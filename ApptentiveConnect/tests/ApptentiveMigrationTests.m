@@ -7,7 +7,7 @@
 //
 
 #import <XCTest/XCTest.h>
-#import "ATDataManager.h"
+#import "ApptentiveDataManager.h"
 #import "ATCompoundMessage.h"
 
 
@@ -16,7 +16,7 @@
 
 
 @implementation ApptentiveMigrationTests
-- (ATDataManager *)dataManagerWithStoreName:(NSString *)name {
+- (ApptentiveDataManager *)dataManagerWithStoreName:(NSString *)name {
 	NSBundle *bundle = [NSBundle bundleForClass:[self class]];
 	NSURL *storeURL = [bundle URLForResource:name withExtension:@"sqlite"];
 
@@ -24,7 +24,7 @@
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
 	NSString *path = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
 
-	ATDataManager *dataManager = [[ATDataManager alloc] initWithModelName:@"ATDataModel" inBundle:bundle storagePath:path];
+	ApptentiveDataManager *dataManager = [[ApptentiveDataManager alloc] initWithModelName:@"ATDataModel" inBundle:bundle storagePath:path];
 
 	NSError *error = nil;
 	[fileManager removeItemAtURL:[dataManager persistentStoreURL] error:nil];
@@ -107,7 +107,7 @@
 	XCTAssertFalse([dataManager didRemovePersistentStore], @"Shouldn't have had to delete datastore.");
 }
 
-- (ATDataManager *)dataManagerByCopyingSQLFilesInDirectory:(NSString *)directoryName {
+- (ApptentiveDataManager *)dataManagerByCopyingSQLFilesInDirectory:(NSString *)directoryName {
 	NSBundle *bundle = [NSBundle bundleForClass:[self class]];
 	NSArray *files = @[@"ATDataModel.sqlite", @"ATDataModel.sqlite-shm", @"ATDataModel.sqlite-wal"];
 

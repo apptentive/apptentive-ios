@@ -8,8 +8,8 @@
 
 #import "ApptentiveMetrics.h"
 
-#import "ATAppConfigurationUpdater.h"
-#import "ATBackend.h"
+#import "ApptentiveAppConfigurationUpdater.h"
+#import "ApptentiveBackend.h"
 #import "Apptentive_Private.h"
 #import "ATData.h"
 #import "ATEvent.h"
@@ -18,7 +18,7 @@
 #import "ATRecordRequestTask.h"
 #import "ATSurveyMetrics.h"
 #import "ATTaskQueue.h"
-#import "ATEngagementBackend.h"
+#import "ApptentiveEngagementBackend.h"
 
 // Engagement event labels
 
@@ -80,7 +80,7 @@ static NSString *ATMetricNameSurveyAnswerQuestion = @"survey.question_response";
 	[self addMetricWithName:name fromInteraction:nil info:userInfo customData:customData extendedData:extendedData];
 }
 
-- (void)addMetricWithName:(NSString *)name fromInteraction:(ATInteraction *)fromInteraction info:(NSDictionary *)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData {
+- (void)addMetricWithName:(NSString *)name fromInteraction:(ApptentiveInteraction *)fromInteraction info:(NSDictionary *)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData {
 	if (metricsEnabled == NO) {
 		return;
 	}
@@ -123,8 +123,8 @@ static NSString *ATMetricNameSurveyAnswerQuestion = @"survey.question_response";
 		if ([NSJSONSerialization isValidJSONObject:customDataDictionary]) {
 			[event addEntriesFromDictionary:customDataDictionary];
 		} else {
-			ATLogError(@"Event `customData` cannot be transformed into valid JSON and will be ignored.");
-			ATLogError(@"Please see NSJSONSerialization's `+isValidJSONObject:` for allowed types.");
+			ApptentiveLogError(@"Event `customData` cannot be transformed into valid JSON and will be ignored.");
+			ApptentiveLogError(@"Please see NSJSONSerialization's `+isValidJSONObject:` for allowed types.");
 		}
 	}
 
@@ -134,8 +134,8 @@ static NSString *ATMetricNameSurveyAnswerQuestion = @"survey.question_response";
 				// Extended data items are not added for key "extended_data", but rather for key of extended data type: "time", "location", etc.
 				[event addEntriesFromDictionary:data];
 			} else {
-				ATLogError(@"Event `extendedData` cannot be transformed into valid JSON and will be ignored.");
-				ATLogError(@"Please see NSJSONSerialization's `+isValidJSONObject:` for allowed types.");
+				ApptentiveLogError(@"Event `extendedData` cannot be transformed into valid JSON and will be ignored.");
+				ApptentiveLogError(@"Please see NSJSONSerialization's `+isValidJSONObject:` for allowed types.");
 			}
 		}
 	}
@@ -224,7 +224,7 @@ static NSString *ATMetricNameSurveyAnswerQuestion = @"survey.question_response";
 	}
 	if (event != ATSurveyEventTappedSend && event != ATSurveyEventTappedCancel && event != ATSurveyEventAnsweredQuestion) {
 		event = ATSurveyEventUnknown;
-		ATLogError(@"Unknown survey event type: %d", event);
+		ApptentiveLogError(@"Unknown survey event type: %d", event);
 	}
 	return event;
 }

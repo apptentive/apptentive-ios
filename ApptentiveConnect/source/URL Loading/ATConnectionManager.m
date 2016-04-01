@@ -5,27 +5,27 @@
 //  Copyright 2008 Apptentive, Inc.. All rights reserved.
 //
 
-#import "ATConnectionManager.h"
-#import "ATConnectionChannel.h"
+#import "ApptentiveConnectionManager.h"
+#import "ApptentiveConnectionChannel.h"
 
-static ApptentiveionManager *sharedSingleton = nil;
+static ApptentiveConnectionManager *sharedSingleton = nil;
 
 #define PLACEHOLDER_CHANNEL_NAME @"ATDefaultChannel"
 
 
-@interface ApptentiveionManager ()
-- (ApptentiveionChannel *)channelForName:(NSString *)channelName;
+@interface ApptentiveConnectionManager ()
+- (ApptentiveConnectionChannel *)channelForName:(NSString *)channelName;
 @end
 
 
-@implementation ApptentiveionManager {
+@implementation ApptentiveConnectionManager {
 	NSMutableDictionary *channels;
 }
 
-+ (ApptentiveionManager *)sharedSingleton {
++ (ApptentiveConnectionManager *)sharedSingleton {
 	@synchronized(self) {
 		if (!sharedSingleton) {
-			sharedSingleton = [[ApptentiveionManager alloc] init];
+			sharedSingleton = [[ApptentiveConnectionManager alloc] init];
 		}
 	}
 	return sharedSingleton;
@@ -40,45 +40,45 @@ static ApptentiveionManager *sharedSingleton = nil;
 }
 
 - (void)start {
-	for (ApptentiveionChannel *channel in [channels allValues]) {
+	for (ApptentiveConnectionChannel *channel in [channels allValues]) {
 		[channel update];
 	}
 }
 
 - (void)stop {
-	for (ApptentiveionChannel *channel in [channels allValues]) {
+	for (ApptentiveConnectionChannel *channel in [channels allValues]) {
 		[channel cancelAllConnections];
 	}
 }
 
-- (void)addConnection:(ATURLConnection *)connection toChannel:(NSString *)channelName {
-	ApptentiveionChannel *channel = [self channelForName:channelName];
+- (void)addConnection:(ApptentiveURLConnection *)connection toChannel:(NSString *)channelName {
+	ApptentiveConnectionChannel *channel = [self channelForName:channelName];
 	[channel addConnection:connection];
 }
 
 - (void)cancelAllConnectionsInChannel:(NSString *)channelName {
-	ApptentiveionChannel *channel = [self channelForName:channelName];
+	ApptentiveConnectionChannel *channel = [self channelForName:channelName];
 	[channel cancelAllConnections];
 }
 
-- (void)cancelConnection:(ATURLConnection *)connection inChannel:(NSString *)channelName {
-	ApptentiveionChannel *channel = [self channelForName:channelName];
+- (void)cancelConnection:(ApptentiveURLConnection *)connection inChannel:(NSString *)channelName {
+	ApptentiveConnectionChannel *channel = [self channelForName:channelName];
 	[channel cancelConnection:connection];
 }
 
 - (void)setMaximumActiveConnections:(NSInteger)maximumConnections forChannel:(NSString *)channelName {
-	ApptentiveionChannel *channel = [self channelForName:channelName];
+	ApptentiveConnectionChannel *channel = [self channelForName:channelName];
 	channel.maximumConnections = maximumConnections;
 }
 
 
-- (ApptentiveionChannel *)channelForName:(NSString *)channelName {
+- (ApptentiveConnectionChannel *)channelForName:(NSString *)channelName {
 	if (!channelName) {
 		channelName = PLACEHOLDER_CHANNEL_NAME;
 	}
-	ApptentiveionChannel *channel = [channels objectForKey:channelName];
+	ApptentiveConnectionChannel *channel = [channels objectForKey:channelName];
 	if (!channel) {
-		channel = [[ApptentiveionChannel alloc] init];
+		channel = [[ApptentiveConnectionChannel alloc] init];
 		[channels setObject:channel forKey:channelName];
 	}
 	return channel;

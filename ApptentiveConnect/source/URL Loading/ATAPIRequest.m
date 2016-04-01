@@ -1,36 +1,36 @@
 //
-//  ATAPIRequest.m
+//  ApptentiveAPIRequest.m
 //  ApptentiveConnect
 //
 //  Created by Andrew Wooster on 5/24/11.
 //  Copyright 2011 Apptentive, Inc. All rights reserved.
 //
 
-#import "ATAPIRequest.h"
+#import "ApptentiveAPIRequest.h"
 #import "Apptentive.h"
 #import "Apptentive+Debugging.h"
 #import "Apptentive_Private.h"
-#import "ATConnectionManager.h"
-#import "ATJSONSerialization.h"
-#import "ATURLConnection.h"
-#import "ATWebClient.h"
-#import "ATWebClient_Private.h"
+#import "ApptentiveConnectionManager.h"
+#import "ApptentiveJSONSerialization.h"
+#import "ApptentiveURLConnection.h"
+#import "ApptentiveWebClient.h"
+#import "ApptentiveWebClient_Private.h"
 
-NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
+NSString *const ApptentiveAPIRequestStatusChanged = @"ApptentiveAPIRequestStatusChanged";
 
 
-@interface ATAPIRequest ()
+@interface ApptentiveAPIRequest ()
 
-@property (strong, nonatomic) ATURLConnection *connection;
+@property (strong, nonatomic) ApptentiveURLConnection *connection;
 @property (strong, nonatomic) NSString *channelName;
 @property (assign, nonatomic) BOOL cancelled;
 
 @end
 
 
-@implementation ATAPIRequest
+@implementation ApptentiveAPIRequest
 
-- (id)initWithConnection:(ATURLConnection *)aConnection channelName:(NSString *)aChannelName {
+- (id)initWithConnection:(ApptentiveURLConnection *)aConnection channelName:(NSString *)aChannelName {
 	if ((self = [super init])) {
 		_connection = aConnection;
 		_connection.delegate = self;
@@ -43,15 +43,15 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 	self.delegate = nil;
 	if (_connection) {
 		_connection.delegate = nil;
-		[[ApptentiveionManager sharedSingleton] cancelConnection:_connection inChannel:_channelName];
+		[[ApptentiveConnectionManager sharedSingleton] cancelConnection:_connection inChannel:_channelName];
 	}
 }
 
 - (void)start {
 	@synchronized(self) {
 		if (_connection) {
-			[[ApptentiveionManager sharedSingleton] addConnection:self.connection toChannel:self.channelName];
-			[[ApptentiveionManager sharedSingleton] start];
+			[[ApptentiveConnectionManager sharedSingleton] addConnection:self.connection toChannel:self.channelName];
+			[[ApptentiveConnectionManager sharedSingleton] start];
 		}
 	}
 }
@@ -60,7 +60,7 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 	@synchronized(self) {
 		_cancelled = YES;
 		if (_connection) {
-			[[ApptentiveionManager sharedSingleton] cancelConnection:self.connection inChannel:self.channelName];
+			[[ApptentiveConnectionManager sharedSingleton] cancelConnection:self.connection inChannel:self.channelName];
 		}
 	}
 }
@@ -75,7 +75,7 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 }
 
 #pragma mark ATURLConnection Delegates
-- (void)connectionFinishedSuccessfully:(ATURLConnection *)sender {
+- (void)connectionFinishedSuccessfully:(ApptentiveURLConnection *)sender {
 	@synchronized(self) {
 		if (self.cancelled) return;
 	}
@@ -99,7 +99,7 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 	} else {
 		_failed = YES;
 		_shouldRetry = YES;
-		ATLogError(@"Unexpected HTTP status: %d", statusCode);
+		ApptentiveLogError(@"Unexpected HTTP status: %d", statusCode);
 	}
 
 	_errorMessage = [NSHTTPURLResponse localizedStringForStatusCode:statusCode];
@@ -114,45 +114,45 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 				_errorResponse = responseString;
 				responseString = nil;
 			}
-			ATLogError(@"Connection failed. %@, %@", self.errorTitle, self.errorMessage);
-			ATLogInfo(@"Status was: %d", sender.statusCode);
+			ApptentiveLogError(@"Connection failed. %@, %@", self.errorTitle, self.errorMessage);
+			ApptentiveLogInfo(@"Status was: %d", sender.statusCode);
 			if (sender.statusCode == 401) {
-				ATLogError(@"Your Apptentive API key may not be set correctly!");
+				ApptentiveLogError(@"Your Apptentive API key may not be set correctly!");
 			}
 			if (sender.statusCode == 422) {
-				ATLogError(@"API Request was sent with malformed data");
+				ApptentiveLogError(@"API Request was sent with malformed data");
 			}
 			if ([Apptentive sharedConnection].debuggingOptions & ApptentiveDebuggingOptionsLogHTTPFailures ||
 				[Apptentive sharedConnection].debuggingOptions & ApptentiveDebuggingOptionsLogAllHTTPRequests) {
-				ATLogDebug(@"Request was:\n%@", [self.connection requestAsString]);
-				ATLogDebug(@"Response was:\n%@", [self.connection responseAsString]);
+				ApptentiveLogDebug(@"Request was:\n%@", [self.connection requestAsString]);
+				ApptentiveLogDebug(@"Response was:\n%@", [self.connection responseAsString]);
 			}
 		} else if ([Apptentive sharedConnection].debuggingOptions & ApptentiveDebuggingOptionsLogAllHTTPRequests) {
-			ATLogDebug(@"Request was:\n%@", [self.connection requestAsString]);
-			ATLogDebug(@"Response was:\n%@", [self.connection responseAsString]);
+			ApptentiveLogDebug(@"Request was:\n%@", [self.connection requestAsString]);
+			ApptentiveLogDebug(@"Response was:\n%@", [self.connection responseAsString]);
 		}
 
 		if (!d) break;
-		if (self.returnType == ATAPIRequestReturnTypeData) {
+		if (self.returnType == ApptentiveAPIRequestReturnTypeData) {
 			result = d;
 			break;
 		}
 
 		NSString *s = [[NSString alloc] initWithData:d encoding:NSUTF8StringEncoding];
 		if (!s) break;
-		if (self.returnType == ATAPIRequestReturnTypeString) {
+		if (self.returnType == ApptentiveAPIRequestReturnTypeString) {
 			result = s;
 			break;
 		}
 
-		if (self.returnType == ATAPIRequestReturnTypeJSON && statusCode != 204) {
+		if (self.returnType == ApptentiveAPIRequestReturnTypeJSON && statusCode != 204) {
 			NSError *error = nil;
-			id json = [ATJSONSerialization JSONObjectWithString:s error:&error];
+			id json = [ApptentiveJSONSerialization JSONObjectWithString:s error:&error];
 			if (!json) {
 				_failed = YES;
 				_errorTitle = ATLocalizedString(@"Invalid response from server.", @"");
 				_errorMessage = ATLocalizedString(@"Server did not return properly formatted JSON.", @"");
-				ATLogError(@"Invalid JSON: %@", error);
+				ApptentiveLogError(@"Invalid JSON: %@", error);
 			}
 			result = json;
 			break;
@@ -166,10 +166,10 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 			[self.delegate at_APIRequestDidFinish:self result:result];
 		}
 	}
-	[[NSNotificationCenter defaultCenter] postNotificationName:ATAPIRequestStatusChanged object:self];
+	[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveAPIRequestStatusChanged object:self];
 }
 
-- (void)connectionFailed:(ATURLConnection *)sender {
+- (void)connectionFailed:(ApptentiveURLConnection *)sender {
 	@synchronized(self) {
 		if (self.cancelled) return;
 	}
@@ -190,22 +190,22 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 
 	if ([Apptentive sharedConnection].debuggingOptions & ApptentiveDebuggingOptionsLogHTTPFailures ||
 		[Apptentive sharedConnection].debuggingOptions & ApptentiveDebuggingOptionsLogAllHTTPRequests) {
-		ATLogError(@"Connection failed. %@, %@", self.errorTitle, self.errorMessage);
-		ATLogInfo(@"Status was: %d", sender.statusCode);
-		ATLogDebug(@"Request was:\n%@", [self.connection requestAsString]);
-		ATLogDebug(@"Response was:\n%@", [self.connection responseAsString]);
+		ApptentiveLogError(@"Connection failed. %@, %@", self.errorTitle, self.errorMessage);
+		ApptentiveLogInfo(@"Status was: %d", sender.statusCode);
+		ApptentiveLogDebug(@"Request was:\n%@", [self.connection requestAsString]);
+		ApptentiveLogDebug(@"Response was:\n%@", [self.connection responseAsString]);
 	}
 	if (self.delegate) {
 		[self.delegate at_APIRequestDidFail:self];
 	}
-	[[NSNotificationCenter defaultCenter] postNotificationName:ATAPIRequestStatusChanged object:self];
+	[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveAPIRequestStatusChanged object:self];
 }
 
-- (void)connectionDidProgress:(ATURLConnection *)sender {
+- (void)connectionDidProgress:(ApptentiveURLConnection *)sender {
 	_percentageComplete = sender.percentComplete;
 	if (self.delegate && [self.delegate respondsToSelector:@selector(at_APIRequestDidProgress:)]) {
 		[self.delegate at_APIRequestDidProgress:self];
 	}
-	[[NSNotificationCenter defaultCenter] postNotificationName:ATAPIRequestStatusChanged object:self];
+	[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveAPIRequestStatusChanged object:self];
 }
 @end

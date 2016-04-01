@@ -8,18 +8,18 @@
 
 #import "Apptentive.h"
 #import "Apptentive_Private.h"
-#import "ATBackend.h"
-#import "ATEngagementBackend.h"
-#import "ATInteraction.h"
-#import "ATUtilities.h"
-#import "ATAppConfigurationUpdater.h"
+#import "ApptentiveBackend.h"
+#import "ApptentiveEngagementBackend.h"
+#import "ApptentiveInteraction.h"
+#import "ApptentiveUtilities.h"
+#import "ApptentiveAppConfigurationUpdater.h"
 #import "ATMessageSender.h"
-#import "ATWebClient.h"
+#import "ApptentiveWebClient.h"
 #if TARGET_OS_IPHONE
-#import "ATMessageCenterViewController.h"
-#import "ATBannerViewController.h"
-#import "ATUnreadMessagesBadgeView.h"
-#import "ATAboutViewController.h"
+#import "ApptentiveMessageCenterViewController.h"
+#import "ApptentiveBannerViewController.h"
+#import "ApptentiveUnreadMessagesBadgeView.h"
+#import "ApptentiveAboutViewController.h"
 #endif
 
 // Can't get CocoaPods to do the right thing for debug builds.
@@ -59,14 +59,14 @@ NSString *const ApptentiveCustomDeviceDataChangedNotification = @"ApptentiveCust
 	NSError *error = nil;
 
 	if (![fm createDirectoryAtPath:apptentiveDirectoryPath withIntermediateDirectories:YES attributes:nil error:&error]) {
-		ATLogError(@"Failed to create support directory: %@", apptentiveDirectoryPath);
-		ATLogError(@"Error was: %@", error);
+		ApptentiveLogError(@"Failed to create support directory: %@", apptentiveDirectoryPath);
+		ApptentiveLogError(@"Error was: %@", error);
 		return nil;
 	}
 
 	if (![fm setAttributes:@{ NSFileProtectionKey: NSFileProtectionCompleteUntilFirstUserAuthentication } ofItemAtPath:apptentiveDirectoryPath error:&error]) {
-		ATLogError(@"Failed to set file protection level: %@", apptentiveDirectoryPath);
-		ATLogError(@"Error was: %@", error);
+		ApptentiveLogError(@"Failed to set file protection level: %@", apptentiveDirectoryPath);
+		ApptentiveLogError(@"Error was: %@", error);
 	}
 
 	return apptentiveDirectoryPath;
@@ -88,17 +88,17 @@ NSString *const ApptentiveCustomDeviceDataChangedNotification = @"ApptentiveCust
 		_integrationConfiguration = [[NSMutableDictionary alloc] init];
 		_styleSheet = [[ApptentiveStyleSheet alloc] init];
 
-		ATLogInfo(@"Apptentive SDK Version %@", kApptentiveVersionString);
+		ApptentiveLogInfo(@"Apptentive SDK Version %@", kApptentiveVersionString);
 	}
 	return self;
 }
 
 - (void)setApiKey:(NSString *)APIKey {
 	if (![self.webClient.APIKey isEqualToString:APIKey]) {
-		_webClient = [[ATWebClient alloc] initWithBaseURL:[NSURL URLWithString:@"https://api.apptentive.com"] APIKey:APIKey];
+		_webClient = [[ApptentiveWebClient alloc] initWithBaseURL:[NSURL URLWithString:@"https://api.apptentive.com"] APIKey:APIKey];
 
-		_backend = [[ATBackend alloc] init];
-		_engagementBackend = [[ATEngagementBackend alloc] init];
+		_backend = [[ApptentiveBackend alloc] init];
+		_engagementBackend = [[ApptentiveEngagementBackend alloc] init];
 
 		[self.backend startup];
 	}
@@ -218,7 +218,7 @@ NSString *const ApptentiveCustomDeviceDataChangedNotification = @"ApptentiveCust
 	if (simpleType || complexType) {
 		[customData setObject:object forKey:key];
 	} else {
-		ATLogError(@"Apptentive custom data must be of type NSString, NSNumber, or NSNull, or a 'complex type' NSDictionary created by one of the constructors in Apptentive.h");
+		ApptentiveLogError(@"Apptentive custom data must be of type NSString, NSNumber, or NSNull, or a 'complex type' NSDictionary created by one of the constructors in Apptentive.h");
 	}
 }
 
@@ -242,13 +242,13 @@ NSString *const ApptentiveCustomDeviceDataChangedNotification = @"ApptentiveCust
 
 - (void)openAppStore {
 	if (!self.appID) {
-		ATLogError(@"Cannot open App Store because `[Apptentive sharedConnection].appID` is not set to your app's iTunes App ID.");
+		ApptentiveLogError(@"Cannot open App Store because `[Apptentive sharedConnection].appID` is not set to your app's iTunes App ID.");
 		return;
 	}
 
 	[self.engagementBackend engageApptentiveAppEvent:@"open_app_store_manually"];
 
-	ATInteraction *appStoreInteraction = [[ATInteraction alloc] init];
+	ApptentiveInteraction *appStoreInteraction = [[ApptentiveInteraction alloc] init];
 	appStoreInteraction.type = @"AppStoreRating";
 	appStoreInteraction.priority = 1;
 	appStoreInteraction.version = @"1.0.0";
@@ -432,7 +432,7 @@ NSString *const ApptentiveCustomDeviceDataChangedNotification = @"ApptentiveCust
 }
 
 - (BOOL)canShowMessageCenter {
-	NSString *messageCenterCodePoint = [[ATInteraction apptentiveAppInteraction] codePointForEvent:ATEngagementMessageCenterEvent];
+	NSString *messageCenterCodePoint = [[ApptentiveInteraction apptentiveAppInteraction] codePointForEvent:ATEngagementMessageCenterEvent];
 	return [self.engagementBackend canShowInteractionForCodePoint:messageCenterCodePoint];
 }
 
@@ -509,9 +509,9 @@ NSString *const ApptentiveCustomDeviceDataChangedNotification = @"ApptentiveCust
 
 - (UIView *)unreadMessageCountAccessoryView:(BOOL)apptentiveHeart {
 	if (apptentiveHeart) {
-		return [ATUnreadMessagesBadgeView unreadMessageCountViewBadgeWithApptentiveHeart];
+		return [ApptentiveUnreadMessagesBadgeView unreadMessageCountViewBadgeWithApptentiveHeart];
 	} else {
-		return [ATUnreadMessagesBadgeView unreadMessageCountViewBadge];
+		return [ApptentiveUnreadMessagesBadgeView unreadMessageCountViewBadge];
 	}
 }
 
@@ -542,7 +542,7 @@ NSString *const ApptentiveCustomDeviceDataChangedNotification = @"ApptentiveCust
 
 + (NSBundle *)resourceBundle {
 #if TARGET_OS_IPHONE
-	NSString *path = [[NSBundle bundleForClass:[ATBackend class]] bundlePath];
+	NSString *path = [[NSBundle bundleForClass:[ApptentiveBackend class]] bundlePath];
 	NSString *bundlePath = [path stringByAppendingPathComponent:@"ApptentiveResources.bundle"];
 	NSFileManager *fm = [NSFileManager defaultManager];
 	if ([fm fileExistsAtPath:bundlePath]) {
@@ -582,7 +582,7 @@ NSString *const ApptentiveCustomDeviceDataChangedNotification = @"ApptentiveCust
 		ATCompoundMessage *textMessage = (ATCompoundMessage *)message;
 		NSURL *profilePhotoURL = textMessage.sender.profilePhotoURL ? [NSURL URLWithString:textMessage.sender.profilePhotoURL] : nil;
 
-		ATBannerViewController *banner = [ATBannerViewController bannerWithImageURL:profilePhotoURL title:textMessage.sender.name message:textMessage.body];
+		ApptentiveBannerViewController *banner = [ApptentiveBannerViewController bannerWithImageURL:profilePhotoURL title:textMessage.sender.name message:textMessage.body];
 
 		banner.delegate = self;
 
@@ -590,7 +590,7 @@ NSString *const ApptentiveCustomDeviceDataChangedNotification = @"ApptentiveCust
 	}
 }
 
-- (void)userDidTapBanner:(ATBannerViewController *)banner {
+- (void)userDidTapBanner:(ApptentiveBannerViewController *)banner {
 	[self presentMessageCenterFromViewController:[self viewControllerForInteractions]];
 }
 
@@ -598,7 +598,7 @@ NSString *const ApptentiveCustomDeviceDataChangedNotification = @"ApptentiveCust
 	if (self.delegate && [self.delegate respondsToSelector:@selector(viewControllerForInteractionsWithConnection:)]) {
 		return [self.delegate viewControllerForInteractionsWithConnection:self];
 	} else {
-		return [ATUtilities topViewController];
+		return [ApptentiveUtilities topViewController];
 	}
 }
 
@@ -610,10 +610,10 @@ NSString *const ApptentiveCustomDeviceDataChangedNotification = @"ApptentiveCust
 
 - (void)setAPIKey:(NSString *)APIKey baseURL:(NSURL *)baseURL {
 	if (![APIKey isEqualToString:self.webClient.APIKey] || ![baseURL isEqual:self.webClient.baseURL]) {
-		_webClient = [[ATWebClient alloc] initWithBaseURL:baseURL APIKey:APIKey];
+		_webClient = [[ApptentiveWebClient alloc] initWithBaseURL:baseURL APIKey:APIKey];
 
-		_backend = [[ATBackend alloc] init];
-		_engagementBackend = [[ATEngagementBackend alloc] init];
+		_backend = [[ApptentiveBackend alloc] init];
+		_engagementBackend = [[ApptentiveEngagementBackend alloc] init];
 
 		[self.backend startup];
 	}

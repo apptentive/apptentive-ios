@@ -7,12 +7,12 @@
 //
 
 #import "ATCompoundMessage.h"
-#import "ATBackend.h"
+#import "ApptentiveBackend.h"
 #import "ATData.h"
-#import "ATJSONSerialization.h"
+#import "ApptentiveJSONSerialization.h"
 #import "ATMessageSender.h"
-#import "NSDictionary+ATAdditions.h"
-#import "ATMessageCenterInteraction.h"
+#import "NSDictionary+Apptentive.h"
+#import "ApptentiveMessageCenterInteraction.h"
 
 NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 
@@ -124,10 +124,10 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 	}
 
 	NSError *error = nil;
-	NSObject *errorObject = (NSObject *)[ATJSONSerialization JSONObjectWithString:self.errorMessageJSON error:&error];
+	NSObject *errorObject = (NSObject *)[ApptentiveJSONSerialization JSONObjectWithString:self.errorMessageJSON error:&error];
 
 	if (errorObject == nil) {
-		ATLogError(@"Error parsing errors: %@", error);
+		ApptentiveLogError(@"Error parsing errors: %@", error);
 		return nil;
 	}
 	if ([errorObject isKindOfClass:[NSDictionary class]]) {
@@ -189,7 +189,7 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 				[originalAttachment updateWithJSON:newJSON];
 			}
 		} else {
-			ATLogError(@"Mismatch in number of attachments in message (%d) versus API (%d).", self.attachments.count, attachmentsJSON.count);
+			ApptentiveLogError(@"Mismatch in number of attachments in message (%d) versus API (%d).", self.attachments.count, attachmentsJSON.count);
 		}
 	}
 }
@@ -256,7 +256,7 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 		@try {
 			result = [NSKeyedUnarchiver unarchiveObjectWithData:self.customData];
 		} @catch (NSException *exception) {
-			ATLogError(@"Unable to unarchive event: %@", exception);
+			ApptentiveLogError(@"Unable to unarchive event: %@", exception);
 		}
 		return result;
 	}
@@ -288,7 +288,7 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 
 			[userInfo setObject:@"CompoundMessage" forKey:@"message_type"];
 
-			[[ATMessageCenterInteraction interactionForInvokingMessageEvents] engage:ATInteractionMessageCenterEventLabelRead fromViewController:nil userInfo:userInfo];
+			[[ApptentiveMessageCenterInteraction interactionForInvokingMessageEvents] engage:ATInteractionMessageCenterEventLabelRead fromViewController:nil userInfo:userInfo];
 		}
 
 		[ATData save];

@@ -8,16 +8,16 @@
 
 #import "ATRecordRequestTask.h"
 #import "ATData.h"
-#import "ATWebClient.h"
+#import "ApptentiveWebClient.h"
 #import "Apptentive_Private.h"
-#import "ATConversationUpdater.h"
+#import "ApptentiveConversationUpdater.h"
 
 #define kATRecordRequestTaskCodingVersion 1
 
 
 @interface ATRecordRequestTask ()
 
-@property (strong, nonatomic) ATAPIRequest *request;
+@property (strong, nonatomic) ApptentiveAPIRequest *request;
 
 @end
 
@@ -31,12 +31,12 @@
 			NSURL *providerURI = [coder decodeObjectForKey:@"managedObjectURIRepresentation"];
 			NSManagedObject *obj = [ATData findEntityWithURI:providerURI];
 			if (obj == nil) {
-				ATLogError(@"Unarchived task can't be found in CoreData");
+				ApptentiveLogError(@"Unarchived task can't be found in CoreData");
 				self.finished = YES;
 			} else if ([obj conformsToProtocol:@protocol(ATRequestTaskProvider)]) {
 				_taskProvider = (NSObject<ATRequestTaskProvider> *)obj;
 			} else {
-				ATLogError(@"Unarchived task doesn't conform to ATRequestTaskProvider protocol.");
+				ApptentiveLogError(@"Unarchived task doesn't conform to ATRequestTaskProvider protocol.");
 				goto fail;
 			}
 		} else {
@@ -63,7 +63,7 @@ fail:
 	if ([Apptentive sharedConnection].webClient == nil) {
 		return NO;
 	}
-	if (![ATConversationUpdater conversationExists]) {
+	if (![ApptentiveConversationUpdater conversationExists]) {
 		return NO;
 	}
 	return YES;
@@ -107,8 +107,8 @@ fail:
 	[self.taskProvider cleanupAfterTask:self];
 }
 
-#pragma mark ATAPIRequestDelegate
-- (void)at_APIRequestDidFinish:(ATAPIRequest *)sender result:(id)result {
+#pragma mark ApptentiveAPIRequestDelegate
+- (void)at_APIRequestDidFinish:(ApptentiveAPIRequest *)sender result:(id)result {
 	@synchronized(self) {
 		ATRecordRequestTaskResult taskResult = [self.taskProvider taskResultForTask:self withRequest:sender withResult:result];
 		switch (taskResult) {
@@ -123,16 +123,16 @@ fail:
 	}
 }
 
-- (void)at_APIRequestDidProgress:(ATAPIRequest *)sender {
+- (void)at_APIRequestDidProgress:(ApptentiveAPIRequest *)sender {
 	// pass
 }
 
-- (void)at_APIRequestDidFail:(ATAPIRequest *)sender {
+- (void)at_APIRequestDidFail:(ApptentiveAPIRequest *)sender {
 	@synchronized(self) {
 		self.failed = YES;
 		self.lastErrorTitle = sender.errorTitle;
 		self.lastErrorMessage = sender.errorMessage;
-		ATLogInfo(@"ATAPIRequest failed: %@, %@", sender.errorTitle, sender.errorMessage);
+		ApptentiveLogInfo(@"ApptentiveAPIRequest failed: %@, %@", sender.errorTitle, sender.errorMessage);
 		[self stop];
 	}
 }

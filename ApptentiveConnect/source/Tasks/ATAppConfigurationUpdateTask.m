@@ -8,11 +8,11 @@
 
 #import "ATAppConfigurationUpdateTask.h"
 #import "Apptentive_Private.h"
-#import "ATConversationUpdater.h"
+#import "ApptentiveConversationUpdater.h"
 
 
 @implementation ATAppConfigurationUpdateTask {
-	ATAppConfigurationUpdater *configurationUpdater;
+	ApptentiveAppConfigurationUpdater *configurationUpdater;
 }
 
 - (id)initWithCoder:(NSCoder *)coder {
@@ -32,7 +32,7 @@
 	if ([Apptentive sharedConnection].webClient == nil) {
 		return NO;
 	}
-	if (![ATConversationUpdater conversationExists]) {
+	if (![ApptentiveConversationUpdater conversationExists]) {
 		return NO;
 	}
 	return YES;
@@ -43,8 +43,8 @@
 }
 
 - (void)start {
-	if (configurationUpdater == nil && [ATAppConfigurationUpdater shouldCheckForUpdate]) {
-		configurationUpdater = [[ATAppConfigurationUpdater alloc] initWithDelegate:self];
+	if (configurationUpdater == nil && [ApptentiveAppConfigurationUpdater shouldCheckForUpdate]) {
+		configurationUpdater = [[ApptentiveAppConfigurationUpdater alloc] initWithDelegate:self];
 		self.inProgress = YES;
 		[configurationUpdater update];
 	} else {

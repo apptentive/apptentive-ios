@@ -12,11 +12,11 @@
 
 #import "ATDeviceInfo.h"
 
-#import "ATBackend.h"
+#import "ApptentiveBackend.h"
 #import "Apptentive.h"
 #import "Apptentive_Private.h"
-#import "ATUtilities.h"
-#import "ATDeviceUpdater.h"
+#import "ApptentiveUtilities.h"
+#import "ApptentiveDeviceUpdater.h"
 
 
 @implementation ATDeviceInfo
@@ -52,22 +52,22 @@
 		device[@"uuid"] = uuid;
 	}
 
-	NSString *osName = [ATUtilities currentSystemName];
+	NSString *osName = [ApptentiveUtilities currentSystemName];
 	if (osName) {
 		device[@"os_name"] = osName;
 	}
 
-	NSString *osVersion = [ATUtilities currentSystemVersion];
+	NSString *osVersion = [ApptentiveUtilities currentSystemVersion];
 	if (osVersion) {
 		device[@"os_version"] = osVersion;
 	}
 
-	NSString *systemBuild = [ATUtilities currentSystemBuild];
+	NSString *systemBuild = [ApptentiveUtilities currentSystemBuild];
 	if (systemBuild) {
 		device[@"os_build"] = systemBuild;
 	}
 
-	NSString *machineName = [ATUtilities currentMachineName];
+	NSString *machineName = [ApptentiveUtilities currentMachineName];
 	if (machineName) {
 		device[@"hardware"] = machineName;
 	}
@@ -109,6 +109,6 @@
 }
 
 - (NSDictionary *)apiJSON {
-	return @{ @"device": [ATUtilities diffDictionary:self.dictionaryRepresentation[@"device"] againstDictionary:[ATDeviceUpdater lastSavedVersion][@"device"]] };
+	return @{ @"device": [ApptentiveUtilities diffDictionary:self.dictionaryRepresentation[@"device"] againstDictionary:[ApptentiveDeviceUpdater lastSavedVersion][@"device"]] };
 }
 @end

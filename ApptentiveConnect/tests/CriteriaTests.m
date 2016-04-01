@@ -7,7 +7,7 @@
 //
 
 #import "CriteriaTests.h"
-#import "ATInteractionInvocation.h"
+#import "ApptentiveInteractionInvocation.h"
 #import "Apptentive.h"
 
 

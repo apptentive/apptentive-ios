@@ -9,9 +9,9 @@
 #import "ATPersonInfo.h"
 
 #import "Apptentive_Private.h"
-#import "ATUtilities.h"
-#import "NSDictionary+ATAdditions.h"
-#import "ATPersonUpdater.h"
+#import "ApptentiveUtilities.h"
+#import "NSDictionary+Apptentive.h"
+#import "ApptentivePersonUpdater.h"
 
 NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
 
@@ -30,7 +30,7 @@ NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
 			@try {
 				_currentPerson = [NSKeyedUnarchiver unarchiveObjectWithData:personData];
 			} @catch (NSException *exception) {
-				ATLogError(@"Unable to unarchive person: %@", personData);
+				ApptentiveLogError(@"Unable to unarchive person: %@", personData);
 			}
 		} else {
 			_currentPerson = [[ATPersonInfo alloc] init];
@@ -99,7 +99,7 @@ NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
 		[person setObject:self.name forKey:@"name"];
 	}
 
-	if (self.emailAddress && [self.emailAddress length] > 0 && [ATUtilities emailAddressIsValid:self.emailAddress]) {
+	if (self.emailAddress && [self.emailAddress length] > 0 && [ApptentiveUtilities emailAddressIsValid:self.emailAddress]) {
 		[person setObject:self.emailAddress forKey:@"email"];
 	} else if ([[self.emailAddress stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] isEqualToString:@""]) {
 		// Delete a previously entered email
@@ -113,7 +113,7 @@ NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
 }
 
 - (NSDictionary *)apiJSON {
-	return [ATUtilities diffDictionary:self.dictionaryRepresentation againstDictionary:[ATPersonUpdater lastSavedVersion]];
+	return [ApptentiveUtilities diffDictionary:self.dictionaryRepresentation againstDictionary:[ApptentivePersonUpdater lastSavedVersion]];
 }
 
 #pragma mark - Private

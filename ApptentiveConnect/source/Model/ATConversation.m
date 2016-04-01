@@ -9,9 +9,9 @@
 #import "ATConversation.h"
 
 #import "Apptentive_Private.h"
-#import "ATBackend.h"
-#import "ATUtilities.h"
-#import "NSDictionary+ATAdditions.h"
+#import "ApptentiveBackend.h"
+#import "ApptentiveUtilities.h"
+#import "NSDictionary+Apptentive.h"
 
 #define kATConversationCodingVersion 1
 
@@ -44,7 +44,7 @@
 		result = [[ATConversation alloc] init];
 		[result updateWithJSON:json];
 	} else {
-		ATLogError(@"Conversation JSON was nil");
+		ApptentiveLogError(@"Conversation JSON was nil");
 	}
 
 	return result;
@@ -83,20 +83,20 @@
 - (NSDictionary *)appReleaseJSON {
 	NSMutableDictionary *result = [NSMutableDictionary dictionary];
 
-	NSString *appVersion = [ATUtilities appVersionString];
+	NSString *appVersion = [ApptentiveUtilities appVersionString];
 	if (appVersion) {
 		result[@"version"] = appVersion;
 	}
 
-	NSString *buildNumber = [ATUtilities buildNumberString];
+	NSString *buildNumber = [ApptentiveUtilities buildNumberString];
 	if (buildNumber) {
 		result[@"build_number"] = buildNumber;
 	}
 
-	NSString *appStoreReceiptFileName = [ATUtilities appStoreReceiptFileName];
+	NSString *appStoreReceiptFileName = [ApptentiveUtilities appStoreReceiptFileName];
 	if (appStoreReceiptFileName) {
 		NSDictionary *receiptInfo = @{ @"file_name": appStoreReceiptFileName,
-			@"has_receipt": @([ATUtilities appStoreReceiptExists]),
+			@"has_receipt": @([ApptentiveUtilities appStoreReceiptExists]),
 		};
 
 		result[@"app_store_receipt"] = receiptInfo;

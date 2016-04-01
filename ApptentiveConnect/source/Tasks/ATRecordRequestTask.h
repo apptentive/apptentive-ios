@@ -7,7 +7,7 @@
 //
 
 #import "ATTask.h"
-#import "ATAPIRequest.h"
+#import "ApptentiveAPIRequest.h"
 
 typedef enum {
 	ATRecordRequestTaskFailedResult,
@@ -17,7 +17,7 @@ typedef enum {
 @protocol ATRequestTaskProvider;
 
 
-@interface ATRecordRequestTask : ATTask <ATAPIRequestDelegate>
+@interface ATRecordRequestTask : ATTask <ApptentiveAPIRequestDelegate>
 @property (strong, nonatomic) NSObject<ATRequestTaskProvider> *taskProvider;
 @end
 
@@ -25,6 +25,6 @@ typedef enum {
 @protocol ATRequestTaskProvider <NSObject>
 - (NSURL *)managedObjectURIRepresentationForTask:(ATRecordRequestTask *)task;
 - (void)cleanupAfterTask:(ATRecordRequestTask *)task;
-- (ATAPIRequest *)requestForTask:(ATRecordRequestTask *)task;
-- (ATRecordRequestTaskResult)taskResultForTask:(ATRecordRequestTask *)task withRequest:(ATAPIRequest *)request withResult:(id)result;
+- (ApptentiveAPIRequest *)requestForTask:(ATRecordRequestTask *)task;
+- (ATRecordRequestTaskResult)taskResultForTask:(ATRecordRequestTask *)task withRequest:(ApptentiveAPIRequest *)request withResult:(id)result;
 @end

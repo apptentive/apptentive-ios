@@ -8,7 +8,7 @@
 
 #import "ATRecord.h"
 
-#import "NSDictionary+ATAdditions.h"
+#import "NSDictionary+Apptentive.h"
 
 
 @implementation ATRecord

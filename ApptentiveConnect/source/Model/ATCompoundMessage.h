@@ -10,7 +10,7 @@
 #import <CoreData/CoreData.h>
 #import <QuickLook/QuickLook.h>
 
-#import "ATJSONModel.h"
+#import "ApptentiveJSONModel.h"
 #import "ATRecord.h"
 
 typedef NS_ENUM(NSInteger, ATPendingMessageState) {
@@ -24,7 +24,7 @@ typedef NS_ENUM(NSInteger, ATPendingMessageState) {
 @class ATMessageDisplayType, ATMessageSender;
 
 
-@interface ATCompoundMessage : ATRecord <ATJSONModel>
+@interface ATCompoundMessage : ATRecord <ApptentiveJSONModel>
 
 @property (strong, nonatomic) NSString *pendingMessageID;
 @property (strong, nonatomic) NSNumber *pendingState;

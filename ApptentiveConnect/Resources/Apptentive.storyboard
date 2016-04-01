@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
@@ -10,13 +9,13 @@
         <!--View Controller-->
         <scene sceneID="Gzy-cr-Fse">
             <objects>
-                <tableViewController storyboardIdentifier="MessageCenter" id="W0l-Dy-ioE" customClass="ATMessageCenterViewController" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="MessageCenter" id="W0l-Dy-ioE" customClass="ApptentiveMessageCenterViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" keyboardDismissMode="interactive" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="6" sectionFooterHeight="6" id="IzQ-h6-djc">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="692"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
                         <gestureRecognizers/>
-                        <view key="tableHeaderView" contentMode="scaleToFill" id="3OP-Us-sTC" customClass="ATMessageCenterGreetingView">
+                        <view key="tableHeaderView" contentMode="scaleToFill" id="3OP-Us-sTC" customClass="ApptentiveMessageCenterGreetingView">
                             <rect key="frame" x="0.0" y="64" width="414" height="258"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
@@ -50,7 +49,7 @@
                                         <constraint firstAttribute="height" constant="104" id="gV3-ZG-nwp"/>
                                     </constraints>
                                 </view>
-                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="jze-Ja-MtR" customClass="ATNetworkImageIconView">
+                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="jze-Ja-MtR" customClass="ApptentiveNetworkImageIconView">
                                     <rect key="frame" x="155" y="20" width="104" height="104"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="104" id="TOX-8x-ZD6"/>
@@ -114,7 +113,7 @@
                             <rect key="frame" x="0.0" y="958.5" width="414" height="300"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Aj5-aD-yTM" customClass="ATMessageCenterInputView">
+                                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Aj5-aD-yTM" customClass="ApptentiveMessageCenterInputView">
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="300"/>
                                     <subviews>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cFn-Go-Vab">
@@ -157,7 +156,7 @@
                                                             <color key="textColor" red="0.51764705879999995" green="0.51764705879999995" blue="0.56470588239999997" alpha="1" colorSpace="calibratedRGB"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
-                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="n0S-Y2-z5K" customClass="ATAttachButton">
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="n0S-Y2-z5K" customClass="ApptentiveAttachButton">
                                                             <rect key="frame" x="274" y="0.0" width="44" height="44"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="44" id="Ag3-q5-a4T"/>
@@ -255,7 +254,7 @@
                                         <outlet property="titleLabelToClearButton" destination="4kH-Os-vzx" id="Shd-FA-4CT"/>
                                     </connections>
                                 </view>
-                                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hjb-x8-sQN" customClass="ATMessageCenterProfileView">
+                                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hjb-x8-sQN" customClass="ApptentiveMessageCenterProfileView">
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="194"/>
                                     <subviews>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PJM-ba-h4O">
@@ -375,7 +374,7 @@
                                         <outlet property="titleLabel" destination="8sl-tE-JA8" id="aeG-Ma-iLJ"/>
                                     </connections>
                                 </view>
-                                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="g94-Qt-Zp0" customClass="ATMessageCenterStatusView">
+                                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="g94-Qt-Zp0" customClass="ApptentiveMessageCenterStatusView">
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="83"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" text="We try and reply to people between 5am and 6pm PST." textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="304" translatesAutoresizingMaskIntoConstraints="NO" id="kQ8-89-rPy">
@@ -422,7 +421,7 @@
                             </constraints>
                         </view>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="ContextMessage" rowHeight="51" id="5ec-cK-c7K" userLabel="Context Message" customClass="ATMessageCenterContextMessageCell">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="ContextMessage" rowHeight="51" id="5ec-cK-c7K" userLabel="Context Message" customClass="ApptentiveMessageCenterContextMessageCell">
                                 <rect key="frame" x="0.0" y="371.5" width="414" height="51"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="5ec-cK-c7K" id="jRh-G0-si1">
@@ -449,7 +448,7 @@
                                     <outlet property="messageLabel" destination="51V-f8-IsS" id="bAK-oV-hJH"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="Reply" rowHeight="87" id="JK9-ui-0US" customClass="ATMessageCenterReplyCell">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="Reply" rowHeight="87" id="JK9-ui-0US" customClass="ApptentiveMessageCenterReplyCell">
                                 <rect key="frame" x="0.0" y="422.5" width="414" height="87"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="JK9-ui-0US" id="mF7-ws-xVD">
@@ -462,7 +461,7 @@
                                             <color key="textColor" red="0.45490196078431372" green="0.45490196078431372" blue="0.46274509803921571" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="g0l-YC-9t6" customClass="ATNetworkImageIconView">
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="g0l-YC-9t6" customClass="ApptentiveNetworkImageIconView">
                                             <rect key="frame" x="15" y="16" width="36" height="36"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" secondItem="g0l-YC-9t6" secondAttribute="height" multiplier="1:1" id="83O-Fb-I5K"/>
@@ -497,7 +496,7 @@
                                     <outlet property="supportUserImageView" destination="g0l-YC-9t6" id="IAN-sK-oUE"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="Message" rowHeight="93" id="hi8-Bq-GR3" customClass="ATMessageCenterMessageCell">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="Message" rowHeight="93" id="hi8-Bq-GR3" customClass="ApptentiveMessageCenterMessageCell">
                                 <rect key="frame" x="0.0" y="509.5" width="414" height="93"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="hi8-Bq-GR3" id="H0J-6d-bTN">
@@ -533,14 +532,14 @@
                                     <outlet property="statusLabel" destination="qyc-gl-oxc" id="49R-Xd-kog"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="CompoundMessage" rowHeight="181" id="evQ-54-Bpq" userLabel="CompoundMessage" customClass="ATCompoundMessageCell">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="CompoundMessage" rowHeight="181" id="evQ-54-Bpq" userLabel="CompoundMessage" customClass="ApptentiveCompoundMessageCell">
                                 <rect key="frame" x="0.0" y="602.5" width="414" height="181"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="evQ-54-Bpq" id="cxM-mJ-g02">
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="180.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="k3E-kW-rhx" customClass="ATIndexedCollectionView">
+                                        <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="k3E-kW-rhx" customClass="ApptentiveIndexedCollectionView">
                                             <rect key="frame" x="0.0" y="71" width="414" height="80"/>
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="16" minimumInteritemSpacing="16" id="yBy-UF-MKC">
@@ -550,7 +549,7 @@
                                                 <inset key="sectionInset" minX="16" minY="8" maxX="16" maxY="8"/>
                                             </collectionViewFlowLayout>
                                             <cells>
-                                                <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Attachment" id="DDu-nA-yL9" customClass="ATAttachmentCell">
+                                                <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Attachment" id="DDu-nA-yL9" customClass="ApptentiveAttachmentCell">
                                                     <rect key="frame" x="16" y="0.0" width="60" height="80"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -632,7 +631,7 @@
                                     <outlet property="statusLabel" destination="NEI-ES-PdT" id="V5k-gB-1qa"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="CompoundReply" rowHeight="169" id="nj1-yL-vAx" customClass="ATCompoundReplyCell">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="CompoundReply" rowHeight="169" id="nj1-yL-vAx" customClass="ApptentiveCompoundReplyCell">
                                 <rect key="frame" x="0.0" y="783.5" width="414" height="169"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="nj1-yL-vAx" id="n4I-KM-rdG">
@@ -645,7 +644,7 @@
                                             <color key="textColor" red="0.4549019608" green="0.4549019608" blue="0.46274509800000002" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Jsr-98-e62" customClass="ATNetworkImageIconView">
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Jsr-98-e62" customClass="ApptentiveNetworkImageIconView">
                                             <rect key="frame" x="15" y="16" width="36" height="36"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" secondItem="Jsr-98-e62" secondAttribute="height" multiplier="1:1" id="B7b-Vw-9mL"/>
@@ -655,7 +654,7 @@
                                                 <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
                                             </userDefinedRuntimeAttributes>
                                         </imageView>
-                                        <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="8yd-Pf-GMV" customClass="ATIndexedCollectionView">
+                                        <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="8yd-Pf-GMV" customClass="ApptentiveIndexedCollectionView">
                                             <rect key="frame" x="0.0" y="90" width="414" height="78"/>
                                             <color key="backgroundColor" red="0.96862745100000003" green="0.96862745100000003" blue="0.97647058819999999" alpha="1" colorSpace="calibratedRGB"/>
                                             <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="16" minimumInteritemSpacing="16" id="OPP-bf-7zg">
@@ -665,7 +664,7 @@
                                                 <inset key="sectionInset" minX="16" minY="8" maxX="16" maxY="8"/>
                                             </collectionViewFlowLayout>
                                             <cells>
-                                                <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Attachment" id="scV-jZ-PIi" customClass="ATAttachmentCell">
+                                                <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Attachment" id="scV-jZ-PIi" customClass="ApptentiveAttachmentCell">
                                                     <rect key="frame" x="16" y="-1" width="60" height="80"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -786,7 +785,7 @@
                         <action selector="showAbout:" destination="W0l-Dy-ioE" id="zSM-IK-mxd"/>
                     </connections>
                 </tapGestureRecognizer>
-                <customObject id="lUk-lg-QHV" customClass="ATAttachmentController">
+                <customObject id="lUk-lg-QHV" customClass="ApptentiveAttachmentController">
                     <connections>
                         <outlet property="attachButton" destination="n0S-Y2-z5K" id="4f6-qt-nlT"/>
                         <outlet property="collectionView" destination="x5z-hj-ODV" id="F5Q-Ot-pbV"/>
@@ -804,7 +803,7 @@
                         <inset key="sectionInset" minX="8" minY="8" maxX="8" maxY="8"/>
                     </collectionViewFlowLayout>
                     <cells>
-                        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Attachment" id="ps9-Oq-gIg" customClass="ATAttachmentCell">
+                        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Attachment" id="ps9-Oq-gIg" customClass="ApptentiveAttachmentCell">
                             <rect key="frame" x="8" y="8.5" width="76" height="123"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -885,7 +884,7 @@
         <!--Message Center Error View-->
         <scene sceneID="G8v-Qy-vVc">
             <objects>
-                <viewController id="98M-gg-3nj" userLabel="Message Center Error View" customClass="ATMessageCenterErrorViewController" sceneMemberID="viewController">
+                <viewController id="98M-gg-3nj" userLabel="Message Center Error View" customClass="ApptentiveMessageCenterErrorViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="YsJ-93-sdE"/>
                         <viewControllerLayoutGuide type="bottom" id="PBq-M4-PKi"/>
@@ -936,10 +935,10 @@
             </objects>
             <point key="canvasLocation" x="303" y="1342"/>
         </scene>
-        <!--Banner View Controller-->
+        <!--Apptentive Banner View Controller-->
         <scene sceneID="pcU-LA-MMv">
             <objects>
-                <viewController storyboardIdentifier="Banner" id="dl0-K5-Mv3" customClass="ATBannerViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Banner" id="dl0-K5-Mv3" customClass="ApptentiveBannerViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="5SP-sQ-HE0"/>
                         <viewControllerLayoutGuide type="bottom" id="2nO-7a-cCZ"/>
@@ -963,7 +962,7 @@
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ubX-Rl-IsM" customClass="ATNetworkImageView">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ubX-Rl-IsM" customClass="ApptentiveNetworkImageView">
                                         <rect key="frame" x="15" y="12" width="44" height="44"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="ubX-Rl-IsM" secondAttribute="height" multiplier="1:1" id="XMZ-t2-8PH"/>
@@ -1030,7 +1029,7 @@
         <!--About-->
         <scene sceneID="zxj-fk-0sF">
             <objects>
-                <viewController storyboardIdentifier="About" hidesBottomBarWhenPushed="YES" id="Vhy-th-mTJ" customClass="ATAboutViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="About" hidesBottomBarWhenPushed="YES" id="Vhy-th-mTJ" customClass="ApptentiveAboutViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Eyb-YH-mrA"/>
                         <viewControllerLayoutGuide type="bottom" id="S8h-gc-fXf"/>
@@ -1112,7 +1111,7 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
         <scene sceneID="Xx8-Lb-CI2">
             <objects>
                 <navigationController storyboardIdentifier="MessageCenterNavigation" modalPresentationStyle="formSheet" toolbarHidden="NO" id="cIq-Hu-EXH" customClass="ATNavigationController" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="sCD-xi-s8C" customClass="ATProgressNavigationBar">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="sCD-xi-s8C" customClass="ApptentiveProgressNavigationBar">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -1144,10 +1143,10 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
             </objects>
             <point key="canvasLocation" x="-190" y="2021"/>
         </scene>
-        <!--Interaction Upgrade Message View Controller-->
+        <!--Apptentive Interaction Upgrade Message View Controller-->
         <scene sceneID="ZBg-KV-iHb">
             <objects>
-                <viewController storyboardIdentifier="UpgradeMessage" id="WnK-TF-euS" customClass="ATInteractionUpgradeMessageViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="UpgradeMessage" id="WnK-TF-euS" customClass="ApptentiveInteractionUpgradeMessageViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="0Ue-5m-Q56"/>
                         <viewControllerLayoutGuide type="bottom" id="NG4-sw-fgI"/>
@@ -1288,29 +1287,29 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
             </objects>
             <point key="canvasLocation" x="-190" y="2832"/>
         </scene>
-        <!--Survey View Controller-->
+        <!--Apptentive Survey View Controller-->
         <scene sceneID="AdM-Ua-90G">
             <objects>
-                <collectionViewController id="0Su-Sq-q29" customClass="ATSurveyViewController" sceneMemberID="viewController">
-                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" keyboardDismissMode="interactive" dataMode="prototypes" id="f2T-ot-d9N" customClass="ATCollectionView">
+                <collectionViewController id="0Su-Sq-q29" customClass="ApptentiveSurveyViewController" sceneMemberID="viewController">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" keyboardDismissMode="interactive" dataMode="prototypes" id="f2T-ot-d9N" customClass="ApptentiveSurveyCollectionView">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
-                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="Nth-y4-abX" customClass="ATSurveyCollectionViewLayout">
+                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="Nth-y4-abX" customClass="ApptentiveSurveyCollectionViewLayout">
                             <size key="itemSize" width="306" height="44"/>
                             <size key="headerReferenceSize" width="306" height="77"/>
                             <size key="footerReferenceSize" width="50" height="12"/>
                             <inset key="sectionInset" minX="7" minY="6" maxX="7" maxY="0.0"/>
                         </collectionViewFlowLayout>
                         <cells>
-                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Radio" id="X1P-xi-UFY" customClass="ATSurveyChoiceCell">
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Radio" id="X1P-xi-UFY" customClass="ApptentiveSurveyChoiceCell">
                                 <rect key="frame" x="7" y="147" width="306" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                     <rect key="frame" x="0.0" y="0.0" width="306" height="44"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="f7n-H0-eAD" customClass="ATSurveyOptionButton">
+                                        <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="f7n-H0-eAD" customClass="ApptentiveSurveyOptionButton">
                                             <rect key="frame" x="25" y="11" width="22" height="22"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="22" id="ElD-zZ-Wiw"/>
@@ -1345,7 +1344,7 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
                                     <outlet property="textLabel" destination="XeR-GW-QUi" id="uot-NF-XjQ"/>
                                 </connections>
                             </collectionViewCell>
-                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Checkbox" id="VvL-CQ-YLL" customClass="ATSurveyChoiceCell">
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Checkbox" id="VvL-CQ-YLL" customClass="ApptentiveSurveyChoiceCell">
                                 <rect key="frame" x="7" y="191" width="306" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -1358,7 +1357,7 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zb3-bq-5N3" customClass="ATSurveyOptionButton">
+                                        <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zb3-bq-5N3" customClass="ApptentiveSurveyOptionButton">
                                             <rect key="frame" x="26" y="12" width="20" height="20"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="20" id="0t0-ZR-qwB"/>
@@ -1387,7 +1386,7 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
                                     <outlet property="textLabel" destination="jfd-bx-kqH" id="89W-Fg-LYo"/>
                                 </connections>
                             </collectionViewCell>
-                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="MultilineText" id="UoN-6d-m4i" customClass="ATSurveyMultilineCell">
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="MultilineText" id="UoN-6d-m4i" customClass="ApptentiveSurveyMultilineCell">
                                 <rect key="frame" x="7" y="235" width="306" height="88"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -1425,7 +1424,7 @@ Lines</string>
                                     <outlet property="textView" destination="n5o-EB-mVk" id="Trj-fI-Cgs"/>
                                 </connections>
                             </collectionViewCell>
-                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="SingleLineText" id="I2g-uG-Caj" customClass="ATSurveySingleLineCell">
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="SingleLineText" id="I2g-uG-Caj" customClass="ApptentiveSurveySingleLineCell">
                                 <rect key="frame" x="7" y="323" width="306" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -1454,7 +1453,7 @@ Lines</string>
                                 </connections>
                             </collectionViewCell>
                         </cells>
-                        <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Question" id="Bcl-nV-AHj" customClass="ATSurveyQuestionView">
+                        <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Question" id="Bcl-nV-AHj" customClass="ApptentiveSurveyQuestionView">
                             <rect key="frame" x="0.0" y="64" width="320" height="77"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
@@ -1521,7 +1520,7 @@ Lines</string>
                     </connections>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="WC4-1a-1lH" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <view contentMode="scaleToFill" id="5MM-w9-NsG" customClass="ATSurveyGreetingView">
+                <view contentMode="scaleToFill" id="5MM-w9-NsG" customClass="ApptentiveSurveyGreetingView">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="85"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
@@ -1581,7 +1580,7 @@ Lines</string>
                             <rect key="frame" x="0.0" y="0.0" width="320" height="1085"/>
                             <color key="backgroundColor" white="0.96772203950000002" alpha="1" colorSpace="calibratedWhite"/>
                         </view>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="W2C-ze-Odt" customClass="ATSurveySubmitButton">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="W2C-ze-Odt" customClass="ApptentiveSurveySubmitButton">
                             <rect key="frame" x="127" y="25" width="66" height="36"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>

@@ -7,7 +7,7 @@
 //
 
 #import "ATTaskQueue.h"
-#import "ATBackend.h"
+#import "ApptentiveBackend.h"
 #import "ATTask.h"
 #import "ATLegacyRecord.h"
 #import "Apptentive_Private.h"
@@ -51,7 +51,7 @@ static ATTaskQueue *sharedTaskQueue = nil;
 				NSError *error = nil;
 				NSData *data = [NSData dataWithContentsOfFile:[ATTaskQueue taskQueuePath] options:NSDataReadingMapped error:&error];
 				if (!data) {
-					ATLogError(@"Unable to unarchive task queue: %@", error);
+					ApptentiveLogError(@"Unable to unarchive task queue: %@", error);
 				} else {
 					@try {
 						NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
@@ -59,7 +59,7 @@ static ATTaskQueue *sharedTaskQueue = nil;
 						sharedTaskQueue = [unarchiver decodeObjectForKey:@"root"];
 						unarchiver = nil;
 					} @catch (NSException *exception) {
-						ATLogError(@"Unable to unarchive task queue: %@", exception);
+						ApptentiveLogError(@"Unable to unarchive task queue: %@", exception);
 					}
 				}
 			}
@@ -239,7 +239,7 @@ static ATTaskQueue *sharedTaskQueue = nil;
 		ATTask *task = (ATTask *)object;
 
 		if (![task isKindOfClass:[ATTask class]]) {
-			ATLogError(@"Object was not subclass of ATTask");
+			ApptentiveLogError(@"Object was not subclass of ATTask");
 			return;
 		}
 
@@ -254,7 +254,7 @@ static ATTaskQueue *sharedTaskQueue = nil;
 				[self stop];
 				task.failureCount = task.failureCount + 1;
 				if (task.failureCount > kMaxFailureCount) {
-					ATLogError(@"Task %@ failed too many times, removing from queue.", task);
+					ApptentiveLogError(@"Task %@ failed too many times, removing from queue.", task);
 					[self unsetActiveTask];
 					[task cleanup];
 					[tasks removeObject:task];
@@ -313,7 +313,7 @@ static ATTaskQueue *sharedTaskQueue = nil;
 	@synchronized(self) {
 		if ([ATTaskQueue taskQueuePath]) {
 			if (![NSKeyedArchiver archiveRootObject:sharedTaskQueue toFile:[ATTaskQueue taskQueuePath]]) {
-				ATLogError(@"Unable to archive task queue to: %@", [ATTaskQueue taskQueuePath]);
+				ApptentiveLogError(@"Unable to archive task queue to: %@", [ATTaskQueue taskQueuePath]);
 			}
 		}
 	}

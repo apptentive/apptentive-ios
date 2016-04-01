@@ -6,38 +6,38 @@
 //  Copyright (c) 2011 Apptentive. All rights reserved.
 //
 
-#import "ATWebClient+SurveyAdditions.h"
-#import "ATWebClient_Private.h"
-#import "ATAPIRequest.h"
-#import "ATConversationUpdater.h"
-#import "ATJSONSerialization.h"
-#import "ATSurveyResponse.h"
-#import "ATURLConnection.h"
+#import "ApptentiveWebClient+SurveyAdditions.h"
+#import "ApptentiveWebClient_Private.h"
+#import "ApptentiveAPIRequest.h"
+#import "ApptentiveConversationUpdater.h"
+#import "ApptentiveJSONSerialization.h"
+#import "ApptentiveSurveyResponse.h"
+#import "ApptentiveURLConnection.h"
 
 
-@implementation ATWebClient (SurveyAdditions)
+@implementation ApptentiveWebClient (SurveyAdditions)
 
-- (ATAPIRequest *)requestForPostingSurveyResponse:(ATSurveyResponse *)surveyResponse {
-	ATConversation *conversation = [ATConversationUpdater currentConversation];
+- (ApptentiveAPIRequest *)requestForPostingSurveyResponse:(ApptentiveSurveyResponse *)surveyResponse {
+	ATConversation *conversation = [ApptentiveConversationUpdater currentConversation];
 	if (!conversation) {
-		ATLogError(@"No current conversation.");
+		ApptentiveLogError(@"No current conversation.");
 		return nil;
 	}
 
 	NSError *error = nil;
-	NSString *postString = [ATJSONSerialization stringWithJSONObject:[surveyResponse apiJSON] options:ATJSONWritingPrettyPrinted error:&error];
+	NSString *postString = [ApptentiveJSONSerialization stringWithJSONObject:[surveyResponse apiJSON] options:ATJSONWritingPrettyPrinted error:&error];
 	if (!postString && error != nil) {
-		ATLogError(@"ATWebClient+SurveyAdditions: Error while encoding JSON: %@", error);
+		ApptentiveLogError(@"ATWebClient+SurveyAdditions: Error while encoding JSON: %@", error);
 		return nil;
 	}
 	NSString *path = [NSString stringWithFormat:@"/surveys/%@/respond", surveyResponse.surveyID];
 
-	ATURLConnection *conn = [self connectionToPost:path JSON:postString];
+	ApptentiveURLConnection *conn = [self connectionToPost:path JSON:postString];
 	conn.timeoutInterval = 240.0;
 	[self updateConnection:conn withOAuthToken:conversation.token];
 
-	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:[self commonChannelName]];
-	request.returnType = ATAPIRequestReturnTypeJSON;
+	ApptentiveAPIRequest *request = [[ApptentiveAPIRequest alloc] initWithConnection:conn channelName:[self commonChannelName]];
+	request.returnType = ApptentiveAPIRequestReturnTypeJSON;
 	return request;
 }
 @end

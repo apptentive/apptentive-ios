@@ -9,7 +9,7 @@
 #import "ATMessageSender.h"
 
 #import "ATData.h"
-#import "NSDictionary+ATAdditions.h"
+#import "NSDictionary+Apptentive.h"
 
 
 @implementation ATMessageSender

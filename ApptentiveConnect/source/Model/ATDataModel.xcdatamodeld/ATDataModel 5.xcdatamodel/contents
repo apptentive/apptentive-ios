@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="9525" systemVersion="15C50" minimumToolsVersion="Xcode 4.3">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="10171" systemVersion="15E65" minimumToolsVersion="Xcode 4.3">
+    <entity name="ApptentiveSurveyResponse" representedClassName="ApptentiveSurveyResponse" parentEntity="ATRecord" syncable="YES">
+        <attribute name="answersData" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="pendingState" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="pendingSurveyResponseID" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
+        <attribute name="surveyID" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
+    </entity>
     <entity name="ATEvent" representedClassName="ATEvent" parentEntity="ATRecord" syncable="YES">
         <attribute name="dictionaryData" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="label" optional="YES" attributeType="String" syncable="YES"/>
@@ -43,18 +49,12 @@
         <attribute name="clientCreationUTCOffset" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="creationTime" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
     </entity>
-    <entity name="ATSurveyResponse" representedClassName="ATSurveyResponse" parentEntity="ATRecord" syncable="YES">
-        <attribute name="answersData" optional="YES" attributeType="Binary" syncable="YES"/>
-        <attribute name="pendingState" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
-        <attribute name="pendingSurveyResponseID" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
-        <attribute name="surveyID" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
-    </entity>
     <elements>
-        <element name="ATEvent" positionX="0" positionY="0" width="128" height="90"/>
-        <element name="ATFileAttachment" positionX="0" positionY="0" width="128" height="135"/>
-        <element name="ATMessage" positionX="0" positionY="0" width="128" height="255"/>
-        <element name="ATMessageSender" positionX="0" positionY="0" width="128" height="120"/>
-        <element name="ATRecord" positionX="0" positionY="0" width="128" height="120"/>
-        <element name="ATSurveyResponse" positionX="0" positionY="0" width="128" height="105"/>
+        <element name="ATEvent" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="ATFileAttachment" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="ATMessage" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="ATMessageSender" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="ATRecord" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="ApptentiveSurveyResponse" positionX="0" positionY="0" width="0" height="0"/>
     </elements>
 </model>

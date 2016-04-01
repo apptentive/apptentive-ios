@@ -7,11 +7,11 @@
 //
 
 #import "ATFileAttachment.h"
-#import "ATBackend.h"
+#import "ApptentiveBackend.h"
 #import "ATCompoundMessage.h"
-#import "ATUtilities.h"
+#import "ApptentiveUtilities.h"
 #import "ATData.h"
-#import "NSDictionary+ATAdditions.h"
+#import "NSDictionary+Apptentive.h"
 #import "Apptentive_Private.h"
 #import <MobileCoreServices/MobileCoreServices.h>
 #import <ImageIO/ImageIO.h>
@@ -77,7 +77,7 @@
 			if ([[NSFileManager defaultManager] moveItemAtPath:[self fullLocalPathForFilename:attachment.localPath] toPath:[self fullLocalPathForFilename:newPath] error:&error]) {
 				attachment.localPath = newPath;
 			} else {
-				ATLogError(@"Unable to append extension to file %@ (error: %@)", newPath, error);
+				ApptentiveLogError(@"Unable to append extension to file %@ (error: %@)", newPath, error);
 			}
 		}
 	}
@@ -118,9 +118,9 @@
 	self.localPath = nil;
 	self.mimeType = MIMEType;
 	if (data) {
-		self.localPath = [[ATUtilities randomStringOfLength:20] stringByAppendingPathExtension:self.extension];
+		self.localPath = [[ApptentiveUtilities randomStringOfLength:20] stringByAppendingPathExtension:self.extension];
 		if (![data writeToFile:[self fullLocalPath] atomically:YES]) {
-			ATLogError(@"Unable to save file data to path: %@", [self fullLocalPath]);
+			ApptentiveLogError(@"Unable to save file data to path: %@", [self fullLocalPath]);
 			self.localPath = nil;
 		}
 		self.name = name ?: [NSString stringWithString:self.localPath];
@@ -134,13 +134,13 @@
 		NSError *error = nil;
 		fileData = [NSData dataWithContentsOfFile:path options:NSDataReadingMappedIfSafe error:&error];
 		if (!fileData) {
-			ATLogError(@"Unable to get contents of file path for uploading: %@", error);
+			ApptentiveLogError(@"Unable to get contents of file path for uploading: %@", error);
 		} else {
 			return fileData;
 		}
 	}
 
-	ATLogError(@"Missing sidecar file for %@", self);
+	ApptentiveLogError(@"Missing sidecar file for %@", self);
 	return nil;
 }
 
@@ -166,17 +166,17 @@
 
 - (NSURL *)beginMoveToStorageFrom:(NSURL *)temporaryLocation {
 	if (temporaryLocation && temporaryLocation.isFileURL) {
-		NSString *name = [[ATUtilities randomStringOfLength:20] stringByAppendingPathExtension:self.extension];
+		NSString *name = [[ApptentiveUtilities randomStringOfLength:20] stringByAppendingPathExtension:self.extension];
 		NSURL *newLocation = [NSURL fileURLWithPath:[[self class] fullLocalPathForFilename:name]];
 		NSError *error = nil;
 		if ([[NSFileManager defaultManager] moveItemAtURL:temporaryLocation toURL:newLocation error:&error]) {
 			return newLocation;
 		} else {
-			ATLogError(@"Unable to write attachment to URL: %@, %@", newLocation, error);
+			ApptentiveLogError(@"Unable to write attachment to URL: %@, %@", newLocation, error);
 			return nil;
 		}
 	} else {
-		ATLogError(@"Temporary file location (%@) is nil or not file URL", temporaryLocation);
+		ApptentiveLogError(@"Temporary file location (%@) is nil or not file URL", temporaryLocation);
 		return nil;
 	}
 }
@@ -243,24 +243,24 @@
 		NSError *error = nil;
 		BOOL isDir = NO;
 		if (![fm fileExistsAtPath:fullPath isDirectory:&isDir] || isDir) {
-			ATLogError(@"File attachment sidecar doesn't exist at path or is directory: %@, %d", fullPath, isDir);
+			ApptentiveLogError(@"File attachment sidecar doesn't exist at path or is directory: %@, %d", fullPath, isDir);
 			return;
 		}
 		if (![fm removeItemAtPath:fullPath error:&error]) {
-			ATLogError(@"Error removing attachment at path: %@. %@", fullPath, error);
+			ApptentiveLogError(@"Error removing attachment at path: %@. %@", fullPath, error);
 			return;
 		}
 		// Delete any thumbnails.
 		NSArray *filenames = [fm contentsOfDirectoryAtPath:[[Apptentive sharedConnection].backend attachmentDirectoryPath] error:&error];
 		if (!filenames) {
-			ATLogError(@"Error listing attachments directory: %@", error);
+			ApptentiveLogError(@"Error listing attachments directory: %@", error);
 		} else {
 			for (NSString *filename in filenames) {
 				if ([filename rangeOfString:self.localPath].location == 0) {
 					NSString *thumbnailPath = [[self class] fullLocalPathForFilename:filename];
 
 					if (![fm removeItemAtPath:thumbnailPath error:&error]) {
-						ATLogError(@"Error removing attachment thumbnail at path: %@. %@", thumbnailPath, error);
+						ApptentiveLogError(@"Error removing attachment thumbnail at path: %@. %@", thumbnailPath, error);
 						continue;
 					}
 				}
@@ -323,7 +323,7 @@
 		return [NSURL fileURLWithPath:self.fullLocalPath];
 	} else {
 		// Use fake path
-		NSString *name = self.name ?: [[ATUtilities randomStringOfLength:20] stringByAppendingPathExtension:self.extension];
+		NSString *name = self.name ?: [[ApptentiveUtilities randomStringOfLength:20] stringByAppendingPathExtension:self.extension];
 		return [NSURL fileURLWithPath:[[self class] fullLocalPathForFilename:name]];
 	}
 }

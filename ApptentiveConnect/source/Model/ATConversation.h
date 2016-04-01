@@ -8,10 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
-#import "ATJSONModel.h"
+#import "ApptentiveJSONModel.h"
 
 
-@interface ATConversation : NSObject <NSCoding, ATJSONModel>
+@interface ATConversation : NSObject <NSCoding, ApptentiveJSONModel>
 @property (strong, nonatomic) NSString *token;
 @property (strong, nonatomic) NSString *personID;
 @property (strong, nonatomic) NSString *deviceID;

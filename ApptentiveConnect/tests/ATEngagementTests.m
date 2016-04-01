@@ -8,11 +8,11 @@
 
 #import <XCTest/XCTest.h>
 #import "Apptentive.h"
-#import "ATInteraction.h"
-#import "ATInteractionInvocation.h"
-#import "ATInteractionUsageData.h"
-#import "ATEngagementBackend.h"
-#import "ATEngagementManifestParser.h"
+#import "ApptentiveInteraction.h"
+#import "ApptentiveInteractionInvocation.h"
+#import "ApptentiveInteractionUsageData.h"
+#import "ApptentiveEngagementBackend.h"
+#import "ApptentiveEngagementManifestParser.h"
 #import "Apptentive_Private.h"
 
 
@@ -53,42 +53,42 @@
 	NSString *i, *o;
 	i = @"testEventLabelSeparators";
 	o = @"testEventLabelSeparators";
-	XCTAssertTrue([[ATEngagementBackend stringByEscapingCodePointSeparatorCharactersInString:i] isEqualToString:o], @"Test escaping code point separator characters from event labels.");
+	XCTAssertTrue([[ApptentiveEngagementBackend stringByEscapingCodePointSeparatorCharactersInString:i] isEqualToString:o], @"Test escaping code point separator characters from event labels.");
 
 	i = @"test#Event#Label#Separators";
 	o = @"test%23Event%23Label%23Separators";
-	XCTAssertTrue([[ATEngagementBackend stringByEscapingCodePointSeparatorCharactersInString:i] isEqualToString:o], @"Test escaping code point separator characters from event labels.");
+	XCTAssertTrue([[ApptentiveEngagementBackend stringByEscapingCodePointSeparatorCharactersInString:i] isEqualToString:o], @"Test escaping code point separator characters from event labels.");
 
 	i = @"test/Event/Label/Separators";
 	o = @"test%2FEvent%2FLabel%2FSeparators";
-	XCTAssertTrue([[ATEngagementBackend stringByEscapingCodePointSeparatorCharactersInString:i] isEqualToString:o], @"Test escaping code point separator characters from event labels.");
+	XCTAssertTrue([[ApptentiveEngagementBackend stringByEscapingCodePointSeparatorCharactersInString:i] isEqualToString:o], @"Test escaping code point separator characters from event labels.");
 
 	i = @"test%Event/Label#Separators";
 	o = @"test%25Event%2FLabel%23Separators";
-	XCTAssertTrue([[ATEngagementBackend stringByEscapingCodePointSeparatorCharactersInString:i] isEqualToString:o], @"Test escaping code point separator characters from event labels.");
+	XCTAssertTrue([[ApptentiveEngagementBackend stringByEscapingCodePointSeparatorCharactersInString:i] isEqualToString:o], @"Test escaping code point separator characters from event labels.");
 
 	i = @"test#Event/Label%Separators";
 	o = @"test%23Event%2FLabel%25Separators";
-	XCTAssertTrue([[ATEngagementBackend stringByEscapingCodePointSeparatorCharactersInString:i] isEqualToString:o], @"Test escaping code point separator characters from event labels.");
+	XCTAssertTrue([[ApptentiveEngagementBackend stringByEscapingCodePointSeparatorCharactersInString:i] isEqualToString:o], @"Test escaping code point separator characters from event labels.");
 
 	i = @"test###Event///Label%%%Separators";
 	o = @"test%23%23%23Event%2F%2F%2FLabel%25%25%25Separators";
-	XCTAssertTrue([[ATEngagementBackend stringByEscapingCodePointSeparatorCharactersInString:i] isEqualToString:o], @"Test escaping code point separator characters from event labels.");
+	XCTAssertTrue([[ApptentiveEngagementBackend stringByEscapingCodePointSeparatorCharactersInString:i] isEqualToString:o], @"Test escaping code point separator characters from event labels.");
 
 	i = @"test#%///#%//%%/#Event_!@#$%^&*(){}Label1234567890[]`~Separators";
 	o = @"test%23%25%2F%2F%2F%23%25%2F%2F%25%25%2F%23Event_!@%23$%25^&*(){}Label1234567890[]`~Separators";
-	XCTAssertTrue([[ATEngagementBackend stringByEscapingCodePointSeparatorCharactersInString:i] isEqualToString:o], @"Test escaping code point separator characters from event labels.");
+	XCTAssertTrue([[ApptentiveEngagementBackend stringByEscapingCodePointSeparatorCharactersInString:i] isEqualToString:o], @"Test escaping code point separator characters from event labels.");
 
 	i = @"test%/#";
 	o = @"test%25%2F%23";
-	XCTAssertTrue([[ATEngagementBackend stringByEscapingCodePointSeparatorCharactersInString:i] isEqualToString:o], @"Test escaping code point separator characters from event labels.");
+	XCTAssertTrue([[ApptentiveEngagementBackend stringByEscapingCodePointSeparatorCharactersInString:i] isEqualToString:o], @"Test escaping code point separator characters from event labels.");
 }
 
 - (void)testInteractionCriteria {
-	ATInteractionInvocation *invocation = [[ATInteractionInvocation alloc] init];
+	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
 	invocation.criteria = @{ @"time_since_install/total": @{@"$gt": @(5 * 60 * 60 * 24), @"$lt": @(7 * 60 * 60 * 24)} };
 
-	ATInteractionUsageData *usageData = [ATInteractionUsageData usageData];
+	ApptentiveInteractionUsageData *usageData = [ApptentiveInteractionUsageData usageData];
 	usageData.timeSinceInstallTotal = @(6 * 60 * 60 * 24);
 	usageData.timeSinceInstallVersion = @(6 * 60 * 60 * 24);
 	usageData.timeSinceInstallBuild = @(6 * 60 * 60 * 24);
@@ -107,11 +107,11 @@
 }
 
 - (void)testUnknownKeyInCriteria {
-	ATInteractionInvocation *invocation = [[ATInteractionInvocation alloc] init];
+	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
 	invocation.criteria = @{ @"time_since_install/total": @(6 * 60 * 60 * 24),
 		@"time_since_install/version": @(6 * 60 * 60 * 24) };
 
-	ATInteractionUsageData *usageData = [ATInteractionUsageData usageData];
+	ApptentiveInteractionUsageData *usageData = [ApptentiveInteractionUsageData usageData];
 	usageData.timeSinceInstallTotal = @(6 * 60 * 60 * 24);
 	usageData.timeSinceInstallVersion = @(6 * 60 * 60 * 24);
 	usageData.timeSinceInstallBuild = @(6 * 60 * 60 * 24);
@@ -136,8 +136,8 @@
 }
 
 - (void)testEmptyCriteria {
-	ATInteractionInvocation *invocation = [[ATInteractionInvocation alloc] init];
-	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
+	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
+	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] init];
 
 	invocation.criteria = nil;
 	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Dictionary with nil criteria should evaluate to False.");
@@ -153,8 +153,8 @@
 }
 
 - (void)testInteractionCriteriaDaysSnceInstall {
-	ATInteractionInvocation *invocation = [[ATInteractionInvocation alloc] init];
-	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
+	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
+	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] init];
 
 	NSTimeInterval dayTimeInterval = 60 * 60 * 24;
 
@@ -190,8 +190,8 @@
 }
 
 - (void)testInteractionCriteriaVersion {
-	ATInteractionInvocation *invocation = [[ATInteractionInvocation alloc] init];
-	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
+	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
+	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] init];
 
 	invocation.criteria = @{ @"application_version": @"1.2.8" };
 	usageData.applicationVersion = @"1.2.8";
@@ -205,7 +205,7 @@
 	usageData.applicationVersion = @"3.0";
 	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Version number must not have a 'v' in front!");
 
-	usageData = [[ATInteractionUsageData alloc] init];
+	usageData = [[ApptentiveInteractionUsageData alloc] init];
 	invocation.criteria = @{ @"app_release/version": @"1.2.8" };
 	usageData.applicationVersion = @"1.2.8";
 	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Version number");
@@ -224,8 +224,8 @@
 }
 
 - (void)testInteractionCriteriaBuild {
-	ATInteractionInvocation *invocation = [[ATInteractionInvocation alloc] init];
-	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
+	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
+	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] init];
 
 	invocation.criteria = @{ @"application_build": @"39" };
 	usageData.applicationBuild = @"39";
@@ -241,7 +241,7 @@
 	usageData.applicationBuild = @"3.0";
 	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Build number must not have a 'v' in front!");
 
-	usageData = [[ATInteractionUsageData alloc] init];
+	usageData = [[ApptentiveInteractionUsageData alloc] init];
 	invocation.criteria = @{ @"app_release/build": @"39" };
 	usageData.applicationBuild = @"39";
 	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Build number");
@@ -262,8 +262,8 @@
 }
 
 - (void)testInteractionCriteriaSDK {
-	ATInteractionInvocation *invocation = [[ATInteractionInvocation alloc] init];
-	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
+	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
+	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] init];
 
 	invocation.criteria = @{ @"sdk/version": [Apptentive versionObjectWithVersion:kApptentiveVersionString] };
 	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Default value should be current version.");
@@ -295,8 +295,8 @@
 }
 
 - (void)testInteractionCriteriaCurrentTime {
-	ATInteractionInvocation *invocation = [[ATInteractionInvocation alloc] init];
-	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
+	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
+	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] init];
 
 	invocation.criteria = @{ @"current_time": @{@"$exists": @YES} };
 	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Must have default current time.");
@@ -322,8 +322,8 @@
 }
 
 - (void)testCodePointInvokesVersion {
-	ATInteractionInvocation *invocation = [[ATInteractionInvocation alloc] init];
-	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
+	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
+	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] init];
 
 	invocation.criteria = @{ @"code_point/app.launch/invokes/version": @1 };
 	usageData.codePointInvokesVersion = @{ @"code_point/app.launch/invokes/version": @1 };
@@ -357,8 +357,8 @@
 }
 
 - (void)testUpgradeMessageCriteria {
-	ATInteractionInvocation *invocation = [[ATInteractionInvocation alloc] init];
-	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
+	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
+	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] init];
 
 	invocation.criteria = @{ @"code_point/app.launch/invokes/version": @1,
 		@"application_version": @"1.3.0",
@@ -435,11 +435,11 @@
 
 	NSDictionary *targetsDictionary = jsonDictionary[@"targets"];
 
-	NSString *targetedEvent = [[ATInteraction localAppInteraction] codePointForEvent:@"upgrade_message_test"];
+	NSString *targetedEvent = [[ApptentiveInteraction localAppInteraction] codePointForEvent:@"upgrade_message_test"];
 	NSDictionary *appLaunchInteraction = [[targetsDictionary objectForKey:targetedEvent] objectAtIndex:0];
 
-	ATInteractionInvocation *upgradeMessageInteractionInvocation = [ATInteractionInvocation invocationWithJSONDictionary:appLaunchInteraction];
-	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
+	ApptentiveInteractionInvocation *upgradeMessageInteractionInvocation = [ApptentiveInteractionInvocation invocationWithJSONDictionary:appLaunchInteraction];
+	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] init];
 
 	usageData.applicationVersion = @"999";
 	usageData.interactionInvokesTotal = @{ @"interactions/52fadf097724c5c09f000012/invokes/total": @0 };
@@ -447,21 +447,21 @@
 	usageData.timeSinceInstallVersion = @(2 * 24 * 60 * 60);
 	XCTAssertTrue([upgradeMessageInteractionInvocation criteriaAreMetForUsageData:usageData], @"Upgrade Message criteria met!");
 
-	usageData = [[ATInteractionUsageData alloc] init];
+	usageData = [[ApptentiveInteractionUsageData alloc] init];
 	usageData.applicationVersion = @"998";
 	usageData.interactionInvokesTotal = @{ @"interactions/52fadf097724c5c09f000012/invokes/total": @0 };
 	usageData.isUpdateVersion = @YES;
 	usageData.timeSinceInstallVersion = @(2 * 24 * 60 * 60);
 	XCTAssertFalse([upgradeMessageInteractionInvocation criteriaAreMetForUsageData:usageData], @"Upgrade Message criteria not met!");
 
-	usageData = [[ATInteractionUsageData alloc] init];
+	usageData = [[ApptentiveInteractionUsageData alloc] init];
 	usageData.applicationVersion = @"999";
 	usageData.interactionInvokesTotal = @{ @"interactions/52fadf097724c5c09f000012/invokes/total": @0 };
 	usageData.isUpdateVersion = @NO;
 	usageData.timeSinceInstallVersion = @(2 * 24 * 60 * 60);
 	XCTAssertFalse([upgradeMessageInteractionInvocation criteriaAreMetForUsageData:usageData], @"Upgrade Message criteria not met!");
 
-	usageData = [[ATInteractionUsageData alloc] init];
+	usageData = [[ApptentiveInteractionUsageData alloc] init];
 	usageData.applicationVersion = @"999";
 	usageData.interactionInvokesTotal = @{ @"interactions/52fadf097724c5c09f000012/invokes/total": @1 };
 	usageData.isUpdateVersion = @YES;
@@ -477,10 +477,10 @@
 				@{@"code_point/big.win/invokes/total": @2}]}]}]
 	};
 
-	ATInteractionInvocation *invocation = [[ATInteractionInvocation alloc] init];
+	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
 	invocation.criteria = complexCriteria;
 
-	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
+	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] init];
 
 	NSTimeInterval dayTimeInterval = 60 * 60 * 24;
 
@@ -515,8 +515,8 @@
 }
 
 - (void)testTimeAgoCriteria {
-	ATInteractionInvocation *invocation = [[ATInteractionInvocation alloc] init];
-	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
+	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
+	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] init];
 
 	invocation.criteria = @{ @"code_point/app.launch/invokes/time_ago": @100,
 		@"interactions/big.win/invokes/time_ago": @1000 };
@@ -534,8 +534,8 @@
 }
 
 - (void)testIsUpdateVersionsAndBuilds {
-	ATInteractionInvocation *invocation = [[ATInteractionInvocation alloc] init];
-	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
+	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
+	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] init];
 
 	//Version
 	invocation.criteria = @{ @"is_update/version": @YES };
@@ -581,10 +581,10 @@
 }
 
 - (void)testInvokesVersion {
-	ATInteractionInvocation *invocation = [[ATInteractionInvocation alloc] init];
+	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
 	invocation.criteria = @{ @"interactions/526fe2836dd8bf546a00000b/invokes/version": @{@"$lte": @6} };
 
-	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
+	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] init];
 	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Invokes version should default to 0 when not set.");
 
 	invocation.criteria = @{ @"interactions/526fe2836dd8bf546a00000b/invokes/version": @{@"$gte": @6} };
@@ -600,10 +600,10 @@
 }
 
 - (void)testInvokesBuild {
-	ATInteractionInvocation *invocation = [[ATInteractionInvocation alloc] init];
+	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
 	invocation.criteria = @{ @"interactions/526fe2836dd8bf546a00000b/invokes/build": @{@"$lte": @6} };
 
-	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
+	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] init];
 	XCTAssertNotNil([invocation criteriaPredicate], @"Criteria should parse correctly.");
 	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Invokes build should default to 0 when not set.");
 
@@ -623,7 +623,7 @@
 }
 
 - (void)testEnjoymentDialogCriteria {
-	ATInteractionInvocation *invocation = [[ATInteractionInvocation alloc] init];
+	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
 	invocation.criteria = @{ @"$or": @[@{@"code_point/local#app#init/invokes/version": @{@"$gte": @10}},
 		@{@"time_since_install/total": @{@"$gt": @864000}},
 		@{@"code_point/local#app#testRatingFlow/invokes/total": @{@"$gt": @10}}],
@@ -631,7 +631,7 @@
 	XCTAssertNotNil([invocation criteriaPredicate], @"Criteria should parse correctly.");
 
 
-	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
+	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] init];
 	usageData.codePointInvokesVersion = @{ @"code_point/local#app#init/invokes/version": @9 };
 	usageData.timeSinceInstallTotal = @863999;
 	usageData.codePointInvokesTotal = @{ @"code_point/local#app#testRatingFlow/invokes/total": @9 };
@@ -655,7 +655,7 @@
 }
 
 - (void)testNotInCriteria {
-	ATInteractionInvocation *invocation = [[ATInteractionInvocation alloc] init];
+	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
 	invocation.criteria = @{ @"$and": @[@{@"code_point/local#app#init/invokes/version": @{@"$not": @{@"$gte": @10}}},
 		@{@"time_since_install/total": @{@"$not": @{@"$gt": @864000}}},
 		@{@"code_point/local#app#testRatingFlow/invokes/total": @{@"$gt": @10}}],
@@ -663,7 +663,7 @@
 	};
 	XCTAssertNotNil([invocation criteriaPredicate], @"Criteria should parse correctly.");
 
-	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
+	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] init];
 	usageData.codePointInvokesVersion = @{ @"code_point/local#app#init/invokes/version": @9 };
 	usageData.timeSinceInstallTotal = @863999;
 	usageData.codePointInvokesTotal = @{ @"code_point/local#app#testRatingFlow/invokes/total": @9 };
@@ -673,30 +673,30 @@
 	usageData.codePointInvokesTotal = @{ @"code_point/local#app#testRatingFlow/invokes/total": @11 };
 	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Should pass due to invokes being 11.");
 
-	invocation = [[ATInteractionInvocation alloc] init];
-	usageData = [[ATInteractionUsageData alloc] init];
+	invocation = [[ApptentiveInteractionInvocation alloc] init];
+	usageData = [[ApptentiveInteractionUsageData alloc] init];
 	invocation.criteria = @{ @"interactions/526fe2836dd8bf546a00000b/invokes/build": @{@"$not": @{@"$gt": @6}} };
 	usageData.interactionInvokesBuild = @{ @"interactions/526fe2836dd8bf546a00000b/invokes/build": @1 };
 	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Should pass because 6 is not > 1.");
 }
 
 - (void)testContainsCriteria {
-	ATInteractionInvocation *invocation = [[ATInteractionInvocation alloc] init];
-	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
+	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
+	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] init];
 	invocation.criteria = @{ @"application_version": @{@"$contains": @"a"} };
 	usageData.applicationVersion = @"1.2.3a";
 	XCTAssertNotNil([invocation criteriaPredicate], @"Criteria should parse correctly.");
 	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Should pass because a is in 1.2.3a");
 
-	invocation = [[ATInteractionInvocation alloc] init];
-	usageData = [[ATInteractionUsageData alloc] init];
+	invocation = [[ApptentiveInteractionInvocation alloc] init];
+	usageData = [[ApptentiveInteractionUsageData alloc] init];
 	invocation.criteria = @{ @"application_version": @{@"$contains": @"1.4"} };
 	usageData.applicationVersion = @"1.2.3a";
 	XCTAssertNotNil([invocation criteriaPredicate], @"Criteria should parse correctly.");
 	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Should fail because 1.4 is not in 1.2.3a");
 
-	invocation = [[ATInteractionInvocation alloc] init];
-	usageData = [[ATInteractionUsageData alloc] init];
+	invocation = [[ApptentiveInteractionInvocation alloc] init];
+	usageData = [[ApptentiveInteractionUsageData alloc] init];
 	invocation.criteria = @{ @"application_version": @{@"$contains": @"abc"} };
 	usageData.applicationVersion = @"AbC";
 	XCTAssertNotNil([invocation criteriaPredicate], @"Criteria should parse correctly.");
@@ -704,30 +704,30 @@
 }
 
 - (void)testStartsWithCriteria {
-	ATInteractionInvocation *invocation = [[ATInteractionInvocation alloc] init];
-	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
+	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
+	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] init];
 	invocation.criteria = @{ @"application_version": @{@"$starts_with": @"1.2."} };
 	usageData.applicationVersion = @"1.2.3a";
 	XCTAssertNotNil([invocation criteriaPredicate], @"Criteria should parse correctly.");
 	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Should pass because 1.2.3a starts with 1.2.");
 
-	invocation = [[ATInteractionInvocation alloc] init];
-	usageData = [[ATInteractionUsageData alloc] init];
+	invocation = [[ApptentiveInteractionInvocation alloc] init];
+	usageData = [[ApptentiveInteractionUsageData alloc] init];
 	invocation.criteria = @{ @"application_version": @{@"$starts_with": @"1.4"} };
 	usageData.applicationVersion = @"1.2.3a";
 	XCTAssertNotNil([invocation criteriaPredicate], @"Criteria should parse correctly.");
 	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Should fail because 1.2.3a doesn't start with 1.4");
 
 	// Test directionality.
-	invocation = [[ATInteractionInvocation alloc] init];
-	usageData = [[ATInteractionUsageData alloc] init];
+	invocation = [[ApptentiveInteractionInvocation alloc] init];
+	usageData = [[ApptentiveInteractionUsageData alloc] init];
 	invocation.criteria = @{ @"application_version": @{@"$starts_with": @"abcd"} };
 	usageData.applicationVersion = @"abc";
 	XCTAssertNotNil([invocation criteriaPredicate], @"Criteria should parse correctly.");
 	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Should fail because abc doesn't start with abcd.");
 
-	invocation = [[ATInteractionInvocation alloc] init];
-	usageData = [[ATInteractionUsageData alloc] init];
+	invocation = [[ApptentiveInteractionInvocation alloc] init];
+	usageData = [[ApptentiveInteractionUsageData alloc] init];
 	invocation.criteria = @{ @"application_version": @{@"$starts_with": @"abc"} };
 	usageData.applicationVersion = @"AbCdEF";
 	XCTAssertNotNil([invocation criteriaPredicate], @"Criteria should parse correctly.");
@@ -735,30 +735,30 @@
 }
 
 - (void)testEndsWithCriteria {
-	ATInteractionInvocation *invocation = [[ATInteractionInvocation alloc] init];
-	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
+	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
+	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] init];
 	invocation.criteria = @{ @"application_version": @{@"$ends_with": @"a"} };
 	usageData.applicationVersion = @"1.2.3a";
 	XCTAssertNotNil([invocation criteriaPredicate], @"Criteria should parse correctly.");
 	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Should pass because 1.2.3a ends with a");
 
-	invocation = [[ATInteractionInvocation alloc] init];
-	usageData = [[ATInteractionUsageData alloc] init];
+	invocation = [[ApptentiveInteractionInvocation alloc] init];
+	usageData = [[ApptentiveInteractionUsageData alloc] init];
 	invocation.criteria = @{ @"application_version": @{@"$ends_with": @"1.4"} };
 	usageData.applicationVersion = @"1.2.3a";
 	XCTAssertNotNil([invocation criteriaPredicate], @"Criteria should parse correctly.");
 	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Should fail because 1.2.3a doesn't end in 1.4");
 
 	// Test directionality
-	invocation = [[ATInteractionInvocation alloc] init];
-	usageData = [[ATInteractionUsageData alloc] init];
+	invocation = [[ApptentiveInteractionInvocation alloc] init];
+	usageData = [[ApptentiveInteractionUsageData alloc] init];
 	invocation.criteria = @{ @"application_version": @{@"$ends_with": @"abcd"} };
 	usageData.applicationVersion = @"bcd";
 	XCTAssertNotNil([invocation criteriaPredicate], @"Criteria should parse correctly.");
 	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Should fail because bcd doesn't end with abcd.");
 
-	invocation = [[ATInteractionInvocation alloc] init];
-	usageData = [[ATInteractionUsageData alloc] init];
+	invocation = [[ApptentiveInteractionInvocation alloc] init];
+	usageData = [[ApptentiveInteractionUsageData alloc] init];
 	invocation.criteria = @{ @"application_version": @{@"$ends_with": @"DEF"} };
 	usageData.applicationVersion = @"AbCdEf";
 	XCTAssertNotNil([invocation criteriaPredicate], @"Criteria should parse correctly.");
@@ -766,42 +766,42 @@
 }
 
 - (void)testExistsCriteria {
-	ATInteractionInvocation *invocation = [[ATInteractionInvocation alloc] init];
-	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
+	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
+	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] init];
 	invocation.criteria = @{ @"application_version": @{@"$exists": @YES} };
 	usageData.applicationVersion = @"1.2.3a";
 	XCTAssertNotNil([invocation criteriaPredicate], @"Criteria should parse correctly.");
 	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Should pass because application_version exists.");
 
-	invocation = [[ATInteractionInvocation alloc] init];
-	usageData = [[ATInteractionUsageData alloc] init];
+	invocation = [[ApptentiveInteractionInvocation alloc] init];
+	usageData = [[ApptentiveInteractionUsageData alloc] init];
 	invocation.criteria = @{ @"application_version": @{@"$exists": @YES} };
 	XCTAssertNotNil([invocation criteriaPredicate], @"Criteria should parse correctly.");
 	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Should fail because application_version doesn't exist.");
 
-	invocation = [[ATInteractionInvocation alloc] init];
-	usageData = [[ATInteractionUsageData alloc] init];
+	invocation = [[ApptentiveInteractionInvocation alloc] init];
+	usageData = [[ApptentiveInteractionUsageData alloc] init];
 	invocation.criteria = @{ @"application_version": @{@"$exists": @NO} };
 	usageData.applicationVersion = @"1.2.3a";
 	XCTAssertNotNil([invocation criteriaPredicate], @"Criteria should parse correctly.");
 	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Should fail because application_version exists.");
 
-	invocation = [[ATInteractionInvocation alloc] init];
-	usageData = [[ATInteractionUsageData alloc] init];
+	invocation = [[ApptentiveInteractionInvocation alloc] init];
+	usageData = [[ApptentiveInteractionUsageData alloc] init];
 	invocation.criteria = @{ @"application_build": @{@"$exists": @NO} };
 	XCTAssertNotNil([invocation criteriaPredicate], @"Criteria should parse correctly.");
 	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Should pass because application_build doesn't exist.");
 
-	invocation = [[ATInteractionInvocation alloc] init];
-	usageData = [[ATInteractionUsageData alloc] init];
+	invocation = [[ApptentiveInteractionInvocation alloc] init];
+	usageData = [[ApptentiveInteractionUsageData alloc] init];
 	invocation.criteria = @{ @"application_build": @{@"$exists": @YES} };
 	usageData.applicationBuild = @"nil";
 	XCTAssertNotNil([invocation criteriaPredicate], @"Criteria should parse correctly.");
 	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Should pass because application_build exists.");
 
 
-	invocation = [[ATInteractionInvocation alloc] init];
-	usageData = [[ATInteractionUsageData alloc] init];
+	invocation = [[ApptentiveInteractionInvocation alloc] init];
+	usageData = [[ApptentiveInteractionUsageData alloc] init];
 	invocation.criteria = @{ @"code_point/app.launch/invokes/time_ago": @{@"$exists": @YES},
 		@"interactions/big.win/invokes/time_ago": @{@"$exists": @NO} };
 	usageData.codePointInvokesTimeAgo = @{ @"code_point/app.launch/invokes/time_ago": @800 };
@@ -812,7 +812,7 @@
 
 - (void)testInvalidJSON {
 	NSString *json = @"";
-	ATEngagementManifestParser *parser = [[ATEngagementManifestParser alloc] init];
+	ApptentiveEngagementManifestParser *parser = [[ApptentiveEngagementManifestParser alloc] init];
 
 	NSDictionary *targetsAndInteractions = [parser targetsAndInteractionsForEngagementManifest:[json dataUsingEncoding:NSUTF8StringEncoding]];
 	XCTAssertNil(targetsAndInteractions, @"Interactions should be nil");
@@ -837,7 +837,7 @@
 }
 
 - (void)testCustomDeviceDataCriteria {
-	ATInteractionInvocation *invocation = [[ATInteractionInvocation alloc] init];
+	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
 	invocation.criteria = @{ @"device/custom_data/test_device_custom_data": @"test_value" };
 
 	XCTAssertFalse([invocation criteriaAreMet], @"Criteria should not be met before adding custom data.");
@@ -857,7 +857,7 @@
 }
 
 - (void)testCustomPersonDataCriteria {
-	ATInteractionInvocation *invocation = [[ATInteractionInvocation alloc] init];
+	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
 	invocation.criteria = @{ @"person/custom_data/hair_color": @"black" };
 
 	XCTAssertFalse([invocation criteriaAreMet], @"Criteria should not be met before adding custom data.");
@@ -879,19 +879,19 @@
 - (void)testCanShowInteractionForEvent {
 	[Apptentive sharedConnection].apiKey = @"bogus_api_key"; // trigger creation of engagement backend
 
-	ATInteractionInvocation *canShow = [[ATInteractionInvocation alloc] init];
+	ApptentiveInteractionInvocation *canShow = [[ApptentiveInteractionInvocation alloc] init];
 	canShow.criteria = @{};
 	canShow.interactionID = @"example_interaction_ID";
 
-	ATInteractionInvocation *willNotShow = [[ATInteractionInvocation alloc] init];
+	ApptentiveInteractionInvocation *willNotShow = [[ApptentiveInteractionInvocation alloc] init];
 	willNotShow.criteria = @{ @"cannot_parse_criteria": @"cannot_parse_criteria" };
 	willNotShow.interactionID = @"example_interaction_ID";
 
-	NSDictionary *targets = @{ [[ATInteraction localAppInteraction] codePointForEvent:@"canShow"]: @[canShow],
-		[[ATInteraction localAppInteraction] codePointForEvent:@"cannotShow"]: @[willNotShow]
+	NSDictionary *targets = @{ [[ApptentiveInteraction localAppInteraction] codePointForEvent:@"canShow"]: @[canShow],
+		[[ApptentiveInteraction localAppInteraction] codePointForEvent:@"cannotShow"]: @[willNotShow]
 	};
 
-	NSDictionary *interactions = @{ @"example_interaction_ID": [[ATInteraction alloc] init] };
+	NSDictionary *interactions = @{ @"example_interaction_ID": [[ApptentiveInteraction alloc] init] };
 
 	[[Apptentive sharedConnection].engagementBackend didReceiveNewTargets:targets andInteractions:interactions maxAge:60];
 

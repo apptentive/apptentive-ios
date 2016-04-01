@@ -6,28 +6,28 @@
 //  Copyright (c) 2013 Apptentive, Inc. All rights reserved.
 //
 
-#import "ATWebClient+EngagementAdditions.h"
-#import "ATWebClient_Private.h"
-#import "ATURLConnection.h"
-#import "ATAPIRequest.h"
-#import "ATConversationUpdater.h"
+#import "ApptentiveWebClient+EngagementAdditions.h"
+#import "ApptentiveWebClient_Private.h"
+#import "ApptentiveURLConnection.h"
+#import "ApptentiveAPIRequest.h"
+#import "ApptentiveConversationUpdater.h"
 
 
-@implementation ATWebClient (EngagementAdditions)
+@implementation ApptentiveWebClient (EngagementAdditions)
 
-- (ATAPIRequest *)requestForGettingEngagementManifest {
-	ATURLConnection *conn = [self connectionToGet:@"/interactions"];
+- (ApptentiveAPIRequest *)requestForGettingEngagementManifest {
+	ApptentiveURLConnection *conn = [self connectionToGet:@"/interactions"];
 	conn.timeoutInterval = 20.0;
 
-	ATConversation *conversation = [ATConversationUpdater currentConversation];
+	ATConversation *conversation = [ApptentiveConversationUpdater currentConversation];
 	if (!conversation) {
-		ATLogError(@"No current conversation.");
+		ApptentiveLogError(@"No current conversation.");
 		return nil;
 	}
 	[self updateConnection:conn withOAuthToken:conversation.token];
 
-	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:[self commonChannelName]];
-	request.returnType = ATAPIRequestReturnTypeData;
+	ApptentiveAPIRequest *request = [[ApptentiveAPIRequest alloc] initWithConnection:conn channelName:[self commonChannelName]];
+	request.returnType = ApptentiveAPIRequestReturnTypeData;
 	return request;
 }
 

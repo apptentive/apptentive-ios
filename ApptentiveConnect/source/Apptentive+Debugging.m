@@ -7,10 +7,10 @@
 //
 
 #import "Apptentive+Debugging.h"
-#import "ATWebClient.h"
-#import "ATBackend.h"
-#import "ATEngagementBackend.h"
-#import "ATInteraction.h"
+#import "ApptentiveWebClient.h"
+#import "ApptentiveBackend.h"
+#import "ApptentiveEngagementBackend.h"
+#import "ApptentiveInteraction.h"
 #import "ATDeviceInfo.h"
 
 
@@ -26,11 +26,11 @@
 
 - (void)setAPIKey:(NSString *)APIKey baseURL:(NSURL *)baseURL storagePath:(nonnull NSString *)storagePath {
 	if (![baseURL isEqual:self.baseURL]) {
-		ATLogInfo(@"Base URL of %@ will not be used due to SDK version. Using %@ instead.", baseURL, self.baseURL);
+		ApptentiveLogInfo(@"Base URL of %@ will not be used due to SDK version. Using %@ instead.", baseURL, self.baseURL);
 	}
 
 	if (![storagePath isEqualToString:self.storagePath]) {
-		ATLogInfo(@"Storage path of %@ will not be used due to SDK version. Using %@ instead.", storagePath, self.storagePath);
+		ApptentiveLogInfo(@"Storage path of %@ will not be used due to SDK version. Using %@ instead.", storagePath, self.storagePath);
 	}
 
 	self.apiKey = APIKey;
@@ -88,13 +88,13 @@
 }
 
 - (NSString *)engagementInteractionNameAtIndex:(NSInteger)index {
-	ATInteraction *interaction = [[self engagementInteractions] objectAtIndex:index];
+	ApptentiveInteraction *interaction = [[self engagementInteractions] objectAtIndex:index];
 
 	return [interaction.configuration objectForKey:@"name"] ?: [interaction.configuration objectForKey:@"title"] ?: @"Untitled Interaction";
 }
 
 - (NSString *)engagementInteractionTypeAtIndex:(NSInteger)index {
-	ATInteraction *interaction = [[self engagementInteractions] objectAtIndex:index];
+	ApptentiveInteraction *interaction = [[self engagementInteractions] objectAtIndex:index];
 
 	return interaction.type;
 }

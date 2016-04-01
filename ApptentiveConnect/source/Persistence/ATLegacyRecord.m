@@ -8,8 +8,8 @@
 
 #import "ATLegacyRecord.h"
 #import "Apptentive_Private.h"
-#import "ATBackend.h"
-#import "ATUtilities.h"
+#import "ApptentiveBackend.h"
+#import "ApptentiveUtilities.h"
 
 #if TARGET_OS_IPHONE
 #import <CoreTelephony/CTTelephonyNetworkInfo.h>
@@ -41,8 +41,8 @@
 			}
 		}
 #elif TARGET_OS_MAC
-		self.model = [ATUtilities currentMachineName];
-		self.os_version = [NSString stringWithFormat:@"%@ %@", [ATUtilities currentSystemName], [ATUtilities currentSystemVersion]];
+		self.model = [ApptentiveUtilities currentMachineName];
+		self.os_version = [NSString stringWithFormat:@"%@ %@", [ApptentiveUtilities currentSystemName], [ApptentiveUtilities currentSystemVersion]];
 		self.carrier = @"";
 #endif
 		self.date = [NSDate date];
@@ -116,8 +116,8 @@
 
 	// Add some app information.
 	NSMutableDictionary *appVersion = [NSMutableDictionary dictionary];
-	[appVersion setObject:[ATUtilities appVersionString] forKey:@"version"];
-	NSString *buildNumber = [ATUtilities buildNumberString];
+	[appVersion setObject:[ApptentiveUtilities appVersionString] forKey:@"version"];
+	NSString *buildNumber = [ApptentiveUtilities buildNumberString];
 	if (buildNumber) {
 		[appVersion setObject:buildNumber forKey:@"build_number"];
 	}
@@ -150,8 +150,8 @@
 	}
 
 	// Add some app information.
-	[d setObject:[ATUtilities appVersionString] forKey:@"record[app_version][version]"];
-	NSString *buildNumber = [ATUtilities buildNumberString];
+	[d setObject:[ApptentiveUtilities appVersionString] forKey:@"record[app_version][version]"];
+	NSString *buildNumber = [ApptentiveUtilities buildNumberString];
 	if (buildNumber) {
 		[d setObject:buildNumber forKey:@"record[app_version][build_number]"];
 	}
@@ -164,10 +164,10 @@
 }
 
 - (NSString *)formattedDate:(NSDate *)aDate {
-	return [ATUtilities stringRepresentationOfDate:aDate];
+	return [ApptentiveUtilities stringRepresentationOfDate:aDate];
 }
 
-- (ATAPIRequest *)requestForSendingRecord {
+- (ApptentiveAPIRequest *)requestForSendingRecord {
 	return nil;
 }
 
@@ -182,6 +182,6 @@
 }
 
 - (NSArray *)availableLocales {
-	return [ATUtilities availableAppLocalizations];
+	return [ApptentiveUtilities availableAppLocalizations];
 }
 @end

@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class ATAPIRequest;
+@class ApptentiveAPIRequest;
 
 
 @interface ATLegacyRecord : NSObject <NSCoding>
@@ -22,7 +22,7 @@
 
 - (NSDictionary *)apiJSON;
 - (NSDictionary *)apiDictionary;
-- (ATAPIRequest *)requestForSendingRecord;
+- (ApptentiveAPIRequest *)requestForSendingRecord;
 /*! Called when we're done using this record. */
 - (void)cleanup;
 @end

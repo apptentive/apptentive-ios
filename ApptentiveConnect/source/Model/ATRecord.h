@@ -9,10 +9,10 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-#import "ATJSONModel.h"
+#import "ApptentiveJSONModel.h"
 
 
-@interface ATRecord : NSManagedObject <ATJSONModel>
+@interface ATRecord : NSManagedObject <ApptentiveJSONModel>
 
 @property (strong, nonatomic) NSString *apptentiveID;
 @property (strong, nonatomic) NSNumber *creationTime;

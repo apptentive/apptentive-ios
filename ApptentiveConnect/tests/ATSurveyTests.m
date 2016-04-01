@@ -7,14 +7,14 @@
 //
 
 #import <XCTest/XCTest.h>
-#import "ATSurveyViewModel.h"
-#import "ATInteraction.h"
+#import "ApptentiveSurveyViewModel.h"
+#import "ApptentiveInteraction.h"
 #import "ATSurveyMetrics.h"
 
 
 @interface ATSurveyTests : XCTestCase <ATSurveyViewModelDelegate>
 
-@property (strong, nonatomic) ATSurveyViewModel *viewModel;
+@property (strong, nonatomic) ApptentiveSurveyViewModel *viewModel;
 @property (strong, nonatomic) NSMutableSet *answeredQuestions;
 @property (strong, nonatomic) NSDictionary *didHideUserInfo;
 @property (assign, nonatomic) BOOL validationChanged;
@@ -36,7 +36,7 @@
 	if (!JSONDictionary) {
 		NSLog(@"Error reading JSON: %@", error);
 	} else {
-		ATInteraction *surveyInteraction = [ATInteraction interactionWithJSONDictionary:JSONDictionary];
+		ApptentiveInteraction *surveyInteraction = [ApptentiveInteraction interactionWithJSONDictionary:JSONDictionary];
 		self.viewModel = [[ATSurveyViewModel alloc] initWithInteraction:surveyInteraction];
 		self.viewModel.delegate = self;
 
@@ -63,11 +63,11 @@
 	self.didHideUserInfo = notification.userInfo;
 }
 
-- (void)viewModelValidationChanged:(ATSurveyViewModel *)viewModel {
+- (void)viewModelValidationChanged:(ApptentiveSurveyViewModel *)viewModel {
 	self.validationChanged = YES;
 }
 
-- (void)viewModel:(ATSurveyViewModel *)viewModel didDeselectAnswerAtIndexPath:(NSIndexPath *)indexPath {
+- (void)viewModel:(ApptentiveSurveyViewModel *)viewModel didDeselectAnswerAtIndexPath:(NSIndexPath *)indexPath {
 	[self.deselectedIndexPaths addObject:indexPath];
 }
 

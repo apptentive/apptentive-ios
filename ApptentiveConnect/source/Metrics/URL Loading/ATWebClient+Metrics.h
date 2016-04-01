@@ -8,12 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
-#import "ATWebClient.h"
+#import "ApptentiveWebClient.h"
 
-@class ATAPIRequest, ATMetric, ATEvent;
+@class ApptentiveAPIRequest, ATMetric, ATEvent;
 
 
-@interface ATWebClient (Metrics)
-- (ATAPIRequest *)requestForSendingMetric:(ATMetric *)metric;
-- (ATAPIRequest *)requestForSendingEvent:(ATEvent *)event;
+@interface ApptentiveWebClient (Metrics)
+- (ApptentiveAPIRequest *)requestForSendingMetric:(ATMetric *)metric;
+- (ApptentiveAPIRequest *)requestForSendingEvent:(ATEvent *)event;
 @end

@@ -11,7 +11,7 @@
 extern NSString *const ApptentiveCustomPersonDataChangedNotification;
 extern NSString *const ApptentiveCustomDeviceDataChangedNotification;
 
-@class ATCompoundMessage, ATWebClient, ATBackend, ATEngagementBackend;
+@class ATCompoundMessage, ApptentiveWebClient, ApptentiveBackend, ApptentiveEngagementBackend;
 
 
 @interface Apptentive ()
@@ -21,9 +21,9 @@ extern NSString *const ApptentiveCustomDeviceDataChangedNotification;
 @property (readonly, nonatomic) NSDictionary *customDeviceData;
 - (NSDictionary *)integrationConfiguration;
 
-@property (readonly, nonatomic) ATWebClient *webClient;
-@property (readonly, nonatomic) ATBackend *backend;
-@property (readonly, nonatomic) ATEngagementBackend *engagementBackend;
+@property (readonly, nonatomic) ApptentiveWebClient *webClient;
+@property (readonly, nonatomic) ApptentiveBackend *backend;
+@property (readonly, nonatomic) ApptentiveEngagementBackend *engagementBackend;
 
 @property (strong, nonatomic) NSDictionary *pushUserInfo;
 @property (strong, nonatomic) UIViewController *pushViewController;

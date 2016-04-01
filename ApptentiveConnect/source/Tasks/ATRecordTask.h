@@ -7,12 +7,12 @@
 //
 
 #import "ATTask.h"
-#import "ATAPIRequest.h"
+#import "ApptentiveAPIRequest.h"
 
 @class ATLegacyRecord;
 
 
-@interface ATRecordTask : ATTask <ATAPIRequestDelegate>
+@interface ATRecordTask : ATTask <ApptentiveAPIRequestDelegate>
 @property (strong, nonatomic) ATLegacyRecord *record;
 
 @end

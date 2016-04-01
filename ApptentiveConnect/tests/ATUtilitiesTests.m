@@ -1,5 +1,5 @@
 //
-//  ATUtilitiesTests.m
+//  ApptentiveUtilitiesTests.m
 //  ApptentiveConnect
 //
 //  Created by Andrew Wooster on 4/15/11.
@@ -8,14 +8,14 @@
 
 #import <XCTest/XCTest.h>
 #import <UIKit/UIKit.h>
-#import "ATUtilities.h"
+#import "ApptentiveUtilities.h"
 
 
-@interface ATUtilitiesTests : XCTestCase
+@interface ApptentiveUtilitiesTests : XCTestCase
 @end
 
 
-@implementation ATUtilitiesTests
+@implementation ApptentiveUtilitiesTests
 
 - (void)testEvenRect {
 	CGRect testRect1 = CGRectMake(0.0, 0.0, 17.0, 21.0);
@@ -30,18 +30,18 @@
 }
 
 - (void)testVersionComparisons {
-	XCTAssertTrue([ATUtilities versionString:@"6.0" isEqualToVersionString:@"6.0"], @"Should be same");
-	XCTAssertTrue([ATUtilities versionString:@"0.0" isEqualToVersionString:@"0.0"], @"Should be same");
-	XCTAssertTrue([ATUtilities versionString:@"6.0.1" isEqualToVersionString:@"6.0.1"], @"Should be same");
-	XCTAssertTrue([ATUtilities versionString:@"0.0.1" isEqualToVersionString:@"0.0.1"], @"Should be same");
-	XCTAssertTrue([ATUtilities versionString:@"10.10.1" isEqualToVersionString:@"10.10.1"], @"Should be same");
+	XCTAssertTrue([ApptentiveUtilities versionString:@"6.0" isEqualToVersionString:@"6.0"], @"Should be same");
+	XCTAssertTrue([ApptentiveUtilities versionString:@"0.0" isEqualToVersionString:@"0.0"], @"Should be same");
+	XCTAssertTrue([ApptentiveUtilities versionString:@"6.0.1" isEqualToVersionString:@"6.0.1"], @"Should be same");
+	XCTAssertTrue([ApptentiveUtilities versionString:@"0.0.1" isEqualToVersionString:@"0.0.1"], @"Should be same");
+	XCTAssertTrue([ApptentiveUtilities versionString:@"10.10.1" isEqualToVersionString:@"10.10.1"], @"Should be same");
 
-	XCTAssertTrue([ATUtilities versionString:@"10.10.1" isGreaterThanVersionString:@"10.10.0"], @"Should be greater");
-	XCTAssertTrue([ATUtilities versionString:@"6.0" isGreaterThanVersionString:@"5.0.1"], @"Should be greater");
-	XCTAssertTrue([ATUtilities versionString:@"6.0" isGreaterThanVersionString:@"5.1"], @"Should be greater");
+	XCTAssertTrue([ApptentiveUtilities versionString:@"10.10.1" isGreaterThanVersionString:@"10.10.0"], @"Should be greater");
+	XCTAssertTrue([ApptentiveUtilities versionString:@"6.0" isGreaterThanVersionString:@"5.0.1"], @"Should be greater");
+	XCTAssertTrue([ApptentiveUtilities versionString:@"6.0" isGreaterThanVersionString:@"5.1"], @"Should be greater");
 
-	XCTAssertTrue([ATUtilities versionString:@"5.0" isLessThanVersionString:@"5.1"], @"Should be less");
-	XCTAssertTrue([ATUtilities versionString:@"5.0" isLessThanVersionString:@"6.0.1"], @"Should be less");
+	XCTAssertTrue([ApptentiveUtilities versionString:@"5.0" isLessThanVersionString:@"5.1"], @"Should be less");
+	XCTAssertTrue([ApptentiveUtilities versionString:@"5.0" isLessThanVersionString:@"6.0.1"], @"Should be less");
 }
 
 - (void)testComplexVersionComparisons {
@@ -86,84 +86,84 @@
 		NSString *compare = versionCheck[1];
 		NSString *right = versionCheck[2];
 		if ([compare isEqualToString:@"="]) {
-			XCTAssertTrue([ATUtilities versionString:left isEqualToVersionString:right], @"%@ not equal to %@", left, right);
+			XCTAssertTrue([ApptentiveUtilities versionString:left isEqualToVersionString:right], @"%@ not equal to %@", left, right);
 		} else if ([compare isEqualToString:@">"]) {
-			XCTAssertTrue([ATUtilities versionString:left isGreaterThanVersionString:right], @"%@ not greater than %@", left, right);
+			XCTAssertTrue([ApptentiveUtilities versionString:left isGreaterThanVersionString:right], @"%@ not greater than %@", left, right);
 		} else if ([compare isEqualToString:@"<"]) {
-			XCTAssertTrue([ATUtilities versionString:left isLessThanVersionString:right], @"%@ not less than %@", left, right);
+			XCTAssertTrue([ApptentiveUtilities versionString:left isLessThanVersionString:right], @"%@ not less than %@", left, right);
 		}
 	}
 }
 
 - (void)testCacheControlParsing {
-	XCTAssertEqual(0., [ATUtilities maxAgeFromCacheControlHeader:nil], @"Should be same");
-	XCTAssertEqual(0., [ATUtilities maxAgeFromCacheControlHeader:@""], @"Should be same");
-	XCTAssertEqual(86400., [ATUtilities maxAgeFromCacheControlHeader:@"Cache-Control: max-age=86400, private"], @"Should be same");
-	XCTAssertEqual(86400., [ATUtilities maxAgeFromCacheControlHeader:@"max-age=86400, private"], @"Should be same");
-	XCTAssertEqual(47.47, [ATUtilities maxAgeFromCacheControlHeader:@"max-age=47.47, private"], @"Should be same");
-	XCTAssertEqual(0., [ATUtilities maxAgeFromCacheControlHeader:@"max-age=0, private"], @"Should be same");
+	XCTAssertEqual(0., [ApptentiveUtilities maxAgeFromCacheControlHeader:nil], @"Should be same");
+	XCTAssertEqual(0., [ApptentiveUtilities maxAgeFromCacheControlHeader:@""], @"Should be same");
+	XCTAssertEqual(86400., [ApptentiveUtilities maxAgeFromCacheControlHeader:@"Cache-Control: max-age=86400, private"], @"Should be same");
+	XCTAssertEqual(86400., [ApptentiveUtilities maxAgeFromCacheControlHeader:@"max-age=86400, private"], @"Should be same");
+	XCTAssertEqual(47.47, [ApptentiveUtilities maxAgeFromCacheControlHeader:@"max-age=47.47, private"], @"Should be same");
+	XCTAssertEqual(0., [ApptentiveUtilities maxAgeFromCacheControlHeader:@"max-age=0, private"], @"Should be same");
 }
 
 - (void)testDictionaryEquality {
 	NSDictionary *a = nil;
 	NSDictionary *b = nil;
 
-	XCTAssertTrue([ATUtilities dictionary:a isEqualToDictionary:b], @"Dictionaries should be equal: %@ v %@", a, b);
+	XCTAssertTrue([ApptentiveUtilities dictionary:a isEqualToDictionary:b], @"Dictionaries should be equal: %@ v %@", a, b);
 
 	a = @{};
-	XCTAssertFalse([ATUtilities dictionary:a isEqualToDictionary:b], @"Dictionaries should not be equal: %@ v %@", a, b);
+	XCTAssertFalse([ApptentiveUtilities dictionary:a isEqualToDictionary:b], @"Dictionaries should not be equal: %@ v %@", a, b);
 
 	a = nil;
 	b = @{};
-	XCTAssertFalse([ATUtilities dictionary:a isEqualToDictionary:b], @"Dictionaries should not be equal: %@ v %@", a, b);
+	XCTAssertFalse([ApptentiveUtilities dictionary:a isEqualToDictionary:b], @"Dictionaries should not be equal: %@ v %@", a, b);
 
 	a = @{};
 	b = @{};
-	XCTAssertTrue([ATUtilities dictionary:a isEqualToDictionary:b], @"Dictionaries should be equal: %@ v %@", a, b);
+	XCTAssertTrue([ApptentiveUtilities dictionary:a isEqualToDictionary:b], @"Dictionaries should be equal: %@ v %@", a, b);
 
 	a = @{ @"foo": @"bar" };
 	b = @{ @"foo": @"bar" };
-	XCTAssertTrue([ATUtilities dictionary:a isEqualToDictionary:b], @"Dictionaries should be equal: %@ v %@", a, b);
+	XCTAssertTrue([ApptentiveUtilities dictionary:a isEqualToDictionary:b], @"Dictionaries should be equal: %@ v %@", a, b);
 
 	a = @{ @"foo": @[@1, @2, @3] };
 	b = @{ @"foo": @[@1, @2, @4] };
-	XCTAssertFalse([ATUtilities dictionary:a isEqualToDictionary:b], @"Dictionaries should not be equal: %@ v %@", a, b);
+	XCTAssertFalse([ApptentiveUtilities dictionary:a isEqualToDictionary:b], @"Dictionaries should not be equal: %@ v %@", a, b);
 
 	a = @{ @"foo": @[@1, @2, @{@"bar": @"yarg"}] };
 	b = @{ @"foo": @[@1, @2, @{@"narf": @"fran"}] };
-	XCTAssertFalse([ATUtilities dictionary:a isEqualToDictionary:b], @"Dictionaries should not be equal: %@ v %@", a, b);
+	XCTAssertFalse([ApptentiveUtilities dictionary:a isEqualToDictionary:b], @"Dictionaries should not be equal: %@ v %@", a, b);
 
 	a = @{ @"foo": @[@1, @2, @{@"bar": @"yarg"}] };
 	b = @{ @"foo": @[@1, @2, @{@"bar": @"yarg"}] };
-	XCTAssertTrue([ATUtilities dictionary:a isEqualToDictionary:b], @"Dictionaries should be equal: %@ v %@", a, b);
+	XCTAssertTrue([ApptentiveUtilities dictionary:a isEqualToDictionary:b], @"Dictionaries should be equal: %@ v %@", a, b);
 }
 
 - (void)testEmailValidation {
-	XCTAssertTrue([ATUtilities emailAddressIsValid:@"andrew@example.com"], @"Should be valid");
-	XCTAssertTrue([ATUtilities emailAddressIsValid:@" andrew+spam@foo.md "], @"Should be valid");
-	XCTAssertTrue([ATUtilities emailAddressIsValid:@"a_blah@a.co.uk"], @"Should be valid");
-	XCTAssertTrue([ATUtilities emailAddressIsValid:@"☃@☃.net"], @"Snowman! Valid!");
-	XCTAssertTrue([ATUtilities emailAddressIsValid:@"andrew@example.com"], @"Should be valid");
-	//	XCTAssertTrue([ATUtilities emailAddressIsValid:@" foo@bar.com yarg@blah.com"], @"May as well accept multiple");
-	//	XCTAssertTrue([ATUtilities emailAddressIsValid:@"Andrew Wooster <andrew@example.com>"], @"Accept contact emails");
-	XCTAssertTrue([ATUtilities emailAddressIsValid:@"foo/bar=blah@example.com"], @"Accept department emails");
-	XCTAssertTrue([ATUtilities emailAddressIsValid:@"!hi!%blah@example.com"], @"Should be valid");
-	XCTAssertTrue([ATUtilities emailAddressIsValid:@"m@example.com"], @"Should be valid");
+	XCTAssertTrue([ApptentiveUtilities emailAddressIsValid:@"andrew@example.com"], @"Should be valid");
+	XCTAssertTrue([ApptentiveUtilities emailAddressIsValid:@" andrew+spam@foo.md "], @"Should be valid");
+	XCTAssertTrue([ApptentiveUtilities emailAddressIsValid:@"a_blah@a.co.uk"], @"Should be valid");
+	XCTAssertTrue([ApptentiveUtilities emailAddressIsValid:@"☃@☃.net"], @"Snowman! Valid!");
+	XCTAssertTrue([ApptentiveUtilities emailAddressIsValid:@"andrew@example.com"], @"Should be valid");
+	//	XCTAssertTrue([ApptentiveUtilities emailAddressIsValid:@" foo@bar.com yarg@blah.com"], @"May as well accept multiple");
+	//	XCTAssertTrue([ApptentiveUtilities emailAddressIsValid:@"Andrew Wooster <andrew@example.com>"], @"Accept contact emails");
+	XCTAssertTrue([ApptentiveUtilities emailAddressIsValid:@"foo/bar=blah@example.com"], @"Accept department emails");
+	XCTAssertTrue([ApptentiveUtilities emailAddressIsValid:@"!hi!%blah@example.com"], @"Should be valid");
+	XCTAssertTrue([ApptentiveUtilities emailAddressIsValid:@"m@example.com"], @"Should be valid");
 
-	XCTAssertFalse([ATUtilities emailAddressIsValid:@"blah"], @"Shouldn't be valid");
-	//	XCTAssertFalse([ATUtilities emailAddressIsValid:@"andrew@example,com"], @"Shouldn't be valid");
-	XCTAssertFalse([ATUtilities emailAddressIsValid:@""], @"Shouldn't be valid");
-	XCTAssertFalse([ATUtilities emailAddressIsValid:@"@"], @"Shouldn't be valid");
-	XCTAssertFalse([ATUtilities emailAddressIsValid:@".com"], @"Shouldn't be valid");
-	XCTAssertFalse([ATUtilities emailAddressIsValid:@"\n"], @"Shouldn't be valid");
-	//	XCTAssertFalse([ATUtilities emailAddressIsValid:@"foo@yarg"], @"Shouldn't be valid");
-	XCTAssertFalse([ATUtilities emailAddressIsValid:@""], @"empty string email shouldn't be valid");
-	XCTAssertFalse([ATUtilities emailAddressIsValid:nil], @"nil email shouldn't be valid");
+	XCTAssertFalse([ApptentiveUtilities emailAddressIsValid:@"blah"], @"Shouldn't be valid");
+	//	XCTAssertFalse([ApptentiveUtilities emailAddressIsValid:@"andrew@example,com"], @"Shouldn't be valid");
+	XCTAssertFalse([ApptentiveUtilities emailAddressIsValid:@""], @"Shouldn't be valid");
+	XCTAssertFalse([ApptentiveUtilities emailAddressIsValid:@"@"], @"Shouldn't be valid");
+	XCTAssertFalse([ApptentiveUtilities emailAddressIsValid:@".com"], @"Shouldn't be valid");
+	XCTAssertFalse([ApptentiveUtilities emailAddressIsValid:@"\n"], @"Shouldn't be valid");
+	//	XCTAssertFalse([ApptentiveUtilities emailAddressIsValid:@"foo@yarg"], @"Shouldn't be valid");
+	XCTAssertFalse([ApptentiveUtilities emailAddressIsValid:@""], @"empty string email shouldn't be valid");
+	XCTAssertFalse([ApptentiveUtilities emailAddressIsValid:nil], @"nil email shouldn't be valid");
 }
 
 - (void)testStringEscaping {
 	NSString *aString = @"foo% bar/#haha";
-	NSString *result = [ATUtilities stringByEscapingForURLArguments:aString];
+	NSString *result = [ApptentiveUtilities stringByEscapingForURLArguments:aString];
 	XCTAssertEqualObjects(@"foo%25%20bar%2F%23haha", result, @"Unexpected result: %@", result);
 }
 
@@ -187,7 +187,7 @@
 - (void)testDictionaryDiff1 {
 	NSDictionary *JSONBlobs = [self loadJSONBlobsWithNames:@[@"1.new", @"1.old", @"1.expected"]];
 
-	NSDictionary *result = [ATUtilities diffDictionary:JSONBlobs[@"1.new"] againstDictionary:JSONBlobs[@"1.old"]];
+	NSDictionary *result = [ApptentiveUtilities diffDictionary:JSONBlobs[@"1.new"] againstDictionary:JSONBlobs[@"1.old"]];
 
 	XCTAssertEqualObjects(result, JSONBlobs[@"1.expected"]);
 }
@@ -195,7 +195,7 @@
 - (void)testDictionaryDiff2 {
 	NSDictionary *JSONBlobs = [self loadJSONBlobsWithNames:@[@"2.new", @"2.old"]];
 
-	NSDictionary *result = [ATUtilities diffDictionary:JSONBlobs[@"2.new"] againstDictionary:JSONBlobs[@"2.old"]];
+	NSDictionary *result = [ApptentiveUtilities diffDictionary:JSONBlobs[@"2.new"] againstDictionary:JSONBlobs[@"2.old"]];
 
 	XCTAssertEqualObjects(result, @{});
 }
@@ -205,7 +205,7 @@
 	NSDictionary *newPerson = @{ @"custom_data": @{@"pet_name": @"Sumo"} };
 	;
 
-	NSDictionary *result = [ATUtilities diffDictionary:newPerson againstDictionary:oldPerson];
+	NSDictionary *result = [ApptentiveUtilities diffDictionary:newPerson againstDictionary:oldPerson];
 
 	XCTAssertEqualObjects(result, newPerson);
 }

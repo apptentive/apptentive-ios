@@ -9,8 +9,8 @@
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
 
-#import "ATInteractionInvocation.h"
-#import "ATInteractionUsageData.h"
+#import "ApptentiveInteractionInvocation.h"
+#import "ApptentiveInteractionUsageData.h"
 
 
 @interface ATInteractionInvocationTests : XCTestCase
@@ -18,7 +18,7 @@
 @end
 
 
-@interface ATInteractionInvocation ()
+@interface ApptentiveInteractionInvocation ()
 + (NSCompoundPredicateType)compoundPredicateTypeFromString:(NSString *)predicateTypeString hasError:(nonnull BOOL *)hasError;
 + (NSPredicateOperatorType)predicateOperatorTypeFromString:(NSString *)operatorString hasError:(nonnull BOOL *)hasError;
 + (BOOL) operator:(NSPredicateOperatorType) operator isValidForParameter:(NSObject *)parameter;
@@ -29,7 +29,7 @@
 @end
 
 
-@interface ATFailingUsageData : ATInteractionUsageData
+@interface ATFailingUsageData : ApptentiveInteractionUsageData
 @end
 
 
@@ -54,88 +54,88 @@
 
 - (void)testCompoundPredicateTypeFromString {
 	BOOL hasError;
-	XCTAssertEqual(NSAndPredicateType, [ATInteractionInvocation compoundPredicateTypeFromString:@"$and" hasError:&hasError]);
+	XCTAssertEqual(NSAndPredicateType, [ApptentiveInteractionInvocation compoundPredicateTypeFromString:@"$and" hasError:&hasError]);
 	XCTAssertFalse(hasError);
-	XCTAssertEqual(NSOrPredicateType, [ATInteractionInvocation compoundPredicateTypeFromString:@"$or" hasError:&hasError]);
+	XCTAssertEqual(NSOrPredicateType, [ApptentiveInteractionInvocation compoundPredicateTypeFromString:@"$or" hasError:&hasError]);
 	XCTAssertFalse(hasError);
-	XCTAssertEqual(NSNotPredicateType, [ATInteractionInvocation compoundPredicateTypeFromString:@"$not" hasError:&hasError]);
+	XCTAssertEqual(NSNotPredicateType, [ApptentiveInteractionInvocation compoundPredicateTypeFromString:@"$not" hasError:&hasError]);
 	XCTAssertFalse(hasError);
 
-	[ATInteractionInvocation compoundPredicateTypeFromString:@"" hasError:&hasError];
+	[ApptentiveInteractionInvocation compoundPredicateTypeFromString:@"" hasError:&hasError];
 	XCTAssertTrue(hasError);
 }
 
 - (void)testPredicateOperatorTypeFromString {
 	BOOL hasError;
-	XCTAssertEqual(NSEqualToPredicateOperatorType, [ATInteractionInvocation predicateOperatorTypeFromString:@"==" hasError:&hasError]);
+	XCTAssertEqual(NSEqualToPredicateOperatorType, [ApptentiveInteractionInvocation predicateOperatorTypeFromString:@"==" hasError:&hasError]);
 	XCTAssertFalse(hasError);
-	XCTAssertEqual(NSEqualToPredicateOperatorType, [ATInteractionInvocation predicateOperatorTypeFromString:@"$eq" hasError:&hasError]);
-	XCTAssertFalse(hasError);
-
-	XCTAssertEqual(NSGreaterThanPredicateOperatorType, [ATInteractionInvocation predicateOperatorTypeFromString:@"$gt" hasError:&hasError]);
-	XCTAssertFalse(hasError);
-	XCTAssertEqual(NSGreaterThanPredicateOperatorType, [ATInteractionInvocation predicateOperatorTypeFromString:@">" hasError:&hasError]);
+	XCTAssertEqual(NSEqualToPredicateOperatorType, [ApptentiveInteractionInvocation predicateOperatorTypeFromString:@"$eq" hasError:&hasError]);
 	XCTAssertFalse(hasError);
 
-	XCTAssertEqual(NSGreaterThanOrEqualToPredicateOperatorType, [ATInteractionInvocation predicateOperatorTypeFromString:@"$gte" hasError:&hasError]);
+	XCTAssertEqual(NSGreaterThanPredicateOperatorType, [ApptentiveInteractionInvocation predicateOperatorTypeFromString:@"$gt" hasError:&hasError]);
 	XCTAssertFalse(hasError);
-	XCTAssertEqual(NSGreaterThanOrEqualToPredicateOperatorType, [ATInteractionInvocation predicateOperatorTypeFromString:@">=" hasError:&hasError]);
-	XCTAssertFalse(hasError);
-
-	XCTAssertEqual(NSLessThanPredicateOperatorType, [ATInteractionInvocation predicateOperatorTypeFromString:@"$lt" hasError:&hasError]);
-	XCTAssertFalse(hasError);
-	XCTAssertEqual(NSLessThanPredicateOperatorType, [ATInteractionInvocation predicateOperatorTypeFromString:@"<" hasError:&hasError]);
+	XCTAssertEqual(NSGreaterThanPredicateOperatorType, [ApptentiveInteractionInvocation predicateOperatorTypeFromString:@">" hasError:&hasError]);
 	XCTAssertFalse(hasError);
 
-	XCTAssertEqual(NSLessThanOrEqualToPredicateOperatorType, [ATInteractionInvocation predicateOperatorTypeFromString:@"$lte" hasError:&hasError]);
+	XCTAssertEqual(NSGreaterThanOrEqualToPredicateOperatorType, [ApptentiveInteractionInvocation predicateOperatorTypeFromString:@"$gte" hasError:&hasError]);
 	XCTAssertFalse(hasError);
-	XCTAssertEqual(NSLessThanOrEqualToPredicateOperatorType, [ATInteractionInvocation predicateOperatorTypeFromString:@"<=" hasError:&hasError]);
-	XCTAssertFalse(hasError);
-
-	XCTAssertEqual(NSNotEqualToPredicateOperatorType, [ATInteractionInvocation predicateOperatorTypeFromString:@"$ne" hasError:&hasError]);
-	XCTAssertFalse(hasError);
-	XCTAssertEqual(NSNotEqualToPredicateOperatorType, [ATInteractionInvocation predicateOperatorTypeFromString:@"!=" hasError:&hasError]);
+	XCTAssertEqual(NSGreaterThanOrEqualToPredicateOperatorType, [ApptentiveInteractionInvocation predicateOperatorTypeFromString:@">=" hasError:&hasError]);
 	XCTAssertFalse(hasError);
 
-	XCTAssertEqual(NSContainsPredicateOperatorType, [ATInteractionInvocation predicateOperatorTypeFromString:@"$contains" hasError:&hasError]);
+	XCTAssertEqual(NSLessThanPredicateOperatorType, [ApptentiveInteractionInvocation predicateOperatorTypeFromString:@"$lt" hasError:&hasError]);
 	XCTAssertFalse(hasError);
-	XCTAssertEqual(NSContainsPredicateOperatorType, [ATInteractionInvocation predicateOperatorTypeFromString:@"CONTAINS[c]" hasError:&hasError]);
-	XCTAssertFalse(hasError);
-
-	XCTAssertEqual(NSBeginsWithPredicateOperatorType, [ATInteractionInvocation predicateOperatorTypeFromString:@"$starts_with" hasError:&hasError]);
-	XCTAssertFalse(hasError);
-	XCTAssertEqual(NSBeginsWithPredicateOperatorType, [ATInteractionInvocation predicateOperatorTypeFromString:@"BEGINSWITH[c]" hasError:&hasError]);
+	XCTAssertEqual(NSLessThanPredicateOperatorType, [ApptentiveInteractionInvocation predicateOperatorTypeFromString:@"<" hasError:&hasError]);
 	XCTAssertFalse(hasError);
 
-	XCTAssertEqual(NSEndsWithPredicateOperatorType, [ATInteractionInvocation predicateOperatorTypeFromString:@"$ends_with" hasError:&hasError]);
+	XCTAssertEqual(NSLessThanOrEqualToPredicateOperatorType, [ApptentiveInteractionInvocation predicateOperatorTypeFromString:@"$lte" hasError:&hasError]);
 	XCTAssertFalse(hasError);
-	XCTAssertEqual(NSEndsWithPredicateOperatorType, [ATInteractionInvocation predicateOperatorTypeFromString:@"ENDSWITH[c]" hasError:&hasError]);
+	XCTAssertEqual(NSLessThanOrEqualToPredicateOperatorType, [ApptentiveInteractionInvocation predicateOperatorTypeFromString:@"<=" hasError:&hasError]);
 	XCTAssertFalse(hasError);
 
-	[ATInteractionInvocation predicateOperatorTypeFromString:@"" hasError:&hasError];
+	XCTAssertEqual(NSNotEqualToPredicateOperatorType, [ApptentiveInteractionInvocation predicateOperatorTypeFromString:@"$ne" hasError:&hasError]);
+	XCTAssertFalse(hasError);
+	XCTAssertEqual(NSNotEqualToPredicateOperatorType, [ApptentiveInteractionInvocation predicateOperatorTypeFromString:@"!=" hasError:&hasError]);
+	XCTAssertFalse(hasError);
+
+	XCTAssertEqual(NSContainsPredicateOperatorType, [ApptentiveInteractionInvocation predicateOperatorTypeFromString:@"$contains" hasError:&hasError]);
+	XCTAssertFalse(hasError);
+	XCTAssertEqual(NSContainsPredicateOperatorType, [ApptentiveInteractionInvocation predicateOperatorTypeFromString:@"CONTAINS[c]" hasError:&hasError]);
+	XCTAssertFalse(hasError);
+
+	XCTAssertEqual(NSBeginsWithPredicateOperatorType, [ApptentiveInteractionInvocation predicateOperatorTypeFromString:@"$starts_with" hasError:&hasError]);
+	XCTAssertFalse(hasError);
+	XCTAssertEqual(NSBeginsWithPredicateOperatorType, [ApptentiveInteractionInvocation predicateOperatorTypeFromString:@"BEGINSWITH[c]" hasError:&hasError]);
+	XCTAssertFalse(hasError);
+
+	XCTAssertEqual(NSEndsWithPredicateOperatorType, [ApptentiveInteractionInvocation predicateOperatorTypeFromString:@"$ends_with" hasError:&hasError]);
+	XCTAssertFalse(hasError);
+	XCTAssertEqual(NSEndsWithPredicateOperatorType, [ApptentiveInteractionInvocation predicateOperatorTypeFromString:@"ENDSWITH[c]" hasError:&hasError]);
+	XCTAssertFalse(hasError);
+
+	[ApptentiveInteractionInvocation predicateOperatorTypeFromString:@"" hasError:&hasError];
 	XCTAssertTrue(hasError);
 }
 
 - (void)testOperatorIsValidForParameterFail {
-	XCTAssertFalse([ATInteractionInvocation operator:-999 isValidForParameter:@"Hey"]);
+	XCTAssertFalse([ApptentiveInteractionInvocation operator:-999 isValidForParameter:@"Hey"]);
 }
 
 - (void)testPredicateWithLeftKeyPathForObjectRightComplexObjectOperatorTypeFail {
-	XCTAssertNil([ATInteractionInvocation predicateWithLeftKeyPath:@"datetime" forObject:@{ @"datetime": @{@"_type": @"datetime"} } rightComplexObject:@{ @"_type": @"foo" } operatorType:NSEqualToPredicateOperatorType]);
+	XCTAssertNil([ApptentiveInteractionInvocation predicateWithLeftKeyPath:@"datetime" forObject:@{ @"datetime": @{@"_type": @"datetime"} } rightComplexObject:@{ @"_type": @"foo" } operatorType:NSEqualToPredicateOperatorType]);
 }
 
 - (void)testCompoundPredicateWithTypeCriteriaArray {
-	XCTAssertNil([ATInteractionInvocation compoundPredicateWithType:NSAndPredicateType criteriaArray:@[@{ @"foo": [NSDate date] }]]);
+	XCTAssertNil([ApptentiveInteractionInvocation compoundPredicateWithType:NSAndPredicateType criteriaArray:@[@{ @"foo": [NSDate date] }]]);
 }
 
 - (void)testFailingInteractionUsageData {
-	ATInteractionInvocation *invocation = [ATInteractionInvocation invocationWithJSONDictionary:@{ @"criteria": @{@"foo": @"bar"} }];
+	ApptentiveInteractionInvocation *invocation = [ApptentiveInteractionInvocation invocationWithJSONDictionary:@{ @"criteria": @{@"foo": @"bar"} }];
 
 	XCTAssertFalse([invocation criteriaAreMetForUsageData:[[ATFailingUsageData alloc] init]]);
 }
 
 - (void)testFailingCompoundPredicateForKeyPath {
-	ATInteractionInvocation *invocation = [ATInteractionInvocation invocationWithJSONDictionary:@{ @"criteria": @{@"$and": @{@"foo": [NSDate date]}} }];
+	ApptentiveInteractionInvocation *invocation = [ApptentiveInteractionInvocation invocationWithJSONDictionary:@{ @"criteria": @{@"$and": @{@"foo": [NSDate date]}} }];
 
 	XCTAssertFalse([invocation criteriaAreMetForUsageData:[[ATFailingUsageData alloc] init]]);
 }

@@ -8,8 +8,8 @@
 
 #import "ATMetric.h"
 #import "Apptentive_Private.h"
-#import "ATUtilities.h"
-#import "ATWebClient.h"
+#import "ApptentiveUtilities.h"
+#import "ApptentiveWebClient.h"
 #import "ATWebClient+Metrics.h"
 
 #define kATMetricStorageVersion 1
@@ -75,7 +75,7 @@
 			NSString *recordKey = [NSString stringWithFormat:@"record[metric][data][%@]", key];
 			NSObject *value = [self.info objectForKey:key];
 			if ([value isKindOfClass:[NSDate class]]) {
-				value = [ATUtilities stringRepresentationOfDate:(NSDate *)value];
+				value = [ApptentiveUtilities stringRepresentationOfDate:(NSDate *)value];
 			}
 			[d setObject:value forKey:recordKey];
 		}
@@ -83,7 +83,7 @@
 	return d;
 }
 
-- (ATAPIRequest *)requestForSendingRecord {
+- (ApptentiveAPIRequest *)requestForSendingRecord {
 	return [[Apptentive sharedConnection].webClient requestForSendingMetric:self];
 }
 @end

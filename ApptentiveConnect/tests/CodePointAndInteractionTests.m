@@ -7,14 +7,14 @@
 //
 
 #import "CriteriaTests.h"
-#import "ATInteractionInvocation.h"
-#import "ATInteractionUsageData.h"
+#import "ApptentiveInteractionInvocation.h"
+#import "ApptentiveInteractionUsageData.h"
 #import "Apptentive_Private.h"
 
 
 @interface CodePointTest : CriteriaTest
 
-@property (strong, nonatomic) ATInteractionUsageData *usageData;
+@property (strong, nonatomic) ApptentiveInteractionUsageData *usageData;
 @end
 
 
@@ -23,7 +23,7 @@
 - (void)setUp {
 	[super setUp];
 
-	self.usageData = [ATInteractionUsageData usageData];
+	self.usageData = [ApptentiveInteractionUsageData usageData];
 }
 
 - (void)incrementTotalCodePoint:(NSString *)codePoint {

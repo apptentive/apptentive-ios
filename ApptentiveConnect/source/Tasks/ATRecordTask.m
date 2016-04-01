@@ -9,7 +9,7 @@
 #import "ATRecordTask.h"
 #import "ApptentiveMetrics.h"
 #import "ATMetric.h"
-#import "ATWebClient.h"
+#import "ApptentiveWebClient.h"
 #import "Apptentive_Private.h"
 
 #define kATRecordTaskCodingVersion 1
@@ -18,7 +18,7 @@
 @interface ATRecordTask ()
 - (BOOL)handleLegacyRecord;
 
-@property (strong, nonatomic) ATAPIRequest *request;
+@property (strong, nonatomic) ApptentiveAPIRequest *request;
 
 @end
 
@@ -95,25 +95,25 @@
 	[self.record cleanup];
 }
 
-#pragma mark ATAPIRequestDelegate
-- (void)at_APIRequestDidFinish:(ATAPIRequest *)sender result:(id)result {
+#pragma mark ApptentiveAPIRequestDelegate
+- (void)at_APIRequestDidFinish:(ApptentiveAPIRequest *)sender result:(id)result {
 	@synchronized(self) {
 		[self stop];
 		self.finished = YES;
 	}
 }
 
-- (void)at_APIRequestDidProgress:(ATAPIRequest *)sender {
+- (void)at_APIRequestDidProgress:(ApptentiveAPIRequest *)sender {
 	// pass
 }
 
-- (void)at_APIRequestDidFail:(ATAPIRequest *)sender {
+- (void)at_APIRequestDidFail:(ApptentiveAPIRequest *)sender {
 	@synchronized(self) {
 		self.failed = YES;
 		self.lastErrorTitle = sender.errorTitle;
 		self.lastErrorMessage = sender.errorMessage;
 		self.shouldRetry = sender.shouldRetry;
-		ATLogInfo(@"ATAPIRequest failed: %@, %@", sender.errorTitle, sender.errorMessage);
+		ApptentiveLogInfo(@"ApptentiveAPIRequest failed: %@, %@", sender.errorTitle, sender.errorMessage);
 		[self stop];
 	}
 }

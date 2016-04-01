@@ -10,7 +10,7 @@
 #import "Apptentive.h"
 #import "ATPersonInfo.h"
 #import "ATDeviceInfo.h"
-#import "ATUtilities.h"
+#import "ApptentiveUtilities.h"
 
 
 @interface ApptentiveConnectTests : XCTestCase

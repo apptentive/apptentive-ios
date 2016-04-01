@@ -11,9 +11,9 @@
 #import <OCMock/OCMock.h>
 
 #import "Apptentive_Private.h"
-#import "ATEngagementBackend.h"
-#import "ATInteractionInvocation.h"
-#import "ATInteractionUsageData.h"
+#import "ApptentiveEngagementBackend.h"
+#import "ApptentiveInteractionInvocation.h"
+#import "ApptentiveInteractionUsageData.h"
 #import "ATPersonInfo.h"
 
 
@@ -25,10 +25,10 @@
 @implementation ATInteractionUsageDataTests
 
 - (void)testApplicationVersion {
-	ATInteractionInvocation *invocation = [[ATInteractionInvocation alloc] init];
+	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
 	invocation.criteria = @{ @"application/version": @{@"$eq": @{@"_type": @"version", @"version": @"4.0.0"}} };
 
-	ATInteractionUsageData *usage = [[ATInteractionUsageData alloc] init];
+	ApptentiveInteractionUsageData *usage = [[ApptentiveInteractionUsageData alloc] init];
 	usage.applicationVersion = @"2";
 
 	NSDictionary *evaluationDictionary = [usage predicateEvaluationDictionary];
@@ -43,7 +43,7 @@
 }
 
 - (void)testDefaultApplicationVersion {
-	ATInteractionUsageData *usage = [[ATInteractionUsageData alloc] init];
+	ApptentiveInteractionUsageData *usage = [[ApptentiveInteractionUsageData alloc] init];
 
 	id mockedUsage = OCMPartialMock(usage);
 	OCMStub([mockedUsage applicationVersion]).andReturn(nil);
@@ -56,7 +56,7 @@
 }
 
 - (void)testSDKVersion {
-	ATInteractionUsageData *usage = [[ATInteractionUsageData alloc] init];
+	ApptentiveInteractionUsageData *usage = [[ApptentiveInteractionUsageData alloc] init];
 
 	NSDictionary *evaluationDictionary = [usage predicateEvaluationDictionary];
 	NSDictionary *versionValue = evaluationDictionary[@"sdk/version"];
@@ -66,7 +66,7 @@
 }
 
 - (void)testDefaultSDKVersion {
-	ATInteractionUsageData *usage = [[ATInteractionUsageData alloc] init];
+	ApptentiveInteractionUsageData *usage = [[ApptentiveInteractionUsageData alloc] init];
 
 	id mockedUsage = OCMPartialMock(usage);
 	OCMStub([mockedUsage sdkVersion]).andReturn(nil);
@@ -77,7 +77,7 @@
 }
 
 - (void)testCurrentTime {
-	ATInteractionUsageData *usage = [[ATInteractionUsageData alloc] init];
+	ApptentiveInteractionUsageData *usage = [[ApptentiveInteractionUsageData alloc] init];
 
 	NSDictionary *evaluationDictionary = [usage predicateEvaluationDictionary];
 	NSDictionary *currentTimeValue = evaluationDictionary[@"current_time"];
@@ -87,7 +87,7 @@
 }
 
 - (void)testTimeAtInstall {
-	ATInteractionUsageData *usage = [[ATInteractionUsageData alloc] init];
+	ApptentiveInteractionUsageData *usage = [[ApptentiveInteractionUsageData alloc] init];
 
 	NSDictionary *evaluationDictionary = [usage predicateEvaluationDictionary];
 	NSDictionary *timeAtInstallValue = evaluationDictionary[@"time_at_install/total"];
@@ -109,7 +109,7 @@
 	person.name = nil;
 	person.emailAddress = nil;
 
-	ATInteractionUsageData *usage = [[ATInteractionUsageData alloc] init];
+	ApptentiveInteractionUsageData *usage = [[ApptentiveInteractionUsageData alloc] init];
 
 	NSDictionary *evaluationDictionary = [usage predicateEvaluationDictionary];
 	XCTAssertNil(evaluationDictionary[@"person/name"]);

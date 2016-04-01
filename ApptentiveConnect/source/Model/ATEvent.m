@@ -61,17 +61,17 @@
 
 	// Monitor that the Event payload has not been dropped on retry
 	if (!result) {
-		ATLogError(@"Event json should not be nil.");
+		ApptentiveLogError(@"Event json should not be nil.");
 	}
 	if (result.count == 0) {
-		ATLogError(@"Event json should return a result.");
+		ApptentiveLogError(@"Event json should return a result.");
 	}
 	if (!result[@"label"]) {
-		ATLogError(@"Event json should include a `label`.");
+		ApptentiveLogError(@"Event json should include a `label`.");
 		return nil;
 	}
 	if (!result[@"nonce"]) {
-		ATLogError(@"Event json should include a `nonce`.");
+		ApptentiveLogError(@"Event json should include a `nonce`.");
 		return nil;
 	}
 
@@ -118,7 +118,7 @@
 		@try {
 			result = [NSKeyedUnarchiver unarchiveObjectWithData:self.dictionaryData];
 		} @catch (NSException *exception) {
-			ATLogError(@"Unable to unarchive event: %@", exception);
+			ApptentiveLogError(@"Unable to unarchive event: %@", exception);
 		}
 		return result;
 	}
@@ -141,12 +141,12 @@
 	[ATData deleteManagedObject:self];
 }
 
-- (ATAPIRequest *)requestForTask:(ATRecordRequestTask *)task {
+- (ApptentiveAPIRequest *)requestForTask:(ATRecordRequestTask *)task {
 	return [[Apptentive sharedConnection].webClient requestForSendingEvent:self];
 }
 
-- (ATRecordRequestTaskResult)taskResultForTask:(ATRecordRequestTask *)task withRequest:(ATAPIRequest *)request withResult:(id)result {
-	//ATLogInfo(@"Successfully sent event: %@ %@", self, result);
+- (ATRecordRequestTaskResult)taskResultForTask:(ATRecordRequestTask *)task withRequest:(ApptentiveAPIRequest *)request withResult:(id)result {
+	//ApptentiveLogInfo(@"Successfully sent event: %@ %@", self, result);
 	return ATRecordRequestTaskFinishedResult;
 }
 @end

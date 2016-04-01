@@ -7,7 +7,7 @@
 //
 
 #import "ATTask.h"
-#import "ATAppConfigurationUpdater.h"
+#import "ApptentiveAppConfigurationUpdater.h"
 
 
 @interface ATAppConfigurationUpdateTask : ATTask <ATAppConfigurationUpdaterDelegate>

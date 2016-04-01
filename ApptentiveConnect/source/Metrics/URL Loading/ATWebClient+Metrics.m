@@ -7,50 +7,50 @@
 //
 
 #import "ATWebClient+Metrics.h"
-#import "ATWebClient_Private.h"
-#import "ATAPIRequest.h"
-#import "ATBackend.h"
+#import "ApptentiveWebClient_Private.h"
+#import "ApptentiveAPIRequest.h"
+#import "ApptentiveBackend.h"
 #import "Apptentive.h"
 #import "ATEvent.h"
 #import "ATMetric.h"
-#import "ATJSONSerialization.h"
-#import "ATURLConnection.h"
+#import "ApptentiveJSONSerialization.h"
+#import "ApptentiveURLConnection.h"
 
 
-@implementation ATWebClient (Metrics)
-- (ATAPIRequest *)requestForSendingMetric:(ATMetric *)metric {
+@implementation ApptentiveWebClient (Metrics)
+- (ApptentiveAPIRequest *)requestForSendingMetric:(ATMetric *)metric {
 	NSDictionary *postData = [metric apiDictionary];
 
-	ATURLConnection *conn = [self connectionToPost:@"/records" parameters:postData];
+	ApptentiveURLConnection *conn = [self connectionToPost:@"/records" parameters:postData];
 	conn.timeoutInterval = 240.0;
-	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:ATWebClientDefaultChannelName];
-	request.returnType = ATAPIRequestReturnTypeJSON;
+	ApptentiveAPIRequest *request = [[ApptentiveAPIRequest alloc] initWithConnection:conn channelName:ATWebClientDefaultChannelName];
+	request.returnType = ApptentiveAPIRequestReturnTypeJSON;
 	return request;
 }
 
-- (ATAPIRequest *)requestForSendingEvent:(ATEvent *)event {
+- (ApptentiveAPIRequest *)requestForSendingEvent:(ATEvent *)event {
 	NSDictionary *postJSON = [event apiJSON];
 	if (postJSON == nil) {
 		return nil;
 	}
 
 	NSError *error = nil;
-	NSString *postString = [ATJSONSerialization stringWithJSONObject:postJSON options:ATJSONWritingPrettyPrinted error:&error];
+	NSString *postString = [ApptentiveJSONSerialization stringWithJSONObject:postJSON options:ATJSONWritingPrettyPrinted error:&error];
 	if (!postString && error != nil) {
-		ATLogError(@"Error while encoding JSON: %@", error);
+		ApptentiveLogError(@"Error while encoding JSON: %@", error);
 		return nil;
 	}
-	ATConversation *conversation = [ATConversationUpdater currentConversation];
+	ATConversation *conversation = [ApptentiveConversationUpdater currentConversation];
 	if (!conversation) {
-		ATLogError(@"No current conversation.");
+		ApptentiveLogError(@"No current conversation.");
 		return nil;
 	}
 
-	ATURLConnection *conn = [self connectionToPost:@"/events" JSON:postString];
+	ApptentiveURLConnection *conn = [self connectionToPost:@"/events" JSON:postString];
 	conn.timeoutInterval = 240.0;
 	[self updateConnection:conn withOAuthToken:conversation.token];
-	ATAPIRequest *request = [[ATAPIRequest alloc] initWithConnection:conn channelName:ATWebClientDefaultChannelName];
-	request.returnType = ATAPIRequestReturnTypeJSON;
+	ApptentiveAPIRequest *request = [[ApptentiveAPIRequest alloc] initWithConnection:conn channelName:ATWebClientDefaultChannelName];
+	request.returnType = ApptentiveAPIRequestReturnTypeJSON;
 	return request;
 }
 @end

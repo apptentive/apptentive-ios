@@ -6,10 +6,10 @@
 //  Copyright (c) 2013 Apptentive, Inc. All rights reserved.
 //
 
-#import "NSDictionary+ATAdditions.h"
+#import "NSDictionary+Apptentive.h"
 
 
-@implementation NSDictionary (ATAdditions)
+@implementation NSDictionary (Apptentive)
 
 - (id)at_safeObjectForKey:(id)aKey {
 	id result = [self objectForKey:aKey];

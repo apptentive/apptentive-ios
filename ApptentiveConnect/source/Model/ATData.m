@@ -8,9 +8,9 @@
 
 #import "ATData.h"
 
-#import "ATBackend.h"
+#import "ApptentiveBackend.h"
 #import "Apptentive_Private.h"
-#import "ATLog.h"
+#import "ApptentiveLog.h"
 
 
 @implementation ATData
@@ -27,7 +27,7 @@
 	NSError *fetchError = nil;
 	NSArray *fetchArray = [context executeFetchRequest:fetchType error:&fetchError];
 	if (!fetchArray) {
-		ATLogError(@"Error executing fetch request: %@", fetchError);
+		ApptentiveLogError(@"Error executing fetch request: %@", fetchError);
 		fetchArray = nil;
 	}
 	fetchType = nil;
@@ -44,8 +44,8 @@
 	NSError *fetchError = nil;
 	NSManagedObject *object = [context existingObjectWithID:objectID error:&fetchError];
 	if (object == nil) {
-		ATLogError(@"Error finding object with URL: %@", URL);
-		ATLogError(@"Error was: %@", fetchError);
+		ApptentiveLogError(@"Error finding object with URL: %@", URL);
+		ApptentiveLogError(@"Error was: %@", fetchError);
 		return nil;
 	}
 	return object;
@@ -58,7 +58,7 @@
 	NSError *fetchError = nil;
 	NSUInteger count = [context countForFetchRequest:fetchType error:&fetchError];
 	if (fetchError != nil) {
-		ATLogError(@"Error executing fetch request: %@", fetchError);
+		ApptentiveLogError(@"Error executing fetch request: %@", fetchError);
 		count = 0;
 	}
 	fetchType = nil;
@@ -74,7 +74,7 @@
 	NSArray *fetchArray = [context executeFetchRequest:fetchTypes error:&fetchError];
 
 	if (!fetchArray) {
-		ATLogError(@"Error finding entities to remove: %@", fetchError);
+		ApptentiveLogError(@"Error finding entities to remove: %@", fetchError);
 	} else {
 		for (NSManagedObject *fetchedObject in fetchArray) {
 			[context deleteObject:fetchedObject];
@@ -94,7 +94,7 @@
 	NSManagedObjectContext *context = [[Apptentive sharedConnection].backend managedObjectContext];
 	NSError *error = nil;
 	if (![context save:&error]) {
-		ATLogError(@"Error saving context: %@", error);
+		ApptentiveLogError(@"Error saving context: %@", error);
 		return NO;
 	}
 	return YES;

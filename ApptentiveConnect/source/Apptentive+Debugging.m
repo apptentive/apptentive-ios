@@ -1,12 +1,12 @@
 //
-//  ATConnect+Debugging.m
+//  Apptentive+Debugging.m
 //  ApptentiveConnect
 //
 //  Created by Frank Schmitt on 1/4/16.
 //  Copyright © 2016 Apptentive, Inc. All rights reserved.
 //
 
-#import "ATConnect+Debugging.h"
+#import "Apptentive+Debugging.h"
 #import "ATWebClient.h"
 #import "ATBackend.h"
 #import "ATEngagementBackend.h"
@@ -14,40 +14,14 @@
 #import "ATDeviceInfo.h"
 
 
-@implementation ATConnect (Debugging)
+@implementation Apptentive (Debugging)
 
-+ (NSString *)supportDirectoryPath {
-	static NSString *_supportDirectoryPath;
-	static dispatch_once_t onceToken;
-	dispatch_once(&onceToken, ^{
-		NSString *appSupportDirectoryPath = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES).firstObject;
-		NSString *apptentiveDirectoryPath = [appSupportDirectoryPath stringByAppendingPathComponent:@"com.apptentive.feedback"];
-		NSFileManager *fm = [NSFileManager defaultManager];
-		NSError *error = nil;
-
-		if (![fm createDirectoryAtPath:apptentiveDirectoryPath withIntermediateDirectories:YES attributes:nil error:&error]) {
-			ATLogError(@"Failed to create support directory: %@", apptentiveDirectoryPath);
-			ATLogError(@"Error was: %@", error);
-			return;
-		}
-
-		if (![fm setAttributes:@{ NSFileProtectionKey: NSFileProtectionCompleteUntilFirstUserAuthentication } ofItemAtPath:apptentiveDirectoryPath error:&error]) {
-			ATLogError(@"Failed to set file protection level: %@", apptentiveDirectoryPath);
-			ATLogError(@"Error was: %@", error);
-		}
-
-		_supportDirectoryPath = apptentiveDirectoryPath;
-	});
-
-	return _supportDirectoryPath;
-}
-
-- (ATConnectDebuggingOptions)debuggingOptions {
+- (ApptentiveDebuggingOptions)debuggingOptions {
 	return 0;
 }
 
 - (NSString *)SDKVersion {
-	return kATConnectVersionString;
+	return kApptentiveVersionString;
 }
 
 - (void)setAPIKey:(NSString *)APIKey baseURL:(NSURL *)baseURL storagePath:(nonnull NSString *)storagePath {

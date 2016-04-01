@@ -7,7 +7,7 @@
 //
 
 #import "ATLegacyRecord.h"
-#import "ATConnect_Private.h"
+#import "Apptentive_Private.h"
 #import "ATBackend.h"
 #import "ATUtilities.h"
 
@@ -29,7 +29,7 @@
 
 - (id)init {
 	if ((self = [super init])) {
-		self.uuid = [[ATConnect sharedConnection].backend deviceUUID];
+		self.uuid = [[Apptentive sharedConnection].backend deviceUUID];
 #if TARGET_OS_IPHONE
 		self.model = [[UIDevice currentDevice] model];
 		self.os_version = [NSString stringWithFormat:@"%@ %@", [[UIDevice currentDevice] systemName], [[UIDevice currentDevice] systemVersion]];
@@ -100,14 +100,14 @@
 
 	// Add some client information.
 	NSMutableDictionary *client = [NSMutableDictionary dictionary];
-	[client setObject:kATConnectVersionString forKey:@"version"];
-	[client setObject:kATConnectPlatformString forKey:@"os"];
+	[client setObject:kApptentiveVersionString forKey:@"version"];
+	[client setObject:kApptentivePlatformString forKey:@"os"];
 	[client setObject:@"Apptentive, Inc." forKey:@"author"];
-	NSString *distribution = [[ATConnect sharedConnection].backend distributionName];
+	NSString *distribution = [[Apptentive sharedConnection].backend distributionName];
 	if (distribution) {
 		[client setObject:distribution forKey:@"distribution"];
 	}
-	NSString *distributionVersion = [[ATConnect sharedConnection].backend distributionVersion];
+	NSString *distributionVersion = [[Apptentive sharedConnection].backend distributionVersion];
 	if (distributionVersion) {
 		[client setObject:distributionVersion forKey:@"distribution_version"];
 	}
@@ -137,14 +137,14 @@
 	[d setObject:[self formattedDate:self.date] forKey:@"record[date]"];
 
 	// Add some client information.
-	[d setObject:kATConnectVersionString forKey:@"record[client][version]"];
-	[d setObject:kATConnectPlatformString forKey:@"record[client][os]"];
+	[d setObject:kApptentiveVersionString forKey:@"record[client][version]"];
+	[d setObject:kApptentivePlatformString forKey:@"record[client][os]"];
 	[d setObject:@"Apptentive, Inc." forKey:@"record[client][author]"];
-	NSString *distribution = [[ATConnect sharedConnection].backend distributionName];
+	NSString *distribution = [[Apptentive sharedConnection].backend distributionName];
 	if (distribution) {
 		[d setObject:distribution forKey:@"record[client][distribution]"];
 	}
-	NSString *distributionVersion = [[ATConnect sharedConnection].backend distributionVersion];
+	NSString *distributionVersion = [[Apptentive sharedConnection].backend distributionVersion];
 	if (distributionVersion) {
 		[d setObject:distributionVersion forKey:@"record[client][distribution_version]"];
 	}

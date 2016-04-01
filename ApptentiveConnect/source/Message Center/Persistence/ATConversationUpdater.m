@@ -11,7 +11,7 @@
 #import "ATBackend.h"
 #import "ATUtilities.h"
 #import "ATWebClient+MessageCenter.h"
-#import "ATConnect_Private.h"
+#import "Apptentive_Private.h"
 
 NSString *const ATCurrentConversationPreferenceKey = @"ATCurrentConversationPreferenceKey";
 
@@ -59,14 +59,14 @@ NSString *const ATConversationLastUpdateValuePreferenceKey = @"ATConversationLas
 		ATLogInfo(@"Creating conversation");
 		creatingConversation = YES;
 		ATConversation *conversation = [[ATConversation alloc] init];
-		conversation.deviceID = [[ATConnect sharedConnection].backend deviceUUID];
-		request = [[ATConnect sharedConnection].webClient requestForCreatingConversation:conversation];
+		conversation.deviceID = [[Apptentive sharedConnection].backend deviceUUID];
+		request = [[Apptentive sharedConnection].webClient requestForCreatingConversation:conversation];
 		request.delegate = self;
 		[request start];
 		conversation = nil;
 	} else {
 		creatingConversation = NO;
-		request = [[ATConnect sharedConnection].webClient requestForUpdatingConversation:currentConversation];
+		request = [[Apptentive sharedConnection].webClient requestForUpdatingConversation:currentConversation];
 		request.delegate = self;
 		[request start];
 	}

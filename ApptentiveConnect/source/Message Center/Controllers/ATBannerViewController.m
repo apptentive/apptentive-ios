@@ -7,7 +7,7 @@
 //
 
 #import "ATBannerViewController.h"
-#import "ATConnect_Private.h"
+#import "Apptentive_Private.h"
 
 #define DISPLAY_DURATION 3.0
 #define ANIMATION_DURATION 0.33
@@ -38,7 +38,7 @@
 		[_currentBanner hide:self];
 	}
 
-	ATBannerViewController *banner = [[ATConnect storyboard] instantiateViewControllerWithIdentifier:@"Banner"];
+	ATBannerViewController *banner = [[Apptentive storyboard] instantiateViewControllerWithIdentifier:@"Banner"];
 
 	banner.imageURL = imageURL;
 	banner.titleText = title;

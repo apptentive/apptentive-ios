@@ -12,7 +12,7 @@
 #import "ATLog.h"
 #import "ATCompoundMessage.h"
 #import "ATConversationUpdater.h"
-#import "ATConnect_Private.h"
+#import "Apptentive_Private.h"
 #import "ATWebClient.h"
 #import "ATWebClient+MessageCenter.h"
 
@@ -50,14 +50,14 @@
 }
 
 - (BOOL)canStart {
-	if ([ATConnect sharedConnection].webClient == nil) {
+	if ([Apptentive sharedConnection].webClient == nil) {
 		ATLogDebug(@"Failed to send message because Apptentive API key is not set!");
 		return NO;
 	}
 	if (![ATConversationUpdater conversationExists]) {
 		return NO;
 	}
-	if ([[ATConnect sharedConnection].backend isUpdatingPerson]) {
+	if ([[Apptentive sharedConnection].backend isUpdatingPerson]) {
 		// Don't send until the person is done being updated.
 		return NO;
 	}
@@ -72,9 +72,9 @@
 			self.finished = YES;
 			return;
 		}
-		request = [[ATConnect sharedConnection].webClient requestForPostingMessage:message];
+		request = [[Apptentive sharedConnection].webClient requestForPostingMessage:message];
 		if (request != nil) {
-			[[ATConnect sharedConnection].backend messageTaskDidBegin:self];
+			[[Apptentive sharedConnection].backend messageTaskDidBegin:self];
 
 			request.delegate = self;
 			[request start];
@@ -124,7 +124,7 @@
 #pragma mark ATAPIRequestDelegate
 - (void)at_APIRequestDidFinish:(ATAPIRequest *)sender result:(NSObject *)result {
 	@synchronized(self) {
-		[[ATConnect sharedConnection].backend messageTaskDidFinish:self];
+		[[Apptentive sharedConnection].backend messageTaskDidFinish:self];
 
 		if ([result isKindOfClass:[NSDictionary class]] && [self processResult:(NSDictionary *)result]) {
 			self.finished = YES;
@@ -137,12 +137,12 @@
 }
 
 - (void)at_APIRequestDidProgress:(ATAPIRequest *)sender {
-	[[ATConnect sharedConnection].backend messageTask:self didProgress:self.percentComplete];
+	[[Apptentive sharedConnection].backend messageTask:self didProgress:self.percentComplete];
 }
 
 - (void)at_APIRequestDidFail:(ATAPIRequest *)sender {
 	@synchronized(self) {
-		[[ATConnect sharedConnection].backend messageTaskDidFail:self];
+		[[Apptentive sharedConnection].backend messageTaskDidFail:self];
 		self.lastErrorTitle = sender.errorTitle;
 		self.lastErrorMessage = sender.errorMessage;
 
@@ -168,7 +168,7 @@
 			[message setPendingState:@(ATPendingMessageStateError)];
 		}
 		NSError *error = nil;
-		NSManagedObjectContext *context = [[ATConnect sharedConnection].backend managedObjectContext];
+		NSManagedObjectContext *context = [[Apptentive sharedConnection].backend managedObjectContext];
 		if (![context save:&error]) {
 			ATLogError(@"Failed to save message after API failure: %@", error);
 		}
@@ -187,7 +187,7 @@
 
 - (BOOL)processResult:(NSDictionary *)jsonMessage {
 	ATLogDebug(@"getting json result: %@", jsonMessage);
-	NSManagedObjectContext *context = [[ATConnect sharedConnection].backend managedObjectContext];
+	NSManagedObjectContext *context = [[Apptentive sharedConnection].backend managedObjectContext];
 
 	ATCompoundMessage *message = [ATCompoundMessage findMessageWithPendingID:self.pendingMessageID];
 	if (message == nil) {

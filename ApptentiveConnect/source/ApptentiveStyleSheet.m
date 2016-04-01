@@ -6,8 +6,8 @@
 //  Copyright © 2016 Apptentive, Inc. All rights reserved.
 //
 
-#import "ATStyleSheet.h"
-#import "ATConnect.h"
+#import "ApptentiveStyleSheet.h"
+#import "Apptentive.h"
 
 NSString * const ApptentiveTextStyleHeaderTitle = @"com.apptentive.header.title";
 NSString * const ApptentiveTextStyleHeaderMessage = @"com.apptentive.header.message";
@@ -32,7 +32,7 @@ NSString * const ApptentiveColorMessageBackground = @"com.apptentive.color.messa
 NSString * const ApptentiveColorReplyBackground = @"com.apptentive.color.replyBackground";
 NSString * const ApptentiveColorContextBackground = @"com.apptentive.color.contextBackground";
 
-@interface ATStyleSheet ()
+@interface ApptentiveStyleSheet ()
 
 @property (strong, nonatomic) NSMutableDictionary *fontDescriptorOverrides;
 @property (strong, nonatomic) NSMutableDictionary *colorOverrides;
@@ -52,7 +52,7 @@ NSString * const ApptentiveColorContextBackground = @"com.apptentive.color.conte
 
 @end
 
-@implementation ATStyleSheet
+@implementation ApptentiveStyleSheet
 
 // TODO: Adjust for content size category?
 + (NSInteger)weightForTextStyle:(NSString *)textStyle {
@@ -307,10 +307,10 @@ NSString * const ApptentiveColorContextBackground = @"com.apptentive.color.conte
 }
 
 + (instancetype)styleSheet {
-	static ATStyleSheet *_styleSheet;
+	static ApptentiveStyleSheet *_styleSheet;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-		_styleSheet = [[ATStyleSheet alloc] init];
+		_styleSheet = [[ApptentiveStyleSheet alloc] init];
 	});
 	return _styleSheet;
 }
@@ -344,7 +344,7 @@ NSString * const ApptentiveColorContextBackground = @"com.apptentive.color.conte
 - (UIColor *)appearanceColorForClass:(Class)klass property:(SEL)propertySelector default:(UIColor *)defaultColor {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-	UIColor * whenContainedInColor = [[klass appearanceWhenContainedIn:[ATNavigationController class], nil] performSelector:propertySelector];
+	UIColor * whenContainedInColor = [[klass appearanceWhenContainedIn:[ApptentiveNavigationController class], nil] performSelector:propertySelector];
 	if (whenContainedInColor) {
 		return whenContainedInColor;
 	}

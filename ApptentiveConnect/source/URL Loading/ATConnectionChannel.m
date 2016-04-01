@@ -1,5 +1,5 @@
 //
-//  ATConnectionChannel.m
+//  ApptentiveionChannel.m
 //
 //  Created by Andrew Wooster on 12/14/08.
 //  Copyright 2008 Apptentive, Inc.. All rights reserved.
@@ -10,7 +10,7 @@
 #import "ATURLConnection_Private.h"
 
 
-@interface ATConnectionChannel ()
+@interface ApptentiveionChannel ()
 
 @property (strong, nonatomic) NSMutableSet *active;
 @property (strong, nonatomic) NSMutableArray *waiting;
@@ -18,7 +18,7 @@
 @end
 
 
-@implementation ATConnectionChannel
+@implementation ApptentiveionChannel
 
 - (id)init {
 	if ((self = [super init])) {

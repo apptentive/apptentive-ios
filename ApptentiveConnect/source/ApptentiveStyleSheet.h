@@ -40,7 +40,7 @@ extern NSString * const ApptentiveColorMessageBackground;
 extern NSString * const ApptentiveColorReplyBackground;
 extern NSString * const ApptentiveColorContextBackground;
 
-@interface ATStyleSheet : NSObject <ApptentiveStyle>
+@interface ApptentiveStyleSheet : NSObject <ApptentiveStyle>
 
 @property (strong, nonatomic) NSString *fontFamily;
 @property (strong, nonatomic) NSString * _Nullable lightFaceAttribute;

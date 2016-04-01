@@ -10,7 +10,7 @@
 
 #import <OCMock/OCMock.h>
 
-#import "ATConnect_Private.h"
+#import "Apptentive_Private.h"
 #import "ATEngagementBackend.h"
 #import "ATInteractionInvocation.h"
 #import "ATInteractionUsageData.h"
@@ -62,7 +62,7 @@
 	NSDictionary *versionValue = evaluationDictionary[@"sdk/version"];
 	XCTAssertNotNil(versionValue, @"No sdk/version key found.");
 	XCTAssertEqualObjects(versionValue[@"_type"], @"version");
-	XCTAssertEqualObjects(versionValue[@"version"], kATConnectVersionString);
+	XCTAssertEqualObjects(versionValue[@"version"], kApptentiveVersionString);
 }
 
 - (void)testDefaultSDKVersion {

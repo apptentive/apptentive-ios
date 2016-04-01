@@ -9,7 +9,7 @@
 #import "ATAppConfigurationUpdater.h"
 #import "ATUtilities.h"
 #import "ATWebClient.h"
-#import "ATConnect_Private.h"
+#import "Apptentive_Private.h"
 
 NSString *const ATConfigurationSDKVersionKey = @"ATConfigurationSDKVersionKey";
 NSString *const ATConfigurationAppBuildNumberKey = @"ATConfigurationAppBuildNumberKey";
@@ -56,7 +56,7 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 	}
 
 	NSString *previousSDKVersion = [[NSUserDefaults standardUserDefaults] stringForKey:ATConfigurationSDKVersionKey];
-	if (![previousSDKVersion isEqualToString:kATConnectVersionString]) {
+	if (![previousSDKVersion isEqualToString:kApptentiveVersionString]) {
 		invalidateCache = YES;
 	}
 
@@ -103,7 +103,7 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 
 - (void)update {
 	[self cancel];
-	request = [[ATConnect sharedConnection].webClient requestForGettingAppConfiguration];
+	request = [[Apptentive sharedConnection].webClient requestForGettingAppConfiguration];
 	request.delegate = self;
 	[request start];
 }
@@ -244,7 +244,7 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 		[defaults removeObjectForKey:ATAppConfigurationAppDisplayNameKey];
 	}
 
-	[defaults setObject:kATConnectVersionString forKey:ATConfigurationSDKVersionKey];
+	[defaults setObject:kApptentiveVersionString forKey:ATConfigurationSDKVersionKey];
 	[defaults setObject:[ATUtilities buildNumberString] forKey:ATConfigurationAppBuildNumberKey];
 
 	if (hasConfigurationChanges) {

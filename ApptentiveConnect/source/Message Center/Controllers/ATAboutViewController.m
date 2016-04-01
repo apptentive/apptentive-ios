@@ -8,7 +8,7 @@
 
 #import "ATAboutViewController.h"
 #import "ATBackend.h"
-#import "ATConnect_Private.h"
+#import "Apptentive_Private.h"
 #import "ATEngagementBackend.h"
 
 NSString *const ATInteractionAboutViewInteractionKey = @"About";
@@ -44,7 +44,7 @@ NSString *const ATInteractionAboutViewEventLabelClose = @"close";
 - (void)viewDidLoad {
 	[super viewDidLoad];
 
-	[[ATConnect sharedConnection].engagementBackend engageCodePoint:[self codePointForEvent:ATInteractionAboutViewEventLabelLaunch] fromInteraction:nil userInfo:nil customData:nil extendedData:nil fromViewController:self];
+	[[Apptentive sharedConnection].engagementBackend engageCodePoint:[self codePointForEvent:ATInteractionAboutViewEventLabelLaunch] fromInteraction:nil userInfo:nil customData:nil extendedData:nil fromViewController:self];
 
 	self.imageView.image = [ATBackend imageNamed:@"at_apptentive_logo"];
 	// TODO: Look into localizing the storyboard instead
@@ -77,7 +77,7 @@ NSString *const ATInteractionAboutViewEventLabelClose = @"close";
 - (void)viewWillDisappear:(BOOL)animated {
 	[super viewWillDisappear:animated];
 
-	[[ATConnect sharedConnection].engagementBackend engageCodePoint:[self codePointForEvent:ATInteractionAboutViewEventLabelClose] fromInteraction:nil userInfo:nil customData:nil extendedData:nil fromViewController:self];
+	[[Apptentive sharedConnection].engagementBackend engageCodePoint:[self codePointForEvent:ATInteractionAboutViewEventLabelClose] fromInteraction:nil userInfo:nil customData:nil extendedData:nil fromViewController:self];
 }
 
 - (IBAction)learnMore:(id)sender {

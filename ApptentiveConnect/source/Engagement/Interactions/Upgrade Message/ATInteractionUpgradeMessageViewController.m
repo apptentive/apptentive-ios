@@ -7,7 +7,7 @@
 //
 
 #import "ATInteractionUpgradeMessageViewController.h"
-#import "ATConnect_Private.h"
+#import "Apptentive_Private.h"
 #import "ATInteraction.h"
 #import "ATBackend.h"
 #import "ATUtilities.h"
@@ -47,7 +47,7 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 + (instancetype)interactionUpgradeMessageViewControllerWithInteraction:(ATInteraction *)interaction {
 	NSAssert([interaction.type isEqualToString:@"UpgradeMessage"], @"Attempted to load an UpgradeMessageViewController with an interaction of type: %@", interaction.type);
 
-	UINavigationController *navigationController = [[ATConnect storyboard] instantiateViewControllerWithIdentifier:@"UpgradeMessageNavigation"];
+	UINavigationController *navigationController = [[Apptentive storyboard] instantiateViewControllerWithIdentifier:@"UpgradeMessageNavigation"];
 	ATInteractionUpgradeMessageViewController *result = (ATInteractionUpgradeMessageViewController *)navigationController.viewControllers.firstObject;
 
 	result.upgradeMessageInteraction = interaction;
@@ -81,7 +81,7 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 	}
 
 	// Powered by Apptentive logo
-	if ([[self.upgradeMessageInteraction.configuration objectForKey:@"show_powered_by"] boolValue] && ![ATConnect sharedConnection].backend.hideBranding) {
+	if ([[self.upgradeMessageInteraction.configuration objectForKey:@"show_powered_by"] boolValue] && ![Apptentive sharedConnection].backend.hideBranding) {
 		self.poweredByApptentiveLogo.text = ATLocalizedString(@"Powered by", @"Powered by followed by Apptentive logo.");
 		UIImage *poweredByApptentiveIcon = [ATBackend imageNamed:@"at_update_logo"];
 		[self.poweredByApptentiveIconView setImage:poweredByApptentiveIcon];
@@ -106,7 +106,7 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 }
 
 - (IBAction)showAbout:(id)sender {
-	[(ATNavigationController *)self.navigationController pushAboutApptentiveViewController];
+	[(ApptentiveNavigationController *)self.navigationController pushAboutApptentiveViewController];
 	[self.navigationController setNavigationBarHidden:NO animated:YES];
 }
 

@@ -21,8 +21,8 @@
 
 #import "ATBackend.h"
 #import "ATHUDViewController.h"
-#import "ATConnect_Private.h"
-#import "ATStyleSheet.h"
+#import "Apptentive_Private.h"
+#import "ApptentiveStyleSheet.h"
 
 // These need to match the values from the storyboard
 #define QUESTION_HORIZONTAL_MARGIN 38.0
@@ -71,7 +71,7 @@
 
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sizeDidUpdate:) name:UIContentSizeCategoryDidChangeNotification object:nil];
 
-	ATStyleSheet *style = self.viewModel.styleSheet;
+	ApptentiveStyleSheet *style = self.viewModel.styleSheet;
 
 	self.collectionView.backgroundColor = [style colorForStyle:ApptentiveColorCollectionBackground];
 	self.headerBackgroundView.backgroundColor = [style colorForStyle:ApptentiveColorHeaderBackground];
@@ -137,7 +137,7 @@
 }
 
 - (IBAction)showAbout:(id)sender {
-	[(ATNavigationController *)self.navigationController pushAboutApptentiveViewController];
+	[(ApptentiveNavigationController *)self.navigationController pushAboutApptentiveViewController];
 }
 
 - (void)setViewModel:(ATSurveyViewModel *)viewModel {

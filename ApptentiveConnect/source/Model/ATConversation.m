@@ -8,7 +8,7 @@
 
 #import "ATConversation.h"
 
-#import "ATConnect_Private.h"
+#import "Apptentive_Private.h"
 #import "ATBackend.h"
 #import "ATUtilities.h"
 #import "NSDictionary+ATAdditions.h"
@@ -69,7 +69,7 @@
 - (NSDictionary *)apiJSON {
 	NSMutableDictionary *result = [NSMutableDictionary dictionary];
 
-	NSString *deviceUUID = [[ATConnect sharedConnection].backend deviceUUID];
+	NSString *deviceUUID = [[Apptentive sharedConnection].backend deviceUUID];
 	if (deviceUUID) {
 		NSDictionary *deviceInfo = @{ @"uuid": deviceUUID };
 		result[@"device"] = deviceInfo;
@@ -107,15 +107,15 @@
 
 - (NSDictionary *)sdkJSON {
 	NSMutableDictionary *result = [NSMutableDictionary dictionary];
-	result[@"version"] = kATConnectVersionString;
+	result[@"version"] = kApptentiveVersionString;
 	result[@"programming_language"] = @"Objective-C";
 	result[@"author_name"] = @"Apptentive, Inc.";
-	result[@"platform"] = kATConnectPlatformString;
-	NSString *distribution = [[ATConnect sharedConnection].backend distributionName];
+	result[@"platform"] = kApptentivePlatformString;
+	NSString *distribution = [[Apptentive sharedConnection].backend distributionName];
 	if (distribution) {
 		result[@"distribution"] = distribution;
 	}
-	NSString *distributionVersion = [[ATConnect sharedConnection].backend distributionVersion];
+	NSString *distributionVersion = [[Apptentive sharedConnection].backend distributionVersion];
 	if (distributionVersion) {
 		result[@"distribution_version"] = distributionVersion;
 	}

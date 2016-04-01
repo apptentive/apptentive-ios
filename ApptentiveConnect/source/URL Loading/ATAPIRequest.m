@@ -7,9 +7,9 @@
 //
 
 #import "ATAPIRequest.h"
-#import "ATConnect.h"
-#import "ATConnect+Debugging.h"
-#import "ATConnect_Private.h"
+#import "Apptentive.h"
+#import "Apptentive+Debugging.h"
+#import "Apptentive_Private.h"
 #import "ATConnectionManager.h"
 #import "ATJSONSerialization.h"
 #import "ATURLConnection.h"
@@ -43,15 +43,15 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 	self.delegate = nil;
 	if (_connection) {
 		_connection.delegate = nil;
-		[[ATConnectionManager sharedSingleton] cancelConnection:_connection inChannel:_channelName];
+		[[ApptentiveionManager sharedSingleton] cancelConnection:_connection inChannel:_channelName];
 	}
 }
 
 - (void)start {
 	@synchronized(self) {
 		if (_connection) {
-			[[ATConnectionManager sharedSingleton] addConnection:self.connection toChannel:self.channelName];
-			[[ATConnectionManager sharedSingleton] start];
+			[[ApptentiveionManager sharedSingleton] addConnection:self.connection toChannel:self.channelName];
+			[[ApptentiveionManager sharedSingleton] start];
 		}
 	}
 }
@@ -60,7 +60,7 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 	@synchronized(self) {
 		_cancelled = YES;
 		if (_connection) {
-			[[ATConnectionManager sharedSingleton] cancelConnection:self.connection inChannel:self.channelName];
+			[[ApptentiveionManager sharedSingleton] cancelConnection:self.connection inChannel:self.channelName];
 		}
 	}
 }
@@ -122,12 +122,12 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 			if (sender.statusCode == 422) {
 				ATLogError(@"API Request was sent with malformed data");
 			}
-			if ([ATConnect sharedConnection].debuggingOptions & ATConnectDebuggingOptionsLogHTTPFailures ||
-				[ATConnect sharedConnection].debuggingOptions & ATConnectDebuggingOptionsLogAllHTTPRequests) {
+			if ([Apptentive sharedConnection].debuggingOptions & ApptentiveDebuggingOptionsLogHTTPFailures ||
+				[Apptentive sharedConnection].debuggingOptions & ApptentiveDebuggingOptionsLogAllHTTPRequests) {
 				ATLogDebug(@"Request was:\n%@", [self.connection requestAsString]);
 				ATLogDebug(@"Response was:\n%@", [self.connection responseAsString]);
 			}
-		} else if ([ATConnect sharedConnection].debuggingOptions & ATConnectDebuggingOptionsLogAllHTTPRequests) {
+		} else if ([Apptentive sharedConnection].debuggingOptions & ApptentiveDebuggingOptionsLogAllHTTPRequests) {
 			ATLogDebug(@"Request was:\n%@", [self.connection requestAsString]);
 			ATLogDebug(@"Response was:\n%@", [self.connection responseAsString]);
 		}
@@ -188,8 +188,8 @@ NSString *const ATAPIRequestStatusChanged = @"ATAPIRequestStatusChanged";
 		responseString = nil;
 	}
 
-	if ([ATConnect sharedConnection].debuggingOptions & ATConnectDebuggingOptionsLogHTTPFailures ||
-		[ATConnect sharedConnection].debuggingOptions & ATConnectDebuggingOptionsLogAllHTTPRequests) {
+	if ([Apptentive sharedConnection].debuggingOptions & ApptentiveDebuggingOptionsLogHTTPFailures ||
+		[Apptentive sharedConnection].debuggingOptions & ApptentiveDebuggingOptionsLogAllHTTPRequests) {
 		ATLogError(@"Connection failed. %@, %@", self.errorTitle, self.errorMessage);
 		ATLogInfo(@"Status was: %d", sender.statusCode);
 		ATLogDebug(@"Request was:\n%@", [self.connection requestAsString]);

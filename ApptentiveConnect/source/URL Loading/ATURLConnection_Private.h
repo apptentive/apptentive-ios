@@ -12,7 +12,7 @@
 
 
 @interface ATURLConnection ()
-/*! It's important nobody but ATURLConnection and ATConnectionChannel call this
+/*! It's important nobody but ATURLConnection and ApptentiveionChannel call this
     selector. */
 - (void)cancel;
 @end

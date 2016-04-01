@@ -1,21 +1,22 @@
 //
-//  ATConnect_Private.h
+//  Apptentive_Private.h
 //  ApptentiveConnect
 //
 //  Created by Andrew Wooster on 1/20/13.
 //  Copyright (c) 2013 Apptentive, Inc. All rights reserved.
 //
 
-#import "ATConnect.h"
+#import "Apptentive.h"
 
-extern NSString *const ATConnectCustomPersonDataChangedNotification;
-extern NSString *const ATConnectCustomDeviceDataChangedNotification;
+extern NSString *const ApptentiveCustomPersonDataChangedNotification;
+extern NSString *const ApptentiveCustomDeviceDataChangedNotification;
 
 @class ATCompoundMessage, ATWebClient, ATBackend, ATEngagementBackend;
 
 
-@interface ATConnect ()
+@interface Apptentive ()
 
++ (NSString *)supportDirectoryPath;
 @property (readonly, nonatomic) NSDictionary *customPersonData;
 @property (readonly, nonatomic) NSDictionary *customDeviceData;
 - (NSDictionary *)integrationConfiguration;
@@ -34,7 +35,7 @@ extern NSString *const ATConnectCustomDeviceDataChangedNotification;
 #endif
 
 /*!
- * Returns the NSBundle corresponding to the bundle containing ATConnect's
+ * Returns the NSBundle corresponding to the bundle containing Apptentive's
  * images, xibs, strings files, etc.
  */
 + (NSBundle *)resourceBundle;
@@ -53,7 +54,7 @@ extern NSString *const ATConnectCustomDeviceDataChangedNotification;
 extern NSString *ATLocalizedString(NSString *key, NSString *comment);
 
 
-@interface ATNavigationController (AboutView)
+@interface ApptentiveNavigationController (AboutView)
 
 - (void)pushAboutApptentiveViewController;
 

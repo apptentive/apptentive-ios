@@ -13,8 +13,8 @@
 #import "ATDeviceInfo.h"
 
 #import "ATBackend.h"
-#import "ATConnect.h"
-#import "ATConnect_Private.h"
+#import "Apptentive.h"
+#import "Apptentive_Private.h"
 #import "ATUtilities.h"
 #import "ATDeviceUpdater.h"
 
@@ -47,7 +47,7 @@
 - (NSDictionary *)dictionaryRepresentation {
 	NSMutableDictionary *device = [NSMutableDictionary dictionary];
 
-	NSString *uuid = [[ATConnect sharedConnection].backend deviceUUID];
+	NSString *uuid = [[Apptentive sharedConnection].backend deviceUUID];
 	if (uuid) {
 		device[@"uuid"] = uuid;
 	}
@@ -95,12 +95,12 @@
 
 	device[@"utc_offset"] = @([[NSTimeZone systemTimeZone] secondsFromGMT]);
 
-	NSDictionary *extraInfo = [[ATConnect sharedConnection] customDeviceData];
+	NSDictionary *extraInfo = [[Apptentive sharedConnection] customDeviceData];
 	if (extraInfo && [extraInfo count]) {
 		device[@"custom_data"] = extraInfo;
 	}
 
-	NSDictionary *integrationConfiguration = [[ATConnect sharedConnection] integrationConfiguration];
+	NSDictionary *integrationConfiguration = [[Apptentive sharedConnection] integrationConfiguration];
 	if (integrationConfiguration && [integrationConfiguration isKindOfClass:[NSDictionary class]]) {
 		device[@"integration_config"] = integrationConfiguration;
 	}

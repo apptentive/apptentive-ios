@@ -9,7 +9,7 @@
 #import "CriteriaTests.h"
 #import "ATInteractionInvocation.h"
 #import "ATInteractionUsageData.h"
-#import "ATConnect_Private.h"
+#import "Apptentive_Private.h"
 
 
 @interface CodePointTest : CriteriaTest
@@ -271,7 +271,7 @@
 @interface CodePointLastInvokedAt : CodePointTest
 @end
 
-#import "ATConnect.h"
+#import "Apptentive.h"
 
 
 @implementation CodePointLastInvokedAt
@@ -280,18 +280,18 @@
 	[super setUp];
 
 	self.usageData.codePointInvokesTotal = @{ @"code_point/switch.code.point/invokes/total": @0 };
-	self.usageData.codePointInvokesTimeAgo = @{ @"code_point/test.code.point/last_invoked_at/total": [ATConnect timestampObjectWithDate:[NSDate date]] };
+	self.usageData.codePointInvokesTimeAgo = @{ @"code_point/test.code.point/last_invoked_at/total": [Apptentive timestampObjectWithDate:[NSDate date]] };
 }
 
 - (void)incrementTimeAgoCodePoint:(NSString *)codePoint {
 	NSString *fullCodePoint = [NSString stringWithFormat:@"code_point/%@/last_invoked_at/total", codePoint];
 	NSMutableDictionary *mutableCodePoints = [self.usageData.interactionInvokesTimeAgo mutableCopy];
-	mutableCodePoints[fullCodePoint] = [ATConnect timestampObjectWithDate:[NSDate date]];
+	mutableCodePoints[fullCodePoint] = [Apptentive timestampObjectWithDate:[NSDate date]];
 	self.usageData.interactionInvokesTimeAgo = [NSDictionary dictionaryWithDictionary:mutableCodePoints];
 }
 
 - (void)testAfter {
-	self.usageData.codePointInvokesTimeAgo = @{ @"code_point/test.code.point/last_invoked_at/total": [ATConnect timestampObjectWithDate:[NSDate distantPast]] };
+	self.usageData.codePointInvokesTimeAgo = @{ @"code_point/test.code.point/last_invoked_at/total": [Apptentive timestampObjectWithDate:[NSDate distantPast]] };
 
 	XCTAssertFalse([self.interaction criteriaAreMetForUsageData:self.usageData]);
 	NSLog(@"%@", [self.usageData predicateEvaluationDictionary][@"code_point/test.code.point/last_invoked_at/total"]);
@@ -308,7 +308,7 @@
 }
 
 - (void)testNe {
-	self.usageData.codePointInvokesTimeAgo = @{ @"code_point/test.code.point/last_invoked_at/total": [ATConnect timestampObjectWithDate:[NSDate date]] };
+	self.usageData.codePointInvokesTimeAgo = @{ @"code_point/test.code.point/last_invoked_at/total": [Apptentive timestampObjectWithDate:[NSDate date]] };
 
 	[self incrementTotalCodePoint:@"switch.code.point"];
 	// There is always going to be a few microseconds of time offset here, so I can't really run this test.

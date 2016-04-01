@@ -7,7 +7,7 @@
 //
 
 #import "ATInteractionAppStoreController.h"
-#import "ATConnect_Private.h"
+#import "Apptentive_Private.h"
 #import "ATUtilities.h"
 #import "ATInteraction.h"
 #import "ATEngagementBackend.h"
@@ -39,7 +39,7 @@ NSString *const ATInteractionAppStoreRatingEventLabelUnableToRate = @"unable_to_
 - (NSString *)appID {
 	NSString *appID = self.interaction.configuration[@"store_id"];
 	if (appID.length == 0) {
-		appID = [ATConnect sharedConnection].appID;
+		appID = [Apptentive sharedConnection].appID;
 	}
 
 	return appID;

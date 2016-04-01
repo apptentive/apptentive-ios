@@ -10,7 +10,7 @@
 #import "ATWebClient_Private.h"
 #import "ATAPIRequest.h"
 #import "ATBackend.h"
-#import "ATConnect.h"
+#import "Apptentive.h"
 #import "ATEvent.h"
 #import "ATMetric.h"
 #import "ATJSONSerialization.h"

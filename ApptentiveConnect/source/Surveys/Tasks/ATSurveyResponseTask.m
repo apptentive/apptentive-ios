@@ -10,7 +10,7 @@
 #import "ATBackend.h"
 #import "ATJSONSerialization.h"
 #import "ATWebClient+SurveyAdditions.h"
-#import "ATConnect_Private.h"
+#import "Apptentive_Private.h"
 
 #define kATPendingMessageTaskCodingVersion 1
 
@@ -47,7 +47,7 @@
 }
 
 - (BOOL)canStart {
-	if ([ATConnect sharedConnection].webClient == nil) {
+	if ([Apptentive sharedConnection].webClient == nil) {
 		return NO;
 	}
 	if (![ATConversationUpdater conversationExists]) {
@@ -64,7 +64,7 @@
 			self.finished = YES;
 			return;
 		}
-		self.request = [[ATConnect sharedConnection].webClient requestForPostingSurveyResponse:response];
+		self.request = [[Apptentive sharedConnection].webClient requestForPostingSurveyResponse:response];
 		if (self.request != nil) {
 			self.request.delegate = self;
 			[self.request start];
@@ -140,7 +140,7 @@
 			[response setPendingState:@(ATPendingSurveyResponseError)];
 		}
 		NSError *error = nil;
-		NSManagedObjectContext *context = [[ATConnect sharedConnection].backend managedObjectContext];
+		NSManagedObjectContext *context = [[Apptentive sharedConnection].backend managedObjectContext];
 		if (![context save:&error]) {
 			ATLogError(@"Failed to save survey response after API failure: %@", error);
 		}
@@ -159,7 +159,7 @@
 
 - (BOOL)processResult:(NSDictionary *)jsonResponse {
 	ATLogDebug(@"Getting json result: %@", jsonResponse);
-	NSManagedObjectContext *context = [[ATConnect sharedConnection].backend managedObjectContext];
+	NSManagedObjectContext *context = [[Apptentive sharedConnection].backend managedObjectContext];
 
 	ATSurveyResponse *response = [ATSurveyResponse findSurveyResponseWithPendingID:self.pendingSurveyResponseID];
 	if (response == nil) {

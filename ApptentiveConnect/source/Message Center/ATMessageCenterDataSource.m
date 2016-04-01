@@ -9,8 +9,8 @@
 #import "ATMessageCenterDataSource.h"
 
 #import "ATBackend.h"
-#import "ATConnect.h"
-#import "ATConnect_Private.h"
+#import "Apptentive.h"
+#import "Apptentive_Private.h"
 #import "ATData.h"
 #import "ATMessageSender.h"
 #import "ATAttachmentCell.h"
@@ -54,7 +54,7 @@ NSString *const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenter
 		if (!_fetchedMessagesController) {
 			[NSFetchedResultsController deleteCacheWithName:@"at-messages-cache"];
 			NSFetchRequest *request = [[NSFetchRequest alloc] init];
-			[request setEntity:[NSEntityDescription entityForName:@"ATMessage" inManagedObjectContext:[[ATConnect sharedConnection].backend managedObjectContext]]];
+			[request setEntity:[NSEntityDescription entityForName:@"ATMessage" inManagedObjectContext:[[Apptentive sharedConnection].backend managedObjectContext]]];
 			[request setFetchBatchSize:20];
 
 			//NSSortDescriptor *creationTimeSort = [[NSSortDescriptor alloc] initWithKey:@"creationTime" ascending:YES];
@@ -67,7 +67,7 @@ NSString *const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenter
 			// For now, group each message into its own section.
 			// In the future, we'll save an attribute that coalesces
 			// closely-grouped (in time) messages into a single section.
-			NSFetchedResultsController *newController = [[NSFetchedResultsController alloc] initWithFetchRequest:request managedObjectContext:[[ATConnect sharedConnection].backend managedObjectContext] sectionNameKeyPath:@"clientCreationTime" cacheName:@"at-messages-cache"];
+			NSFetchedResultsController *newController = [[NSFetchedResultsController alloc] initWithFetchRequest:request managedObjectContext:[[Apptentive sharedConnection].backend managedObjectContext] sectionNameKeyPath:@"clientCreationTime" cacheName:@"at-messages-cache"];
 			newController.delegate = self;
 			_fetchedMessagesController = newController;
 
@@ -78,7 +78,7 @@ NSString *const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenter
 }
 
 - (void)start {
-	[[ATConnect sharedConnection].backend messageCenterEnteredForeground];
+	[[Apptentive sharedConnection].backend messageCenterEnteredForeground];
 	[ATCompoundMessage clearComposingMessages];
 
 	NSError *error = nil;
@@ -89,7 +89,7 @@ NSString *const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenter
 }
 
 - (void)stop {
-	[[ATConnect sharedConnection].backend messageCenterLeftForeground];
+	[[Apptentive sharedConnection].backend messageCenterLeftForeground];
 }
 
 #pragma mark - Message center view controller support

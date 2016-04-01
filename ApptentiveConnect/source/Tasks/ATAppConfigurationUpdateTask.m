@@ -7,7 +7,7 @@
 //
 
 #import "ATAppConfigurationUpdateTask.h"
-#import "ATConnect_Private.h"
+#import "Apptentive_Private.h"
 #import "ATConversationUpdater.h"
 
 
@@ -29,7 +29,7 @@
 }
 
 - (BOOL)canStart {
-	if ([ATConnect sharedConnection].webClient == nil) {
+	if ([Apptentive sharedConnection].webClient == nil) {
 		return NO;
 	}
 	if (![ATConversationUpdater conversationExists]) {

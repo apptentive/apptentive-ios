@@ -7,7 +7,7 @@
 //
 
 #import <XCTest/XCTest.h>
-#import "ATConnect.h"
+#import "Apptentive.h"
 #import "ATPersonInfo.h"
 #import "ATDeviceInfo.h"
 #import "ATUtilities.h"
@@ -30,14 +30,14 @@
 	person.name = nil;
 
 	// Add custom person data
-	[[ATConnect sharedConnection] addCustomPersonData:@"brown" withKey:@"hair_color"];
-	[[ATConnect sharedConnection] addCustomPersonData:@(70) withKey:@"height"];
-	[[ATConnect sharedConnection] addCustomPersonData:[NSNull null] withKey:@"nsNullCustomData"];
+	[[Apptentive sharedConnection] addCustomPersonData:@"brown" withKey:@"hair_color"];
+	[[Apptentive sharedConnection] addCustomPersonData:@(70) withKey:@"height"];
+	[[Apptentive sharedConnection] addCustomPersonData:[NSNull null] withKey:@"nsNullCustomData"];
 
 	// Arrays, dictionaries, etc. should throw exception if added to custom data
 	NSDictionary *customDictionary = [NSDictionary dictionaryWithObject:@"thisShould" forKey:@"notWork"];
 	@try {
-		[[ATConnect sharedConnection] addCustomPersonData:customDictionary withKey:@"customDictionary"];
+		[[Apptentive sharedConnection] addCustomPersonData:customDictionary withKey:@"customDictionary"];
 	}
 	@catch (NSException *e) {
 		XCTAssertTrue(e != nil, @"Attempting to add a dictionary to custom_data should throw an exception: %@", e);
@@ -53,11 +53,11 @@
 	XCTAssertTrue([[[[[person apiJSON] objectForKey:@"person"] objectForKey:@"custom_data"] objectForKey:@"nsNullCustomData"] isEqual:[NSNull null]], @"Custom data 'nsNullCustomData' should be equal to '[NSNull null]'");
 
 	// Remove custom person data
-	[[ATConnect sharedConnection] removeCustomPersonDataWithKey:@"hair_color"];
+	[[Apptentive sharedConnection] removeCustomPersonDataWithKey:@"hair_color"];
 	XCTAssertTrue([[[[person apiJSON] objectForKey:@"person"] objectForKey:@"custom_data"] objectForKey:@"hair_color"] == nil, @"The 'hair_color' custom data was removed, should no longer be in custom_data");
 	XCTAssertTrue([[[[person apiJSON] objectForKey:@"person"] objectForKey:@"custom_data"] objectForKey:@"height"] != nil, @"The 'height' custom data was not removed, should still be in custom_data");
-	[[ATConnect sharedConnection] removeCustomPersonDataWithKey:@"height"];
-	[[ATConnect sharedConnection] removeCustomPersonDataWithKey:@"nsNullCustomData"];
+	[[Apptentive sharedConnection] removeCustomPersonDataWithKey:@"height"];
+	[[Apptentive sharedConnection] removeCustomPersonDataWithKey:@"nsNullCustomData"];
 }
 
 - (void)testCustomDeviceData {
@@ -65,14 +65,14 @@
 	XCTAssertTrue([[device dictionaryRepresentation] objectForKey:@"device"] != nil, @"A device should always have a base apiJSON key of 'device'");
 
 	// Add custom device data
-	[[ATConnect sharedConnection] addCustomDeviceData:@"black" withKey:@"color"];
-	[[ATConnect sharedConnection] addCustomDeviceData:@(499) withKey:@"MSRP"];
-	[[ATConnect sharedConnection] addCustomDeviceData:[NSNull null] withKey:@"nsNullCustomData"];
+	[[Apptentive sharedConnection] addCustomDeviceData:@"black" withKey:@"color"];
+	[[Apptentive sharedConnection] addCustomDeviceData:@(499) withKey:@"MSRP"];
+	[[Apptentive sharedConnection] addCustomDeviceData:[NSNull null] withKey:@"nsNullCustomData"];
 
 	// Arrays, dictionaries, etc. should throw exception if added to custom data
 	NSArray *customArray = [NSArray arrayWithObject:@"thisShouldNotWork"];
 	@try {
-		[[ATConnect sharedConnection] addCustomDeviceData:customArray withKey:@"customArray"];
+		[[Apptentive sharedConnection] addCustomDeviceData:customArray withKey:@"customArray"];
 	}
 	@catch (NSException *e) {
 		XCTAssertTrue(e != nil, @"Attempting to add an array to custom_data should throw an exception: %@", e);
@@ -88,11 +88,11 @@
 	XCTAssertTrue([[[[[device dictionaryRepresentation] objectForKey:@"device"] objectForKey:@"custom_data"] objectForKey:@"nsNullCustomData"] isEqual:[NSNull null]], @"Custom data 'nsNullCustomData' should be equal to '[NSNull null]'");
 
 	// Remove custom device data
-	[[ATConnect sharedConnection] removeCustomDeviceDataWithKey:@"color"];
+	[[Apptentive sharedConnection] removeCustomDeviceDataWithKey:@"color"];
 	XCTAssertTrue([[[[device dictionaryRepresentation] objectForKey:@"device"] objectForKey:@"custom_data"] objectForKey:@"color"] == nil, @"The 'color' custom data was removed, should no longer be in custom_data");
 	XCTAssertTrue([[[[device dictionaryRepresentation] objectForKey:@"device"] objectForKey:@"custom_data"] objectForKey:@"MSRP"] != nil, @"The 'MSRP' custom data was not removed, should still be in custom_data");
-	[[ATConnect sharedConnection] removeCustomDeviceDataWithKey:@"MSRP"];
-	[[ATConnect sharedConnection] removeCustomDeviceDataWithKey:@"nsNullCustomData"];
+	[[Apptentive sharedConnection] removeCustomDeviceDataWithKey:@"MSRP"];
+	[[Apptentive sharedConnection] removeCustomDeviceDataWithKey:@"nsNullCustomData"];
 }
 
 @end

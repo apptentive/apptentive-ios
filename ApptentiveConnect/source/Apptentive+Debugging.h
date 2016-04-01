@@ -7,21 +7,21 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "ATConnect_Private.h"
+#import "Apptentive_Private.h"
 
-typedef NS_OPTIONS(NSInteger, ATConnectDebuggingOptions) {
-	ATConnectDebuggingOptionsNone = 0,
-	ATConnectDebuggingOptionsShowDebugPanel = 1 << 0,
-	ATConnectDebuggingOptionsLogHTTPFailures = 1 << 1,
-	ATConnectDebuggingOptionsLogAllHTTPRequests = 1 << 2,
+typedef NS_OPTIONS(NSInteger, ApptentiveDebuggingOptions) {
+	ApptentiveDebuggingOptionsNone = 0,
+	ApptentiveDebuggingOptionsShowDebugPanel = 1 << 0,
+	ApptentiveDebuggingOptionsLogHTTPFailures = 1 << 1,
+	ApptentiveDebuggingOptionsLogAllHTTPRequests = 1 << 2,
 };
 
 NS_ASSUME_NONNULL_BEGIN
 
 
-@interface ATConnect ()
+@interface Apptentive ()
 
-@property (assign, nonatomic) ATConnectDebuggingOptions debuggingOptions;
+@property (assign, nonatomic) ApptentiveDebuggingOptions debuggingOptions;
 @property (readonly, nonatomic) NSURL *_Nullable baseURL;
 
 - (void)setAPIKey:(NSString *)APIKey baseURL:(NSURL *)baseURL;
@@ -29,9 +29,8 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 
-@interface ATConnect (Debugging)
+@interface Apptentive (Debugging)
 
-+ (NSString *)supportDirectoryPath;
 - (void)setAPIKey:(NSString *)APIKey baseURL:(NSURL *)baseURL storagePath:(NSString *)storagePath;
 
 @property (readonly, nonatomic) NSURL *_Nullable baseURL;

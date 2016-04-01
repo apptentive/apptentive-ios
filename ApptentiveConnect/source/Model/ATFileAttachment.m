@@ -12,7 +12,7 @@
 #import "ATUtilities.h"
 #import "ATData.h"
 #import "NSDictionary+ATAdditions.h"
-#import "ATConnect_Private.h"
+#import "Apptentive_Private.h"
 #import <MobileCoreServices/MobileCoreServices.h>
 #import <ImageIO/ImageIO.h>
 
@@ -226,7 +226,7 @@
 	if (!filename) {
 		return nil;
 	}
-	return [[[ATConnect sharedConnection].backend attachmentDirectoryPath] stringByAppendingPathComponent:filename];
+	return [[[Apptentive sharedConnection].backend attachmentDirectoryPath] stringByAppendingPathComponent:filename];
 }
 
 - (NSString *)filenameForThumbnailOfSize:(CGSize)size {
@@ -251,7 +251,7 @@
 			return;
 		}
 		// Delete any thumbnails.
-		NSArray *filenames = [fm contentsOfDirectoryAtPath:[[ATConnect sharedConnection].backend attachmentDirectoryPath] error:&error];
+		NSArray *filenames = [fm contentsOfDirectoryAtPath:[[Apptentive sharedConnection].backend attachmentDirectoryPath] error:&error];
 		if (!filenames) {
 			ATLogError(@"Error listing attachments directory: %@", error);
 		} else {

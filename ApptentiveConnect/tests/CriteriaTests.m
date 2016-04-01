@@ -8,7 +8,7 @@
 
 #import "CriteriaTests.h"
 #import "ATInteractionInvocation.h"
-#import "ATConnect.h"
+#import "Apptentive.h"
 
 
 @implementation CriteriaTest
@@ -35,10 +35,10 @@
 		self.interaction = [ATInteractionInvocation invocationWithJSONDictionary:invocationDictionary];
 	}
 
-	[[ATConnect sharedConnection] addCustomDeviceDataNumber:@5 withKey:@"number_5"];
-	[[ATConnect sharedConnection] addCustomDeviceDataString:@"qwerty" withKey:@"string_qwerty"];
-	[[ATConnect sharedConnection] addCustomDeviceDataString:@"string with spaces" withKey:@"string with spaces"];
-	[[ATConnect sharedConnection] removeCustomDeviceDataWithKey:@"key_with_null_value"];
+	[[Apptentive sharedConnection] addCustomDeviceDataNumber:@5 withKey:@"number_5"];
+	[[Apptentive sharedConnection] addCustomDeviceDataString:@"qwerty" withKey:@"string_qwerty"];
+	[[Apptentive sharedConnection] addCustomDeviceDataString:@"string with spaces" withKey:@"string with spaces"];
+	[[Apptentive sharedConnection] removeCustomDeviceDataWithKey:@"key_with_null_value"];
 }
 
 @end
@@ -77,8 +77,8 @@
 @implementation DefaultValues
 
 - (void)testDefaultValues {
-	[ATConnect sharedConnection].personName = nil;
-	[ATConnect sharedConnection].personEmailAddress = nil;
+	[Apptentive sharedConnection].personName = nil;
+	[Apptentive sharedConnection].personEmailAddress = nil;
 
 	XCTAssertTrue([self.interaction criteriaAreMet]);
 }
@@ -106,7 +106,7 @@
 @implementation OperatorContains
 
 - (void)testOperatorContains {
-	[ATConnect sharedConnection].personEmailAddress = @"test@example.com";
+	[Apptentive sharedConnection].personEmailAddress = @"test@example.com";
 	XCTAssertTrue([self.interaction criteriaAreMet]);
 }
 

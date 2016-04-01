@@ -7,7 +7,7 @@
 //
 
 #import "ATMetric.h"
-#import "ATConnect_Private.h"
+#import "Apptentive_Private.h"
 #import "ATUtilities.h"
 #import "ATWebClient.h"
 #import "ATWebClient+Metrics.h"
@@ -84,6 +84,6 @@
 }
 
 - (ATAPIRequest *)requestForSendingRecord {
-	return [[ATConnect sharedConnection].webClient requestForSendingMetric:self];
+	return [[Apptentive sharedConnection].webClient requestForSendingMetric:self];
 }
 @end

@@ -7,13 +7,13 @@
 //
 
 #import <XCTest/XCTest.h>
-#import "ATConnect.h"
+#import "Apptentive.h"
 #import "ATInteraction.h"
 #import "ATInteractionInvocation.h"
 #import "ATInteractionUsageData.h"
 #import "ATEngagementBackend.h"
 #import "ATEngagementManifestParser.h"
-#import "ATConnect_Private.h"
+#import "Apptentive_Private.h"
 
 
 @interface ATEngagementTests : XCTestCase
@@ -265,10 +265,10 @@
 	ATInteractionInvocation *invocation = [[ATInteractionInvocation alloc] init];
 	ATInteractionUsageData *usageData = [[ATInteractionUsageData alloc] init];
 
-	invocation.criteria = @{ @"sdk/version": [ATConnect versionObjectWithVersion:kATConnectVersionString] };
+	invocation.criteria = @{ @"sdk/version": [Apptentive versionObjectWithVersion:kApptentiveVersionString] };
 	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Default value should be current version.");
 
-	invocation.criteria = @{ @"sdk/version": [ATConnect versionObjectWithVersion:@"1.4.2"] };
+	invocation.criteria = @{ @"sdk/version": [Apptentive versionObjectWithVersion:@"1.4.2"] };
 	usageData.sdkVersion = @"1.4.2";
 	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"SDK Version should be 1.4.2");
 
@@ -305,11 +305,11 @@
 	NSTimeInterval timestamp = [usageData.currentTime doubleValue];
 	XCTAssertTrue(timestamp < currentTimestamp && timestamp > (currentTimestamp - 5), @"Current time not a believable value.");
 
-	invocation.criteria = @{ @"current_time": @{@"$gt": [ATConnect timestampObjectWithDate:[NSDate dateWithTimeIntervalSince1970:1397598108.63843]]} };
+	invocation.criteria = @{ @"current_time": @{@"$gt": [Apptentive timestampObjectWithDate:[NSDate dateWithTimeIntervalSince1970:1397598108.63843]]} };
 	usageData.currentTime = @1397598109;
 	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Current time criteria not met.");
 
-	invocation.criteria = @{ @"current_time": @{@"$lt": [ATConnect timestampObjectWithDate:[NSDate dateWithTimeIntervalSince1970:1183135260]], @"$gt": [ATConnect timestampObjectWithDate:[NSDate dateWithTimeIntervalSince1970:465498000]]} };
+	invocation.criteria = @{ @"current_time": @{@"$lt": [Apptentive timestampObjectWithDate:[NSDate dateWithTimeIntervalSince1970:1183135260]], @"$gt": [Apptentive timestampObjectWithDate:[NSDate dateWithTimeIntervalSince1970:465498000]]} };
 	usageData.currentTime = @1183135259.5;
 	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Current time criteria not met.");
 
@@ -832,8 +832,8 @@
 - (void)testCustomDataAndExtendedData {
 	UIViewController *dummyViewController = [[UIViewController alloc] init];
 
-	XCTAssertNoThrow([[ATConnect sharedConnection] engage:@"test_event" withCustomData:nil fromViewController:dummyViewController], @"nil custom data should not throw exception!");
-	XCTAssertNoThrow([[ATConnect sharedConnection] engage:@"test_event" withCustomData:nil withExtendedData:nil fromViewController:dummyViewController], @"nil custom data or extended data should not throw exception!");
+	XCTAssertNoThrow([[Apptentive sharedConnection] engage:@"test_event" withCustomData:nil fromViewController:dummyViewController], @"nil custom data should not throw exception!");
+	XCTAssertNoThrow([[Apptentive sharedConnection] engage:@"test_event" withCustomData:nil withExtendedData:nil fromViewController:dummyViewController], @"nil custom data or extended data should not throw exception!");
 }
 
 - (void)testCustomDeviceDataCriteria {
@@ -842,7 +842,7 @@
 
 	XCTAssertFalse([invocation criteriaAreMet], @"Criteria should not be met before adding custom data.");
 
-	[[ATConnect sharedConnection] addCustomDeviceData:@"test_value" withKey:@"test_device_custom_data"];
+	[[Apptentive sharedConnection] addCustomDeviceData:@"test_value" withKey:@"test_device_custom_data"];
 
 	XCTAssertTrue([invocation criteriaAreMet], @"Criteria should be met after adding custom data.");
 
@@ -851,7 +851,7 @@
 
 	XCTAssertFalse([invocation criteriaAreMet], @"Criteria should not be met before adding custom data.");
 
-	[[ATConnect sharedConnection] addCustomDeviceData:@"4.5.1" withKey:@"test_version"];
+	[[Apptentive sharedConnection] addCustomDeviceData:@"4.5.1" withKey:@"test_version"];
 
 	XCTAssertTrue([invocation criteriaAreMet], @"Criteria should be met after adding custom data.");
 }
@@ -862,7 +862,7 @@
 
 	XCTAssertFalse([invocation criteriaAreMet], @"Criteria should not be met before adding custom data.");
 
-	[[ATConnect sharedConnection] addCustomPersonData:@"black" withKey:@"hair_color"];
+	[[Apptentive sharedConnection] addCustomPersonData:@"black" withKey:@"hair_color"];
 
 	XCTAssertTrue([invocation criteriaAreMet], @"Criteria should be met after adding custom data.");
 
@@ -871,13 +871,13 @@
 
 	XCTAssertFalse([invocation criteriaAreMet], @"Criteria should not be met before adding custom data.");
 
-	[[ATConnect sharedConnection] addCustomPersonData:@"27" withKey:@"age"];
+	[[Apptentive sharedConnection] addCustomPersonData:@"27" withKey:@"age"];
 
 	XCTAssertTrue([invocation criteriaAreMet], @"Criteria should be met after adding custom data.");
 }
 
 - (void)testCanShowInteractionForEvent {
-	[ATConnect sharedConnection].apiKey = @"bogus_api_key"; // trigger creation of engagement backend
+	[Apptentive sharedConnection].apiKey = @"bogus_api_key"; // trigger creation of engagement backend
 
 	ATInteractionInvocation *canShow = [[ATInteractionInvocation alloc] init];
 	canShow.criteria = @{};
@@ -893,13 +893,13 @@
 
 	NSDictionary *interactions = @{ @"example_interaction_ID": [[ATInteraction alloc] init] };
 
-	[[ATConnect sharedConnection].engagementBackend didReceiveNewTargets:targets andInteractions:interactions maxAge:60];
+	[[Apptentive sharedConnection].engagementBackend didReceiveNewTargets:targets andInteractions:interactions maxAge:60];
 
 	XCTAssertTrue([canShow criteriaAreMet], @"Invocation should be valid.");
-	XCTAssertTrue([[ATConnect sharedConnection] canShowInteractionForEvent:@"canShow"], @"If invocation is valid, it will be shown for the next targeted event.");
+	XCTAssertTrue([[Apptentive sharedConnection] canShowInteractionForEvent:@"canShow"], @"If invocation is valid, it will be shown for the next targeted event.");
 
 	XCTAssertFalse([willNotShow criteriaAreMet], @"Invocation should not be valid.");
-	XCTAssertFalse([[ATConnect sharedConnection] canShowInteractionForEvent:@"cannotShow"], @"If invocation is not valid, it will not be shown for the next targeted event.");
+	XCTAssertFalse([[Apptentive sharedConnection] canShowInteractionForEvent:@"cannotShow"], @"If invocation is not valid, it will not be shown for the next targeted event.");
 }
 
 @end

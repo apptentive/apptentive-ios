@@ -1,13 +1,13 @@
 //
-//  ATConnect.m
+//  Apptentive.m
 //  ApptentiveConnect
 //
 //  Created by Andrew Wooster on 3/12/11.
 //  Copyright 2011 Apptentive, Inc.. All rights reserved.
 //
 
-#import "ATConnect.h"
-#import "ATConnect_Private.h"
+#import "Apptentive.h"
+#import "Apptentive_Private.h"
 #import "ATBackend.h"
 #import "ATEngagementBackend.h"
 #import "ATInteraction.h"
@@ -38,15 +38,15 @@ NSString *const ATSurveyShownNotification = @"ATSurveyShownNotification";
 NSString *const ATSurveySentNotification = @"ATSurveySentNotification";
 NSString *const ATSurveyIDKey = @"ATSurveyIDKey";
 
-NSString *const ATConnectCustomPersonDataChangedNotification = @"ATConnectCustomPersonDataChangedNotification";
-NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustomDeviceDataChangedNotification";
+NSString *const ApptentiveCustomPersonDataChangedNotification = @"ApptentiveCustomPersonDataChangedNotification";
+NSString *const ApptentiveCustomDeviceDataChangedNotification = @"ApptentiveCustomDeviceDataChangedNotification";
 
 
-@interface ATConnect () <ATBannerViewControllerDelegate>
+@interface Apptentive () <ATBannerViewControllerDelegate>
 @end
 
 
-@implementation ATConnect {
+@implementation Apptentive {
 	NSMutableDictionary *_customPersonData;
 	NSMutableDictionary *_customDeviceData;
 	NSMutableDictionary *_integrationConfiguration;
@@ -72,11 +72,11 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 	return apptentiveDirectoryPath;
 }
 
-+ (ATConnect *)sharedConnection {
-	static ATConnect *sharedConnection = nil;
++ (Apptentive *)sharedConnection {
+	static Apptentive *sharedConnection = nil;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-		sharedConnection = [[ATConnect alloc] init];
+		sharedConnection = [[Apptentive alloc] init];
 	});
 	return sharedConnection;
 }
@@ -86,9 +86,9 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 		_customPersonData = [[NSMutableDictionary alloc] init];
 		_customDeviceData = [[NSMutableDictionary alloc] init];
 		_integrationConfiguration = [[NSMutableDictionary alloc] init];
-		_styleSheet = [[ATStyleSheet alloc] init];
+		_styleSheet = [[ApptentiveStyleSheet alloc] init];
 
-		ATLogInfo(@"Apptentive SDK Version %@", kATConnectVersionString);
+		ATLogInfo(@"Apptentive SDK Version %@", kApptentiveVersionString);
 	}
 	return self;
 }
@@ -125,11 +125,11 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 }
 
 - (UIColor *)tintColor {
-	return [UIView appearanceWhenContainedIn:[ATNavigationController class], nil].tintColor;
+	return [UIView appearanceWhenContainedIn:[ApptentiveNavigationController class], nil].tintColor;
 }
 
 - (void)setTintColor:(UIColor *)tintColor {
-	[UIView appearanceWhenContainedIn:[ATNavigationController class], nil].tintColor = tintColor;
+	[UIView appearanceWhenContainedIn:[ApptentiveNavigationController class], nil].tintColor = tintColor;
 }
 
 - (void)sendAttachmentText:(NSString *)text {
@@ -194,12 +194,12 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 
 - (void)addCustomPersonData:(NSObject *)object withKey:(NSString *)key {
 	[self addCustomData:object withKey:key toCustomDataDictionary:_customPersonData];
-	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomPersonDataChangedNotification object:self.customPersonData];
+	[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveCustomPersonDataChangedNotification object:self.customPersonData];
 }
 
 - (void)addCustomDeviceData:(NSObject *)object withKey:(NSString *)key {
 	[self addCustomData:object withKey:key toCustomDataDictionary:_customDeviceData];
-	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomDeviceDataChangedNotification object:self.customDeviceData];
+	[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveCustomDeviceDataChangedNotification object:self.customDeviceData];
 }
 
 - (void)addCustomData:(NSObject *)object withKey:(NSString *)key toCustomDataDictionary:(NSMutableDictionary *)customData {
@@ -218,18 +218,18 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 	if (simpleType || complexType) {
 		[customData setObject:object forKey:key];
 	} else {
-		ATLogError(@"Apptentive custom data must be of type NSString, NSNumber, or NSNull, or a 'complex type' NSDictionary created by one of the constructors in ATConnect.h");
+		ATLogError(@"Apptentive custom data must be of type NSString, NSNumber, or NSNull, or a 'complex type' NSDictionary created by one of the constructors in Apptentive.h");
 	}
 }
 
 - (void)removeCustomPersonDataWithKey:(NSString *)key {
 	[_customPersonData removeObjectForKey:key];
-	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomPersonDataChangedNotification object:self.customPersonData];
+	[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveCustomPersonDataChangedNotification object:self.customPersonData];
 }
 
 - (void)removeCustomDeviceDataWithKey:(NSString *)key {
 	[_customDeviceData removeObjectForKey:key];
-	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomDeviceDataChangedNotification object:self.customDeviceData];
+	[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveCustomDeviceDataChangedNotification object:self.customDeviceData];
 }
 
 - (void)addCustomData:(NSObject<NSCoding> *)object withKey:(NSString *)key {
@@ -242,7 +242,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 
 - (void)openAppStore {
 	if (!self.appID) {
-		ATLogError(@"Cannot open App Store because `[ATConnect sharedConnection].appID` is not set to your app's iTunes App ID.");
+		ATLogError(@"Cannot open App Store because `[Apptentive sharedConnection].appID` is not set to your app's iTunes App ID.");
 		return;
 	}
 
@@ -296,7 +296,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 - (void)addIntegration:(NSString *)integration withConfiguration:(NSDictionary *)configuration {
 	[_integrationConfiguration setObject:configuration forKey:integration];
 
-	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomDeviceDataChangedNotification object:self.customDeviceData];
+	[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveCustomDeviceDataChangedNotification object:self.customDeviceData];
 }
 
 - (void)addIntegration:(NSString *)integration withDeviceToken:(NSData *)deviceToken {
@@ -312,7 +312,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 - (void)removeIntegration:(NSString *)integration {
 	[_integrationConfiguration removeObjectForKey:integration];
 
-	[[NSNotificationCenter defaultCenter] postNotificationName:ATConnectCustomDeviceDataChangedNotification object:self.customDeviceData];
+	[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveCustomDeviceDataChangedNotification object:self.customDeviceData];
 }
 
 #if TARGET_OS_IPHONE
@@ -569,7 +569,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 		}
 	}
 #elif TARGET_OS_MAC
-	NSBundle *bundle = [NSBundle bundleForClass:[ATConnect class]];
+	NSBundle *bundle = [NSBundle bundleForClass:[Apptentive class]];
 	return bundle;
 #endif
 }
@@ -603,7 +603,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 }
 
 + (UIStoryboard *)storyboard {
-	return [UIStoryboard storyboardWithName:@"Apptentive" bundle:[ATConnect resourceBundle]];
+	return [UIStoryboard storyboardWithName:@"Apptentive" bundle:[Apptentive resourceBundle]];
 }
 
 #pragma mark - Debugging and diagnostics
@@ -622,21 +622,21 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 @end
 
 
-@implementation ATNavigationController
+@implementation ApptentiveNavigationController
 // Container to allow customization of Apptentive UI using UIAppearance
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
 	self = [super initWithCoder:aDecoder];
 	if (self) {
-		if (!([UINavigationBar appearance].barTintColor || [UINavigationBar appearanceWhenContainedIn:[ATNavigationController class], nil].barTintColor)) {
-			[UINavigationBar appearanceWhenContainedIn:[ATNavigationController class], nil].barTintColor = [UIColor whiteColor];
+		if (!([UINavigationBar appearance].barTintColor || [UINavigationBar appearanceWhenContainedIn:[ApptentiveNavigationController class], nil].barTintColor)) {
+			[UINavigationBar appearanceWhenContainedIn:[ApptentiveNavigationController class], nil].barTintColor = [UIColor whiteColor];
 		}
 	}
 	return self;
 }
 
 - (void)pushAboutApptentiveViewController {
-	UIViewController *aboutViewController = [[ATConnect storyboard] instantiateViewControllerWithIdentifier:@"About"];
+	UIViewController *aboutViewController = [[Apptentive storyboard] instantiateViewControllerWithIdentifier:@"About"];
 	[self pushViewController:aboutViewController animated:YES];
 }
 
@@ -645,7 +645,7 @@ NSString *const ATConnectCustomDeviceDataChangedNotification = @"ATConnectCustom
 NSString *ATLocalizedString(NSString *key, NSString *comment) {
 	static NSBundle *bundle = nil;
 	if (!bundle) {
-		bundle = [ATConnect resourceBundle];
+		bundle = [Apptentive resourceBundle];
 	}
 	NSString *result = [bundle localizedStringForKey:key value:key table:nil];
 	return result;

@@ -8,7 +8,7 @@
 
 #import "ATMessageCenterInteraction.h"
 #import "ATEngagementBackend.h"
-#import "ATConnect_Private.h"
+#import "Apptentive_Private.h"
 #import "ATPersonInfo.h"
 #import "ATMessageCenterViewController.h"
 

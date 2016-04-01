@@ -10,7 +10,7 @@
 #import "ATBackend.h"
 #import "ATTask.h"
 #import "ATLegacyRecord.h"
-#import "ATConnect_Private.h"
+#import "Apptentive_Private.h"
 
 #define kATTaskQueueCodingVersion 1
 // Retry period in seconds.
@@ -35,7 +35,7 @@ static ATTaskQueue *sharedTaskQueue = nil;
 }
 
 + (NSString *)taskQueuePath {
-	return [[[ATConnect sharedConnection].backend supportDirectoryPath] stringByAppendingPathComponent:@"tasks.objects"];
+	return [[[Apptentive sharedConnection].backend supportDirectoryPath] stringByAppendingPathComponent:@"tasks.objects"];
 }
 
 + (BOOL)serializedQueueExists {

@@ -9,7 +9,7 @@
 #import "ATRecordRequestTask.h"
 #import "ATData.h"
 #import "ATWebClient.h"
-#import "ATConnect_Private.h"
+#import "Apptentive_Private.h"
 #import "ATConversationUpdater.h"
 
 #define kATRecordRequestTaskCodingVersion 1
@@ -60,7 +60,7 @@ fail:
 }
 
 - (BOOL)canStart {
-	if ([ATConnect sharedConnection].webClient == nil) {
+	if ([Apptentive sharedConnection].webClient == nil) {
 		return NO;
 	}
 	if (![ATConversationUpdater conversationExists]) {

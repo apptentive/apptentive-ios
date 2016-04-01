@@ -7,7 +7,7 @@
 //
 
 #import "ATUnreadMessagesBadgeView.h"
-#import "ATConnect.h"
+#import "Apptentive.h"
 
 
 @interface ATUnreadMessagesBadgeView ()
@@ -70,7 +70,7 @@
 
 + (UILabel *)unreadMessageCountLabel {
 	UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 32.0, 32.0)];
-	[label setText:[NSString stringWithFormat:@"%lu", (unsigned long)[[ATConnect sharedConnection] unreadMessageCount]]];
+	[label setText:[NSString stringWithFormat:@"%lu", (unsigned long)[[Apptentive sharedConnection] unreadMessageCount]]];
 	[label setBackgroundColor:[UIColor clearColor]];
 	[label setFont:[UIFont systemFontOfSize:16.0f]];
 	[label sizeToFit];

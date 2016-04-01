@@ -12,7 +12,7 @@
 #import "ATURLConnection.h"
 
 #import "ATBackend.h"
-#import "ATConnect.h"
+#import "Apptentive.h"
 #import "ATConversationUpdater.h"
 #import "ATURLConnection.h"
 #import "ATUtilities.h"
@@ -97,7 +97,7 @@ NSString *const ATWebClientDefaultChannelName = @"ATWebClient";
 }
 
 - (NSString *)userAgentString {
-	return [NSString stringWithFormat:@"ApptentiveConnect/%@ (%@)", kATConnectVersionString, kATConnectPlatformString];
+	return [NSString stringWithFormat:@"ApptentiveConnect/%@ (%@)", kApptentiveVersionString, kApptentivePlatformString];
 }
 
 - (ATURLConnection *)connectionToGet:(NSString *)path {

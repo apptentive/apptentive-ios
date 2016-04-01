@@ -9,7 +9,7 @@
 #import "ATInteractionMessageCenterController.h"
 #import "ATMessageCenterInteraction.h"
 #import "ATBackend.h"
-#import "ATConnect_Private.h"
+#import "Apptentive_Private.h"
 #import "ATMessageCenterViewController.h"
 
 
@@ -40,7 +40,7 @@
 	if (!self.viewController) {
 		ATLogError(@"No view controller to present Message Center interface!!");
 	} else {
-		UINavigationController *navigationController = [[ATConnect storyboard] instantiateViewControllerWithIdentifier:@"MessageCenterNavigation"];
+		UINavigationController *navigationController = [[Apptentive storyboard] instantiateViewControllerWithIdentifier:@"MessageCenterNavigation"];
 
 		ATMessageCenterViewController *messageCenter = navigationController.viewControllers.firstObject;
 		messageCenter.interaction = self.interaction;

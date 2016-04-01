@@ -8,7 +8,7 @@
 
 #import "ATPersonInfo.h"
 
-#import "ATConnect_Private.h"
+#import "Apptentive_Private.h"
 #import "ATUtilities.h"
 #import "NSDictionary+ATAdditions.h"
 #import "ATPersonUpdater.h"
@@ -106,7 +106,7 @@ NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
 		[person setObject:[NSNull null] forKey:@"email"];
 	}
 
-	NSDictionary *customPersonData = [[ATConnect sharedConnection] customPersonData] ?: @{};
+	NSDictionary *customPersonData = [[Apptentive sharedConnection] customPersonData] ?: @{};
 	[person setObject:customPersonData forKey:@"custom_data"];
 
 	return [NSDictionary dictionaryWithObject:person forKey:@"person"];

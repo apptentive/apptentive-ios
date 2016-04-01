@@ -9,7 +9,7 @@
 #import "ATNetworkImageView.h"
 
 #import "ATBackend.h"
-#import "ATConnect_Private.h"
+#import "Apptentive_Private.h"
 
 
 @interface ATNetworkImageView ()
@@ -49,7 +49,7 @@
 	if (self.imageURL) {
 		NSURLRequest *request = [NSURLRequest requestWithURL:self.imageURL];
 
-		NSURLCache *cache = [[ATConnect sharedConnection].backend imageCache];
+		NSURLCache *cache = [[Apptentive sharedConnection].backend imageCache];
 		BOOL cacheHit = NO;
 		if (cache) {
 			NSCachedURLResponse *cachedResponse = [cache cachedResponseForRequest:request];
@@ -110,7 +110,7 @@
 			self.image = newImage;
 			if (self.useCache) {
 				NSURLRequest *request = [NSURLRequest requestWithURL:self.imageURL];
-				NSURLCache *cache = [[ATConnect sharedConnection].backend imageCache];
+				NSURLCache *cache = [[Apptentive sharedConnection].backend imageCache];
 				NSCachedURLResponse *cachedResponse = [[NSCachedURLResponse alloc] initWithResponse:self.response data:self.imageData userInfo:nil storagePolicy:NSURLCacheStorageAllowed];
 				[cache storeCachedResponse:cachedResponse forRequest:request];
 				cachedResponse = nil;

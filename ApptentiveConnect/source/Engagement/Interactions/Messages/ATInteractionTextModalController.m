@@ -10,7 +10,7 @@
 #import "ATUtilities.h"
 #import "ATInteractionInvocation.h"
 #import "ATEngagementBackend.h"
-#import "ATConnect_Private.h"
+#import "Apptentive_Private.h"
 
 NSString *const ATInteractionTextModalEventLabelLaunch = @"launch";
 NSString *const ATInteractionTextModalEventLabelCancel = @"cancel";
@@ -211,7 +211,7 @@ NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 	ATInteraction *interaction = nil;
 	NSArray *invocations = actionConfig[@"invokes"];
 	if (invocations) {
-		interaction = [[ATConnect sharedConnection].engagementBackend interactionForInvocations:invocations];
+		interaction = [[Apptentive sharedConnection].engagementBackend interactionForInvocations:invocations];
 	}
 
 	NSDictionary *userInfo = @{ @"label": (actionConfig[@"label"] ?: [NSNull null]),
@@ -223,7 +223,7 @@ NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 	[self.interaction engage:ATInteractionTextModalEventLabelInteraction fromViewController:self.viewController userInfo:userInfo];
 
 	if (interaction) {
-		[[ATConnect sharedConnection].engagementBackend presentInteraction:interaction fromViewController:self.viewController];
+		[[Apptentive sharedConnection].engagementBackend presentInteraction:interaction fromViewController:self.viewController];
 	}
 }
 

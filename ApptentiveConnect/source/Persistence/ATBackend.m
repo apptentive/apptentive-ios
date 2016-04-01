@@ -9,8 +9,8 @@
 #import "ATBackend.h"
 #import "ATAppConfigurationUpdateTask.h"
 #import "ATEngagementGetManifestTask.h"
-#import "ATConnect.h"
-#import "ATConnect_Private.h"
+#import "Apptentive.h"
+#import "Apptentive_Private.h"
 #import "ATDataManager.h"
 #import "ATDeviceUpdater.h"
 #import "ApptentiveMetrics.h"
@@ -95,16 +95,16 @@ static NSURLCache *imageCache = nil;
 	UIImage *result = nil;
 	CGFloat scale = [[UIScreen mainScreen] scale];
 	if (scale > 1.0) {
-		imagePath = [[ATConnect resourceBundle] pathForResource:[NSString stringWithFormat:@"%@@2x", name] ofType:@"png"];
+		imagePath = [[Apptentive resourceBundle] pathForResource:[NSString stringWithFormat:@"%@@2x", name] ofType:@"png"];
 	} else {
-		imagePath = [[ATConnect resourceBundle] pathForResource:[NSString stringWithFormat:@"%@", name] ofType:@"png"];
+		imagePath = [[Apptentive resourceBundle] pathForResource:[NSString stringWithFormat:@"%@", name] ofType:@"png"];
 	}
 
 	if (!imagePath) {
 		if (scale > 1.0) {
-			imagePath = [[ATConnect resourceBundle] pathForResource:[NSString stringWithFormat:@"%@@2x", name] ofType:@"png" inDirectory:@"generated"];
+			imagePath = [[Apptentive resourceBundle] pathForResource:[NSString stringWithFormat:@"%@@2x", name] ofType:@"png" inDirectory:@"generated"];
 		} else {
-			imagePath = [[ATConnect resourceBundle] pathForResource:[NSString stringWithFormat:@"%@", name] ofType:@"png" inDirectory:@"generated"];
+			imagePath = [[Apptentive resourceBundle] pathForResource:[NSString stringWithFormat:@"%@", name] ofType:@"png" inDirectory:@"generated"];
 		}
 	}
 
@@ -116,7 +116,7 @@ static NSURLCache *imageCache = nil;
 	if (!result) {
 		ATLogError(@"Unable to find image named: %@", name);
 		ATLogError(@"sought at: %@", imagePath);
-		ATLogError(@"bundle is: %@", [ATConnect resourceBundle]);
+		ATLogError(@"bundle is: %@", [Apptentive resourceBundle]);
 	}
 	return result;
 }
@@ -130,16 +130,16 @@ static NSURLCache *imageCache = nil;
 		scale = (CGFloat)[[NSScreen mainScreen] backingScaleFactor];
 	}
 	if (scale > 1.0) {
-		imagePath = [[ATConnect resourceBundle] pathForResource:[NSString stringWithFormat:@"%@@2x", name] ofType:@"png"];
+		imagePath = [[Apptentive resourceBundle] pathForResource:[NSString stringWithFormat:@"%@@2x", name] ofType:@"png"];
 	} else {
-		imagePath = [[ATConnect resourceBundle] pathForResource:[NSString stringWithFormat:@"%@", name] ofType:@"png"];
+		imagePath = [[Apptentive resourceBundle] pathForResource:[NSString stringWithFormat:@"%@", name] ofType:@"png"];
 	}
 
 	if (!imagePath) {
 		if (scale > 1.0) {
-			imagePath = [[ATConnect resourceBundle] pathForResource:[NSString stringWithFormat:@"%@@2x", name] ofType:@"png" inDirectory:@"generated"];
+			imagePath = [[Apptentive resourceBundle] pathForResource:[NSString stringWithFormat:@"%@@2x", name] ofType:@"png" inDirectory:@"generated"];
 		} else {
-			imagePath = [[ATConnect resourceBundle] pathForResource:[NSString stringWithFormat:@"%@", name] ofType:@"png" inDirectory:@"generated"];
+			imagePath = [[Apptentive resourceBundle] pathForResource:[NSString stringWithFormat:@"%@", name] ofType:@"png" inDirectory:@"generated"];
 		}
 	}
 
@@ -151,7 +151,7 @@ static NSURLCache *imageCache = nil;
 	if (!result) {
 		ATLogError(@"Unable to find image named: %@", name);
 		ATLogError(@"sought at: %@", imagePath);
-		ATLogError(@"bundle is: %@", [ATConnect resourceBundle]);
+		ATLogError(@"bundle is: %@", [Apptentive resourceBundle]);
 	}
 	return result;
 }
@@ -485,7 +485,7 @@ static NSURLCache *imageCache = nil;
 	BOOL didShowMessageCenter = [[ATInteraction apptentiveAppInteraction] engage:ATEngagementMessageCenterEvent fromViewController:viewController];
 
 	if (!didShowMessageCenter) {
-		UINavigationController *navigationController = [[ATConnect storyboard] instantiateViewControllerWithIdentifier:@"NoPayloadNavigation"];
+		UINavigationController *navigationController = [[Apptentive storyboard] instantiateViewControllerWithIdentifier:@"NoPayloadNavigation"];
 
 		[viewController presentViewController:navigationController animated:YES completion:nil];
 	}
@@ -633,7 +633,7 @@ static NSURLCache *imageCache = nil;
 	}
 
 	if (![[ATTaskQueue sharedTaskQueue] hasTaskOfClass:[ATEngagementGetManifestTask class]]) {
-		[[ATConnect sharedConnection].engagementBackend checkForEngagementManifest];
+		[[Apptentive sharedConnection].engagementBackend checkForEngagementManifest];
 	}
 }
 
@@ -646,7 +646,7 @@ static NSURLCache *imageCache = nil;
 		if (unreadCount != self.previousUnreadCount) {
 			if (unreadCount > self.previousUnreadCount && !self.messageCenterInForeground) {
 				ATCompoundMessage *message = sectionInfo.objects.firstObject;
-				[[ATConnect sharedConnection] showNotificationBannerForMessage:message];
+				[[Apptentive sharedConnection] showNotificationBannerForMessage:message];
 			}
 			self.previousUnreadCount = unreadCount;
 			[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterUnreadCountChangedNotification object:nil userInfo:@{ @"count": @(self.previousUnreadCount) }];
@@ -717,7 +717,7 @@ static NSURLCache *imageCache = nil;
 	static NSString *cachedDistributionName = nil;
 	static dispatch_once_t onceToken = 0;
 	dispatch_once(&onceToken, ^{
-		cachedDistributionName = (NSString *)[[ATConnect resourceBundle] objectForInfoDictionaryKey:ATInfoDistributionKey];
+		cachedDistributionName = (NSString *)[[Apptentive resourceBundle] objectForInfoDictionaryKey:ATInfoDistributionKey];
 	});
 	return cachedDistributionName;
 }
@@ -726,7 +726,7 @@ static NSURLCache *imageCache = nil;
 	static NSString *cachedDistributionVersion = nil;
 	static dispatch_once_t onceToken = 0;
 	dispatch_once(&onceToken, ^{
-		cachedDistributionVersion = (NSString *)[[ATConnect resourceBundle] objectForInfoDictionaryKey:ATInfoDistributionVersionKey];
+		cachedDistributionVersion = (NSString *)[[Apptentive resourceBundle] objectForInfoDictionaryKey:ATInfoDistributionVersionKey];
 	});
 	return cachedDistributionVersion;
 }
@@ -928,8 +928,8 @@ static NSURLCache *imageCache = nil;
 	[[NSNotificationCenter defaultCenter] postNotificationName:ATBackendBecameReadyNotification object:nil];
 
 	// Monitor changes to custom data.
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(personDataChanged:) name:ATConnectCustomPersonDataChangedNotification object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceDataChanged:) name:ATConnectCustomDeviceDataChangedNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(personDataChanged:) name:ApptentiveCustomPersonDataChangedNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceDataChanged:) name:ApptentiveCustomDeviceDataChangedNotification object:nil];
 
 	// Append extensions to attachments that are missing them
 	[ATFileAttachment addMissingExtensions];
@@ -977,8 +977,8 @@ static NSURLCache *imageCache = nil;
 }
 
 - (void)handleRemoteNotificationInUIApplicationStateActive {
-	if ([ATConnect sharedConnection].pushUserInfo) {
-		[[ATConnect sharedConnection] didReceiveRemoteNotification:[ATConnect sharedConnection].pushUserInfo fromViewController:[ATConnect sharedConnection].pushViewController];
+	if ([Apptentive sharedConnection].pushUserInfo) {
+		[[Apptentive sharedConnection] didReceiveRemoteNotification:[Apptentive sharedConnection].pushUserInfo fromViewController:[Apptentive sharedConnection].pushViewController];
 	}
 }
 
@@ -995,7 +995,7 @@ static NSURLCache *imageCache = nil;
 		if (![self isReady]) {
 			return;
 		}
-		[[ATConnect sharedConnection].engagementBackend checkForEngagementManifest];
+		[[Apptentive sharedConnection].engagementBackend checkForEngagementManifest];
 	}
 }
 
@@ -1015,7 +1015,7 @@ static NSURLCache *imageCache = nil;
 		self.state = ATBackendStateStarting;
 	}
 
-	self.dataManager = [[ATDataManager alloc] initWithModelName:@"ATDataModel" inBundle:[ATConnect resourceBundle] storagePath:[self supportDirectoryPath]];
+	self.dataManager = [[ATDataManager alloc] initWithModelName:@"ATDataModel" inBundle:[Apptentive resourceBundle] storagePath:[self supportDirectoryPath]];
 	if (![self.dataManager setupAndVerify]) {
 		ATLogError(@"Unable to setup and verify data manager.");
 		[self continueStartupWithDataManagerFailure];
@@ -1069,7 +1069,7 @@ static NSURLCache *imageCache = nil;
 	}
 	checkedAlready = YES;
 #if TARGET_IPHONE_SIMULATOR
-	if ([ATConnect resourceBundle] == nil) {
+	if ([Apptentive resourceBundle] == nil) {
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Unable to Find Resources" message:@"Unable to find `ApptentiveResources.bundle`. Did you remember to add it to your target's Copy Bundle Resources build phase?" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 		[alert show];
 	} else if (self.persistentStoreCoordinator == nil || self.managedObjectContext == nil) {

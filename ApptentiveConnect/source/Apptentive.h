@@ -1,5 +1,5 @@
 //
-//  ATConnect.h
+//  Apptentive.h
 //  ApptentiveConnect
 //
 //  Created by Andrew Wooster on 3/12/11.
@@ -9,23 +9,23 @@
 
 #if TARGET_OS_IPHONE
 #import <UIKit/UIKit.h>
-#import "ATStyleSheet.h"
+#import "ApptentiveStyleSheet.h"
 #elif TARGET_OS_MAC
 #import <Cocoa/Cocoa.h>
 #endif
 
-#define kATConnectVersionString @"2.1.3"
+#define kApptentiveVersionString @"2.1.3"
 
 #if TARGET_OS_IPHONE
-#define kATConnectPlatformString @"iOS"
+#define kApptentivePlatformString @"iOS"
 #elif TARGET_OS_MAC
-#define kATConnectPlatformString @"Mac OS X"
+#define kApptentivePlatformString @"Mac OS X"
 @class ATFeedbackWindowController;
 #endif
 
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol ATConnectDelegate;
+@protocol ApptentiveDelegate;
 
 /** Notification sent when Message Center unread messages count changes. */
 extern NSString *const ATMessageCenterUnreadCountChangedNotification;
@@ -58,13 +58,13 @@ typedef NS_ENUM(NSInteger, ATPushProvider) {
 };
 
 /**
- `ATConnect` is a singleton which is used as the main point of entry for the Apptentive service.
+ `Apptentive` is a singleton which is used as the main point of entry for the Apptentive service.
 
  ## Configuration
 
-Before calling any other methods on the shared `ATConnect` instance, set the API key:
+Before calling any other methods on the shared `Apptentive` instance, set the API key:
 
-     [[ATConnect sharedConnection].apiKey = @"your API key here";
+     [[Apptentive sharedConnection].apiKey = @"your API key here";
 
  ## Engagement Events
 
@@ -74,7 +74,7 @@ Before calling any other methods on the shared `ATConnect` instance, set the API
 
  You would add calls at these points to optionally engage with the user:
 
-     [[ATConnect sharedConnection] engage:@"completed_level" fromViewController:viewController];
+     [[Apptentive sharedConnection] engage:@"completed_level" fromViewController:viewController];
 
  See the readme for more information.
 
@@ -105,7 +105,7 @@ Before calling any other methods on the shared `ATConnect` instance, set the API
  * `ATIntegrationKeyKahuna` - For Kahuna
  * `ATIntegrationKeyParse` - For Parse
  */
-@interface ATConnect : NSObject
+@interface Apptentive : NSObject
 
 ///---------------------------------
 /// @name Basic Usage
@@ -124,11 +124,11 @@ Before calling any other methods on the shared `ATConnect` instance, set the API
  */
 @property (copy, nonatomic) NSString *_Nullable appID;
 
-/** The shared singleton of `ATConnect`. */
-+ (ATConnect *)sharedConnection;
+/** The shared singleton of `Apptentive`. */
++ (Apptentive *)sharedConnection;
 
-/** An object conforming to the `ATConnectDelegate` protocol */
-@property (weak, nonatomic) id<ATConnectDelegate> delegate;
+/** An object conforming to the `ApptentiveDelegate` protocol */
+@property (weak, nonatomic) id<ApptentiveDelegate> delegate;
 
 ///---------------------------------
 /// @name Interface Customization
@@ -312,7 +312,7 @@ Returns a Boolean value indicating whether the given event will cause an Interac
 
  @param event A string representing the name of the event.
  @param customData A dictionary of key/value pairs to be associated with the event. Keys and values should conform to standards of NSJSONSerialization's `isValidJSONObject:`.
- @param extendedData An array of dictionaries with specific Apptentive formatting. For example, [ATConnect extendedDataDate:[NSDate date]].
+ @param extendedData An array of dictionaries with specific Apptentive formatting. For example, [Apptentive extendedDataDate:[NSDate date]].
  @param viewController A view controller Apptentive UI may be presented from.
 
  @return `YES` if an interaction was triggered by the event, `NO` otherwise.
@@ -374,7 +374,7 @@ Returns a Boolean value indicating whether the given event will cause an Interac
  @param shipping The transaction's shipping cost.
  @param tax Tax on the transaction.
  @param currency Currency for revenue/shipping/tax values.
- @param commerceItems An array of commerce items contained in the transaction. Create commerce items with [ATConnect extendedDataCommerceItemWithItemID:name:category:price:quantity:currency:].
+ @param commerceItems An array of commerce items contained in the transaction. Create commerce items with [Apptentive extendedDataCommerceItemWithItemID:name:category:price:quantity:currency:].
 
  @return An extended data dictionary representing a commerce transaction, to be included in an event's extended data.
   */
@@ -607,25 +607,25 @@ Returns a Boolean value indicating whether the given event will cause an Interac
 @end
 
 /**
- The `ATConnectDelegate` protocol allows your app to override the default behavior when
+ The `ApptentiveDelegate` protocol allows your app to override the default behavior when
  the Message Center is launched from an incoming push notification. In most cases the
  default behavior (which walks the view controller stack from the main window's root view
  controller) will work, but if your app features custom container view controllers, it may
  behave unexpectedly. In that case an object in your app should implement the
- `ATConnectDelegate` protocol's `-viewControllerForInteractionsWithConnection:` method
+ `ApptentiveDelegate` protocol's `-viewControllerForInteractionsWithConnection:` method
  and return the view controller from which to present the Message Center interaction.
  */
-@protocol ATConnectDelegate <NSObject>
+@protocol ApptentiveDelegate <NSObject>
 @optional
 
 /**
  Returns a view controller from which to present the MessageCenter interaction.
 
- @param connection The `ATConnect` object that is requesting a view controller to present from.
+ @param connection The `Apptentive` object that is requesting a view controller to present from.
 
  @return The view controller your app would like the interaction to be presented from.
  */
-- (UIViewController *)viewControllerForInteractionsWithConnection:(ATConnect *)connection;
+- (UIViewController *)viewControllerForInteractionsWithConnection:(Apptentive *)connection;
 
 @end
 
@@ -639,7 +639,7 @@ Returns a Boolean value indicating whether the given event will cause an Interac
 	[[UINavigationBar appearanceWhenContainedIn:[ATNavigationController class], nil].barTintColor = [UIColor magentaColor];
 
  */
-@interface ATNavigationController : UINavigationController
+@interface ApptentiveNavigationController : UINavigationController
 @end
 
 NS_ASSUME_NONNULL_END

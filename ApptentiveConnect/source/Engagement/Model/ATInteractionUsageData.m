@@ -8,8 +8,8 @@
 
 #import "ATInteractionUsageData.h"
 #import "ATBackend.h"
-#import "ATConnect.h"
-#import "ATConnect_Private.h"
+#import "Apptentive.h"
+#import "Apptentive_Private.h"
 #import "ATEngagementBackend.h"
 #import "ATUtilities.h"
 #import "ATDeviceInfo.h"
@@ -65,13 +65,13 @@
 		NSArray *components = [keyPath componentsSeparatedByString:@"/"];
 		if (components.count > 1) {
 			NSString *codePoint = [components objectAtIndex:1];
-			[[ATConnect sharedConnection].engagementBackend codePointWasSeen:[codePoint stringByRemovingPercentEncoding]];
+			[[Apptentive sharedConnection].engagementBackend codePointWasSeen:[codePoint stringByRemovingPercentEncoding]];
 		}
 	} else if ([keyPath hasPrefix:@"interactions/"]) {
 		NSArray *components = [keyPath componentsSeparatedByString:@"/"];
 		if (components.count > 1) {
 			NSString *interactionID = [components objectAtIndex:1];
-			[[ATConnect sharedConnection].engagementBackend interactionWasSeen:interactionID];
+			[[Apptentive sharedConnection].engagementBackend interactionWasSeen:interactionID];
 		}
 	}
 }
@@ -83,19 +83,19 @@
 		@"is_update/version": self.isUpdateVersion,
 		@"is_update/build": self.isUpdateBuild }];
 	if (self.timeAtInstallTotal) {
-		predicateEvaluationDictionary[@"time_at_install/total"] = [ATConnect timestampObjectWithDate:self.timeAtInstallTotal];
+		predicateEvaluationDictionary[@"time_at_install/total"] = [Apptentive timestampObjectWithDate:self.timeAtInstallTotal];
 	}
 	if (self.timeAtInstallVersion) {
-		predicateEvaluationDictionary[@"time_at_install/version"] = [ATConnect timestampObjectWithDate:self.timeAtInstallVersion];
+		predicateEvaluationDictionary[@"time_at_install/version"] = [Apptentive timestampObjectWithDate:self.timeAtInstallVersion];
 	}
 
 	if (self.applicationVersion) {
 		predicateEvaluationDictionary[@"application_version"] = self.applicationVersion;
 		predicateEvaluationDictionary[@"app_release/version"] = self.applicationVersion;
-		predicateEvaluationDictionary[@"application/version"] = [ATConnect versionObjectWithVersion:self.applicationVersion];
+		predicateEvaluationDictionary[@"application/version"] = [Apptentive versionObjectWithVersion:self.applicationVersion];
 	} else {
 		ATLogWarning(@"Unable to get application version. Using default value of 0.0.0");
-		predicateEvaluationDictionary[@"application/version"] = [ATConnect versionObjectWithVersion:@"0.0.0"];
+		predicateEvaluationDictionary[@"application/version"] = [Apptentive versionObjectWithVersion:@"0.0.0"];
 	}
 
 	if (self.applicationBuild) {
@@ -104,7 +104,7 @@
 	}
 
 	if (self.sdkVersion) {
-		predicateEvaluationDictionary[@"sdk/version"] = [ATConnect versionObjectWithVersion:self.sdkVersion];
+		predicateEvaluationDictionary[@"sdk/version"] = [Apptentive versionObjectWithVersion:self.sdkVersion];
 	} else {
 		ATLogError(@"Unable to find SDK version. Interaction critera don't make sense without one.");
 		return nil;
@@ -117,7 +117,7 @@
 		predicateEvaluationDictionary[@"sdk/distribution_version"] = self.sdkDistributionVersion;
 	}
 
-	predicateEvaluationDictionary[@"current_time"] = [ATConnect timestampObjectWithNumber:self.currentTime];
+	predicateEvaluationDictionary[@"current_time"] = [Apptentive timestampObjectWithNumber:self.currentTime];
 	[predicateEvaluationDictionary addEntriesFromDictionary:self.codePointInvokesTotal];
 	[predicateEvaluationDictionary addEntriesFromDictionary:self.codePointInvokesVersion];
 	[predicateEvaluationDictionary addEntriesFromDictionary:self.codePointInvokesBuild];
@@ -258,21 +258,21 @@
 
 - (NSString *)sdkVersion {
 	if (!_sdkVersion) {
-		_sdkVersion = [kATConnectVersionString copy];
+		_sdkVersion = [kApptentiveVersionString copy];
 	}
 	return _sdkVersion;
 }
 
 - (NSString *)sdkDistribution {
 	if (!_sdkDistribution) {
-		_sdkDistribution = [[[ATConnect sharedConnection].backend distributionName] copy];
+		_sdkDistribution = [[[Apptentive sharedConnection].backend distributionName] copy];
 	}
 	return _sdkDistribution;
 }
 
 - (NSString *)sdkDistributionVersion {
 	if (!_sdkDistributionVersion) {
-		_sdkDistributionVersion = [[[ATConnect sharedConnection].backend distributionVersion] copy];
+		_sdkDistributionVersion = [[[Apptentive sharedConnection].backend distributionVersion] copy];
 	}
 	return _sdkDistributionVersion;
 }
@@ -346,7 +346,7 @@
 			NSDate *lastDate = [codePointsInvokesLastDate objectForKey:codePoint];
 
 			if (lastDate) {
-				predicateSyntax[key] = [ATConnect timestampObjectWithDate:lastDate];
+				predicateSyntax[key] = [Apptentive timestampObjectWithDate:lastDate];
 			} else {
 				predicateSyntax[key] = [NSNull null];
 			}
@@ -404,7 +404,7 @@
 			NSDate *lastDate = [interactionInvokesLastDate objectForKey:interactionID];
 
 			if (lastDate) {
-				predicateSyntax[key] = [ATConnect timestampObjectWithDate:lastDate];
+				predicateSyntax[key] = [Apptentive timestampObjectWithDate:lastDate];
 			} else {
 				predicateSyntax[key] = [NSNull null];
 			}

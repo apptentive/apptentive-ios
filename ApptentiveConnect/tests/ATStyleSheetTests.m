@@ -7,12 +7,12 @@
 //
 
 #import <XCTest/XCTest.h>
-#import "ATStyleSheet.h"
-#import "ATConnect.h"
+#import "ApptentiveStyleSheet.h"
+#import "Apptentive.h"
 
 @interface ATStyleSheetTests : XCTestCase
 
-@property (strong, nonatomic) ATStyleSheet *styleSheet;
+@property (strong, nonatomic) ApptentiveStyleSheet *styleSheet;
 
 @end
 
@@ -21,7 +21,7 @@
 - (void)setUp {
     [super setUp];
 
-	self.styleSheet = [[ATStyleSheet alloc] init];
+	self.styleSheet = [[ApptentiveStyleSheet alloc] init];
 }
 
 - (void)testUIAppearanceDefaults {

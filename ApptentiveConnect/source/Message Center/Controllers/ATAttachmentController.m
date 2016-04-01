@@ -11,7 +11,7 @@
 #import "ATAttachButton.h"
 #import "ATMessageCenterViewController.h"
 #import "ATMessageCenterInteraction.h"
-#import "ATConnect_Private.h"
+#import "Apptentive_Private.h"
 
 #define MAX_NUMBER_OF_ATTACHMENTS 4
 #define ATTACHMENT_MARGIN CGSizeMake(16.0, 15.0)
@@ -223,7 +223,7 @@ NSString *const ATInteractionMessageCenterEventLabelAttachmentDelete = @"attachm
 }
 
 - (NSString *)archivePath {
-	return [[ATConnect sharedConnection].backend.supportDirectoryPath stringByAppendingPathComponent:ATMessageCenterAttachmentsArchiveFilename];
+	return [[Apptentive sharedConnection].backend.supportDirectoryPath stringByAppendingPathComponent:ATMessageCenterAttachmentsArchiveFilename];
 }
 
 - (void)insertImage:(UIImage *)image {

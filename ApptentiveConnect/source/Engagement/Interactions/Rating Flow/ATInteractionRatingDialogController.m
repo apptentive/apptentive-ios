@@ -10,7 +10,7 @@
 #import "ATUtilities.h"
 #import "ATInteractionInvocation.h"
 #import "ATEngagementBackend.h"
-#import "ATConnect_Private.h"
+#import "Apptentive_Private.h"
 #import "ATBackend.h"
 
 NSString *const ATInteractionRatingDialogEventLabelLaunch = @"launch";
@@ -40,13 +40,13 @@ NSString *const ATInteractionRatingDialogEventLabelDecline = @"decline";
 }
 
 - (NSString *)body {
-	NSString *body = self.interaction.configuration[@"body"] ?: [NSString stringWithFormat:ATLocalizedString(@"We're so happy to hear that you love %@! It'd be really helpful if you rated us. Thanks so much for spending some time with us.", @"Rate app message. Parameter is app name."), [[ATConnect sharedConnection].backend appName]];
+	NSString *body = self.interaction.configuration[@"body"] ?: [NSString stringWithFormat:ATLocalizedString(@"We're so happy to hear that you love %@! It'd be really helpful if you rated us. Thanks so much for spending some time with us.", @"Rate app message. Parameter is app name."), [[Apptentive sharedConnection].backend appName]];
 
 	return body;
 }
 
 - (NSString *)rateText {
-	NSString *rateText = self.interaction.configuration[@"rate_text"] ?: [NSString stringWithFormat:ATLocalizedString(@"Rate %@", @"Rate app button title"), [[ATConnect sharedConnection].backend appName]];
+	NSString *rateText = self.interaction.configuration[@"rate_text"] ?: [NSString stringWithFormat:ATLocalizedString(@"Rate %@", @"Rate app button title"), [[Apptentive sharedConnection].backend appName]];
 
 	return rateText;
 }

@@ -16,7 +16,7 @@
 #import "ATMessageCenterContextMessageCell.h"
 #import "ATCompoundMessageCell.h"
 #import "ATMessageCenterInteraction.h"
-#import "ATConnect_Private.h"
+#import "Apptentive_Private.h"
 #import "ATNetworkImageView.h"
 #import "ATUtilities.h"
 #import "ATNetworkImageIconView.h"
@@ -27,7 +27,7 @@
 #import "ATAttachmentController.h"
 #import "ATIndexedCollectionView.h"
 #import "ATAttachmentCell.h"
-#import "ATStyleSheet.h"
+#import "ApptentiveStyleSheet.h"
 #import <MobileCoreServices/UTCoreTypes.h>
 
 #define HEADER_LABEL_HEIGHT 64.0
@@ -118,7 +118,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 - (void)viewDidLoad {
 	// TODO: Figure out a way to avoid tightly coupling this
-	[ATConnect sharedConnection].backend.presentedMessageCenterViewController = self;
+	[Apptentive sharedConnection].backend.presentedMessageCenterViewController = self;
 
 	[super viewDidLoad];
 
@@ -132,7 +132,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.dataSource = [[ATMessageCenterDataSource alloc] initWithDelegate:self];
 	[self.dataSource start];
 
-	[ATConnect sharedConnection].backend.messageDelegate = self;
+	[Apptentive sharedConnection].backend.messageDelegate = self;
 
 	self.dateFormatter = [[NSDateFormatter alloc] init];
 	self.dateFormatter.dateFormat = [NSDateFormatter dateFormatFromTemplate:@"MMMMdyyyy" options:0 locale:[NSLocale currentLocale]];
@@ -148,24 +148,24 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 	self.navigationItem.title = self.interaction.title;
 
-	self.tableView.separatorColor = [[ATConnect sharedConnection].styleSheet colorForStyle:ApptentiveColorSeparator];
-	self.tableView.backgroundColor = [[ATConnect sharedConnection].styleSheet colorForStyle:ApptentiveColorCollectionBackground];
+	self.tableView.separatorColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveColorSeparator];
+	self.tableView.backgroundColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveColorCollectionBackground];
 
-	self.greetingView.backgroundColor = [[ATConnect sharedConnection].styleSheet colorForStyle:ApptentiveColorBackground];
-	self.greetingView.borderView.backgroundColor = [[ATConnect sharedConnection].styleSheet colorForStyle:ApptentiveColorSeparator];
+	self.greetingView.backgroundColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveColorBackground];
+	self.greetingView.borderView.backgroundColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveColorSeparator];
 
 	self.greetingView.titleLabel.text = self.interaction.greetingTitle;
-	self.greetingView.titleLabel.font = [[ATConnect sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleHeaderTitle];
-	self.greetingView.titleLabel.textColor = [[ATConnect sharedConnection].styleSheet colorForStyle:ApptentiveTextStyleHeaderTitle];
+	self.greetingView.titleLabel.font = [[Apptentive sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleHeaderTitle];
+	self.greetingView.titleLabel.textColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveTextStyleHeaderTitle];
 
 	self.greetingView.messageLabel.text = self.interaction.greetingBody;
-	self.greetingView.messageLabel.font = [[ATConnect sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleHeaderMessage];
-	self.greetingView.messageLabel.textColor = [[ATConnect sharedConnection].styleSheet colorForStyle:ApptentiveTextStyleHeaderMessage];
+	self.greetingView.messageLabel.font = [[Apptentive sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleHeaderMessage];
+	self.greetingView.messageLabel.textColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveTextStyleHeaderMessage];
 
 	self.greetingView.imageView.imageURL = self.interaction.greetingImageURL;
 
 	self.greetingView.aboutButton.hidden = !self.interaction.branding;
-	self.greetingView.aboutButton.tintColor = [[ATConnect sharedConnection].styleSheet colorForStyle:ApptentiveTextStyleHeaderMessage];
+	self.greetingView.aboutButton.tintColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveTextStyleHeaderMessage];
 	self.greetingView.isOnScreen = NO;
 
 	[self.greetingView.aboutButton setImage:[[ATBackend imageNamed:@"at_info"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
@@ -179,13 +179,13 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[self.messageInputView.clearButton setImage:[[ATBackend imageNamed:@"at_close"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
 
 	self.messageInputView.placeholderLabel.text = self.interaction.composerPlaceholderText;
-	self.messageInputView.placeholderLabel.font = [[ATConnect sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleTextInput];
+	self.messageInputView.placeholderLabel.font = [[Apptentive sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleTextInput];
 
 	self.messageInputView.placeholderLabel.hidden = self.messageInputView.messageView.text.length > 0;
 
 	self.messageInputView.titleLabel.text = self.interaction.composerTitle;
 	[self.messageInputView.sendButton setTitle:self.interaction.composerSendButtonTitle forState:UIControlStateNormal];
-	self.messageInputView.sendButton.titleLabel.font = [[ATConnect sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleButton];
+	self.messageInputView.sendButton.titleLabel.font = [[Apptentive sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleButton];
 
 	self.messageInputView.sendButton.accessibilityHint = ATLocalizedString(@"Sends the message.", @"Accessibility hint for 'send' button");
 
@@ -196,16 +196,16 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.messageInputView.attachButton.accessibilityLabel = ATLocalizedString(@"Attach", @"Accessibility label for 'attach' button");
 	self.messageInputView.attachButton.accessibilityHint = ATLocalizedString(@"Attaches a photo or screenshot", @"Accessibility hint for 'attach'");
 
-	self.messageInputView.containerView.backgroundColor = [[ATConnect sharedConnection].styleSheet colorForStyle:ApptentiveColorBackground];
-	self.messageInputView.borderColor = [[ATConnect sharedConnection].styleSheet colorForStyle:ApptentiveColorSeparator];
-	self.messageInputView.messageView.font = [[ATConnect sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleTextInput];
-	self.messageInputView.messageView.textColor = [[ATConnect sharedConnection].styleSheet colorForStyle:ApptentiveTextStyleTextInput];
-	self.messageInputView.messageView.backgroundColor = [[ATConnect sharedConnection].styleSheet colorForStyle:ApptentiveColorTextInputBackground];
-	self.messageInputView.titleLabel.font = [[ATConnect sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleButton];
-	self.messageInputView.titleLabel.textColor = [[ATConnect sharedConnection].styleSheet colorForStyle:ApptentiveTextStyleButton];
+	self.messageInputView.containerView.backgroundColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveColorBackground];
+	self.messageInputView.borderColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveColorSeparator];
+	self.messageInputView.messageView.font = [[Apptentive sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleTextInput];
+	self.messageInputView.messageView.textColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveTextStyleTextInput];
+	self.messageInputView.messageView.backgroundColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveColorTextInputBackground];
+	self.messageInputView.titleLabel.font = [[Apptentive sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleButton];
+	self.messageInputView.titleLabel.textColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveTextStyleButton];
 
-	self.statusView.statusLabel.font = [[ATConnect sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleMessageCenterStatus];
-	self.statusView.statusLabel.textColor = [[ATConnect sharedConnection].styleSheet colorForStyle:ApptentiveTextStyleMessageCenterStatus];
+	self.statusView.statusLabel.font = [[Apptentive sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleMessageCenterStatus];
+	self.statusView.statusLabel.textColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveTextStyleMessageCenterStatus];
 
 	if (self.interaction.profileRequested) {
 		UIBarButtonItem *profileButtonItem = [[UIBarButtonItem alloc] initWithImage:[ATBackend imageNamed:@"at_account"] landscapeImagePhone:[ATBackend imageNamed:@"at_account"] style:UIBarButtonItemStylePlain target:self action:@selector(showWho:)];
@@ -213,22 +213,22 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		profileButtonItem.accessibilityHint = ATLocalizedString(@"Displays name and email editor.", @"Accessibility hint for 'edit profile' button");
 		self.navigationItem.leftBarButtonItem = profileButtonItem;
 
-		self.profileView.containerView.backgroundColor = [[ATConnect sharedConnection].styleSheet colorForStyle:ApptentiveColorBackground];
+		self.profileView.containerView.backgroundColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveColorBackground];
 		self.profileView.titleLabel.text = self.interaction.profileInitialTitle;
-		self.profileView.titleLabel.font = [[ATConnect sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleButton];
-		self.profileView.titleLabel.textColor = [[ATConnect sharedConnection].styleSheet colorForStyle:ApptentiveTextStyleButton];
-		self.profileView.saveButton.titleLabel.font = [[ATConnect sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleButton];
-		self.profileView.skipButton.titleLabel.font =  [[ATConnect sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleButton];
+		self.profileView.titleLabel.font = [[Apptentive sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleButton];
+		self.profileView.titleLabel.textColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveTextStyleButton];
+		self.profileView.saveButton.titleLabel.font = [[Apptentive sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleButton];
+		self.profileView.skipButton.titleLabel.font =  [[Apptentive sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleButton];
 		self.profileView.requiredLabel.text = self.interaction.profileInitialEmailExplanation;
-		self.profileView.requiredLabel.font = [[ATConnect sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleSurveyInstructions];
-		self.profileView.requiredLabel.textColor = [[ATConnect sharedConnection].styleSheet colorForStyle:ApptentiveTextStyleSurveyInstructions];
+		self.profileView.requiredLabel.font = [[Apptentive sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleSurveyInstructions];
+		self.profileView.requiredLabel.textColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveTextStyleSurveyInstructions];
 		[self.profileView.saveButton setTitle:self.interaction.profileInitialSaveButtonTitle forState:UIControlStateNormal];
 		[self.profileView.skipButton setTitle:self.interaction.profileInitialSkipButtonTitle forState:UIControlStateNormal];
 		self.profileView.skipButton.hidden = self.interaction.profileRequired;
 		[self validateWho:self];
-		self.profileView.borderColor = [[ATConnect sharedConnection].styleSheet colorForStyle:ApptentiveColorSeparator];
-		self.profileView.nameField.font = [[ATConnect sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleTextInput];
-		self.profileView.emailField.font = [[ATConnect sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleTextInput];
+		self.profileView.borderColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveColorSeparator];
+		self.profileView.nameField.font = [[Apptentive sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleTextInput];
+		self.profileView.emailField.font = [[Apptentive sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleTextInput];
 
 		if (self.interaction.profileRequired && [self shouldShowProfileViewBeforeComposing:YES]) {
 			self.profileView.skipButton.hidden = YES;
@@ -245,7 +245,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 	self.contextMessage = nil;
 	if (self.interaction.contextMessageBody) {
-		self.contextMessage = [[ATConnect sharedConnection].backend automatedMessageWithTitle:nil body:self.interaction.contextMessageBody];
+		self.contextMessage = [[Apptentive sharedConnection].backend automatedMessageWithTitle:nil body:self.interaction.contextMessageBody];
 	}
 
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resizeFooterView:) name:UIKeyboardWillChangeFrameNotification object:nil];
@@ -326,7 +326,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 	[self saveDraft];
 
-	[[ATConnect sharedConnection].backend messageCenterWillDismiss:self];
+	[[Apptentive sharedConnection].backend messageCenterWillDismiss:self];
 }
 
 #pragma mark - Table view data source
@@ -357,25 +357,25 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 			case ATMessageCenterMessageStatusFailed:
 				messageCell.statusLabelHidden = NO;
 				messageCell.layer.borderWidth = 1.0 / [UIScreen mainScreen].scale;
-				messageCell.layer.borderColor = [[ATConnect sharedConnection].styleSheet colorForStyle:ApptentiveColorFailure].CGColor;
-				messageCell.statusLabel.textColor = [[ATConnect sharedConnection].styleSheet colorForStyle:ApptentiveColorFailure];
+				messageCell.layer.borderColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveColorFailure].CGColor;
+				messageCell.statusLabel.textColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveColorFailure];
 				messageCell.statusLabel.text = ATLocalizedString(@"Failed", @"Message failed to send.");
 				break;
 			case ATMessageCenterMessageStatusSending:
 				messageCell.statusLabelHidden = NO;
 				messageCell.layer.borderWidth = 0;
-				messageCell.statusLabel.textColor = [[ATConnect sharedConnection].styleSheet colorForStyle:ApptentiveTextStyleMessageStatus];
+				messageCell.statusLabel.textColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveTextStyleMessageStatus];
 				messageCell.statusLabel.text = ATLocalizedString(@"Sending…", @"Message is sending.");
 				break;
 			case ATMessageCenterMessageStatusSent:
 				messageCell.statusLabelHidden = NO;
 				messageCell.layer.borderWidth = 0;
-				messageCell.statusLabel.textColor = [[ATConnect sharedConnection].styleSheet colorForStyle:ApptentiveTextStyleMessageStatus];
+				messageCell.statusLabel.textColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveTextStyleMessageStatus];
 				messageCell.statusLabel.text = ATLocalizedString(@"Sent", @"Message sent successfully");
 				break;
 		}
 
-		messageCell.statusLabel.font = [[ATConnect sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleMessageStatus];
+		messageCell.statusLabel.font = [[Apptentive sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleMessageStatus];
 
 		cell = messageCell;
 	} else if (type == ATMessageCenterMessageTypeReply || type == ATMessageCenterMessageTypeCompoundReply) {
@@ -395,8 +395,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		cell = contextMessageCell;
 	}
 
-	cell.messageLabel.font = [[ATConnect sharedConnection].styleSheet fontForStyle:UIFontTextStyleBody];
-	cell.messageLabel.textColor = [[ATConnect sharedConnection].styleSheet colorForStyle:UIFontTextStyleBody];
+	cell.messageLabel.font = [[Apptentive sharedConnection].styleSheet fontForStyle:UIFontTextStyleBody];
+	cell.messageLabel.textColor = [[Apptentive sharedConnection].styleSheet colorForStyle:UIFontTextStyleBody];
 	cell.messageLabel.text = [self.dataSource textOfMessageAtIndexPath:indexPath];
 
 	if (type == ATMessageCenterMessageTypeCompoundMessage || type == ATMessageCenterMessageTypeCompoundReply) {
@@ -406,7 +406,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		compoundCell.collectionView.dataSource = self;
 		compoundCell.collectionView.delegate = self;
 		[compoundCell.collectionView reloadData];
-		compoundCell.collectionView.backgroundColor = [[ATConnect sharedConnection].styleSheet colorForStyle:ApptentiveColorBackground];
+		compoundCell.collectionView.backgroundColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveColorBackground];
 
 		UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout *)compoundCell.collectionView.collectionViewLayout;
 		layout.sectionInset = UIEdgeInsetsMake(ATTACHMENT_MARGIN.height, ATTACHMENT_MARGIN.width, ATTACHMENT_MARGIN.height, ATTACHMENT_MARGIN.width);
@@ -472,8 +472,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	CGFloat effectiveLabelWidth = CGRectGetWidth(tableView.bounds) - horizontalMargin;
 	CGRect labelRect = CGRectZero;
 	if (labelText.length) {
-		UIFont *font = [[ATConnect sharedConnection].styleSheet fontForStyle:UIFontTextStyleBody];
-		UIColor *color = [[ATConnect sharedConnection].styleSheet colorForStyle:UIFontTextStyleBody];
+		UIFont *font = [[Apptentive sharedConnection].styleSheet fontForStyle:UIFontTextStyleBody];
+		UIColor *color = [[Apptentive sharedConnection].styleSheet colorForStyle:UIFontTextStyleBody];
 		NSAttributedString *attributedText = [[NSAttributedString alloc] initWithString:labelText attributes:@{NSFontAttributeName: font, NSForegroundColorAttributeName: color }];
 		labelRect = [attributedText boundingRectWithSize:CGSizeMake(effectiveLabelWidth, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin context:nil];
 	} else {
@@ -506,21 +506,21 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
 	UITableViewHeaderFooterView *headerView = (UITableViewHeaderFooterView *)view;
-	headerView.textLabel.font = [[ATConnect sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleMessageDate];
-	headerView.textLabel.textColor = [[ATConnect sharedConnection].styleSheet colorForStyle:ApptentiveTextStyleMessageDate];
+	headerView.textLabel.font = [[Apptentive sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleMessageDate];
+	headerView.textLabel.textColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveTextStyleMessageDate];
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
 	switch ([self.dataSource cellTypeAtIndexPath:indexPath]) {
 		case ATMessageCenterMessageTypeMessage:
 		case ATMessageCenterMessageTypeCompoundMessage:
-			cell.contentView.backgroundColor = [[ATConnect sharedConnection].styleSheet colorForStyle:ApptentiveColorMessageBackground];
+			cell.contentView.backgroundColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveColorMessageBackground];
 			break;
 		case ATMessageCenterMessageTypeReply:
 		case ATMessageCenterMessageTypeCompoundReply:
-			cell.contentView.backgroundColor = [[ATConnect sharedConnection].styleSheet colorForStyle:ApptentiveColorReplyBackground];
+			cell.contentView.backgroundColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveColorReplyBackground];
 		case ATMessageCenterMessageTypeContextMessage:
-			cell.contentView.backgroundColor = [[ATConnect sharedConnection].styleSheet colorForStyle:ApptentiveColorContextBackground];
+			cell.contentView.backgroundColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveColorContextBackground];
 	}
 }
 
@@ -760,15 +760,15 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	NSIndexPath *lastUserMessageIndexPath = self.dataSource.lastUserMessageIndexPath;
 
 	if (self.contextMessage) {
-		[[ATConnect sharedConnection].backend sendAutomatedMessage:self.contextMessage];
+		[[Apptentive sharedConnection].backend sendAutomatedMessage:self.contextMessage];
 		self.contextMessage = nil;
 	}
 
 	if (self.messageComposerHasAttachments) {
-		[[ATConnect sharedConnection].backend sendCompoundMessageWithText:message attachments:self.attachmentController.attachments hiddenOnClient:NO];
+		[[Apptentive sharedConnection].backend sendCompoundMessageWithText:message attachments:self.attachmentController.attachments hiddenOnClient:NO];
 		[self.attachmentController clear];
 	} else {
-		[[ATConnect sharedConnection].backend sendTextMessageWithBody:message];
+		[[Apptentive sharedConnection].backend sendTextMessageWithBody:message];
 	}
 
 	[self.attachmentController resignFirstResponder];
@@ -873,18 +873,18 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 	[self.interaction engage:ATInteractionMessageCenterEventLabelProfileSubmit fromViewController:self userInfo:userInfo];
 
-	if (self.profileView.nameField.text != [ATConnect sharedConnection].personName) {
-		[ATConnect sharedConnection].personName = self.profileView.nameField.text;
+	if (self.profileView.nameField.text != [Apptentive sharedConnection].personName) {
+		[Apptentive sharedConnection].personName = self.profileView.nameField.text;
 		[self.interaction engage:ATInteractionMessageCenterEventLabelProfileName fromViewController:self userInfo:@{ @"length": @(self.profileView.nameField.text.length) }];
 	}
 
-	if (self.profileView.emailField.text != [ATConnect sharedConnection].personEmailAddress) {
-		[ATConnect sharedConnection].personEmailAddress = self.profileView.emailField.text;
+	if (self.profileView.emailField.text != [Apptentive sharedConnection].personEmailAddress) {
+		[Apptentive sharedConnection].personEmailAddress = self.profileView.emailField.text;
 		[self.interaction engage:ATInteractionMessageCenterEventLabelProfileEmail fromViewController:self userInfo:@{ @"length": @(self.profileView.emailField.text.length),
 			@"valid": @([ATUtilities emailAddressIsValid:self.profileView.emailField.text]) }];
 	}
 
-	[[ATConnect sharedConnection].backend updatePersonIfNeeded];
+	[[Apptentive sharedConnection].backend updatePersonIfNeeded];
 
 	self.composeButtonItem.enabled = YES;
 	self.neuMessageButtonItem.enabled = YES;
@@ -914,7 +914,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (IBAction)showAbout:(id)sender {
-	[(ATNavigationController *)self.navigationController pushAboutApptentiveViewController];
+	[(ApptentiveNavigationController *)self.navigationController pushAboutApptentiveViewController];
 }
 
 #pragma mark - Key-value observing
@@ -1031,8 +1031,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 					[self.profileView becomeFirstResponder];
 				}
 				self.navigationItem.leftBarButtonItem.enabled = NO;
-				self.profileView.nameField.text = [ATConnect sharedConnection].personName;
-				self.profileView.emailField.text = [ATConnect sharedConnection].personEmailAddress;
+				self.profileView.nameField.text = [Apptentive sharedConnection].personName;
+				self.profileView.emailField.text = [Apptentive sharedConnection].personEmailAddress;
 				toolbarHidden = YES;
 				newFooter = self.profileView;
 				break;
@@ -1239,7 +1239,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (BOOL)shouldShowProfileViewBeforeComposing:(BOOL)beforeComposing {
-	if ([ATUtilities emailAddressIsValid:[ATConnect sharedConnection].personEmailAddress]) {
+	if ([ATUtilities emailAddressIsValid:[Apptentive sharedConnection].personEmailAddress]) {
 		return NO;
 	} else if (self.interaction.profileRequired) {
 		return YES;

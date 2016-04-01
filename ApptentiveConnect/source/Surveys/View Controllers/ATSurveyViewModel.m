@@ -11,7 +11,7 @@
 #import "ATSurveyQuestion.h"
 #import "ATSurveyAnswer.h"
 
-#import "ATConnect_Private.h"
+#import "Apptentive_Private.h"
 #import "ATInteraction.h"
 #import "ATSurveyResponse.h"
 #import "ATSurveyResponseTask.h"
@@ -44,8 +44,8 @@
 	return self;
 }
 
-- (ATStyleSheet *)styleSheet {
-	return [ATConnect sharedConnection].styleSheet;
+- (ApptentiveStyleSheet *)styleSheet {
+	return [Apptentive sharedConnection].styleSheet;
 }
 
 - (NSString *)title {

@@ -10,7 +10,7 @@
 #import "ApptentiveMetrics.h"
 #import "ATMetric.h"
 #import "ATWebClient.h"
-#import "ATConnect_Private.h"
+#import "Apptentive_Private.h"
 
 #define kATRecordTaskCodingVersion 1
 
@@ -47,7 +47,7 @@
 }
 
 - (BOOL)canStart {
-	if ([ATConnect sharedConnection].webClient == nil) {
+	if ([Apptentive sharedConnection].webClient == nil) {
 		return NO;
 	}
 	return YES;

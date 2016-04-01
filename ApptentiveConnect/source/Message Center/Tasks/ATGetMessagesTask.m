@@ -15,7 +15,7 @@
 #import "ATWebClient.h"
 #import "ATWebClient+MessageCenter.h"
 #import "NSDictionary+ATAdditions.h"
-#import "ATConnect_Private.h"
+#import "Apptentive_Private.h"
 
 static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessagesLastRetrievedMessagIDPreferenceKey";
 
@@ -50,7 +50,7 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 }
 
 - (BOOL)canStart {
-	if ([ATConnect sharedConnection].webClient == nil) {
+	if ([Apptentive sharedConnection].webClient == nil) {
 		return NO;
 	}
 	if (![ATConversationUpdater conversationExists]) {
@@ -61,7 +61,7 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 
 - (void)start {
 	if (!request) {
-		request = [[ATConnect sharedConnection].webClient requestForRetrievingMessagesSinceMessage:lastMessage];
+		request = [[Apptentive sharedConnection].webClient requestForRetrievingMessagesSinceMessage:lastMessage];
 		if (request != nil) {
 			request.delegate = self;
 			[request start];
@@ -108,7 +108,7 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 		}
 		[self stop];
 
-		[[ATConnect sharedConnection].backend completeMessageFetchWithResult:fetchResult];
+		[[Apptentive sharedConnection].backend completeMessageFetchWithResult:fetchResult];
 	}
 }
 
@@ -129,7 +129,7 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 #pragma mark - Private methods
 
 - (BOOL)processResult:(NSDictionary *)jsonMessages {
-	NSManagedObjectContext *context = [[ATConnect sharedConnection].backend managedObjectContext];
+	NSManagedObjectContext *context = [[Apptentive sharedConnection].backend managedObjectContext];
 	NSString *lastMessageID = nil;
 
 	ATConversation *conversation = [ATConversationUpdater currentConversation];

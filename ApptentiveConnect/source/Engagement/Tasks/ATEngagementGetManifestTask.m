@@ -12,7 +12,7 @@
 #import "ATWebClient+EngagementAdditions.h"
 #import "ATEngagementManifestParser.h"
 #import "ATEngagementBackend.h"
-#import "ATConnect_Private.h"
+#import "Apptentive_Private.h"
 
 
 @implementation ATEngagementGetManifestTask {
@@ -34,7 +34,7 @@
 }
 
 - (BOOL)canStart {
-	if ([ATConnect sharedConnection].webClient == nil) {
+	if ([Apptentive sharedConnection].webClient == nil) {
 		ATLogDebug(@"Failed to download Apptentive configuration because API key is not set!");
 		return NO;
 	}
@@ -55,7 +55,7 @@
 
 - (void)start {
 	if (checkManifestRequest == nil) {
-		ATWebClient *client = [ATConnect sharedConnection].webClient;
+		ATWebClient *client = [Apptentive sharedConnection].webClient;
 		checkManifestRequest = [client requestForGettingEngagementManifest];
 		checkManifestRequest.delegate = self;
 		self.inProgress = YES;
@@ -97,9 +97,9 @@
 			NSDictionary *interactions = targetsAndInteractions[@"interactions"];
 
 			if (targets && interactions) {
-				[[ATConnect sharedConnection].engagementBackend didReceiveNewTargets:targets andInteractions:interactions maxAge:[request expiresMaxAge]];
+				[[Apptentive sharedConnection].engagementBackend didReceiveNewTargets:targets andInteractions:interactions maxAge:[request expiresMaxAge]];
 #if APPTENTIVE_DEBUG
-				[ATConnect sharedConnection].engagementBackend.engagementManifestJSON = targetsAndInteractions[@"raw"];
+				[Apptentive sharedConnection].engagementBackend.engagementManifestJSON = targetsAndInteractions[@"raw"];
 #endif
 			} else {
 				ATLogError(@"An error occurred parsing the engagement manifest: %@", [parser parserError]);

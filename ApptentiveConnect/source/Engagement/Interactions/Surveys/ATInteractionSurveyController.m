@@ -7,7 +7,7 @@
 //
 
 #import "ATInteractionSurveyController.h"
-#import "ATConnect_Private.h"
+#import "Apptentive_Private.h"
 #import "ATInteraction.h"
 #import "ATBackend.h"
 #import "ATSurveyViewController.h"
@@ -33,7 +33,7 @@ NSString *const ATInteractionSurveyEventLabelLaunch = @"launch";
 - (void)showSurveyFromViewController:(UIViewController *)viewController {
 	self.viewController = viewController;
 
-	UINavigationController *navigationController = [[ATConnect storyboard] instantiateViewControllerWithIdentifier:@"SurveyNavigation"];
+	UINavigationController *navigationController = [[Apptentive storyboard] instantiateViewControllerWithIdentifier:@"SurveyNavigation"];
 	ATSurveyViewController *surveyViewController = navigationController.viewControllers.firstObject;
 	surveyViewController.viewModel = [[ATSurveyViewModel alloc] initWithInteraction:self.interaction];
 

@@ -12,7 +12,7 @@
 #import "ATTaskQueue.h"
 #import "ATInteraction.h"
 #import "ATInteractionInvocation.h"
-#import "ATConnect_Private.h"
+#import "Apptentive_Private.h"
 #import "ATUtilities.h"
 #import "ApptentiveMetrics.h"
 #import "ATInteractionUpgradeMessageViewController.h"
@@ -114,7 +114,7 @@ NSString *const ATEngagementMessageCenterEvent = @"show_message_center";
 	}
 
 	NSString *previousSDKVersion = [[NSUserDefaults standardUserDefaults] stringForKey:ATEngagementInteractionsSDKVersionKey];
-	if (![previousSDKVersion isEqualToString:kATConnectVersionString]) {
+	if (![previousSDKVersion isEqualToString:kApptentiveVersionString]) {
 		invalidateCache = YES;
 	}
 
@@ -170,7 +170,7 @@ NSString *const ATEngagementMessageCenterEvent = @"show_message_center";
 	ATLogInfo(@"Received remote Interactions from Apptentive.");
 
 	@synchronized(self) {
-		if ([[ATConnect sharedConnection].backend supportDirectoryPath]) {
+		if ([[Apptentive sharedConnection].backend supportDirectoryPath]) {
 			[NSKeyedArchiver archiveRootObject:targets toFile:[ATEngagementBackend cachedTargetsStoragePath]];
 			[NSKeyedArchiver archiveRootObject:interactions toFile:[ATEngagementBackend cachedInteractionsStoragePath]];
 
@@ -193,7 +193,7 @@ NSString *const ATEngagementMessageCenterEvent = @"show_message_center";
 				[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATEngagementInteractionsAppBuildNumberKey];
 			}
 
-			[[NSUserDefaults standardUserDefaults] setObject:kATConnectVersionString forKey:ATEngagementInteractionsSDKVersionKey];
+			[[NSUserDefaults standardUserDefaults] setObject:kApptentiveVersionString forKey:ATEngagementInteractionsSDKVersionKey];
 
 			[self updateVersionInfo];
 		}
@@ -229,11 +229,11 @@ NSString *const ATEngagementMessageCenterEvent = @"show_message_center";
 }
 
 + (NSString *)cachedTargetsStoragePath {
-	return [[[ATConnect sharedConnection].backend supportDirectoryPath] stringByAppendingPathComponent:@"cachedtargets.objects"];
+	return [[[Apptentive sharedConnection].backend supportDirectoryPath] stringByAppendingPathComponent:@"cachedtargets.objects"];
 }
 
 + (NSString *)cachedInteractionsStoragePath {
-	return [[[ATConnect sharedConnection].backend supportDirectoryPath] stringByAppendingPathComponent:@"cachedinteractionsV2.objects"];
+	return [[[Apptentive sharedConnection].backend supportDirectoryPath] stringByAppendingPathComponent:@"cachedinteractionsV2.objects"];
 }
 
 - (BOOL)canShowInteractionForLocalEvent:(NSString *)event {
@@ -243,7 +243,7 @@ NSString *const ATEngagementMessageCenterEvent = @"show_message_center";
 }
 
 - (BOOL)canShowInteractionForCodePoint:(NSString *)codePoint {
-	ATInteraction *interaction = [[ATConnect sharedConnection].engagementBackend interactionForEvent:codePoint];
+	ATInteraction *interaction = [[Apptentive sharedConnection].engagementBackend interactionForEvent:codePoint];
 
 	return (interaction != nil);
 }
@@ -317,7 +317,7 @@ NSString *const ATEngagementMessageCenterEvent = @"show_message_center";
 
 - (BOOL)engageCodePoint:(NSString *)codePoint fromInteraction:(ATInteraction *)fromInteraction userInfo:(NSDictionary *)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData fromViewController:(UIViewController *)viewController {
 	ATLogInfo(@"Engage Apptentive event: %@", codePoint);
-	if (![[ATConnect sharedConnection].backend isReady]) {
+	if (![[Apptentive sharedConnection].backend isReady]) {
 		return NO;
 	}
 

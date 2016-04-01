@@ -15,9 +15,9 @@
 #import "ApptentiveInteraction.h"
 #import "ApptentiveSurveyResponse.h"
 #import "ApptentiveSurveyResponseTask.h"
-#import "ATSurveyMetrics.h"
-#import "ATTaskQueue.h"
-#import "ATData.h"
+#import "ApptentiveSurveyMetrics.h"
+#import "ApptentiveTaskQueue.h"
+#import "ApptentiveData.h"
 
 
 @interface ApptentiveSurveyViewModel ()
@@ -172,14 +172,14 @@
 }
 
 - (void)submit {
-	ApptentiveSurveyResponse *response = (ApptentiveSurveyResponse *)[ATData newEntityNamed:@"ATSurveyResponse"];
+	ApptentiveSurveyResponse *response = (ApptentiveSurveyResponse *)[ApptentiveData newEntityNamed:@"ATSurveyResponse"];
 
 	[response setup];
 	response.pendingState = [NSNumber numberWithInt:ATPendingSurveyResponseStateSending];
 	response.surveyID = self.interaction.identifier;
 	[response updateClientCreationTime];
 	[response setAnswers:self.answers];
-	[ATData save];
+	[ApptentiveData save];
 
 	NSString *pendingSurveyResponseID = [response pendingSurveyResponseID];
 	double delayInSeconds = 1.5;
@@ -187,7 +187,7 @@
 	dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
 		ApptentiveSurveyResponseTask *task = [[ApptentiveSurveyResponseTask alloc] init];
 		task.pendingSurveyResponseID = pendingSurveyResponseID;
-		[[ATTaskQueue sharedTaskQueue] addTask:task];
+		[[ApptentiveTaskQueue sharedTaskQueue] addTask:task];
 	});
 
 	NSDictionary *notificationInfo = @{ATSurveyIDKey: (self.interaction.identifier ?: [NSNull null])};

@@ -32,7 +32,7 @@
 	} else {
 		NSDictionary *invocationDictionary = @{ @"criteria": JSONDictionary };
 
-		self.interaction = [ATInteractionInvocation invocationWithJSONDictionary:invocationDictionary];
+		self.interaction = [ApptentiveInteractionInvocation invocationWithJSONDictionary:invocationDictionary];
 	}
 
 	[[Apptentive sharedConnection] addCustomDeviceDataNumber:@5 withKey:@"number_5"];

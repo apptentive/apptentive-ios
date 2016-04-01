@@ -11,13 +11,13 @@
 #import "ApptentiveAppConfigurationUpdater.h"
 #import "ApptentiveBackend.h"
 #import "Apptentive_Private.h"
-#import "ATData.h"
-#import "ATEvent.h"
-#import "ATMetric.h"
-#import "ATRecordTask.h"
-#import "ATRecordRequestTask.h"
-#import "ATSurveyMetrics.h"
-#import "ATTaskQueue.h"
+#import "ApptentiveData.h"
+#import "ApptentiveEvent.h"
+#import "ApptentiveMetric.h"
+#import "ApptentiveRecordTask.h"
+#import "ApptentiveRecordRequestTask.h"
+#import "ApptentiveSurveyMetrics.h"
+#import "ApptentiveTaskQueue.h"
 #import "ApptentiveEngagementBackend.h"
 
 // Engagement event labels
@@ -92,7 +92,7 @@ static NSString *ATMetricNameSurveyAnswerQuestion = @"survey.question_response";
 		return;
 	}
 
-	ATEvent *event = [ATEvent newInstanceWithLabel:name];
+	ApptentiveEvent *event = [ApptentiveEvent newInstanceWithLabel:name];
 
 	if (fromInteraction) {
 		NSString *interactionID = fromInteraction.identifier;
@@ -140,14 +140,14 @@ static NSString *ATMetricNameSurveyAnswerQuestion = @"survey.question_response";
 		}
 	}
 
-	if (![ATData save]) {
+	if (![ApptentiveData save]) {
 		event = nil;
 		return;
 	}
 
-	ATRecordRequestTask *task = [[ATRecordRequestTask alloc] init];
+	ApptentiveRecordRequestTask *task = [[ApptentiveRecordRequestTask alloc] init];
 	[task setTaskProvider:event];
-	[[ATTaskQueue sharedTaskQueue] addTask:task];
+	[[ApptentiveTaskQueue sharedTaskQueue] addTask:task];
 	event = nil;
 	task = nil;
 }
@@ -189,21 +189,21 @@ static NSString *ATMetricNameSurveyAnswerQuestion = @"survey.question_response";
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (BOOL)upgradeLegacyMetric:(ATMetric *)metric {
+- (BOOL)upgradeLegacyMetric:(ApptentiveMetric *)metric {
 	if (metricsEnabled == NO) {
 		return NO;
 	}
 
-	ATEvent *event = [ATEvent newInstanceWithLabel:metric.name];
+	ApptentiveEvent *event = [ApptentiveEvent newInstanceWithLabel:metric.name];
 	[event addEntriesFromDictionary:[metric info]];
-	if (![ATData save]) {
+	if (![ApptentiveData save]) {
 		event = nil;
 		return NO;
 	}
 
-	ATRecordRequestTask *task = [[ATRecordRequestTask alloc] init];
+	ApptentiveRecordRequestTask *task = [[ApptentiveRecordRequestTask alloc] init];
 	[task setTaskProvider:event];
-	[[ATTaskQueue sharedTaskQueue] addTask:task];
+	[[ApptentiveTaskQueue sharedTaskQueue] addTask:task];
 	event = nil;
 	task = nil;
 	return YES;

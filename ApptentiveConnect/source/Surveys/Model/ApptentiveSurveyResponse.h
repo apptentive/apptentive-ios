@@ -9,7 +9,7 @@
 #import <CoreData/CoreData.h>
 
 #import "ApptentiveJSONModel.h"
-#import "ATRecord.h"
+#import "ApptentiveRecord.h"
 
 typedef enum {
 	ATPendingSurveyResponseStateSending,
@@ -18,7 +18,7 @@ typedef enum {
 } ATPendingSurveyResponseState;
 
 
-@interface ApptentiveSurveyResponse : ATRecord <ApptentiveJSONModel>
+@interface ApptentiveSurveyResponse : ApptentiveRecord <ApptentiveJSONModel>
 @property (strong, nonatomic) NSString *pendingSurveyResponseID;
 @property (strong, nonatomic) NSData *answersData;
 @property (strong, nonatomic) NSString *surveyID;

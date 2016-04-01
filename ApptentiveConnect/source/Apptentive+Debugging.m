@@ -11,7 +11,7 @@
 #import "ApptentiveBackend.h"
 #import "ApptentiveEngagementBackend.h"
 #import "ApptentiveInteraction.h"
-#import "ATDeviceInfo.h"
+#import "ApptentiveDeviceInfo.h"
 
 
 @implementation Apptentive (Debugging)
@@ -76,7 +76,7 @@
 }
 
 - (NSDictionary *)deviceInfo {
-	return [[[[ATDeviceInfo alloc] init] dictionaryRepresentation] objectForKey:@"device"];
+	return [[[[ApptentiveDeviceInfo alloc] init] dictionaryRepresentation] objectForKey:@"device"];
 }
 
 - (NSArray *)engagementInteractions {

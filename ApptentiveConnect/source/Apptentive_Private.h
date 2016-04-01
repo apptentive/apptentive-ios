@@ -11,7 +11,7 @@
 extern NSString *const ApptentiveCustomPersonDataChangedNotification;
 extern NSString *const ApptentiveCustomDeviceDataChangedNotification;
 
-@class ATCompoundMessage, ApptentiveWebClient, ApptentiveBackend, ApptentiveEngagementBackend;
+@class ApptentiveMessage, ApptentiveWebClient, ApptentiveBackend, ApptentiveEngagementBackend;
 
 
 @interface Apptentive ()
@@ -41,7 +41,7 @@ extern NSString *const ApptentiveCustomDeviceDataChangedNotification;
 + (NSBundle *)resourceBundle;
 + (UIStoryboard *)storyboard;
 
-- (void)showNotificationBannerForMessage:(ATCompoundMessage *)message;
+- (void)showNotificationBannerForMessage:(ApptentiveMessage *)message;
 
 + (NSDictionary *)timestampObjectWithNumber:(NSNumber *)seconds;
 + (NSDictionary *)versionObjectWithVersion:(NSString *)version;

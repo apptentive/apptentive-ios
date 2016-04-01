@@ -8,7 +8,7 @@
 
 #import <XCTest/XCTest.h>
 #import "ApptentiveDataManager.h"
-#import "ATCompoundMessage.h"
+#import "ApptentiveMessage.h"
 
 
 @interface ApptentiveMigrationTests : XCTestCase
@@ -36,7 +36,7 @@
 }
 
 - (void)testCurrentDatabaseVersion {
-	ATDataManager *dataManager = [self dataManagerWithStoreName:@"ATDataModelv5"];
+	ApptentiveDataManager *dataManager = [self dataManagerWithStoreName:@"ATDataModelv5"];
 
 	XCTAssertTrue([dataManager setupAndVerify], @"Should be able to setup database.");
 	XCTAssertNotNil([dataManager persistentStoreCoordinator], @"Shouldn't be nil");
@@ -53,7 +53,7 @@
 		NSArray *results = [moc executeFetchRequest:request error:nil];
 		XCTAssertTrue([results count] > 0, @"No messages found after database migration.");
 		for (NSManagedObject *c in results) {
-			ATCompoundMessage *message = (ATCompoundMessage *)c;
+			ApptentiveMessage *message = (ApptentiveMessage *)c;
 			XCTAssertNotNil(message.hidden, @"Messages should be visible by default after migration.");
 			XCTAssertFalse([(NSNumber *)message.hidden boolValue], @"Messages should be visible by default after migration.");
 		}
@@ -68,7 +68,7 @@
 
 - (void)testV1Upgrade {
 	// For example, we will do the following with a copy of an old data model.
-	ATDataManager *dataManager = [self dataManagerWithStoreName:@"ATDataModelv1"];
+	ApptentiveDataManager *dataManager = [self dataManagerWithStoreName:@"ATDataModelv1"];
 
 	XCTAssertTrue([dataManager setupAndVerify], @"Should be able to setup database.");
 	XCTAssertNotNil([dataManager persistentStoreCoordinator], @"Shouldn't be nil");
@@ -78,7 +78,7 @@
 }
 
 - (void)testV2Upgrade {
-	ATDataManager *dataManager = [self dataManagerWithStoreName:@"ATDataModelv2"];
+	ApptentiveDataManager *dataManager = [self dataManagerWithStoreName:@"ATDataModelv2"];
 
 	XCTAssertTrue([dataManager setupAndVerify], @"Should be able to setup database.");
 	XCTAssertNotNil([dataManager persistentStoreCoordinator], @"Shouldn't be nil");
@@ -88,7 +88,7 @@
 }
 
 - (void)testV3Upgrade {
-	ATDataManager *dataManager = [self dataManagerWithStoreName:@"ATDataModelv3"];
+	ApptentiveDataManager *dataManager = [self dataManagerWithStoreName:@"ATDataModelv3"];
 
 	XCTAssertTrue([dataManager setupAndVerify], @"Should be able to setup database.");
 	XCTAssertNotNil([dataManager persistentStoreCoordinator], @"Shouldn't be nil");
@@ -98,7 +98,7 @@
 }
 
 - (void)testV4Upgrade {
-	ATDataManager *dataManager = [self dataManagerWithStoreName:@"ATDataModelv4"];
+	ApptentiveDataManager *dataManager = [self dataManagerWithStoreName:@"ATDataModelv4"];
 
 	XCTAssertTrue([dataManager setupAndVerify], @"Should be able to setup database.");
 	XCTAssertNotNil([dataManager persistentStoreCoordinator], @"Shouldn't be nil");
@@ -133,13 +133,13 @@
 		}
 	}
 
-	ATDataManager *dataManager = [[ATDataManager alloc] initWithModelName:@"ATDataModel" inBundle:bundle storagePath:path];
+	ApptentiveDataManager *dataManager = [[ApptentiveDataManager alloc] initWithModelName:@"ATDataModel" inBundle:bundle storagePath:path];
 	return dataManager;
 }
 
 - (void)testV2WALDatabase {
 	// A valid v2 database, albeit in WAL format.
-	ATDataManager *dataManager = [self dataManagerByCopyingSQLFilesInDirectory:@"v2WALDatabase"];
+	ApptentiveDataManager *dataManager = [self dataManagerByCopyingSQLFilesInDirectory:@"v2WALDatabase"];
 
 	XCTAssertTrue([dataManager setupAndVerify], @"Should be able to setup database.");
 	XCTAssertNotNil([dataManager persistentStoreCoordinator], @"Should be able to use existing WAL database.");
@@ -150,7 +150,7 @@
 
 - (void)testV3WALDatabase {
 	// A valid v3 database, albeit in WAL format.
-	ATDataManager *dataManager = [self dataManagerByCopyingSQLFilesInDirectory:@"v3WALDatabase"];
+	ApptentiveDataManager *dataManager = [self dataManagerByCopyingSQLFilesInDirectory:@"v3WALDatabase"];
 
 	XCTAssertTrue([dataManager setupAndVerify], @"Should be able to setup database.");
 	XCTAssertNotNil([dataManager persistentStoreCoordinator], @"Should be able to use existing WAL database.");
@@ -161,7 +161,7 @@
 
 - (void)testCorruptV2DatabaseRecovery {
 	// A corrupt v3 database in WAL format.
-	ATDataManager *dataManager = [self dataManagerByCopyingSQLFilesInDirectory:@"v2CorruptDatabase"];
+	ApptentiveDataManager *dataManager = [self dataManagerByCopyingSQLFilesInDirectory:@"v2CorruptDatabase"];
 
 	XCTAssertTrue([dataManager setupAndVerify], @"Should be able to setup database.");
 	XCTAssertNotNil([dataManager persistentStoreCoordinator], @"Shouldn't be nil after fixing it.");

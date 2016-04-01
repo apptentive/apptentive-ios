@@ -42,7 +42,7 @@ NSString *const ATPersonLastUpdateValuePreferenceKey = @"ATPersonLastUpdateValue
 + (BOOL)shouldUpdate {
 	[ApptentivePersonUpdater registerDefaults];
 
-	return [[ATPersonInfo currentPerson] apiJSON].count > 0;
+	return [[ApptentivePersonInfo currentPerson] apiJSON].count > 0;
 }
 
 + (NSDictionary *)lastSavedVersion {
@@ -66,7 +66,7 @@ NSString *const ATPersonLastUpdateValuePreferenceKey = @"ATPersonLastUpdateValue
 
 - (void)update {
 	[self cancel];
-	ATPersonInfo *person = [ATPersonInfo currentPerson];
+	ApptentivePersonInfo *person = [ApptentivePersonInfo currentPerson];
 	self.sentPersonJSON = person.dictionaryRepresentation;
 	self.request = [[Apptentive sharedConnection].webClient requestForUpdatingPerson:person];
 	self.request.delegate = self;
@@ -122,7 +122,7 @@ NSString *const ATPersonLastUpdateValuePreferenceKey = @"ATPersonLastUpdateValue
 }
 
 - (void)processResult:(NSDictionary *)jsonPerson {
-	ATPersonInfo *person = [ATPersonInfo newPersonFromJSON:jsonPerson];
+	ApptentivePersonInfo *person = [ApptentivePersonInfo newPersonFromJSON:jsonPerson];
 
 	if (person) {
 		// Save out the value we sent to the server.

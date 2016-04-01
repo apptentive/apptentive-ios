@@ -10,7 +10,7 @@
 #import "ApptentiveBackend.h"
 #import "ApptentiveJSONSerialization.h"
 #import "ApptentiveLog.h"
-#import "ATCompoundMessage.h"
+#import "ApptentiveMessage.h"
 #import "ApptentiveConversationUpdater.h"
 #import "Apptentive_Private.h"
 #import "ApptentiveWebClient.h"
@@ -66,7 +66,7 @@
 
 - (void)start {
 	if (!request) {
-		ATCompoundMessage *message = [ATCompoundMessage findMessageWithPendingID:self.pendingMessageID];
+		ApptentiveMessage *message = [ApptentiveMessage findMessageWithPendingID:self.pendingMessageID];
 		if (message == nil) {
 			ApptentiveLogError(@"Warning: Message was nil in message task.");
 			self.finished = YES;
@@ -146,7 +146,7 @@
 		self.lastErrorTitle = sender.errorTitle;
 		self.lastErrorMessage = sender.errorMessage;
 
-		ATCompoundMessage *message = [ATCompoundMessage findMessageWithPendingID:self.pendingMessageID];
+		ApptentiveMessage *message = [ApptentiveMessage findMessageWithPendingID:self.pendingMessageID];
 		if (message == nil) {
 			ApptentiveLogError(@"Warning: Message went away during task.");
 			self.finished = YES;
@@ -189,7 +189,7 @@
 	ApptentiveLogDebug(@"getting json result: %@", jsonMessage);
 	NSManagedObjectContext *context = [[Apptentive sharedConnection].backend managedObjectContext];
 
-	ATCompoundMessage *message = [ATCompoundMessage findMessageWithPendingID:self.pendingMessageID];
+	ApptentiveMessage *message = [ApptentiveMessage findMessageWithPendingID:self.pendingMessageID];
 	if (message == nil) {
 		ApptentiveLogError(@"Warning: Message went away during task.");
 		return YES;

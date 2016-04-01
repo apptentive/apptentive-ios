@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 #import "ApptentiveAPIRequest.h"
-#import "ATConversation.h"
+#import "ApptentiveConversation.h"
 
 extern NSString *const ATCurrentConversationPreferenceKey;
 
@@ -19,7 +19,7 @@ extern NSString *const ATCurrentConversationPreferenceKey;
 @interface ApptentiveConversationUpdater : NSObject <ApptentiveAPIRequestDelegate>
 @property (weak, nonatomic) NSObject<ApptentiveConversationUpdaterDelegate> *delegate;
 + (BOOL)conversationExists;
-+ (ATConversation *)currentConversation;
++ (ApptentiveConversation *)currentConversation;
 + (BOOL)shouldUpdate;
 
 - (id)initWithDelegate:(NSObject<ApptentiveConversationUpdaterDelegate> *)delegate;

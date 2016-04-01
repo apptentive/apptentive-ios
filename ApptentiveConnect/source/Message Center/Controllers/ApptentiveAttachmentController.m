@@ -82,14 +82,14 @@ NSString *const ATInteractionMessageCenterEventLabelAttachmentDelete = @"attachm
 	return self.viewController;
 }
 
-- (NSArray<ATFileAttachment *> *)attachments {
+- (NSArray<ApptentiveFileAttachment *> *)attachments {
 	if (_attachments == nil) {
 		NSMutableArray *attachments = [NSMutableArray array];
 		NSInteger index = 1;
 
 		for (UIImage *image in self.mutableAttachments) {
 			NSString *name = [NSString stringWithFormat:ATLocalizedString(@"Attachment %ld", @"Placeholder name for attachment"), (long)index];
-			ATFileAttachment *attachment = [ATFileAttachment newInstanceWithFileData:UIImageJPEGRepresentation(image, 0.6) MIMEType:@"image/jpeg" name:name];
+			ApptentiveFileAttachment *attachment = [ApptentiveFileAttachment newInstanceWithFileData:UIImageJPEGRepresentation(image, 0.6) MIMEType:@"image/jpeg" name:name];
 
 			index++;
 			[attachments addObject:attachment];

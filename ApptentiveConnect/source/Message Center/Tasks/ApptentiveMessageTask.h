@@ -7,11 +7,11 @@
 //
 
 #import "ApptentiveAPIRequest.h"
-#import "ATTask.h"
-#import "ATCompoundMessage.h"
+#import "ApptentiveTask.h"
+#import "ApptentiveMessage.h"
 
 
-@interface ApptentiveMessageTask : ATTask <ApptentiveAPIRequestDelegate>
+@interface ApptentiveMessageTask : ApptentiveTask <ApptentiveAPIRequestDelegate>
 
 @property (strong, nonatomic) NSString *pendingMessageID;
 

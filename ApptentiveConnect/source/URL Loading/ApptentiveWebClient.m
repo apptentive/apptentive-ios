@@ -45,7 +45,7 @@ NSString *const ATWebClientDefaultChannelName = @"ATWebClient";
 }
 
 - (ApptentiveAPIRequest *)requestForGettingAppConfiguration {
-	ATConversation *conversation = [ApptentiveConversationUpdater currentConversation];
+	ApptentiveConversation *conversation = [ApptentiveConversationUpdater currentConversation];
 	if (!conversation) {
 		return nil;
 	}
@@ -197,7 +197,7 @@ NSString *const ATWebClientDefaultChannelName = @"ATWebClient";
 		[debugString appendString:body];
 	}
 
-	for (ATFileAttachment *attachment in attachments) {
+	for (ApptentiveFileAttachment *attachment in attachments) {
 		NSString *boundaryString = [NSString stringWithFormat:@"\r\n--%@\r\n", boundary];
 		[multipartEncodedData appendData:[boundaryString dataUsingEncoding:NSUTF8StringEncoding]];
 		[debugString appendString:boundaryString];

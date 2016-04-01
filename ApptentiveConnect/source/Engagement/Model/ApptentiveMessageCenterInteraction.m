@@ -9,7 +9,7 @@
 #import "ApptentiveMessageCenterInteraction.h"
 #import "ApptentiveEngagementBackend.h"
 #import "Apptentive_Private.h"
-#import "ATPersonInfo.h"
+#import "ApptentivePersonInfo.h"
 #import "ApptentiveMessageCenterViewController.h"
 
 

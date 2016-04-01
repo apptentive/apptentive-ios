@@ -6,11 +6,11 @@
 //  Copyright (c) 2013 Apptentive, Inc. All rights reserved.
 //
 
-#import "ATTask.h"
+#import "ApptentiveTask.h"
 #import "ApptentiveAPIRequest.h"
 #import "ApptentiveSurveyResponse.h"
 
 
-@interface ApptentiveSurveyResponseTask : ATTask <ApptentiveAPIRequestDelegate>
+@interface ApptentiveSurveyResponseTask : ApptentiveTask <ApptentiveAPIRequestDelegate>
 @property (strong, nonatomic) NSString *pendingSurveyResponseID;
 @end

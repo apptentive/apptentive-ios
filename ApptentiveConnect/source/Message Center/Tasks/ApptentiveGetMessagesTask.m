@@ -9,9 +9,9 @@
 #import "ApptentiveGetMessagesTask.h"
 
 #import "ApptentiveBackend.h"
-#import "ATCompoundMessage.h"
+#import "ApptentiveMessage.h"
 #import "ApptentiveConversationUpdater.h"
-#import "ATMessageSender.h"
+#import "ApptentiveMessageSender.h"
 #import "ApptentiveWebClient.h"
 #import "ApptentiveWebClient+MessageCenter.h"
 #import "NSDictionary+Apptentive.h"
@@ -27,7 +27,7 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 
 @implementation ApptentiveGetMessagesTask {
 	ApptentiveAPIRequest *request;
-	ATCompoundMessage *lastMessage;
+	ApptentiveMessage *lastMessage;
 }
 
 - (id)init {
@@ -35,7 +35,7 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 		NSString *messageID = [defaults objectForKey:ATMessagesLastRetrievedMessageIDPreferenceKey];
 		if (messageID) {
-			lastMessage = [ATCompoundMessage findMessageWithID:messageID];
+			lastMessage = [ApptentiveMessage findMessageWithID:messageID];
 		}
 	}
 	return self;
@@ -132,7 +132,7 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 	NSManagedObjectContext *context = [[Apptentive sharedConnection].backend managedObjectContext];
 	NSString *lastMessageID = nil;
 
-	ATConversation *conversation = [ApptentiveConversationUpdater currentConversation];
+	ApptentiveConversation *conversation = [ApptentiveConversationUpdater currentConversation];
 
 	do { // once
 		if (!jsonMessages) break;
@@ -148,13 +148,13 @@ static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessa
 		for (NSDictionary *messageJSON in messages) {
 			NSString *pendingMessageID = [messageJSON at_safeObjectForKey:@"nonce"];
 			NSString *messageID = [messageJSON at_safeObjectForKey:@"id"];
-			ATCompoundMessage *message = nil;
-			message = [ATCompoundMessage findMessageWithPendingID:pendingMessageID];
+			ApptentiveMessage *message = nil;
+			message = [ApptentiveMessage findMessageWithPendingID:pendingMessageID];
 			if (!message) {
-				message = [ATCompoundMessage findMessageWithID:messageID];
+				message = [ApptentiveMessage findMessageWithID:messageID];
 			}
 			if (!message) {
-				message = (ATCompoundMessage *)[ATCompoundMessage newInstanceWithJSON:messageJSON];
+				message = (ApptentiveMessage *)[ApptentiveMessage newInstanceWithJSON:messageJSON];
 				if (conversation && [conversation.personID isEqualToString:message.sender.apptentiveID]) {
 					message.sentByUser = @(YES);
 					message.seenByUser = @(YES);

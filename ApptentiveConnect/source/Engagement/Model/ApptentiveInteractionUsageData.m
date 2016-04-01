@@ -12,8 +12,8 @@
 #import "Apptentive_Private.h"
 #import "ApptentiveEngagementBackend.h"
 #import "ApptentiveUtilities.h"
-#import "ATDeviceInfo.h"
-#import "ATPersonInfo.h"
+#import "ApptentiveDeviceInfo.h"
+#import "ApptentivePersonInfo.h"
 
 
 @implementation ApptentiveInteractionUsageData
@@ -128,7 +128,7 @@
 	[predicateEvaluationDictionary addEntriesFromDictionary:self.interactionInvokesTimeAgo];
 
 	// Device
-	ATDeviceInfo *deviceInfo = [[ATDeviceInfo alloc] init];
+	ApptentiveDeviceInfo *deviceInfo = [[ApptentiveDeviceInfo alloc] init];
 	if (deviceInfo) {
 		NSDictionary *deviceData = deviceInfo.dictionaryRepresentation[@"device"];
 
@@ -165,7 +165,7 @@
 	}
 
 	// Person
-	ATPersonInfo *personInfo = [ATPersonInfo currentPerson];
+	ApptentivePersonInfo *personInfo = [ApptentivePersonInfo currentPerson];
 	if (personInfo) {
 		NSDictionary *personData = personInfo.dictionaryRepresentation[@"person"];
 

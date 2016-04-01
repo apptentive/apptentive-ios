@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 #import "ApptentiveAPIRequest.h"
-#import "ATPersonInfo.h"
+#import "ApptentivePersonInfo.h"
 
 extern NSString *const ATPersonLastUpdateValuePreferenceKey;
 

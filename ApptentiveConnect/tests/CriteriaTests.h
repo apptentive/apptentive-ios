@@ -8,11 +8,11 @@
 
 #import <XCTest/XCTest.h>
 
-@class ATInteractionInvocation;
+@class ApptentiveInteractionInvocation;
 
 
 @interface CriteriaTest : XCTestCase
 
-@property (strong, nonatomic) ATInteractionInvocation *interaction;
+@property (strong, nonatomic) ApptentiveInteractionInvocation *interaction;
 
 @end

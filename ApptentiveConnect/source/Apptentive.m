@@ -13,7 +13,7 @@
 #import "ApptentiveInteraction.h"
 #import "ApptentiveUtilities.h"
 #import "ApptentiveAppConfigurationUpdater.h"
-#import "ATMessageSender.h"
+#import "ApptentiveMessageSender.h"
 #import "ApptentiveWebClient.h"
 #if TARGET_OS_IPHONE
 #import "ApptentiveMessageCenterViewController.h"
@@ -109,19 +109,19 @@ NSString *const ApptentiveCustomDeviceDataChangedNotification = @"ApptentiveCust
 }
 
 - (NSString *)personName {
-	return [ATPersonInfo currentPerson].name;
+	return [ApptentivePersonInfo currentPerson].name;
 }
 
 - (void)setPersonName:(NSString *)personName {
-	[ATPersonInfo currentPerson].name = personName;
+	[ApptentivePersonInfo currentPerson].name = personName;
 }
 
 - (NSString *)personEmailAddress {
-	return [ATPersonInfo currentPerson].emailAddress;
+	return [ApptentivePersonInfo currentPerson].emailAddress;
 }
 
 - (void)setPersonEmailAddress:(NSString *)personEmailAddress {
-	[ATPersonInfo currentPerson].emailAddress = personEmailAddress;
+	[ApptentivePersonInfo currentPerson].emailAddress = personEmailAddress;
 }
 
 - (UIColor *)tintColor {
@@ -576,10 +576,10 @@ NSString *const ApptentiveCustomDeviceDataChangedNotification = @"ApptentiveCust
 
 #pragma mark - Message notification banner
 
-- (void)showNotificationBannerForMessage:(ATCompoundMessage *)message {
-	if (self.backend.notificationPopupsEnabled && [message isKindOfClass:[ATCompoundMessage class]]) {
+- (void)showNotificationBannerForMessage:(ApptentiveMessage *)message {
+	if (self.backend.notificationPopupsEnabled && [message isKindOfClass:[ApptentiveMessage class]]) {
 		// TODO: Display something if body is empty
-		ATCompoundMessage *textMessage = (ATCompoundMessage *)message;
+		ApptentiveMessage *textMessage = (ApptentiveMessage *)message;
 		NSURL *profilePhotoURL = textMessage.sender.profilePhotoURL ? [NSURL URLWithString:textMessage.sender.profilePhotoURL] : nil;
 
 		ApptentiveBannerViewController *banner = [ApptentiveBannerViewController bannerWithImageURL:profilePhotoURL title:textMessage.sender.name message:textMessage.body];

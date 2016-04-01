@@ -6,12 +6,12 @@
 //  Copyright (c) 2012 Apptentive, Inc. All rights reserved.
 //
 
-#import "ATTask.h"
+#import "ApptentiveTask.h"
 #import "ApptentiveAPIRequest.h"
-#import "ATCompoundMessage.h"
+#import "ApptentiveMessage.h"
 
 static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey;
 
 
-@interface ApptentiveGetMessagesTask : ATTask <ApptentiveAPIRequestDelegate>
+@interface ApptentiveGetMessagesTask : ApptentiveTask <ApptentiveAPIRequestDelegate>
 @end

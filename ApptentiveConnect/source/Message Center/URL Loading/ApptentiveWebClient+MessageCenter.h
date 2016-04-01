@@ -8,18 +8,18 @@
 
 #import "ApptentiveWebClient.h"
 
-#import "ATConversation.h"
-#import "ATDeviceInfo.h"
-#import "ATCompoundMessage.h"
-#import "ATPersonInfo.h"
+#import "ApptentiveConversation.h"
+#import "ApptentiveDeviceInfo.h"
+#import "ApptentiveMessage.h"
+#import "ApptentivePersonInfo.h"
 
 
 @interface ApptentiveWebClient (MessageCenter)
-- (ApptentiveAPIRequest *)requestForCreatingConversation:(ATConversation *)conversation;
-- (ApptentiveAPIRequest *)requestForUpdatingConversation:(ATConversation *)conversation;
+- (ApptentiveAPIRequest *)requestForCreatingConversation:(ApptentiveConversation *)conversation;
+- (ApptentiveAPIRequest *)requestForUpdatingConversation:(ApptentiveConversation *)conversation;
 
-- (ApptentiveAPIRequest *)requestForUpdatingDevice:(ATDeviceInfo *)deviceInfo;
-- (ApptentiveAPIRequest *)requestForUpdatingPerson:(ATPersonInfo *)personInfo;
-- (ApptentiveAPIRequest *)requestForPostingMessage:(ATCompoundMessage *)message;
-- (ApptentiveAPIRequest *)requestForRetrievingMessagesSinceMessage:(ATCompoundMessage *)message;
+- (ApptentiveAPIRequest *)requestForUpdatingDevice:(ApptentiveDeviceInfo *)deviceInfo;
+- (ApptentiveAPIRequest *)requestForUpdatingPerson:(ApptentivePersonInfo *)personInfo;
+- (ApptentiveAPIRequest *)requestForPostingMessage:(ApptentiveMessage *)message;
+- (ApptentiveAPIRequest *)requestForRetrievingMessagesSinceMessage:(ApptentiveMessage *)message;
 @end

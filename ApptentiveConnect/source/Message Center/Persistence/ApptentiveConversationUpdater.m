@@ -54,11 +54,11 @@ NSString *const ATConversationLastUpdateValuePreferenceKey = @"ATConversationLas
 - (void)createOrUpdateConversation {
 	[self cancel];
 
-	ATConversation *currentConversation = [ApptentiveConversationUpdater currentConversation];
+	ApptentiveConversation *currentConversation = [ApptentiveConversationUpdater currentConversation];
 	if (currentConversation == nil) {
 		ApptentiveLogInfo(@"Creating conversation");
 		creatingConversation = YES;
-		ATConversation *conversation = [[ATConversation alloc] init];
+		ApptentiveConversation *conversation = [[ApptentiveConversation alloc] init];
 		conversation.deviceID = [[Apptentive sharedConnection].backend deviceUUID];
 		request = [[Apptentive sharedConnection].webClient requestForCreatingConversation:conversation];
 		request.delegate = self;
@@ -89,7 +89,7 @@ NSString *const ATConversationLastUpdateValuePreferenceKey = @"ATConversationLas
 }
 
 + (BOOL)conversationExists {
-	ATConversation *currentFeed = [ApptentiveConversationUpdater currentConversation];
+	ApptentiveConversation *currentFeed = [ApptentiveConversationUpdater currentConversation];
 	if (currentFeed == nil) {
 		return NO;
 	} else {
@@ -97,13 +97,13 @@ NSString *const ATConversationLastUpdateValuePreferenceKey = @"ATConversationLas
 	}
 }
 
-+ (ATConversation *)currentConversation {
++ (ApptentiveConversation *)currentConversation {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	NSData *conversationData = [defaults dataForKey:ATCurrentConversationPreferenceKey];
 	if (!conversationData) {
 		return nil;
 	}
-	ATConversation *conversation = nil;
+	ApptentiveConversation *conversation = nil;
 	@try {
 		conversation = [NSKeyedUnarchiver unarchiveObjectWithData:conversationData];
 	} @catch (NSException *exception) {
@@ -124,7 +124,7 @@ NSString *const ATConversationLastUpdateValuePreferenceKey = @"ATConversationLas
 			break;
 		}
 		NSDictionary *lastValueDictionary = (NSDictionary *)lastValue;
-		ATConversation *conversation = [self currentConversation];
+		ApptentiveConversation *conversation = [self currentConversation];
 		if (!conversation) {
 			break;
 		}
@@ -173,7 +173,7 @@ NSString *const ATConversationLastUpdateValuePreferenceKey = @"ATConversationLas
 
 - (void)processResult:(NSDictionary *)jsonActivityFeed {
 	if (creatingConversation) {
-		ATConversation *conversation = (ATConversation *)[ATConversation newInstanceWithJSON:jsonActivityFeed];
+		ApptentiveConversation *conversation = (ApptentiveConversation *)[ApptentiveConversation newInstanceWithJSON:jsonActivityFeed];
 		if (conversation) {
 			NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 			NSData *conversationData = [NSKeyedArchiver archivedDataWithRootObject:conversation];
@@ -194,7 +194,7 @@ NSString *const ATConversationLastUpdateValuePreferenceKey = @"ATConversationLas
 		conversation = nil;
 	} else {
 		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-		ATConversation *conversation = [ApptentiveConversationUpdater currentConversation];
+		ApptentiveConversation *conversation = [ApptentiveConversationUpdater currentConversation];
 		[defaults setObject:[conversation apiUpdateJSON] forKey:ATConversationLastUpdateValuePreferenceKey];
 		[defaults setObject:[NSDate date] forKey:ATConversationLastUpdatePreferenceKey];
 		[self.delegate conversationUpdater:self updatedConversationSuccessfully:YES];

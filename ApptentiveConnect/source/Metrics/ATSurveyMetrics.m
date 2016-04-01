@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 Apptentive, Inc. All rights reserved.
 //
 
-#import "ATSurveyMetrics.h"
+#import "ApptentiveSurveyMetrics.h"
 
 NSString *const ATSurveyDidHideWindowNotification = @"ATSurveyDidHideWindowNotification";
 NSString *const ATSurveyDidAnswerQuestionNotification = @"ATSurveyDidAnswerQuestionNotification";

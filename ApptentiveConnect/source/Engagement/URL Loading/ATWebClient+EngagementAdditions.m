@@ -19,7 +19,7 @@
 	ApptentiveURLConnection *conn = [self connectionToGet:@"/interactions"];
 	conn.timeoutInterval = 20.0;
 
-	ATConversation *conversation = [ApptentiveConversationUpdater currentConversation];
+	ApptentiveConversation *conversation = [ApptentiveConversationUpdater currentConversation];
 	if (!conversation) {
 		ApptentiveLogError(@"No current conversation.");
 		return nil;

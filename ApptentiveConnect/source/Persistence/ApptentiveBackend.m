@@ -7,7 +7,7 @@
 //
 
 #import "ApptentiveBackend.h"
-#import "ATAppConfigurationUpdateTask.h"
+#import "ApptentiveAppConfigurationUpdateTask.h"
 #import "ApptentiveEngagementGetManifestTask.h"
 #import "Apptentive.h"
 #import "Apptentive_Private.h"
@@ -15,11 +15,11 @@
 #import "ApptentiveDeviceUpdater.h"
 #import "ApptentiveMetrics.h"
 #import "ApptentiveReachability.h"
-#import "ATTaskQueue.h"
+#import "ApptentiveTaskQueue.h"
 #import "ApptentiveUtilities.h"
 #import "ApptentiveWebClient.h"
 #import "ApptentiveGetMessagesTask.h"
-#import "ATMessageSender.h"
+#import "ApptentiveMessageSender.h"
 #import "ApptentiveMessageTask.h"
 #import "ApptentiveLog.h"
 #import "ApptentivePersonUpdater.h"
@@ -170,8 +170,8 @@ static NSURLCache *imageCache = nil;
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (ATCompoundMessage *)automatedMessageWithTitle:(NSString *)title body:(NSString *)body {
-	ATCompoundMessage *message = [ATCompoundMessage newInstanceWithBody:body attachments:nil];
+- (ApptentiveMessage *)automatedMessageWithTitle:(NSString *)title body:(NSString *)body {
+	ApptentiveMessage *message = [ApptentiveMessage newInstanceWithBody:body attachments:nil];
 	message.hidden = @NO;
 	message.title = title;
 	message.pendingState = @(ATPendingMessageStateComposing);
@@ -186,7 +186,7 @@ static NSURLCache *imageCache = nil;
 	return message;
 }
 
-- (BOOL)sendAutomatedMessage:(ATCompoundMessage *)message {
+- (BOOL)sendAutomatedMessage:(ApptentiveMessage *)message {
 	message.pendingState = @(ATPendingMessageStateSending);
 
 	return [self sendMessage:message];
@@ -200,8 +200,8 @@ static NSURLCache *imageCache = nil;
 	return [self sendTextMessage:[self createTextMessageWithBody:body hiddenOnClient:hidden]];
 }
 
-- (ATCompoundMessage *)createTextMessageWithBody:(NSString *)body hiddenOnClient:(BOOL)hidden {
-	ATCompoundMessage *message = [ATCompoundMessage newInstanceWithBody:body attachments:nil];
+- (ApptentiveMessage *)createTextMessageWithBody:(NSString *)body hiddenOnClient:(BOOL)hidden {
+	ApptentiveMessage *message = [ApptentiveMessage newInstanceWithBody:body attachments:nil];
 	message.sentByUser = @YES;
 	message.seenByUser = @YES;
 	message.hidden = @(hidden);
@@ -213,7 +213,7 @@ static NSURLCache *imageCache = nil;
 	return message;
 }
 
-- (BOOL)sendTextMessage:(ATCompoundMessage *)message {
+- (BOOL)sendTextMessage:(ApptentiveMessage *)message {
 	message.pendingState = @(ATPendingMessageStateSending);
 
 	[self updatePersonIfNeeded];
@@ -239,12 +239,12 @@ static NSURLCache *imageCache = nil;
 - (BOOL)sendFileMessageWithFileData:(NSData *)fileData andMimeType:(NSString *)mimeType hiddenOnClient:(BOOL)hidden {
 	[self updatePersonIfNeeded];
 
-	ATFileAttachment *fileAttachment = [ATFileAttachment newInstanceWithFileData:fileData MIMEType:mimeType name:nil];
+	ApptentiveFileAttachment *fileAttachment = [ApptentiveFileAttachment newInstanceWithFileData:fileData MIMEType:mimeType name:nil];
 	return [self sendCompoundMessageWithText:nil attachments:@[fileAttachment] hiddenOnClient:hidden];
 }
 
 - (BOOL)sendCompoundMessageWithText:(NSString *)text attachments:(NSArray *)attachments hiddenOnClient:(BOOL)hidden {
-	ATCompoundMessage *compoundMessage = [ATCompoundMessage newInstanceWithBody:text attachments:attachments];
+	ApptentiveMessage *compoundMessage = [ApptentiveMessage newInstanceWithBody:text attachments:attachments];
 	compoundMessage.pendingState = @(ATPendingMessageStateSending);
 	compoundMessage.sentByUser = @YES;
 	compoundMessage.hidden = @(hidden);
@@ -252,10 +252,10 @@ static NSURLCache *imageCache = nil;
 	return [self sendMessage:compoundMessage];
 }
 
-- (BOOL)sendMessage:(ATCompoundMessage *)message {
-	ATConversation *conversation = [ApptentiveConversationUpdater currentConversation];
+- (BOOL)sendMessage:(ApptentiveMessage *)message {
+	ApptentiveConversation *conversation = [ApptentiveConversationUpdater currentConversation];
 	if (conversation) {
-		ATMessageSender *sender = [ATMessageSender findSenderWithID:conversation.personID];
+		ApptentiveMessageSender *sender = [ApptentiveMessageSender findSenderWithID:conversation.personID];
 		if (sender) {
 			message.sender = sender;
 		}
@@ -279,8 +279,8 @@ static NSURLCache *imageCache = nil;
 	}
 
 	dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
-		[[ATTaskQueue sharedTaskQueue] addTask:task];
-		[[ATTaskQueue sharedTaskQueue] start];
+		[[ApptentiveTaskQueue sharedTaskQueue] addTask:task];
+		[[ApptentiveTaskQueue sharedTaskQueue] start];
 
 		if ([ApptentiveReachability sharedReachability].currentNetworkStatus == ApptentiveNetworkNotReachable) {
 			message.pendingState = @(ATPendingMessageStateError);
@@ -493,7 +493,7 @@ static NSURLCache *imageCache = nil;
 	return didShowMessageCenter;
 }
 
-- (void)attachCustomDataToMessage:(ATCompoundMessage *)message {
+- (void)attachCustomDataToMessage:(ApptentiveMessage *)message {
 	if (self.currentCustomData) {
 		[message addCustomDataFromDictionary:self.currentCustomData];
 		// Only attach custom data to the first message.
@@ -531,14 +531,14 @@ static NSURLCache *imageCache = nil;
 	if (_working != working) {
 		_working = working;
 		if (_working) {
-			[[ATTaskQueue sharedTaskQueue] start];
+			[[ApptentiveTaskQueue sharedTaskQueue] start];
 
 			[self updateConversationIfNeeded];
 			[self updateConfigurationIfNeeded];
 			[self updateEngagementManifestIfNeeded];
 		} else {
-			[[ATTaskQueue sharedTaskQueue] stop];
-			[ATTaskQueue releaseSharedTaskQueue];
+			[[ApptentiveTaskQueue sharedTaskQueue] stop];
+			[ApptentiveTaskQueue releaseSharedTaskQueue];
 		}
 	}
 }
@@ -619,9 +619,9 @@ static NSURLCache *imageCache = nil;
 		return;
 	}
 
-	ATTaskQueue *queue = [ATTaskQueue sharedTaskQueue];
-	if (![queue hasTaskOfClass:[ATAppConfigurationUpdateTask class]]) {
-		ATAppConfigurationUpdateTask *task = [[ATAppConfigurationUpdateTask alloc] init];
+	ApptentiveTaskQueue *queue = [ApptentiveTaskQueue sharedTaskQueue];
+	if (![queue hasTaskOfClass:[ApptentiveAppConfigurationUpdateTask class]]) {
+		ApptentiveAppConfigurationUpdateTask *task = [[ApptentiveAppConfigurationUpdateTask alloc] init];
 		[queue addTask:task];
 		task = nil;
 	}
@@ -632,7 +632,7 @@ static NSURLCache *imageCache = nil;
 		return;
 	}
 
-	if (![[ATTaskQueue sharedTaskQueue] hasTaskOfClass:[ApptentiveEngagementGetManifestTask class]]) {
+	if (![[ApptentiveTaskQueue sharedTaskQueue] hasTaskOfClass:[ApptentiveEngagementGetManifestTask class]]) {
 		[[Apptentive sharedConnection].engagementBackend checkForEngagementManifest];
 	}
 }
@@ -645,7 +645,7 @@ static NSURLCache *imageCache = nil;
 		NSUInteger unreadCount = [sectionInfo numberOfObjects];
 		if (unreadCount != self.previousUnreadCount) {
 			if (unreadCount > self.previousUnreadCount && !self.messageCenterInForeground) {
-				ATCompoundMessage *message = sectionInfo.objects.firstObject;
+				ApptentiveMessage *message = sectionInfo.objects.firstObject;
 				[[Apptentive sharedConnection] showNotificationBannerForMessage:message];
 			}
 			self.previousUnreadCount = unreadCount;
@@ -664,7 +664,7 @@ static NSURLCache *imageCache = nil;
 			[self performSelector:@selector(updateConversationIfNeeded) withObject:nil afterDelay:20];
 		} else {
 			// Queued tasks can probably start now.
-			ATTaskQueue *queue = [ATTaskQueue sharedTaskQueue];
+			ApptentiveTaskQueue *queue = [ApptentiveTaskQueue sharedTaskQueue];
 			[queue start];
 			[self updateConfigurationIfNeeded];
 			[self updateDeviceIfNeeded];
@@ -693,7 +693,7 @@ static NSURLCache *imageCache = nil;
 		self.personUpdater = nil;
 		// Give task queue a bump if necessary.
 		if (success && [self isReady] && !self.shouldStopWorking) {
-			ATTaskQueue *queue = [ATTaskQueue sharedTaskQueue];
+			ApptentiveTaskQueue *queue = [ApptentiveTaskQueue sharedTaskQueue];
 			[queue start];
 		}
 	}
@@ -794,7 +794,7 @@ static NSURLCache *imageCache = nil;
 			if (![self isReady] || self.shouldStopWorking) {
 				return;
 			}
-			ATTaskQueue *queue = [ATTaskQueue sharedTaskQueue];
+			ApptentiveTaskQueue *queue = [ApptentiveTaskQueue sharedTaskQueue];
 			if (![queue hasTaskOfClass:[ApptentiveGetMessagesTask class]]) {
 				ApptentiveGetMessagesTask *task = [[ApptentiveGetMessagesTask alloc] init];
 				[queue addTask:task];
@@ -809,7 +809,7 @@ static NSURLCache *imageCache = nil;
 
 	@autoreleasepool {
 		@synchronized(self) {
-			ATTaskQueue *queue = [ATTaskQueue sharedTaskQueue];
+			ApptentiveTaskQueue *queue = [ApptentiveTaskQueue sharedTaskQueue];
 			if (![queue hasTaskOfClass:[ApptentiveGetMessagesTask class]]) {
 				ApptentiveGetMessagesTask *task = [[ApptentiveGetMessagesTask alloc] init];
 				[queue addTask:task];
@@ -932,7 +932,7 @@ static NSURLCache *imageCache = nil;
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceDataChanged:) name:ApptentiveCustomDeviceDataChangedNotification object:nil];
 
 	// Append extensions to attachments that are missing them
-	[ATFileAttachment addMissingExtensions];
+	[ApptentiveFileAttachment addMissingExtensions];
 }
 
 - (void)continueStartupWithDataManagerFailure {

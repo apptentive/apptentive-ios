@@ -102,7 +102,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 @property (weak, nonatomic) UIView *activeFooterView;
 
-@property (strong, nonatomic) ATCompoundMessage *contextMessage;
+@property (strong, nonatomic) ApptentiveMessage *contextMessage;
 
 @property (assign, nonatomic) BOOL isSubsequentDisplay;
 

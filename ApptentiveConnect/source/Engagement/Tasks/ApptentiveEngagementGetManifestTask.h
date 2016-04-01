@@ -6,9 +6,9 @@
 //  Copyright (c) 2013 Apptentive, Inc. All rights reserved.
 //
 
-#import "ATTask.h"
+#import "ApptentiveTask.h"
 #import "ApptentiveAPIRequest.h"
 
 
-@interface ApptentiveEngagementGetManifestTask : ATTask <ApptentiveAPIRequestDelegate>
+@interface ApptentiveEngagementGetManifestTask : ApptentiveTask <ApptentiveAPIRequestDelegate>
 @end

@@ -8,8 +8,8 @@
 
 #import <XCTest/XCTest.h>
 #import "Apptentive.h"
-#import "ATPersonInfo.h"
-#import "ATDeviceInfo.h"
+#import "ApptentivePersonInfo.h"
+#import "ApptentiveDeviceInfo.h"
 #import "ApptentiveUtilities.h"
 
 
@@ -20,7 +20,7 @@
 @implementation ApptentiveConnectTests
 
 - (void)testCustomPersonData {
-	ATPersonInfo *person = [[ATPersonInfo alloc] init];
+	ApptentivePersonInfo *person = [[ApptentivePersonInfo alloc] init];
 	XCTAssertTrue([[person apiJSON] objectForKey:@"person"] != nil, @"A person should always have a base apiJSON key of 'person'");
 
 	// Add standard types of data
@@ -61,7 +61,7 @@
 }
 
 - (void)testCustomDeviceData {
-	ATDeviceInfo *device = [[ATDeviceInfo alloc] init];
+	ApptentiveDeviceInfo *device = [[ApptentiveDeviceInfo alloc] init];
 	XCTAssertTrue([[device dictionaryRepresentation] objectForKey:@"device"] != nil, @"A device should always have a base apiJSON key of 'device'");
 
 	// Add custom device data

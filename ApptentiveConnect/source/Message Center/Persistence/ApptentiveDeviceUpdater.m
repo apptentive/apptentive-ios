@@ -41,7 +41,7 @@ NSString *const ATDeviceLastUpdateValuePreferenceKey = @"ATDeviceLastUpdateValue
 + (BOOL)shouldUpdate {
 	[ApptentiveDeviceUpdater registerDefaults];
 
-	ATDeviceInfo *deviceInfo = [[ATDeviceInfo alloc] init];
+	ApptentiveDeviceInfo *deviceInfo = [[ApptentiveDeviceInfo alloc] init];
 	NSDictionary *deviceDictionary = [deviceInfo.apiJSON valueForKey:@"device"];
 
 	return deviceDictionary.count > 0;
@@ -65,7 +65,7 @@ NSString *const ATDeviceLastUpdateValuePreferenceKey = @"ATDeviceLastUpdateValue
 
 - (void)update {
 	[self cancel];
-	ATDeviceInfo *deviceInfo = [[ATDeviceInfo alloc] init];
+	ApptentiveDeviceInfo *deviceInfo = [[ApptentiveDeviceInfo alloc] init];
 	self.sentDeviceJSON = deviceInfo.dictionaryRepresentation;
 	self.request = [[Apptentive sharedConnection].webClient requestForUpdatingDevice:deviceInfo];
 	self.request.delegate = self;

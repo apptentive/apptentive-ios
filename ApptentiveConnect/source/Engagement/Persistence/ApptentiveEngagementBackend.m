@@ -9,7 +9,7 @@
 #import "ApptentiveEngagementBackend.h"
 #import "ApptentiveBackend.h"
 #import "ApptentiveEngagementGetManifestTask.h"
-#import "ATTaskQueue.h"
+#import "ApptentiveTaskQueue.h"
 #import "ApptentiveInteraction.h"
 #import "ApptentiveInteractionInvocation.h"
 #import "Apptentive_Private.h"
@@ -132,7 +132,7 @@ NSString *const ATEngagementMessageCenterEvent = @"show_message_center";
 - (void)checkForEngagementManifest {
 	if ([self shouldRetrieveNewEngagementManifest]) {
 		ApptentiveEngagementGetManifestTask *task = [[ApptentiveEngagementGetManifestTask alloc] init];
-		[[ATTaskQueue sharedTaskQueue] addTask:task];
+		[[ApptentiveTaskQueue sharedTaskQueue] addTask:task];
 		task = nil;
 	}
 }

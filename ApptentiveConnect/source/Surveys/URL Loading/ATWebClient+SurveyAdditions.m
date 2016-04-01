@@ -18,7 +18,7 @@
 @implementation ApptentiveWebClient (SurveyAdditions)
 
 - (ApptentiveAPIRequest *)requestForPostingSurveyResponse:(ApptentiveSurveyResponse *)surveyResponse {
-	ATConversation *conversation = [ApptentiveConversationUpdater currentConversation];
+	ApptentiveConversation *conversation = [ApptentiveConversationUpdater currentConversation];
 	if (!conversation) {
 		ApptentiveLogError(@"No current conversation.");
 		return nil;

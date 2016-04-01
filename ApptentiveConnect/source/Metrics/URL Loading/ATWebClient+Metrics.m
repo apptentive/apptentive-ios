@@ -6,19 +6,19 @@
 //  Copyright (c) 2012 Apptentive. All rights reserved.
 //
 
-#import "ATWebClient+Metrics.h"
+#import "ApptentiveWebClient+Metrics.h"
 #import "ApptentiveWebClient_Private.h"
 #import "ApptentiveAPIRequest.h"
 #import "ApptentiveBackend.h"
 #import "Apptentive.h"
-#import "ATEvent.h"
-#import "ATMetric.h"
+#import "ApptentiveEvent.h"
+#import "ApptentiveMetric.h"
 #import "ApptentiveJSONSerialization.h"
 #import "ApptentiveURLConnection.h"
 
 
 @implementation ApptentiveWebClient (Metrics)
-- (ApptentiveAPIRequest *)requestForSendingMetric:(ATMetric *)metric {
+- (ApptentiveAPIRequest *)requestForSendingMetric:(ApptentiveMetric *)metric {
 	NSDictionary *postData = [metric apiDictionary];
 
 	ApptentiveURLConnection *conn = [self connectionToPost:@"/records" parameters:postData];
@@ -28,7 +28,7 @@
 	return request;
 }
 
-- (ApptentiveAPIRequest *)requestForSendingEvent:(ATEvent *)event {
+- (ApptentiveAPIRequest *)requestForSendingEvent:(ApptentiveEvent *)event {
 	NSDictionary *postJSON = [event apiJSON];
 	if (postJSON == nil) {
 		return nil;
@@ -40,7 +40,7 @@
 		ApptentiveLogError(@"Error while encoding JSON: %@", error);
 		return nil;
 	}
-	ATConversation *conversation = [ApptentiveConversationUpdater currentConversation];
+	ApptentiveConversation *conversation = [ApptentiveConversationUpdater currentConversation];
 	if (!conversation) {
 		ApptentiveLogError(@"No current conversation.");
 		return nil;

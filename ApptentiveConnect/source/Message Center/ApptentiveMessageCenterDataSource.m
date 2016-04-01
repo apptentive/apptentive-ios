@@ -11,8 +11,8 @@
 #import "ApptentiveBackend.h"
 #import "Apptentive.h"
 #import "Apptentive_Private.h"
-#import "ATData.h"
-#import "ATMessageSender.h"
+#import "ApptentiveData.h"
+#import "ApptentiveMessageSender.h"
 #import "ApptentiveAttachmentCell.h"
 
 NSString *const ATMessageCenterServerErrorDomain = @"com.apptentive.MessageCenterServerError";
@@ -22,7 +22,7 @@ NSString *const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenter
 @interface ApptentiveMessageCenterDataSource () <NSFetchedResultsControllerDelegate>
 
 @property (readwrite, strong, nonatomic) NSFetchedResultsController *fetchedMessagesController;
-@property (readonly, nonatomic) ATCompoundMessage *lastUserMessage;
+@property (readonly, nonatomic) ApptentiveMessage *lastUserMessage;
 @property (readonly, nonatomic) NSURLSession *attachmentDownloadSession;
 @property (readonly, nonatomic) NSMutableDictionary<NSValue *, NSIndexPath *> *taskIndexPaths;
 
@@ -79,7 +79,7 @@ NSString *const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenter
 
 - (void)start {
 	[[Apptentive sharedConnection].backend messageCenterEnteredForeground];
-	[ATCompoundMessage clearComposingMessages];
+	[ApptentiveMessage clearComposingMessages];
 
 	NSError *error = nil;
 	if (![self.fetchedMessagesController performFetch:&error]) {
@@ -116,7 +116,7 @@ NSString *const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenter
 }
 
 - (ATMessageCenterMessageType)cellTypeAtIndexPath:(NSIndexPath *)indexPath {
-	ATCompoundMessage *message = [self messageAtIndexPath:indexPath];
+	ApptentiveMessage *message = [self messageAtIndexPath:indexPath];
 
 	if (message.automated.boolValue) {
 		return ATMessageCenterMessageTypeContextMessage;
@@ -141,7 +141,7 @@ NSString *const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenter
 
 - (NSDate *)dateOfMessageGroupAtIndex:(NSInteger)index {
 	if ([self numberOfMessagesInGroup:index] > 0) {
-		ATCompoundMessage *message = [self messageAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:index]];
+		ApptentiveMessage *message = [self messageAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:index]];
 
 		return [NSDate dateWithTimeIntervalSince1970:[message.creationTimeForSections doubleValue]];
 	} else {
@@ -150,7 +150,7 @@ NSString *const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenter
 }
 
 - (ATMessageCenterMessageStatus)statusOfMessageAtIndexPath:(NSIndexPath *)indexPath {
-	ATCompoundMessage *message = [self messageAtIndexPath:indexPath];
+	ApptentiveMessage *message = [self messageAtIndexPath:indexPath];
 
 	if (message.sentByUser.boolValue) {
 		ATPendingMessageState messageState = message.pendingState.integerValue;
@@ -179,12 +179,12 @@ NSString *const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenter
 }
 
 - (NSString *)senderOfMessageAtIndexPath:(NSIndexPath *)indexPath {
-	ATCompoundMessage *message = [self messageAtIndexPath:indexPath];
+	ApptentiveMessage *message = [self messageAtIndexPath:indexPath];
 	return message.sender.name;
 }
 
 - (NSURL *)imageURLOfSenderAtIndexPath:(NSIndexPath *)indexPath {
-	ATCompoundMessage *message = [self messageAtIndexPath:indexPath];
+	ApptentiveMessage *message = [self messageAtIndexPath:indexPath];
 	if (message.sender.profilePhotoURL.length) {
 		return [NSURL URLWithString:message.sender.profilePhotoURL];
 	} else {
@@ -193,14 +193,14 @@ NSString *const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenter
 }
 
 - (void)markAsReadMessageAtIndexPath:(NSIndexPath *)indexPath {
-	ATCompoundMessage *message = [self messageAtIndexPath:indexPath];
+	ApptentiveMessage *message = [self messageAtIndexPath:indexPath];
 
 	[message markAsRead];
 }
 
 - (BOOL)lastMessageIsReply {
 	id<NSFetchedResultsSectionInfo> section = self.fetchedMessagesController.sections.lastObject;
-	ATCompoundMessage *lastMessage = section.objects.lastObject;
+	ApptentiveMessage *lastMessage = section.objects.lastObject;
 
 	return lastMessage.sentByUser.boolValue == NO;
 }
@@ -220,19 +220,19 @@ NSString *const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenter
 }
 
 - (BOOL)shouldUsePlaceholderForAttachmentAtIndexPath:(NSIndexPath *)indexPath {
-	ATFileAttachment *attachment = [self fileAttachmentAtIndexPath:indexPath];
+	ApptentiveFileAttachment *attachment = [self fileAttachmentAtIndexPath:indexPath];
 
 	return attachment.localPath == nil || !attachment.canCreateThumbnail;
 }
 
 - (BOOL)canPreviewAttachmentAtIndexPath:(NSIndexPath *)indexPath {
-	ATFileAttachment *attachment = [self fileAttachmentAtIndexPath:indexPath];
+	ApptentiveFileAttachment *attachment = [self fileAttachmentAtIndexPath:indexPath];
 
 	return attachment.localPath != nil;
 }
 
 - (UIImage *)imageForAttachmentAtIndexPath:(NSIndexPath *)indexPath size:(CGSize)size {
-	ATFileAttachment *attachment = [self fileAttachmentAtIndexPath:indexPath];
+	ApptentiveFileAttachment *attachment = [self fileAttachmentAtIndexPath:indexPath];
 
 	if (attachment.localPath) {
 		UIImage *thumbnail = [attachment thumbnailOfSize:size];
@@ -248,7 +248,7 @@ NSString *const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenter
 }
 
 - (NSString *)extensionForAttachmentAtIndexPath:(NSIndexPath *)indexPath {
-	ATFileAttachment *attachment = [self fileAttachmentAtIndexPath:indexPath];
+	ApptentiveFileAttachment *attachment = [self fileAttachmentAtIndexPath:indexPath];
 
 	return attachment.extension;
 }
@@ -258,7 +258,7 @@ NSString *const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenter
 		return;
 	}
 
-	ATFileAttachment *attachment = [self fileAttachmentAtIndexPath:indexPath];
+	ApptentiveFileAttachment *attachment = [self fileAttachmentAtIndexPath:indexPath];
 	if (attachment.localPath != nil || !attachment.remoteURL) {
 		ApptentiveLogError(@"Attempting to download attachment with missing or invalid remote URL");
 		return;
@@ -322,7 +322,7 @@ NSString *const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenter
 	NSIndexPath *attachmentIndexPath = [self indexPathForTask:downloadTask];
 	[self removeTask:downloadTask];
 
-	ATFileAttachment *attachment = [self fileAttachmentAtIndexPath:attachmentIndexPath];
+	ApptentiveFileAttachment *attachment = [self fileAttachmentAtIndexPath:attachmentIndexPath];
 	// -beginMoveToStorageFrom: must be called on this (background) thread.
 	NSURL *finalLocation = [attachment beginMoveToStorageFrom:location];
 
@@ -357,7 +357,7 @@ NSString *const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenter
 - (void)removeUnsentContextMessages {
 	@synchronized(self) {
 		NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"(pendingState == %d)", ATPendingMessageStateComposing];
-		[ATData removeEntitiesNamed:@"ATMessage" withPredicate:fetchPredicate];
+		[ApptentiveData removeEntitiesNamed:@"ATMessage" withPredicate:fetchPredicate];
 	}
 }
 
@@ -376,18 +376,18 @@ NSString *const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenter
 }
 
 // indexPath.section refers to the message index (table view section), indexPath.row refers to the attachment index.
-- (ATFileAttachment *)fileAttachmentAtIndexPath:(NSIndexPath *)indexPath {
-	ATCompoundMessage *message = [self messageAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:indexPath.section]];
+- (ApptentiveFileAttachment *)fileAttachmentAtIndexPath:(NSIndexPath *)indexPath {
+	ApptentiveMessage *message = [self messageAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:indexPath.section]];
 	return [message.attachments objectAtIndex:indexPath.row];
 }
 
-- (ATCompoundMessage *)messageAtIndexPath:(NSIndexPath *)indexPath {
+- (ApptentiveMessage *)messageAtIndexPath:(NSIndexPath *)indexPath {
 	return [self.fetchedMessagesController objectAtIndexPath:indexPath];
 }
 
-- (ATCompoundMessage *)lastUserMessage {
+- (ApptentiveMessage *)lastUserMessage {
 	for (id<NSFetchedResultsSectionInfo> section in self.fetchedMessagesController.sections.reverseObjectEnumerator) {
-		for (ATCompoundMessage *message in section.objects.reverseObjectEnumerator) {
+		for (ApptentiveMessage *message in section.objects.reverseObjectEnumerator) {
 			if (message.sentByUser) {
 				return message;
 			}

@@ -7,7 +7,7 @@
 //
 
 #import "ApptentiveSurveyResponse.h"
-#import "ATData.h"
+#import "ApptentiveData.h"
 
 
 @implementation ApptentiveSurveyResponse
@@ -26,7 +26,7 @@
 
 	@synchronized(self) {
 		NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"(pendingSurveyResponseID == %@)", pendingID];
-		NSArray *results = [ATData findEntityNamed:@"ApptentiveSurveyResponse" withPredicate:fetchPredicate];
+		NSArray *results = [ApptentiveData findEntityNamed:@"ApptentiveSurveyResponse" withPredicate:fetchPredicate];
 		if (results && [results count] != 0) {
 			result = [results objectAtIndex:0];
 		}

@@ -10,8 +10,8 @@
 
 #import "ApptentiveAPIRequest.h"
 #import "ApptentiveBackend.h"
-#import "ATCompoundMessage.h"
-#import "ATFileAttachment.h"
+#import "ApptentiveMessage.h"
+#import "ApptentiveFileAttachment.h"
 #import "ApptentiveJSONSerialization.h"
 #import "ApptentiveURLConnection.h"
 #import "ApptentiveWebClient_Private.h"
@@ -20,7 +20,7 @@
 
 
 @implementation ApptentiveWebClient (MessageCenter)
-- (ApptentiveAPIRequest *)requestForCreatingConversation:(ATConversation *)conversation {
+- (ApptentiveAPIRequest *)requestForCreatingConversation:(ApptentiveConversation *)conversation {
 	NSError *error = nil;
 	NSDictionary *postJSON = nil;
 	if (conversation == nil) {
@@ -41,7 +41,7 @@
 	return request;
 }
 
-- (ApptentiveAPIRequest *)requestForUpdatingConversation:(ATConversation *)conversation {
+- (ApptentiveAPIRequest *)requestForUpdatingConversation:(ApptentiveConversation *)conversation {
 	NSError *error = nil;
 	NSDictionary *putJSON = nil;
 	if (conversation == nil) {
@@ -62,7 +62,7 @@
 	return request;
 }
 
-- (ApptentiveAPIRequest *)requestForUpdatingDevice:(ATDeviceInfo *)deviceInfo {
+- (ApptentiveAPIRequest *)requestForUpdatingDevice:(ApptentiveDeviceInfo *)deviceInfo {
 	NSError *error = nil;
 	NSDictionary *postJSON = [deviceInfo apiJSON];
 
@@ -72,7 +72,7 @@
 		return nil;
 	}
 
-	ATConversation *conversation = [ApptentiveConversationUpdater currentConversation];
+	ApptentiveConversation *conversation = [ApptentiveConversationUpdater currentConversation];
 	if (!conversation) {
 		ApptentiveLogError(@"No current conversation.");
 		return nil;
@@ -86,7 +86,7 @@
 	return request;
 }
 
-- (ApptentiveAPIRequest *)requestForUpdatingPerson:(ATPersonInfo *)personInfo {
+- (ApptentiveAPIRequest *)requestForUpdatingPerson:(ApptentivePersonInfo *)personInfo {
 	NSError *error = nil;
 	NSDictionary *postJSON = [personInfo apiJSON];
 
@@ -96,7 +96,7 @@
 		return nil;
 	}
 
-	ATConversation *conversation = [ApptentiveConversationUpdater currentConversation];
+	ApptentiveConversation *conversation = [ApptentiveConversationUpdater currentConversation];
 	if (!conversation) {
 		ApptentiveLogError(@"No current conversation.");
 		return nil;
@@ -110,7 +110,7 @@
 	return request;
 }
 
-- (ApptentiveAPIRequest *)requestForPostingMessage:(ATCompoundMessage *)message {
+- (ApptentiveAPIRequest *)requestForPostingMessage:(ApptentiveMessage *)message {
 	NSError *error = nil;
 	NSDictionary *postJSON = [message apiJSON];
 
@@ -120,7 +120,7 @@
 		return nil;
 	}
 
-	ATConversation *conversation = [ApptentiveConversationUpdater currentConversation];
+	ApptentiveConversation *conversation = [ApptentiveConversationUpdater currentConversation];
 	if (!conversation) {
 		ApptentiveLogError(@"No current conversation");
 		return nil;
@@ -134,13 +134,13 @@
 	return request;
 }
 
-- (ApptentiveAPIRequest *)requestForRetrievingMessagesSinceMessage:(ATCompoundMessage *)message {
+- (ApptentiveAPIRequest *)requestForRetrievingMessagesSinceMessage:(ApptentiveMessage *)message {
 	NSDictionary *parameters = nil;
 	if (message && message.apptentiveID) {
 		parameters = @{ @"after_id": message.apptentiveID };
 	}
 
-	ATConversation *conversation = [ApptentiveConversationUpdater currentConversation];
+	ApptentiveConversation *conversation = [ApptentiveConversationUpdater currentConversation];
 	if (!conversation) {
 		ApptentiveLogError(@"No current conversation.");
 		return nil;

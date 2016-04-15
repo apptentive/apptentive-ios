@@ -99,7 +99,6 @@ static ApptentiveHUDViewController *currentHUD;
 	[UIView animateWithDuration:self.animationDuration animations:^{
 		self.HUDView.alpha = 0;
 	} completion:^(BOOL finished) {
-		[self.hostWindow resignKeyWindow];
 		self.hostWindow.hidden = YES;
 		self.hostWindow = nil;
 	}];

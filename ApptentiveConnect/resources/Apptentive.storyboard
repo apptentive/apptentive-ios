@@ -1519,7 +1519,7 @@ Lines</string>
                         <barButtonItem title="Missing Required Question" id="j9x-29-teK"/>
                     </toolbarItems>
                     <navigationItem key="navigationItem" id="gUI-yC-CSN">
-                        <barButtonItem key="rightBarButtonItem" title="Close" id="vZt-Yq-ief">
+                        <barButtonItem key="leftBarButtonItem" title="Close" id="vZt-Yq-ief">
                             <connections>
                                 <action selector="close:" destination="0Su-Sq-q29" id="p4s-SX-doe"/>
                             </connections>

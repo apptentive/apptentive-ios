@@ -20,6 +20,8 @@
 
 - (void)awakeFromNib {
 	self.borderViewHeight.constant = 1.0 / [UIScreen mainScreen].scale;
+
+	self.greetingLabel.numberOfLines = 0;
 }
 
 @end

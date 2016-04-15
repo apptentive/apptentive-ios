@@ -20,6 +20,9 @@
 
 - (void)awakeFromNib {
 	self.separatorViewHeight.constant = 1.0 / [UIScreen mainScreen].scale;
+
+	self.textLabel.numberOfLines = 0;
+	self.instructionsTextLabel.numberOfLines = 0;
 }
 
 @end

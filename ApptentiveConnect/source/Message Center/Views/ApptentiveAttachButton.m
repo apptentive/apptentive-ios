@@ -1,5 +1,5 @@
 //
-//  ATAttachButton.m
+//  ApptentiveAttachButton.m
 //  ApptentiveConnect
 //
 //  Created by Frank Schmitt on 10/9/15.

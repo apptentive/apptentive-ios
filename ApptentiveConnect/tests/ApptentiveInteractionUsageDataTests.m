@@ -1,5 +1,5 @@
 //
-//  ATInteractionUsageDataTests.m
+//  ApptentiveInteractionUsageDataTests.m
 //  ApptentiveConnect
 //
 //  Created by Andrew Wooster on 11/15/15.

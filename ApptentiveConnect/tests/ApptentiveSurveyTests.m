@@ -1,5 +1,5 @@
 //
-//  ATSurveyTests.m
+//  ApptentiveSurveyTests.m
 //  ApptentiveConnect
 //
 //  Created by Frank Schmitt on 3/3/16.

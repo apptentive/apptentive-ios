@@ -1,5 +1,5 @@
 //
-//  ATJSONSerialization.m
+//  ApptentiveJSONSerialization.m
 //  ApptentiveConnect
 //
 //  Created by Andrew Wooster on 6/22/13.

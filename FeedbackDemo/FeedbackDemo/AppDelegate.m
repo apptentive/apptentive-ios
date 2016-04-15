@@ -26,7 +26,7 @@
 #warning Please set your API key and app ID before running.
 	// To find your API key, log into http://be.apptentive.com/,
 	// select your app, click Settings, and click API & Development.
-	[Apptentive sharedConnection].apiKey = @"edbf34735084c94fe345baaa93a408c655132984bde1a8fe75ddd15b79b771a3";
+	[Apptentive sharedConnection].APIKey = @"ApptentiveApiKey";
 
 	// To find your app ID, log into http://itunesconnect.apple.com/,
 	// click My Apps, select an app, and look for its Apple ID.
@@ -47,7 +47,7 @@
 
 	NSString *testFlightAPIKey = plist[@"ATTestFlightAPIKey"];
 	if (testFlightAPIKey) {
-		[Apptentive sharedConnection].apiKey = testFlightAPIKey;
+		[Apptentive sharedConnection].APIKey = testFlightAPIKey;
 
 		[self registerForRemoteNotifications];
 	}
@@ -61,7 +61,7 @@
 }
 
 - (void)showAPIKeyWarning {
-	if ([[Apptentive sharedConnection].apiKey isEqualToString:@"ApptentiveApiKey"]) {
+	if ([[Apptentive sharedConnection].APIKey isEqualToString:@"ApptentiveApiKey"]) {
 		NSLog(@"---");
 		NSLog(@"---");
 		NSLog(@"Please set Apptentive API Key! This demo app will not work properly until you set your API key in AppDelegate.m");
@@ -96,7 +96,7 @@
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
 	// Enable Push Notifications for New Messages
-	[[Apptentive sharedConnection] setPushNotificationIntegration:ATPushProviderApptentive withDeviceToken:deviceToken];
+	[[Apptentive sharedConnection] setPushNotificationIntegration:ApptentivePushProviderApptentive withDeviceToken:deviceToken];
 }
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {

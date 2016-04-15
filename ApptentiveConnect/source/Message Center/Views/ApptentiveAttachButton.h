@@ -1,5 +1,5 @@
 //
-//  ATAttachButton.h
+//  ApptentiveAttachButton.h
 //  ApptentiveConnect
 //
 //  Created by Frank Schmitt on 10/9/15.

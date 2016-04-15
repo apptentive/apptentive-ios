@@ -1,5 +1,5 @@
 //
-//  ATAppConfigurationUpdateTask.m
+//  ApptentiveAppConfigurationUpdateTask.m
 //  ApptentiveConnect
 //
 //  Created by Andrew Wooster on 7/20/12.

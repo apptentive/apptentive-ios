@@ -1,5 +1,5 @@
 //
-//  ATInteractionEnjoymentDialogController.m
+//  ApptentiveInteractionEnjoymentDialogController.m
 //  ApptentiveConnect
 //
 //  Created by Peter Kamb on 7/15/15.
@@ -33,7 +33,7 @@ NSString *const ATInteractionEnjoymentDialogEventLabelNo = @"no";
 }
 
 - (NSString *)title {
-	NSString *title = self.interaction.configuration[@"title"] ?: [NSString stringWithFormat:ATLocalizedString(@"Do you love %@?", @"Title for enjoyment alert view. Parameter is app name."), [[Apptentive sharedConnection].backend appName]];
+	NSString *title = self.interaction.configuration[@"title"] ?: [NSString stringWithFormat:ApptentiveLocalizedString(@"Do you love %@?", @"Title for enjoyment alert view. Parameter is app name."), [[Apptentive sharedConnection].backend appName]];
 
 	return title;
 }
@@ -45,13 +45,13 @@ NSString *const ATInteractionEnjoymentDialogEventLabelNo = @"no";
 }
 
 - (NSString *)yesText {
-	NSString *yesText = self.interaction.configuration[@"yes_text"] ?: ATLocalizedString(@"Yes", @"yes");
+	NSString *yesText = self.interaction.configuration[@"yes_text"] ?: ApptentiveLocalizedString(@"Yes", @"yes");
 
 	return yesText;
 }
 
 - (NSString *)noText {
-	NSString *noText = self.interaction.configuration[@"no_text"] ?: ATLocalizedString(@"No", @"no");
+	NSString *noText = self.interaction.configuration[@"no_text"] ?: ApptentiveLocalizedString(@"No", @"no");
 
 	return noText;
 }

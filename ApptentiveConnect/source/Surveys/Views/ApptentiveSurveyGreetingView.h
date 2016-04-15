@@ -1,5 +1,5 @@
 //
-//  ATSurveyGreetingView.h
+//  ApptentiveSurveyGreetingView.h
 //  ApptentiveConnect
 //
 //  Created by Frank Schmitt on 3/1/16.

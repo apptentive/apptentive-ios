@@ -1,5 +1,5 @@
 //
-//  ATRecordRequestTask.h
+//  ApptentiveRecordRequestTask.h
 //  ApptentiveConnect
 //
 //  Created by Andrew Wooster on 3/10/13.
@@ -14,17 +14,10 @@ typedef enum {
 	ATRecordRequestTaskFinishedResult,
 } ATRecordRequestTaskResult;
 
-@protocol ATRequestTaskProvider;
-
+@class ApptentiveEvent;
 
 @interface ApptentiveRecordRequestTask : ApptentiveTask <ApptentiveAPIRequestDelegate>
-@property (strong, nonatomic) NSObject<ATRequestTaskProvider> *taskProvider;
-@end
 
+@property (strong, nonatomic) ApptentiveEvent *event;
 
-@protocol ATRequestTaskProvider <NSObject>
-- (NSURL *)managedObjectURIRepresentationForTask:(ApptentiveRecordRequestTask *)task;
-- (void)cleanupAfterTask:(ApptentiveRecordRequestTask *)task;
-- (ApptentiveAPIRequest *)requestForTask:(ApptentiveRecordRequestTask *)task;
-- (ATRecordRequestTaskResult)taskResultForTask:(ApptentiveRecordRequestTask *)task withRequest:(ApptentiveAPIRequest *)request withResult:(id)result;
 @end

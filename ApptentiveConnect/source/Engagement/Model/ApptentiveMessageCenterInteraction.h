@@ -1,5 +1,5 @@
 //
-//  ATMessageCenterInteraction.h
+//  ApptentiveMessageCenterInteraction.h
 //  ApptentiveConnect
 //
 //  Created by Peter Kamb on 5/22/15.

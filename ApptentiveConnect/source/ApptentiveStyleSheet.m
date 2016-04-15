@@ -1,5 +1,5 @@
 //
-//  ATStyleSheet.m
+//  ApptentiveStyleSheet.m
 //  ApptentiveConnect
 //
 //  Created by Frank Schmitt on 3/15/16.
@@ -9,28 +9,29 @@
 #import "ApptentiveStyleSheet.h"
 #import "Apptentive.h"
 
-NSString * const ApptentiveTextStyleHeaderTitle = @"com.apptentive.header.title";
-NSString * const ApptentiveTextStyleHeaderMessage = @"com.apptentive.header.message";
-NSString * const ApptentiveTextStyleMessageDate = @"com.apptentive.message.date";
-NSString * const ApptentiveTextStyleMessageSender = @"com.apptentive.message.sender";
-NSString * const ApptentiveTextStyleMessageStatus = @"com.apptentive.message.status";
-NSString * const ApptentiveTextStyleMessageCenterStatus = @"com.apptentive.messageCenter.status";
-NSString * const ApptentiveTextStyleSurveyInstructions = @"com.apptentive.survey.question.instructions";
-NSString * const ApptentiveTextStyleDoneButton = @"com.apptentive.doneButton";
-NSString * const ApptentiveTextStyleButton = @"com.apptentive.button";
-NSString * const ApptentiveTextStyleSubmitButton = @"com.apptentive.submitButton";
-NSString * const ApptentiveTextStyleTextInput = @"com.apptentive.textInput";
+NSString *const ApptentiveTextStyleHeaderTitle = @"com.apptentive.header.title";
+NSString *const ApptentiveTextStyleHeaderMessage = @"com.apptentive.header.message";
+NSString *const ApptentiveTextStyleMessageDate = @"com.apptentive.message.date";
+NSString *const ApptentiveTextStyleMessageSender = @"com.apptentive.message.sender";
+NSString *const ApptentiveTextStyleMessageStatus = @"com.apptentive.message.status";
+NSString *const ApptentiveTextStyleMessageCenterStatus = @"com.apptentive.messageCenter.status";
+NSString *const ApptentiveTextStyleSurveyInstructions = @"com.apptentive.survey.question.instructions";
+NSString *const ApptentiveTextStyleDoneButton = @"com.apptentive.doneButton";
+NSString *const ApptentiveTextStyleButton = @"com.apptentive.button";
+NSString *const ApptentiveTextStyleSubmitButton = @"com.apptentive.submitButton";
+NSString *const ApptentiveTextStyleTextInput = @"com.apptentive.textInput";
 
-NSString * const ApptentiveColorHeaderBackground = @"com.apptentive.color.header.background";
-NSString * const ApptentiveColorFooterBackground = @"com.apptentive.color.footer.background";
-NSString * const ApptentiveColorFailure = @"com.apptentive.color.failure";
-NSString * const ApptentiveColorSeparator = @"com.apptentive.color.separator";
-NSString * const ApptentiveColorBackground = @"com.apptentive.color.cellBackground";
-NSString * const ApptentiveColorCollectionBackground = @"com.apptentive.color.collectionBackground";
-NSString * const ApptentiveColorTextInputBackground = @"com.apptentive.color.textInputBackground";
-NSString * const ApptentiveColorMessageBackground = @"com.apptentive.color.messageBackground";
-NSString * const ApptentiveColorReplyBackground = @"com.apptentive.color.replyBackground";
-NSString * const ApptentiveColorContextBackground = @"com.apptentive.color.contextBackground";
+NSString *const ApptentiveColorHeaderBackground = @"com.apptentive.color.header.background";
+NSString *const ApptentiveColorFooterBackground = @"com.apptentive.color.footer.background";
+NSString *const ApptentiveColorFailure = @"com.apptentive.color.failure";
+NSString *const ApptentiveColorSeparator = @"com.apptentive.color.separator";
+NSString *const ApptentiveColorBackground = @"com.apptentive.color.cellBackground";
+NSString *const ApptentiveColorCollectionBackground = @"com.apptentive.color.collectionBackground";
+NSString *const ApptentiveColorTextInputBackground = @"com.apptentive.color.textInputBackground";
+NSString *const ApptentiveColorMessageBackground = @"com.apptentive.color.messageBackground";
+NSString *const ApptentiveColorReplyBackground = @"com.apptentive.color.replyBackground";
+NSString *const ApptentiveColorContextBackground = @"com.apptentive.color.contextBackground";
+
 
 @interface ApptentiveStyleSheet ()
 
@@ -51,6 +52,7 @@ NSString * const ApptentiveColorContextBackground = @"com.apptentive.color.conte
 - (NSString *)faceAttributeForWeight:(NSInteger)weight;
 
 @end
+
 
 @implementation ApptentiveStyleSheet
 
@@ -77,7 +79,7 @@ NSString * const ApptentiveColorContextBackground = @"com.apptentive.color.conte
 }
 
 + (NSNumber *)sizeForTextStyle:(NSString *)textStyle {
-	static NSDictionary <NSString *, NSDictionary <NSString *, NSNumber *> *> *sizeForCategoryForStyle;
+	static NSDictionary<NSString *, NSDictionary<NSString *, NSNumber *> *> *sizeForCategoryForStyle;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
 		sizeForCategoryForStyle = @{
@@ -326,8 +328,8 @@ NSString * const ApptentiveColorContextBackground = @"com.apptentive.color.conte
 
 		_sizeAdjustment = 1.0;
 
-		_secondaryColor = [UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:147.0/255.0 alpha:1.0];
-		_failureColor = [UIColor colorWithRed:218.0/255.0 green:53.0/255.0 blue:71.0/255.0 alpha:1.0];
+		_secondaryColor = [UIColor colorWithRed:142.0 / 255.0 green:142.0 / 255.0 blue:147.0 / 255.0 alpha:1.0];
+		_failureColor = [UIColor colorWithRed:218.0 / 255.0 green:53.0 / 255.0 blue:71.0 / 255.0 alpha:1.0];
 
 		_fontDescriptorOverrides = [NSMutableDictionary dictionary];
 		_colorOverrides = [NSMutableDictionary dictionary];
@@ -337,14 +339,14 @@ NSString * const ApptentiveColorContextBackground = @"com.apptentive.color.conte
 	return self;
 }
 
--(void)dealloc {
+- (void)dealloc {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (UIColor *)appearanceColorForClass:(Class)klass property:(SEL)propertySelector default:(UIColor *)defaultColor {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-	UIColor * whenContainedInColor = [[klass appearanceWhenContainedIn:[ApptentiveNavigationController class], nil] performSelector:propertySelector];
+	UIColor *whenContainedInColor = [[klass appearanceWhenContainedIn:[ApptentiveNavigationController class], nil] performSelector:propertySelector];
 	if (whenContainedInColor) {
 		return whenContainedInColor;
 	}
@@ -360,7 +362,7 @@ NSString * const ApptentiveColorContextBackground = @"com.apptentive.color.conte
 
 - (void)didBecomeActive:(NSNotification *)notification {
 	_primaryColor = self.primaryColor ?: [self appearanceColorForClass:[UILabel class] property:@selector(textColor) default:[UIColor blackColor]];
-	_separatorColor = self.separatorColor ?: [self appearanceColorForClass:[UITableView class] property:@selector(separatorColor) default:[UIColor colorWithRed:199.0/255.0 green:200.0/255.0 blue:204.0/255.0 alpha:1.0]];
+	_separatorColor = self.separatorColor ?: [self appearanceColorForClass:[UITableView class] property:@selector(separatorColor) default:[UIColor colorWithRed:199.0 / 255.0 green:200.0 / 255.0 blue:204.0 / 255.0 alpha:1.0]];
 	_backgroundColor = self.backgroundColor ?: [self appearanceColorForClass:[UITableViewCell class] property:@selector(backgroundColor) default:[UIColor whiteColor]];
 	_collectionBackgroundColor = self.collectionBackgroundColor ?: [self appearanceColorForClass:[UITableView class] property:@selector(backgroundColor) default:[UIColor groupTableViewBackgroundColor]];
 }
@@ -395,10 +397,11 @@ NSString * const ApptentiveColorContextBackground = @"com.apptentive.color.conte
 		attributes[UIFontDescriptorFaceAttribute] = face;
 	}
 
-	return  [UIFontDescriptor fontDescriptorWithFontAttributes:attributes];;
+	return [UIFontDescriptor fontDescriptorWithFontAttributes:attributes];
+	;
 }
 
-- (NSString * _Nullable)faceAttributeForFontDescriptor:(UIFontDescriptor *)fontDescriptor {
+- (NSString *_Nullable)faceAttributeForFontDescriptor:(UIFontDescriptor *)fontDescriptor {
 	NSString *faceAttribute = [fontDescriptor objectForKey:UIFontDescriptorFaceAttribute];
 
 	if ([faceAttribute isEqualToString:@"Light"]) {
@@ -443,7 +446,7 @@ NSString * const ApptentiveColorContextBackground = @"com.apptentive.color.conte
 
 	CGFloat inverse = 1.0 - interpolation;
 
-	return [UIColor colorWithRed:red1 * interpolation + red2 * inverse green:green1  * interpolation + green2 * inverse blue:blue1 * interpolation + blue2 * inverse alpha:alpha1 * interpolation + alpha2 * inverse];
+	return [UIColor colorWithRed:red1 * interpolation + red2 * inverse green:green1 * interpolation + green2 * inverse blue:blue1 * interpolation + blue2 * inverse alpha:alpha1 * interpolation + alpha2 * inverse];
 }
 
 - (UIColor *)colorForStyle:(NSString *)style {
@@ -475,4 +478,3 @@ NSString * const ApptentiveColorContextBackground = @"com.apptentive.color.conte
 }
 
 @end
-

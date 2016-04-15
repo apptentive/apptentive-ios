@@ -1,5 +1,5 @@
 //
-//  ATInteractionUsageData.h
+//  ApptentiveInteractionUsageData.h
 //  ApptentiveConnect
 //
 //  Created by Peter Kamb on 10/14/13.

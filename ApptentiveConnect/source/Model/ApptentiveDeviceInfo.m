@@ -1,17 +1,14 @@
 //
-//  ATDeviceInfo.m
+//  ApptentiveDeviceInfo.m
 //  ApptentiveConnect
 //
 //  Created by Andrew Wooster on 10/6/12.
 //  Copyright (c) 2012 Apptentive, Inc. All rights reserved.
 //
-#if TARGET_OS_IPHONE
+
 #import <CoreTelephony/CTTelephonyNetworkInfo.h>
 #import <CoreTelephony/CTCarrier.h>
-#endif
-
 #import "ApptentiveDeviceInfo.h"
-
 #import "ApptentiveBackend.h"
 #import "Apptentive.h"
 #import "Apptentive_Private.h"
@@ -28,7 +25,6 @@
 
 
 + (NSString *)carrier {
-#if TARGET_OS_IPHONE
 	NSString *result = nil;
 	if ([CTTelephonyNetworkInfo class]) {
 		CTTelephonyNetworkInfo *netInfo = [[CTTelephonyNetworkInfo alloc] init];
@@ -39,9 +35,6 @@
 		netInfo = nil;
 	}
 	return result;
-#elif TARGET_OS_MAC
-	return @"";
-#endif
 }
 
 - (NSDictionary *)dictionaryRepresentation {

@@ -1,5 +1,5 @@
 //
-//  ATEngagementBackend.m
+//  ApptentiveEngagementBackend.m
 //  ApptentiveConnect
 //
 //  Created by Peter Kamb on 8/21/13.
@@ -47,7 +47,7 @@ NSString *const ATEngagementCodePointHostAppInteractionKey = @"app";
 NSString *const ATEngagementCodePointApptentiveVendorKey = @"com.apptentive";
 NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 
-NSString *const ATEngagementMessageCenterEvent = @"show_message_center";
+NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 
 
 @interface ApptentiveEngagementBackend ()

@@ -6,23 +6,15 @@
 //  Copyright 2011 Apptentive, Inc.. All rights reserved.
 //
 
-#if TARGET_OS_IPHONE
 #import <UIKit/UIKit.h>
-#elif TARGET_OS_MAC
-#import <Cocoa/Cocoa.h>
-#endif
 
 #define kApptentiveHostName @"apptentive.com"
 
 
 @interface ApptentiveUtilities : NSObject
-#if TARGET_OS_IPHONE
 + (UIViewController *)rootViewControllerForCurrentWindow;
 + (UIViewController *)topViewController;
 + (UIImage *)appIcon;
-#elif TARGET_OS_MAC
-+ (NSData *)pngRepresentationOfImage:(NSImage *)image;
-#endif
 
 + (NSString *)currentMachineName;
 + (NSString *)currentSystemName;

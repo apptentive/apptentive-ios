@@ -1,5 +1,5 @@
 //
-//  ATSurveyQuestionView.m
+//  ApptentiveSurveyQuestionView.m
 //  CVSurvey
 //
 //  Created by Frank Schmitt on 2/23/16.
@@ -20,12 +20,6 @@
 
 - (void)awakeFromNib {
 	self.separatorViewHeight.constant = 1.0 / [UIScreen mainScreen].scale;
-}
-
-- (void)layoutSubviews {
-	[super layoutSubviews];
-
-	self.textLabel.preferredMaxLayoutWidth = CGRectGetWidth(self.textLabel.bounds);
 }
 
 @end

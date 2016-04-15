@@ -1,5 +1,5 @@
 //
-//  ATSurveyQuestionResponse.m
+//  ApptentiveSurveyQuestionResponse.m
 //  ApptentiveConnect
 //
 //  Created by Peter Kamb on 4/22/14.

@@ -1,5 +1,5 @@
 //
-//  ATInteraction.h
+//  ApptentiveInteraction.h
 //  ApptentiveConnect
 //
 //  Created by Peter Kamb on 8/23/13.

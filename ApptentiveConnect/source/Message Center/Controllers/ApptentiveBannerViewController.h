@@ -1,5 +1,5 @@
 //
-//  ATBannerViewController.h
+//  ApptentiveBannerViewController.h
 //  TestBanner
 //
 //  Created by Frank Schmitt on 6/17/15.
@@ -8,12 +8,12 @@
 
 #import "ApptentiveNetworkImageView.h"
 
-@protocol ATBannerViewControllerDelegate;
+@protocol ApptentiveBannerViewControllerDelegate;
 
 
 @interface ApptentiveBannerViewController : UIViewController <ApptentiveNetworkImageViewDelegate>
 
-@property (weak, nonatomic) id<ATBannerViewControllerDelegate> delegate;
+@property (weak, nonatomic) id<ApptentiveBannerViewControllerDelegate> delegate;
 @property (strong, nonatomic) NSURL *imageURL;
 @property (strong, nonatomic) NSString *titleText;
 @property (strong, nonatomic) NSString *messageText;
@@ -23,7 +23,7 @@
 
 @end
 
-@protocol ATBannerViewControllerDelegate <NSObject>
+@protocol ApptentiveBannerViewControllerDelegate <NSObject>
 
 - (void)userDidTapBanner:(ApptentiveBannerViewController *)banner;
 

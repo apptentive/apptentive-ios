@@ -1,5 +1,5 @@
 //
-//  ATEngagementTests.m
+//  ApptentiveEngagementTests.m
 //  ApptentiveConnect
 //
 //  Created by Peter Kamb on 9/5/13.

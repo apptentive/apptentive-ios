@@ -1,5 +1,5 @@
 //
-//  ATSurveyAnswerCell.m
+//  ApptentiveSurveyAnswerCell.m
 //  CVSurvey
 //
 //  Created by Frank Schmitt on 2/23/16.

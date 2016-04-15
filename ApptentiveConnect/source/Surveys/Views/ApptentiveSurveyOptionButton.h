@@ -1,5 +1,5 @@
 //
-//  ATSurveyOptionButton.h
+//  ApptentiveSurveyOptionButton.h
 //  Survey
 //
 //  Created by Frank Schmitt on 2/12/16.

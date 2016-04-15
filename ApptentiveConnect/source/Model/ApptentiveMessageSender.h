@@ -1,5 +1,5 @@
 //
-//  ATMessageSender.h
+//  ApptentiveMessageSender.h
 //  ApptentiveConnect
 //
 //  Created by Andrew Wooster on 10/30/12.

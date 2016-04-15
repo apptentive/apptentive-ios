@@ -1,5 +1,5 @@
 //
-//  ATSurveyQuestion.m
+//  ApptentiveSurveyQuestion.m
 //  CVSurvey
 //
 //  Created by Frank Schmitt on 2/29/16.
@@ -29,7 +29,7 @@
 		_identifier = JSON[@"id"];
 		_instructions = JSON[@"instructions"];
 		_value = JSON[@"value"];
-		_placeholder = JSON[@"placeholder"];
+		_placeholder = JSON[@"freeform_hint"];
 		_required = [JSON[@"required"] boolValue];
 
 		if (_type == ATSurveyQuestionTypeMultipleSelect) {

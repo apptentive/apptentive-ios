@@ -1,5 +1,5 @@
 //
-//  ATProgressNavigationBar.m
+//  ApptentiveProgressNavigationBar.m
 //  ApptentiveConnect
 //
 //  Created by Frank Schmitt on 7/29/15.

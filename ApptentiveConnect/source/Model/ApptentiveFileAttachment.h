@@ -1,5 +1,5 @@
 //
-//  ATFileAttachment.h
+//  ApptentiveFileAttachment.h
 //  ApptentiveConnect
 //
 //  Created by Andrew Wooster on 2/20/13.

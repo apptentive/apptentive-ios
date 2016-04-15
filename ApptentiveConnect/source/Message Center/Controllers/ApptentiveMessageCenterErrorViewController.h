@@ -1,5 +1,5 @@
 //
-//  ATMessageCenterErrorViewController.h
+//  ApptentiveMessageCenterErrorViewController.h
 //  ApptentiveConnect
 //
 //  Created by Frank Schmitt on 8/4/15.

@@ -1,5 +1,5 @@
 //
-//  ATPassThroughView.h
+//  ApptentivePassThroughWindow.h
 //  ATHUD
 //
 //  Created by Frank Schmitt on 3/2/16.

@@ -1,5 +1,5 @@
 //
-//  ApptentiveAPIRequest.m
+//  ATAPIRequest.m
 //  ApptentiveConnect
 //
 //  Created by Andrew Wooster on 5/24/11.
@@ -67,10 +67,8 @@ NSString *const ApptentiveAPIRequestStatusChanged = @"ApptentiveAPIRequestStatus
 
 - (void)showAlert {
 	if (self.failed) {
-#if TARGET_OS_IPHONE
-		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:self.errorTitle message:self.errorMessage delegate:nil cancelButtonTitle:ATLocalizedString(@"Close", nil) otherButtonTitles:nil];
+		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:self.errorTitle message:self.errorMessage delegate:nil cancelButtonTitle:ApptentiveLocalizedString(@"Close", nil) otherButtonTitles:nil];
 		[alert show];
-#endif
 	}
 }
 
@@ -91,11 +89,11 @@ NSString *const ApptentiveAPIRequestStatusChanged = @"ApptentiveAPIRequestStatus
 	} else if ([clientErrorStatusCodes containsIndex:statusCode]) {
 		_failed = YES;
 		_shouldRetry = NO;
-		_errorTitle = ATLocalizedString(@"Bad Request", @"");
+		_errorTitle = ApptentiveLocalizedString(@"Bad Request", @"");
 	} else if ([serverErrorStatusCodes containsIndex:statusCode]) {
 		_failed = YES;
 		_shouldRetry = YES;
-		_errorTitle = ATLocalizedString(@"Server error.", @"");
+		_errorTitle = ApptentiveLocalizedString(@"Server error.", @"");
 	} else {
 		_failed = YES;
 		_shouldRetry = YES;
@@ -150,8 +148,8 @@ NSString *const ApptentiveAPIRequestStatusChanged = @"ApptentiveAPIRequestStatus
 			id json = [ApptentiveJSONSerialization JSONObjectWithString:s error:&error];
 			if (!json) {
 				_failed = YES;
-				_errorTitle = ATLocalizedString(@"Invalid response from server.", @"");
-				_errorMessage = ATLocalizedString(@"Server did not return properly formatted JSON.", @"");
+				_errorTitle = ApptentiveLocalizedString(@"Invalid response from server.", @"");
+				_errorMessage = ApptentiveLocalizedString(@"Server did not return properly formatted JSON.", @"");
 				ApptentiveLogError(@"Invalid JSON: %@", error);
 			}
 			result = json;
@@ -175,10 +173,10 @@ NSString *const ApptentiveAPIRequestStatusChanged = @"ApptentiveAPIRequestStatus
 	}
 	_failed = YES;
 	if (sender.failedAuthentication || sender.statusCode == 401) {
-		_errorTitle = ATLocalizedString(@"Authentication Failed", @"");
-		_errorMessage = ATLocalizedString(@"Wrong username and/or password.", @"");
+		_errorTitle = ApptentiveLocalizedString(@"Authentication Failed", @"");
+		_errorMessage = ApptentiveLocalizedString(@"Wrong username and/or password.", @"");
 	} else {
-		_errorTitle = ATLocalizedString(@"Network Connection Error", @"");
+		_errorTitle = ApptentiveLocalizedString(@"Network Connection Error", @"");
 		_errorMessage = [sender.connectionError localizedDescription];
 	}
 	NSData *d = [sender responseData];

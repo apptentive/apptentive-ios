@@ -1,5 +1,5 @@
 //
-//  ATAppConfigurationUpdater.m
+//  ApptentiveAppConfigurationUpdater.m
 //  ApptentiveConnect
 //
 //  Created by Andrew Wooster on 3/18/12.

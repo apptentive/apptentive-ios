@@ -1,5 +1,5 @@
 //
-//  ATWebClient.m
+//  ApptentiveWebClient.m
 //  apptentive-ios
 //
 //  Created by Andrew Wooster on 7/28/09.

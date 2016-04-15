@@ -1,5 +1,5 @@
 //
-//  ATEngagementManifestParser.h
+//  ApptentiveEngagementManifestParser.h
 //  ApptentiveConnect
 //
 //  Created by Peter Kamb on 8/20/13.

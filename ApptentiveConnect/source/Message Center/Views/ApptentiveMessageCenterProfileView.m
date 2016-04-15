@@ -1,5 +1,5 @@
 //
-//  ATMessageCenterProfileView.m
+//  ApptentiveMessageCenterProfileView.m
 //  ApptentiveConnect
 //
 //  Created by Frank Schmitt on 7/20/15.
@@ -71,7 +71,7 @@
 
 - (void)setBorderColor:(UIColor *)borderColor {
 	_borderColor = borderColor;
-	
+
 	self.containerView.layer.borderColor = self.borderColor.CGColor;
 	self.buttonBar.layer.borderColor = self.borderColor.CGColor;
 }

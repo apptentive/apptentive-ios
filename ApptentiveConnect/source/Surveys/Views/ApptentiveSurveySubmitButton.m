@@ -1,5 +1,5 @@
 //
-//  ATSurveySubmitButton.m
+//  ApptentiveSurveySubmitButton.m
 //  ApptentiveConnect
 //
 //  Created by Frank Schmitt on 2/11/16.

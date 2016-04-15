@@ -1,1 +1,1 @@
-*.strings diff=localizablestrings
+*.strings utf16 diff=localizablestrings

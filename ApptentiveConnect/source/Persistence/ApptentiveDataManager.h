@@ -1,5 +1,5 @@
 //
-//  ATDataManager.h
+//  ApptentiveDataManager.h
 //  ApptentiveConnect
 //
 //  Created by Andrew Wooster on 5/12/13.

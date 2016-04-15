@@ -1,5 +1,5 @@
 //
-//  ATGetMessagesTask.m
+//  ApptentiveGetMessagesTask.m
 //  ApptentiveConnect
 //
 //  Created by Andrew Wooster on 10/12/12.

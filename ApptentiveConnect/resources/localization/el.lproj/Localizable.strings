@@ -2,9 +2,6 @@
 "About Apptentive" = "Σχετικά με την Apptentive";
 
 /* (No Commment) */
-"Answer" = "Απάντηση";
-
-/* (No Commment) */
 "Apptentive is a service that allows you to have a conversation with the makers of this app. Your input and feedback can help to provide you with a better overall experience.
 
 Your feedback is hosted by Apptentive and is subject to both Apptentive’s privacy policy and the privacy policy of this app’s developer." = "Η Apptentive είναι μια υπηρεσία που σας επιτρέπει να συνομιλήσετε με τους κατασκευαστές αυτού του app. Η γνώμη και τα σχόλιά σας μπορούν να μας βοηθήσουν να σας προσφέρουμε μια καλύτερη εμπειρία στο σύνολό σας.
@@ -48,12 +45,6 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
 "Learn about Apptentive" = "Μάθετε για την Apptentive";
 
 /* (No Commment) */
-"Missing %d required answers." = "Λείπουν %d υποχρεωτικές απαντήσεις.";
-
-/* (No Commment) */
-"Missing a required answer." = "Λείπει μια υποχρεωτική απάντηση.";
-
-/* (No Commment) */
 "Network Connection Error" = "Σφάλμα σύνδεσης δικτύου";
 
 /* (No Commment) */
@@ -81,9 +72,6 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
 "Remind Me Later" = "Θύμισέ το μου αργότερα";
 
 /* (No Commment) */
-"Send Response" = "Αποστολή απάντησης";
-
-/* (No Commment) */
 "Sending…" = "Αποστολή…";
 
 /* (No Commment) */
@@ -99,34 +87,10 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
 "Server error." = "Σφάλμα διακομιστή.";
 
 /* (No Commment) */
-"Survey" = "Έρευνα";
-
-/* (No Commment) */
 "Thank You" = "Ευχαριστούμε";
 
 /* (No Commment) */
-"Thanks!" = "Ευχαριστούμε!";
-
-/* (No Commment) */
-"The request was well-formed but was unable to be followed due to semantic errors." = "Το αίτημα ήταν καλά διατυπωμένο, ωστόσο δεν ήταν δυνατή η διεκπεραίωσή του λόγω σφαλμάτων στην σημασιολογία.";
-
-/* (No Commment) */
-"Too few selections made for %d questions above." = "Πολύ λίγες επιλογές για τις παραπάνω %d ερωτήσεις.";
-
-/* (No Commment) */
-"Too few selections made for a question above." = "Πολύ λίγες επιλογές για την παραπάνω ερώτηση.";
-
-/* (No Commment) */
-"Too many selections made for %d questions above." = "Πάρα πολλές επιλογές για τις παραπάνω %d ερωτήσεις.";
-
-/* (No Commment) */
-"Too many selections made for a question above." = "Πάρα πολλές επιλογές για την παραπάνω ερώτηση.";
-
-/* (No Commment) */
 "Unable to load the App Store" = "Δεν είναι δυνατή η φόρτωση του App Store";
-
-/* (No Commment) */
-"Unprocessable Entity" = "Οντότητα χωρίς δυνατότητα επεξεργασίας";
 
 /* (No Commment) */
 "We're so happy to hear that you love %@! It'd be really helpful if you rated us. Thanks so much for spending some time with us." = "Είμαστε πολύ χαρούμενοι που διαβάζουμε ότι σας αρέσει η εφαρμογή %@! Θα μας βοηθούσατε πραγματικά εάν βαθμολογούσατε την εφαρμογή μας. Σας ευχαριστούμε θερμά για τον χρόνο σας.";

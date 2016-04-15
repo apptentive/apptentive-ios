@@ -1,5 +1,5 @@
 //
-//  ATLogger.h
+//  ApptentiveLogger.h
 //  ApptentiveConnect
 //
 //  Created by Andrew Wooster on 3/8/13.

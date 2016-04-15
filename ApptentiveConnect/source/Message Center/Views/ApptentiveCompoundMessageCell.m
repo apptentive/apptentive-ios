@@ -1,5 +1,5 @@
 //
-//  ATCompoundMessageCell.m
+//  ApptentiveCompoundMessageCell.m
 //  ApptentiveConnect
 //
 //  Created by Frank Schmitt on 10/23/15.

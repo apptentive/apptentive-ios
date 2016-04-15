@@ -1,5 +1,5 @@
 //
-//  ATInteractionNavigateToLink.m
+//  ApptentiveInteractionNavigateToLink.m
 //  ApptentiveConnect
 //
 //  Created by Peter Kamb on 12/19/14.

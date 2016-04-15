@@ -1,5 +1,5 @@
 //
-//  ATSurveyChoiceCell.h
+//  ApptentiveSurveyChoiceCell.h
 //  CVSurvey
 //
 //  Created by Frank Schmitt on 2/25/16.

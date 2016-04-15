@@ -9,16 +9,8 @@
 #import "ApptentiveUtilities.h"
 #import <QuartzCore/QuartzCore.h>
 #import <AVFoundation/AVFoundation.h>
-#if !TARGET_OS_IPHONE
-#import <Carbon/Carbon.h>
-#import <SystemConfiguration/SystemConfiguration.h>
-#include <sys/types.h>
-#include <sys/sysctl.h>
-#endif
 #include <stdlib.h>
-#if TARGET_OS_IPHONE
 #import <sys/utsname.h>
-#endif
 #import <sys/sysctl.h>
 
 #define KINDA_EQUALS(a, b) (fabs(a - b) < 0.1)
@@ -40,8 +32,6 @@ UIViewController *topChildViewController(UIViewController *viewController) {
 
 
 @implementation ApptentiveUtilities
-
-#if TARGET_OS_IPHONE
 
 + (UIViewController *)rootViewControllerForCurrentWindow {
 	UIWindow *window = nil;
@@ -91,56 +81,18 @@ UIViewController *topChildViewController(UIViewController *viewController) {
 	return iconFile;
 }
 
-#elif TARGET_OS_MAC
-
-+ (NSData *)pngRepresentationOfImage:(NSImage *)image {
-	CGImageRef imageRef = [image CGImageForProposedRect:NULL context:NULL hints:nil];
-	NSBitmapImageRep *imageRep = [[NSBitmapImageRep alloc] initWithCGImage:imageRef];
-	NSData *result = [imageRep representationUsingType:NSPNGFileType properties:nil];
-	[imageRep release];
-	return result;
-}
-#endif
-
 + (NSString *)currentMachineName {
-#if TARGET_OS_IPHONE
 	struct utsname systemInfo;
 	uname(&systemInfo);
 	return [NSString stringWithCString:systemInfo.machine encoding:NSUTF8StringEncoding];
-#elif TARGET_OS_MAC
-	char modelBuffer[256];
-	size_t sz = sizeof(modelBuffer);
-	NSString *result = @"Unknown";
-	if (0 == sysctlbyname("hw.model", modelBuffer, &sz, NULL, 0)) {
-		modelBuffer[sizeof(modelBuffer) - 1] = 0;
-		result = [NSString stringWithUTF8String:modelBuffer];
-	}
-	return result;
-#endif
 }
 
 + (NSString *)currentSystemName {
-#if TARGET_OS_IPHONE
 	return [[UIDevice currentDevice] systemName];
-#elif TARGET_OS_MAC
-	NSProcessInfo *info = [NSProcessInfo processInfo];
-	NSString *osName = [info operatingSystemName];
-
-	if ([osName isEqualToString:@"NSMACHOperatingSystem"]) {
-		osName = @"Mac OS X";
-	}
-
-	return osName;
-#endif
 }
 
 + (NSString *)currentSystemVersion {
-#if TARGET_OS_IPHONE
 	return [[UIDevice currentDevice] systemVersion];
-#elif TARGET_OS_MAC
-	NSProcessInfo *info = [NSProcessInfo processInfo];
-	return [info operatingSystemVersionString];
-#endif
 }
 
 + (NSString *)currentSystemBuild {

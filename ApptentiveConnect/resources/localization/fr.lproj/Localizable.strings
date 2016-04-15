@@ -2,9 +2,6 @@
 "About Apptentive" = "À propos d'Apptentive";
 
 /* (No Commment) */
-"Answer" = "Réponse";
-
-/* (No Commment) */
 "Apptentive is a service that allows you to have a conversation with the makers of this app. Your input and feedback can help to provide you with a better overall experience.
 
 Your feedback is hosted by Apptentive and is subject to both Apptentive’s privacy policy and the privacy policy of this app’s developer." = "Apptentive est un service qui vous permet d'entrer en contact avec les créateurs de cette application. Vos suggestions et commentaires peuvent nous aider à vous fournir une meilleure expérience d'ensemble.
@@ -48,12 +45,6 @@ Vos commentaires sont hébergés par Apptentive et assujettis à la politique de
 "Learn about Apptentive" = "En savoir plus sur Apptentive";
 
 /* (No Commment) */
-"Missing %d required answers." = "%d réponses obligatoires manquantes.";
-
-/* (No Commment) */
-"Missing a required answer." = "Une réponse obligatoire manquante.";
-
-/* (No Commment) */
 "Network Connection Error" = "Erreur de connexion réseau";
 
 /* (No Commment) */
@@ -81,9 +72,6 @@ Vos commentaires sont hébergés par Apptentive et assujettis à la politique de
 "Remind Me Later" = "Me le rappeler ultérieurement";
 
 /* (No Commment) */
-"Send Response" = "Envoyer la Réponse";
-
-/* (No Commment) */
 "Sending…" = "Envoi...";
 
 /* (No Commment) */
@@ -99,34 +87,10 @@ Vos commentaires sont hébergés par Apptentive et assujettis à la politique de
 "Server error." = "Erreur de serveur.";
 
 /* (No Commment) */
-"Survey" = "Sondage";
-
-/* (No Commment) */
 "Thank You" = "Merci";
 
 /* (No Commment) */
-"Thanks!" = "Merci!";
-
-/* (No Commment) */
-"The request was well-formed but was unable to be followed due to semantic errors." = "La requête est bien formée mais il n'a pu y être donné suite en raison d'erreurs sémantiques.";
-
-/* (No Commment) */
-"Too few selections made for %d questions above." = "Trop peu de sélections effectuées pour les %d questions ci-dessus.";
-
-/* (No Commment) */
-"Too few selections made for a question above." = "Trop peu de sélections effectuées pour la question ci-dessus.";
-
-/* (No Commment) */
-"Too many selections made for %d questions above." = "Trop de sélections effectuées pour les %d questions ci-dessus.";
-
-/* (No Commment) */
-"Too many selections made for a question above." = "Trop de sélections effectuées pour la question ci-dessus.";
-
-/* (No Commment) */
 "Unable to load the App Store" = "Impossible de charger l'App Store";
-
-/* (No Commment) */
-"Unprocessable Entity" = "Entité non traitable";
 
 /* (No Commment) */
 "We're so happy to hear that you love %@! It'd be really helpful if you rated us. Thanks so much for spending some time with us." = "Nous sommes vraiment contents d'apprendre que vous adorez %@! Votre évaluation nous serait extrêmement utile. Nous vous remercions infiniment pour le temps que vous pourriez nous consacrer.";

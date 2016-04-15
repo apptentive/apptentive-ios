@@ -1,5 +1,5 @@
 //
-//  ATReachability.m
+//  ApptentiveReachability.m
 //  ApptentiveConnect
 //
 //  Created by Andrew Wooster on 4/13/11.
@@ -106,12 +106,10 @@ static void ATReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkRea
 		if ((onDemand || onTraffic) && !interventionRequired) {
 			status = ApptentiveNetworkWifiReachable;
 		}
-#if TARGET_OS_IPHONE
 		BOOL isWWAN = ((flags & kSCNetworkReachabilityFlagsIsWWAN) == kSCNetworkReachabilityFlagsIsWWAN);
 		if (isWWAN) {
 			status = ApptentiveNetworkWWANReachable;
 		}
-#endif
 	} while (NO);
 
 	return status;

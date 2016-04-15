@@ -2,9 +2,6 @@
 "About Apptentive" = "О Apptentive";
 
 /* (No Commment) */
-"Answer" = "Ответ";
-
-/* (No Commment) */
 "Apptentive is a service that allows you to have a conversation with the makers of this app. Your input and feedback can help to provide you with a better overall experience.
 
 Your feedback is hosted by Apptentive and is subject to both Apptentive’s privacy policy and the privacy policy of this app’s developer." = "Apptentive — это служба, которая позволяет вам общаться с создателями этого приложения. Ваш отзыв помогает нам улучшать опыт пользования службой.
@@ -48,12 +45,6 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
 "Learn about Apptentive" = "Подробнее об Apptentive";
 
 /* (No Commment) */
-"Missing %d required answers." = "Отсутствуют обязательные ответы: %d";
-
-/* (No Commment) */
-"Missing a required answer." = "Отсутствует обязательный ответ.";
-
-/* (No Commment) */
 "Network Connection Error" = "Ошибка сетевого подключения";
 
 /* (No Commment) */
@@ -81,9 +72,6 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
 "Remind Me Later" = "Напомнить позже";
 
 /* (No Commment) */
-"Send Response" = "Отравить отзыв";
-
-/* (No Commment) */
 "Sending…" = "Отправка...";
 
 /* (No Commment) */
@@ -99,34 +87,10 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
 "Server error." = "Ошибка сервера.";
 
 /* (No Commment) */
-"Survey" = "Опрос";
-
-/* (No Commment) */
 "Thank You" = "Спасибо";
 
 /* (No Commment) */
-"Thanks!" = "Спасибо!";
-
-/* (No Commment) */
-"The request was well-formed but was unable to be followed due to semantic errors." = "Запрос сформирован, но из-за семантических ошибок невозможно выполнить дальнейшие действия.";
-
-/* (No Commment) */
-"Too few selections made for %d questions above." = "Слишком мало вариантов для %d вопросов выше.";
-
-/* (No Commment) */
-"Too few selections made for a question above." = "Слишком мало вариантов для вопроса выше.";
-
-/* (No Commment) */
-"Too many selections made for %d questions above." = "Слишком много вариантов для %d вопросов выше.";
-
-/* (No Commment) */
-"Too many selections made for a question above." = "Слишком много вариантов для вопроса выше.";
-
-/* (No Commment) */
 "Unable to load the App Store" = "Не удается загрузить App Store";
-
-/* (No Commment) */
-"Unprocessable Entity" = "Необрабатываемый объект";
 
 /* (No Commment) */
 "We're so happy to hear that you love %@! It'd be really helpful if you rated us. Thanks so much for spending some time with us." = "Так приятно знать, что вы любите %@! Если вы оцените нас, нам это очень поможет! Спасибо за то, что уделили нам свое время.";

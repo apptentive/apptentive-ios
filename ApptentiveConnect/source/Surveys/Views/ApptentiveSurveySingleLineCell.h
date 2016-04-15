@@ -1,5 +1,5 @@
 //
-//  ATSurveySingleLineCell.h
+//  ApptentiveSurveySingleLineCell.h
 //  CVSurvey
 //
 //  Created by Frank Schmitt on 2/25/16.

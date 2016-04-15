@@ -1,5 +1,5 @@
 //
-//  ATSurvey.m
+//  ApptentiveSurvey.m
 //  CVSurvey
 //
 //  Created by Frank Schmitt on 2/26/16.
@@ -22,6 +22,9 @@
 		_showSuccessMessage = [JSON[@"show_success_message"] boolValue];
 		_successMessage = JSON[@"success_message"];
 		_viewPeriod = [JSON[@"view_period"] doubleValue];
+		_submitText = JSON[@"submit_text"];
+		_requiredText = JSON[@"required_text"];
+		_validationErrorText = JSON[@"validation_error"];
 
 		NSMutableArray *mutableQuestions = [NSMutableArray array];
 

@@ -1,5 +1,5 @@
 //
-//  ATTaskQueue.h
+//  ApptentiveTaskQueue.h
 //  ApptentiveConnect
 //
 //  Created by Andrew Wooster on 3/21/11.

@@ -1,5 +1,5 @@
 //
-//  ATMessageCenterInputView.h
+//  ApptentiveMessageCenterInputView.h
 //  ApptentiveConnect
 //
 //  Created by Frank Schmitt on 7/14/15.

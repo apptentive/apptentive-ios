@@ -1,5 +1,5 @@
 //
-//  ATBackend.m
+//  ApptentiveBackend.m
 //  ApptentiveConnect
 //
 //  Created by Andrew Wooster on 3/19/11.
@@ -67,9 +67,7 @@ static NSURLCache *imageCache = nil;
 - (void)startMonitoringUnreadMessages;
 - (void)checkForProperConfiguration;
 
-#if TARGET_OS_IPHONE
 @property (strong, nonatomic) UIViewController *presentingViewController;
-#endif
 @property (assign, nonatomic) BOOL working;
 @property (strong, nonatomic) NSTimer *messageRetrievalTimer;
 @property (copy, nonatomic) NSString *cachedDeviceUUID;
@@ -89,7 +87,6 @@ static NSURLCache *imageCache = nil;
 @implementation ApptentiveBackend
 @synthesize supportDirectoryPath = _supportDirectoryPath;
 
-#if TARGET_OS_IPHONE
 + (UIImage *)imageNamed:(NSString *)name {
 	NSString *imagePath = nil;
 	UIImage *result = nil;
@@ -120,42 +117,6 @@ static NSURLCache *imageCache = nil;
 	}
 	return result;
 }
-#elif TARGET_OS_MAC
-+ (NSImage *)imageNamed:(NSString *)name {
-	NSString *imagePath = nil;
-	NSImage *result = nil;
-	CGFloat scale = 1.0;
-
-	if ([[NSScreen mainScreen] respondsToSelector:@selector(backingScaleFactor)]) {
-		scale = (CGFloat)[[NSScreen mainScreen] backingScaleFactor];
-	}
-	if (scale > 1.0) {
-		imagePath = [[Apptentive resourceBundle] pathForResource:[NSString stringWithFormat:@"%@@2x", name] ofType:@"png"];
-	} else {
-		imagePath = [[Apptentive resourceBundle] pathForResource:[NSString stringWithFormat:@"%@", name] ofType:@"png"];
-	}
-
-	if (!imagePath) {
-		if (scale > 1.0) {
-			imagePath = [[Apptentive resourceBundle] pathForResource:[NSString stringWithFormat:@"%@@2x", name] ofType:@"png" inDirectory:@"generated"];
-		} else {
-			imagePath = [[Apptentive resourceBundle] pathForResource:[NSString stringWithFormat:@"%@", name] ofType:@"png" inDirectory:@"generated"];
-		}
-	}
-
-	if (imagePath) {
-		result = [[[NSImage alloc] initWithContentsOfFile:imagePath] autorelease];
-	} else {
-		result = [NSImage imageNamed:name];
-	}
-	if (!result) {
-		ApptentiveLogError(@"Unable to find image named: %@", name);
-		ApptentiveLogError(@"sought at: %@", imagePath);
-		ApptentiveLogError(@"bundle is: %@", [Apptentive resourceBundle]);
-	}
-	return result;
-}
-#endif
 
 - (id)init {
 	if ((self = [super init])) {
@@ -333,7 +294,6 @@ static NSURLCache *imageCache = nil;
 }
 
 - (NSString *)deviceUUID {
-#if TARGET_OS_IPHONE
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
 		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -367,25 +327,6 @@ static NSURLCache *imageCache = nil;
 		self.cachedDeviceUUID = uuid;
 	});
 	return self.cachedDeviceUUID;
-#elif TARGET_OS_MAC
-	static CFStringRef keyRef = CFSTR("apptentiveUUID");
-	static CFStringRef appIDRef = CFSTR("com.apptentive.feedback");
-	NSString *uuid = nil;
-	uuid = (NSString *)CFPreferencesCopyAppValue(keyRef, appIDRef);
-	if (!uuid) {
-		CFUUIDRef uuidRef = CFUUIDCreate(NULL);
-		CFStringRef uuidStringRef = CFUUIDCreateString(NULL, uuidRef);
-
-		uuid = [[NSString alloc] initWithFormat:@"osx:%@", (NSString *)uuidStringRef];
-
-		CFRelease(uuidRef), uuidRef = NULL;
-		CFRelease(uuidStringRef), uuidStringRef = NULL;
-
-		CFPreferencesSetValue(keyRef, (CFStringRef)uuid, appIDRef, kCFPreferencesCurrentUser, kCFPreferencesCurrentHost);
-		CFPreferencesSynchronize(appIDRef, kCFPreferencesCurrentUser, kCFPreferencesCurrentHost);
-	}
-	return [uuid autorelease];
-#endif
 }
 
 - (NSString *)appName {
@@ -482,7 +423,7 @@ static NSURLCache *imageCache = nil;
 		return NO;
 	}
 
-	BOOL didShowMessageCenter = [[ApptentiveInteraction apptentiveAppInteraction] engage:ATEngagementMessageCenterEvent fromViewController:viewController];
+	BOOL didShowMessageCenter = [[ApptentiveInteraction apptentiveAppInteraction] engage:ApptentiveEngagementMessageCenterEvent fromViewController:viewController];
 
 	if (!didShowMessageCenter) {
 		UINavigationController *navigationController = [[Apptentive storyboard] instantiateViewControllerWithIdentifier:@"NoPayloadNavigation"];
@@ -518,12 +459,10 @@ static NSURLCache *imageCache = nil;
 	}
 }
 
-#if TARGET_OS_IPHONE
-
 #pragma mark UIAlertViewDelegate
+
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
 }
-#endif
 
 #pragma mark Accessors
 
@@ -637,8 +576,8 @@ static NSURLCache *imageCache = nil;
 	}
 }
 
-#if TARGET_OS_IPHONE
 #pragma mark NSFetchedResultsControllerDelegate
+
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
 	if (controller == self.unreadCountController) {
 		id<NSFetchedResultsSectionInfo> sectionInfo = [[self.unreadCountController sections] objectAtIndex:0];
@@ -649,13 +588,13 @@ static NSURLCache *imageCache = nil;
 				[[Apptentive sharedConnection] showNotificationBannerForMessage:message];
 			}
 			self.previousUnreadCount = unreadCount;
-			[[NSNotificationCenter defaultCenter] postNotificationName:ATMessageCenterUnreadCountChangedNotification object:nil userInfo:@{ @"count": @(self.previousUnreadCount) }];
+			[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveMessageCenterUnreadCountChangedNotification object:nil userInfo:@{ @"count": @(self.previousUnreadCount) }];
 		}
 	}
 }
-#endif
 
 #pragma mark ATActivityFeedUpdaterDelegate
+
 - (void)conversationUpdater:(ApptentiveConversationUpdater *)updater createdConversationSuccessfully:(BOOL)success {
 	if (self.conversationUpdater == updater) {
 		self.conversationUpdater = nil;
@@ -699,13 +638,11 @@ static NSURLCache *imageCache = nil;
 	}
 }
 
-#if TARGET_OS_IPHONE
 - (void)messageCenterWillDismiss:(ApptentiveMessageCenterViewController *)messageCenter {
 	if (self.presentedMessageCenterViewController) {
 		self.presentedMessageCenterViewController = nil;
 	}
 }
-#endif
 
 #pragma mark -
 
@@ -881,7 +818,6 @@ static NSURLCache *imageCache = nil;
 		[self performSelectorOnMainThread:@selector(setup) withObject:nil waitUntilDone:YES];
 		return;
 	}
-#if TARGET_OS_IPHONE
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startWorking:) name:UIApplicationDidBecomeActiveNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startWorking:) name:UIApplicationWillEnterForegroundNotification object:nil];
 
@@ -890,10 +826,6 @@ static NSURLCache *imageCache = nil;
 
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkForMessages) name:UIApplicationWillEnterForegroundNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleRemoteNotificationInUIApplicationStateActive) name:UIApplicationDidBecomeActiveNotification object:nil];
-
-#elif TARGET_OS_MAC
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopWorking:) name:NSApplicationWillTerminateNotification object:nil];
-#endif
 
 	self.activeMessageTasks = [NSMutableSet set];
 
@@ -1029,7 +961,6 @@ static NSURLCache *imageCache = nil;
 
 - (void)startMonitoringUnreadMessages {
 	@autoreleasepool {
-#if TARGET_OS_IPHONE
 		if (self.unreadCountController != nil) {
 			ApptentiveLogError(@"startMonitoringUnreadMessages called more than once!");
 			return;
@@ -1057,7 +988,6 @@ static NSURLCache *imageCache = nil;
 		}
 
 		request = nil;
-#endif
 	}
 }
 

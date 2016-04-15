@@ -15,12 +15,10 @@
 #import "ApptentiveAppConfigurationUpdater.h"
 #import "ApptentiveMessageSender.h"
 #import "ApptentiveWebClient.h"
-#if TARGET_OS_IPHONE
 #import "ApptentiveMessageCenterViewController.h"
 #import "ApptentiveBannerViewController.h"
 #import "ApptentiveUnreadMessagesBadgeView.h"
 #import "ApptentiveAboutViewController.h"
-#endif
 
 // Can't get CocoaPods to do the right thing for debug builds.
 // So, do it explicitly.
@@ -30,19 +28,21 @@
 #endif
 #endif
 
-NSString *const ATMessageCenterUnreadCountChangedNotification = @"ATMessageCenterUnreadCountChangedNotification";
+NSString *const ApptentiveMessageCenterUnreadCountChangedNotification = @"ApptentiveMessageCenterUnreadCountChangedNotification";
 
-NSString *const ATAppRatingFlowUserAgreedToRateAppNotification = @"ATAppRatingFlowUserAgreedToRateAppNotification";
+NSString *const ApptentiveAppRatingFlowUserAgreedToRateAppNotification = @"ApptentiveAppRatingFlowUserAgreedToRateAppNotification";
 
-NSString *const ATSurveyShownNotification = @"ATSurveyShownNotification";
-NSString *const ATSurveySentNotification = @"ATSurveySentNotification";
-NSString *const ATSurveyIDKey = @"ATSurveyIDKey";
+NSString *const ApptentiveSurveyShownNotification = @"ApptentiveSurveyShownNotification";
+NSString *const ApptentiveSurveySentNotification = @"ApptentiveSurveySentNotification";
+NSString *const ApptentiveSurveyIDKey = @"ApptentiveSurveyIDKey";
 
 NSString *const ApptentiveCustomPersonDataChangedNotification = @"ApptentiveCustomPersonDataChangedNotification";
 NSString *const ApptentiveCustomDeviceDataChangedNotification = @"ApptentiveCustomDeviceDataChangedNotification";
 
+NSString *const ApptentiveCustomDeviceDataPreferenceKey = @"ApptentiveCustomDeviceDataPreferenceKey";
+NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPersonDataPreferenceKey";
 
-@interface Apptentive () <ATBannerViewControllerDelegate>
+@interface Apptentive () <ApptentiveBannerViewControllerDelegate>
 @end
 
 
@@ -51,6 +51,8 @@ NSString *const ApptentiveCustomDeviceDataChangedNotification = @"ApptentiveCust
 	NSMutableDictionary *_customDeviceData;
 	NSMutableDictionary *_integrationConfiguration;
 }
+
+@synthesize styleSheet = _styleSheet;
 
 + (NSString *)supportDirectoryPath {
 	NSString *appSupportDirectoryPath = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES).firstObject;
@@ -83,8 +85,9 @@ NSString *const ApptentiveCustomDeviceDataChangedNotification = @"ApptentiveCust
 
 - (id)init {
 	if ((self = [super init])) {
-		_customPersonData = [[NSMutableDictionary alloc] init];
-		_customDeviceData = [[NSMutableDictionary alloc] init];
+		_customPersonData = [[NSUserDefaults standardUserDefaults] objectForKey:ApptentiveCustomPersonDataPreferenceKey] ?: [[NSMutableDictionary alloc] init];
+		_customDeviceData = [[NSUserDefaults standardUserDefaults] objectForKey:ApptentiveCustomDeviceDataPreferenceKey] ?: [[NSMutableDictionary alloc] init];
+
 		_integrationConfiguration = [[NSMutableDictionary alloc] init];
 		_styleSheet = [[ApptentiveStyleSheet alloc] init];
 
@@ -93,7 +96,17 @@ NSString *const ApptentiveCustomDeviceDataChangedNotification = @"ApptentiveCust
 	return self;
 }
 
-- (void)setApiKey:(NSString *)APIKey {
+- (void)saveCustomPersonData {
+	[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveCustomPersonDataChangedNotification object:self.customPersonData];
+	[[NSUserDefaults standardUserDefaults] setObject:_customPersonData forKey:ApptentiveCustomPersonDataPreferenceKey];
+}
+
+- (void)saveCustomDeviceData {
+	[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveCustomDeviceDataChangedNotification object:self.customPersonData];
+	[[NSUserDefaults standardUserDefaults] setObject:_customDeviceData forKey:ApptentiveCustomDeviceDataPreferenceKey];
+}
+
+- (void)setAPIKey:(NSString *)APIKey {
 	if (![self.webClient.APIKey isEqualToString:APIKey]) {
 		_webClient = [[ApptentiveWebClient alloc] initWithBaseURL:[NSURL URLWithString:@"https://api.apptentive.com"] APIKey:APIKey];
 
@@ -104,8 +117,20 @@ NSString *const ApptentiveCustomDeviceDataChangedNotification = @"ApptentiveCust
 	}
 }
 
-- (NSString *)apiKey {
+- (NSString *)APIKey {
 	return self.webClient.APIKey;
+}
+
+- (id<ApptentiveStyle>)styleSheet {
+	_didAccessStyleSheet = YES;
+
+	return _styleSheet;
+}
+
+- (void)setStyleSheet:(id<ApptentiveStyle>)styleSheet {
+	_styleSheet = styleSheet;
+
+	_didAccessStyleSheet = YES;
 }
 
 - (NSString *)personName {
@@ -122,14 +147,6 @@ NSString *const ApptentiveCustomDeviceDataChangedNotification = @"ApptentiveCust
 
 - (void)setPersonEmailAddress:(NSString *)personEmailAddress {
 	[ApptentivePersonInfo currentPerson].emailAddress = personEmailAddress;
-}
-
-- (UIColor *)tintColor {
-	return [UIView appearanceWhenContainedIn:[ApptentiveNavigationController class], nil].tintColor;
-}
-
-- (void)setTintColor:(UIColor *)tintColor {
-	[UIView appearanceWhenContainedIn:[ApptentiveNavigationController class], nil].tintColor = tintColor;
 }
 
 - (void)sendAttachmentText:(NSString *)text {
@@ -194,12 +211,12 @@ NSString *const ApptentiveCustomDeviceDataChangedNotification = @"ApptentiveCust
 
 - (void)addCustomPersonData:(NSObject *)object withKey:(NSString *)key {
 	[self addCustomData:object withKey:key toCustomDataDictionary:_customPersonData];
-	[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveCustomPersonDataChangedNotification object:self.customPersonData];
+	[self saveCustomPersonData];
 }
 
 - (void)addCustomDeviceData:(NSObject *)object withKey:(NSString *)key {
 	[self addCustomData:object withKey:key toCustomDataDictionary:_customDeviceData];
-	[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveCustomDeviceDataChangedNotification object:self.customDeviceData];
+	[self saveCustomDeviceData];
 }
 
 - (void)addCustomData:(NSObject *)object withKey:(NSString *)key toCustomDataDictionary:(NSMutableDictionary *)customData {
@@ -224,20 +241,12 @@ NSString *const ApptentiveCustomDeviceDataChangedNotification = @"ApptentiveCust
 
 - (void)removeCustomPersonDataWithKey:(NSString *)key {
 	[_customPersonData removeObjectForKey:key];
-	[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveCustomPersonDataChangedNotification object:self.customPersonData];
+	[self saveCustomPersonData];
 }
 
 - (void)removeCustomDeviceDataWithKey:(NSString *)key {
 	[_customDeviceData removeObjectForKey:key];
-	[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveCustomDeviceDataChangedNotification object:self.customDeviceData];
-}
-
-- (void)addCustomData:(NSObject<NSCoding> *)object withKey:(NSString *)key {
-	[self addCustomDeviceData:object withKey:key];
-}
-
-- (void)removeCustomDataWithKey:(NSString *)key {
-	[self removeCustomDeviceDataWithKey:key];
+	[self saveCustomDeviceData];
 }
 
 - (void)openAppStore {
@@ -263,7 +272,7 @@ NSString *const ApptentiveCustomDeviceDataChangedNotification = @"ApptentiveCust
 	return _integrationConfiguration;
 }
 
-- (void)setPushNotificationIntegration:(ATPushProvider)pushProvider withDeviceToken:(NSData *)deviceToken {
+- (void)setPushNotificationIntegration:(ApptentivePushProvider)pushProvider withDeviceToken:(NSData *)deviceToken {
 	[self removeAllPushIntegrations];
 
 	NSString *integrationKey = [self integrationKeyForPushProvider:pushProvider];
@@ -272,21 +281,21 @@ NSString *const ApptentiveCustomDeviceDataChangedNotification = @"ApptentiveCust
 }
 
 - (void)removeAllPushIntegrations {
-	[self removeIntegration:[self integrationKeyForPushProvider:ATPushProviderApptentive]];
-	[self removeIntegration:[self integrationKeyForPushProvider:ATPushProviderUrbanAirship]];
-	[self removeIntegration:[self integrationKeyForPushProvider:ATPushProviderAmazonSNS]];
-	[self removeIntegration:[self integrationKeyForPushProvider:ATPushProviderParse]];
+	[self removeIntegration:[self integrationKeyForPushProvider:ApptentivePushProviderApptentive]];
+	[self removeIntegration:[self integrationKeyForPushProvider:ApptentivePushProviderUrbanAirship]];
+	[self removeIntegration:[self integrationKeyForPushProvider:ApptentivePushProviderAmazonSNS]];
+	[self removeIntegration:[self integrationKeyForPushProvider:ApptentivePushProviderParse]];
 }
 
-- (NSString *)integrationKeyForPushProvider:(ATPushProvider)pushProvider {
+- (NSString *)integrationKeyForPushProvider:(ApptentivePushProvider)pushProvider {
 	switch (pushProvider) {
-		case ATPushProviderApptentive:
+		case ApptentivePushProviderApptentive:
 			return @"apptentive_push";
-		case ATPushProviderUrbanAirship:
+		case ApptentivePushProviderUrbanAirship:
 			return @"urban_airship";
-		case ATPushProviderAmazonSNS:
+		case ApptentivePushProviderAmazonSNS:
 			return @"aws_sns";
-		case ATPushProviderParse:
+		case ApptentivePushProviderParse:
 			return @"parse";
 		default:
 			return @"UNKNOWN_PUSH_PROVIDER";
@@ -313,12 +322,6 @@ NSString *const ApptentiveCustomDeviceDataChangedNotification = @"ApptentiveCust
 	[_integrationConfiguration removeObjectForKey:integration];
 
 	[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveCustomDeviceDataChangedNotification object:self.customDeviceData];
-}
-
-#if TARGET_OS_IPHONE
-
-- (BOOL)willShowInteractionForEvent:(NSString *)event {
-	return [self canShowInteractionForEvent:event];
 }
 
 - (BOOL)canShowInteractionForEvent:(NSString *)event {
@@ -432,7 +435,7 @@ NSString *const ApptentiveCustomDeviceDataChangedNotification = @"ApptentiveCust
 }
 
 - (BOOL)canShowMessageCenter {
-	NSString *messageCenterCodePoint = [[ApptentiveInteraction apptentiveAppInteraction] codePointForEvent:ATEngagementMessageCenterEvent];
+	NSString *messageCenterCodePoint = [[ApptentiveInteraction apptentiveAppInteraction] codePointForEvent:ApptentiveEngagementMessageCenterEvent];
 	return [self.engagementBackend canShowInteractionForCodePoint:messageCenterCodePoint];
 }
 
@@ -515,33 +518,7 @@ NSString *const ApptentiveCustomDeviceDataChangedNotification = @"ApptentiveCust
 	}
 }
 
-#elif TARGET_OS_MAC
-- (IBAction)showFeedbackWindow:(id)sender {
-	if (![self.backend currentFeedback]) {
-		ATFeedback *feedback = [[ATFeedback alloc] init];
-		if (additionalFeedbackData && [additionalFeedbackData count]) {
-			[feedback addExtraDataFromDictionary:additionalFeedbackData];
-		}
-		if (self.initialName && [self.initialName length] > 0) {
-			feedback.name = self.initialName;
-		}
-		if (self.initialEmailAddress && [self.initialEmailAddress length] > 0) {
-			feedback.email = self.initialEmailAddress;
-		}
-		[self.backend setCurrentFeedback:feedback];
-		[feedback release];
-		feedback = nil;
-	}
-
-	if (!feedbackWindowController) {
-		feedbackWindowController = [[ATFeedbackWindowController alloc] initWithFeedback:[self.backend currentFeedback]];
-	}
-	[feedbackWindowController showWindow:self];
-}
-#endif
-
 + (NSBundle *)resourceBundle {
-#if TARGET_OS_IPHONE
 	NSString *path = [[NSBundle bundleForClass:[ApptentiveBackend class]] bundlePath];
 	NSString *bundlePath = [path stringByAppendingPathComponent:@"ApptentiveResources.bundle"];
 	NSFileManager *fm = [NSFileManager defaultManager];
@@ -549,29 +526,8 @@ NSString *const ApptentiveCustomDeviceDataChangedNotification = @"ApptentiveCust
 		NSBundle *bundle = [[NSBundle alloc] initWithPath:bundlePath];
 		return bundle;
 	} else {
-		// Try trigger.io path.
-		bundlePath = [path stringByAppendingPathComponent:@"apptentive.bundle"];
-		bundlePath = [bundlePath stringByAppendingPathComponent:@"ApptentiveResources.bundle"];
-		if ([fm fileExistsAtPath:bundlePath]) {
-			NSBundle *bundle = [[NSBundle alloc] initWithPath:bundlePath];
-			return bundle;
-		} else {
-			// Try Titanium path.
-			bundlePath = [path stringByAppendingPathComponent:@"modules"];
-			bundlePath = [bundlePath stringByAppendingPathComponent:@"com.apptentive.titanium"];
-			bundlePath = [bundlePath stringByAppendingPathComponent:@"ApptentiveResources.bundle"];
-			if ([fm fileExistsAtPath:bundlePath]) {
-				NSBundle *bundle = [[NSBundle alloc] initWithPath:bundlePath];
-				return bundle;
-			} else {
-				return nil;
-			}
-		}
+		return nil;
 	}
-#elif TARGET_OS_MAC
-	NSBundle *bundle = [NSBundle bundleForClass:[Apptentive class]];
-	return bundle;
-#endif
 }
 
 #pragma mark - Message notification banner
@@ -642,7 +598,7 @@ NSString *const ApptentiveCustomDeviceDataChangedNotification = @"ApptentiveCust
 
 @end
 
-NSString *ATLocalizedString(NSString *key, NSString *comment) {
+NSString *ApptentiveLocalizedString(NSString *key, NSString *comment) {
 	static NSBundle *bundle = nil;
 	if (!bundle) {
 		bundle = [Apptentive resourceBundle];

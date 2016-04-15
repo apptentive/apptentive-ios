@@ -1,5 +1,5 @@
 //
-//  ATURLConnection_Private.h
+//  ApptentiveURLConnection_Private.h
 //  ApptentiveConnect
 //
 //  Created by Andrew Wooster on 5/24/11.

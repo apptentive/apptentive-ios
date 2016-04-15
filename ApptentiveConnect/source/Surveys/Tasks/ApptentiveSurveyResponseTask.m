@@ -1,5 +1,5 @@
 //
-//  ATSurveyResponseTask.m
+//  ApptentiveSurveyResponseTask.m
 //  ApptentiveConnect
 //
 //  Created by Andrew Wooster on 7/8/13.

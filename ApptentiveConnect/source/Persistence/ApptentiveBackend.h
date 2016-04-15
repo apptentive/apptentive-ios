@@ -1,25 +1,19 @@
 //
-//  ATBackend.h
+//  ApptentiveBackend.h
 //  ApptentiveConnect
 //
 //  Created by Andrew Wooster on 3/19/11.
 //  Copyright 2011 Apptentive, Inc.. All rights reserved.
 //
 
-#if TARGET_OS_IPHONE
 #import <UIKit/UIKit.h>
-#elif TARGET_OS_MAC
-#import <Cocoa/Cocoa.h>
-#endif
 #import <CoreData/CoreData.h>
 
 #import "ApptentiveConversationUpdater.h"
 #import "ApptentiveDeviceUpdater.h"
 #import "ApptentivePersonUpdater.h"
 #import "ApptentiveFileAttachment.h"
-#if TARGET_OS_IPHONE
 #import "ApptentiveMessage.h"
-#endif
 
 @class ApptentiveMessageCenterViewController;
 
@@ -36,12 +30,7 @@ extern NSString *const ATBackendBecameReadyNotification;
 @protocol ATBackendMessageDelegate;
 
 /*! Handles all of the backend activities, such as sending feedback. */
-@interface ApptentiveBackend : NSObject <ApptentiveConversationUpdaterDelegate, ATDeviceUpdaterDelegate, ATPersonUpdaterDelegate
-#if TARGET_OS_IPHONE
-						   ,
-						   NSFetchedResultsControllerDelegate, UIAlertViewDelegate
-#endif
-						   >
+@interface ApptentiveBackend : NSObject <ApptentiveConversationUpdaterDelegate, ATDeviceUpdaterDelegate, ATPersonUpdaterDelegate, NSFetchedResultsControllerDelegate, UIAlertViewDelegate>
 /*! The feedback currently being worked on by the user. */
 @property (strong, nonatomic) ATFeedback *currentFeedback;
 @property (strong, nonatomic) NSDictionary *currentCustomData;
@@ -63,7 +52,6 @@ extern NSString *const ATBackendBecameReadyNotification;
 - (void)messageTaskDidFinish:(ApptentiveMessageTask *)messageTask;
 - (void)messageTaskDidFail:(ApptentiveMessageTask *)messageTask;
 
-#if TARGET_OS_IPHONE
 + (UIImage *)imageNamed:(NSString *)name;
 - (BOOL)presentMessageCenterFromViewController:(UIViewController *)viewController;
 - (BOOL)presentMessageCenterFromViewController:(UIViewController *)viewController withCustomData:(NSDictionary *)customData;
@@ -71,9 +59,6 @@ extern NSString *const ATBackendBecameReadyNotification;
 
 - (void)attachCustomDataToMessage:(ApptentiveMessage *)message;
 - (void)dismissMessageCenterAnimated:(BOOL)animated completion:(void (^)(void))completion;
-#elif TARGET_OS_MAC
-+ (NSImage *)imageNamed:(NSString *)name;
-#endif
 
 /*! ATAutomatedMessage messages. */
 - (ApptentiveMessage *)automatedMessageWithTitle:(NSString *)title body:(NSString *)body;

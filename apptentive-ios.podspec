@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
   s.platform = :ios, '7.0'
   s.source_files   = 'ApptentiveConnect/source/**/*.{h,m}'
   s.requires_arc = true
-  s.frameworks     = 'AVFoundation', 'CoreData', 'CoreGraphics', 'Foundation', 'ImageIO', 'MobileCoreServices', 'QuartzCore', 'SystemConfiguration', 'UIKit'
+  s.frameworks     = 'AVFoundation', 'CoreData', 'CoreGraphics', 'Foundation', 'ImageIO', 'MobileCoreServices', 'QuartzCore', 'QuickLook', 'SystemConfiguration', 'UIKit'
   s.resource_bundle = { 'ApptentiveResources' => [
 		'ApptentiveConnect/source/Model/*.xcdatamodeld',
 		'ApptentiveConnect/source/Model/*.xcmappingmodel',
@@ -20,6 +20,6 @@ Pod::Spec.new do |s|
 		'ApptentiveConnect/resources/CocoaPodsResources/Info.plist'
 		] }
   s.weak_frameworks = 'StoreKit', 'CoreTelephony'
-  s.prefix_header_contents = '#import "ATLog.h"'
-  s.xcconfig = { "GCC_PREPROCESSOR_DEFINITIONS" => "AT_LOGGING_LEVEL_ERROR=1" }
+  s.prefix_header_contents = '#import "ApptentiveLog.h"'
+  s.xcconfig = { "GCC_PREPROCESSOR_DEFINITIONS" => "APPTENTIVE_LOGGING_LEVEL_ERROR=1" }
 end

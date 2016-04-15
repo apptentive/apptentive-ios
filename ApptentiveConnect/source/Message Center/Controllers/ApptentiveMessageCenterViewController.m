@@ -1,5 +1,5 @@
 //
-//  ATMessageCenterViewController.m
+//  ApptentiveMessageCenterViewController.m
 //  ApptentiveConnect
 //
 //  Created by Frank Schmitt on 5/20/15.
@@ -81,6 +81,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	ATMessageCenterStateReplied
 };
 
+
 @interface ApptentiveMessageCenterViewController ()
 
 @property (weak, nonatomic) IBOutlet ApptentiveMessageCenterGreetingView *greetingView;
@@ -126,8 +127,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 	[self.navigationController.toolbar addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(compose:)]];
 
-	self.navigationItem.rightBarButtonItem.title = ATLocalizedString(@"Close", @"Button that closes Message Center.");
-	self.navigationItem.rightBarButtonItem.accessibilityHint = ATLocalizedString(@"Closes Message Center.", @"Accessibility hint for 'close' button");
+	self.navigationItem.rightBarButtonItem.title = ApptentiveLocalizedString(@"Close", @"Button that closes Message Center.");
+	self.navigationItem.rightBarButtonItem.accessibilityHint = ApptentiveLocalizedString(@"Closes Message Center.", @"Accessibility hint for 'close' button");
 
 	self.dataSource = [[ApptentiveMessageCenterDataSource alloc] initWithDelegate:self];
 	[self.dataSource start];
@@ -137,14 +138,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.dateFormatter = [[NSDateFormatter alloc] init];
 	self.dateFormatter.dateFormat = [NSDateFormatter dateFormatFromTemplate:@"MMMMdyyyy" options:0 locale:[NSLocale currentLocale]];
 	self.dataSource.dateFormatter.dateFormat = self.dateFormatter.dateFormat; // Used to determine if date changed between messages
-
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated"
-	UIInterfaceOrientation interfaceOrientation = [UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad ? UIInterfaceOrientationPortrait : self.interfaceOrientation;
-#pragma clang diagnostic pop
-	self.greetingView.orientation = interfaceOrientation;
-	self.profileView.orientation = interfaceOrientation;
-	self.messageInputView.orientation = interfaceOrientation;
 
 	self.navigationItem.title = self.interaction.title;
 
@@ -169,8 +162,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.greetingView.isOnScreen = NO;
 
 	[self.greetingView.aboutButton setImage:[[ApptentiveBackend imageNamed:@"at_info"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
-	self.greetingView.aboutButton.accessibilityLabel = ATLocalizedString(@"About Apptentive", @"Accessibility label for 'show about' button");
-	self.greetingView.aboutButton.accessibilityHint = ATLocalizedString(@"Displays information about this feature.", @"Accessibilty hint for 'show about' button");
+	self.greetingView.aboutButton.accessibilityLabel = ApptentiveLocalizedString(@"About Apptentive", @"Accessibility label for 'show about' button");
+	self.greetingView.aboutButton.accessibilityHint = ApptentiveLocalizedString(@"Displays information about this feature.", @"Accessibilty hint for 'show about' button");
 
 	self.statusView.mode = ATMessageCenterStatusModeEmpty;
 
@@ -187,14 +180,16 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[self.messageInputView.sendButton setTitle:self.interaction.composerSendButtonTitle forState:UIControlStateNormal];
 	self.messageInputView.sendButton.titleLabel.font = [[Apptentive sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleButton];
 
-	self.messageInputView.sendButton.accessibilityHint = ATLocalizedString(@"Sends the message.", @"Accessibility hint for 'send' button");
+	self.messageInputView.sendButton.accessibilityHint = ApptentiveLocalizedString(@"Sends the message.", @"Accessibility hint for 'send' button");
 
-	self.messageInputView.clearButton.accessibilityLabel = ATLocalizedString(@"Discard", @"Accessibility label for 'discard' button");
-	self.messageInputView.clearButton.accessibilityHint = ATLocalizedString(@"Discards the message.", @"Accessibility hint for 'discard' button");
+	self.messageInputView.clearButton.accessibilityLabel = ApptentiveLocalizedString(@"Discard", @"Accessibility label for 'discard' button");
+	self.messageInputView.clearButton.accessibilityHint = ApptentiveLocalizedString(@"Discards the message.", @"Accessibility hint for 'discard' button");
 
 	[self.messageInputView.attachButton setImage:[ApptentiveBackend imageNamed:@"at_attach"] forState:UIControlStateNormal];
-	self.messageInputView.attachButton.accessibilityLabel = ATLocalizedString(@"Attach", @"Accessibility label for 'attach' button");
-	self.messageInputView.attachButton.accessibilityHint = ATLocalizedString(@"Attaches a photo or screenshot", @"Accessibility hint for 'attach'");
+	[self.messageInputView.attachButton setTitleColor:[[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveColorBackground] forState:UIControlStateNormal];
+
+	self.messageInputView.attachButton.accessibilityLabel = ApptentiveLocalizedString(@"Attach", @"Accessibility label for 'attach' button");
+	self.messageInputView.attachButton.accessibilityHint = ApptentiveLocalizedString(@"Attaches a photo or screenshot", @"Accessibility hint for 'attach'");
 
 	self.messageInputView.containerView.backgroundColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveColorBackground];
 	self.messageInputView.borderColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveColorSeparator];
@@ -209,8 +204,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 	if (self.interaction.profileRequested) {
 		UIBarButtonItem *profileButtonItem = [[UIBarButtonItem alloc] initWithImage:[ApptentiveBackend imageNamed:@"at_account"] landscapeImagePhone:[ApptentiveBackend imageNamed:@"at_account"] style:UIBarButtonItemStylePlain target:self action:@selector(showWho:)];
-		profileButtonItem.accessibilityLabel = ATLocalizedString(@"Profile", @"Accessibility label for 'edit profile' button");
-		profileButtonItem.accessibilityHint = ATLocalizedString(@"Displays name and email editor.", @"Accessibility hint for 'edit profile' button");
+		profileButtonItem.accessibilityLabel = ApptentiveLocalizedString(@"Profile", @"Accessibility label for 'edit profile' button");
+		profileButtonItem.accessibilityHint = ApptentiveLocalizedString(@"Displays name and email editor.", @"Accessibility hint for 'edit profile' button");
 		self.navigationItem.leftBarButtonItem = profileButtonItem;
 
 		self.profileView.containerView.backgroundColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveColorBackground];
@@ -218,7 +213,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		self.profileView.titleLabel.font = [[Apptentive sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleButton];
 		self.profileView.titleLabel.textColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveTextStyleButton];
 		self.profileView.saveButton.titleLabel.font = [[Apptentive sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleButton];
-		self.profileView.skipButton.titleLabel.font =  [[Apptentive sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleButton];
+		self.profileView.skipButton.titleLabel.font = [[Apptentive sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleButton];
 		self.profileView.requiredLabel.text = self.interaction.profileInitialEmailExplanation;
 		self.profileView.requiredLabel.font = [[Apptentive sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleSurveyInstructions];
 		self.profileView.requiredLabel.textColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveTextStyleSurveyInstructions];
@@ -262,6 +257,14 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[self.attachmentController viewDidLoad];
 
 	[self updateSendButtonEnabledStatus];
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated"
+	UIInterfaceOrientation interfaceOrientation = [UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad ? UIInterfaceOrientationPortrait : self.interfaceOrientation;
+#pragma clang diagnostic pop
+	self.greetingView.orientation = interfaceOrientation;
+	self.profileView.orientation = interfaceOrientation;
+	self.messageInputView.orientation = interfaceOrientation;
 }
 
 - (void)dealloc {
@@ -359,19 +362,19 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 				messageCell.layer.borderWidth = 1.0 / [UIScreen mainScreen].scale;
 				messageCell.layer.borderColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveColorFailure].CGColor;
 				messageCell.statusLabel.textColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveColorFailure];
-				messageCell.statusLabel.text = ATLocalizedString(@"Failed", @"Message failed to send.");
+				messageCell.statusLabel.text = ApptentiveLocalizedString(@"Failed", @"Message failed to send.");
 				break;
 			case ATMessageCenterMessageStatusSending:
 				messageCell.statusLabelHidden = NO;
 				messageCell.layer.borderWidth = 0;
 				messageCell.statusLabel.textColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveTextStyleMessageStatus];
-				messageCell.statusLabel.text = ATLocalizedString(@"Sending…", @"Message is sending.");
+				messageCell.statusLabel.text = ApptentiveLocalizedString(@"Sending…", @"Message is sending.");
 				break;
 			case ATMessageCenterMessageStatusSent:
 				messageCell.statusLabelHidden = NO;
 				messageCell.layer.borderWidth = 0;
 				messageCell.statusLabel.textColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveTextStyleMessageStatus];
-				messageCell.statusLabel.text = ATLocalizedString(@"Sent", @"Message sent successfully");
+				messageCell.statusLabel.text = ApptentiveLocalizedString(@"Sent", @"Message sent successfully");
 				break;
 		}
 
@@ -474,7 +477,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	if (labelText.length) {
 		UIFont *font = [[Apptentive sharedConnection].styleSheet fontForStyle:UIFontTextStyleBody];
 		UIColor *color = [[Apptentive sharedConnection].styleSheet colorForStyle:UIFontTextStyleBody];
-		NSAttributedString *attributedText = [[NSAttributedString alloc] initWithString:labelText attributes:@{NSFontAttributeName: font, NSForegroundColorAttributeName: color }];
+		NSAttributedString *attributedText = [[NSAttributedString alloc] initWithString:labelText attributes:@{NSFontAttributeName: font, NSForegroundColorAttributeName: color}];
 		labelRect = [attributedText boundingRectWithSize:CGSizeMake(effectiveLabelWidth, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin context:nil];
 	} else {
 		verticalMargin -= MESSAGE_LABEL_TOTAL_VERTICAL_MARGIN / 2.0;
@@ -638,7 +641,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	attachmentCell.progressView.hidden = YES;
 	attachmentCell.progressView.progress = 0;
 
-	[[[UIAlertView alloc] initWithTitle:ATLocalizedString(@"Unable to Download Attachment", @"Attachment download failed alert title") message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+	[[[UIAlertView alloc] initWithTitle:ApptentiveLocalizedString(@"Unable to Download Attachment", @"Attachment download failed alert title") message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
 }
 
 #pragma mark Collection view delegate

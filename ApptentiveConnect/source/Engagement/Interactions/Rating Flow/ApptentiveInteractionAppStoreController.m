@@ -1,5 +1,5 @@
 //
-//  ATInteractionAppStoreController.m
+//  ApptentiveInteractionAppStoreController.m
 //  ApptentiveConnect
 //
 //  Created by Peter Kamb on 3/26/14.
@@ -60,7 +60,6 @@ NSString *const ATInteractionAppStoreRatingEventLabelUnableToRate = @"unable_to_
 }
 
 - (void)legacyOpenAppStoreToRateApp {
-#if TARGET_OS_IPHONE
 #if TARGET_IPHONE_SIMULATOR
 	[self showUnableToOpenAppStoreDialog];
 #else
@@ -70,13 +69,8 @@ NSString *const ATInteractionAppStoreRatingEventLabelUnableToRate = @"unable_to_
 		[self openAppStoreViaURL];
 	}
 #endif
-
-#elif TARGET_OS_MAC
-	[self openMacAppStore];
-#endif
 }
 
-#if TARGET_OS_IPHONE
 - (void)showUnableToOpenAppStoreDialog {
 	[self.interaction engage:ATInteractionAppStoreRatingEventLabelUnableToRate fromViewController:self.viewController];
 
@@ -88,15 +82,14 @@ NSString *const ATInteractionAppStoreRatingEventLabelUnableToRate = @"unable_to_
 	message = @"The iOS Simulator is unable to open the App Store app. Please try again on a real iOS device.";
 	cancelButtonTitle = @"OK";
 #else
-	title = ATLocalizedString(@"Oops!", @"Unable to load the App Store title");
-	message = ATLocalizedString(@"Unable to load the App Store", @"Unable to load the App Store message");
-	cancelButtonTitle = ATLocalizedString(@"OK", @"OK button title");
+	title = ApptentiveLocalizedString(@"Oops!", @"Unable to load the App Store title");
+	message = ApptentiveLocalizedString(@"Unable to load the App Store", @"Unable to load the App Store message");
+	cancelButtonTitle = ApptentiveLocalizedString(@"OK", @"OK button title");
 #endif
 
 	UIAlertView *errorAlert = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:cancelButtonTitle otherButtonTitles:nil];
 	[errorAlert show];
 }
-#endif
 
 - (BOOL)shouldOpenAppStoreViaStoreKit {
 	return ([SKStoreProductViewController class] != NULL && [self appID]);
@@ -113,15 +106,11 @@ NSString *const ATInteractionAppStoreRatingEventLabelUnableToRate = @"unable_to_
 - (NSURL *)legacyURLForRatingApp {
 	NSString *URLString = nil;
 
-#if TARGET_OS_IPHONE
 	if ([[[UIDevice currentDevice] systemVersion] compare:@"7.1" options:NSNumericSearch] != NSOrderedAscending) {
 		URLString = [NSString stringWithFormat:@"itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id=%@", [self appID]];
 	} else {
 		URLString = [NSString stringWithFormat:@"itms-apps://itunes.apple.com/%@/app/id%@", [[NSLocale currentLocale] objectForKey:NSLocaleCountryCode], [self appID]];
 	}
-#elif TARGET_OS_MAC
-	URLString = [NSString stringWithFormat:@"macappstore://itunes.apple.com/app/id%@?mt=12", [self appID]];
-#endif
 
 	return [NSURL URLWithString:URLString];
 }
@@ -192,14 +181,6 @@ NSString *const ATInteractionAppStoreRatingEventLabelUnableToRate = @"unable_to_
 
 - (void)openMacAppStore {
 	[self.interaction engage:ATInteractionAppStoreRatingEventLabelOpenMacAppStore fromViewController:self.viewController];
-
-#if TARGET_OS_IPHONE
-#elif TARGET_OS_MAC
-	NSURL *url = [self URLForRatingApp];
-	[[NSWorkspace sharedWorkspace] openURL:url];
-
-	[self release];
-#endif
 }
 
 

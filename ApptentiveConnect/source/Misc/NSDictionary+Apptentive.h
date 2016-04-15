@@ -1,5 +1,5 @@
 //
-//  NSDictionary+ATAdditions.h
+//  NSDictionary+Apptentive.h
 //  ApptentiveConnect
 //
 //  Created by Andrew Wooster on 2/8/13.

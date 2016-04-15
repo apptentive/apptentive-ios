@@ -2,9 +2,6 @@
 "About Apptentive" = "Over Apptentive";
 
 /* (No Commment) */
-"Answer" = "Antwoord";
-
-/* (No Commment) */
 "Apptentive is a service that allows you to have a conversation with the makers of this app. Your input and feedback can help to provide you with a better overall experience.
 
 Your feedback is hosted by Apptentive and is subject to both Apptentive’s privacy policy and the privacy policy of this app’s developer." = "Apptentive is een service waarmee u in contact kunt komen met de makers van deze app. Met uw reacties en feedback kunt u zorgen voor een betere ervaring.
@@ -48,12 +45,6 @@ Uw feedback wordt gehost door Apptentive en is onderworpen aan het privacybeleid
 "Learn about Apptentive" = "Meer informatie over Apptentive";
 
 /* (No Commment) */
-"Missing %d required answers." = "%d verplichte antwoorden ontbreken.";
-
-/* (No Commment) */
-"Missing a required answer." = "Een verplicht antwoord ontbreekt.";
-
-/* (No Commment) */
 "Network Connection Error" = "Netwerkverbindingsfout";
 
 /* (No Commment) */
@@ -81,9 +72,6 @@ Uw feedback wordt gehost door Apptentive en is onderworpen aan het privacybeleid
 "Remind Me Later" = "Herinner me later";
 
 /* (No Commment) */
-"Send Response" = "Verstuur antwoord";
-
-/* (No Commment) */
 "Sending…" = "Verzenden…";
 
 /* (No Commment) */
@@ -99,34 +87,10 @@ Uw feedback wordt gehost door Apptentive en is onderworpen aan het privacybeleid
 "Server error." = "Serverfout.";
 
 /* (No Commment) */
-"Survey" = "Enquête";
-
-/* (No Commment) */
 "Thank You" = "Bedankt";
 
 /* (No Commment) */
-"Thanks!" = "Bedankt!";
-
-/* (No Commment) */
-"The request was well-formed but was unable to be followed due to semantic errors." = "De opmaak van het verzoek was in orde, maar het kan wegens semantische fouten niet worden opgevolgd.";
-
-/* (No Commment) */
-"Too few selections made for %d questions above." = "Te weinig selecties gemaakt voor %d vragen hierboven.";
-
-/* (No Commment) */
-"Too few selections made for a question above." = "Te weinig selecties gemaakt voor een vraag hierboven.";
-
-/* (No Commment) */
-"Too many selections made for %d questions above." = "Te veel selecties gemaakt voor %d vragen hierboven.";
-
-/* (No Commment) */
-"Too many selections made for a question above." = "Te veel selecties gemaakt voor een vraag hierboven.";
-
-/* (No Commment) */
 "Unable to load the App Store" = "Laden van de App Store mislukt";
-
-/* (No Commment) */
-"Unprocessable Entity" = "Item kan niet worden verwerkt";
 
 /* (No Commment) */
 "We're so happy to hear that you love %@! It'd be really helpful if you rated us. Thanks so much for spending some time with us." = "Wat geweldig om te horen dat u zo gek bent op %@! Het zou ontzettend behulpzaam zijn als u ons beoordeelde. Bedankt voor het gebruiken van deze app.";

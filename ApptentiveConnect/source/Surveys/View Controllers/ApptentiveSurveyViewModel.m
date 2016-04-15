@@ -1,5 +1,5 @@
 //
-//  ATSurveyViewModel.m
+//  ApptentiveSurveyViewModel.m
 //  CVSurvey
 //
 //  Created by Frank Schmitt on 2/23/16.
@@ -49,7 +49,7 @@
 }
 
 - (NSString *)title {
-	return self.survey.title;
+	return self.survey.name;
 }
 
 - (NSString *)greeting {
@@ -57,7 +57,7 @@
 }
 
 - (NSString *)submitButtonText {
-	return ATLocalizedString(@"Submit", @"Survey submit button text");
+	return self.survey.submitText;
 }
 
 - (BOOL)showThankYou {
@@ -66,6 +66,10 @@
 
 - (NSString *)thankYouText {
 	return self.survey.successMessage;
+}
+
+- (NSString *)missingRequiredItemText {
+	return self.survey.validationErrorText;
 }
 
 - (NSInteger)numberOfQuestionsInSurvey {
@@ -84,18 +88,31 @@
 	return [self questionAtIndex:index].value;
 }
 
-- (NSString *)instructionTextOfQuestionAtIndex:(NSInteger)index {
+- (NSAttributedString *)instructionTextOfQuestionAtIndex:(NSInteger)index {
 	NSMutableArray *parts = [NSMutableArray array];
+	NSInteger redCharacterCount = 0;
 
 	if ([self questionAtIndex:index].required) {
-		[parts addObject:ATLocalizedString(@"required", @"Survey answer requires response")];
+		[parts addObject:self.survey.requiredText ?: ApptentiveLocalizedString(@"required", nil)];
+		redCharacterCount = self.survey.requiredText.length;
 	}
 
 	if ([self questionAtIndex:index].instructions) {
 		[parts addObject:[self questionAtIndex:index].instructions];
 	}
 
-	return parts.count > 0 ? [parts componentsJoinedByString:@"—"] : nil;
+	if (parts.count > 0) {
+		NSMutableAttributedString *result = [[NSMutableAttributedString alloc] initWithString:[parts componentsJoinedByString:@" – "]];
+
+		if (redCharacterCount > 0) {
+			[result addAttributes:@{ NSForegroundColorAttributeName: [self.styleSheet colorForStyle:ApptentiveColorFailure] } range:NSMakeRange(0, redCharacterCount)];
+		}
+		[result addAttributes:@{ NSForegroundColorAttributeName: [self.styleSheet colorForStyle:ApptentiveTextStyleSurveyInstructions] } range:NSMakeRange(redCharacterCount, result.length - redCharacterCount)];
+
+		return result;
+	} else {
+		return nil;
+	}
 }
 
 - (NSString *)placeholderTextOfQuestionAtIndex:(NSInteger)index {
@@ -190,8 +207,8 @@
 		[[ApptentiveTaskQueue sharedTaskQueue] addTask:task];
 	});
 
-	NSDictionary *notificationInfo = @{ATSurveyIDKey: (self.interaction.identifier ?: [NSNull null])};
-	[[NSNotificationCenter defaultCenter] postNotificationName:ATSurveySentNotification object:nil userInfo:notificationInfo];
+	NSDictionary *notificationInfo = @{ApptentiveSurveyIDKey: (self.interaction.identifier ?: [NSNull null])};
+	[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveSurveySentNotification object:nil userInfo:notificationInfo];
 }
 
 #pragma mark - Validation & Output
@@ -237,7 +254,7 @@
 	}
 
 	if (![self.invalidQuestionIndexes isEqualToIndexSet:previousInvalidQuestionIndexes]) {
-		[self.delegate viewModelValidationChanged:self];
+		[self.delegate viewModelValidationChanged:self isValid:self.invalidQuestionIndexes.count == 0];
 	}
 
 	return self.invalidQuestionIndexes.count == 0;

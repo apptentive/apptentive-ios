@@ -1,5 +1,5 @@
 //
-//  ATMessageCenterProfileView.h
+//  ApptentiveMessageCenterProfileView.h
 //  ApptentiveConnect
 //
 //  Created by Frank Schmitt on 7/20/15.

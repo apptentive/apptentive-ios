@@ -1,5 +1,5 @@
 //
-//  ATUnreadMessagesBadgeView.m
+//  ApptentiveUnreadMessagesBadgeView.m
 //  ApptentiveConnect
 //
 //  Created by Peter Kamb on 6/19/15.
@@ -62,7 +62,7 @@
 	self = [super initWithFrame:frame];
 
 	if (self) {
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(unreadMessageCountChanged:) name:ATMessageCenterUnreadCountChangedNotification object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(unreadMessageCountChanged:) name:ApptentiveMessageCenterUnreadCountChangedNotification object:nil];
 	}
 
 	return self;

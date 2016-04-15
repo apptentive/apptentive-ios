@@ -1,5 +1,5 @@
 //
-//  ATSurveyChoiceCell.m
+//  ApptentiveSurveyChoiceCell.m
 //  CVSurvey
 //
 //  Created by Frank Schmitt on 2/25/16.
@@ -26,12 +26,6 @@
 	[super setHighlighted:highlighted];
 
 	[self.button setHighlighted:highlighted];
-}
-
-- (void)layoutSubviews {
-	[super layoutSubviews];
-
-	self.textLabel.preferredMaxLayoutWidth = CGRectGetWidth(self.textLabel.bounds);
 }
 
 @end

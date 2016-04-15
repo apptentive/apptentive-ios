@@ -1,5 +1,5 @@
 //
-//  ATInteractionMessageCenterController.m
+//  ApptentiveInteractionMessageCenterController.m
 //  ApptentiveConnect
 //
 //  Created by Peter Kamb on 3/3/14.

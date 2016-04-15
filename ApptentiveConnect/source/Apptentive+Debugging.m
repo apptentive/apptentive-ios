@@ -33,7 +33,7 @@
 		ApptentiveLogInfo(@"Storage path of %@ will not be used due to SDK version. Using %@ instead.", storagePath, self.storagePath);
 	}
 
-	self.apiKey = APIKey;
+	self.APIKey = APIKey;
 }
 
 - (NSString *)storagePath {
@@ -42,10 +42,6 @@
 
 - (NSURL *)baseURL {
 	return self.webClient.baseURL;
-}
-
-- (NSString *)APIKey {
-	return self.apiKey;
 }
 
 - (UIView *)unreadAccessoryView {

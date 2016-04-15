@@ -48,12 +48,6 @@ Dein Feedback wird von Apptentive gehostet und unterliegt sowohl der Datenschutz
 "Learn about Apptentive" = "Mehr über Apptentive erfahren";
 
 /* (No Commment) */
-"Missing %d required answers." = "%d erforderliche Antworten fehlen.";
-
-/* (No Commment) */
-"Missing a required answer." = "Eine erforderliche Antwort fehlt.";
-
-/* (No Commment) */
 "Network Connection Error" = "Netzwerkverbindungsfehler";
 
 /* (No Commment) */
@@ -81,9 +75,6 @@ Dein Feedback wird von Apptentive gehostet und unterliegt sowohl der Datenschutz
 "Remind Me Later" = "Später erinnern";
 
 /* (No Commment) */
-"Send Response" = "Antwort senden";
-
-/* (No Commment) */
 "Sending…" = "Versendung…";
 
 /* (No Commment) */
@@ -99,34 +90,10 @@ Dein Feedback wird von Apptentive gehostet und unterliegt sowohl der Datenschutz
 "Server error." = "Serverfehler.";
 
 /* (No Commment) */
-"Survey" = "Umfrage";
-
-/* (No Commment) */
 "Thank You" = "Vielen Dank";
 
 /* (No Commment) */
-"Thanks!" = "Danke!";
-
-/* (No Commment) */
-"The request was well-formed but was unable to be followed due to semantic errors." = "Die Anfrage war wohlgeformt, konnte aber aufgrund semantischer Fehler nicht gefolgt werden.";
-
-/* (No Commment) */
-"Too few selections made for %d questions above." = "Zu geringe Auswahl bei %d der obigen Fragen getroffen.";
-
-/* (No Commment) */
-"Too few selections made for a question above." = "Zu geringe Auswahl bei einer der obigen Fragen getroffen.";
-
-/* (No Commment) */
-"Too many selections made for %d questions above." = "Zu große Auswahl bei %d der obigen Fragen getroffen.";
-
-/* (No Commment) */
-"Too many selections made for a question above." = "Zu große Auswahl bei einer der obigen Fragen getroffen.";
-
-/* (No Commment) */
 "Unable to load the App Store" = "App Store kann nicht geladen werden";
-
-/* (No Commment) */
-"Unprocessable Entity" = "Einheit kann nicht bearbeitet werden";
 
 /* (No Commment) */
 "We're so happy to hear that you love %@! It'd be really helpful if you rated us. Thanks so much for spending some time with us." = "Es freut uns sehr, dass du von %@ begeistert bist! Es wäre wirklich hilfreich, wenn du eine Bewertung abgeben würdest. Vielen Dank, dass du deine Zeit mit uns verbringst.";

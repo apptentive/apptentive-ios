@@ -36,7 +36,7 @@ typedef NS_ENUM(NSInteger, TableViewSection) {
 - (void)viewDidLoad {
 	[super viewDidLoad];
 
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(unreadMessageCountChanged:) name:ATMessageCenterUnreadCountChangedNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(unreadMessageCountChanged:) name:ApptentiveMessageCenterUnreadCountChangedNotification object:nil];
 
 	self.interactions = [Apptentive sharedConnection].engagementInteractions;
 

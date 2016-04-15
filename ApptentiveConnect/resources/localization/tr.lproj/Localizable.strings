@@ -2,9 +2,6 @@
 "About Apptentive" = "Apptentive hakkında";
 
 /* (No Commment) */
-"Answer" = "Yanıt";
-
-/* (No Commment) */
 "Apptentive is a service that allows you to have a conversation with the makers of this app. Your input and feedback can help to provide you with a better overall experience.
 
 Your feedback is hosted by Apptentive and is subject to both Apptentive’s privacy policy and the privacy policy of this app’s developer." = "Appentive bu uygulamanın geliştiricileriyle bir görüşme yapmanıza olanak sağlayan bir hizmettir. Katkınız ve geribildiriminiz daha iyi bir genel deneyiminin sağlanmasına yardımcı olabilir.
@@ -48,12 +45,6 @@ Geribildiriminiz Appentive tarafından barındırılmaktadır ve Appentive'in gi
 "Learn about Apptentive" = "Appentive'i Öğren";
 
 /* (No Commment) */
-"Missing %d required answers." = "%d gerekli yanıt eksik.";
-
-/* (No Commment) */
-"Missing a required answer." = "Gerekli bir yanıt eksik.";
-
-/* (No Commment) */
 "Network Connection Error" = "Ağ Bağlantı Hatası";
 
 /* (No Commment) */
@@ -81,9 +72,6 @@ Geribildiriminiz Appentive tarafından barındırılmaktadır ve Appentive'in gi
 "Remind Me Later" = "Daha Sonra Anımsat";
 
 /* (No Commment) */
-"Send Response" = "Yanıtı Gönder";
-
-/* (No Commment) */
 "Sending…" = "Gönderiliyor…";
 
 /* (No Commment) */
@@ -99,34 +87,10 @@ Geribildiriminiz Appentive tarafından barındırılmaktadır ve Appentive'in gi
 "Server error." = "Sunucu hatası.";
 
 /* (No Commment) */
-"Survey" = "Anket";
-
-/* (No Commment) */
 "Thank You" = "Teşekkür Ederiz";
 
 /* (No Commment) */
-"Thanks!" = "Teşekkürler!";
-
-/* (No Commment) */
-"The request was well-formed but was unable to be followed due to semantic errors." = "İstek iyi oluşturulmuştur, ancak anlam hatalarından dolayı takip edilemiyor.";
-
-/* (No Commment) */
-"Too few selections made for %d questions above." = "Yukarıdaki %d soru için çok az seçim yapıldı.";
-
-/* (No Commment) */
-"Too few selections made for a question above." = "Yukarıdaki bir soru için çok az seçim yapıldı.";
-
-/* (No Commment) */
-"Too many selections made for %d questions above." = "Yukarıdaki %d soru için çok fazla seçim yapıldı.";
-
-/* (No Commment) */
-"Too many selections made for a question above." = "Yukarıdaki bir soru için çok fazla seçim yapıldı.";
-
-/* (No Commment) */
 "Unable to load the App Store" = "App Store'a yüklenemiyor";
-
-/* (No Commment) */
-"Unprocessable Entity" = "İşleme Alınamaz Varlık";
 
 /* (No Commment) */
 "We're so happy to hear that you love %@! It'd be really helpful if you rated us. Thanks so much for spending some time with us." = "%@ uygulamasını sevdiğinizi duymaktan dolayı çok mutluyuz! Bizi derecelendirirseniz, çok yardımcı olacak. Bizimle zaman geçirdiğiniz için çok teşekkürler.";

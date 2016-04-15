@@ -1,5 +1,5 @@
 //
-//  ATEngagementGetManifestTask.h
+//  ApptentiveEngagementGetManifestTask.h
 //  ApptentiveConnect
 //
 //  Created by Peter Kamb on 8/19/13.

@@ -1,5 +1,5 @@
 //
-//  ATSurvey.h
+//  ApptentiveSurvey.h
 //  CVSurvey
 //
 //  Created by Frank Schmitt on 2/26/16.
@@ -22,5 +22,8 @@
 @property (readonly, nonatomic) NSString *successMessage;
 @property (readonly, nonatomic) NSTimeInterval viewPeriod;
 @property (readonly, nonatomic) NSArray<ApptentiveSurveyQuestion *> *questions;
+@property (readonly, nonatomic) NSString *submitText;
+@property (readonly, nonatomic) NSString *requiredText;
+@property (readonly, nonatomic) NSString *validationErrorText;
 
 @end

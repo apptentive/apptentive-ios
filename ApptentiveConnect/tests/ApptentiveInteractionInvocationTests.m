@@ -1,5 +1,5 @@
 //
-//  ATInteractionInvocationTests.m
+//  ApptentiveInteractionInvocationTests.m
 //  ApptentiveConnect
 //
 //  Created by Andrew Wooster on 11/11/15.

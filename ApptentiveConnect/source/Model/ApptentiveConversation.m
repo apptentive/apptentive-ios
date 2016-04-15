@@ -1,5 +1,5 @@
 //
-//  ATConversation.m
+//  ApptentiveConversation.m
 //  ApptentiveConnect
 //
 //  Created by Andrew Wooster on 2/4/13.
@@ -105,6 +105,8 @@
 
 		result[@"app_store_receipt"] = receiptInfo;
 	}
+
+	result[@"overriding_styles"] = @([Apptentive sharedConnection].didAccessStyleSheet);
 
 	return result;
 }

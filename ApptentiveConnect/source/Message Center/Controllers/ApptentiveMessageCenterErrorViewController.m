@@ -1,5 +1,5 @@
 //
-//  ATMessageCenterErrorViewController.m
+//  ApptentiveMessageCenterErrorViewController.m
 //  ApptentiveConnect
 //
 //  Created by Frank Schmitt on 8/4/15.
@@ -35,18 +35,22 @@ NSString *const ATInteractionMessageCenterEventLabelNoInteractionClose = @"no_in
 - (void)viewDidLoad {
 	[super viewDidLoad];
 
-	self.navigationItem.title = ATLocalizedString(@"Message Center", @"Message Center default title");
+	self.navigationItem.title = ApptentiveLocalizedString(@"Message Center", @"Message Center default title");
 
 	if ([ApptentiveReachability sharedReachability].currentNetworkStatus == ApptentiveNetworkNotReachable) {
-		self.imageView.image = [ApptentiveBackend imageNamed:@"at_network_error"];
-		self.textLabel.text = ATLocalizedString(@"You must connect to the internet before you can send feedback.", @"Message Center configuration hasn't downloaded due to connection problem.");
+		self.imageView.image = [[ApptentiveBackend imageNamed:@"at_network_error"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+		self.textLabel.text = ApptentiveLocalizedString(@"You must connect to the internet before you can send feedback.", @"Message Center configuration hasn't downloaded due to connection problem.");
 
 		[[Apptentive sharedConnection].engagementBackend engageCodePoint:[self codePointForEvent:ATInteractionMessageCenterEventLabelNoInteractionNoInternet] fromInteraction:nil userInfo:nil customData:nil extendedData:nil fromViewController:self];
 	} else {
-		self.imageView.image = [ApptentiveBackend imageNamed:@"at_error_wait"];
-		self.textLabel.text = ATLocalizedString(@"We’re attempting to connect. Thanks for your patience!", @"Message Center configuration is waiting to be downloaded or encountered a server error.");
+		self.imageView.image = [[ApptentiveBackend imageNamed:@"at_error_wait"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+		self.textLabel.text = ApptentiveLocalizedString(@"We’re attempting to connect. Thanks for your patience!", @"Message Center configuration is waiting to be downloaded or encountered a server error.");
 
 		[[Apptentive sharedConnection].engagementBackend engageCodePoint:[self codePointForEvent:ATInteractionMessageCenterEventLabelNoInteractionAttempting] fromInteraction:nil userInfo:nil customData:nil extendedData:nil fromViewController:self];
+
+		self.imageView.tintColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveTextStyleMessageCenterStatus];
+		self.textLabel.textColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveTextStyleMessageCenterStatus];
+		self.view.backgroundColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveColorCollectionBackground];
 	}
 }
 

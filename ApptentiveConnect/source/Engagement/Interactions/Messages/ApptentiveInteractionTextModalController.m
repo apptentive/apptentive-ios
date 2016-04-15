@@ -1,5 +1,5 @@
 //
-//  ATInteractionTextModalController.m
+//  ApptentiveInteractionTextModalController.m
 //  ApptentiveConnect
 //
 //  Created by Peter Kamb on 1/27/15.

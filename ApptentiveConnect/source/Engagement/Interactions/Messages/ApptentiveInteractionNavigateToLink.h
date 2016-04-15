@@ -1,5 +1,5 @@
 //
-//  ATInteractionNavigateToLink.h
+//  ApptentiveInteractionNavigateToLink.h
 //  ApptentiveConnect
 //
 //  Created by Peter Kamb on 12/19/14.

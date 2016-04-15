@@ -1,5 +1,5 @@
 //
-//  ATInteractionSurveyController.m
+//  ApptentiveInteractionSurveyController.m
 //  ApptentiveConnect
 //
 //  Created by Peter Kamb on 4/9/14.
@@ -37,8 +37,8 @@ NSString *const ATInteractionSurveyEventLabelLaunch = @"launch";
 	ApptentiveSurveyViewController *surveyViewController = navigationController.viewControllers.firstObject;
 	surveyViewController.viewModel = [[ApptentiveSurveyViewModel alloc] initWithInteraction:self.interaction];
 
-	NSDictionary *notificationInfo = @{ATSurveyIDKey: (self.interaction.identifier ?: [NSNull null])};
-	[[NSNotificationCenter defaultCenter] postNotificationName:ATSurveyShownNotification object:nil userInfo:notificationInfo];
+	NSDictionary *notificationInfo = @{ApptentiveSurveyIDKey: (self.interaction.identifier ?: [NSNull null])};
+	[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveSurveyShownNotification object:nil userInfo:notificationInfo];
 
 	[self.interaction engage:ATInteractionSurveyEventLabelLaunch fromViewController:self.viewController];
 

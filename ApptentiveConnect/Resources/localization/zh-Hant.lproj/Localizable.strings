@@ -2,9 +2,6 @@
 "About Apptentive" = "關於 Apptentive";
 
 /* (No Commment) */
-"Answer" = "回答";
-
-/* (No Commment) */
 "Apptentive is a service that allows you to have a conversation with the makers of this app. Your input and feedback can help to provide you with a better overall experience.
 
 Your feedback is hosted by Apptentive and is subject to both Apptentive’s privacy policy and the privacy policy of this app’s developer." = "Apptentive 是一款可讓您與此應用程式製作者對話的服務。您的想法與意見將可協助提供您更出色的整體使用體驗。
@@ -48,12 +45,6 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
 "Learn about Apptentive" = "瞭解 Apptentive";
 
 /* (No Commment) */
-"Missing %d required answers." = "缺少 %d 個必填回答。";
-
-/* (No Commment) */
-"Missing a required answer." = "缺少一個必填回答。";
-
-/* (No Commment) */
 "Network Connection Error" = "網路連線錯誤";
 
 /* (No Commment) */
@@ -81,9 +72,6 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
 "Remind Me Later" = "稍後提醒我";
 
 /* (No Commment) */
-"Send Response" = "傳送回應";
-
-/* (No Commment) */
 "Sending…" = "正在傳送...";
 
 /* (No Commment) */
@@ -99,34 +87,10 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
 "Server error." = "伺服器錯誤。";
 
 /* (No Commment) */
-"Survey" = "調查";
-
-/* (No Commment) */
 "Thank You" = "謝謝您";
 
 /* (No Commment) */
-"Thanks!" = "謝謝！";
-
-/* (No Commment) */
-"The request was well-formed but was unable to be followed due to semantic errors." = "已成功建立要求，但因語義錯誤而無法追蹤。";
-
-/* (No Commment) */
-"Too few selections made for %d questions above." = "上述 %d 個問題的選擇太少。";
-
-/* (No Commment) */
-"Too few selections made for a question above." = "上述一個問題的選擇太少。";
-
-/* (No Commment) */
-"Too many selections made for %d questions above." = "上述 %d 個問題的選擇太多。";
-
-/* (No Commment) */
-"Too many selections made for a question above." = "上述一個問題的選擇太多。";
-
-/* (No Commment) */
 "Unable to load the App Store" = "無法載入 App Store";
-
-/* (No Commment) */
-"Unprocessable Entity" = "無法處理的實體";
 
 /* (No Commment) */
 "We're so happy to hear that you love %@! It'd be really helpful if you rated us. Thanks so much for spending some time with us." = "我們很高興聽到您喜歡 %@！若您能給予評等，我們將獲益良多。非常感謝您寶貴的時間。";

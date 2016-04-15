@@ -1,5 +1,5 @@
 //
-//  ATTask.m
+//  ApptentiveTask.m
 //  ApptentiveConnect
 //
 //  Created by Andrew Wooster on 3/20/11.

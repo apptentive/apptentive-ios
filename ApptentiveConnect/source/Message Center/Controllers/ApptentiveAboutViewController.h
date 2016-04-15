@@ -1,5 +1,5 @@
 //
-//  ATAboutViewController.h
+//  ApptentiveAboutViewController.h
 //  ApptentiveConnect
 //
 //  Created by Frank Schmitt on 7/28/15.

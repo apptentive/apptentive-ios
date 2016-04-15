@@ -1,5 +1,5 @@
 //
-//  ATCompoundMessage.h
+//  ApptentiveMessage.h
 //  ApptentiveConnect
 //
 //  Created by Andrew Wooster on 10/6/12.

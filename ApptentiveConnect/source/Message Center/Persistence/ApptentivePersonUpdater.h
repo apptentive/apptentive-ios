@@ -1,5 +1,5 @@
 //
-//  ATPersonUpdater.h
+//  ApptentivePersonUpdater.h
 //  ApptentiveConnect
 //
 //  Created by Andrew Wooster on 10/2/12.

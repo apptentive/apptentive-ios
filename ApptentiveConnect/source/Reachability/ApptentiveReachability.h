@@ -1,5 +1,5 @@
 //
-//  ATReachability.h
+//  ApptentiveReachability.h
 //  ApptentiveConnect
 //
 //  Created by Andrew Wooster on 4/13/11.

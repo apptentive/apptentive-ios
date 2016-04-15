@@ -1,5 +1,5 @@
 //
-//  ATMessageCenterGreetingView.h
+//  ApptentiveMessageCenterGreetingView.h
 //  ApptentiveConnect
 //
 //  Created by Frank Schmitt on 5/20/15.

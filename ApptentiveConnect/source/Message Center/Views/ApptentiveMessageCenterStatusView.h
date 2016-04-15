@@ -1,5 +1,5 @@
 //
-//  ATMessageCenterStatusView.h
+//  ApptentiveMessageCenterStatusView.h
 //  ApptentiveConnect
 //
 //  Created by Frank Schmitt on 5/21/15.
@@ -21,5 +21,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterStatusMode) {
 
 @property (assign, nonatomic) ATMessageCenterStatusMode mode;
 @property (weak, nonatomic) IBOutlet UILabel *statusLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *imageView;
 
 @end

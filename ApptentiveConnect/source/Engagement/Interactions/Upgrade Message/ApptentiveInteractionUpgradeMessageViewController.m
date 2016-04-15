@@ -1,5 +1,5 @@
 //
-//  ATInteractionUpgradeMessageViewController.m
+//  ApptentiveInteractionUpgradeMessageViewController.m
 //  ApptentiveConnect
 //
 //  Created by Peter Kamb on 10/16/13.
@@ -82,7 +82,7 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 
 	// Powered by Apptentive logo
 	if ([[self.upgradeMessageInteraction.configuration objectForKey:@"show_powered_by"] boolValue] && ![Apptentive sharedConnection].backend.hideBranding) {
-		self.poweredByApptentiveLogo.text = ATLocalizedString(@"Powered by", @"Powered by followed by Apptentive logo.");
+		self.poweredByApptentiveLogo.text = ApptentiveLocalizedString(@"Powered by", @"Powered by followed by Apptentive logo.");
 		UIImage *poweredByApptentiveIcon = [ApptentiveBackend imageNamed:@"at_update_logo"];
 		[self.poweredByApptentiveIconView setImage:poweredByApptentiveIcon];
 	} else {

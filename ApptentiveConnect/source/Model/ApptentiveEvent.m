@@ -1,5 +1,5 @@
 //
-//  ATEvent.m
+//  ApptentiveEvent.m
 //  ApptentiveConnect
 //
 //  Created by Andrew Wooster on 2/13/13.
@@ -7,6 +7,7 @@
 //
 
 #import "ApptentiveEvent.h"
+#import "ApptentiveRecordRequestTask.h"
 #import "ApptentiveData.h"
 #import "ApptentiveWebClient+Metrics.h"
 #import "Apptentive_Private.h"
@@ -33,6 +34,17 @@
 	ApptentiveEvent *result = (ApptentiveEvent *)[ApptentiveData newEntityNamed:@"ATEvent"];
 	result.label = label;
 	[result setup];
+	return result;
+}
+
++ (instancetype)findEventWithPendingID:(NSString *)pendingEventID {
+	ApptentiveEvent *result = nil;
+
+	@synchronized(self) {
+		NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"(pendingEventID == %@)", pendingEventID];
+		result = [ApptentiveData findEntityNamed:@"ATEvent" withPredicate:fetchPredicate].firstObject;
+	}
+
 	return result;
 }
 

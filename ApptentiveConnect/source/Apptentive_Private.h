@@ -28,11 +28,10 @@ extern NSString *const ApptentiveCustomDeviceDataChangedNotification;
 @property (strong, nonatomic) NSDictionary *pushUserInfo;
 @property (strong, nonatomic) UIViewController *pushViewController;
 
-#if TARGET_OS_IPHONE
+@property (readonly, nonatomic) BOOL didAccessStyleSheet;
 
 // For debugging only.
 - (void)resetUpgradeData;
-#endif
 
 /*!
  * Returns the NSBundle corresponding to the bundle containing Apptentive's
@@ -51,7 +50,7 @@ extern NSString *const ApptentiveCustomDeviceDataChangedNotification;
 
 /*! Replacement for NSLocalizedString within ApptentiveConnect. Pulls
  localized strings out of the resource bundle. */
-extern NSString *ATLocalizedString(NSString *key, NSString *comment);
+extern NSString *ApptentiveLocalizedString(NSString *key, NSString *comment);
 
 
 @interface ApptentiveNavigationController (AboutView)

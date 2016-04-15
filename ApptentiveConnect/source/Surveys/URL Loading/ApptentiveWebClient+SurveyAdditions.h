@@ -1,5 +1,5 @@
 //
-//  ATWebClient+SurveyAdditions.h
+//  ApptentiveWebClient+SurveyAdditions.h
 //  ApptentiveSurveys
 //
 //  Created by Andrew Wooster on 11/4/11.

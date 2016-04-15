@@ -271,8 +271,6 @@
 		49E891D0134FE2AB00DD098A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 49E891CD134FE2AB00DD098A /* Localizable.strings */; };
 		49EA5AB014BD08AD004F8A4D /* ApptentiveLegacyRecord.h in Headers */ = {isa = PBXBuildFile; fileRef = 49EA5AAE14BD08AD004F8A4D /* ApptentiveLegacyRecord.h */; };
 		49EA5AB114BD08AD004F8A4D /* ApptentiveLegacyRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = 49EA5AAF14BD08AD004F8A4D /* ApptentiveLegacyRecord.m */; };
-		49EA5ABD14BD0F4D004F8A4D /* ApptentiveRecordTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 49EA5ABB14BD0F4D004F8A4D /* ApptentiveRecordTask.h */; };
-		49EA5ABE14BD0F4D004F8A4D /* ApptentiveRecordTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 49EA5ABC14BD0F4D004F8A4D /* ApptentiveRecordTask.m */; };
 		49ED18051BF97B4500C6D343 /* ApptentiveInteractionUsageDataTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 49ED18041BF97B4500C6D343 /* ApptentiveInteractionUsageDataTests.m */; };
 		49ED18211BF988C300C6D343 /* libOCMock.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 49ED18151BF988C300C6D343 /* libOCMock.a */; };
 		49ED184A1BF98B2300C6D343 /* libApptentiveConnect.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 496DC37F1333D35600743F65 /* libApptentiveConnect.a */; };
@@ -633,8 +631,6 @@
 		49E740901840498100413697 /* ATDataModelv3.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = ATDataModelv3.sqlite; sourceTree = "<group>"; };
 		49EA5AAE14BD08AD004F8A4D /* ApptentiveLegacyRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveLegacyRecord.h; sourceTree = "<group>"; };
 		49EA5AAF14BD08AD004F8A4D /* ApptentiveLegacyRecord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveLegacyRecord.m; sourceTree = "<group>"; };
-		49EA5ABB14BD0F4D004F8A4D /* ApptentiveRecordTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveRecordTask.h; sourceTree = "<group>"; };
-		49EA5ABC14BD0F4D004F8A4D /* ApptentiveRecordTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveRecordTask.m; sourceTree = "<group>"; };
 		49EA62C317F50D9400C5A638 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Localizable.strings; sourceTree = "<group>"; };
 		49ED18041BF97B4500C6D343 /* ApptentiveInteractionUsageDataTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveInteractionUsageDataTests.m; sourceTree = "<group>"; };
 		49ED18151BF988C300C6D343 /* libOCMock.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libOCMock.a; sourceTree = "<group>"; };
@@ -726,7 +722,7 @@
 		58DCC0D2180F445700A3A7AE /* ApptentiveInteractionUpgradeMessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveInteractionUpgradeMessageViewController.h; sourceTree = "<group>"; };
 		58DCC0D3180F445700A3A7AE /* ApptentiveInteractionUpgradeMessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveInteractionUpgradeMessageViewController.m; sourceTree = "<group>"; };
 		58DD74FA1B8FA6A300F2804A /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
-		58DD74FB1B8FA6A500F2804A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		58DD74FB1B8FA6A500F2804A /* en */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		58DD74FC1B8FA6B200F2804A /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		58DD74FD1B8FA6B300F2804A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		58E95808190740BC005063DC /* ApptentiveSurveyQuestionResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveSurveyQuestionResponse.h; sourceTree = "<group>"; };
@@ -1073,7 +1069,7 @@
 			path = "URL Loading";
 			sourceTree = "<group>";
 		};
-		492F2F0B16E3F8060030E48A /* Resources */ = {
+		492F2F0B16E3F8060030E48A /* resources */ = {
 			isa = PBXGroup;
 			children = (
 				016085281BA77B0500050FDB /* Images */,
@@ -1081,6 +1077,7 @@
 				4967278516B9FE7000C679B8 /* ApptentiveResources */,
 				49E891CC134FE2AA00DD098A /* localization */,
 			);
+			name = resources;
 			path = Resources;
 			sourceTree = "<group>";
 		};
@@ -1214,7 +1211,7 @@
 			isa = PBXGroup;
 			children = (
 				49C00295133413BB0071F088 /* source */,
-				492F2F0B16E3F8060030E48A /* Resources */,
+				492F2F0B16E3F8060030E48A /* resources */,
 				49C002861334137E0071F088 /* tests */,
 				496DC3811333D35600743F65 /* Frameworks */,
 				496DC3801333D35600743F65 /* Products */,
@@ -1413,8 +1410,6 @@
 			children = (
 				49D1124D13368CC200603373 /* ApptentiveTask.h */,
 				49D1124E13368CC200603373 /* ApptentiveTask.m */,
-				49EA5ABB14BD0F4D004F8A4D /* ApptentiveRecordTask.h */,
-				49EA5ABC14BD0F4D004F8A4D /* ApptentiveRecordTask.m */,
 				49D112711337CC9E00603373 /* ApptentiveTaskQueue.h */,
 				49D112721337CC9F00603373 /* ApptentiveTaskQueue.m */,
 				498EFB6E15BA48B200A1043B /* ApptentiveAppConfigurationUpdateTask.h */,
@@ -1643,7 +1638,6 @@
 				49B877111464958C00594A5D /* ApptentiveWebClient_Private.h in Headers */,
 				49EA5AB014BD08AD004F8A4D /* ApptentiveLegacyRecord.h in Headers */,
 				0132F8C71C851C0800A452E3 /* ApptentiveSurveyChoiceCell.h in Headers */,
-				49EA5ABD14BD0F4D004F8A4D /* ApptentiveRecordTask.h in Headers */,
 				0132F8C91C851C0800A452E3 /* ApptentiveSurveyMultilineCell.h in Headers */,
 				01C85EE61CADBB8800743DA0 /* ApptentiveStyleSheet.h in Headers */,
 				58B703EE1B0EB6DB0024478C /* ApptentiveMessageCenterViewController.h in Headers */,
@@ -1928,7 +1922,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "echo \"Configuration is: ${CONFIGURATION}\"\nif [ \"${CONFIGURATION}\" = 'Release' ]; then\n    echo \"b\"\n    if [ -e \"${PROJECT_DIR}/resources/localization/en.lproj/Localizable.strings\" ]; then\n        echo \"c\"\n        rm \"${PROJECT_DIR}/resources/localization/en.lproj/Localizable.strings\"\n    fi\n    find \"${PROJECT_DIR}/source/\" -name *.m -print0 | xargs -0 genstrings -s ATLocalizedString -o \"${PROJECT_DIR}/resources/localization/en.lproj\"\nfi\n";
+			shellScript = "echo \"Configuration is: ${CONFIGURATION}\"\nif [ \"${CONFIGURATION}\" = 'Release' ]; then\n    echo \"b\"\n    if [ -e \"${PROJECT_DIR}/resources/localization/en.lproj/Localizable.strings\" ]; then\n        echo \"c\"\n        rm \"${PROJECT_DIR}/resources/localization/en.lproj/Localizable.strings\"\n    fi\n    find \"${PROJECT_DIR}/source/\" -name *.m -print0 | xargs -0 genstrings -s ApptentiveLocalizedString -o \"${PROJECT_DIR}/resources/localization/en.lproj\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1968,7 +1962,6 @@
 				49352AC5138C97A2000E464A /* ATAPIRequest.m in Sources */,
 				49EA5AB114BD08AD004F8A4D /* ApptentiveLegacyRecord.m in Sources */,
 				0132F8AD1C851BFA00A452E3 /* ApptentiveSurveyLayoutAttributes.m in Sources */,
-				49EA5ABE14BD0F4D004F8A4D /* ApptentiveRecordTask.m in Sources */,
 				0132F8C61C851C0800A452E3 /* ApptentiveSurveyAnswerCell.m in Sources */,
 				49CEFF5E15168B54006D8BA8 /* ApptentiveAppConfigurationUpdater.m in Sources */,
 				49735D631832DF1F00D48DE7 /* ApptentiveMessageCenterDataSource.m in Sources */,

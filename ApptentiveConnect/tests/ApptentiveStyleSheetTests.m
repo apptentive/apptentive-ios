@@ -1,5 +1,5 @@
 //
-//  ATStyleSheetTests.m
+//  ApptentiveStyleSheetTests.m
 //  ApptentiveConnect
 //
 //  Created by Frank Schmitt on 3/18/16.
@@ -10,16 +10,18 @@
 #import "ApptentiveStyleSheet.h"
 #import "Apptentive.h"
 
+
 @interface ApptentiveStyleSheetTests : XCTestCase
 
 @property (strong, nonatomic) ApptentiveStyleSheet *styleSheet;
 
 @end
 
+
 @implementation ApptentiveStyleSheetTests
 
 - (void)setUp {
-    [super setUp];
+	[super setUp];
 
 	self.styleSheet = [[ApptentiveStyleSheet alloc] init];
 }

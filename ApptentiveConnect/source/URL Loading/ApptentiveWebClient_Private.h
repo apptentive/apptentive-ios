@@ -1,5 +1,5 @@
 //
-//  ATWebClient_Private.h
+//  ApptentiveWebClient_Private.h
 //  ApptentiveConnect
 //
 //  Created by Andrew Wooster on 11/4/11.

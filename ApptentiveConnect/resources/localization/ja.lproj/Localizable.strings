@@ -2,9 +2,6 @@
 "About Apptentive" = "Apptentive について";
 
 /* (No Commment) */
-"Answer" = "回答";
-
-/* (No Commment) */
 "Apptentive is a service that allows you to have a conversation with the makers of this app. Your input and feedback can help to provide you with a better overall experience.
 
 Your feedback is hosted by Apptentive and is subject to both Apptentive’s privacy policy and the privacy policy of this app’s developer." = "Apptentive は、アプリ作成者と対話ができるサービスです。当製品の全体的な品質向上には、お客様のご意見及びフィードバックが欠かせません。
@@ -48,12 +45,6 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
 "Learn about Apptentive" = "Apptentive について学ぶ";
 
 /* (No Commment) */
-"Missing %d required answers." = "%d 個の必須回答が欠けています。";
-
-/* (No Commment) */
-"Missing a required answer." = "必須の回答が欠けています。";
-
-/* (No Commment) */
 "Network Connection Error" = "ネットワーク接続エラー";
 
 /* (No Commment) */
@@ -81,9 +72,6 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
 "Remind Me Later" = "後で通知する";
 
 /* (No Commment) */
-"Send Response" = "回答を送信";
-
-/* (No Commment) */
 "Sending…" = "送信中。。。";
 
 /* (No Commment) */
@@ -99,34 +87,10 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
 "Server error." = "サーバー エラーです。";
 
 /* (No Commment) */
-"Survey" = "調査";
-
-/* (No Commment) */
 "Thank You" = "ありがとうございます";
 
 /* (No Commment) */
-"Thanks!" = "ありがとう ！";
-
-/* (No Commment) */
-"The request was well-formed but was unable to be followed due to semantic errors." = "リクエストの形式は整っていましたが、セマンティックエラーの為に従う事ができませんでした。";
-
-/* (No Commment) */
-"Too few selections made for %d questions above." = "上記の質問 %d 問で、選択回答数が少なすぎます。";
-
-/* (No Commment) */
-"Too few selections made for a question above." = "上記の質問で、選択回答数が少なすぎます。";
-
-/* (No Commment) */
-"Too many selections made for %d questions above." = "上記の質問 %d 問で、選択回答数が多すぎます。";
-
-/* (No Commment) */
-"Too many selections made for a question above." = "上記の質問で、選択回答数が多すぎます。";
-
-/* (No Commment) */
 "Unable to load the App Store" = "App ストアを読み込む事ができません";
-
-/* (No Commment) */
-"Unprocessable Entity" = "処理不能なエンティティ";
 
 /* (No Commment) */
 "We're so happy to hear that you love %@! It'd be really helpful if you rated us. Thanks so much for spending some time with us." = "%@ に夢中だとお伺いして大変嬉しいです！ もしこのアプリを評価して下さったら非常に助かります。お時間を割いて頂きありがとうございます。";

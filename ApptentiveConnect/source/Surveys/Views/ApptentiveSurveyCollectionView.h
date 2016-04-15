@@ -1,5 +1,5 @@
 //
-//  ATCollectionView.h
+//  ApptentiveSurveyCollectionView.h
 //  CVSurvey
 //
 //  Created by Frank Schmitt on 2/26/16.

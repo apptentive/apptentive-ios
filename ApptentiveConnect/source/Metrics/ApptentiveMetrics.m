@@ -14,7 +14,6 @@
 #import "ApptentiveData.h"
 #import "ApptentiveEvent.h"
 #import "ApptentiveMetric.h"
-#import "ApptentiveRecordTask.h"
 #import "ApptentiveRecordRequestTask.h"
 #import "ApptentiveSurveyMetrics.h"
 #import "ApptentiveTaskQueue.h"
@@ -146,7 +145,7 @@ static NSString *ATMetricNameSurveyAnswerQuestion = @"survey.question_response";
 	}
 
 	ApptentiveRecordRequestTask *task = [[ApptentiveRecordRequestTask alloc] init];
-	[task setTaskProvider:event];
+	task.event = event;
 	[[ApptentiveTaskQueue sharedTaskQueue] addTask:task];
 	event = nil;
 	task = nil;
@@ -164,13 +163,10 @@ static NSString *ATMetricNameSurveyAnswerQuestion = @"survey.question_response";
 
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(preferencesChanged:) name:ATConfigurationPreferencesChangedNotification object:nil];
 
-#if TARGET_OS_IPHONE
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillTerminate:) name:UIApplicationWillTerminateNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillEnterForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
-#elif TARGET_OS_MAC
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillTerminate:) name:NSApplicationWillTerminateNotification object:nil];
-#endif
+
 		[self performSelector:@selector(addLaunchMetric) withObject:nil afterDelay:0.1];
 	}
 }
@@ -202,7 +198,7 @@ static NSString *ATMetricNameSurveyAnswerQuestion = @"survey.question_response";
 	}
 
 	ApptentiveRecordRequestTask *task = [[ApptentiveRecordRequestTask alloc] init];
-	[task setTaskProvider:event];
+	task.event = event;
 	[[ApptentiveTaskQueue sharedTaskQueue] addTask:task];
 	event = nil;
 	task = nil;

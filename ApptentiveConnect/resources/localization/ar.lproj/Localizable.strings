@@ -2,9 +2,6 @@
 "About Apptentive" = "نبذة عن أبتينتيف";
 
 /* (No Commment) */
-"Answer" = "الجواب";
-
-/* (No Commment) */
 "Apptentive is a service that allows you to have a conversation with the makers of this app. Your input and feedback can help to provide you with a better overall experience.
 
 Your feedback is hosted by Apptentive and is subject to both Apptentive’s privacy policy and the privacy policy of this app’s developer." = "Apptentive هي خدمة تتيح لك إجراء المحادثة مع صناع هذا التطبيق. من شأن إدخالك وتعليقاتك أن تساعد في تقديم خدمة أفضل بشكل كلي.
@@ -49,12 +46,6 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
 "Learn about Apptentive" = "اعرف عن Apptentive";
 
 /* (No Commment) */
-"Missing %d required answers." = "%d إجابات مفقودة.";
-
-/* (No Commment) */
-"Missing a required answer." = "إحدى الإجابات المطلوبة مفقودة.";
-
-/* (No Commment) */
 "Network Connection Error" = "خطأ في الاتصال بالشبكة";
 
 /* (No Commment) */
@@ -82,9 +73,6 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
 "Remind Me Later" = "ذكرني لاحقاً";
 
 /* (No Commment) */
-"Send Response" = "إرسال الرد";
-
-/* (No Commment) */
 "Sending…" = "جاري الإرسال...";
 
 /* (No Commment) */
@@ -100,34 +88,10 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
 "Server error." = "خطأ في الخادم.";
 
 /* (No Commment) */
-"Survey" = "استقصاء";
-
-/* (No Commment) */
 "Thank You" = "شكراً لك";
 
 /* (No Commment) */
-"Thanks!" = "شكرا!";
-
-/* (No Commment) */
-"The request was well-formed but was unable to be followed due to semantic errors." = "هذا الطلب منسق بشكل جيد لكن تعذر أن يتم اتباعه بسبب أخطاء دلالية.";
-
-/* (No Commment) */
-"Too few selections made for %d questions above." = "اختيارات قليلة جداً للأسئلة البالغ عددها %d أسئلة أعلاه.";
-
-/* (No Commment) */
-"Too few selections made for a question above." = "اختيارات قليلة جداً للسؤال أعلاه.";
-
-/* (No Commment) */
-"Too many selections made for %d questions above." = "اختيارات كثيرة جداً للأسئلة البالغ عددها %d أسئلة أعلاه.";
-
-/* (No Commment) */
-"Too many selections made for a question above." = "اختيارات كثيرة جداً للسؤال أعلاه.";
-
-/* (No Commment) */
 "Unable to load the App Store" = "تعذر تحميل متجر التطبيقات";
-
-/* (No Commment) */
-"Unprocessable Entity" = "وحدة غير قابلة للمعالجة";
 
 /* (No Commment) */
 "We're so happy to hear that you love %@! It'd be really helpful if you rated us. Thanks so much for spending some time with us." = "يسعدنا أن %@ قد أعجبك! سيكون من المفيد حقاً إذا قمت بتقييمنا. شكراً جزيلاً لقضاء بعض الوقت معنا.";

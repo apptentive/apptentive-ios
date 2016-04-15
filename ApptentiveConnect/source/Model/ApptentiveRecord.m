@@ -1,5 +1,5 @@
 //
-//  ATRecord.m
+//  ApptentiveRecord.m
 //  ApptentiveConnect
 //
 //  Created by Andrew Wooster on 2/13/13.

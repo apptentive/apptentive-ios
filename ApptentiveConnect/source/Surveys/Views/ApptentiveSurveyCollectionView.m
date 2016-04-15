@@ -1,5 +1,5 @@
 //
-//  ATCollectionView.m
+//  ApptentiveSurveyCollectionView.m
 //  CVSurvey
 //
 //  Created by Frank Schmitt on 2/26/16.
@@ -60,6 +60,12 @@
 	}
 
 	[self.collectionViewLayout invalidateLayout];
+}
+
+- (void)setContentOffset:(CGPoint)contentOffset animated:(BOOL)animated {
+	if (!self.scrollingPaused) {
+		[super setContentOffset:contentOffset animated:animated];
+	}
 }
 
 - (void)setContentOffset:(CGPoint)contentOffset {

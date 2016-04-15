@@ -1,5 +1,5 @@
 //
-//  ATInteractionRatingDialogController.m
+//  ApptentiveInteractionRatingDialogController.m
 //  ApptentiveConnect
 //
 //  Created by Peter Kamb on 7/15/15.
@@ -34,31 +34,31 @@ NSString *const ATInteractionRatingDialogEventLabelDecline = @"decline";
 }
 
 - (NSString *)title {
-	NSString *title = self.interaction.configuration[@"title"] ?: ATLocalizedString(@"Thank You", @"Rate app title.");
+	NSString *title = self.interaction.configuration[@"title"] ?: ApptentiveLocalizedString(@"Thank You", @"Rate app title.");
 
 	return title;
 }
 
 - (NSString *)body {
-	NSString *body = self.interaction.configuration[@"body"] ?: [NSString stringWithFormat:ATLocalizedString(@"We're so happy to hear that you love %@! It'd be really helpful if you rated us. Thanks so much for spending some time with us.", @"Rate app message. Parameter is app name."), [[Apptentive sharedConnection].backend appName]];
+	NSString *body = self.interaction.configuration[@"body"] ?: [NSString stringWithFormat:ApptentiveLocalizedString(@"We're so happy to hear that you love %@! It'd be really helpful if you rated us. Thanks so much for spending some time with us.", @"Rate app message. Parameter is app name."), [[Apptentive sharedConnection].backend appName]];
 
 	return body;
 }
 
 - (NSString *)rateText {
-	NSString *rateText = self.interaction.configuration[@"rate_text"] ?: [NSString stringWithFormat:ATLocalizedString(@"Rate %@", @"Rate app button title"), [[Apptentive sharedConnection].backend appName]];
+	NSString *rateText = self.interaction.configuration[@"rate_text"] ?: [NSString stringWithFormat:ApptentiveLocalizedString(@"Rate %@", @"Rate app button title"), [[Apptentive sharedConnection].backend appName]];
 
 	return rateText;
 }
 
 - (NSString *)declineText {
-	NSString *declineText = self.interaction.configuration[@"decline_text"] ?: ATLocalizedString(@"No Thanks", @"cancel title for app rating dialog");
+	NSString *declineText = self.interaction.configuration[@"decline_text"] ?: ApptentiveLocalizedString(@"No Thanks", @"cancel title for app rating dialog");
 
 	return declineText;
 }
 
 - (NSString *)remindText {
-	NSString *remindText = self.interaction.configuration[@"remind_text"] ?: ATLocalizedString(@"Remind Me Later", @"Remind me later button title");
+	NSString *remindText = self.interaction.configuration[@"remind_text"] ?: ApptentiveLocalizedString(@"Remind Me Later", @"Remind me later button title");
 
 	return remindText;
 }
@@ -135,7 +135,7 @@ NSString *const ATInteractionRatingDialogEventLabelDecline = @"decline";
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
 	if (alertView == self.alertView) {
 		if (buttonIndex == 1) { // rate
-			[[NSNotificationCenter defaultCenter] postNotificationName:ATAppRatingFlowUserAgreedToRateAppNotification object:nil];
+			[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveAppRatingFlowUserAgreedToRateAppNotification object:nil];
 
 			[self.interaction engage:ATInteractionRatingDialogEventLabelRate fromViewController:self.viewController];
 		} else if (buttonIndex == 2) { // remind later

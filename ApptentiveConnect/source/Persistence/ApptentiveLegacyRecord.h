@@ -1,5 +1,5 @@
 //
-//  ATLegacyRecord.h
+//  ApptentiveLegacyRecord.h
 //  ApptentiveConnect
 //
 //  Created by Andrew Wooster on 1/10/12.

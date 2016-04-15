@@ -1,5 +1,5 @@
 //
-//  ATSurveyLayoutAttributes.m
+//  ApptentiveSurveyLayoutAttributes.m
 //  CVSurvey
 //
 //  Created by Frank Schmitt on 2/26/16.

@@ -1,5 +1,5 @@
 //
-//  ATConversationUpdater.h
+//  ApptentiveConversationUpdater.h
 //  ApptentiveConnect
 //
 //  Created by Andrew Wooster on 2/4/13.

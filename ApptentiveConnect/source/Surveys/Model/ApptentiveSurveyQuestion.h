@@ -1,5 +1,5 @@
 //
-//  ATSurveyQuestion.h
+//  ApptentiveSurveyQuestion.h
 //  CVSurvey
 //
 //  Created by Frank Schmitt on 2/29/16.

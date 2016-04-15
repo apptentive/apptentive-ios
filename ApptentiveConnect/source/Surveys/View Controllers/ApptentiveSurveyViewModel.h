@@ -1,5 +1,5 @@
 //
-//  ATSurveyViewModel.h
+//  ApptentiveSurveyViewModel.h
 //  CVSurvey
 //
 //  Created by Frank Schmitt on 2/23/16.
@@ -31,12 +31,13 @@
 
 @property (readonly, nonatomic) BOOL showThankYou;
 @property (readonly, nonatomic) NSString *thankYouText;
+@property (readonly, nonatomic) NSString *missingRequiredItemText;
 
 - (NSInteger)numberOfQuestionsInSurvey;
 - (NSInteger)numberOfAnswersForQuestionAtIndex:(NSInteger)index;
 
 - (NSString *)textOfQuestionAtIndex:(NSInteger)index;
-- (NSString *)instructionTextOfQuestionAtIndex:(NSInteger)index;
+- (NSAttributedString *)instructionTextOfQuestionAtIndex:(NSInteger)index;
 - (NSString *)placeholderTextOfQuestionAtIndex:(NSInteger)index;
 - (ATSurveyQuestionType)typeOfQuestionAtIndex:(NSInteger)index;
 
@@ -62,6 +63,6 @@
 @protocol ATSurveyViewModelDelegate <NSObject>
 
 - (void)viewModel:(ApptentiveSurveyViewModel *)viewModel didDeselectAnswerAtIndexPath:(NSIndexPath *)indexPath;
-- (void)viewModelValidationChanged:(ApptentiveSurveyViewModel *)viewModel;
+- (void)viewModelValidationChanged:(ApptentiveSurveyViewModel *)viewModel isValid:(BOOL)valid;
 
 @end

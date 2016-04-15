@@ -1,5 +1,5 @@
 //
-//  ATAttachmentController.m
+//  ApptentiveAttachmentController.m
 //  ApptentiveConnect
 //
 //  Created by Frank Schmitt on 10/9/15.
@@ -40,10 +40,11 @@ NSString *const ATInteractionMessageCenterEventLabelAttachmentDelete = @"attachm
 @synthesize attachments = _attachments;
 
 - (void)viewDidLoad {
-	self.collectionView.layer.shadowOpacity = 0.5;
-	self.collectionView.layer.shadowRadius = 2.0;
+	self.collectionView.layer.shadowOpacity = 1.0;
+	self.collectionView.layer.shadowRadius = 1.0 / [UIScreen mainScreen].scale;
+	self.collectionView.layer.shadowOffset = CGSizeMake(0.0, -1.0 / [UIScreen mainScreen].scale);
 	self.collectionView.layer.masksToBounds = NO;
-	self.collectionView.layer.shadowColor = [UIColor grayColor].CGColor;
+	self.collectionView.layer.shadowColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveColorSeparator].CGColor;
 
 	// Hide the attach button if tapping it will cause a crash (due to unsupported portrait orientation).
 	BOOL isPhone = [UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone;
@@ -70,6 +71,7 @@ NSString *const ATInteractionMessageCenterEventLabelAttachmentDelete = @"attachm
 	[self didChangeValueForKey:@"attachments"];
 
 	self.collectionViewFooterSize = ((UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout).footerReferenceSize;
+	self.collectionView.backgroundColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveColorBackground];
 
 	[self updateBadge];
 }
@@ -88,7 +90,7 @@ NSString *const ATInteractionMessageCenterEventLabelAttachmentDelete = @"attachm
 		NSInteger index = 1;
 
 		for (UIImage *image in self.mutableAttachments) {
-			NSString *name = [NSString stringWithFormat:ATLocalizedString(@"Attachment %ld", @"Placeholder name for attachment"), (long)index];
+			NSString *name = [NSString stringWithFormat:ApptentiveLocalizedString(@"Attachment %ld", @"Placeholder name for attachment"), (long)index];
 			ApptentiveFileAttachment *attachment = [ApptentiveFileAttachment newInstanceWithFileData:UIImageJPEGRepresentation(image, 0.6) MIMEType:@"image/jpeg" name:name];
 
 			index++;

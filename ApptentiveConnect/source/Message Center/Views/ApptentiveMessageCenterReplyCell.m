@@ -1,5 +1,5 @@
 //
-//  ATMessageCenterReplyCell.m
+//  ApptentiveMessageCenterReplyCell.m
 //  ApptentiveConnect
 //
 //  Created by Frank Schmitt on 5/21/15.

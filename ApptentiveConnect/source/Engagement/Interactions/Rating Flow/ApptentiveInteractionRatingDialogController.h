@@ -1,5 +1,5 @@
 //
-//  ATInteractionRatingDialogController.h
+//  ApptentiveInteractionRatingDialogController.h
 //  ApptentiveConnect
 //
 //  Created by Peter Kamb on 7/15/15.

@@ -1,5 +1,5 @@
 //
-//  ATInteractionUsageData.m
+//  ApptentiveInteractionUsageData.m
 //  ApptentiveConnect
 //
 //  Created by Peter Kamb on 10/14/13.

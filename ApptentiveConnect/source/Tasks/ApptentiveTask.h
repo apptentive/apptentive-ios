@@ -1,5 +1,5 @@
 //
-//  ATTask.h
+//  ApptentiveTask.h
 //  ApptentiveConnect
 //
 //  Created by Andrew Wooster on 3/20/11.

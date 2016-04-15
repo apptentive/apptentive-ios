@@ -1,5 +1,5 @@
 //
-//  ATMessageCenterInputView.m
+//  ApptentiveMessageCenterInputView.m
 //  ApptentiveConnect
 //
 //  Created by Frank Schmitt on 7/14/15.
@@ -62,7 +62,7 @@
 - (void)setBorderColor:(UIColor *)borderColor {
 	_borderColor = borderColor;
 
-	self.containerView.layer.borderColor =self.borderColor.CGColor;
+	self.containerView.layer.borderColor = self.borderColor.CGColor;
 	self.sendBar.layer.borderColor = self.borderColor.CGColor;
 }
 

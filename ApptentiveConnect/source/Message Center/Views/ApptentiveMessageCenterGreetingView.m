@@ -1,5 +1,5 @@
 //
-//  ATMessageCenterGreetingView.m
+//  ApptentiveMessageCenterGreetingView.m
 //  ApptentiveConnect
 //
 //  Created by Frank Schmitt on 5/20/15.
@@ -40,16 +40,16 @@
 
 - (void)setOrientation:(UIInterfaceOrientation)orientation {
 	_orientation = orientation;
+
+	self.translatesAutoresizingMaskIntoConstraints = NO;
 	[self updateConstraints];
+
 	[self sizeToFit];
+	self.translatesAutoresizingMaskIntoConstraints = YES;
 }
 
 - (CGSize)sizeThatFits:(CGSize)size {
-	if (UIInterfaceOrientationIsLandscape(self.orientation)) {
-		return CGSizeMake(size.width, GREETING_LANDSCAPE_HEIGHT);
-	} else {
-		return CGSizeMake(size.width, GREETING_PORTRAIT_HEIGHT);
-	}
+	return [self systemLayoutSizeFittingSize:CGSizeMake(self.bounds.size.width, 2000)];
 }
 
 - (void)updateConstraints {
@@ -65,7 +65,8 @@
 		self.imageCenterXConstraint.constant = 0.0;
 		self.textCenterXConstraint.constant = 0.0;
 
-		self.imageCenterYConstraint.constant = self.textContainerView.bounds.size.height / 2.0 + 5.0;
+		CGSize textContainerSize = [self.textContainerView systemLayoutSizeFittingSize:CGSizeMake(self.textContainerView.bounds.size.width, 2000)];
+		self.imageCenterYConstraint.constant = textContainerSize.height / 2.0 + 0.75;
 		self.textCenterYConstraint.constant = -self.imageWidthConstraint.constant / 2.0 - 7.0;
 	}
 

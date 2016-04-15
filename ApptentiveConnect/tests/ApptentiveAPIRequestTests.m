@@ -1,5 +1,5 @@
 //
-//  ATAPIself.requestTests.m
+//  ApptentiveAPIRequestTests.m
 //  ApptentiveConnect
 //
 //  Created by Frank Schmitt on 1/21/16.

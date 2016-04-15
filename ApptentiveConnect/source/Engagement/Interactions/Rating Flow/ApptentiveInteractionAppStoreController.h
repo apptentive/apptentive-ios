@@ -1,5 +1,5 @@
 //
-//  ATInteractionAppStoreController.h
+//  ApptentiveInteractionAppStoreController.h
 //  ApptentiveConnect
 //
 //  Created by Peter Kamb on 3/26/14.
@@ -11,10 +11,7 @@
 @class ApptentiveInteraction;
 
 
-@interface ApptentiveInteractionAppStoreController : NSObject
-#if TARGET_OS_IPHONE
-											 <SKStoreProductViewControllerDelegate, UIAlertViewDelegate>
-#endif
+@interface ApptentiveInteractionAppStoreController : NSObject <SKStoreProductViewControllerDelegate, UIAlertViewDelegate>
 
 @property (readonly, strong, nonatomic) ApptentiveInteraction *interaction;
 @property (strong, nonatomic) UIViewController *viewController;

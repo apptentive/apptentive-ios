@@ -1,5 +1,5 @@
 //
-//  ATURLConnection.m
+//  ApptentiveURLConnection.m
 //
 //  Created by Andrew Wooster on 12/14/08.
 //  Copyright 2008 Apptentive, Inc.. All rights reserved.
@@ -223,16 +223,9 @@
 	// See: http://blackpixel.com/blog/1659/caching-and-nsurlconnection/
 	NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)[cachedResponse response];
 	NSURLRequest *r = nil;
-#if TARGET_OS_IPHONE
 	if ([aConnection respondsToSelector:@selector(currentRequest)]) {
 		r = [aConnection currentRequest];
 	}
-#endif
-#if TARGET_OS_MAC
-	if (self.request) {
-		r = self.request;
-	}
-#endif
 	if (r != nil && [r cachePolicy] == NSURLRequestUseProtocolCachePolicy) {
 		self.responseHeaders = [httpResponse allHeaderFields];
 		NSString *cacheControlHeader = [self.responseHeaders valueForKey:@"Cache-Control"];

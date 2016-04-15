@@ -1,5 +1,5 @@
 //
-//  ATInteractionUpgradeMessageViewController.h
+//  ApptentiveInteractionUpgradeMessageViewController.h
 //  ApptentiveConnect
 //
 //  Created by Peter Kamb on 10/16/13.

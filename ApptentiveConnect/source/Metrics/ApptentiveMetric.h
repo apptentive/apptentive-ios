@@ -1,5 +1,5 @@
 //
-//  ATMetric.h
+//  ApptentiveMetric.h
 //  ApptentiveMetrics
 //
 //  Created by Andrew Wooster on 12/27/11.

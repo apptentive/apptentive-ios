@@ -7,54 +7,44 @@
 //
 
 
-#if TARGET_OS_IPHONE
 #import <UIKit/UIKit.h>
 #import "ApptentiveStyleSheet.h"
-#elif TARGET_OS_MAC
-#import <Cocoa/Cocoa.h>
-#endif
 
-#define kApptentiveVersionString @"2.1.3"
-
-#if TARGET_OS_IPHONE
+#define kApptentiveVersionString @"3.0.0"
 #define kApptentivePlatformString @"iOS"
-#elif TARGET_OS_MAC
-#define kApptentivePlatformString @"Mac OS X"
-@class ATFeedbackWindowController;
-#endif
 
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol ApptentiveDelegate;
 
 /** Notification sent when Message Center unread messages count changes. */
-extern NSString *const ATMessageCenterUnreadCountChangedNotification;
+extern NSString *const ApptentiveMessageCenterUnreadCountChangedNotification;
 
 /** Notification sent when the user has agreed to rate the application. */
-extern NSString *const ATAppRatingFlowUserAgreedToRateAppNotification;
+extern NSString *const ApptentiveAppRatingFlowUserAgreedToRateAppNotification;
 
 /** Notification sent when a survey is shown. */
-extern NSString *const ATSurveyShownNotification;
+extern NSString *const ApptentiveSurveyShownNotification;
 
 /** Notification sent when a survey is submitted by the user. */
-extern NSString *const ATSurveySentNotification;
+extern NSString *const ApptentiveSurveySentNotification;
 
 /**
- When a survey is shown or sent, notification's userInfo dictionary will contain the ATSurveyIDKey key.
+ When a survey is shown or sent, notification's userInfo dictionary will contain the ApptentiveSurveyIDKey key.
  Value is the ID of the survey that was shown or sent.
  */
-extern NSString *const ATSurveyIDKey;
+extern NSString *const ApptentiveSurveyIDKey;
 
 /** Supported Push Providers for use in `setPushNotificationIntegration:withDeviceToken:` */
-typedef NS_ENUM(NSInteger, ATPushProvider) {
+typedef NS_ENUM(NSInteger, ApptentivePushProvider) {
 	/** Specifies the Apptentive push provider. */
-	ATPushProviderApptentive,
+	ApptentivePushProviderApptentive,
 	/** Specifies the Urban Airship push provider. */
-	ATPushProviderUrbanAirship,
+	ApptentivePushProviderUrbanAirship,
 	/** Specifies the Amazon Simple Notification Service push provider. */
-	ATPushProviderAmazonSNS,
+	ApptentivePushProviderAmazonSNS,
 	/** Specifies the Parse push provider. */
-	ATPushProviderParse,
+	ApptentivePushProviderParse,
 };
 
 /**
@@ -64,9 +54,9 @@ typedef NS_ENUM(NSInteger, ATPushProvider) {
 
 Before calling any other methods on the shared `Apptentive` instance, set the API key:
 
-     [[Apptentive sharedConnection].apiKey = @"your API key here";
+     [[Apptentive sharedConnection].APIKey = @"your API key here";
 
- ## Engagement Events
+## Engagement Events
 
  The Ratings Prompt and other Apptentive interactions are targeted to certain Apptentive events. For example,
  you could decide to show the Ratings Prompt after an event named "user_completed_level" has been engaged.
@@ -78,54 +68,52 @@ Before calling any other methods on the shared `Apptentive` instance, set the AP
 
  See the readme for more information.
 
- ## Notifications
+## Notifications
 
- `ATMessageCenterUnreadCountChangedNotification`
+ `ApptentiveMessageCenterUnreadCountChangedNotification`
 
  Sent when the number of unread messages changes.
  The notification object is undefined. The `userInfo` dictionary contains a `count` key, the value of which
  is the number of unread messages.
 
- `ATAppRatingFlowUserAgreedToRateAppNotification`
+ `ApptentiveAppRatingFlowUserAgreedToRateAppNotification`
 
  Sent when the user has agreed to rate the application.
 
- `ATSurveySentNotification`
+ `ApptentiveSurveySentNotification`
 
- Sent when a survey is submitted by the user. The userInfo dictionary will have a key named `ATSurveyIDKey`,
+ Sent when a survey is submitted by the user. The userInfo dictionary will have a key named `ApptentiveSurveyIDKey`,
  with a value of the id of the survey that was sent.
 
- ## Integrations
-
- Keys for currently supported integrations:
-
- * `ATIntegrationKeyApptentive` - For Apptentive Push
- * `ATIntegrationKeyUrbanAirship` - For Urban Airship
- * `ATIntegrationKeyAmazonSNS` - For Amazon SNS
- * `ATIntegrationKeyKahuna` - For Kahuna
- * `ATIntegrationKeyParse` - For Parse
  */
 @interface Apptentive : NSObject
 
 ///---------------------------------
 /// @name Basic Usage
 ///---------------------------------
+/** The shared singleton of `Apptentive`. */
++ (Apptentive *)sharedConnection;
+
 /**
  The API key for Apptentive.
 
  This key is found on the Apptentive website under Settings, API & Development.
  */
-@property (copy, nonatomic) NSString *_Nullable apiKey;
+@property (copy, nonatomic, nullable) NSString * APIKey;
+
+/**
+  APIKey property with legacy capitalization.
+ 
+ @deprecated Capitalize `API` in the property/setter name.
+ */
+@property (copy, nonatomic, nullable) NSString *apiKey __deprecated_msg("Use 'APIKey' instead.");
 
 /**
  The app's iTunes App ID.
 
  You can find this in iTunes Connect, and is the numeric "Apple ID" shown on your app details page.
  */
-@property (copy, nonatomic) NSString *_Nullable appID;
-
-/** The shared singleton of `Apptentive`. */
-+ (Apptentive *)sharedConnection;
+@property (copy, nonatomic, nullable) NSString *appID;
 
 /** An object conforming to the `ApptentiveDelegate` protocol */
 @property (weak, nonatomic) id<ApptentiveDelegate> delegate;
@@ -139,31 +127,6 @@ Before calling any other methods on the shared `Apptentive` instance, set the AP
 @discussion See the [Apptentive Styling Guide for iOS](https://docs.apptentive.com/ios/customization/) for information on configuring this property.
  */
 @property (strong, nonatomic) id<ApptentiveStyle> styleSheet;
-
-/** Toggles the display of an email field in the message panel. `YES` by default.
- 
-	@deprecated This property no longer has any effect. It is included for compatibility but will be removed in the next major version release.
- */
-@property (assign, nonatomic) BOOL showEmailField DEPRECATED_ATTRIBUTE;
-
-/** Set this if you want some custom text to appear as a placeholder in the feedback text box.
- 
- @deprecated This property no longer has any effect. It is included for compatibility but will be removed in the next major version release.
-*/
-@property (copy, nonatomic) NSString *customPlaceholderText DEPRECATED_ATTRIBUTE;
-#if TARGET_OS_IPHONE
-/**
- A tint color to use in Apptentive-specific UI.
-
- Overrides the default tintColor acquired from your app, in case you're using one that doesn't look great
- with Apptentive-specific UI.
-
- @deprecated Use `[UIAppearance appearanceWhenContainedIn:[ATNavigationController class], nil].tintColor`
- */
-@property (strong, nonatomic) UIColor *tintColor DEPRECATED_ATTRIBUTE;
-#endif
-
-#if TARGET_OS_IPHONE
 
 ///--------------------
 /// @name Presenting UI
@@ -216,7 +179,7 @@ Before calling any other methods on the shared `Apptentive` instance, set the AP
 /**
  Returns a "badge" than can be used as a UITableViewCell accessoryView to indicate the current number of unread messages.
 
- To keep this value updated, your view controller will must register for `ATMessageCenterUnreadCountChangedNotification`
+ To keep this value updated, your view controller will must register for `ApptentiveMessageCenterUnreadCountChangedNotification`
  and reload the table view cell when a notification is received.
 
  @param apptentiveHeart A Boolean value indicating whether to include a heart logo adjacent to the number.
@@ -262,15 +225,6 @@ Before calling any other methods on the shared `Apptentive` instance, set the AP
  */
 
 - (BOOL)didReceiveRemoteNotification:(NSDictionary *)userInfo fromViewController:(UIViewController *)viewController fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler;
-
-/**
- Deprecated in 2.0.0 in favor of the better-named `canShowInteractionForEvent:`
-
- @param event A string representing the name of the event.
-
- @return `YES` if the event will show an interaction, `NO` otherwise.
-*/
-- (BOOL)willShowInteractionForEvent:(NSString *)event DEPRECATED_ATTRIBUTE;
 
 /**
 Returns a Boolean value indicating whether the given event will cause an Interaction to be shown.
@@ -328,19 +282,6 @@ Returns a Boolean value indicating whether the given event will cause an Interac
  @discussion Under normal circumstances, Message Center will be dismissed by the user tapping the Close button, so it is not necessary to call this method.
  */
 - (void)dismissMessageCenterAnimated:(BOOL)animated completion:(nullable void (^)(void))completion;
-
-#elif TARGET_OS_MAC
-
-///---------------------------
-/// @name Presenting UI (OS X)
-///---------------------------
-/**
- Presents a feedback window (OS X framework only).
-
- @param sender The originator of the action.
- */
-- (IBAction)showFeedbackWindow:(id)sender;
-#endif
 
 ///--------------------
 /// @name Extended Data for Events
@@ -443,9 +384,9 @@ Returns a Boolean value indicating whether the given event will cause an Interac
 ///---------------------------------------
 
 /** The name of the app user when communicating with Apptentive. */
-@property (copy, nonatomic) NSString *_Nullable personName;
+@property (copy, nonatomic, nullable) NSString *personName;
 /** The email address of the app user in form fields and communicating with Apptentive. */
-@property (copy, nonatomic) NSString *_Nullable personEmailAddress;
+@property (copy, nonatomic, nullable) NSString *personEmailAddress;
 
 /**
  Adds custom data associated with the current person.
@@ -553,24 +494,6 @@ Returns a Boolean value indicating whether the given event will cause an Interac
  */
 - (void)addCustomPersonDataBool:(BOOL)boolValue withKey:(NSString *)key;
 
-/**
- Adds the specified custom data value associated with the specified key.
-
- @param object The custom data.
- @param key The key of the data.
-
- @deprecated Use `-addCustomDeviceData:withKey:` instead.
- */
-- (void)addCustomData:(NSObject<NSCoding> *)object withKey:(NSString *)key DEPRECATED_ATTRIBUTE;
-
-/** Removes custom data associated with the specified key.
-
- @param key The key of the data.
-
- @deprecated Use `-removeCustomDeviceDataWithKey:` instead.
- */
-- (void)removeCustomDataWithKey:(NSString *)key DEPRECATED_ATTRIBUTE;
-
 ///---------------------------------------
 /// @name Open App Store
 ///---------------------------------------
@@ -602,7 +525,7 @@ Returns a Boolean value indicating whether the given event will cause an Interac
  @param deviceToken The device token used to send Remote Notifications.
  **/
 
-- (void)setPushNotificationIntegration:(ATPushProvider)pushProvider withDeviceToken:(NSData *)deviceToken;
+- (void)setPushNotificationIntegration:(ApptentivePushProvider)pushProvider withDeviceToken:(NSData *)deviceToken;
 
 @end
 
@@ -630,16 +553,19 @@ Returns a Boolean value indicating whether the given event will cause an Interac
 @end
 
 /**
- The `ATNavigationController class is an empty subclass of UINavigationController that
+ The `ApptentiveNavigationController class is an empty subclass of UINavigationController that
  can be used to target UIAppearance settings specifically to Apptentive UI.
 
  For instance, to override the default `barTintColor` (white) for navigation controllers
  in the Apptentive UI, you would call:
 
-	[[UINavigationBar appearanceWhenContainedIn:[ATNavigationController class], nil].barTintColor = [UIColor magentaColor];
+	[[UINavigationBar appearanceWhenContainedIn:[ApptentiveNavigationController class], nil].barTintColor = [UIColor magentaColor];
 
  */
 @interface ApptentiveNavigationController : UINavigationController
 @end
+
+@compatibility_alias ATConnect Apptentive;
+@compatibility_alias ATNavigationController ApptentiveNavigationController;
 
 NS_ASSUME_NONNULL_END

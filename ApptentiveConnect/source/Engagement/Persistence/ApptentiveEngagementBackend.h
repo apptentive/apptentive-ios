@@ -1,5 +1,5 @@
 //
-//  ATEngagementBackend.h
+//  ApptentiveEngagementBackend.h
 //  ApptentiveConnect
 //
 //  Created by Peter Kamb on 8/21/13.
@@ -28,7 +28,7 @@ extern NSString *const ATEngagementCodePointHostAppInteractionKey;
 extern NSString *const ATEngagementCodePointApptentiveVendorKey;
 extern NSString *const ATEngagementCodePointApptentiveAppInteractionKey;
 
-extern NSString *const ATEngagementMessageCenterEvent;
+extern NSString *const ApptentiveEngagementMessageCenterEvent;
 
 @class ApptentiveInteraction;
 

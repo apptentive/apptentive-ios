@@ -1,5 +1,5 @@
 //
-//  ATConversationUpdater.m
+//  ApptentiveConversationUpdater.m
 //  ApptentiveConnect
 //
 //  Created by Andrew Wooster on 2/4/13.

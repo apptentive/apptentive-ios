@@ -1,5 +1,5 @@
 //
-//  ATAboutViewController.m
+//  ApptentiveAboutViewController.m
 //  ApptentiveConnect
 //
 //  Created by Frank Schmitt on 7/28/15.
@@ -48,9 +48,9 @@ NSString *const ATInteractionAboutViewEventLabelClose = @"close";
 
 	self.imageView.image = [ApptentiveBackend imageNamed:@"at_apptentive_logo"];
 	// TODO: Look into localizing the storyboard instead
-	self.aboutLabel.text = ATLocalizedString(@"Apptentive is a service that allows you to have a conversation with the makers of this app. Your input and feedback can help to provide you with a better overall experience.\n\nYour feedback is hosted by Apptentive and is subject to both Apptentive’s privacy policy and the privacy policy of this app’s developer.", @"About apptentive introductory message");
-	[self.aboutButton setTitle:ATLocalizedString(@"Learn about Apptentive", @"About apptentive link button label") forState:UIControlStateNormal];
-	[self.privacyButton setTitle:ATLocalizedString(@"Apptentive’s Privacy Policy", @"About apptentive privacy button label") forState:UIControlStateNormal];
+	self.aboutLabel.text = ApptentiveLocalizedString(@"Apptentive is a service that allows you to have a conversation with the makers of this app. Your input and feedback can help to provide you with a better overall experience.\n\nYour feedback is hosted by Apptentive and is subject to both Apptentive’s privacy policy and the privacy policy of this app’s developer.", @"About apptentive introductory message");
+	[self.aboutButton setTitle:ApptentiveLocalizedString(@"Learn about Apptentive", @"About apptentive link button label") forState:UIControlStateNormal];
+	[self.privacyButton setTitle:ApptentiveLocalizedString(@"Apptentive’s Privacy Policy", @"About apptentive privacy button label") forState:UIControlStateNormal];
 
 	self.portraitConstraints = @[self.aboutButtonTrailingConstraint, self.privacyButtonLeadingConstraint, self.aboutButtonPrivacyButtonVeritcalConstraint];
 
@@ -68,8 +68,8 @@ NSString *const ATInteractionAboutViewEventLabelClose = @"close";
 - (void)viewDidLayoutSubviews {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated"
-	if ([[NSProcessInfo processInfo] respondsToSelector:@selector(isOperatingSystemAtLeastVersion:)] && [[NSProcessInfo processInfo]  isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){8, 0, 0}]) {
-	[self resizeForOrientation:self.interfaceOrientation duration:0];
+	if ([[NSProcessInfo processInfo] respondsToSelector:@selector(isOperatingSystemAtLeastVersion:)] && [[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){8, 0, 0}]) {
+		[self resizeForOrientation:self.interfaceOrientation duration:0];
 	}
 #pragma clang diagnostic pop
 }

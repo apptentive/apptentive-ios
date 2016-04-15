@@ -1,5 +1,5 @@
 //
-//  ATSurveyViewController.m
+//  ApptentiveSurveyViewController.m
 //  CVSurvey
 //
 //  Created by Frank Schmitt on 2/22/16.
@@ -34,6 +34,7 @@
 #define MULTILINE_HORIZONTAL_MARGIN 44
 #define MULTILINE_VERTICAL_MARGIN 14
 
+
 @interface ApptentiveSurveyViewController ()
 
 @property (strong, nonatomic) IBOutlet ApptentiveSurveyGreetingView *headerView;
@@ -41,12 +42,14 @@
 @property (strong, nonatomic) IBOutlet UIView *footerView;
 @property (strong, nonatomic) IBOutlet UIView *footerBackgroundView;
 @property (strong, nonatomic) IBOutlet ApptentiveSurveySubmitButton *submitButton;
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *missingRequiredItem;
 
 @property (strong, nonatomic) NSIndexPath *editingIndexPath;
 
 @property (readonly, nonatomic) CGFloat lineHeightOfQuestionFont;
 
 @end
+
 
 @implementation ApptentiveSurveyViewController
 
@@ -83,6 +86,17 @@
 	self.footerBackgroundView.backgroundColor = [style colorForStyle:ApptentiveColorFooterBackground];
 	self.submitButton.titleLabel.font = [style fontForStyle:ApptentiveTextStyleSubmitButton];
 	self.submitButton.backgroundColor = [style colorForStyle:ApptentiveColorBackground];
+
+	self.missingRequiredItem.tintColor = [style colorForStyle:ApptentiveColorBackground];
+	self.missingRequiredItem.title = [self.viewModel missingRequiredItemText];
+
+	self.toolbarItems = @[ [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil],
+						   self.missingRequiredItem,
+						   [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil]
+						   ];
+
+	self.navigationController.toolbar.translucent = NO;
+	self.navigationController.toolbar.barTintColor = [style colorForStyle:ApptentiveColorFailure];
 }
 
 - (void)dealloc {
@@ -227,14 +241,13 @@
 		ApptentiveSurveyQuestionView *view = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:@"Question" forIndexPath:indexPath];
 
 		view.textLabel.text = [self.viewModel textOfQuestionAtIndex:indexPath.section];
-		view.textLabel.font = [ self.viewModel.styleSheet fontForStyle:UIFontTextStyleBody];
-		view.textLabel.textColor = [ self.viewModel.styleSheet colorForStyle:UIFontTextStyleBody];
+		view.textLabel.font = [self.viewModel.styleSheet fontForStyle:UIFontTextStyleBody];
+		view.textLabel.textColor = [self.viewModel.styleSheet colorForStyle:UIFontTextStyleBody];
 
-		view.instructionsTextLabel.text = [self.viewModel instructionTextOfQuestionAtIndex:indexPath.section];
+		view.instructionsTextLabel.attributedText = [self.viewModel instructionTextOfQuestionAtIndex:indexPath.section];
 		view.instructionsTextLabel.font = [ self.viewModel.styleSheet fontForStyle:ApptentiveTextStyleSurveyInstructions];
-		view.instructionsTextLabel.textColor = [ self.viewModel.styleSheet colorForStyle:ApptentiveTextStyleSurveyInstructions];
 
-		view.separatorView.backgroundColor = [ self.viewModel.styleSheet colorForStyle:ApptentiveColorSeparator];
+		view.separatorView.backgroundColor = [self.viewModel.styleSheet colorForStyle:ApptentiveColorSeparator];
 
 		return view;
 	} else {
@@ -337,7 +350,7 @@
 	UIFont *questionFont = [self.viewModel.styleSheet fontForStyle:UIFontTextStyleBody];
 	CGSize labelSize = CGRectIntegral([[self.viewModel textOfQuestionAtIndex:section] boundingRectWithSize:CGSizeMake(labelWidth, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{ NSFontAttributeName: questionFont } context:nil]).size;
 
-	NSString *instructionsText = [self.viewModel instructionTextOfQuestionAtIndex:section];
+	NSString *instructionsText = [[self.viewModel instructionTextOfQuestionAtIndex:section] string];
 	CGSize instructionsSize = CGSizeZero;
 	if (instructionsText) {
 		UIFont *instructionsFont = [self.viewModel.styleSheet fontForStyle:ApptentiveTextStyleSurveyInstructions];
@@ -421,8 +434,19 @@
 
 #pragma mark - View model delegate
 
-- (void)viewModelValidationChanged:(ApptentiveSurveyViewModel *)viewModel {
+- (void)viewModelValidationChanged:(ApptentiveSurveyViewModel *)viewModel isValid:(BOOL)valid {
 	[self.collectionViewLayout invalidateLayout];
+
+	CGFloat bottomContentOffset = self.collectionView.contentSize.height - CGRectGetHeight(self.collectionView.bounds);
+	CGFloat toolbarAdjustment = (valid ? -1 : 1) * CGRectGetHeight(self.navigationController.toolbar.bounds);
+
+	[UIView animateWithDuration:0.2 animations:^{
+		if (self.collectionView.contentOffset.y >= bottomContentOffset - toolbarAdjustment) {
+			self.collectionView.contentOffset = CGPointMake(0, bottomContentOffset + toolbarAdjustment);
+		}
+	}];
+
+	[self.navigationController setToolbarHidden:valid animated:YES];
 }
 
 - (void)viewModel:(ApptentiveSurveyViewModel *)viewModel didDeselectAnswerAtIndexPath:(NSIndexPath *)indexPath {

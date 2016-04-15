@@ -1,5 +1,5 @@
 //
-//  ATMessageCenterContextMessageCell.m
+//  ApptentiveMessageCenterContextMessageCell.m
 //  ApptentiveConnect
 //
 //  Created by Peter Kamb on 7/22/15.

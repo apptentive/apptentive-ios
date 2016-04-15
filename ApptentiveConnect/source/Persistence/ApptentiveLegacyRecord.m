@@ -1,5 +1,5 @@
 //
-//  ATLegacyRecord.m
+//  ApptentiveLegacyRecord.m
 //  ApptentiveConnect
 //
 //  Created by Andrew Wooster on 1/10/12.
@@ -10,11 +10,8 @@
 #import "Apptentive_Private.h"
 #import "ApptentiveBackend.h"
 #import "ApptentiveUtilities.h"
-
-#if TARGET_OS_IPHONE
 #import <CoreTelephony/CTTelephonyNetworkInfo.h>
 #import <CoreTelephony/CTCarrier.h>
-#endif
 
 #define kRecordCodingVersion 1
 
@@ -34,7 +31,6 @@
 - (id)init {
 	if ((self = [super init])) {
 		self.uuid = [[Apptentive sharedConnection].backend deviceUUID];
-#if TARGET_OS_IPHONE
 		self.model = [[UIDevice currentDevice] model];
 		self.os_version = [NSString stringWithFormat:@"%@ %@", [[UIDevice currentDevice] systemName], [[UIDevice currentDevice] systemVersion]];
 		if ([CTTelephonyNetworkInfo class]) {
@@ -44,11 +40,6 @@
 				self.carrier = c.carrierName;
 			}
 		}
-#elif TARGET_OS_MAC
-		self.model = [ApptentiveUtilities currentMachineName];
-		self.os_version = [NSString stringWithFormat:@"%@ %@", [ApptentiveUtilities currentSystemName], [ApptentiveUtilities currentSystemVersion]];
-		self.carrier = @"";
-#endif
 		self.date = [NSDate date];
 	}
 	return self;

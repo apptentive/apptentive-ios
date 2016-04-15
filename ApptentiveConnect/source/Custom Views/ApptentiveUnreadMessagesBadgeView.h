@@ -1,5 +1,5 @@
 //
-//  ATUnreadMessagesBadgeView.h
+//  ApptentiveUnreadMessagesBadgeView.h
 //  ApptentiveConnect
 //
 //  Created by Peter Kamb on 6/19/15.

@@ -1,5 +1,5 @@
 //
-//  ATConnect+Debugging.h
+//  Apptentive+Debugging.h
 //  ApptentiveConnect
 //
 //  Created by Andrew Wooster on 4/23/14.

@@ -1,5 +1,5 @@
 //
-//  ATInteractionSurveyController.h
+//  ApptentiveInteractionSurveyController.h
 //  ApptentiveConnect
 //
 //  Created by Peter Kamb on 4/9/14.

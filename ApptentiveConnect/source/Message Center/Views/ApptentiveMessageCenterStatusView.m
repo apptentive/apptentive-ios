@@ -1,5 +1,5 @@
 //
-//  ATMessageCenterStatusView.m
+//  ApptentiveMessageCenterStatusView.m
 //  ApptentiveConnect
 //
 //  Created by Frank Schmitt on 5/21/15.
@@ -13,7 +13,6 @@
 @interface ApptentiveMessageCenterStatusView ()
 
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *imageStatusSpacing;
-@property (weak, nonatomic) IBOutlet UIImageView *imageView;
 
 @end
 
@@ -28,11 +27,11 @@
 
 		switch (mode) {
 			case ATMessageCenterStatusModeNetworkError:
-				statusImage = [ApptentiveBackend imageNamed:@"at_network_error"];
+				statusImage = [[ApptentiveBackend imageNamed:@"at_network_error"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 				break;
 
 			case ATMessageCenterStatusModeHTTPError:
-				statusImage = [ApptentiveBackend imageNamed:@"at_error_wait"];
+				statusImage = [[ApptentiveBackend imageNamed:@"at_error_wait"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 				break;
 
 			default:

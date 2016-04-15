@@ -1,5 +1,5 @@
 //
-//  ATData.m
+//  ApptentiveData.m
 //  ApptentiveConnect
 //
 //  Created by Andrew Wooster on 10/29/12.

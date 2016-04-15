@@ -1,5 +1,5 @@
 //
-//  ATHUDViewController.h
+//  ApptentiveHUDViewController.h
 //  ATHUD
 //
 //  Created by Frank Schmitt on 3/2/16.

@@ -1,5 +1,5 @@
 //
-//  ATCompoundReplyCell.m
+//  ApptentiveCompoundReplyCell.m
 //  ApptentiveConnect
 //
 //  Created by Frank Schmitt on 11/10/15.

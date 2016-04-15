@@ -1,5 +1,5 @@
 //
-//  ATSurveyQuestionBackgroundView.m
+//  ApptentiveSurveyQuestionBackgroundView.m
 //  CVSurvey
 //
 //  Created by Frank Schmitt on 2/23/16.
@@ -8,6 +8,7 @@
 
 #import "ApptentiveSurveyQuestionBackgroundView.h"
 #import "ApptentiveSurveyLayoutAttributes.h"
+
 
 @implementation ApptentiveSurveyQuestionBackgroundView
 

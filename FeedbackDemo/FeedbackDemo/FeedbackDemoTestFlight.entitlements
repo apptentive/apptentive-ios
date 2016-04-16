@@ -4,10 +4,10 @@
 <dict>
 	<key>application-identifier</key>
 	<string>$(AppIdentifierPrefix)$(CFBundleIdentifier)</string>
-	<key>beta-reports-active</key>
-	<true/>
 	<key>aps-environment</key>
 	<string>production</string>
+	<key>get-task-allow</key>
+	<false/>
 	<key>keychain-access-groups</key>
 	<array>
 		<string>$(AppIdentifierPrefix)*</string>

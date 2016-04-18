@@ -62,16 +62,9 @@
 	[self.collectionViewLayout invalidateLayout];
 }
 
-- (void)setContentOffset:(CGPoint)contentOffset animated:(BOOL)animated {
-	if (!self.scrollingPaused) {
-		[super setContentOffset:contentOffset animated:animated];
-	}
-}
-
-- (void)setContentOffset:(CGPoint)contentOffset {
-	if (!self.scrollingPaused) {
-		[super setContentOffset:contentOffset];
-	}
+- (void)scrollToItemAtIndexPath:(NSIndexPath *)indexPath atScrollPosition:(UICollectionViewScrollPosition)scrollPosition animated:(BOOL)animated {
+	// The OS calls this incompetently and screws up our positioning. 
+	return;
 }
 
 - (void)layoutSubviews {

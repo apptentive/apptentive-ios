@@ -30,4 +30,10 @@
 	[self.button setHighlighted:highlighted];
 }
 
+- (void)layoutSubviews {
+	[super layoutSubviews];
+
+	self.textLabel.preferredMaxLayoutWidth = CGRectGetWidth(self.textLabel.bounds);
+}
+
 @end

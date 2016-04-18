@@ -124,16 +124,16 @@ extern NSString *const ApptentiveColorContextBackground;
 @property (strong, nonatomic) NSString *fontFamily;
 
 /// The font face suffix for a light weight of the font.
-@property (strong, nonatomic) NSString *_Nullable lightFaceAttribute;
+@property (strong, nonatomic, nullable) NSString *lightFaceAttribute;
 
 /// The font face suffix for a regular/book weight of the font.
-@property (strong, nonatomic) NSString *_Nullable regularFaceAttribute;
+@property (strong, nonatomic, nullable) NSString *regularFaceAttribute;
 
 /// The font face suffix for a medium weight of the font.
-@property (strong, nonatomic) NSString *_Nullable mediumFaceAttribute;
+@property (strong, nonatomic, nullable) NSString *mediumFaceAttribute;
 
 /// The font face suffix for a bold weight of the font.
-@property (strong, nonatomic) NSString *_Nullable boldFaceAttribute;
+@property (strong, nonatomic, nullable) NSString *boldFaceAttribute;
 
 /**
  The primary text color to use in the Apptentive UI. Defaults to black. 

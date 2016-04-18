@@ -25,4 +25,11 @@
 	self.instructionsTextLabel.numberOfLines = 0;
 }
 
+- (void)layoutSubviews {
+	[super layoutSubviews];
+
+	self.textLabel.preferredMaxLayoutWidth = CGRectGetWidth(self.textLabel.bounds);
+	self.instructionsTextLabel.preferredMaxLayoutWidth = CGRectGetWidth(self.textLabel.bounds);
+}
+
 @end

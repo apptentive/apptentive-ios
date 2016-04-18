@@ -366,7 +366,7 @@
 
 - (void)textViewDidBeginEditing:(UITextField *)textView {
 	self.editingIndexPath = [NSIndexPath indexPathForItem:0 inSection:textView.tag];
-	[self scrollHeaderAtIndexPathToTop:self.editingIndexPath animated:YES];
+	[(ApptentiveSurveyCollectionView *)self.collectionView scrollHeaderAtIndexPathToTop:self.editingIndexPath animated:YES];
 }
 
 - (BOOL)textViewShouldEndEditing:(UITextView *)textView {
@@ -394,7 +394,7 @@
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
 	self.editingIndexPath = [NSIndexPath indexPathForItem:0 inSection:textField.tag];
-	[self scrollHeaderAtIndexPathToTop:self.editingIndexPath animated:YES];
+	[(ApptentiveSurveyCollectionView *)self.collectionView scrollHeaderAtIndexPathToTop:self.editingIndexPath animated:YES];
 }
 
 - (IBAction)textFieldChanged:(UITextField *)textField {
@@ -452,19 +452,9 @@
 	[UIView animateWithDuration:duration animations:^{
 		[self.collectionView layoutIfNeeded];
 		if (self.editingIndexPath) {
-			[self scrollHeaderAtIndexPathToTop:self.editingIndexPath animated:NO];
+			[(ApptentiveSurveyCollectionView *)self.collectionView scrollHeaderAtIndexPathToTop:self.editingIndexPath animated:NO];
 		}
 	}];
-}
-
-#pragma mark - Misc
-
-- (void)scrollHeaderAtIndexPathToTop:(NSIndexPath *)indexPath animated:(BOOL)animated {
-	CGRect headerFrame = [self.collectionView layoutAttributesForSupplementaryElementOfKind:UICollectionElementKindSectionHeader atIndexPath:indexPath].frame;
-	CGRect foo = CGRectOffset(headerFrame, -headerFrame.origin.x, -self.collectionView.contentInset.top - ((UICollectionViewFlowLayout *)self.collectionViewLayout).sectionInset.top);
-	foo.origin.y = fmin(foo.origin.y, self.collectionView.contentSize.height - CGRectGetHeight(self.collectionView.bounds) + self.collectionView.contentInset.bottom);
-
-	[self.collectionView setContentOffset:foo.origin  animated:animated];
 }
 
 @end

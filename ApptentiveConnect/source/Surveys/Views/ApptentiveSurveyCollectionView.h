@@ -13,7 +13,8 @@
 
 @property (strong, nonatomic) UIView *collectionHeaderView;
 @property (strong, nonatomic) UIView *collectionFooterView;
-@property (assign, nonatomic) BOOL scrollingPaused;
+
+- (void)scrollHeaderAtIndexPathToTop:(NSIndexPath *)indexPath animated:(BOOL)animated;
 
 @end
 

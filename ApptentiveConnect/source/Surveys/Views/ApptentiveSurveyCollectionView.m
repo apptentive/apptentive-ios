@@ -62,16 +62,19 @@
 	[self.collectionViewLayout invalidateLayout];
 }
 
-- (void)setContentOffset:(CGPoint)contentOffset animated:(BOOL)animated {
-	if (!self.scrollingPaused) {
-		[super setContentOffset:contentOffset animated:animated];
-	}
+- (void)scrollToItemAtIndexPath:(NSIndexPath *)indexPath atScrollPosition:(UICollectionViewScrollPosition)scrollPosition animated:(BOOL)animated {
+	// The OS calls this incompetently and screws up our positioning. 
+	return;
 }
 
-- (void)setContentOffset:(CGPoint)contentOffset {
-	if (!self.scrollingPaused) {
-		[super setContentOffset:contentOffset];
-	}
+- (void)scrollHeaderAtIndexPathToTop:(NSIndexPath *)indexPath animated:(BOOL)animated {
+	CGRect headerFrame = [self layoutAttributesForSupplementaryElementOfKind:UICollectionElementKindSectionHeader atIndexPath:indexPath].frame;
+	CGRect offsetHeaderFrame = CGRectOffset(headerFrame, -headerFrame.origin.x, -self.contentInset.top - ((UICollectionViewFlowLayout *)self.collectionViewLayout).sectionInset.top);
+
+	// Make sure we don't scroll off the bottom of the content + footer
+	offsetHeaderFrame.origin.y = fmin(offsetHeaderFrame.origin.y, self.contentSize.height - CGRectGetHeight(self.bounds) + self.contentInset.bottom);
+
+	[self setContentOffset:offsetHeaderFrame.origin  animated:animated];
 }
 
 - (void)layoutSubviews {

@@ -66,11 +66,8 @@
 	((ApptentiveSurveyCollectionView *)self.collectionView).collectionHeaderView = self.headerView;
 	((ApptentiveSurveyCollectionView *)self.collectionView).collectionFooterView = self.footerView;
 
-	// iOS 7 and 8 don't seem to adjust the contentInset for the keyboard
-	if (![NSProcessInfo instancesRespondToSelector:@selector(isOperatingSystemAtLeastVersion:)] || ![[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){9, 0, 0}]) {
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(adjustForKeyboard:) name:UIKeyboardWillShowNotification object:nil];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(adjustForKeyboard:) name:UIKeyboardWillHideNotification object:nil];
-	}
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(adjustForKeyboard:) name:UIKeyboardWillShowNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(adjustForKeyboard:) name:UIKeyboardWillHideNotification object:nil];
 
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sizeDidUpdate:) name:UIContentSizeCategoryDidChangeNotification object:nil];
 
@@ -367,16 +364,9 @@
 
 #pragma mark - Text view delegate
 
-- (BOOL)textViewShouldBeginEditing:(UITextView *)textView {
-	((ApptentiveSurveyCollectionView *)self.collectionView).scrollingPaused = YES;
-
-	return YES;
-}
-
 - (void)textViewDidBeginEditing:(UITextField *)textView {
 	self.editingIndexPath = [NSIndexPath indexPathForItem:0 inSection:textView.tag];
-	[self.collectionView scrollToItemAtIndexPath:self.editingIndexPath atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:YES];
-	((ApptentiveSurveyCollectionView *)self.collectionView).scrollingPaused = NO;
+	[(ApptentiveSurveyCollectionView *)self.collectionView scrollHeaderAtIndexPathToTop:self.editingIndexPath animated:YES];
 }
 
 - (BOOL)textViewShouldEndEditing:(UITextView *)textView {
@@ -402,16 +392,9 @@
 
 #pragma mark - Text field delegate
 
-- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField {
-	((ApptentiveSurveyCollectionView *)self.collectionView).scrollingPaused = YES;
-
-	return YES;
-}
-
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
 	self.editingIndexPath = [NSIndexPath indexPathForItem:0 inSection:textField.tag];
-	[self.collectionView scrollToItemAtIndexPath:self.editingIndexPath atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:YES];
-	((ApptentiveSurveyCollectionView *)self.collectionView).scrollingPaused = NO;
+	[(ApptentiveSurveyCollectionView *)self.collectionView scrollHeaderAtIndexPathToTop:self.editingIndexPath animated:YES];
 }
 
 - (IBAction)textFieldChanged:(UITextField *)textField {
@@ -458,14 +441,19 @@
 - (void)adjustForKeyboard:(NSNotification *)notification {
 	CGRect keyboardRect = [self.view.window convertRect:[notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue] toView:self.collectionView.superview];
 
-	((ApptentiveSurveyCollectionView *)self.collectionView).scrollingPaused = YES;
-	self.collectionView.contentInset = UIEdgeInsetsMake(self.collectionView.contentInset.top, self.collectionView.contentInset.left, CGRectGetHeight(self.collectionView.bounds) - keyboardRect.origin.y, self.collectionView.contentInset.right);
+	// iOS 7 and 8 don't seem to adjust the contentInset for the keyboard
+	if (![NSProcessInfo instancesRespondToSelector:@selector(isOperatingSystemAtLeastVersion:)] || ![[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){9, 0, 0}]) {
+		self.collectionView.contentInset = UIEdgeInsetsMake(self.collectionView.contentInset.top, self.collectionView.contentInset.left, CGRectGetHeight(self.collectionView.bounds) - keyboardRect.origin.y, self.collectionView.contentInset.right);
 
-	[self.collectionViewLayout invalidateLayout];
-	[UIView animateWithDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue] animations:^{
+		[self.collectionViewLayout invalidateLayout];
+	}
+
+	CGFloat duration = ((NSNumber *)notification.userInfo[UIKeyboardAnimationDurationUserInfoKey]).doubleValue;
+	[UIView animateWithDuration:duration animations:^{
 		[self.collectionView layoutIfNeeded];
-	} completion:^(BOOL finished) {
-		((ApptentiveSurveyCollectionView *)self.collectionView).scrollingPaused = NO;
+		if (self.editingIndexPath) {
+			[(ApptentiveSurveyCollectionView *)self.collectionView scrollHeaderAtIndexPathToTop:self.editingIndexPath animated:NO];
+		}
 	}];
 }
 

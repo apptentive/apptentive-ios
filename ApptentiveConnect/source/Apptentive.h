@@ -8,14 +8,13 @@
 
 
 #import <UIKit/UIKit.h>
-#import "ApptentiveStyleSheet.h"
 
 #define kApptentiveVersionString @"3.0.0"
 #define kApptentivePlatformString @"iOS"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol ApptentiveDelegate;
+@protocol ApptentiveDelegate, ApptentiveStyle;
 
 /** Notification sent when Message Center unread messages count changes. */
 extern NSString *const ApptentiveMessageCenterUnreadCountChangedNotification;
@@ -567,5 +566,90 @@ Returns a Boolean value indicating whether the given event will cause an Interac
 
 @compatibility_alias ATConnect Apptentive;
 @compatibility_alias ATNavigationController ApptentiveNavigationController;
+
+/**
+ The ApptentiveStyle protocol allows extensive customization of the fonts and colors used by the Apptentive SDK's UI.
+
+ A class implementing this protocol must handle resizing text according to the applications content size to support dynamic type.
+ */
+@protocol ApptentiveStyle <NSObject>
+
+/**
+ @param textStyle the text style whose font should be returned.
+ @return the font to use for the given style.
+ */
+- (UIFont *)fontForStyle:(NSString *)textStyle;
+
+/**
+ @param style the style whose color should be returned.
+ @return the color to use for the given style.
+ */
+- (UIColor *)colorForStyle:(NSString *)style;
+
+@end
+
+/// The text style for the title text of the greeting view in Message Center.
+extern NSString *const ApptentiveTextStyleHeaderTitle;
+
+/// The text style for the message text of the greeting view in Message Center.
+extern NSString *const ApptentiveTextStyleHeaderMessage;
+
+/// The text style for the date lables in Message Center.
+extern NSString *const ApptentiveTextStyleMessageDate;
+
+/// The text style for the message sender text in Message Center.
+extern NSString *const ApptentiveTextStyleMessageSender;
+
+/// The text style for the message status text in Message Center.
+extern NSString *const ApptentiveTextStyleMessageStatus;
+
+/// The text style for the message center status text in Message Center.
+extern NSString *const ApptentiveTextStyleMessageCenterStatus;
+
+/// The text style for the survey description text.
+extern NSString *const ApptentiveTextStyleSurveyInstructions;
+
+/// The text style for buttons that make changes when tapped.
+extern NSString *const ApptentiveTextStyleDoneButton;
+
+/// The text style for buttons that cancel or otherwise don't make changes when tapped.
+extern NSString *const ApptentiveTextStyleButton;
+
+/// The text style for the the submit button on Surveys.
+extern NSString *const ApptentiveTextStyleSubmitButton;
+
+/// The text style for text input fields.
+extern NSString *const ApptentiveTextStyleTextInput;
+
+
+/// The background color for headers in Message Center and Surveys.
+extern NSString *const ApptentiveColorHeaderBackground;
+
+/// The background color for the footer in Surveys.
+extern NSString *const ApptentiveColorFooterBackground;
+
+/// The foreground color for text and borders indicating a failure of validation or sending.
+extern NSString *const ApptentiveColorFailure;
+
+/// The foreground color for borders in Message Center and Surveys.
+extern NSString *const ApptentiveColorSeparator;
+
+/// The background color for cells in Message Center and Surveys.
+extern NSString *const ApptentiveColorBackground;
+
+/// The background color for table- and collection views.
+extern NSString *const ApptentiveColorCollectionBackground;
+
+/// The background color for text input fields. Changing this may render placeholder invisible.
+extern NSString *const ApptentiveColorTextInputBackground;
+
+/// The background color for message cells in Message Center.
+extern NSString *const ApptentiveColorMessageBackground;
+
+/// The background color for reply cells in Message Center.
+extern NSString *const ApptentiveColorReplyBackground;
+
+/// The background color for context cells in Message Center.
+extern NSString *const ApptentiveColorContextBackground;
 
 NS_ASSUME_NONNULL_END

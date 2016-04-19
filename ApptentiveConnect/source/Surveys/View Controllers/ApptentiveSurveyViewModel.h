@@ -9,9 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "ApptentiveSurveyQuestion.h"
 
-@class ApptentiveSurvey, ApptentiveInteraction, ApptentiveStyleSheet;
+@class ApptentiveSurvey, ApptentiveInteraction;
 
-@protocol ATSurveyViewModelDelegate;
+@protocol ATSurveyViewModelDelegate, ApptentiveStyle;
 
 
 @interface ApptentiveSurveyViewModel : NSObject
@@ -22,7 +22,7 @@
 // Consider making this private
 @property (readonly, nonatomic) ApptentiveInteraction *interaction;
 @property (readonly, nonatomic) ApptentiveSurvey *survey;
-@property (readonly, nonatomic) ApptentiveStyleSheet *styleSheet;
+@property (readonly, nonatomic) id<ApptentiveStyle> styleSheet;
 @property (weak, nonatomic) id<ATSurveyViewModelDelegate> delegate;
 
 @property (readonly, nonatomic) NSString *title;

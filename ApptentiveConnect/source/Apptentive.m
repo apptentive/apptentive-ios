@@ -19,6 +19,7 @@
 #import "ApptentiveBannerViewController.h"
 #import "ApptentiveUnreadMessagesBadgeView.h"
 #import "ApptentiveAboutViewController.h"
+#import "ApptentiveStyleSheet.h"
 
 // Can't get CocoaPods to do the right thing for debug builds.
 // So, do it explicitly.

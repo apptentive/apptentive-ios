@@ -27,7 +27,6 @@
 #import "ApptentiveAttachmentController.h"
 #import "ApptentiveIndexedCollectionView.h"
 #import "ApptentiveAttachmentCell.h"
-#import "ApptentiveStyleSheet.h"
 #import <MobileCoreServices/UTCoreTypes.h>
 
 #define HEADER_LABEL_HEIGHT 64.0

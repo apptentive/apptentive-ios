@@ -44,7 +44,7 @@
 	return self;
 }
 
-- (ApptentiveStyleSheet *)styleSheet {
+- (id<ApptentiveStyle>)styleSheet {
 	return [Apptentive sharedConnection].styleSheet;
 }
 

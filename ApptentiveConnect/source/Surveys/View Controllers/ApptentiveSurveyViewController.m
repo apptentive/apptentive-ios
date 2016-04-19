@@ -22,7 +22,6 @@
 #import "ApptentiveBackend.h"
 #import "ApptentiveHUDViewController.h"
 #import "Apptentive_Private.h"
-#import "ApptentiveStyleSheet.h"
 
 // These need to match the values from the storyboard
 #define QUESTION_HORIZONTAL_MARGIN 38.0
@@ -71,7 +70,7 @@
 
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sizeDidUpdate:) name:UIContentSizeCategoryDidChangeNotification object:nil];
 
-	ApptentiveStyleSheet *style = self.viewModel.styleSheet;
+	id<ApptentiveStyle> style = self.viewModel.styleSheet;
 
 	self.collectionView.backgroundColor = [style colorForStyle:ApptentiveColorCollectionBackground];
 	self.headerBackgroundView.backgroundColor = [style colorForStyle:ApptentiveColorHeaderBackground];

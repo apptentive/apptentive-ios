@@ -47,11 +47,11 @@ NSString *const ATInteractionMessageCenterEventLabelNoInteractionClose = @"no_in
 		self.textLabel.text = ApptentiveLocalizedString(@"We’re attempting to connect. Thanks for your patience!", @"Message Center configuration is waiting to be downloaded or encountered a server error.");
 
 		[[Apptentive sharedConnection].engagementBackend engageCodePoint:[self codePointForEvent:ATInteractionMessageCenterEventLabelNoInteractionAttempting] fromInteraction:nil userInfo:nil customData:nil extendedData:nil fromViewController:self];
-
-		self.imageView.tintColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveTextStyleMessageCenterStatus];
-		self.textLabel.textColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveTextStyleMessageCenterStatus];
-		self.view.backgroundColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveColorCollectionBackground];
 	}
+
+	self.imageView.tintColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveTextStyleMessageCenterStatus];
+	self.textLabel.textColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveTextStyleMessageCenterStatus];
+	self.view.backgroundColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveColorCollectionBackground];
 }
 
 - (IBAction)dismiss:(id)sender {

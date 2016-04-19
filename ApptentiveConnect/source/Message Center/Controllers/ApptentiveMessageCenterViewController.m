@@ -201,6 +201,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 	self.statusView.statusLabel.font = [[Apptentive sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleMessageCenterStatus];
 	self.statusView.statusLabel.textColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveTextStyleMessageCenterStatus];
+	self.statusView.imageView.tintColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveTextStyleMessageCenterStatus];
 
 	if (self.interaction.profileRequested) {
 		UIBarButtonItem *profileButtonItem = [[UIBarButtonItem alloc] initWithImage:[ApptentiveBackend imageNamed:@"at_account"] landscapeImagePhone:[ApptentiveBackend imageNamed:@"at_account"] style:UIBarButtonItemStylePlain target:self action:@selector(showWho:)];

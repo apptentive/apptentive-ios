@@ -94,6 +94,7 @@
 
 	self.navigationController.toolbar.translucent = NO;
 	self.navigationController.toolbar.barTintColor = [style colorForStyle:ApptentiveColorFailure];
+	self.navigationController.toolbar.userInteractionEnabled = NO;
 }
 
 - (void)dealloc {
@@ -120,6 +121,8 @@
 }
 
 - (IBAction)submit:(id)sender {
+	[self.view endEditing:YES];
+
 	if ([self.viewModel validate:YES]) {
 		// Consider any pending edits complete
 		if (self.editingIndexPath) {

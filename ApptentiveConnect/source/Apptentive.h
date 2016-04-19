@@ -643,6 +643,9 @@ extern NSString *const ApptentiveColorCollectionBackground;
 /// The background color for text input fields. Changing this may render placeholder invisible.
 extern NSString *const ApptentiveColorTextInputBackground;
 
+/// The background color for text input fields. Changing this may render placeholder invisible.
+extern NSString *const ApptentiveColorTextInputPlaceholder;
+
 /// The background color for message cells in Message Center.
 extern NSString *const ApptentiveColorMessageBackground;
 

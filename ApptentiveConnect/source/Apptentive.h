@@ -99,7 +99,7 @@ Before calling any other methods on the shared `Apptentive` instance, set the AP
 
  This key is found on the Apptentive website under Settings, API & Development.
  */
-@property (copy, nonatomic, nullable) NSString * APIKey;
+@property (copy, nonatomic, nullable) NSString *APIKey;
 
 /**
   APIKey property with legacy capitalization.

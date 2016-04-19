@@ -16,6 +16,7 @@ typedef enum {
 
 @class ApptentiveEvent;
 
+
 @interface ApptentiveRecordRequestTask : ApptentiveTask <ApptentiveAPIRequestDelegate>
 
 @property (strong, nonatomic) ApptentiveEvent *event;

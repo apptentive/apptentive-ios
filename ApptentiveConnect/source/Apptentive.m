@@ -42,6 +42,7 @@ NSString *const ApptentiveCustomDeviceDataChangedNotification = @"ApptentiveCust
 NSString *const ApptentiveCustomDeviceDataPreferenceKey = @"ApptentiveCustomDeviceDataPreferenceKey";
 NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPersonDataPreferenceKey";
 
+
 @interface Apptentive () <ApptentiveBannerViewControllerDelegate>
 @end
 

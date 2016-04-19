@@ -87,10 +87,9 @@
 	self.missingRequiredItem.tintColor = [style colorForStyle:ApptentiveColorBackground];
 	self.missingRequiredItem.title = [self.viewModel missingRequiredItemText];
 
-	self.toolbarItems = @[ [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil],
-						   self.missingRequiredItem,
-						   [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil]
-						   ];
+	self.toolbarItems = @[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil],
+		self.missingRequiredItem,
+		[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil]];
 
 	self.navigationController.toolbar.translucent = NO;
 	self.navigationController.toolbar.barTintColor = [style colorForStyle:ApptentiveColorFailure];
@@ -245,7 +244,7 @@
 		view.textLabel.textColor = [self.viewModel.styleSheet colorForStyle:UIFontTextStyleBody];
 
 		view.instructionsTextLabel.attributedText = [self.viewModel instructionTextOfQuestionAtIndex:indexPath.section];
-		view.instructionsTextLabel.font = [ self.viewModel.styleSheet fontForStyle:ApptentiveTextStyleSurveyInstructions];
+		view.instructionsTextLabel.font = [self.viewModel.styleSheet fontForStyle:ApptentiveTextStyleSurveyInstructions];
 
 		view.separatorView.backgroundColor = [self.viewModel.styleSheet colorForStyle:ApptentiveColorSeparator];
 

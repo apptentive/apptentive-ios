@@ -63,7 +63,7 @@
 }
 
 - (void)scrollToItemAtIndexPath:(NSIndexPath *)indexPath atScrollPosition:(UICollectionViewScrollPosition)scrollPosition animated:(BOOL)animated {
-	// The OS calls this incompetently and screws up our positioning. 
+	// The OS calls this incompetently and screws up our positioning.
 	return;
 }
 
@@ -74,7 +74,7 @@
 	// Make sure we don't scroll off the bottom of the content + footer
 	offsetHeaderFrame.origin.y = fmin(offsetHeaderFrame.origin.y, self.contentSize.height - CGRectGetHeight(self.bounds) + self.contentInset.bottom);
 
-	[self setContentOffset:offsetHeaderFrame.origin  animated:animated];
+	[self setContentOffset:offsetHeaderFrame.origin animated:animated];
 }
 
 - (void)layoutSubviews {

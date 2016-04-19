@@ -28,6 +28,7 @@ NSString *const ApptentiveColorSeparator = @"com.apptentive.color.separator";
 NSString *const ApptentiveColorBackground = @"com.apptentive.color.cellBackground";
 NSString *const ApptentiveColorCollectionBackground = @"com.apptentive.color.collectionBackground";
 NSString *const ApptentiveColorTextInputBackground = @"com.apptentive.color.textInputBackground";
+NSString *const ApptentiveColorTextInputPlaceholder = @"com.apptentive.color.textInputPlaceholder";
 NSString *const ApptentiveColorMessageBackground = @"com.apptentive.color.messageBackground";
 NSString *const ApptentiveColorReplyBackground = @"com.apptentive.color.replyBackground";
 NSString *const ApptentiveColorContextBackground = @"com.apptentive.color.contextBackground";
@@ -365,6 +366,7 @@ NSString *const ApptentiveColorContextBackground = @"com.apptentive.color.contex
 	_separatorColor = self.separatorColor ?: [self appearanceColorForClass:[UITableView class] property:@selector(separatorColor) default:[UIColor colorWithRed:199.0 / 255.0 green:200.0 / 255.0 blue:204.0 / 255.0 alpha:1.0]];
 	_backgroundColor = self.backgroundColor ?: [self appearanceColorForClass:[UITableViewCell class] property:@selector(backgroundColor) default:[UIColor whiteColor]];
 	_collectionBackgroundColor = self.collectionBackgroundColor ?: [self appearanceColorForClass:[UITableView class] property:@selector(backgroundColor) default:[UIColor groupTableViewBackgroundColor]];
+	_placeholderColor = self.placeholderColor ?: [UIColor colorWithRed:0 green:0 blue:25.0/255.0 alpha:56.0/255.0];
 }
 
 - (void)setFontDescriptor:(UIFontDescriptor *)fontDescriptor forStyle:(NSString *)textStyle {
@@ -468,6 +470,8 @@ NSString *const ApptentiveColorContextBackground = @"com.apptentive.color.contex
 		return [self.backgroundColor colorWithAlphaComponent:0.5];
 	} else if ([style isEqualToString:ApptentiveColorReplyBackground] || [style isEqualToString:ApptentiveColorContextBackground]) {
 		return [self interpolateAtPoint:0.968 between:self.backgroundColor and:self.primaryColor];
+	} else if ([style isEqualToString:ApptentiveColorTextInputPlaceholder]) {
+		return self.placeholderColor;
 	} else if ([@[ApptentiveTextStyleHeaderMessage, ApptentiveTextStyleMessageDate, ApptentiveTextStyleMessageStatus, ApptentiveTextStyleMessageCenterStatus, ApptentiveTextStyleSurveyInstructions] containsObject:style]) {
 		return self.secondaryColor;
 	} else {

@@ -188,10 +188,10 @@
 			ApptentiveSurveyMultilineCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"MultilineText" forIndexPath:indexPath];
 
 			cell.textView.text = [self.viewModel textOfAnswerAtIndexPath:indexPath];
-			cell.placeholderLabel.text = [self.viewModel placeholderTextOfQuestionAtIndex:indexPath.section];
+			cell.placeholderLabel.attributedText = [self.viewModel placeholderTextOfQuestionAtIndex:indexPath.section];
 			cell.textView.delegate = self;
 			cell.textView.tag = indexPath.section;
-			cell.textView.accessibilityLabel = [self.viewModel placeholderTextOfQuestionAtIndex:indexPath.section];
+			cell.textView.accessibilityLabel = [self.viewModel placeholderTextOfQuestionAtIndex:indexPath.section].string;
 			cell.textView.font = [self.viewModel.styleSheet fontForStyle:ApptentiveTextStyleTextInput];
 			cell.textView.textColor = [self.viewModel.styleSheet colorForStyle:ApptentiveTextStyleTextInput];
 
@@ -201,7 +201,7 @@
 			ApptentiveSurveySingleLineCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"SingleLineText" forIndexPath:indexPath];
 
 			cell.textField.text = [self.viewModel textOfAnswerAtIndexPath:indexPath];
-			cell.textField.placeholder = [self.viewModel placeholderTextOfQuestionAtIndex:indexPath.section];
+			cell.textField.attributedPlaceholder = [self.viewModel placeholderTextOfQuestionAtIndex:indexPath.section];
 			cell.textField.delegate = self;
 			cell.textField.tag = indexPath.section;
 			cell.textField.font = [self.viewModel.styleSheet fontForStyle:ApptentiveTextStyleTextInput];

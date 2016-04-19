@@ -1545,13 +1545,13 @@ Lines</string>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </view>
                         <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eQS-jv-07Q">
-                            <rect key="frame" x="282" y="8" width="30" height="34"/>
+                            <rect key="frame" x="282" y="24" width="30" height="34"/>
                             <connections>
                                 <action selector="showAbout:" destination="0Su-Sq-q29" eventType="touchUpInside" id="oe5-zj-xZf"/>
                             </connections>
                         </button>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Would you like to take a survey?!" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="220" translatesAutoresizingMaskIntoConstraints="NO" id="QJU-jb-fK0">
-                            <rect key="frame" x="50" y="8" width="220" height="69"/>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Would you like to take a survey?!" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="220" translatesAutoresizingMaskIntoConstraints="NO" id="QJU-jb-fK0">
+                            <rect key="frame" x="19" y="19" width="251" height="40"/>
                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                             <color key="textColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             <nil key="highlightedColor"/>
@@ -1569,16 +1569,16 @@ Lines</string>
                         <constraint firstAttribute="trailing" secondItem="QJU-jb-fK0" secondAttribute="trailing" constant="50" id="3M8-7U-DAv"/>
                         <constraint firstAttribute="trailing" secondItem="eQS-jv-07Q" secondAttribute="trailing" constant="8" id="5o0-nM-4r0"/>
                         <constraint firstAttribute="trailing" secondItem="kjO-RC-C9t" secondAttribute="trailing" id="7ki-29-dG1"/>
-                        <constraint firstItem="kjO-RC-C9t" firstAttribute="top" relation="greaterThanOrEqual" secondItem="eQS-jv-07Q" secondAttribute="bottom" constant="8" id="FhP-NR-GO3"/>
+                        <constraint firstItem="kjO-RC-C9t" firstAttribute="top" relation="greaterThanOrEqual" secondItem="eQS-jv-07Q" secondAttribute="bottom" constant="24" id="FhP-NR-GO3"/>
                         <constraint firstAttribute="trailing" secondItem="hym-vX-x0x" secondAttribute="trailing" id="O7u-UU-rCY"/>
                         <constraint firstItem="kjO-RC-C9t" firstAttribute="leading" secondItem="5MM-w9-NsG" secondAttribute="leading" id="RHh-BL-x21"/>
                         <constraint firstItem="hym-vX-x0x" firstAttribute="top" secondItem="5MM-w9-NsG" secondAttribute="top" constant="-1000" id="YEn-ux-FqZ"/>
                         <constraint firstAttribute="bottom" secondItem="kjO-RC-C9t" secondAttribute="bottom" id="akX-ad-z1E"/>
-                        <constraint firstItem="QJU-jb-fK0" firstAttribute="leading" secondItem="5MM-w9-NsG" secondAttribute="leading" constant="50" id="fZv-8x-wkE"/>
-                        <constraint firstItem="eQS-jv-07Q" firstAttribute="top" secondItem="5MM-w9-NsG" secondAttribute="top" constant="8" id="fsQ-O1-gcB"/>
+                        <constraint firstItem="QJU-jb-fK0" firstAttribute="leading" secondItem="5MM-w9-NsG" secondAttribute="leading" constant="19" id="fZv-8x-wkE"/>
+                        <constraint firstItem="eQS-jv-07Q" firstAttribute="top" secondItem="5MM-w9-NsG" secondAttribute="top" constant="24" id="fsQ-O1-gcB"/>
                         <constraint firstItem="hym-vX-x0x" firstAttribute="leading" secondItem="5MM-w9-NsG" secondAttribute="leading" id="hnU-Vl-6cU"/>
-                        <constraint firstAttribute="bottom" secondItem="QJU-jb-fK0" secondAttribute="bottom" constant="8" id="inw-Yq-JwN"/>
-                        <constraint firstItem="QJU-jb-fK0" firstAttribute="top" secondItem="5MM-w9-NsG" secondAttribute="top" constant="8" id="j86-Xc-x2p"/>
+                        <constraint firstAttribute="bottom" secondItem="QJU-jb-fK0" secondAttribute="bottom" constant="26" id="inw-Yq-JwN"/>
+                        <constraint firstItem="QJU-jb-fK0" firstAttribute="top" secondItem="5MM-w9-NsG" secondAttribute="top" constant="19" id="j86-Xc-x2p"/>
                         <constraint firstAttribute="bottom" secondItem="hym-vX-x0x" secondAttribute="bottom" id="o7f-uU-vfB"/>
                     </constraints>
                     <connections>

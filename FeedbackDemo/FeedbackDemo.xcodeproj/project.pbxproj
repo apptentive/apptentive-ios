@@ -85,7 +85,6 @@
 		0165B3701CC18C4200A93F2C /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		016A4E211CAF341A00AD22A9 /* Apptentive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Apptentive.h; path = ../ApptentiveConnect/source/Apptentive.h; sourceTree = "<group>"; };
 		016A4E221CAF341A00AD22A9 /* Apptentive+Debugging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Apptentive+Debugging.h"; path = "../ApptentiveConnect/source/Apptentive+Debugging.h"; sourceTree = "<group>"; };
-		016A4E231CAF341A00AD22A9 /* ApptentiveStyleSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ApptentiveStyleSheet.h; path = ../ApptentiveConnect/source/ApptentiveStyleSheet.h; sourceTree = "<group>"; };
 		019CEBEC1BDEDE9400CCEC97 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		019CEBED1BDEDE9400CCEC97 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = "pt-BR"; path = "pt-BR.lproj/Main.storyboard"; sourceTree = "<group>"; };
 		019CEBEE1BDEDE9400CCEC97 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
@@ -228,7 +227,6 @@
 				01A16C8D1AF2A66B00D691FC /* Products */,
 				016A4E211CAF341A00AD22A9 /* Apptentive.h */,
 				016A4E221CAF341A00AD22A9 /* Apptentive+Debugging.h */,
-				016A4E231CAF341A00AD22A9 /* ApptentiveStyleSheet.h */,
 				01A16CB51AF2A67600D691FC /* ApptentiveConnect.xcodeproj */,
 			);
 			sourceTree = "<group>";

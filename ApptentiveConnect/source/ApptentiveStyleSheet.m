@@ -376,8 +376,8 @@ NSString *const ApptentiveColorContextBackground = @"com.apptentive.color.contex
 		return self.fontDescriptorOverrides[textStyle];
 	}
 
-	NSString *face = self.regularFaceAttribute;
-	NSNumber *size = @(17.0);
+	NSString *face;
+	NSNumber *size;
 
 	if ([[[self class] UIKitTextStyles] containsObject:textStyle]) {
 		// fontDescriptorWithFamily doesn't properly override the font family for the system font :(

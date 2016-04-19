@@ -62,7 +62,7 @@ class Builder(object):
 		if dist_type not in [self.COCOAPODS_DIST, self.BINARY_DIST]:
 			log("Unknown dist_type: %s" % dist_type)
 			sys.exit(1)
-	
+
 	def build(self):
 		with chdir(self._project_dir()):
 			# Build for simulator and device, each 64bit and not.
@@ -93,7 +93,7 @@ class Builder(object):
 				log("Unable to lipo static libraries")
 				log(output)
 				return False
-			paths_to_copy = [("source/ATConnect.h", "include/ATConnect.h"), ("../LICENSE.txt", "LICENSE.txt"), ("../README.md", "README.md"), ("../CHANGELOG.md", "CHANGELOG.md")]
+			paths_to_copy = [("source/Apptentive.h", "include/Apptentive.h"), ("../LICENSE.txt", "LICENSE.txt"), ("../README.md", "README.md"), ("../CHANGELOG.md", "CHANGELOG.md")]
 			for (project_path, destination_path) in paths_to_copy:
 				full_project_path = project_path
 				full_destination_path = os.path.join(self._output_dir(), destination_path)
@@ -121,11 +121,11 @@ class Builder(object):
 				log("Unknown dist_type")
 				return False
 			biplist.writePlist(plist, bundle_plist_path)
-		
+
 		# Try to get the version.
 		version = None
-		header_contents = open(os.path.join(self._project_dir(), "source", "ATConnect.h")).read()
-		match = re.search(r"#define kATConnectVersionString @\"(?P<version>.+)\"", header_contents, re.MULTILINE)
+		header_contents = open(os.path.join(self._project_dir(), "source", "Apptentive.h")).read()
+		match = re.search(r"#define kApptentiveVersionString @\"(?P<version>.+)\"", header_contents, re.MULTILINE)
 		if match and match.group('version'):
 			version = match.group('version')
 		with chdir(self._output_dir()):
@@ -143,13 +143,13 @@ class Builder(object):
 				return False
 			run_command("open .")
 		return True
-	
+
 	def _project_dir(self):
 		return os.path.realpath(os.path.join(get_dirname(), "..", "..", "ApptentiveConnect"))
-	
+
 	def _output_dir(self):
 		return os.path.join(self.build_root, "library_dir")
-	
+
 	def _products_dir(self, is_simulator=False, is_64bit=False):
 		products_dir = os.path.join(self.build_root, "device_product")
 		if is_simulator:
@@ -157,13 +157,13 @@ class Builder(object):
 		if is_64bit:
 			products_dir += "_64bit"
 		return products_dir
-	
+
 	def _xcode_options(self, is_simulator=False, is_64bit=False):
 		products_dir = self._products_dir(is_simulator=is_simulator, is_64bit=is_64bit)
 		symroot = os.path.join(self.build_root, "symroot")
 		temp_dir = os.path.join(self.build_root, "target_temp_dir")
 		return "CONFIGURATION_BUILD_DIR=%s SYMROOT=%s TARGET_TEMP_DIR=%s" % (escape_arg(products_dir), escape_arg(symroot), escape_arg(temp_dir))
-	
+
 	def _lipo_command(self):
 		output_dir = self._output_dir()
 		lib = "libApptentiveConnect.a"
@@ -173,7 +173,7 @@ class Builder(object):
 		input_c = os.path.join(self._products_dir(is_simulator=True, is_64bit=True), lib)
 		input_d = os.path.join(self._products_dir(is_simulator=False, is_64bit=True), lib)
 		return """xcrun lipo -create -output %s %s %s %s %s""" % (escape_arg(output_library), escape_arg(input_a), escape_arg(input_b), escape_arg(input_c), escape_arg(input_d))
-	
+
 	def _build_command(self, is_simulator=False, is_64bit=False):
 		sdk = 'iphoneos'
 		if is_simulator:
@@ -188,11 +188,11 @@ class Builder(object):
 		elif not is_simulator and not is_64bit:
 			command += " ARCHS='armv7 armv7s' VALID_ARCHS='armv7 armv7s'"
 		return command
-	
+
 	def _project_path(self, filename):
 		"""Returns the file within the project directory for the given filename."""
 		return os.path.join(self._project_dir(), filename)
-	
+
 	def _ditto_file(self, path_from, path_to):
 		command = """xcrun ditto %s %s""" % (escape_arg(path_from), escape_arg(path_to))
 		return run_command(command, verbose=self.verbose)

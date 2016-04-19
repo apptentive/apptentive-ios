@@ -86,8 +86,8 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 
 - (id)init {
 	if ((self = [super init])) {
-		_customPersonData = [[NSUserDefaults standardUserDefaults] objectForKey:ApptentiveCustomPersonDataPreferenceKey] ?: [[NSMutableDictionary alloc] init];
-		_customDeviceData = [[NSUserDefaults standardUserDefaults] objectForKey:ApptentiveCustomDeviceDataPreferenceKey] ?: [[NSMutableDictionary alloc] init];
+		_customPersonData = [[[NSUserDefaults standardUserDefaults] objectForKey:ApptentiveCustomPersonDataPreferenceKey] mutableCopy] ?: [[NSMutableDictionary alloc] init];
+		_customDeviceData = [[[NSUserDefaults standardUserDefaults] objectForKey:ApptentiveCustomDeviceDataPreferenceKey] mutableCopy] ?: [[NSMutableDictionary alloc] init];
 
 		_integrationConfiguration = [[NSMutableDictionary alloc] init];
 		_styleSheet = [[ApptentiveStyleSheet alloc] init];

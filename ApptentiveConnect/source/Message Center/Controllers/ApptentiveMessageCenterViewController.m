@@ -172,6 +172,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 	self.messageInputView.placeholderLabel.text = self.interaction.composerPlaceholderText;
 	self.messageInputView.placeholderLabel.font = [[Apptentive sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleTextInput];
+	self.messageInputView.placeholderLabel.textColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveColorTextInputPlaceholder];
 
 	self.messageInputView.placeholderLabel.hidden = self.messageInputView.messageView.text.length > 0;
 
@@ -221,8 +222,11 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		self.profileView.skipButton.hidden = self.interaction.profileRequired;
 		[self validateWho:self];
 		self.profileView.borderColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveColorSeparator];
+
 		self.profileView.nameField.font = [[Apptentive sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleTextInput];
+		self.profileView.nameField.backgroundColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveColorTextInputBackground];
 		self.profileView.emailField.font = [[Apptentive sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleTextInput];
+		self.profileView.emailField.backgroundColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveColorTextInputBackground];
 
 		if (self.interaction.profileRequired && [self shouldShowProfileViewBeforeComposing:YES]) {
 			self.profileView.skipButton.hidden = YES;
@@ -836,8 +840,9 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.profileView.skipButton.hidden = NO;
 	self.profileView.titleLabel.text = self.interaction.profileEditTitle;
 
-	self.profileView.nameField.placeholder = self.interaction.profileEditNamePlaceholder;
-	self.profileView.emailField.placeholder = self.interaction.profileEditEmailPlaceholder;
+	NSDictionary *placeholderAttributes = @{ NSForegroundColorAttributeName: [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveColorTextInputPlaceholder] };
+	self.profileView.nameField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:self.interaction.profileEditNamePlaceholder attributes:placeholderAttributes];
+	self.profileView.emailField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:self.interaction.profileEditEmailPlaceholder attributes:placeholderAttributes];
 
 	[self.profileView.saveButton setTitle:self.interaction.profileEditSaveButtonTitle forState:UIControlStateNormal];
 	[self.profileView.skipButton setTitle:self.interaction.profileEditSkipButtonTitle forState:UIControlStateNormal];

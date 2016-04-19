@@ -115,8 +115,9 @@
 	}
 }
 
-- (NSString *)placeholderTextOfQuestionAtIndex:(NSInteger)index {
-	return [self questionAtIndex:index].placeholder;
+- (NSAttributedString *)placeholderTextOfQuestionAtIndex:(NSInteger)index {
+	NSString *placeholder = [self questionAtIndex:index].placeholder ?: @"";
+	return [[NSAttributedString alloc] initWithString:placeholder attributes:@{ NSForegroundColorAttributeName: [self.styleSheet colorForStyle:ApptentiveColorTextInputPlaceholder] }];
 }
 
 - (NSString *)textOfAnswerAtIndexPath:(NSIndexPath *)indexPath {

@@ -24,4 +24,12 @@
 	self.greetingLabel.numberOfLines = 0;
 }
 
+- (void)layoutSubviews {
+	[super layoutSubviews];
+
+	self.greetingLabel.preferredMaxLayoutWidth = CGRectGetWidth(self.greetingLabel.bounds);
+
+	[super layoutSubviews];
+}
+
 @end

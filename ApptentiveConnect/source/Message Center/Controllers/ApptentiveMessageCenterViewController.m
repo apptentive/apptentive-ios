@@ -111,6 +111,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 @property (readonly, nonatomic) BOOL messageComposerHasAttachments;
 @property (readonly, nonatomic) NSDictionary *bodyLengthDictionary;
 
+@property (assign, nonatomic) CGRect lastKnownKeyboardRect;
+
 @end
 
 
@@ -308,6 +310,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
+
+	self.lastKnownKeyboardRect = CGRectMake(0, CGRectGetHeight([UIScreen mainScreen].bounds), CGRectGetWidth([UIScreen mainScreen].bounds), 20);
 
 	if (self.attachmentController.active) {
 		self.state = ATMessageCenterStateComposing;
@@ -1142,20 +1146,17 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (void)scrollToFooterView:(NSNotification *)notification {
-	CGFloat footerSpace = [self.dataSource numberOfMessageGroups] > 0 ? self.tableView.sectionFooterHeight : 0;
-	CGFloat verticalOffset = CGRectGetMaxY(self.rectOfLastMessage) + footerSpace;
-	CGFloat verticalOffsetLimit;
-
-	// A notification means a keyboard is involved, which uses different math
 	if (notification) {
-		CGRect keyboardRect = [self.view.window convertRect:[notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue] toView:self.tableView.superview];
-
-		verticalOffsetLimit = self.tableView.contentSize.height - CGRectGetMinY(keyboardRect);
-	} else {
-		verticalOffsetLimit = self.tableView.contentSize.height - (CGRectGetHeight(self.tableView.bounds) - self.tableView.contentInset.bottom);
+		self.lastKnownKeyboardRect = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
 	}
 
-	verticalOffsetLimit = fmax(-self.tableView.contentInset.top, verticalOffsetLimit);
+	CGRect localKeyboardRect = self.view.window ? [self.view.window convertRect:self.lastKnownKeyboardRect toView:self.tableView.superview] : self.lastKnownKeyboardRect;
+
+	CGFloat topContentInset = [NSProcessInfo instancesRespondToSelector:@selector(isOperatingSystemAtLeastVersion:)] ? self.tableView.contentInset.top : 64.0;
+	CGFloat footerSpace = [self.dataSource numberOfMessageGroups] > 0 ? self.tableView.sectionFooterHeight : 0;
+	CGFloat verticalOffset = CGRectGetMaxY(self.rectOfLastMessage) + footerSpace;
+	CGFloat verticalOffsetLimit = fmax(-topContentInset, self.tableView.contentSize.height - fmin(CGRectGetMinY(localKeyboardRect), CGRectGetHeight(self.view.bounds) - topContentInset));
+
 	verticalOffset = fmin(verticalOffset, verticalOffsetLimit);
 	CGPoint contentOffset = CGPointMake(0, verticalOffset);
 
@@ -1172,26 +1173,22 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	CGFloat height = 0;
 
 	if (self.state == ATMessageCenterStateComposing || self.state == ATMessageCenterStateEmpty) {
-		CGRect keyboardRect;
-
 		if (notification) {
-			keyboardRect = [self.view.window convertRect:[notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue] toView:self.tableView.superview];
-
-			// Available space is between the top of the keyboard and the bottom of the navigation bar
-			height = CGRectGetMinY(keyboardRect) - self.tableView.contentInset.top;
-
-			// Unless the top of the keyboard is below the (visible) toolbar, then subtract the toolbar height
-			if (CGRectGetHeight(CGRectIntersection(keyboardRect, self.view.frame)) == 0 && !self.navigationController.toolbarHidden) {
-				height -= CGRectGetHeight(self.navigationController.toolbar.bounds);
-			}
-		} else {
-			// Workaround for weird race conditions on top layout guide and table view content inset
-			CGFloat topBarHeight = fmax([self.topLayoutGuide length], self.tableView.contentInset.top);
-			height = CGRectGetHeight(self.tableView.bounds) - topBarHeight;
+			self.lastKnownKeyboardRect = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
 		}
 
-		// If there are no sent messages and the keyboard is off screen, fill the available space.
-		if (!self.dataSource.hasNonContextMessages && (!notification || CGRectGetMinY(keyboardRect) >= CGRectGetMaxY(self.tableView.frame))) {
+		CGRect localKeyboardRect = self.view.window ? [self.view.window convertRect:self.lastKnownKeyboardRect toView:self.tableView.superview] : self.lastKnownKeyboardRect;
+		CGFloat topContentInset = [NSProcessInfo instancesRespondToSelector:@selector(isOperatingSystemAtLeastVersion:)] ? self.tableView.contentInset.top : 64.0;
+
+		// Available space is between the top of the keyboard and the bottom of the navigation bar
+		height = CGRectGetMinY(localKeyboardRect) - topContentInset;
+
+		// Unless the top of the keyboard is below the (visible) toolbar, then subtract the toolbar height
+		if (CGRectGetHeight(CGRectIntersection(localKeyboardRect, self.view.frame)) == 0 && !self.navigationController.toolbarHidden) {
+			height -= CGRectGetHeight(self.navigationController.toolbar.bounds);
+		}
+
+		if (!self.dataSource.hasNonContextMessages && CGRectGetMinY(localKeyboardRect) >= CGRectGetMaxY(self.tableView.frame)) {
 			height -= CGRectGetHeight(self.greetingView.bounds);
 		}
 	} else {
@@ -1270,8 +1267,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 	[self resizeFooterView:nil];
 
-	// iOS 7 needs a (nano)sec to allow the keyboard to disappear before scrolling
-	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1)), dispatch_get_main_queue(), ^{
+	// iOS 7 needs a sec to allow the keyboard to disappear before scrolling
+	dispatch_async(dispatch_get_main_queue(), ^{
 		[self scrollToLastMessageAnimated:YES];
 	});
 }

@@ -383,7 +383,9 @@
 
 	[self.collectionView performBatchUpdates:^{
 		[self.viewModel setText:textView.text forAnswerAtIndexPath:indexPath];
+		CGPoint contentOffset = self.collectionView.contentOffset;
 		[self.collectionViewLayout invalidateLayout];
+		self.collectionView.contentOffset = contentOffset;
 	} completion:nil];
 }
 
@@ -430,7 +432,9 @@
 		}
 	}];
 
+	CGPoint contentOffset = self.collectionView.contentOffset;
 	[self.navigationController setToolbarHidden:valid animated:YES];
+	self.collectionView.contentOffset = contentOffset;
 }
 
 - (void)viewModel:(ApptentiveSurveyViewModel *)viewModel didDeselectAnswerAtIndexPath:(NSIndexPath *)indexPath {
@@ -451,7 +455,9 @@
 
 	CGFloat duration = ((NSNumber *)notification.userInfo[UIKeyboardAnimationDurationUserInfoKey]).doubleValue;
 	[UIView animateWithDuration:duration animations:^{
+		CGPoint contentOffset = self.collectionView.contentOffset;
 		[self.collectionView layoutIfNeeded];
+		self.collectionView.contentOffset = contentOffset;
 		if (self.editingIndexPath) {
 			[(ApptentiveSurveyCollectionView *)self.collectionView scrollHeaderAtIndexPathToTop:self.editingIndexPath animated:NO];
 		}

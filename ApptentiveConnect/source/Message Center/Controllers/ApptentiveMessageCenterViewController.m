@@ -566,6 +566,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
+	[self updateStatusOfVisibleCells];
+
 	@try {
 		[self.tableView endUpdates];
 	} @catch (NSException *exception) {
@@ -772,7 +774,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 - (IBAction)sendButtonPressed:(id)sender {
 	NSString *message = self.trimmedMessage;
-	NSIndexPath *lastUserMessageIndexPath = self.dataSource.lastUserMessageIndexPath;
 
 	if (self.contextMessage) {
 		[[Apptentive sharedConnection].backend sendAutomatedMessage:self.contextMessage];
@@ -797,14 +798,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	} else {
 		[self.messageInputView.messageView resignFirstResponder];
 		[self updateState];
-	}
-
-	if (lastUserMessageIndexPath) {
-		@try {
-			[self.tableView reloadRowsAtIndexPaths:@[lastUserMessageIndexPath] withRowAnimation:UITableViewRowAnimationFade];
-		} @catch (NSException *exception) {
-			ApptentiveLogError(@"caught exception: %@: %@", [exception name], [exception description]);
-		}
 	}
 
 	self.messageInputView.messageView.text = @"";
@@ -942,6 +935,27 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 #pragma mark - Private
+
+- (void)updateStatusOfVisibleCells {
+	NSMutableArray *indexPathsToReload = [NSMutableArray array];
+	for (UITableViewCell *cell in self.tableView.visibleCells) {
+		if ([cell isKindOfClass:[ApptentiveMessageCenterMessageCell class]]) {
+			ApptentiveMessageCenterMessageCell *messageCell = (ApptentiveMessageCenterMessageCell *)cell;
+			NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+			BOOL shouldHideStatus = [self.dataSource statusOfMessageAtIndexPath:indexPath] == ATMessageCenterMessageStatusHidden;
+
+			if (messageCell.statusLabelHidden != shouldHideStatus) {
+				[indexPathsToReload addObject:indexPath];
+			}
+		}
+	}
+
+	@try {
+		[self.tableView reloadRowsAtIndexPaths:indexPathsToReload withRowAnimation:UITableViewRowAnimationFade];
+	} @catch (NSException *exception) {
+		ApptentiveLogError(@"caught exception: %@: %@", [exception name], [exception description]);
+	}
+}
 
 - (NSDictionary *)bodyLengthDictionary {
 	return @{ @"body_length": @(self.messageInputView.messageView.text.length) };

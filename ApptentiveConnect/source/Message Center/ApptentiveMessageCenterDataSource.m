@@ -209,10 +209,6 @@ NSString *const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenter
 	return self.lastUserMessage.pendingState.integerValue;
 }
 
-- (NSIndexPath *)lastUserMessageIndexPath {
-	return [self.fetchedMessagesController indexPathForObject:self.lastUserMessage];
-}
-
 #pragma mark Attachments
 
 - (NSInteger)numberOfAttachmentsForMessageAtIndex:(NSInteger)index {

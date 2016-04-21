@@ -837,8 +837,10 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 		if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
 			[actionSheet showFromRect:sender.frame inView:sender.superview animated:YES];
-		} else {
+		} else if (!self.navigationController.toolbarHidden) {
 			[actionSheet showFromToolbar:self.navigationController.toolbar];
+		} else {
+			[actionSheet showInView:self.view];
 		}
 	}
 }
@@ -1154,23 +1156,25 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		self.lastKnownKeyboardRect = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
 	}
 
+	BOOL isIOS7 = ![NSProcessInfo instancesRespondToSelector:@selector(isOperatingSystemAtLeastVersion:)];
 	CGRect localKeyboardRect = self.view.window ? [self.view.window convertRect:self.lastKnownKeyboardRect toView:self.tableView.superview] : self.lastKnownKeyboardRect;
 
-	CGFloat topContentInset = [NSProcessInfo instancesRespondToSelector:@selector(isOperatingSystemAtLeastVersion:)] ? self.tableView.contentInset.top : 64.0;
+	CGFloat topContentInset = isIOS7 ? self.tableView.contentInset.top : 64.0;
 	CGFloat footerSpace = [self.dataSource numberOfMessageGroups] > 0 ? self.tableView.sectionFooterHeight : 0;
 	CGFloat verticalOffset = CGRectGetMaxY(self.rectOfLastMessage) + footerSpace;
-	CGFloat verticalOffsetLimit = fmax(-topContentInset, self.tableView.contentSize.height - fmin(CGRectGetMinY(localKeyboardRect), CGRectGetHeight(self.view.bounds) - topContentInset));
+	CGFloat toolbarHeight = self.navigationController.toolbarHidden ? 0 : CGRectGetHeight(self.navigationController.toolbar.bounds);
 
-	verticalOffset = fmin(verticalOffset, verticalOffsetLimit);
+	CGFloat iOS7FudgeFactor =  isIOS7 && self.view.window == nil ? topContentInset : 0;
+	CGFloat heightOfVisibleView = fmin(CGRectGetMinY(localKeyboardRect), CGRectGetHeight(self.view.bounds) - toolbarHeight - iOS7FudgeFactor);
+	CGFloat verticalOffsetMaximum = fmax(-64, self.tableView.contentSize.height - heightOfVisibleView);
+
+	verticalOffset = fmin(verticalOffset, verticalOffsetMaximum);
 	CGPoint contentOffset = CGPointMake(0, verticalOffset);
 
-	if (notification) {
-		[UIView animateWithDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue] animations:^{
+	CGFloat duration = notification ? [notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue] : 0.25;
+	[UIView animateWithDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue] animations:^{
 			self.tableView.contentOffset = contentOffset;
-		}];
-	} else {
-		[self.tableView setContentOffset:contentOffset animated:YES];
-	}
+	}];
 }
 
 - (void)resizeFooterView:(NSNotification *)notification {
@@ -1185,7 +1189,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		CGFloat topContentInset = [NSProcessInfo instancesRespondToSelector:@selector(isOperatingSystemAtLeastVersion:)] ? self.tableView.contentInset.top : 64.0;
 
 		// Available space is between the top of the keyboard and the bottom of the navigation bar
-		height = CGRectGetMinY(localKeyboardRect) - topContentInset;
+		height = fmin(CGRectGetMinY(localKeyboardRect), CGRectGetHeight(self.view.bounds)) - topContentInset;
 
 		// Unless the top of the keyboard is below the (visible) toolbar, then subtract the toolbar height
 		if (CGRectGetHeight(CGRectIntersection(localKeyboardRect, self.view.frame)) == 0 && !self.navigationController.toolbarHidden) {
@@ -1211,7 +1215,9 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		self.tableView.tableFooterView.frame = frame;
 		[self.tableView.tableFooterView layoutIfNeeded];
 		[self.activeFooterView updateConstraints];
+		//CGPoint contentOffset = self.tableView.contentOffset;
 		self.tableView.tableFooterView = self.tableView.tableFooterView;
+		//self.tableView.contentOffset = contentOffset;
 	}];
 }
 

@@ -61,7 +61,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterMessageStatus) {
 - (id<QLPreviewControllerDataSource>)previewDataSourceAtIndex:(NSInteger)index;
 
 @property (readonly, nonatomic) BOOL lastMessageIsReply;
-@property (readonly, nonatomic) NSIndexPath *lastUserMessageIndexPath;
 @property (readonly, nonatomic) ATPendingMessageState lastUserMessageState;
 
 @end

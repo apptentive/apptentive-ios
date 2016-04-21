@@ -1215,9 +1215,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		self.tableView.tableFooterView.frame = frame;
 		[self.tableView.tableFooterView layoutIfNeeded];
 		[self.activeFooterView updateConstraints];
-		//CGPoint contentOffset = self.tableView.contentOffset;
 		self.tableView.tableFooterView = self.tableView.tableFooterView;
-		//self.tableView.contentOffset = contentOffset;
 	}];
 }
 

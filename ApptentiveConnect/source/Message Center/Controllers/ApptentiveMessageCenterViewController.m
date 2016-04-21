@@ -801,6 +801,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	}
 
 	self.messageInputView.messageView.text = @"";
+	[self updateSendButtonEnabledStatus];
 }
 
 - (IBAction)compose:(id)sender {

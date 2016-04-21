@@ -316,6 +316,10 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	if (self.attachmentController.active) {
 		self.state = ATMessageCenterStateComposing;
 		[self.attachmentController becomeFirstResponder];
+
+		CGSize screenSize = [UIScreen mainScreen].bounds.size;
+		CGSize drawerSize = self.attachmentController.inputView.bounds.size;
+		self.lastKnownKeyboardRect = CGRectMake(0, screenSize.height - drawerSize.height, screenSize.width, drawerSize.height);
 	} else if (self.messageComposerHasText || self.messageComposerHasAttachments) {
 		self.state = ATMessageCenterStateComposing;
 		[self.messageInputView.messageView becomeFirstResponder];

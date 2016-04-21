@@ -264,11 +264,7 @@ static ApptentiveTaskQueue *sharedTaskQueue = nil;
 					[tasks removeObject:task];
 					[self startOnNextRunLoopIteration];
 				} else {
-					// Put task on back of queue.
-					[tasks removeObject:task];
-					[tasks addObject:task];
-					[self archive];
-
+					// Retry it
 					[self performSelector:@selector(start) withObject:nil afterDelay:kATTaskQueueRetryPeriod];
 				}
 			} else {

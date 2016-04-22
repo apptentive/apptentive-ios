@@ -1187,7 +1187,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	CGPoint contentOffset = CGPointMake(0, verticalOffset);
 
 	CGFloat duration = notification ? [notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue] : 0.25;
-	[UIView animateWithDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue] animations:^{
+	[UIView animateWithDuration:duration animations:^{
 			self.tableView.contentOffset = contentOffset;
 	}];
 }

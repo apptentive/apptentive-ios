@@ -1174,7 +1174,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	BOOL isIOS7 = ![NSProcessInfo instancesRespondToSelector:@selector(isOperatingSystemAtLeastVersion:)];
 	CGRect localKeyboardRect = self.view.window ? [self.view.window convertRect:self.lastKnownKeyboardRect toView:self.tableView.superview] : self.lastKnownKeyboardRect;
 
-	CGFloat topContentInset = isIOS7 ? self.tableView.contentInset.top : 64.0;
+	CGFloat topContentInset = isIOS7 ? 64.0 : self.tableView.contentInset.top;
 	CGFloat footerSpace = [self.dataSource numberOfMessageGroups] > 0 ? self.tableView.sectionFooterHeight : 0;
 	CGFloat verticalOffset = CGRectGetMaxY(self.rectOfLastMessage) + footerSpace;
 	CGFloat toolbarHeight = self.navigationController.toolbarHidden ? 0 : CGRectGetHeight(self.navigationController.toolbar.bounds);

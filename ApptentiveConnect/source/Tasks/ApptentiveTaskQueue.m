@@ -262,6 +262,7 @@ static ApptentiveTaskQueue *sharedTaskQueue = nil;
 					[self unsetActiveTask];
 					[task cleanup];
 					[tasks removeObject:task];
+					[self archive];
 					[self startOnNextRunLoopIteration];
 				} else {
 					// Retry it
@@ -270,7 +271,9 @@ static ApptentiveTaskQueue *sharedTaskQueue = nil;
 			} else {
 				task.failureCount = task.failureCount + 1;
 				[self unsetActiveTask];
+				[task cleanup];
 				[tasks removeObject:task];
+				[self archive];
 				[self startOnNextRunLoopIteration];
 			}
 		}

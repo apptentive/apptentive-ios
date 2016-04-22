@@ -117,7 +117,7 @@
                             </connections>
                         </view>
                         <view key="tableFooterView" contentMode="scaleToFill" id="6et-WJ-u3H">
-                            <rect key="frame" x="0.0" y="958.5" width="414" height="300"/>
+                            <rect key="frame" x="0.0" y="955.5" width="414" height="300"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Aj5-aD-yTM" customClass="ApptentiveMessageCenterInputView">
@@ -428,15 +428,15 @@
                             </constraints>
                         </view>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="ContextMessage" rowHeight="51" id="5ec-cK-c7K" userLabel="Context Message" customClass="ApptentiveMessageCenterContextMessageCell">
-                                <rect key="frame" x="0.0" y="371.5" width="414" height="51"/>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="ContextMessage" rowHeight="48" id="5ec-cK-c7K" userLabel="Context Message" customClass="ApptentiveMessageCenterContextMessageCell">
+                                <rect key="frame" x="0.0" y="371.5" width="414" height="48"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="5ec-cK-c7K" id="jRh-G0-si1">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="50.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="47.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" verticalCompressionResistancePriority="749" scrollEnabled="NO" editable="NO" text="This is a context message." textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="51V-f8-IsS">
-                                            <rect key="frame" x="15" y="8" width="384" height="34.5"/>
+                                            <rect key="frame" x="15" y="14" width="384" height="19.5"/>
                                             <color key="textColor" red="0.066666666666666666" green="0.066666666666666666" blue="0.090196078431372548" alpha="1" colorSpace="calibratedRGB"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -446,9 +446,9 @@
                                     <color key="backgroundColor" red="0.96862745098039216" green="0.96862745098039216" blue="0.97647058823529409" alpha="1" colorSpace="calibratedRGB"/>
                                     <constraints>
                                         <constraint firstAttribute="trailing" secondItem="51V-f8-IsS" secondAttribute="trailing" constant="15" id="Hfi-CO-c7B"/>
-                                        <constraint firstAttribute="bottom" secondItem="51V-f8-IsS" secondAttribute="bottom" constant="8" id="X47-Cz-LLK"/>
+                                        <constraint firstAttribute="bottom" secondItem="51V-f8-IsS" secondAttribute="bottom" constant="14" id="X47-Cz-LLK"/>
                                         <constraint firstItem="51V-f8-IsS" firstAttribute="leading" secondItem="jRh-G0-si1" secondAttribute="leading" constant="15" id="blU-qF-sDv"/>
-                                        <constraint firstItem="51V-f8-IsS" firstAttribute="top" secondItem="jRh-G0-si1" secondAttribute="top" constant="8" id="dQ5-9Y-EBs"/>
+                                        <constraint firstItem="51V-f8-IsS" firstAttribute="top" secondItem="jRh-G0-si1" secondAttribute="top" constant="14" id="dQ5-9Y-EBs"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
@@ -456,7 +456,7 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="Reply" rowHeight="87" id="JK9-ui-0US" customClass="ApptentiveMessageCenterReplyCell">
-                                <rect key="frame" x="0.0" y="422.5" width="414" height="87"/>
+                                <rect key="frame" x="0.0" y="419.5" width="414" height="87"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="JK9-ui-0US" id="mF7-ws-xVD">
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="86.5"/>
@@ -504,7 +504,7 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="Message" rowHeight="93" id="hi8-Bq-GR3" customClass="ApptentiveMessageCenterMessageCell">
-                                <rect key="frame" x="0.0" y="509.5" width="414" height="93"/>
+                                <rect key="frame" x="0.0" y="506.5" width="414" height="93"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="hi8-Bq-GR3" id="H0J-6d-bTN">
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="92.5"/>
@@ -540,7 +540,7 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="CompoundMessage" rowHeight="181" id="evQ-54-Bpq" userLabel="CompoundMessage" customClass="ApptentiveCompoundMessageCell">
-                                <rect key="frame" x="0.0" y="602.5" width="414" height="181"/>
+                                <rect key="frame" x="0.0" y="599.5" width="414" height="181"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="evQ-54-Bpq" id="cxM-mJ-g02">
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="180.5"/>
@@ -639,7 +639,7 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="CompoundReply" rowHeight="169" id="nj1-yL-vAx" customClass="ApptentiveCompoundReplyCell">
-                                <rect key="frame" x="0.0" y="783.5" width="414" height="169"/>
+                                <rect key="frame" x="0.0" y="780.5" width="414" height="169"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="nj1-yL-vAx" id="n4I-KM-rdG">
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="168.5"/>

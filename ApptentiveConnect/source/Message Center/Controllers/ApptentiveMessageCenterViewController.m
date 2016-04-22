@@ -180,7 +180,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 	self.messageInputView.titleLabel.text = self.interaction.composerTitle;
 	[self.messageInputView.sendButton setTitle:self.interaction.composerSendButtonTitle forState:UIControlStateNormal];
-	self.messageInputView.sendButton.titleLabel.font = [[Apptentive sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleButton];
+	self.messageInputView.sendButton.titleLabel.font = [[Apptentive sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleDoneButton];
 
 	self.messageInputView.sendButton.accessibilityHint = ApptentiveLocalizedString(@"Sends the message.", @"Accessibility hint for 'send' button");
 
@@ -215,7 +215,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		self.profileView.titleLabel.text = self.interaction.profileInitialTitle;
 		self.profileView.titleLabel.font = [[Apptentive sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleButton];
 		self.profileView.titleLabel.textColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveTextStyleButton];
-		self.profileView.saveButton.titleLabel.font = [[Apptentive sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleButton];
+		self.profileView.saveButton.titleLabel.font = [[Apptentive sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleDoneButton];
 		self.profileView.skipButton.titleLabel.font = [[Apptentive sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleButton];
 		self.profileView.requiredLabel.text = self.interaction.profileInitialEmailExplanation;
 		self.profileView.requiredLabel.font = [[Apptentive sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleSurveyInstructions];

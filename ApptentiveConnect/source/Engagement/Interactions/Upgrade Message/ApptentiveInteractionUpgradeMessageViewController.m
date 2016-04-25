@@ -92,7 +92,7 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 
 	// Web view
 	NSString *html = [self.upgradeMessageInteraction.configuration objectForKey:@"body"];
-	[self.webView loadHTMLString:html baseURL:nil];
+	[self.webView loadHTMLString:html baseURL:[NSURL URLWithString:@"http://"]];
 	self.webView.scrollView.showsHorizontalScrollIndicator = NO;
 	self.webView.scrollView.showsVerticalScrollIndicator = NO;
 

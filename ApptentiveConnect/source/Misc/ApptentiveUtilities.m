@@ -141,7 +141,7 @@ UIViewController *topChildViewController(UIViewController *viewController) {
 	dispatch_once(&onceToken, ^{
 		dateFormatter = [[NSDateFormatter alloc] init];
 		NSLocale *enUSLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
-		NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+		NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
 		[dateFormatter setLocale:enUSLocale];
 		[dateFormatter setCalendar:calendar];
 		[dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];

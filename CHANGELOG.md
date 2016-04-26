@@ -1,8 +1,15 @@
+2016-04-26 frankus v3.0.0
+-------------------------
+Version 3.0.0 introduces a redesigned survey UI and enhanced styling capability.
+The ATConnect class has been renamed to Apptentive, and several enums and string
+constants have also been changed. See the migration guide in the docs directory
+for more information.
+
 2016-03-09 frankus v2.1.3
 -------------------------
 Version 2.1.3 contains a fix for flagging automated messages as such. It also
 fixes an issue where the post-survey HUD view was rotating incorrectly on iOS 9
-devices. 
+devices.
 
 2016-02-05 frankus v2.1.2
 -------------------------

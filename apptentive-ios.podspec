@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
   s.name     = 'apptentive-ios'
   s.module_name = 'Apptentive'
-  s.version  = '2.1.3'
+  s.version  = '3.0.0'
   s.license  = 'BSD'
   s.summary  = 'Apptentive Customer Communications SDK.'
   s.homepage = 'https://www.apptentive.com/'
@@ -22,4 +22,5 @@ Pod::Spec.new do |s|
   s.weak_frameworks = 'StoreKit', 'CoreTelephony'
   s.prefix_header_contents = '#import "ApptentiveLog.h"'
   s.xcconfig = { "GCC_PREPROCESSOR_DEFINITIONS" => "APPTENTIVE_LOGGING_LEVEL_ERROR=1" }
+  s.public_header_files = 'ApptentiveConnect/source/Apptentive.h', 'ApptentiveConnect/source/ApptentiveStyleSheet.h'
 end

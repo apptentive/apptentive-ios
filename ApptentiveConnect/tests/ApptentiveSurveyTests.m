@@ -63,7 +63,7 @@
 	self.didHideUserInfo = notification.userInfo;
 }
 
-- (void)viewModelValidationChanged:(ApptentiveSurveyViewModel *)viewModel {
+- (void)viewModelValidationChanged:(ApptentiveSurveyViewModel *)viewModel isValid:(BOOL)valid {
 	self.validationChanged = YES;
 }
 
@@ -81,7 +81,7 @@
 	XCTAssertEqual([self.viewModel typeOfQuestionAtIndex:3], ATSurveyQuestionTypeMultipleSelect);
 	XCTAssertEqualObjects(self.viewModel.greeting, @"Please help us see how each question is formatted when returning a survey response to the server.");
 	XCTAssertEqualObjects(self.viewModel.submitButtonText, @"Submit");
-	XCTAssertEqualObjects([self.viewModel instructionTextOfQuestionAtIndex:1], @"required—select one");
+	XCTAssertEqualObjects([self.viewModel instructionTextOfQuestionAtIndex:1].string, @"Required – select one");
 }
 
 - (void)testRadioButtons {

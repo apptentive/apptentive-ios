@@ -840,6 +840,9 @@
 	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
 	invocation.criteria = @{ @"device/custom_data/test_device_custom_data": @"test_value" };
 
+	[[Apptentive sharedConnection] removeCustomDeviceDataWithKey:@"test_device_custom_data"];
+	[[Apptentive sharedConnection] removeCustomDeviceDataWithKey:@"test_version"];
+
 	XCTAssertFalse([invocation criteriaAreMet], @"Criteria should not be met before adding custom data.");
 
 	[[Apptentive sharedConnection] addCustomDeviceData:@"test_value" withKey:@"test_device_custom_data"];
@@ -859,6 +862,9 @@
 - (void)testCustomPersonDataCriteria {
 	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
 	invocation.criteria = @{ @"person/custom_data/hair_color": @"black" };
+
+	[[Apptentive sharedConnection] removeCustomPersonDataWithKey:@"hair_color"];
+	[[Apptentive sharedConnection] removeCustomPersonDataWithKey:@"age"];
 
 	XCTAssertFalse([invocation criteriaAreMet], @"Criteria should not be met before adding custom data.");
 

@@ -18,7 +18,7 @@
 @property (strong, nonatomic) NSMutableSet *answeredQuestions;
 @property (strong, nonatomic) NSDictionary *didHideUserInfo;
 @property (assign, nonatomic) BOOL validationChanged;
-@property (assign, nonatomic) NSMutableSet *deselectedIndexPaths;
+@property (strong, nonatomic) NSMutableSet *deselectedIndexPaths;
 
 @end
 

@@ -883,7 +883,7 @@
 }
 
 - (void)testCanShowInteractionForEvent {
-	[Apptentive sharedConnection].apiKey = @"bogus_api_key"; // trigger creation of engagement backend
+	[Apptentive sharedConnection].APIKey = @"bogus_api_key"; // trigger creation of engagement backend
 
 	ApptentiveInteractionInvocation *canShow = [[ApptentiveInteractionInvocation alloc] init];
 	canShow.criteria = @{};

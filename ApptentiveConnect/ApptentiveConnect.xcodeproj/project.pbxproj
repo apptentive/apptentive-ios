@@ -134,7 +134,6 @@
 		01D3128E1B69349900B369E1 /* ApptentiveProgressNavigationBar.h in Headers */ = {isa = PBXBuildFile; fileRef = 01D3128C1B69349900B369E1 /* ApptentiveProgressNavigationBar.h */; };
 		01D3128F1B69349900B369E1 /* ApptentiveProgressNavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 01D3128D1B69349900B369E1 /* ApptentiveProgressNavigationBar.m */; };
 		01DD9E081C6534CD003C4B1D /* Apptentive+Debugging.m in Sources */ = {isa = PBXBuildFile; fileRef = 019A63CA1C4DA5BE00DD5EBF /* Apptentive+Debugging.m */; };
-		01DD9E091C6534CE003C4B1D /* Apptentive+Debugging.m in Sources */ = {isa = PBXBuildFile; fileRef = 019A63CA1C4DA5BE00DD5EBF /* Apptentive+Debugging.m */; };
 		01E25CE51C88B1EE005BF2D2 /* ApptentiveSurveyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 01E25CE41C88B1EE005BF2D2 /* ApptentiveSurveyTests.m */; };
 		01E25CE71C88B38E005BF2D2 /* Survey.json in Resources */ = {isa = PBXBuildFile; fileRef = 01E25CE61C88B21B005BF2D2 /* Survey.json */; };
 		01E25CEC1C88C70E005BF2D2 /* ApptentiveHUDViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 01E25CE81C88C70E005BF2D2 /* ApptentiveHUDViewController.h */; };
@@ -2042,7 +2041,6 @@
 				01AF1BF61C0F9C0D00CB4821 /* ATDataModel v3 to v4.xcmappingmodel in Sources */,
 				49C0028E1334137E0071F088 /* ApptentiveConnectTests.m in Sources */,
 				58CD20151821B7A70071CC72 /* ATDataModel v2 to v3.xcmappingmodel in Sources */,
-				01DD9E091C6534CE003C4B1D /* Apptentive+Debugging.m in Sources */,
 				014A16DD1C9C75DE00B0B199 /* ApptentiveStyleSheetTests.m in Sources */,
 				01C7C4DE1BEAD0BE005D6EC1 /* ATDataModel.xcdatamodeld in Sources */,
 				013BB6181BF6ABB600BB6C27 /* ATDataModel v4 to v5.xcmappingmodel in Sources */,

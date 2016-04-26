@@ -1,0 +1,183 @@
+{
+	"type" : "Survey",
+	"id" : "56d49498c719925f33000007",
+	"configuration" : {
+		"description" : "Please help us see how each question is formatted when returning a survey response to the server.",
+		"questions" : [
+			{
+				"answer_choices" : [
+					{
+						"id" : "56d49499c719925f33000009",
+						"value" : "A"
+					},
+					{
+						"id" : "56d49499c719925f3300000a",
+						"value" : "B"
+					}
+				],
+				"type" : "multichoice",
+				"id" : "56d49499c719925f33000008",
+				"instructions" : "select one",
+				"required" : false,
+				"value" : "Multichoice Optional",
+				"randomize" : false
+			},
+			{
+				"answer_choices" : [
+					{
+						"id" : "56d49499c719925f3300000c",
+						"value" : "A"
+					},
+					{
+						"id" : "56d49499c719925f3300000d",
+						"value" : "B"
+					}
+				],
+				"type" : "multichoice",
+				"id" : "56d49499c719925f3300000b",
+				"instructions" : "select one",
+				"required" : true,
+				"value" : "Multichoice Required",
+				"randomize" : false
+			},
+			{
+				"max_selections" : 2,
+				"answer_choices" : [
+					{
+						"id" : "56d49499c719925f3300000f",
+						"value" : "A"
+					},
+					{
+						"id" : "56d49499c719925f33000010",
+						"value" : "B"
+					}
+				],
+				"type" : "multiselect",
+				"id" : "56d49499c719925f3300000e",
+				"instructions" : "select all that apply",
+				"required" : false,
+				"value" : "Multiselect Optional",
+				"randomize" : false,
+				"min_selections" : 0
+			},
+			{
+				"max_selections" : 2,
+				"answer_choices" : [
+					{
+						"id" : "56d49499c719925f33000012",
+						"value" : "A"
+					},
+					{
+						"id" : "56d49499c719925f33000013",
+						"value" : "B"
+					}
+				],
+				"type" : "multiselect",
+				"id" : "56d49499c719925f33000011",
+				"instructions" : "select all that apply",
+				"required" : true,
+				"value" : "MultiSelect Required",
+				"randomize" : false,
+				"min_selections" : 0
+			},
+			{
+				"max_selections" : 3,
+				"answer_choices" : [
+					{
+						"id" : "56d49499c719925f33000015",
+						"value" : "A"
+					},
+					{
+						"id" : "56d49499c719925f33000016",
+						"value" : "B"
+					},
+					{
+						"id" : "56d49499c719925f33000017",
+						"value" : "C"
+					},
+					{
+						"id" : "56d49499c719925f33000018",
+						"value" : "D"
+					}
+				],
+				"type" : "multiselect",
+				"id" : "56d49499c719925f33000014",
+				"instructions" : "select between 1 and 3",
+				"required" : false,
+				"value" : "Multiselect Optional With Limits",
+				"randomize" : false,
+				"min_selections" : 1
+			},
+			{
+				"max_selections" : 3,
+				"answer_choices" : [
+					{
+						"id" : "56d49499c719925f3300001a",
+						"value" : "A"
+					},
+					{
+						"id" : "56d49499c719925f3300001b",
+						"value" : "B"
+					},
+					{
+						"id" : "56d49499c719925f3300001c",
+						"value" : "C"
+					},
+					{
+						"id" : "56d49499c719925f3300001d",
+						"value" : "D"
+					}
+				],
+				"type" : "multiselect",
+				"id" : "56d49499c719925f33000019",
+				"instructions" : "select between 1 and 3",
+				"required" : true,
+				"value" : "Multiselect Required With Limits",
+				"randomize" : false,
+				"min_selections" : 1
+			},
+			{
+				"type" : "singleline",
+				"id" : "56d49499c719925f3300001e",
+				"value" : "Singleline Short Optional",
+				"randomize" : false,
+				"multiline" : false,
+				"required" : false
+			},
+			{
+				"type" : "singleline",
+				"id" : "56d49499c719925f3300001f",
+				"value" : "Singleline Short Required",
+				"randomize" : false,
+				"multiline" : false,
+				"required" : true
+			},
+			{
+				"type" : "singleline",
+				"id" : "56d49499c719925f33000020",
+				"value" : "Singleline Long Optional",
+				"randomize" : false,
+				"multiline" : true,
+				"required" : false
+			},
+			{
+				"type" : "singleline",
+				"id" : "56d49499c719925f33000021",
+				"value" : "Singleline Long Required",
+				"randomize" : false,
+				"multiline" : true,
+				"required" : true
+			}
+		],
+		"multiple_responses" : true,
+		"name" : "Every Question Type",
+		"required" : false,
+		"success_message" : "Thank you!",
+		"view_period" : 86400,
+		"show_success_message" : true,
+		"title" : "All Combos Survey",
+		"submit_text": "Submit",
+		"required_text": "Required"
+	},
+	"version" : 1
+}

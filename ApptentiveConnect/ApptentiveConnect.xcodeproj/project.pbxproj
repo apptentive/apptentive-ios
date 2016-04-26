@@ -493,7 +493,7 @@
 		01D3128C1B69349900B369E1 /* ApptentiveProgressNavigationBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveProgressNavigationBar.h; sourceTree = "<group>"; };
 		01D3128D1B69349900B369E1 /* ApptentiveProgressNavigationBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveProgressNavigationBar.m; sourceTree = "<group>"; };
 		01E25CE41C88B1EE005BF2D2 /* ApptentiveSurveyTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveSurveyTests.m; sourceTree = "<group>"; };
-		01E25CE61C88B21B005BF2D2 /* Survey.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = Survey.json; path = ../../../../CVSurvey/Survey.json; sourceTree = "<group>"; };
+		01E25CE61C88B21B005BF2D2 /* Survey.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Survey.json; sourceTree = "<group>"; };
 		01E25CE81C88C70E005BF2D2 /* ApptentiveHUDViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveHUDViewController.h; sourceTree = "<group>"; };
 		01E25CE91C88C70E005BF2D2 /* ApptentiveHUDViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveHUDViewController.m; sourceTree = "<group>"; };
 		01E25CEA1C88C70E005BF2D2 /* ApptentivePassThroughWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentivePassThroughWindow.h; sourceTree = "<group>"; };

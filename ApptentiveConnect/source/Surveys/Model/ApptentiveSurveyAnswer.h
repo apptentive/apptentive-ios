@@ -8,6 +8,11 @@
 
 #import <Foundation/Foundation.h>
 
+typedef NS_ENUM(NSInteger, ApptentiveSurveyAnswerType) {
+	ApptentiveSurveyAnswerTypeChoice,
+	ApptentiveSurveyAnswerTypeOther
+};
+
 
 @interface ApptentiveSurveyAnswer : NSObject
 
@@ -15,5 +20,6 @@
 
 @property (readonly, nonatomic) NSString *identifier;
 @property (readonly, nonatomic) NSString *value;
+@property (readonly, nonatomic) ApptentiveSurveyAnswerType type;
 
 @end

@@ -82,6 +82,7 @@
 	XCTAssertEqualObjects(self.viewModel.greeting, @"Please help us see how each question is formatted when returning a survey response to the server.");
 	XCTAssertEqualObjects(self.viewModel.submitButtonText, @"Submit");
 	XCTAssertEqualObjects([self.viewModel instructionTextOfQuestionAtIndex:1].string, @"Required – select one");
+	XCTAssertEqual([self.viewModel typeOfAnswerAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:0]], ApptentiveSurveyAnswerTypeOther, @"Last answer of first question should be of type “Other”.");
 }
 
 - (void)testRadioButtons {

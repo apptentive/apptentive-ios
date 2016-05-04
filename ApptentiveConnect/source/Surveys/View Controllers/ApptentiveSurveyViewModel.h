@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "ApptentiveSurveyQuestion.h"
+#import "ApptentiveSurveyAnswer.h"
 
 @class ApptentiveSurvey, ApptentiveInteraction;
 
@@ -40,6 +41,7 @@
 - (NSAttributedString *)instructionTextOfQuestionAtIndex:(NSInteger)index;
 - (NSAttributedString *)placeholderTextOfQuestionAtIndex:(NSInteger)index;
 - (ATSurveyQuestionType)typeOfQuestionAtIndex:(NSInteger)index;
+- (ApptentiveSurveyAnswerType)typeOfAnswerAtIndexPath:(NSIndexPath *)indexPath;
 
 - (NSString *)textOfAnswerAtIndexPath:(NSIndexPath *)indexPath;
 - (BOOL)answerAtIndexPathIsSelected:(NSIndexPath *)indexPath;

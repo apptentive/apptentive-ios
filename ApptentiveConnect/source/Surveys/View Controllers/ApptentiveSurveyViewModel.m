@@ -138,6 +138,10 @@
 	return [self questionAtIndex:index].type;
 }
 
+- (ApptentiveSurveyAnswerType)typeOfAnswerAtIndexPath:(NSIndexPath *)indexPath {
+	return [self answerAtIndexPath:indexPath].type;
+}
+
 - (BOOL)answerIsValidForQuestionAtIndex:(NSInteger)index {
 	return ![self.invalidQuestionIndexes containsIndex:index];
 }

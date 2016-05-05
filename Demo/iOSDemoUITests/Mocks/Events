@@ -1,0 +1,23 @@
+POST
+/events
+201
+Server: nginx
+Date: Fri, 22 Jan 2016 23:26:42 GMT
+Content-Type: application/json; charset=utf-8
+Transfer-Encoding: chunked
+Connection: keep-alive
+Strict-Transport-Security: max-age=31536000
+Vary: Authorization,Origin,Accept-Encoding
+Access-Control-Allow-Origin: *
+Access-Control-Request-Method: GET,PUT,POST,OPTIONS
+X-UA-Compatible: IE=Edge,chrome=1
+ETag: "99914b932bd37a50b983c5e7c90ae93b"
+Cache-Control: max-age=0, private, must-revalidate
+X-Content-Type-Options: nosniff
+X-Request-Id: d2130ef1e6a439a1e6afefdbaa919a1a
+X-Runtime: 0.069380
+X-Rack-Cache: invalidate, pass
+Content-Encoding: gzip
+X-Frame-Options: SAMEORIGIN
+
+{}

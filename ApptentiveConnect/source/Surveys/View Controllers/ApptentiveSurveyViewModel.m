@@ -120,14 +120,12 @@
 	return [[NSAttributedString alloc] initWithString:placeholder attributes:@{ NSForegroundColorAttributeName: [self.styleSheet colorForStyle:ApptentiveColorTextInputPlaceholder] }];
 }
 
-- (NSString *)textOfAnswerAtIndexPath:(NSIndexPath *)indexPath {
-	ApptentiveSurveyQuestion *question = [self questionAtIndex:indexPath.section];
+- (NSString *)textOfChoiceAtIndexPath:(NSIndexPath *)indexPath {
+	return [self answerAtIndexPath:indexPath].value;
+}
 
-	if (question.type == ATSurveyQuestionTypeSingleLine || question.type == ATSurveyQuestionTypeMultipleLine) {
-		return self.textAtIndexPath[indexPath];
-	} else {
-		return [self answerAtIndexPath:indexPath].value;
-	}
+- (NSString *)textOfAnswerAtIndexPath:(NSIndexPath *)indexPath {
+	return self.textAtIndexPath[indexPath];
 }
 
 - (BOOL)answerAtIndexPathIsSelected:(NSIndexPath *)indexPath {

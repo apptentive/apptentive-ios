@@ -44,6 +44,7 @@
 - (ApptentiveSurveyAnswerType)typeOfAnswerAtIndexPath:(NSIndexPath *)indexPath;
 
 - (NSString *)textOfAnswerAtIndexPath:(NSIndexPath *)indexPath;
+- (NSString *)textOfChoiceAtIndexPath:(NSIndexPath *)indexPath;
 - (BOOL)answerAtIndexPathIsSelected:(NSIndexPath *)indexPath;
 - (BOOL)answerIsValidForQuestionAtIndex:(NSInteger)index;
 

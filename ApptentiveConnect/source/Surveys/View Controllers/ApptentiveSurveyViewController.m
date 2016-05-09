@@ -221,12 +221,12 @@
 
 			ApptentiveSurveyChoiceCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
 
-			cell.textLabel.text = [self.viewModel textOfAnswerAtIndexPath:indexPath];
+			cell.textLabel.text = [self.viewModel textOfChoiceAtIndexPath:indexPath];
 			cell.textLabel.font = [self.viewModel.styleSheet fontForStyle:UIFontTextStyleBody];
 			cell.textLabel.textColor = [self.viewModel.styleSheet colorForStyle:UIFontTextStyleBody];
 
 			cell.button.borderColor = [self.viewModel.styleSheet colorForStyle:ApptentiveColorSeparator];
-			cell.accessibilityLabel = [self.viewModel textOfAnswerAtIndexPath:indexPath];
+			cell.accessibilityLabel = [self.viewModel textOfChoiceAtIndexPath:indexPath];
 			[cell.button setImage:buttonImage forState:UIControlStateNormal];
 			cell.button.imageView.tintColor = [self.viewModel.styleSheet colorForStyle:ApptentiveColorBackground];
 
@@ -336,7 +336,7 @@
 			CGFloat labelWidth = itemSize.width - CHOICE_HORIZONTAL_MARGIN;
 
 			UIFont *choiceFont = [self.viewModel.styleSheet fontForStyle:UIFontTextStyleBody];
-			CGSize labelSize = CGRectIntegral([[self.viewModel textOfAnswerAtIndexPath:indexPath] boundingRectWithSize:CGSizeMake(labelWidth, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{ NSFontAttributeName: choiceFont } context:nil]).size;
+			CGSize labelSize = CGRectIntegral([[self.viewModel textOfChoiceAtIndexPath:indexPath] boundingRectWithSize:CGSizeMake(labelWidth, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{ NSFontAttributeName: choiceFont } context:nil]).size;
 
 			itemSize.height = labelSize.height + CHOICE_VERTICAL_MARGIN;
 

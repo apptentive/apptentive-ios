@@ -22,5 +22,5 @@ Pod::Spec.new do |s|
   s.weak_frameworks = 'StoreKit', 'CoreTelephony'
   s.prefix_header_contents = '#import "ApptentiveLog.h"'
   s.xcconfig = { "GCC_PREPROCESSOR_DEFINITIONS" => "APPTENTIVE_LOGGING_LEVEL_ERROR=1" }
-  s.public_header_files = 'ApptentiveConnect/source/Apptentive.h', 'ApptentiveConnect/source/ApptentiveStyleSheet.h'
+  s.public_header_files = 'ApptentiveConnect/source/Apptentive.h', 'ApptentiveConnect/source/ApptentiveStyleSheet.h', 'ApptentiveConnect/source/Apptentive+Debugging.h'
 end

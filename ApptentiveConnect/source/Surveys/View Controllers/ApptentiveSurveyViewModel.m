@@ -170,8 +170,10 @@
 		for (NSInteger answerIndex = 0; answerIndex < [self numberOfAnswersForQuestionAtIndex:indexPath.section]; answerIndex++) {
 			if (answerIndex != indexPath.item) {
 				NSIndexPath *deselectIndexPath = [NSIndexPath indexPathForItem:answerIndex inSection:indexPath.section];
-				[self.delegate viewModel:self didDeselectAnswerAtIndexPath:deselectIndexPath];
-				[self.selectedIndexPaths removeObject:deselectIndexPath];
+				if ([self.selectedIndexPaths containsObject:deselectIndexPath]) {
+					[self.selectedIndexPaths removeObject:deselectIndexPath];
+					[self.delegate viewModel:self didDeselectAnswerAtIndexPath:deselectIndexPath];
+				}
 			}
 		}
 	}

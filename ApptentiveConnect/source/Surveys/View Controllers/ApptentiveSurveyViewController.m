@@ -25,10 +25,10 @@
 #import "Apptentive_Private.h"
 
 // These need to match the values from the storyboard
-#define QUESTION_HORIZONTAL_MARGIN 38.0
+#define QUESTION_HORIZONTAL_MARGIN 52.0
 #define QUESTION_VERTICAL_MARGIN 36.0
 
-#define CHOICE_HORIZONTAL_MARGIN 77.0
+#define CHOICE_HORIZONTAL_MARGIN 70.0
 #define CHOICE_VERTICAL_MARGIN 23.5
 
 #define MULTILINE_HORIZONTAL_MARGIN 44
@@ -365,9 +365,8 @@
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
-	UIEdgeInsets sectionInset = ((UICollectionViewFlowLayout *)collectionViewLayout).sectionInset;
-	CGSize headerSize = CGSizeMake(collectionView.bounds.size.width - sectionInset.left - sectionInset.right, 44.0);
-	CGFloat labelWidth = headerSize.width - QUESTION_HORIZONTAL_MARGIN;
+	CGFloat headerWidth = CGRectGetWidth(collectionView.bounds);
+	CGFloat labelWidth = headerWidth - QUESTION_HORIZONTAL_MARGIN;
 
 	UIFont *questionFont = [self.viewModel.styleSheet fontForStyle:UIFontTextStyleBody];
 	CGSize labelSize = CGRectIntegral([[self.viewModel textOfQuestionAtIndex:section] boundingRectWithSize:CGSizeMake(labelWidth, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{ NSFontAttributeName: questionFont } context:nil]).size;
@@ -379,7 +378,7 @@
 		instructionsSize = CGRectIntegral([instructionsText boundingRectWithSize:CGSizeMake(labelWidth, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{ NSFontAttributeName: instructionsFont } context:nil]).size;
 	}
 
-	return CGSizeMake(headerSize.width, labelSize.height + QUESTION_VERTICAL_MARGIN + instructionsSize.height);
+	return CGSizeMake(headerWidth, labelSize.height + QUESTION_VERTICAL_MARGIN + instructionsSize.height);
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section {

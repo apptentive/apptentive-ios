@@ -493,8 +493,17 @@
 
 - (void)maybeAnimateOtherSizeChangeAtIndexPath:(NSIndexPath *)indexPath {
 	if ([self.viewModel typeOfAnswerAtIndexPath:indexPath] == ApptentiveSurveyAnswerTypeOther) {
+		BOOL showing = [self.viewModel answerAtIndexPathIsSelected:indexPath];
 		[UIView animateWithDuration:0.25 animations:^{
 			[self.collectionViewLayout invalidateLayout];
+		} completion:^(BOOL finished) {
+			ApptentiveSurveyOtherCell *cell = (ApptentiveSurveyOtherCell *)[self.collectionView cellForItemAtIndexPath:indexPath];
+
+			if (showing) {
+				[cell.textField becomeFirstResponder];
+			} else {
+				[cell.textField resignFirstResponder];
+			}
 		}];
 	}
 }

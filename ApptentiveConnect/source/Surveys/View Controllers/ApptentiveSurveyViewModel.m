@@ -231,24 +231,36 @@
 
 	self.invalidQuestionIndexes = [NSMutableIndexSet indexSet];
 
-	[self.survey.questions enumerateObjectsUsingBlock:^(ApptentiveSurveyQuestion *_Nonnull question, NSUInteger index, BOOL *_Nonnull stop) {
+	[self.survey.questions enumerateObjectsUsingBlock:^(ApptentiveSurveyQuestion *_Nonnull question, NSUInteger questionIndex, BOOL *_Nonnull stop) {
 		switch (question.type) {
 			case ATSurveyQuestionTypeSingleLine:
 			case ATSurveyQuestionTypeMultipleLine: {
-				BOOL answerIsEmpty = [self.textAtIndexPath[[NSIndexPath indexPathForItem:0 inSection:index]] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]].length == 0;
-				if (question.required && answerIsEmpty) {
-					[self.invalidQuestionIndexes addIndex:index];
+				if (question.required && ![self textFieldHasTextAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:questionIndex]]) {
+					[self.invalidQuestionIndexes addIndex:questionIndex];
 				}
 				break;
 			}
 			case ATSurveyQuestionTypeSingleSelect:
 			case ATSurveyQuestionTypeMultipleSelect: {
-				NSInteger numberOfSelections = [self selectionsForQuestionAtIndex:index].count;
+				NSArray *selectionsForQuestion = [self selectionsForQuestionAtIndex:questionIndex];
+
+				NSInteger numberOfSelections = selectionsForQuestion.count;
 				BOOL numberOfSelectionsOutOfRange = numberOfSelections	> question.maximumSelectedCount || numberOfSelections < question.minimumSelectedCount;
 
 				if ((question.required || numberOfSelections != 0) && numberOfSelectionsOutOfRange) {
-						[self.invalidQuestionIndexes addIndex:index];
+						[self.invalidQuestionIndexes addIndex:questionIndex];
+				} else if (question.required) {
+					// Check for empty "other" text
+					[question.answers enumerateObjectsUsingBlock:^(ApptentiveSurveyAnswer *_Nonnull answer, NSUInteger answerIndex, BOOL *_Nonnull stop) {
+						if (answer.type == ApptentiveSurveyAnswerTypeOther
+							&& [selectionsForQuestion containsObject:answer.identifier]
+							&& ![self textFieldHasTextAtIndexPath:[NSIndexPath indexPathForItem:answerIndex inSection:questionIndex]]) {
+							[self.invalidQuestionIndexes addIndex:questionIndex];
+							*stop = YES;
+						}
+					}];
 				}
+
 				break;
 			}
 		}
@@ -280,10 +292,10 @@
 		switch (question.type) {
 			case ATSurveyQuestionTypeSingleLine:
 			case ATSurveyQuestionTypeMultipleLine: {
-				NSString *text = [self.textAtIndexPath[[NSIndexPath indexPathForItem:0 inSection:index]] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+				NSIndexPath *indexPath = [NSIndexPath indexPathForItem:0 inSection:index];
 
-				if (text.length > 0) {
-					result[question.identifier] = text;
+				if ([self textFieldHasTextAtIndexPath:indexPath]) {
+					result[question.identifier] = [self trimmedTextAtIndexPath:indexPath];
 				}
 				break;
 			}
@@ -366,6 +378,14 @@
 	}
 
 	return result;
+}
+
+- (NSString *)trimmedTextAtIndexPath:(NSIndexPath *)indexPath {
+	return [self.textAtIndexPath[indexPath] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+}
+
+- (BOOL)textFieldHasTextAtIndexPath:(NSIndexPath *)indexPath {
+	return [self trimmedTextAtIndexPath:indexPath].length > 0;
 }
 
 @end

@@ -1380,6 +1380,9 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
                                             <rect key="frame" x="51" y="48.5" width="236" height="30"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <textInputTraits key="textInputTraits"/>
+                                            <connections>
+                                                <action selector="textFieldChanged:" destination="0Su-Sq-q29" eventType="editingChanged" id="Rn0-P1-pLy"/>
+                                            </connections>
                                         </textField>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -1462,6 +1465,9 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
                                             <rect key="frame" x="51" y="49" width="236" height="30"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <textInputTraits key="textInputTraits"/>
+                                            <connections>
+                                                <action selector="textFieldChanged:" destination="0Su-Sq-q29" eventType="editingChanged" id="fm0-0V-06v"/>
+                                            </connections>
                                         </textField>
                                         <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cwb-ZY-17p" customClass="ApptentiveSurveyOptionButton">
                                             <rect key="frame" x="19" y="12" width="20" height="20"/>

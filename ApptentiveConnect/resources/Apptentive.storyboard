@@ -1351,8 +1351,60 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
                                     <outlet property="textLabel" destination="XeR-GW-QUi" id="uot-NF-XjQ"/>
                                 </connections>
                             </collectionViewCell>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="RadioOther" id="qJB-CQ-0Wg" customClass="ApptentiveSurveyOtherCell">
+                                <rect key="frame" x="7" y="191" width="306" height="88"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                    <rect key="frame" x="0.0" y="0.0" width="306" height="88"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wHI-hM-kSE" customClass="ApptentiveSurveyOptionButton">
+                                            <rect key="frame" x="25" y="11" width="22" height="22"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="22" id="IC7-BF-sAa"/>
+                                                <constraint firstAttribute="height" constant="22" id="ijf-RF-rCQ"/>
+                                            </constraints>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="style">
+                                                    <integer key="value" value="1"/>
+                                                </userDefinedRuntimeAttribute>
+                                            </userDefinedRuntimeAttributes>
+                                        </button>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Radio with Other" textAlignment="natural" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xYx-2t-KcO">
+                                            <rect key="frame" x="58" y="11" width="229" height="22"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="cX6-PD-cQI">
+                                            <rect key="frame" x="58" y="48.5" width="229" height="30"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <textInputTraits key="textInputTraits"/>
+                                        </textField>
+                                    </subviews>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
+                                <constraints>
+                                    <constraint firstItem="wHI-hM-kSE" firstAttribute="leading" secondItem="qJB-CQ-0Wg" secondAttribute="leading" constant="25" id="2lc-VG-vzN"/>
+                                    <constraint firstAttribute="trailing" secondItem="xYx-2t-KcO" secondAttribute="trailing" constant="19" id="7s5-bo-aRI"/>
+                                    <constraint firstItem="wHI-hM-kSE" firstAttribute="top" secondItem="qJB-CQ-0Wg" secondAttribute="top" constant="11" id="M6y-if-UW9"/>
+                                    <constraint firstItem="xYx-2t-KcO" firstAttribute="leading" secondItem="wHI-hM-kSE" secondAttribute="trailing" constant="11" id="Nt0-ZN-HmX"/>
+                                    <constraint firstItem="xYx-2t-KcO" firstAttribute="top" secondItem="qJB-CQ-0Wg" secondAttribute="top" constant="11" id="PVN-yp-b8A"/>
+                                    <constraint firstItem="cX6-PD-cQI" firstAttribute="top" secondItem="xYx-2t-KcO" secondAttribute="bottom" constant="16" id="gfW-rQ-zgW"/>
+                                    <constraint firstItem="cX6-PD-cQI" firstAttribute="top" secondItem="qJB-CQ-0Wg" secondAttribute="top" constant="49" id="hxf-Wy-oSq"/>
+                                    <constraint firstItem="cX6-PD-cQI" firstAttribute="leading" secondItem="xYx-2t-KcO" secondAttribute="leading" id="oAQ-hO-ffi"/>
+                                    <constraint firstItem="cX6-PD-cQI" firstAttribute="trailing" secondItem="xYx-2t-KcO" secondAttribute="trailing" id="yp5-fR-4T1"/>
+                                </constraints>
+                                <size key="customSize" width="306" height="88"/>
+                                <connections>
+                                    <outlet property="button" destination="wHI-hM-kSE" id="mIo-XL-zWK"/>
+                                    <outlet property="buttonTopConstraint" destination="M6y-if-UW9" id="EMB-ew-rCA"/>
+                                    <outlet property="textField" destination="cX6-PD-cQI" id="UUc-i2-wGW"/>
+                                    <outlet property="textLabel" destination="xYx-2t-KcO" id="9yG-2z-vbM"/>
+                                </connections>
+                            </collectionViewCell>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Checkbox" id="VvL-CQ-YLL" customClass="ApptentiveSurveyChoiceCell">
-                                <rect key="frame" x="7" y="191" width="306" height="44"/>
+                                <rect key="frame" x="7" y="279" width="306" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                     <rect key="frame" x="0.0" y="0.0" width="306" height="44"/>
@@ -1393,8 +1445,60 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
                                     <outlet property="textLabel" destination="jfd-bx-kqH" id="89W-Fg-LYo"/>
                                 </connections>
                             </collectionViewCell>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="CheckboxOther" id="331-1u-Jzv" customClass="ApptentiveSurveyOtherCell">
+                                <rect key="frame" x="7" y="323" width="306" height="88"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                    <rect key="frame" x="0.0" y="0.0" width="306" height="88"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cwb-ZY-17p" customClass="ApptentiveSurveyOptionButton">
+                                            <rect key="frame" x="26" y="12" width="20" height="20"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="20" id="OsU-bB-fdS"/>
+                                                <constraint firstAttribute="height" constant="20" id="omT-fn-u9d"/>
+                                            </constraints>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="style">
+                                                    <integer key="value" value="0"/>
+                                                </userDefinedRuntimeAttribute>
+                                            </userDefinedRuntimeAttributes>
+                                        </button>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Checkmark with Other" textAlignment="natural" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CR7-Hc-OdL">
+                                            <rect key="frame" x="58" y="11" width="229" height="22"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="IRG-ZH-U5u">
+                                            <rect key="frame" x="58" y="49" width="229" height="30"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <textInputTraits key="textInputTraits"/>
+                                        </textField>
+                                    </subviews>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
+                                <constraints>
+                                    <constraint firstItem="CR7-Hc-OdL" firstAttribute="top" secondItem="331-1u-Jzv" secondAttribute="top" constant="11" id="1Fo-Wm-Z9E"/>
+                                    <constraint firstItem="cwb-ZY-17p" firstAttribute="leading" secondItem="331-1u-Jzv" secondAttribute="leading" constant="26" id="EFe-a6-2ST"/>
+                                    <constraint firstItem="IRG-ZH-U5u" firstAttribute="trailing" secondItem="CR7-Hc-OdL" secondAttribute="trailing" id="Gq9-m7-cGG"/>
+                                    <constraint firstItem="IRG-ZH-U5u" firstAttribute="leading" secondItem="CR7-Hc-OdL" secondAttribute="leading" id="MAu-vB-Srp"/>
+                                    <constraint firstItem="CR7-Hc-OdL" firstAttribute="leading" secondItem="cwb-ZY-17p" secondAttribute="trailing" constant="12" id="ZJu-RS-5N3"/>
+                                    <constraint firstItem="cwb-ZY-17p" firstAttribute="top" secondItem="331-1u-Jzv" secondAttribute="top" constant="12" id="iqD-2Q-bHD"/>
+                                    <constraint firstItem="IRG-ZH-U5u" firstAttribute="top" relation="greaterThanOrEqual" secondItem="331-1u-Jzv" secondAttribute="top" constant="49" id="k5q-lh-E6V"/>
+                                    <constraint firstItem="IRG-ZH-U5u" firstAttribute="top" secondItem="CR7-Hc-OdL" secondAttribute="bottom" constant="16" id="neV-mI-wqU"/>
+                                    <constraint firstAttribute="trailing" secondItem="CR7-Hc-OdL" secondAttribute="trailing" constant="19" id="yL9-2V-6eA"/>
+                                </constraints>
+                                <size key="customSize" width="306" height="88"/>
+                                <connections>
+                                    <outlet property="button" destination="cwb-ZY-17p" id="InI-Ev-Cpn"/>
+                                    <outlet property="buttonTopConstraint" destination="iqD-2Q-bHD" id="Jcj-D8-iTi"/>
+                                    <outlet property="textField" destination="IRG-ZH-U5u" id="LCd-Nb-Msb"/>
+                                    <outlet property="textLabel" destination="CR7-Hc-OdL" id="OFz-G3-eea"/>
+                                </connections>
+                            </collectionViewCell>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="MultilineText" id="UoN-6d-m4i" customClass="ApptentiveSurveyMultilineCell">
-                                <rect key="frame" x="7" y="235" width="306" height="88"/>
+                                <rect key="frame" x="7" y="411" width="306" height="88"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                     <rect key="frame" x="0.0" y="0.0" width="306" height="88"/>
@@ -1435,7 +1539,7 @@ Lines</string>
                                 </connections>
                             </collectionViewCell>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="SingleLineText" id="I2g-uG-Caj" customClass="ApptentiveSurveySingleLineCell">
-                                <rect key="frame" x="7" y="323" width="306" height="44"/>
+                                <rect key="frame" x="7" y="499" width="306" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                     <rect key="frame" x="0.0" y="0.0" width="306" height="44"/>
@@ -1507,7 +1611,7 @@ Lines</string>
                             </connections>
                         </collectionReusableView>
                         <collectionReusableView key="sectionFooterView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Footer" id="0F3-e9-lGf">
-                            <rect key="frame" x="0.0" y="367" width="320" height="12"/>
+                            <rect key="frame" x="0.0" y="543" width="320" height="12"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </collectionReusableView>
                         <connections>

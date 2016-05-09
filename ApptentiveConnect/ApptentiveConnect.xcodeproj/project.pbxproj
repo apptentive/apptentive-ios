@@ -53,6 +53,8 @@
 		0132F8F31C851F5400A452E3 /* at_circle.png in Resources */ = {isa = PBXBuildFile; fileRef = 0132F8ED1C851F5400A452E3 /* at_circle.png */; };
 		0132F8F41C851F5400A452E3 /* at_circle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0132F8EE1C851F5400A452E3 /* at_circle@2x.png */; };
 		0132F8F51C851F5400A452E3 /* at_circle@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0132F8EF1C851F5400A452E3 /* at_circle@3x.png */; };
+		01382B421CDAB93400D57608 /* ApptentiveSurveyOtherCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 01382B401CDAB93400D57608 /* ApptentiveSurveyOtherCell.h */; };
+		01382B431CDAB93400D57608 /* ApptentiveSurveyOtherCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 01382B411CDAB93400D57608 /* ApptentiveSurveyOtherCell.m */; };
 		013BB6061BF6A65C00BB6C27 /* at_remove.png in Resources */ = {isa = PBXBuildFile; fileRef = 013BB6031BF6A63300BB6C27 /* at_remove.png */; };
 		013BB6071BF6A65C00BB6C27 /* at_remove@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 013BB6041BF6A63300BB6C27 /* at_remove@2x.png */; };
 		013BB6081BF6A65C00BB6C27 /* at_remove@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 013BB6051BF6A63300BB6C27 /* at_remove@3x.png */; };
@@ -402,6 +404,8 @@
 		0132F8ED1C851F5400A452E3 /* at_circle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = at_circle.png; sourceTree = "<group>"; };
 		0132F8EE1C851F5400A452E3 /* at_circle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_circle@2x.png"; sourceTree = "<group>"; };
 		0132F8EF1C851F5400A452E3 /* at_circle@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_circle@3x.png"; sourceTree = "<group>"; };
+		01382B401CDAB93400D57608 /* ApptentiveSurveyOtherCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveSurveyOtherCell.h; sourceTree = "<group>"; };
+		01382B411CDAB93400D57608 /* ApptentiveSurveyOtherCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveSurveyOtherCell.m; sourceTree = "<group>"; };
 		013BB6031BF6A63300BB6C27 /* at_remove.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = at_remove.png; sourceTree = "<group>"; };
 		013BB6041BF6A63300BB6C27 /* at_remove@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_remove@2x.png"; sourceTree = "<group>"; };
 		013BB6051BF6A63300BB6C27 /* at_remove@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_remove@3x.png"; sourceTree = "<group>"; };
@@ -821,6 +825,8 @@
 				0132F8C21C851C0800A452E3 /* ApptentiveSurveySubmitButton.m */,
 				014745BB1C863A0700542951 /* ApptentiveSurveyGreetingView.h */,
 				014745BC1C863A0700542951 /* ApptentiveSurveyGreetingView.m */,
+				01382B401CDAB93400D57608 /* ApptentiveSurveyOtherCell.h */,
+				01382B411CDAB93400D57608 /* ApptentiveSurveyOtherCell.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1651,6 +1657,7 @@
 				493AEB3C15990A4D00DFD4C7 /* ApptentiveWebClient+SurveyAdditions.h in Headers */,
 				493AEB3F15990A4D00DFD4C7 /* ApptentiveSurveyViewController.h in Headers */,
 				498EFB7015BA48B300A1043B /* ApptentiveAppConfigurationUpdateTask.h in Headers */,
+				01382B421CDAB93400D57608 /* ApptentiveSurveyOtherCell.h in Headers */,
 				499912A8161B6AF700FDA15F /* ApptentiveWebClient+MessageCenter.h in Headers */,
 				4961A402161BBD7000E30037 /* ApptentiveMessageTask.h in Headers */,
 				0132F8D11C851C0800A452E3 /* ApptentiveSurveySingleLineCell.h in Headers */,
@@ -2012,6 +2019,7 @@
 				01C85EE71CADBB8800743DA0 /* ApptentiveStyleSheet.m in Sources */,
 				01DD9E081C6534CD003C4B1D /* Apptentive+Debugging.m in Sources */,
 				492F2F1D16ED597F0030E48A /* ApptentiveRecordRequestTask.m in Sources */,
+				01382B431CDAB93400D57608 /* ApptentiveSurveyOtherCell.m in Sources */,
 				4960A534171F70530082669B /* ApptentiveNetworkImageView.m in Sources */,
 				583DF06F1A44CD6E00BF0207 /* ApptentiveInteractionNavigateToLink.m in Sources */,
 				589274A7180CC33A0029E5CE /* ApptentiveInteractionUsageData.m in Sources */,

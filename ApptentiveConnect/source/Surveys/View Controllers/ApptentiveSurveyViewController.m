@@ -10,6 +10,7 @@
 #import "ApptentiveSurveyViewModel.h"
 #import "ApptentiveSurveyAnswerCell.h"
 #import "ApptentiveSurveyChoiceCell.h"
+#import "ApptentiveSurveyOtherCell.h"
 #import "ApptentiveSurveySingleLineCell.h"
 #import "ApptentiveSurveyMultilineCell.h"
 #import "ApptentiveSurveyQuestionView.h"
@@ -214,6 +215,10 @@
 			NSString *reuseIdentifier = [self.viewModel typeOfQuestionAtIndex:indexPath.section] == ATSurveyQuestionTypeSingleSelect ? @"Radio" : @"Checkbox";
 			UIImage *buttonImage = [[ApptentiveBackend imageNamed:[self.viewModel typeOfQuestionAtIndex:indexPath.section] == ATSurveyQuestionTypeSingleSelect ? @"at_circle" : @"at_checkmark"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 
+			if ([self.viewModel typeOfAnswerAtIndexPath:indexPath] == ApptentiveSurveyAnswerTypeOther) {
+				reuseIdentifier = [reuseIdentifier stringByAppendingString:@"Other"];
+			}
+
 			ApptentiveSurveyChoiceCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
 
 			cell.textLabel.text = [self.viewModel textOfAnswerAtIndexPath:indexPath];
@@ -226,6 +231,16 @@
 			cell.button.imageView.tintColor = [self.viewModel.styleSheet colorForStyle:ApptentiveColorBackground];
 
 			cell.buttonTopConstraint.constant = (self.lineHeightOfQuestionFont - CGRectGetHeight(cell.button.bounds)) / 2.0;
+
+			if ([self.viewModel typeOfAnswerAtIndexPath:indexPath] == ApptentiveSurveyAnswerTypeOther) {
+				ApptentiveSurveyOtherCell *otherCell = (ApptentiveSurveyOtherCell *)cell;
+				otherCell.textField.text = [self.viewModel textOfAnswerAtIndexPath:indexPath];
+				otherCell.textField.attributedPlaceholder = [self.viewModel placeholderTextOfQuestionAtIndex:indexPath.section];
+				otherCell.textField.delegate = self;
+				otherCell.textField.tag = indexPath.section;
+				otherCell.textField.font = [self.viewModel.styleSheet fontForStyle:ApptentiveTextStyleTextInput];
+				otherCell.textField.textColor = [self.viewModel.styleSheet colorForStyle:ApptentiveTextStyleTextInput];
+			}
 
 			return cell;
 		}
@@ -273,10 +288,14 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
 	[self.viewModel selectAnswerAtIndexPath:indexPath];
+
+	[self maybeAnimateOtherSizeChangeAtIndexPath:indexPath];
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
 	[self.viewModel deselectAnswerAtIndexPath:indexPath];
+
+	[self maybeAnimateOtherSizeChangeAtIndexPath:indexPath];
 }
 
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -320,6 +339,11 @@
 			CGSize labelSize = CGRectIntegral([[self.viewModel textOfAnswerAtIndexPath:indexPath] boundingRectWithSize:CGSizeMake(labelWidth, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{ NSFontAttributeName: choiceFont } context:nil]).size;
 
 			itemSize.height = labelSize.height + CHOICE_VERTICAL_MARGIN;
+
+			if ([self.viewModel typeOfAnswerAtIndexPath:indexPath] == ApptentiveSurveyAnswerTypeOther && [self.viewModel answerAtIndexPathIsSelected:indexPath]) {
+				itemSize.height += 44.0;
+			}
+
 			break;
 		}
 		case ATSurveyQuestionTypeSingleLine:
@@ -439,6 +463,8 @@
 
 - (void)viewModel:(ApptentiveSurveyViewModel *)viewModel didDeselectAnswerAtIndexPath:(NSIndexPath *)indexPath {
 	[self.collectionView deselectItemAtIndexPath:indexPath animated:NO];
+
+	[self maybeAnimateOtherSizeChangeAtIndexPath:indexPath];
 }
 
 #pragma mark - Keyboard adjustment for iOS 7 & 8
@@ -462,6 +488,16 @@
 			[(ApptentiveSurveyCollectionView *)self.collectionView scrollHeaderAtIndexPathToTop:self.editingIndexPath animated:NO];
 		}
 	}];
+}
+
+#pragma mark - Private 
+
+- (void)maybeAnimateOtherSizeChangeAtIndexPath:(NSIndexPath *)indexPath {
+	if ([self.viewModel typeOfAnswerAtIndexPath:indexPath] == ApptentiveSurveyAnswerTypeOther) {
+		[UIView animateWithDuration:0.25 animations:^{
+			[self.collectionViewLayout invalidateLayout];
+		}];
+	}
 }
 
 @end

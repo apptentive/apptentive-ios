@@ -89,7 +89,7 @@
 	XCTAssertEqualObjects(self.viewModel.submitButtonText, @"Submit");
 	XCTAssertEqualObjects([self.viewModel instructionTextOfQuestionAtIndex:1].string, @"Required – select one");
 
-	NSIndexPath *otherIndexPath = [NSIndexPath indexPathForRow:2 inSection:0];
+	NSIndexPath *otherIndexPath = [NSIndexPath indexPathForRow:2 inSection:1];
 	XCTAssertEqual([self.viewModel typeOfAnswerAtIndexPath:otherIndexPath], ApptentiveSurveyAnswerTypeOther, @"Last answer of first question should be of type “Other”.");
 	XCTAssertEqualObjects([self.viewModel placeholderTextOfAnswerAtIndexPath:otherIndexPath].string, @"Other Placeholder");
 }
@@ -149,9 +149,26 @@
 
 	[self.viewModel setText:@" " forAnswerAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:7]];
 
+	XCTAssertTrue([self.viewModel validate:NO]);
+	XCTAssertFalse(self.validationChanged);
+
 	XCTAssertFalse([self.viewModel validate:YES]);
 	XCTAssertTrue(self.validationChanged);
 	self.validationChanged = NO;
+
+	[self.viewModel setText:@"Foo" forAnswerAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:7]];
+	XCTAssertTrue([self.viewModel validate:YES]);
+
+	NSIndexPath *optionalOtherIndexPath = [NSIndexPath indexPathForRow:2 inSection:0];
+	[self.viewModel selectAnswerAtIndexPath:optionalOtherIndexPath];
+	XCTAssertTrue([self.viewModel validate:YES]);
+
+	NSIndexPath *requiredOtherIndexPath = [NSIndexPath indexPathForRow:2 inSection:1];
+	[self.viewModel selectAnswerAtIndexPath:requiredOtherIndexPath];
+	XCTAssertFalse([self.viewModel validate:YES]);
+
+	[self.viewModel setText:@"Foo" forAnswerAtIndexPath:requiredOtherIndexPath];
+	XCTAssertTrue([self.viewModel validate:YES]);
 }
 
 - (void)testAnswers {

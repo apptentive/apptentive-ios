@@ -144,6 +144,14 @@
 	return ![self.invalidQuestionIndexes containsIndex:index];
 }
 
+- (NSIndexPath *)indexPathForTextFieldTag:(NSInteger)tag {
+	return [NSIndexPath indexPathForItem:tag & 0xFFFF inSection:tag >> 16];
+}
+
+- (NSInteger)textFieldTagForIndexPath:(NSIndexPath *)indexPath {
+	return (indexPath.section << 16) | (indexPath.item & 0xFFFF);
+}
+
 #pragma mark - Mutation
 
 - (void)setText:(NSString *)text forAnswerAtIndexPath:(NSIndexPath *)indexPath {

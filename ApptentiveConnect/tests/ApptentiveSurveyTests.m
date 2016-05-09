@@ -188,4 +188,12 @@
 	XCTAssertEqualObjects(self.didHideUserInfo[ATSurveyMetricsEventKey], @(ATSurveyEventTappedCancel));
 }
 
+- (void)testTagForIndexPath {
+	NSIndexPath *indexPath = [NSIndexPath indexPathForItem:69 inSection:369];
+	NSInteger tag = [self.viewModel textFieldTagForIndexPath:indexPath];
+	NSIndexPath *resultIndexPath = [self.viewModel indexPathForTextFieldTag:tag];
+
+	XCTAssertEqualObjects(indexPath, resultIndexPath, @"Index paths should survive being tagged and untagged");
+}
+
 @end

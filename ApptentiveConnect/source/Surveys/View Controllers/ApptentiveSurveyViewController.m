@@ -191,7 +191,7 @@
 			cell.textView.text = [self.viewModel textOfAnswerAtIndexPath:indexPath];
 			cell.placeholderLabel.attributedText = [self.viewModel placeholderTextOfQuestionAtIndex:indexPath.section];
 			cell.textView.delegate = self;
-			cell.textView.tag = indexPath.section;
+			cell.textView.tag = [self.viewModel textFieldTagForIndexPath:indexPath];
 			cell.textView.accessibilityLabel = [self.viewModel placeholderTextOfQuestionAtIndex:indexPath.section].string;
 			cell.textView.font = [self.viewModel.styleSheet fontForStyle:ApptentiveTextStyleTextInput];
 			cell.textView.textColor = [self.viewModel.styleSheet colorForStyle:ApptentiveTextStyleTextInput];
@@ -204,7 +204,7 @@
 			cell.textField.text = [self.viewModel textOfAnswerAtIndexPath:indexPath];
 			cell.textField.attributedPlaceholder = [self.viewModel placeholderTextOfQuestionAtIndex:indexPath.section];
 			cell.textField.delegate = self;
-			cell.textField.tag = indexPath.section;
+			cell.textField.tag = [self.viewModel textFieldTagForIndexPath:indexPath];
 			cell.textField.font = [self.viewModel.styleSheet fontForStyle:ApptentiveTextStyleTextInput];
 			cell.textField.textColor = [self.viewModel.styleSheet colorForStyle:ApptentiveTextStyleTextInput];
 
@@ -237,7 +237,7 @@
 				otherCell.textField.text = [self.viewModel textOfAnswerAtIndexPath:indexPath];
 				otherCell.textField.attributedPlaceholder = [self.viewModel placeholderTextOfQuestionAtIndex:indexPath.section];
 				otherCell.textField.delegate = self;
-				otherCell.textField.tag = indexPath.section;
+				otherCell.textField.tag = [self.viewModel textFieldTagForIndexPath:indexPath];
 				otherCell.textField.font = [self.viewModel.styleSheet fontForStyle:ApptentiveTextStyleTextInput];
 				otherCell.textField.textColor = [self.viewModel.styleSheet colorForStyle:ApptentiveTextStyleTextInput];
 			}
@@ -389,7 +389,7 @@
 #pragma mark - Text view delegate
 
 - (void)textViewDidBeginEditing:(UITextField *)textView {
-	self.editingIndexPath = [NSIndexPath indexPathForItem:0 inSection:textView.tag];
+	self.editingIndexPath = [self.viewModel indexPathForTextFieldTag:textView.tag];
 	[(ApptentiveSurveyCollectionView *)self.collectionView scrollHeaderAtIndexPathToTop:self.editingIndexPath animated:YES];
 }
 
@@ -400,7 +400,7 @@
 }
 
 - (void)textViewDidChange:(UITextView *)textView {
-	NSIndexPath *indexPath = [NSIndexPath indexPathForItem:0 inSection:textView.tag];
+	NSIndexPath *indexPath = [self.viewModel indexPathForTextFieldTag:textView.tag];
 	ApptentiveSurveyMultilineCell *cell = (ApptentiveSurveyMultilineCell *)[self.collectionView cellForItemAtIndexPath:indexPath];
 	cell.placeholderLabel.hidden = textView.text.length > 0;
 
@@ -413,18 +413,18 @@
 }
 
 - (void)textViewDidEndEditing:(UITextView *)textView {
-	[self.viewModel commitChangeAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:textView.tag]];
+	[self.viewModel commitChangeAtIndexPath:[self.viewModel indexPathForTextFieldTag:textView.tag]];
 }
 
 #pragma mark - Text field delegate
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
-	self.editingIndexPath = [NSIndexPath indexPathForItem:0 inSection:textField.tag];
+	self.editingIndexPath = [self.viewModel indexPathForTextFieldTag:textField.tag];
 	[(ApptentiveSurveyCollectionView *)self.collectionView scrollHeaderAtIndexPathToTop:self.editingIndexPath animated:YES];
 }
 
 - (IBAction)textFieldChanged:(UITextField *)textField {
-	NSIndexPath *indexPath = [NSIndexPath indexPathForItem:0 inSection:textField.tag];
+	NSIndexPath *indexPath = [self.viewModel indexPathForTextFieldTag:textField.tag];
 
 	[self.viewModel setText:textField.text forAnswerAtIndexPath:indexPath];
 }
@@ -438,7 +438,7 @@
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
-	[self.viewModel commitChangeAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:textField.tag]];
+	[self.viewModel commitChangeAtIndexPath:[self.viewModel indexPathForTextFieldTag:textField.tag]];
 }
 
 #pragma mark - View model delegate

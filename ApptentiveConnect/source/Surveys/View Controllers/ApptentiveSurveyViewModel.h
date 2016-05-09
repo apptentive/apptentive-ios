@@ -39,7 +39,7 @@
 
 - (NSString *)textOfQuestionAtIndex:(NSInteger)index;
 - (NSAttributedString *)instructionTextOfQuestionAtIndex:(NSInteger)index;
-- (NSAttributedString *)placeholderTextOfQuestionAtIndex:(NSInteger)index;
+- (NSAttributedString *)placeholderTextOfAnswerAtIndexPath:(NSIndexPath *)indexPath;
 - (ATSurveyQuestionType)typeOfQuestionAtIndex:(NSInteger)index;
 - (ApptentiveSurveyAnswerType)typeOfAnswerAtIndexPath:(NSIndexPath *)indexPath;
 

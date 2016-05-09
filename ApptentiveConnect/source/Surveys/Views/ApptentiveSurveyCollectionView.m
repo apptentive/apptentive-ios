@@ -68,7 +68,6 @@
 }
 
 - (void)scrollHeaderAtIndexPathToTop:(NSIndexPath *)indexPath animated:(BOOL)animated {
-	CGRect cellFrame = [self layoutAttributesForItemAtIndexPath:indexPath].frame;
 	CGRect headerFrame = [self layoutAttributesForSupplementaryElementOfKind:UICollectionElementKindSectionHeader atIndexPath:indexPath].frame;
 
 	// Make sure we don't scroll off the bottom of the content + footer

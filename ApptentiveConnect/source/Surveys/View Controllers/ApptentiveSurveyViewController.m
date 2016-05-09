@@ -189,10 +189,10 @@
 			ApptentiveSurveyMultilineCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"MultilineText" forIndexPath:indexPath];
 
 			cell.textView.text = [self.viewModel textOfAnswerAtIndexPath:indexPath];
-			cell.placeholderLabel.attributedText = [self.viewModel placeholderTextOfQuestionAtIndex:indexPath.section];
+			cell.placeholderLabel.attributedText = [self.viewModel placeholderTextOfAnswerAtIndexPath:indexPath];
 			cell.textView.delegate = self;
 			cell.textView.tag = [self.viewModel textFieldTagForIndexPath:indexPath];
-			cell.textView.accessibilityLabel = [self.viewModel placeholderTextOfQuestionAtIndex:indexPath.section].string;
+			cell.textView.accessibilityLabel = cell.placeholderLabel.text;
 			cell.textView.font = [self.viewModel.styleSheet fontForStyle:ApptentiveTextStyleTextInput];
 			cell.textView.textColor = [self.viewModel.styleSheet colorForStyle:ApptentiveTextStyleTextInput];
 
@@ -202,7 +202,7 @@
 			ApptentiveSurveySingleLineCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"SingleLineText" forIndexPath:indexPath];
 
 			cell.textField.text = [self.viewModel textOfAnswerAtIndexPath:indexPath];
-			cell.textField.attributedPlaceholder = [self.viewModel placeholderTextOfQuestionAtIndex:indexPath.section];
+			cell.textField.attributedPlaceholder = [self.viewModel placeholderTextOfAnswerAtIndexPath:indexPath];
 			cell.textField.delegate = self;
 			cell.textField.tag = [self.viewModel textFieldTagForIndexPath:indexPath];
 			cell.textField.font = [self.viewModel.styleSheet fontForStyle:ApptentiveTextStyleTextInput];
@@ -235,7 +235,7 @@
 			if ([self.viewModel typeOfAnswerAtIndexPath:indexPath] == ApptentiveSurveyAnswerTypeOther) {
 				ApptentiveSurveyOtherCell *otherCell = (ApptentiveSurveyOtherCell *)cell;
 				otherCell.textField.text = [self.viewModel textOfAnswerAtIndexPath:indexPath];
-				otherCell.textField.attributedPlaceholder = [self.viewModel placeholderTextOfQuestionAtIndex:indexPath.section];
+				otherCell.textField.attributedPlaceholder = [self.viewModel placeholderTextOfAnswerAtIndexPath:indexPath];
 				otherCell.textField.delegate = self;
 				otherCell.textField.tag = [self.viewModel textFieldTagForIndexPath:indexPath];
 				otherCell.textField.font = [self.viewModel.styleSheet fontForStyle:ApptentiveTextStyleTextInput];

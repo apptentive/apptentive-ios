@@ -17,7 +17,8 @@
 	if (self) {
 		_identifier = JSON[@"id"];
 		_value = JSON[@"value"];
-		_type = [JSON[@"type"] isEqualToString:@"other"] ? ApptentiveSurveyAnswerTypeOther : ApptentiveSurveyAnswerTypeChoice;
+		_type = [JSON[@"type"] isEqualToString:@"input_other"] ? ApptentiveSurveyAnswerTypeOther : ApptentiveSurveyAnswerTypeChoice;
+		_placeholder = JSON[@"hint"];
 	}
 
 	return self;

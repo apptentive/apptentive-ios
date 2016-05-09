@@ -115,8 +115,16 @@
 	}
 }
 
-- (NSAttributedString *)placeholderTextOfQuestionAtIndex:(NSInteger)index {
-	NSString *placeholder = [self questionAtIndex:index].placeholder ?: @"";
+- (NSAttributedString *)placeholderTextOfAnswerAtIndexPath:(NSIndexPath *)indexPath {
+	NSString *placeholder;
+	ApptentiveSurveyQuestion *question = [self questionAtIndex:indexPath.section];
+
+	if (question.type == ATSurveyQuestionTypeSingleLine || question.type == ATSurveyQuestionTypeMultipleLine) {
+		placeholder = [self questionAtIndex:indexPath.section].placeholder ?: @"";
+	} else {
+		placeholder = [self answerAtIndexPath:indexPath].placeholder ?: @"";
+	}
+
 	return [[NSAttributedString alloc] initWithString:placeholder attributes:@{ NSForegroundColorAttributeName: [self.styleSheet colorForStyle:ApptentiveColorTextInputPlaceholder] }];
 }
 

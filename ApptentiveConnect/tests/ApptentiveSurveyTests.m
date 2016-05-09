@@ -10,6 +10,7 @@
 #import "ApptentiveSurveyViewModel.h"
 #import "ApptentiveInteraction.h"
 #import "ApptentiveSurveyMetrics.h"
+#import "ApptentiveStyleSheet.h"
 
 
 @interface ApptentiveSurveyTests : XCTestCase <ATSurveyViewModelDelegate>
@@ -42,6 +43,11 @@
 
 		self.answeredQuestions = [NSMutableSet set];
 		self.deselectedIndexPaths = [NSMutableSet set];
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundeclared-selector"
+		[self.viewModel.styleSheet performSelector:@selector(didBecomeActive:) withObject:nil];
+#pragma clang diagnostic pop
 
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(answeredQuestion:) name:ATSurveyDidAnswerQuestionNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didHide:) name:ATSurveyDidHideWindowNotification object:nil];
@@ -77,12 +83,15 @@
 	XCTAssertNotNil(self.viewModel.survey);
 
 	XCTAssertEqualObjects([self.viewModel textOfQuestionAtIndex:4], @"Multiselect Optional With Limits");
-	XCTAssertEqualObjects([self.viewModel textOfAnswerAtIndexPath:[NSIndexPath indexPathForItem:2 inSection:4]], @"C");
+	XCTAssertEqualObjects([self.viewModel textOfChoiceAtIndexPath:[NSIndexPath indexPathForItem:2 inSection:4]], @"C");
 	XCTAssertEqual([self.viewModel typeOfQuestionAtIndex:3], ATSurveyQuestionTypeMultipleSelect);
 	XCTAssertEqualObjects(self.viewModel.greeting, @"Please help us see how each question is formatted when returning a survey response to the server.");
 	XCTAssertEqualObjects(self.viewModel.submitButtonText, @"Submit");
 	XCTAssertEqualObjects([self.viewModel instructionTextOfQuestionAtIndex:1].string, @"Required – select one");
-	XCTAssertEqual([self.viewModel typeOfAnswerAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:0]], ApptentiveSurveyAnswerTypeOther, @"Last answer of first question should be of type “Other”.");
+
+	NSIndexPath *otherIndexPath = [NSIndexPath indexPathForRow:2 inSection:0];
+	XCTAssertEqual([self.viewModel typeOfAnswerAtIndexPath:otherIndexPath], ApptentiveSurveyAnswerTypeOther, @"Last answer of first question should be of type “Other”.");
+	XCTAssertEqualObjects([self.viewModel placeholderTextOfAnswerAtIndexPath:otherIndexPath].string, @"Other Placeholder");
 }
 
 - (void)testRadioButtons {

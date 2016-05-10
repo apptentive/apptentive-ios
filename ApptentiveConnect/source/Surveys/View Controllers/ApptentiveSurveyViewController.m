@@ -420,7 +420,10 @@
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
 	self.editingIndexPath = [self.viewModel indexPathForTextFieldTag:textField.tag];
-	[(ApptentiveSurveyCollectionView *)self.collectionView scrollHeaderAtIndexPathToTop:self.editingIndexPath animated:YES];
+
+	if ([self.viewModel typeOfAnswerAtIndexPath:self.editingIndexPath] != ApptentiveSurveyAnswerTypeOther) {
+		[(ApptentiveSurveyCollectionView *)self.collectionView scrollHeaderAtIndexPathToTop:self.editingIndexPath animated:YES];
+	}
 }
 
 - (IBAction)textFieldChanged:(UITextField *)textField {
@@ -483,7 +486,7 @@
 		CGPoint contentOffset = self.collectionView.contentOffset;
 		[self.collectionView layoutIfNeeded];
 		self.collectionView.contentOffset = contentOffset;
-		if (self.editingIndexPath) {
+		if (self.editingIndexPath && [self.viewModel typeOfAnswerAtIndexPath:self.editingIndexPath] != ApptentiveSurveyAnswerTypeOther) {
 			[(ApptentiveSurveyCollectionView *)self.collectionView scrollHeaderAtIndexPathToTop:self.editingIndexPath animated:NO];
 		}
 	}];

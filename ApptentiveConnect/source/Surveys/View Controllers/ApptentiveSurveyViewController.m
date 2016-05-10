@@ -310,7 +310,7 @@
 	// Don't let them unselect the selected answer in a single select question
 	if (questionType == ATSurveyQuestionTypeSingleSelect) {
 		for (NSInteger answerIndex = 0; answerIndex < [self.viewModel numberOfAnswersForQuestionAtIndex:indexPath.section]; answerIndex++) {
-			if ([self.viewModel answerAtIndexPathIsSelected:[NSIndexPath indexPathForItem:answerIndex inSection:indexPath.section]]) {
+			if ([self.viewModel answerIsSelectedAtIndexPath:[NSIndexPath indexPathForItem:answerIndex inSection:indexPath.section]]) {
 				return NO;
 			}
 		}
@@ -340,7 +340,7 @@
 
 			itemSize.height = labelSize.height + CHOICE_VERTICAL_MARGIN;
 
-			if ([self.viewModel typeOfAnswerAtIndexPath:indexPath] == ApptentiveSurveyAnswerTypeOther && [self.viewModel answerAtIndexPathIsSelected:indexPath]) {
+			if ([self.viewModel typeOfAnswerAtIndexPath:indexPath] == ApptentiveSurveyAnswerTypeOther && [self.viewModel answerIsSelectedAtIndexPath:indexPath]) {
 				itemSize.height += 44.0;
 			}
 
@@ -496,7 +496,7 @@
 
 - (void)maybeAnimateOtherSizeChangeAtIndexPath:(NSIndexPath *)indexPath {
 	if ([self.viewModel typeOfAnswerAtIndexPath:indexPath] == ApptentiveSurveyAnswerTypeOther) {
-		BOOL showing = [self.viewModel answerAtIndexPathIsSelected:indexPath];
+		BOOL showing = [self.viewModel answerIsSelectedAtIndexPath:indexPath];
 		[UIView animateWithDuration:0.25 animations:^{
 			[self.collectionViewLayout invalidateLayout];
 		} completion:^(BOOL finished) {

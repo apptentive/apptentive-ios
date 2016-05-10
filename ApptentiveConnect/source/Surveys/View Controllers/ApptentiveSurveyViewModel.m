@@ -136,7 +136,7 @@
 	return self.textAtIndexPath[indexPath];
 }
 
-- (BOOL)answerAtIndexPathIsSelected:(NSIndexPath *)indexPath {
+- (BOOL)answerIsSelectedAtIndexPath:(NSIndexPath *)indexPath {
 	return [self.selectedIndexPaths containsObject:indexPath];
 }
 

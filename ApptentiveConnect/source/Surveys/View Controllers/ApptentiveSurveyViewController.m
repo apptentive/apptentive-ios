@@ -234,6 +234,11 @@
 
 			if ([self.viewModel typeOfAnswerAtIndexPath:indexPath] == ApptentiveSurveyAnswerTypeOther) {
 				ApptentiveSurveyOtherCell *otherCell = (ApptentiveSurveyOtherCell *)cell;
+
+				otherCell.validColor = [self.viewModel.styleSheet colorForStyle:ApptentiveColorSeparator];
+				otherCell.invalidColor = [self.viewModel.styleSheet colorForStyle:ApptentiveColorFailure];
+				otherCell.valid = [self.viewModel answerIsValidAtIndexPath:indexPath];
+
 				otherCell.textField.text = [self.viewModel textOfAnswerAtIndexPath:indexPath];
 				otherCell.textField.attributedPlaceholder = [self.viewModel placeholderTextOfAnswerAtIndexPath:indexPath];
 				otherCell.textField.delegate = self;
@@ -461,6 +466,13 @@
 	CGPoint contentOffset = self.collectionView.contentOffset;
 	[self.navigationController setToolbarHidden:valid animated:YES];
 	self.collectionView.contentOffset = contentOffset;
+
+	for (UICollectionViewCell *cell in self.collectionView.visibleCells) {
+		if ([cell isKindOfClass:[ApptentiveSurveyOtherCell class]]) {
+			ApptentiveSurveyOtherCell *otherCell = (ApptentiveSurveyOtherCell *)cell;
+			otherCell.valid = [self.viewModel answerIsValidAtIndexPath:[self.viewModel indexPathForTextFieldTag:otherCell.textField.tag]];
+		}
+	}
 }
 
 - (void)viewModel:(ApptentiveSurveyViewModel *)viewModel didDeselectAnswerAtIndexPath:(NSIndexPath *)indexPath {

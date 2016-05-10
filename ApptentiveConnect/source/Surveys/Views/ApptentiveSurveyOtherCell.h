@@ -11,5 +11,8 @@
 @interface ApptentiveSurveyOtherCell : ApptentiveSurveyChoiceCell
 
 @property (strong, nonatomic) IBOutlet UITextField *textField;
+@property (assign, nonatomic, getter=isValid) BOOL valid;
+@property (strong, nonatomic) UIColor *validColor;
+@property (strong, nonatomic) UIColor *invalidColor;
 
 @end

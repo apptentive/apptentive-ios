@@ -46,6 +46,7 @@
 - (NSString *)textOfAnswerAtIndexPath:(NSIndexPath *)indexPath;
 - (NSString *)textOfChoiceAtIndexPath:(NSIndexPath *)indexPath;
 - (BOOL)answerIsSelectedAtIndexPath:(NSIndexPath *)indexPath;
+- (BOOL)answerIsValidAtIndexPath:(NSIndexPath *)indexPath;
 - (BOOL)answerIsValidForQuestionAtIndex:(NSInteger)index;
 
 - (NSIndexPath *)indexPathForTextFieldTag:(NSInteger)tag;

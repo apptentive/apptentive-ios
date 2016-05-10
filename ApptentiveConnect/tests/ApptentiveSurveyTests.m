@@ -99,12 +99,12 @@
 	[self.viewModel selectAnswerAtIndexPath:[NSIndexPath indexPathForItem:1 inSection:0]];
 
 	XCTAssertTrue([self.deselectedIndexPaths containsObject:[NSIndexPath indexPathForItem:0 inSection:0]]);
-	XCTAssertFalse([self.viewModel answerAtIndexPathIsSelected:[NSIndexPath indexPathForItem:0 inSection:0]]);
+	XCTAssertFalse([self.viewModel answerIsSelectedAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:0]]);
 	[self.deselectedIndexPaths removeAllObjects];
 
 	[self.viewModel selectAnswerAtIndexPath:[NSIndexPath indexPathForItem:1 inSection:0]];
 
-	XCTAssertTrue([self.viewModel answerAtIndexPathIsSelected:[NSIndexPath indexPathForItem:1 inSection:0]]);
+	XCTAssertTrue([self.viewModel answerIsSelectedAtIndexPath:[NSIndexPath indexPathForItem:1 inSection:0]]);
 	XCTAssertEqual(self.deselectedIndexPaths.count, 0);
 }
 
@@ -166,9 +166,15 @@
 	NSIndexPath *requiredOtherIndexPath = [NSIndexPath indexPathForRow:2 inSection:1];
 	[self.viewModel selectAnswerAtIndexPath:requiredOtherIndexPath];
 	XCTAssertFalse([self.viewModel validate:YES]);
+	XCTAssertFalse([self.viewModel answerIsValidAtIndexPath:requiredOtherIndexPath]);
+	XCTAssertFalse([self.viewModel answerIsValidForQuestionAtIndex:requiredOtherIndexPath.section]);
 
 	[self.viewModel setText:@"Foo" forAnswerAtIndexPath:requiredOtherIndexPath];
+	XCTAssertTrue([self.viewModel answerIsValidAtIndexPath:requiredOtherIndexPath]);
+	XCTAssertTrue([self.viewModel answerIsValidForQuestionAtIndex:requiredOtherIndexPath.section]);
 	XCTAssertTrue([self.viewModel validate:YES]);
+	XCTAssertTrue([self.viewModel answerIsValidAtIndexPath:requiredOtherIndexPath]);
+	XCTAssertTrue([self.viewModel answerIsValidForQuestionAtIndex:requiredOtherIndexPath.section]);
 }
 
 - (void)testAnswers {

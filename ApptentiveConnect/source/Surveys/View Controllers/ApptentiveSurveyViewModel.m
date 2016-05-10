@@ -26,6 +26,7 @@
 @property (strong, nonatomic) NSMutableSet *selectedIndexPaths;
 @property (strong, nonatomic) NSMutableDictionary *textAtIndexPath;
 @property (strong, nonatomic) NSMutableIndexSet *invalidQuestionIndexes;
+@property (strong, nonatomic) NSMutableSet *invalidAnswerIndexPaths;
 
 @end
 
@@ -152,6 +153,10 @@
 	return ![self.invalidQuestionIndexes containsIndex:index];
 }
 
+- (BOOL)answerIsValidAtIndexPath:(NSIndexPath *)indexPath {
+	return ![self.invalidAnswerIndexPaths containsObject:indexPath];
+}
+
 - (NSIndexPath *)indexPathForTextFieldTag:(NSInteger)tag {
 	return [NSIndexPath indexPathForItem:tag & 0xFFFF inSection:tag >> 16];
 }
@@ -236,15 +241,21 @@
 
 - (BOOL)validate:(BOOL)isSubmit {
 	NSIndexSet *previousInvalidQuestionIndexes = self.invalidQuestionIndexes;
+	NSSet *previousInvalidAnswerIndexPaths = [self.invalidAnswerIndexPaths copy];
 
 	self.invalidQuestionIndexes = [NSMutableIndexSet indexSet];
+	self.invalidAnswerIndexPaths = [NSMutableSet set];
 
 	[self.survey.questions enumerateObjectsUsingBlock:^(ApptentiveSurveyQuestion *_Nonnull question, NSUInteger questionIndex, BOOL *_Nonnull stop) {
+		NSIndexPath *answerIndexPath = [NSIndexPath indexPathForItem:0 inSection:questionIndex];
+
 		switch (question.type) {
 			case ATSurveyQuestionTypeSingleLine:
 			case ATSurveyQuestionTypeMultipleLine: {
-				if (question.required && ![self textFieldHasTextAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:questionIndex]]) {
+				NSIndexPath *answerIndexPath = [NSIndexPath indexPathForItem:0 inSection:questionIndex];
+				if (question.required && ![self textFieldHasTextAtIndexPath:answerIndexPath]) {
 					[self.invalidQuestionIndexes addIndex:questionIndex];
+					[self.invalidAnswerIndexPaths addObject:answerIndexPath];
 				}
 				break;
 			}
@@ -256,15 +267,17 @@
 				BOOL numberOfSelectionsOutOfRange = numberOfSelections	> question.maximumSelectedCount || numberOfSelections < question.minimumSelectedCount;
 
 				if ((question.required || numberOfSelections != 0) && numberOfSelectionsOutOfRange) {
-						[self.invalidQuestionIndexes addIndex:questionIndex];
+					[self.invalidQuestionIndexes addIndex:questionIndex];
+					[self.invalidAnswerIndexPaths addObject:answerIndexPath];
 				} else if (question.required) {
 					// Check for empty "other" text
 					[question.answers enumerateObjectsUsingBlock:^(ApptentiveSurveyAnswer *_Nonnull answer, NSUInteger answerIndex, BOOL *_Nonnull stop) {
+						NSIndexPath *answerIndexPath = [NSIndexPath indexPathForItem:answerIndex inSection:questionIndex];
 						if (answer.type == ApptentiveSurveyAnswerTypeOther
 							&& [selectionsForQuestion containsObject:answer.identifier]
-							&& ![self textFieldHasTextAtIndexPath:[NSIndexPath indexPathForItem:answerIndex inSection:questionIndex]]) {
+							&& ![self textFieldHasTextAtIndexPath:answerIndexPath]) {
 							[self.invalidQuestionIndexes addIndex:questionIndex];
-							*stop = YES;
+							[self.invalidAnswerIndexPaths addObject:answerIndexPath];
 						}
 					}];
 				}
@@ -284,6 +297,15 @@
 		}];
 
 		self.invalidQuestionIndexes = redToGreenQuestionIndexes;
+
+		NSMutableSet *redToGreenAnswerIndexPaths = [self.invalidAnswerIndexPaths mutableCopy];
+		[self.invalidAnswerIndexPaths enumerateObjectsUsingBlock:^(id  _Nonnull obj, BOOL * _Nonnull stop) {
+			if (![previousInvalidAnswerIndexPaths containsObject:obj]) {
+				[redToGreenAnswerIndexPaths removeObject:obj];
+			}
+		}];
+
+		self.invalidAnswerIndexPaths = redToGreenAnswerIndexPaths;
 	}
 
 	if (![self.invalidQuestionIndexes isEqualToIndexSet:previousInvalidQuestionIndexes]) {

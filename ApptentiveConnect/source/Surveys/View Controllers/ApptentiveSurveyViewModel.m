@@ -38,8 +38,8 @@
 		_interaction = interaction;
 		_survey = [[ApptentiveSurvey alloc] initWithJSON:interaction.configuration];
 
-		self.selectedIndexPaths = [NSMutableSet set];
-		self.textAtIndexPath = [NSMutableDictionary dictionary];
+		_selectedIndexPaths = [NSMutableSet set];
+		_textAtIndexPath = [NSMutableDictionary dictionary];
 	}
 	return self;
 }

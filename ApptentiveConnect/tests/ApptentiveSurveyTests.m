@@ -180,18 +180,19 @@
 - (void)testAnswers {
 	XCTAssertEqualObjects(self.viewModel.answers, @{});
 
-	[self.viewModel selectAnswerAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:1]];
+	[self.viewModel selectAnswerAtIndexPath:[NSIndexPath indexPathForItem:2 inSection:1]];
+	[self.viewModel setText:@"Other Text" forAnswerAtIndexPath:[NSIndexPath indexPathForItem:2 inSection:1]];
 	[self.viewModel selectAnswerAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:3]];
 	[self.viewModel selectAnswerAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:5]];
 
 	[self.viewModel setText:@" Foo " forAnswerAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:7]];
 	[self.viewModel setText:@" Bar\n" forAnswerAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:9]];
 
-	NSLog(@"answers are: %@", self.viewModel.answers);
+	NSDictionary *answer = @{ @"id": @"56d49499c719925f3300000b", @"value": @"Other Text" };
+	XCTAssertEqualObjects(self.viewModel.answers[@"56d49499c719925f3300000b"], answer);
+	XCTAssertEqualObjects(self.viewModel.answers[@"56d49499c719925f33000011"], @[ @{ @"id": @"56d49499c719925f33000012" }]);
+	XCTAssertEqualObjects(self.viewModel.answers[@"56d49499c719925f33000019"], @[ @{ @"id": @"56d49499c719925f3300001a" }] );
 
-	XCTAssertEqualObjects(self.viewModel.answers[@"56d49499c719925f3300000b"], @"56d49499c719925f3300000c");
-	XCTAssertEqualObjects(self.viewModel.answers[@"56d49499c719925f33000011"], @[@"56d49499c719925f33000012"]);
-	XCTAssertEqualObjects(self.viewModel.answers[@"56d49499c719925f33000019"], @[@"56d49499c719925f3300001a"]);
 	XCTAssertEqualObjects(self.viewModel.answers[@"56d49499c719925f3300001f"], @"Foo");
 	XCTAssertEqualObjects(self.viewModel.answers[@"56d49499c719925f33000021"], @"Bar");
 }

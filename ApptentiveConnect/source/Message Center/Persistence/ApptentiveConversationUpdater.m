@@ -144,10 +144,11 @@ NSString *const ATConversationLastUpdateValuePreferenceKey = @"ATConversationLas
 		if ([result isKindOfClass:[NSDictionary class]]) {
 			[self processResult:(NSDictionary *)result];
 		} else {
-			ApptentiveLogError(@"Activity feed result is not NSDictionary!");
 			if (creatingConversation) {
+				ApptentiveLogError(@"Activity feed result is not NSDictionary!");
 				[self.delegate conversationUpdater:self createdConversationSuccessfully:NO];
 			} else {
+				// Empty response is expected for conversation update.
 				[self.delegate conversationUpdater:self updatedConversationSuccessfully:NO];
 			}
 		}

@@ -149,11 +149,9 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.greetingView.borderView.backgroundColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveColorSeparator];
 
 	self.greetingView.titleLabel.text = self.interaction.greetingTitle;
-	self.greetingView.titleLabel.font = [[Apptentive sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleHeaderTitle];
 	self.greetingView.titleLabel.textColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveTextStyleHeaderTitle];
 
 	self.greetingView.messageLabel.text = self.interaction.greetingBody;
-	self.greetingView.messageLabel.font = [[Apptentive sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleHeaderMessage];
 	self.greetingView.messageLabel.textColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveTextStyleHeaderMessage];
 
 	self.greetingView.imageView.imageURL = self.interaction.greetingImageURL;
@@ -161,6 +159,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.greetingView.aboutButton.hidden = !self.interaction.branding;
 	self.greetingView.aboutButton.tintColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveTextStyleHeaderMessage];
 	self.greetingView.isOnScreen = NO;
+
+	[self updateHeaderFooterTextSize:nil];
 
 	[self.greetingView.aboutButton setImage:[[ApptentiveBackend imageNamed:@"at_info"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
 	self.greetingView.aboutButton.accessibilityLabel = ApptentiveLocalizedString(@"About Apptentive", @"Accessibility label for 'show about' button");
@@ -173,14 +173,12 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[self.messageInputView.clearButton setImage:[[ApptentiveBackend imageNamed:@"at_close"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
 
 	self.messageInputView.placeholderLabel.text = self.interaction.composerPlaceholderText;
-	self.messageInputView.placeholderLabel.font = [[Apptentive sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleTextInput];
 	self.messageInputView.placeholderLabel.textColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveColorTextInputPlaceholder];
 
 	self.messageInputView.placeholderLabel.hidden = self.messageInputView.messageView.text.length > 0;
 
 	self.messageInputView.titleLabel.text = self.interaction.composerTitle;
 	[self.messageInputView.sendButton setTitle:self.interaction.composerSendButtonTitle forState:UIControlStateNormal];
-	self.messageInputView.sendButton.titleLabel.font = [[Apptentive sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleDoneButton];
 
 	self.messageInputView.sendButton.accessibilityHint = ApptentiveLocalizedString(@"Sends the message.", @"Accessibility hint for 'send' button");
 
@@ -195,13 +193,10 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 	self.messageInputView.containerView.backgroundColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveColorBackground];
 	self.messageInputView.borderColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveColorSeparator];
-	self.messageInputView.messageView.font = [[Apptentive sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleTextInput];
 	self.messageInputView.messageView.textColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveTextStyleTextInput];
 	self.messageInputView.messageView.backgroundColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveColorTextInputBackground];
-	self.messageInputView.titleLabel.font = [[Apptentive sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleButton];
 	self.messageInputView.titleLabel.textColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveTextStyleButton];
 
-	self.statusView.statusLabel.font = [[Apptentive sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleMessageCenterStatus];
 	self.statusView.statusLabel.textColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveTextStyleMessageCenterStatus];
 	self.statusView.imageView.tintColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveTextStyleMessageCenterStatus];
 
@@ -213,12 +208,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 		self.profileView.containerView.backgroundColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveColorBackground];
 		self.profileView.titleLabel.text = self.interaction.profileInitialTitle;
-		self.profileView.titleLabel.font = [[Apptentive sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleButton];
 		self.profileView.titleLabel.textColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveTextStyleButton];
-		self.profileView.saveButton.titleLabel.font = [[Apptentive sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleDoneButton];
-		self.profileView.skipButton.titleLabel.font = [[Apptentive sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleButton];
 		self.profileView.requiredLabel.text = self.interaction.profileInitialEmailExplanation;
-		self.profileView.requiredLabel.font = [[Apptentive sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleSurveyInstructions];
 		self.profileView.requiredLabel.textColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveTextStyleSurveyInstructions];
 		[self.profileView.saveButton setTitle:self.interaction.profileInitialSaveButtonTitle forState:UIControlStateNormal];
 		[self.profileView.skipButton setTitle:self.interaction.profileInitialSkipButtonTitle forState:UIControlStateNormal];
@@ -226,9 +217,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		[self validateWho:self];
 		self.profileView.borderColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveColorSeparator];
 
-		self.profileView.nameField.font = [[Apptentive sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleTextInput];
 		self.profileView.nameField.backgroundColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveColorTextInputBackground];
-		self.profileView.emailField.font = [[Apptentive sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleTextInput];
 		self.profileView.emailField.backgroundColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveColorTextInputBackground];
 
 		if (self.interaction.profileRequired && [self shouldShowProfileViewBeforeComposing:YES]) {
@@ -258,6 +247,9 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 	// Fix iOS 7 bug where contentSize gets set to zero
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(fixContentSize:) name:UIKeyboardDidShowNotification object:nil];
+
+	// Respond to dynamic type size changes
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateHeaderFooterTextSize:) name:UIContentSizeCategoryDidChangeNotification object:nil];
 
 	[self.attachmentController addObserver:self forKeyPath:@"attachments" options:0 context:NULL];
 	[self.attachmentController viewDidLoad];
@@ -1302,6 +1294,26 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		self.tableView.tableFooterView = self.tableView.tableFooterView;
 		[self scrollToFooterView:nil];
 	}
+}
+
+- (void)updateHeaderFooterTextSize:(NSNotification *)notification {
+	self.greetingView.titleLabel.font = [[Apptentive sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleHeaderTitle];
+	self.greetingView.messageLabel.font = [[Apptentive sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleHeaderMessage];
+
+	self.messageInputView.sendButton.titleLabel.font = [[Apptentive sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleDoneButton];
+	self.messageInputView.placeholderLabel.font = [[Apptentive sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleTextInput];
+
+	self.messageInputView.titleLabel.font = [[Apptentive sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleButton];
+	self.messageInputView.messageView.font = [[Apptentive sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleTextInput];
+
+	self.statusView.statusLabel.font = [[Apptentive sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleMessageCenterStatus];
+
+	self.profileView.titleLabel.font = [[Apptentive sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleButton];
+	self.profileView.saveButton.titleLabel.font = [[Apptentive sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleDoneButton];
+	self.profileView.skipButton.titleLabel.font = [[Apptentive sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleButton];
+	self.profileView.requiredLabel.font = [[Apptentive sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleSurveyInstructions];
+	self.profileView.nameField.font = [[Apptentive sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleTextInput];
+	self.profileView.emailField.font = [[Apptentive sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleTextInput];
 }
 
 @end

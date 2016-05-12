@@ -1,7 +1,7 @@
 Apptentive Demo App
 -----------------------
 
-**Note: For an example of how to integrate the Apptentive SDK, please see the example app at the top level of this repository.**
+**Note: For an example of how to integrate the Apptentive SDK, please see the example app in the /Example directory of this repository.**
 
 This app is intended to demonstrate the features of the Apptentive SDK, often in ways that are not suitable for use in a production app, including the use of undocumented APIs that may change without notice. As such, it is not intended for use as an example of how to integrate with the Apptentive SDK. 
 

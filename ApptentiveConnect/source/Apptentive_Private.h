@@ -10,6 +10,8 @@
 
 extern NSString *const ApptentiveCustomPersonDataChangedNotification;
 extern NSString *const ApptentiveCustomDeviceDataChangedNotification;
+extern NSString *const ApptentiveInteractionsDidUpdateNotification;
+extern NSString *const ApptentiveConversationCreatedNotification;
 
 @class ApptentiveMessage, ApptentiveWebClient, ApptentiveBackend, ApptentiveEngagementBackend;
 

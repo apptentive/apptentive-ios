@@ -186,6 +186,7 @@ NSString *const ATConversationLastUpdateValuePreferenceKey = @"ATConversationLas
 			} else {
 				ApptentiveLogInfo(@"Conversation created successfully.");
 				[self.delegate conversationUpdater:self createdConversationSuccessfully:YES];
+				[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveConversationCreatedNotification object:conversation userInfo:@{ @"token": conversation.token }];
 			}
 		} else {
 			ApptentiveLogError(@"Unable to create conversation");

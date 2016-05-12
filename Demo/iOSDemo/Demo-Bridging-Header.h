@@ -11,5 +11,6 @@
 
 #import "Apptentive.h"
 #import "Apptentive+Debugging.h"
+#import "ApptentiveStyleSheet.h"
 
 #endif /* Demo_Bridging_Header_h */

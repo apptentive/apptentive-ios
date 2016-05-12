@@ -87,6 +87,7 @@
 		019959031CD15E180044A185 /* InteractionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InteractionsViewController.swift; sourceTree = "<group>"; };
 		019959051CD15E2A0044A185 /* MessagesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessagesViewController.swift; sourceTree = "<group>"; };
 		019959071CD15E390044A185 /* DataViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataViewController.swift; sourceTree = "<group>"; };
+		01A900B01CE52D1800BA8C1B /* ApptentiveStyleSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ApptentiveStyleSheet.h; path = ../../ApptentiveConnect/source/ApptentiveStyleSheet.h; sourceTree = "<group>"; };
 		01FA58071CD03B7800CF132B /* iOSDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iOSDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		01FA580A1CD03B7800CF132B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		01FA580C1CD03B7800CF132B /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -166,6 +167,7 @@
 				01FA582F1CD136EA00CF132B /* Apptentive+Debugging.h */,
 				019958CE1CD1375A0044A185 /* Apptentive.h */,
 				019958CF1CD137640044A185 /* Apptentive_Private.h */,
+				01A900B01CE52D1800BA8C1B /* ApptentiveStyleSheet.h */,
 				019959011CD15DFA0044A185 /* EventsViewController.swift */,
 				019959031CD15E180044A185 /* InteractionsViewController.swift */,
 				019959051CD15E2A0044A185 /* MessagesViewController.swift */,

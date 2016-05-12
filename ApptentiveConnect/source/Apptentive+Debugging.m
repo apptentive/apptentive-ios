@@ -99,4 +99,8 @@
 	[self.engagementBackend presentInteraction:[self.engagementInteractions objectAtIndex:index] fromViewController:viewController];
 }
 
+- (NSString *)conversationToken {
+	return [ApptentiveConversationUpdater currentConversation].token;
+}
+
 @end

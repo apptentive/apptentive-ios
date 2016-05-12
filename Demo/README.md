@@ -1,4 +1,4 @@
-Apptentive iOS Demo App
+Apptentive Demo App
 -----------------------
 
 **Note: For an example of how to integrate the Apptentive SDK, please see the example app at the top level of this repository.**

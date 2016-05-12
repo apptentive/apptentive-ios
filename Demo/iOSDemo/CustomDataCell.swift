@@ -1,6 +1,6 @@
 //
 //  CustomDataCell.swift
-//  iOSDemo
+//  iOS Demo
 //
 //  Created by Frank Schmitt on 4/28/16.
 //  Copyright © 2016 Apptentive, Inc. All rights reserved.

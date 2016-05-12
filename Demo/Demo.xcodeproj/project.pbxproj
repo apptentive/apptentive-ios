@@ -18,11 +18,10 @@
 		019959041CD15E180044A185 /* InteractionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019959031CD15E180044A185 /* InteractionsViewController.swift */; };
 		019959061CD15E2A0044A185 /* MessagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019959051CD15E2A0044A185 /* MessagesViewController.swift */; };
 		019959081CD15E390044A185 /* DataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019959071CD15E390044A185 /* DataViewController.swift */; };
+		01A900B81CE5463D00BA8C1B /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 01A900B71CE5463D00BA8C1B /* LaunchScreen.xib */; };
 		01FA580B1CD03B7800CF132B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FA580A1CD03B7800CF132B /* AppDelegate.swift */; };
-		01FA580D1CD03B7800CF132B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FA580C1CD03B7800CF132B /* ViewController.swift */; };
 		01FA58101CD03B7800CF132B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 01FA580E1CD03B7800CF132B /* Main.storyboard */; };
 		01FA58121CD03B7800CF132B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 01FA58111CD03B7800CF132B /* Assets.xcassets */; };
-		01FA58151CD03B7800CF132B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 01FA58131CD03B7800CF132B /* LaunchScreen.storyboard */; };
 		01FA58201CD03B7800CF132B /* iOSDemoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FA581F1CD03B7800CF132B /* iOSDemoUITests.swift */; };
 		01FA582B1CD12EBB00CF132B /* APIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FA582A1CD12EBB00CF132B /* APIViewController.swift */; };
 /* End PBXBuildFile section */
@@ -88,12 +87,11 @@
 		019959051CD15E2A0044A185 /* MessagesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessagesViewController.swift; sourceTree = "<group>"; };
 		019959071CD15E390044A185 /* DataViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataViewController.swift; sourceTree = "<group>"; };
 		01A900B01CE52D1800BA8C1B /* ApptentiveStyleSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ApptentiveStyleSheet.h; path = ../../ApptentiveConnect/source/ApptentiveStyleSheet.h; sourceTree = "<group>"; };
+		01A900B71CE5463D00BA8C1B /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LaunchScreen.xib; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		01FA58071CD03B7800CF132B /* iOSDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iOSDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		01FA580A1CD03B7800CF132B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		01FA580C1CD03B7800CF132B /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		01FA580F1CD03B7800CF132B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		01FA58111CD03B7800CF132B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		01FA58141CD03B7800CF132B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		01FA58161CD03B7800CF132B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		01FA581B1CD03B7800CF132B /* iOSDemoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iOSDemoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		01FA581F1CD03B7800CF132B /* iOSDemoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSDemoUITests.swift; sourceTree = "<group>"; };
@@ -132,11 +130,23 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		01A900B61CE5452500BA8C1B /* Apptentive Headers */ = {
+			isa = PBXGroup;
+			children = (
+				01FA582D1CD1368800CF132B /* Demo-Bridging-Header.h */,
+				01FA582F1CD136EA00CF132B /* Apptentive+Debugging.h */,
+				019958CE1CD1375A0044A185 /* Apptentive.h */,
+				019958CF1CD137640044A185 /* Apptentive_Private.h */,
+				01A900B01CE52D1800BA8C1B /* ApptentiveStyleSheet.h */,
+			);
+			name = "Apptentive Headers";
+			sourceTree = "<group>";
+		};
 		01FA57FE1CD03B7800CF132B = {
 			isa = PBXGroup;
 			children = (
 				019958D01CD137CA0044A185 /* README.md */,
-				01FA58091CD03B7800CF132B /* iOSDemo */,
+				01FA58091CD03B7800CF132B /* iOS Demo */,
 				01FA581E1CD03B7800CF132B /* iOSDemoUITests */,
 				01FA58081CD03B7800CF132B /* Products */,
 				01382B2E1CDAAE4C00D57608 /* ApptentiveConnect.xcodeproj */,
@@ -152,30 +162,26 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		01FA58091CD03B7800CF132B /* iOSDemo */ = {
+		01FA58091CD03B7800CF132B /* iOS Demo */ = {
 			isa = PBXGroup;
 			children = (
 				019958D31CD13A320044A185 /* Defaults.plist */,
 				01FA580A1CD03B7800CF132B /* AppDelegate.swift */,
-				01FA580C1CD03B7800CF132B /* ViewController.swift */,
-				01FA580E1CD03B7800CF132B /* Main.storyboard */,
-				01FA582A1CD12EBB00CF132B /* APIViewController.swift */,
-				01FA58111CD03B7800CF132B /* Assets.xcassets */,
-				01FA58131CD03B7800CF132B /* LaunchScreen.storyboard */,
-				01FA58161CD03B7800CF132B /* Info.plist */,
-				01FA582D1CD1368800CF132B /* Demo-Bridging-Header.h */,
-				01FA582F1CD136EA00CF132B /* Apptentive+Debugging.h */,
-				019958CE1CD1375A0044A185 /* Apptentive.h */,
-				019958CF1CD137640044A185 /* Apptentive_Private.h */,
-				01A900B01CE52D1800BA8C1B /* ApptentiveStyleSheet.h */,
 				019959011CD15DFA0044A185 /* EventsViewController.swift */,
 				019959031CD15E180044A185 /* InteractionsViewController.swift */,
 				019959051CD15E2A0044A185 /* MessagesViewController.swift */,
 				019959071CD15E390044A185 /* DataViewController.swift */,
-				014B260B1CD167A9009BE289 /* StringViewController.swift */,
+				01FA582A1CD12EBB00CF132B /* APIViewController.swift */,
 				014B26101CD27D67009BE289 /* CustomDataCell.swift */,
 				014B26121CD2994B009BE289 /* ConnectionViewController.swift */,
+				014B260B1CD167A9009BE289 /* StringViewController.swift */,
+				01FA580E1CD03B7800CF132B /* Main.storyboard */,
+				01FA58111CD03B7800CF132B /* Assets.xcassets */,
+				01A900B71CE5463D00BA8C1B /* LaunchScreen.xib */,
+				01FA58161CD03B7800CF132B /* Info.plist */,
+				01A900B61CE5452500BA8C1B /* Apptentive Headers */,
 			);
+			name = "iOS Demo";
 			path = iOSDemo;
 			sourceTree = "<group>";
 		};
@@ -303,8 +309,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				01A900B81CE5463D00BA8C1B /* LaunchScreen.xib in Resources */,
 				014B260D1CD16F72009BE289 /* Defaults.plist in Resources */,
-				01FA58151CD03B7800CF132B /* LaunchScreen.storyboard in Resources */,
 				01FA58121CD03B7800CF132B /* Assets.xcassets in Resources */,
 				01FA58101CD03B7800CF132B /* Main.storyboard in Resources */,
 				01382B3F1CDAAF5800D57608 /* ApptentiveResources.bundle in Resources */,
@@ -327,7 +333,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				014B26111CD27D67009BE289 /* CustomDataCell.swift in Sources */,
-				01FA580D1CD03B7800CF132B /* ViewController.swift in Sources */,
 				014B26131CD2994B009BE289 /* ConnectionViewController.swift in Sources */,
 				019959061CD15E2A0044A185 /* MessagesViewController.swift in Sources */,
 				01FA580B1CD03B7800CF132B /* AppDelegate.swift in Sources */,
@@ -374,14 +379,6 @@
 				01FA580F1CD03B7800CF132B /* Base */,
 			);
 			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		01FA58131CD03B7800CF132B /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				01FA58141CD03B7800CF132B /* Base */,
-			);
-			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -474,6 +471,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				INFOPLIST_FILE = iOSDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -481,6 +479,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.apptentive.iOSDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/$(PRODUCT_NAME)/Demo-Bridging-Header.h";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -488,6 +487,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				INFOPLIST_FILE = iOSDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -495,6 +495,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.apptentive.iOSDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/$(PRODUCT_NAME)/Demo-Bridging-Header.h";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};

@@ -1,4 +1,4 @@
-Apptentive Demo App
+Apptentive Example App
 -----------------------
 
 **Note: For testing Apptentive SDK features or working with SDK internals, please see the demo app in the /Demo directory in this repository.**

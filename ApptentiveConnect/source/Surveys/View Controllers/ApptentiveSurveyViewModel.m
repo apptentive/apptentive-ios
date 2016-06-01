@@ -316,13 +316,14 @@
 	NSMutableDictionary *result = [NSMutableDictionary dictionary];
 
 	[self.survey.questions enumerateObjectsUsingBlock:^(ApptentiveSurveyQuestion *_Nonnull question, NSUInteger questionIndex, BOOL *_Nonnull stop) {
+		NSMutableArray *responses = [NSMutableArray array];
 		switch (question.type) {
 			case ATSurveyQuestionTypeSingleLine:
 			case ATSurveyQuestionTypeMultipleLine: {
 				NSIndexPath *indexPath = [NSIndexPath indexPathForItem:0 inSection:questionIndex];
 
 				if ([self textFieldHasTextAtIndexPath:indexPath]) {
-					result[question.identifier] = [self trimmedTextAtIndexPath:indexPath];
+					[responses addObject:[self trimmedTextAtIndexPath:indexPath]];
 				}
 				break;
 			}
@@ -330,21 +331,20 @@
 				NSArray *selections = [self selectedIndexPathsForQuestionAtIndex:questionIndex];
 
 				if (selections.count == 1) {
-					result[question.identifier] = [self responseDictionaryForAnswerAtIndexPath:selections.firstObject];
+					[responses addObject:[self responseDictionaryForAnswerAtIndexPath:selections.firstObject]];
 				}
 				break;
 			}
-			case ATSurveyQuestionTypeMultipleSelect: {
-				NSMutableArray *responses = [NSMutableArray array];
+			case ATSurveyQuestionTypeMultipleSelect:
 				for (NSIndexPath *indexPath in [self selectedIndexPathsForQuestionAtIndex:questionIndex]) {
 					[responses addObject:[self responseDictionaryForAnswerAtIndexPath:indexPath]];
 				}
 
-				if (responses.count > 0) {
-					result[question.identifier] = responses;
-				}
 				break;
-			}
+		}
+
+		if (responses.count > 0) {
+			result[question.identifier] = responses;
 		}
 	}];
 

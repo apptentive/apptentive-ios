@@ -1,9 +1,9 @@
 Apptentive Example App
 -----------------------
 
-**Note: For testing Apptentive SDK features or working with SDK internals, please see the demo app in the /Demo directory in this repository.**
+**Note: For manually triggering Apptentive SDK features or working with SDK internals, please see the demo app in the /Demo directory in this repository.**
 
-This app is intended as an exampe of how you might integrate a real-world app with the Apptentive SDK. 
+This app is intended as an example of how you might integrate a real-world app with the Apptentive SDK. 
 
 Features
 ========
@@ -18,7 +18,7 @@ This app shows an example of the how to use Apptentive SDK's classes and methods
 Setup
 =====
 
-First, navigate to the directory that this README is in and type `pod install` to install the latest version of the Apptentive SDK. If you prefer to use the local version of the SDK (in the parent directory), comment out the first `pod` statement and uncomment the second one (you will have to `pod install` again after changing this). 
+First, navigate to the directory that this README is in and type `pod install` to install the Apptentive SDK. Then open the `Example.xcworkspace` file. 
 
 You will need to set a valid Apptentive API Key to run this app in the `AppDelegate.swift` file. You can find your API key on your [Apptentive dashboard](https://be.apptentive.com/apps/current/settings/api) in the API section of the Settings tab. We suggest creating a new app for evaluation purposes. 
 

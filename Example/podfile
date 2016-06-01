@@ -2,8 +2,9 @@ platform :ios, '8.0'
 use_frameworks!
 
 target 'iOSExample' do
-	# This will use the latest version of the Apptentive SDK from CocoaPods
-	pod 'apptentive-ios'
-	# Uncomment the following line (and comment out the previous one) to use the version of the Apptentive SDK in this repository
-	# pod 'apptentive-ios', :path => '..'
+	# This will use the version of the Apptentive SDK included in this repository.
+	pod 'apptentive-ios', :path => '..'
+
+	# In your own apps, you will want to use the latest version from CocoaPods, like so:
+	# pod 'apptentive-ios', '~> 3.1'
 end

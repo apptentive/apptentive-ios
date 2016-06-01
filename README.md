@@ -30,7 +30,7 @@ You should begin by setting your app's API key, then engaging Apptentive events 
 Or, in Swift:
 
 ``` Swift
-@import Apptentive
+import Apptentive
 ...
 Apptentive.sharedConnection().APIKey = "<Your API Key>"
 ...

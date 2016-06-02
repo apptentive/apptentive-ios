@@ -233,11 +233,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		self.navigationItem.leftBarButtonItem = nil;
 	}
 
-	self.contextMessage = nil;
-	if (self.interaction.contextMessageBody) {
-		self.contextMessage = [[Apptentive sharedConnection].backend automatedMessageWithTitle:nil body:self.interaction.contextMessageBody];
-	}
-
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resizeFooterView:) name:UIKeyboardWillChangeFrameNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scrollToFooterView:) name:UIKeyboardWillShowNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resizeFooterView:) name:UIKeyboardDidHideNotification object:nil];
@@ -325,6 +320,11 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		[self scrollToLastMessageAnimated:NO];
 
 		self.isSubsequentDisplay = YES;
+	}
+
+	self.contextMessage = nil;
+	if (self.interaction.contextMessageBody) {
+		self.contextMessage = [[Apptentive sharedConnection].backend automatedMessageWithTitle:nil body:self.interaction.contextMessageBody];
 	}
 }
 

@@ -37,7 +37,13 @@
 	self = [super init];
 	if (self) {
 		_interaction = interaction;
-		_survey = [[ApptentiveSurvey alloc] initWithJSON:interaction.configuration];
+
+		@try {
+			_survey = [[ApptentiveSurvey alloc] initWithJSON:interaction.configuration];
+		} @catch (NSException *exception) {
+			ApptentiveLogError(@"Unable to parse survey.");
+			return nil;
+		}
 
 		_selectedIndexPaths = [NSMutableSet set];
 		_textAtIndexPath = [NSMutableDictionary dictionary];

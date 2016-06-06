@@ -9,7 +9,7 @@
 
 #import <UIKit/UIKit.h>
 
-#define kApptentiveVersionString @"3.0.0"
+#define kApptentiveVersionString @"3.1.0"
 #define kApptentivePlatformString @"iOS"
 
 NS_ASSUME_NONNULL_BEGIN

@@ -34,15 +34,17 @@ NSString *const ATInteractionSurveyEventLabelLaunch = @"launch";
 	self.viewController = viewController;
 
 	UINavigationController *navigationController = [[Apptentive storyboard] instantiateViewControllerWithIdentifier:@"SurveyNavigation"];
-	ApptentiveSurveyViewController *surveyViewController = navigationController.viewControllers.firstObject;
-	surveyViewController.viewModel = [[ApptentiveSurveyViewModel alloc] initWithInteraction:self.interaction];
+	ApptentiveSurveyViewModel *viewModel = [[ApptentiveSurveyViewModel alloc] initWithInteraction:self.interaction];
+	if (viewModel) {
+		ApptentiveSurveyViewController *surveyViewController = navigationController.viewControllers.firstObject;
+		surveyViewController.viewModel = viewModel;
+		[viewController presentViewController:navigationController animated:YES completion:nil];
+	}
 
 	NSDictionary *notificationInfo = @{ApptentiveSurveyIDKey: (self.interaction.identifier ?: [NSNull null])};
 	[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveSurveyShownNotification object:nil userInfo:notificationInfo];
 
 	[self.interaction engage:ATInteractionSurveyEventLabelLaunch fromViewController:self.viewController];
-
-	[viewController presentViewController:navigationController animated:YES completion:nil];
 }
 
 

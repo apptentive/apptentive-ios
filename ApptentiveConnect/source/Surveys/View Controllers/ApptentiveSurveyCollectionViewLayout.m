@@ -26,25 +26,6 @@
 	return superSize;
 }
 
-- (UICollectionViewLayoutAttributes *)layoutAttributesForSupplementaryViewOfKind:(NSString *)elementKind atIndexPath:(NSIndexPath *)indexPath {
-	UICollectionViewLayoutAttributes *layoutAttributes = [super layoutAttributesForSupplementaryViewOfKind:elementKind atIndexPath:indexPath];
-
-	CGRect frame = layoutAttributes.frame;
-	frame.origin.x += self.sectionInset.left;
-	frame.size.width -= self.sectionInset.left + self.sectionInset.right;
-
-	if (elementKind == UICollectionElementKindSectionHeader) {
-		frame.origin.y += self.sectionInset.top;
-	} else if (elementKind == UICollectionElementKindSectionFooter) {
-		frame.origin.y -= self.sectionInset.bottom;
-	}
-
-	layoutAttributes.frame = frame;
-	layoutAttributes.zIndex = 1;
-
-	return layoutAttributes;
-}
-
 - (UICollectionViewLayoutAttributes *)layoutAttributesForDecorationViewOfKind:(NSString *)decorationViewKind atIndexPath:(NSIndexPath *)indexPath {
 	NSInteger section = indexPath.section;
 	NSInteger numberOfItems = [self.collectionView.dataSource collectionView:self.collectionView numberOfItemsInSection:section];
@@ -73,7 +54,7 @@
 		layoutAttributes.backgroundColor = [(id<ApptentiveCollectionViewDataSource>)self.collectionView.dataSource backgroundColor];
 	}
 
-	layoutAttributes.frame = CGRectMake(origin.x, origin.y, size.width, size.height);
+	layoutAttributes.frame = UIEdgeInsetsInsetRect(CGRectMake(origin.x, origin.y, size.width, size.height), self.sectionInset	);
 	layoutAttributes.zIndex = -1;
 
 	return layoutAttributes;

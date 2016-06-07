@@ -10,6 +10,7 @@
 #import "ApptentiveSurveyViewModel.h"
 #import "ApptentiveSurveyAnswerCell.h"
 #import "ApptentiveSurveyChoiceCell.h"
+#import "ApptentiveSurveyOtherCell.h"
 #import "ApptentiveSurveySingleLineCell.h"
 #import "ApptentiveSurveyMultilineCell.h"
 #import "ApptentiveSurveyQuestionView.h"
@@ -24,10 +25,10 @@
 #import "Apptentive_Private.h"
 
 // These need to match the values from the storyboard
-#define QUESTION_HORIZONTAL_MARGIN 38.0
+#define QUESTION_HORIZONTAL_MARGIN 52.0
 #define QUESTION_VERTICAL_MARGIN 36.0
 
-#define CHOICE_HORIZONTAL_MARGIN 77.0
+#define CHOICE_HORIZONTAL_MARGIN 70.0
 #define CHOICE_VERTICAL_MARGIN 23.5
 
 #define MULTILINE_HORIZONTAL_MARGIN 44
@@ -188,10 +189,10 @@
 			ApptentiveSurveyMultilineCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"MultilineText" forIndexPath:indexPath];
 
 			cell.textView.text = [self.viewModel textOfAnswerAtIndexPath:indexPath];
-			cell.placeholderLabel.attributedText = [self.viewModel placeholderTextOfQuestionAtIndex:indexPath.section];
+			cell.placeholderLabel.attributedText = [self.viewModel placeholderTextOfAnswerAtIndexPath:indexPath];
 			cell.textView.delegate = self;
-			cell.textView.tag = indexPath.section;
-			cell.textView.accessibilityLabel = [self.viewModel placeholderTextOfQuestionAtIndex:indexPath.section].string;
+			cell.textView.tag = [self.viewModel textFieldTagForIndexPath:indexPath];
+			cell.textView.accessibilityLabel = cell.placeholderLabel.text;
 			cell.textView.font = [self.viewModel.styleSheet fontForStyle:ApptentiveTextStyleTextInput];
 			cell.textView.textColor = [self.viewModel.styleSheet colorForStyle:ApptentiveTextStyleTextInput];
 
@@ -201,9 +202,9 @@
 			ApptentiveSurveySingleLineCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"SingleLineText" forIndexPath:indexPath];
 
 			cell.textField.text = [self.viewModel textOfAnswerAtIndexPath:indexPath];
-			cell.textField.attributedPlaceholder = [self.viewModel placeholderTextOfQuestionAtIndex:indexPath.section];
+			cell.textField.attributedPlaceholder = [self.viewModel placeholderTextOfAnswerAtIndexPath:indexPath];
 			cell.textField.delegate = self;
-			cell.textField.tag = indexPath.section;
+			cell.textField.tag = [self.viewModel textFieldTagForIndexPath:indexPath];
 			cell.textField.font = [self.viewModel.styleSheet fontForStyle:ApptentiveTextStyleTextInput];
 			cell.textField.textColor = [self.viewModel.styleSheet colorForStyle:ApptentiveTextStyleTextInput];
 
@@ -214,18 +215,37 @@
 			NSString *reuseIdentifier = [self.viewModel typeOfQuestionAtIndex:indexPath.section] == ATSurveyQuestionTypeSingleSelect ? @"Radio" : @"Checkbox";
 			UIImage *buttonImage = [[ApptentiveBackend imageNamed:[self.viewModel typeOfQuestionAtIndex:indexPath.section] == ATSurveyQuestionTypeSingleSelect ? @"at_circle" : @"at_checkmark"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 
+			if ([self.viewModel typeOfAnswerAtIndexPath:indexPath] == ApptentiveSurveyAnswerTypeOther) {
+				reuseIdentifier = [reuseIdentifier stringByAppendingString:@"Other"];
+			}
+
 			ApptentiveSurveyChoiceCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
 
-			cell.textLabel.text = [self.viewModel textOfAnswerAtIndexPath:indexPath];
+			cell.textLabel.text = [self.viewModel textOfChoiceAtIndexPath:indexPath];
 			cell.textLabel.font = [self.viewModel.styleSheet fontForStyle:UIFontTextStyleBody];
 			cell.textLabel.textColor = [self.viewModel.styleSheet colorForStyle:UIFontTextStyleBody];
 
 			cell.button.borderColor = [self.viewModel.styleSheet colorForStyle:ApptentiveColorSeparator];
-			cell.accessibilityLabel = [self.viewModel textOfAnswerAtIndexPath:indexPath];
+			cell.accessibilityLabel = [self.viewModel textOfChoiceAtIndexPath:indexPath];
 			[cell.button setImage:buttonImage forState:UIControlStateNormal];
 			cell.button.imageView.tintColor = [self.viewModel.styleSheet colorForStyle:ApptentiveColorBackground];
 
 			cell.buttonTopConstraint.constant = (self.lineHeightOfQuestionFont - CGRectGetHeight(cell.button.bounds)) / 2.0;
+
+			if ([self.viewModel typeOfAnswerAtIndexPath:indexPath] == ApptentiveSurveyAnswerTypeOther) {
+				ApptentiveSurveyOtherCell *otherCell = (ApptentiveSurveyOtherCell *)cell;
+
+				otherCell.validColor = [self.viewModel.styleSheet colorForStyle:ApptentiveColorSeparator];
+				otherCell.invalidColor = [self.viewModel.styleSheet colorForStyle:ApptentiveColorFailure];
+				otherCell.valid = [self.viewModel answerIsValidAtIndexPath:indexPath];
+
+				otherCell.textField.text = [self.viewModel textOfAnswerAtIndexPath:indexPath];
+				otherCell.textField.attributedPlaceholder = [self.viewModel placeholderTextOfAnswerAtIndexPath:indexPath];
+				otherCell.textField.delegate = self;
+				otherCell.textField.tag = [self.viewModel textFieldTagForIndexPath:indexPath];
+				otherCell.textField.font = [self.viewModel.styleSheet fontForStyle:ApptentiveTextStyleTextInput];
+				otherCell.textField.textColor = [self.viewModel.styleSheet colorForStyle:ApptentiveTextStyleTextInput];
+			}
 
 			return cell;
 		}
@@ -273,10 +293,14 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
 	[self.viewModel selectAnswerAtIndexPath:indexPath];
+
+	[self maybeAnimateOtherSizeChangeAtIndexPath:indexPath];
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
 	[self.viewModel deselectAnswerAtIndexPath:indexPath];
+
+	[self maybeAnimateOtherSizeChangeAtIndexPath:indexPath];
 }
 
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -291,7 +315,7 @@
 	// Don't let them unselect the selected answer in a single select question
 	if (questionType == ATSurveyQuestionTypeSingleSelect) {
 		for (NSInteger answerIndex = 0; answerIndex < [self.viewModel numberOfAnswersForQuestionAtIndex:indexPath.section]; answerIndex++) {
-			if ([self.viewModel answerAtIndexPathIsSelected:[NSIndexPath indexPathForItem:answerIndex inSection:indexPath.section]]) {
+			if ([self.viewModel answerIsSelectedAtIndexPath:[NSIndexPath indexPathForItem:answerIndex inSection:indexPath.section]]) {
 				return NO;
 			}
 		}
@@ -317,9 +341,14 @@
 			CGFloat labelWidth = itemSize.width - CHOICE_HORIZONTAL_MARGIN;
 
 			UIFont *choiceFont = [self.viewModel.styleSheet fontForStyle:UIFontTextStyleBody];
-			CGSize labelSize = CGRectIntegral([[self.viewModel textOfAnswerAtIndexPath:indexPath] boundingRectWithSize:CGSizeMake(labelWidth, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{ NSFontAttributeName: choiceFont } context:nil]).size;
+			CGSize labelSize = CGRectIntegral([[self.viewModel textOfChoiceAtIndexPath:indexPath] boundingRectWithSize:CGSizeMake(labelWidth, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{ NSFontAttributeName: choiceFont } context:nil]).size;
 
 			itemSize.height = labelSize.height + CHOICE_VERTICAL_MARGIN;
+
+			if ([self.viewModel typeOfAnswerAtIndexPath:indexPath] == ApptentiveSurveyAnswerTypeOther && [self.viewModel answerIsSelectedAtIndexPath:indexPath]) {
+				itemSize.height += 44.0;
+			}
+
 			break;
 		}
 		case ATSurveyQuestionTypeSingleLine:
@@ -341,9 +370,8 @@
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
-	UIEdgeInsets sectionInset = ((UICollectionViewFlowLayout *)collectionViewLayout).sectionInset;
-	CGSize headerSize = CGSizeMake(collectionView.bounds.size.width - sectionInset.left - sectionInset.right, 44.0);
-	CGFloat labelWidth = headerSize.width - QUESTION_HORIZONTAL_MARGIN;
+	CGFloat headerWidth = CGRectGetWidth(collectionView.bounds);
+	CGFloat labelWidth = headerWidth - QUESTION_HORIZONTAL_MARGIN;
 
 	UIFont *questionFont = [self.viewModel.styleSheet fontForStyle:UIFontTextStyleBody];
 	CGSize labelSize = CGRectIntegral([[self.viewModel textOfQuestionAtIndex:section] boundingRectWithSize:CGSizeMake(labelWidth, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{ NSFontAttributeName: questionFont } context:nil]).size;
@@ -355,7 +383,7 @@
 		instructionsSize = CGRectIntegral([instructionsText boundingRectWithSize:CGSizeMake(labelWidth, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{ NSFontAttributeName: instructionsFont } context:nil]).size;
 	}
 
-	return CGSizeMake(headerSize.width, labelSize.height + QUESTION_VERTICAL_MARGIN + instructionsSize.height);
+	return CGSizeMake(headerWidth, labelSize.height + QUESTION_VERTICAL_MARGIN + instructionsSize.height);
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section {
@@ -366,7 +394,7 @@
 #pragma mark - Text view delegate
 
 - (void)textViewDidBeginEditing:(UITextField *)textView {
-	self.editingIndexPath = [NSIndexPath indexPathForItem:0 inSection:textView.tag];
+	self.editingIndexPath = [self.viewModel indexPathForTextFieldTag:textView.tag];
 	[(ApptentiveSurveyCollectionView *)self.collectionView scrollHeaderAtIndexPathToTop:self.editingIndexPath animated:YES];
 }
 
@@ -377,7 +405,7 @@
 }
 
 - (void)textViewDidChange:(UITextView *)textView {
-	NSIndexPath *indexPath = [NSIndexPath indexPathForItem:0 inSection:textView.tag];
+	NSIndexPath *indexPath = [self.viewModel indexPathForTextFieldTag:textView.tag];
 	ApptentiveSurveyMultilineCell *cell = (ApptentiveSurveyMultilineCell *)[self.collectionView cellForItemAtIndexPath:indexPath];
 	cell.placeholderLabel.hidden = textView.text.length > 0;
 
@@ -390,18 +418,21 @@
 }
 
 - (void)textViewDidEndEditing:(UITextView *)textView {
-	[self.viewModel commitChangeAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:textView.tag]];
+	[self.viewModel commitChangeAtIndexPath:[self.viewModel indexPathForTextFieldTag:textView.tag]];
 }
 
 #pragma mark - Text field delegate
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
-	self.editingIndexPath = [NSIndexPath indexPathForItem:0 inSection:textField.tag];
-	[(ApptentiveSurveyCollectionView *)self.collectionView scrollHeaderAtIndexPathToTop:self.editingIndexPath animated:YES];
+	self.editingIndexPath = [self.viewModel indexPathForTextFieldTag:textField.tag];
+
+	if ([self.viewModel typeOfAnswerAtIndexPath:self.editingIndexPath] != ApptentiveSurveyAnswerTypeOther) {
+		[(ApptentiveSurveyCollectionView *)self.collectionView scrollHeaderAtIndexPathToTop:self.editingIndexPath animated:YES];
+	}
 }
 
 - (IBAction)textFieldChanged:(UITextField *)textField {
-	NSIndexPath *indexPath = [NSIndexPath indexPathForItem:0 inSection:textField.tag];
+	NSIndexPath *indexPath = [self.viewModel indexPathForTextFieldTag:textField.tag];
 
 	[self.viewModel setText:textField.text forAnswerAtIndexPath:indexPath];
 }
@@ -415,7 +446,7 @@
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
-	[self.viewModel commitChangeAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:textField.tag]];
+	[self.viewModel commitChangeAtIndexPath:[self.viewModel indexPathForTextFieldTag:textField.tag]];
 }
 
 #pragma mark - View model delegate
@@ -435,10 +466,19 @@
 	CGPoint contentOffset = self.collectionView.contentOffset;
 	[self.navigationController setToolbarHidden:valid animated:YES];
 	self.collectionView.contentOffset = contentOffset;
+
+	for (UICollectionViewCell *cell in self.collectionView.visibleCells) {
+		if ([cell isKindOfClass:[ApptentiveSurveyOtherCell class]]) {
+			ApptentiveSurveyOtherCell *otherCell = (ApptentiveSurveyOtherCell *)cell;
+			otherCell.valid = [self.viewModel answerIsValidAtIndexPath:[self.viewModel indexPathForTextFieldTag:otherCell.textField.tag]];
+		}
+	}
 }
 
 - (void)viewModel:(ApptentiveSurveyViewModel *)viewModel didDeselectAnswerAtIndexPath:(NSIndexPath *)indexPath {
 	[self.collectionView deselectItemAtIndexPath:indexPath animated:NO];
+
+	[self maybeAnimateOtherSizeChangeAtIndexPath:indexPath];
 }
 
 #pragma mark - Keyboard adjustment for iOS 7 & 8
@@ -458,10 +498,29 @@
 		CGPoint contentOffset = self.collectionView.contentOffset;
 		[self.collectionView layoutIfNeeded];
 		self.collectionView.contentOffset = contentOffset;
-		if (self.editingIndexPath) {
+		if (self.editingIndexPath && [self.viewModel typeOfAnswerAtIndexPath:self.editingIndexPath] != ApptentiveSurveyAnswerTypeOther) {
 			[(ApptentiveSurveyCollectionView *)self.collectionView scrollHeaderAtIndexPathToTop:self.editingIndexPath animated:NO];
 		}
 	}];
+}
+
+#pragma mark - Private 
+
+- (void)maybeAnimateOtherSizeChangeAtIndexPath:(NSIndexPath *)indexPath {
+	if ([self.viewModel typeOfAnswerAtIndexPath:indexPath] == ApptentiveSurveyAnswerTypeOther) {
+		BOOL showing = [self.viewModel answerIsSelectedAtIndexPath:indexPath];
+		[UIView animateWithDuration:0.25 animations:^{
+			[self.collectionViewLayout invalidateLayout];
+		} completion:^(BOOL finished) {
+			ApptentiveSurveyOtherCell *cell = (ApptentiveSurveyOtherCell *)[self.collectionView cellForItemAtIndexPath:indexPath];
+
+			if (showing) {
+				[cell.textField becomeFirstResponder];
+			} else {
+				[cell.textField resignFirstResponder];
+			}
+		}];
+	}
 }
 
 @end

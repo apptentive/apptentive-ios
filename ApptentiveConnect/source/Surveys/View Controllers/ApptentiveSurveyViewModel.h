@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "ApptentiveSurveyQuestion.h"
+#import "ApptentiveSurveyAnswer.h"
 
 @class ApptentiveSurvey, ApptentiveInteraction;
 
@@ -38,12 +39,18 @@
 
 - (NSString *)textOfQuestionAtIndex:(NSInteger)index;
 - (NSAttributedString *)instructionTextOfQuestionAtIndex:(NSInteger)index;
-- (NSAttributedString *)placeholderTextOfQuestionAtIndex:(NSInteger)index;
+- (NSAttributedString *)placeholderTextOfAnswerAtIndexPath:(NSIndexPath *)indexPath;
 - (ATSurveyQuestionType)typeOfQuestionAtIndex:(NSInteger)index;
+- (ApptentiveSurveyAnswerType)typeOfAnswerAtIndexPath:(NSIndexPath *)indexPath;
 
 - (NSString *)textOfAnswerAtIndexPath:(NSIndexPath *)indexPath;
-- (BOOL)answerAtIndexPathIsSelected:(NSIndexPath *)indexPath;
+- (NSString *)textOfChoiceAtIndexPath:(NSIndexPath *)indexPath;
+- (BOOL)answerIsSelectedAtIndexPath:(NSIndexPath *)indexPath;
+- (BOOL)answerIsValidAtIndexPath:(NSIndexPath *)indexPath;
 - (BOOL)answerIsValidForQuestionAtIndex:(NSInteger)index;
+
+- (NSIndexPath *)indexPathForTextFieldTag:(NSInteger)tag;
+- (NSInteger)textFieldTagForIndexPath:(NSIndexPath *)indexPath;
 
 - (void)setText:(NSString *)text forAnswerAtIndexPath:(NSIndexPath *)indexPath;
 - (void)selectAnswerAtIndexPath:(NSIndexPath *)indexPath;

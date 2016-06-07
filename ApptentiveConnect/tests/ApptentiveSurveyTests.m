@@ -10,6 +10,7 @@
 #import "ApptentiveSurveyViewModel.h"
 #import "ApptentiveInteraction.h"
 #import "ApptentiveSurveyMetrics.h"
+#import "ApptentiveStyleSheet.h"
 
 
 @interface ApptentiveSurveyTests : XCTestCase <ATSurveyViewModelDelegate>
@@ -42,6 +43,11 @@
 
 		self.answeredQuestions = [NSMutableSet set];
 		self.deselectedIndexPaths = [NSMutableSet set];
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundeclared-selector"
+		[self.viewModel.styleSheet performSelector:@selector(didBecomeActive:) withObject:nil];
+#pragma clang diagnostic pop
 
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(answeredQuestion:) name:ATSurveyDidAnswerQuestionNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didHide:) name:ATSurveyDidHideWindowNotification object:nil];
@@ -77,12 +83,14 @@
 	XCTAssertNotNil(self.viewModel.survey);
 
 	XCTAssertEqualObjects([self.viewModel textOfQuestionAtIndex:4], @"Multiselect Optional With Limits");
-	XCTAssertEqualObjects([self.viewModel textOfAnswerAtIndexPath:[NSIndexPath indexPathForItem:2 inSection:4]], @"C");
+	XCTAssertEqualObjects([self.viewModel textOfChoiceAtIndexPath:[NSIndexPath indexPathForItem:2 inSection:4]], @"C");
 	XCTAssertEqual([self.viewModel typeOfQuestionAtIndex:3], ATSurveyQuestionTypeMultipleSelect);
 	XCTAssertEqualObjects(self.viewModel.greeting, @"Please help us see how each question is formatted when returning a survey response to the server.");
 	XCTAssertEqualObjects(self.viewModel.submitButtonText, @"Submit");
 	XCTAssertEqualObjects([self.viewModel instructionTextOfQuestionAtIndex:1].string, @"Required – select one");
-	XCTAssertEqual([self.viewModel typeOfAnswerAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:0]], ApptentiveSurveyAnswerTypeOther, @"Last answer of first question should be of type “Other”.");
+	NSIndexPath *otherIndexPath = [NSIndexPath indexPathForRow:2 inSection:1];
+	XCTAssertEqual([self.viewModel typeOfAnswerAtIndexPath:otherIndexPath], ApptentiveSurveyAnswerTypeOther, @"Last answer of first question should be of type “Other”.");
+	XCTAssertEqualObjects([self.viewModel placeholderTextOfAnswerAtIndexPath:otherIndexPath].string, @"Other Placeholder");
 }
 
 - (void)testRadioButtons {
@@ -90,12 +98,12 @@
 	[self.viewModel selectAnswerAtIndexPath:[NSIndexPath indexPathForItem:1 inSection:0]];
 
 	XCTAssertTrue([self.deselectedIndexPaths containsObject:[NSIndexPath indexPathForItem:0 inSection:0]]);
-	XCTAssertFalse([self.viewModel answerAtIndexPathIsSelected:[NSIndexPath indexPathForItem:0 inSection:0]]);
+	XCTAssertFalse([self.viewModel answerIsSelectedAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:0]]);
 	[self.deselectedIndexPaths removeAllObjects];
 
 	[self.viewModel selectAnswerAtIndexPath:[NSIndexPath indexPathForItem:1 inSection:0]];
 
-	XCTAssertTrue([self.viewModel answerAtIndexPathIsSelected:[NSIndexPath indexPathForItem:1 inSection:0]]);
+	XCTAssertTrue([self.viewModel answerIsSelectedAtIndexPath:[NSIndexPath indexPathForItem:1 inSection:0]]);
 	XCTAssertEqual(self.deselectedIndexPaths.count, 0);
 }
 
@@ -140,28 +148,52 @@
 
 	[self.viewModel setText:@" " forAnswerAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:7]];
 
+	XCTAssertTrue([self.viewModel validate:NO]);
+	XCTAssertFalse(self.validationChanged);
+
 	XCTAssertFalse([self.viewModel validate:YES]);
 	XCTAssertTrue(self.validationChanged);
 	self.validationChanged = NO;
+
+	[self.viewModel setText:@"Foo" forAnswerAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:7]];
+	XCTAssertTrue([self.viewModel validate:YES]);
+
+	NSIndexPath *optionalOtherIndexPath = [NSIndexPath indexPathForRow:2 inSection:0];
+	[self.viewModel selectAnswerAtIndexPath:optionalOtherIndexPath];
+	XCTAssertTrue([self.viewModel validate:YES]);
+
+	NSIndexPath *requiredOtherIndexPath = [NSIndexPath indexPathForRow:2 inSection:1];
+	[self.viewModel selectAnswerAtIndexPath:requiredOtherIndexPath];
+	XCTAssertFalse([self.viewModel validate:YES]);
+	XCTAssertFalse([self.viewModel answerIsValidAtIndexPath:requiredOtherIndexPath]);
+	XCTAssertFalse([self.viewModel answerIsValidForQuestionAtIndex:requiredOtherIndexPath.section]);
+
+	[self.viewModel setText:@"Foo" forAnswerAtIndexPath:requiredOtherIndexPath];
+	XCTAssertTrue([self.viewModel answerIsValidAtIndexPath:requiredOtherIndexPath]);
+	XCTAssertTrue([self.viewModel answerIsValidForQuestionAtIndex:requiredOtherIndexPath.section]);
+	XCTAssertTrue([self.viewModel validate:YES]);
+	XCTAssertTrue([self.viewModel answerIsValidAtIndexPath:requiredOtherIndexPath]);
+	XCTAssertTrue([self.viewModel answerIsValidForQuestionAtIndex:requiredOtherIndexPath.section]);
 }
 
 - (void)testAnswers {
 	XCTAssertEqualObjects(self.viewModel.answers, @{});
 
-	[self.viewModel selectAnswerAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:1]];
+	[self.viewModel selectAnswerAtIndexPath:[NSIndexPath indexPathForItem:2 inSection:1]];
+	[self.viewModel setText:@"Other Text" forAnswerAtIndexPath:[NSIndexPath indexPathForItem:2 inSection:1]];
 	[self.viewModel selectAnswerAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:3]];
 	[self.viewModel selectAnswerAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:5]];
 
 	[self.viewModel setText:@" Foo " forAnswerAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:7]];
 	[self.viewModel setText:@" Bar\n" forAnswerAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:9]];
 
-	NSLog(@"answers are: %@", self.viewModel.answers);
+	NSDictionary *answer = @{ @"id": @"56d49499c719925f3300000b", @"value": @"Other Text" };
+	XCTAssertEqualObjects(self.viewModel.answers[@"56d49499c719925f3300000b"], @[ answer ]);
+	XCTAssertEqualObjects(self.viewModel.answers[@"56d49499c719925f33000011"], @[ @{ @"id": @"56d49499c719925f33000012" }]);
+	XCTAssertEqualObjects(self.viewModel.answers[@"56d49499c719925f33000019"], @[ @{ @"id": @"56d49499c719925f3300001a" }] );
 
-	XCTAssertEqualObjects(self.viewModel.answers[@"56d49499c719925f3300000b"], @"56d49499c719925f3300000c");
-	XCTAssertEqualObjects(self.viewModel.answers[@"56d49499c719925f33000011"], @[@"56d49499c719925f33000012"]);
-	XCTAssertEqualObjects(self.viewModel.answers[@"56d49499c719925f33000019"], @[@"56d49499c719925f3300001a"]);
-	XCTAssertEqualObjects(self.viewModel.answers[@"56d49499c719925f3300001f"], @"Foo");
-	XCTAssertEqualObjects(self.viewModel.answers[@"56d49499c719925f33000021"], @"Bar");
+	XCTAssertEqualObjects(self.viewModel.answers[@"56d49499c719925f3300001f"], @[ @"Foo" ]);
+	XCTAssertEqualObjects(self.viewModel.answers[@"56d49499c719925f33000021"], @[ @"Bar" ]);
 }
 
 - (void)testMetrics {
@@ -186,6 +218,14 @@
 	[self.viewModel didCancel];
 
 	XCTAssertEqualObjects(self.didHideUserInfo[ATSurveyMetricsEventKey], @(ATSurveyEventTappedCancel));
+}
+
+- (void)testTagForIndexPath {
+	NSIndexPath *indexPath = [NSIndexPath indexPathForItem:69 inSection:369];
+	NSInteger tag = [self.viewModel textFieldTagForIndexPath:indexPath];
+	NSIndexPath *resultIndexPath = [self.viewModel indexPathForTextFieldTag:tag];
+
+	XCTAssertEqualObjects(indexPath, resultIndexPath, @"Index paths should survive being tagged and untagged");
 }
 
 @end

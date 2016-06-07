@@ -69,12 +69,11 @@
 
 - (void)scrollHeaderAtIndexPathToTop:(NSIndexPath *)indexPath animated:(BOOL)animated {
 	CGRect headerFrame = [self layoutAttributesForSupplementaryElementOfKind:UICollectionElementKindSectionHeader atIndexPath:indexPath].frame;
-	CGRect offsetHeaderFrame = CGRectOffset(headerFrame, -headerFrame.origin.x, -self.contentInset.top - ((UICollectionViewFlowLayout *)self.collectionViewLayout).sectionInset.top);
 
 	// Make sure we don't scroll off the bottom of the content + footer
-	offsetHeaderFrame.origin.y = fmin(offsetHeaderFrame.origin.y, self.contentSize.height - CGRectGetHeight(self.bounds) + self.contentInset.bottom);
+	headerFrame.origin.y = fmin(headerFrame.origin.y - self.contentInset.top, self.contentSize.height - CGRectGetHeight(self.bounds) + self.contentInset.bottom);
 
-	[self setContentOffset:offsetHeaderFrame.origin animated:animated];
+	[self setContentOffset:headerFrame.origin animated:animated];
 }
 
 - (void)layoutSubviews {

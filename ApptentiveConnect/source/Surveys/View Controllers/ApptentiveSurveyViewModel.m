@@ -26,6 +26,7 @@
 @property (strong, nonatomic) NSMutableSet *selectedIndexPaths;
 @property (strong, nonatomic) NSMutableDictionary *textAtIndexPath;
 @property (strong, nonatomic) NSMutableIndexSet *invalidQuestionIndexes;
+@property (strong, nonatomic) NSMutableSet *invalidAnswerIndexPaths;
 
 @end
 
@@ -36,10 +37,16 @@
 	self = [super init];
 	if (self) {
 		_interaction = interaction;
-		_survey = [[ApptentiveSurvey alloc] initWithJSON:interaction.configuration];
 
-		self.selectedIndexPaths = [NSMutableSet set];
-		self.textAtIndexPath = [NSMutableDictionary dictionary];
+		@try {
+			_survey = [[ApptentiveSurvey alloc] initWithJSON:interaction.configuration];
+		} @catch (NSException *exception) {
+			ApptentiveLogError(@"Unable to parse survey.");
+			return nil;
+		}
+
+		_selectedIndexPaths = [NSMutableSet set];
+		_textAtIndexPath = [NSMutableDictionary dictionary];
 	}
 	return self;
 }
@@ -115,22 +122,28 @@
 	}
 }
 
-- (NSAttributedString *)placeholderTextOfQuestionAtIndex:(NSInteger)index {
-	NSString *placeholder = [self questionAtIndex:index].placeholder ?: @"";
-	return [[NSAttributedString alloc] initWithString:placeholder attributes:@{ NSForegroundColorAttributeName: [self.styleSheet colorForStyle:ApptentiveColorTextInputPlaceholder] }];
-}
-
-- (NSString *)textOfAnswerAtIndexPath:(NSIndexPath *)indexPath {
+- (NSAttributedString *)placeholderTextOfAnswerAtIndexPath:(NSIndexPath *)indexPath {
+	NSString *placeholder;
 	ApptentiveSurveyQuestion *question = [self questionAtIndex:indexPath.section];
 
 	if (question.type == ATSurveyQuestionTypeSingleLine || question.type == ATSurveyQuestionTypeMultipleLine) {
-		return self.textAtIndexPath[indexPath];
+		placeholder = [self questionAtIndex:indexPath.section].placeholder ?: @"";
 	} else {
-		return [self answerAtIndexPath:indexPath].value;
+		placeholder = [self answerAtIndexPath:indexPath].placeholder ?: @"";
 	}
+
+	return [[NSAttributedString alloc] initWithString:placeholder attributes:@{ NSForegroundColorAttributeName: [self.styleSheet colorForStyle:ApptentiveColorTextInputPlaceholder] }];
 }
 
-- (BOOL)answerAtIndexPathIsSelected:(NSIndexPath *)indexPath {
+- (NSString *)textOfChoiceAtIndexPath:(NSIndexPath *)indexPath {
+	return [self answerAtIndexPath:indexPath].value;
+}
+
+- (NSString *)textOfAnswerAtIndexPath:(NSIndexPath *)indexPath {
+	return self.textAtIndexPath[indexPath];
+}
+
+- (BOOL)answerIsSelectedAtIndexPath:(NSIndexPath *)indexPath {
 	return [self.selectedIndexPaths containsObject:indexPath];
 }
 
@@ -138,8 +151,24 @@
 	return [self questionAtIndex:index].type;
 }
 
+- (ApptentiveSurveyAnswerType)typeOfAnswerAtIndexPath:(NSIndexPath *)indexPath {
+	return [self answerAtIndexPath:indexPath].type;
+}
+
 - (BOOL)answerIsValidForQuestionAtIndex:(NSInteger)index {
 	return ![self.invalidQuestionIndexes containsIndex:index];
+}
+
+- (BOOL)answerIsValidAtIndexPath:(NSIndexPath *)indexPath {
+	return ![self.invalidAnswerIndexPaths containsObject:indexPath];
+}
+
+- (NSIndexPath *)indexPathForTextFieldTag:(NSInteger)tag {
+	return [NSIndexPath indexPathForItem:tag & 0xFFFF inSection:tag >> 16];
+}
+
+- (NSInteger)textFieldTagForIndexPath:(NSIndexPath *)indexPath {
+	return (indexPath.section << 16) | (indexPath.item & 0xFFFF);
 }
 
 #pragma mark - Mutation
@@ -166,8 +195,10 @@
 		for (NSInteger answerIndex = 0; answerIndex < [self numberOfAnswersForQuestionAtIndex:indexPath.section]; answerIndex++) {
 			if (answerIndex != indexPath.item) {
 				NSIndexPath *deselectIndexPath = [NSIndexPath indexPathForItem:answerIndex inSection:indexPath.section];
-				[self.delegate viewModel:self didDeselectAnswerAtIndexPath:deselectIndexPath];
-				[self.selectedIndexPaths removeObject:deselectIndexPath];
+				if ([self.selectedIndexPaths containsObject:deselectIndexPath]) {
+					[self.selectedIndexPaths removeObject:deselectIndexPath];
+					[self.delegate viewModel:self didDeselectAnswerAtIndexPath:deselectIndexPath];
+				}
 			}
 		}
 	}
@@ -216,27 +247,44 @@
 
 - (BOOL)validate:(BOOL)isSubmit {
 	NSIndexSet *previousInvalidQuestionIndexes = self.invalidQuestionIndexes;
+	NSSet *previousInvalidAnswerIndexPaths = [self.invalidAnswerIndexPaths copy];
 
 	self.invalidQuestionIndexes = [NSMutableIndexSet indexSet];
+	self.invalidAnswerIndexPaths = [NSMutableSet set];
 
-	[self.survey.questions enumerateObjectsUsingBlock:^(ApptentiveSurveyQuestion *_Nonnull question, NSUInteger index, BOOL *_Nonnull stop) {
+	[self.survey.questions enumerateObjectsUsingBlock:^(ApptentiveSurveyQuestion *_Nonnull question, NSUInteger questionIndex, BOOL *_Nonnull stop) {
 		switch (question.type) {
 			case ATSurveyQuestionTypeSingleLine:
 			case ATSurveyQuestionTypeMultipleLine: {
-				BOOL answerIsEmpty = [self.textAtIndexPath[[NSIndexPath indexPathForItem:0 inSection:index]] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]].length == 0;
-				if (question.required && answerIsEmpty) {
-					[self.invalidQuestionIndexes addIndex:index];
+				NSIndexPath *answerIndexPath = [NSIndexPath indexPathForItem:0 inSection:questionIndex];
+				if (question.required && ![self textFieldHasTextAtIndexPath:answerIndexPath]) {
+					[self.invalidQuestionIndexes addIndex:questionIndex];
+					[self.invalidAnswerIndexPaths addObject:answerIndexPath];
 				}
 				break;
 			}
 			case ATSurveyQuestionTypeSingleSelect:
 			case ATSurveyQuestionTypeMultipleSelect: {
-				NSInteger numberOfSelections = [self selectionsForQuestionAtIndex:index].count;
-				BOOL numberOfSelectionsOutOfRange = numberOfSelections	> question.maximumSelectedCount || numberOfSelections < question.minimumSelectedCount;
+				NSInteger __block numberOfSelections = 0;
 
+				[question.answers enumerateObjectsUsingBlock:^(ApptentiveSurveyAnswer * _Nonnull answer, NSUInteger answerIndex, BOOL * _Nonnull stop) {
+					NSIndexPath *answerIndexPath = [NSIndexPath indexPathForItem:answerIndex inSection:questionIndex];
+
+					if ([self.selectedIndexPaths containsObject:answerIndexPath]) {
+						numberOfSelections ++;
+
+						if (question.required && answer.type == ApptentiveSurveyAnswerTypeOther && ![self textFieldHasTextAtIndexPath:answerIndexPath]) {
+							[self.invalidAnswerIndexPaths addObject:answerIndexPath];
+							[self.invalidQuestionIndexes addIndex:questionIndex];
+						}
+					}
+				}];
+
+				BOOL numberOfSelectionsOutOfRange = numberOfSelections	> question.maximumSelectedCount || numberOfSelections < question.minimumSelectedCount;
 				if ((question.required || numberOfSelections != 0) && numberOfSelectionsOutOfRange) {
-						[self.invalidQuestionIndexes addIndex:index];
+					[self.invalidQuestionIndexes addIndex:questionIndex];
 				}
+
 				break;
 			}
 		}
@@ -252,6 +300,15 @@
 		}];
 
 		self.invalidQuestionIndexes = redToGreenQuestionIndexes;
+
+		NSMutableSet *redToGreenAnswerIndexPaths = [self.invalidAnswerIndexPaths mutableCopy];
+		[self.invalidAnswerIndexPaths enumerateObjectsUsingBlock:^(id  _Nonnull obj, BOOL * _Nonnull stop) {
+			if (![previousInvalidAnswerIndexPaths containsObject:obj]) {
+				[redToGreenAnswerIndexPaths removeObject:obj];
+			}
+		}];
+
+		self.invalidAnswerIndexPaths = redToGreenAnswerIndexPaths;
 	}
 
 	if (![self.invalidQuestionIndexes isEqualToIndexSet:previousInvalidQuestionIndexes]) {
@@ -264,34 +321,36 @@
 - (NSDictionary *)answers {
 	NSMutableDictionary *result = [NSMutableDictionary dictionary];
 
-	[self.survey.questions enumerateObjectsUsingBlock:^(ApptentiveSurveyQuestion *_Nonnull question, NSUInteger index, BOOL *_Nonnull stop) {
+	[self.survey.questions enumerateObjectsUsingBlock:^(ApptentiveSurveyQuestion *_Nonnull question, NSUInteger questionIndex, BOOL *_Nonnull stop) {
+		NSMutableArray *responses = [NSMutableArray array];
 		switch (question.type) {
 			case ATSurveyQuestionTypeSingleLine:
 			case ATSurveyQuestionTypeMultipleLine: {
-				NSString *text = [self.textAtIndexPath[[NSIndexPath indexPathForItem:0 inSection:index]] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+				NSIndexPath *indexPath = [NSIndexPath indexPathForItem:0 inSection:questionIndex];
 
-				if (text.length > 0) {
-					result[question.identifier] = text;
+				if ([self textFieldHasTextAtIndexPath:indexPath]) {
+					[responses addObject:@{ @"value": [self trimmedTextAtIndexPath:indexPath] }];
 				}
 				break;
 			}
 			case ATSurveyQuestionTypeSingleSelect: {
-				NSArray *selections = [self selectionsForQuestionAtIndex:index];
+				NSArray *selections = [self selectedIndexPathsForQuestionAtIndex:questionIndex];
 
 				if (selections.count == 1) {
-					result[question.identifier] = selections.firstObject;
-				}
-
-				break;
-			}
-			case ATSurveyQuestionTypeMultipleSelect: {
-				NSArray *selections = [self selectionsForQuestionAtIndex:index];
-
-				if (selections.count > 0) {
-					result[question.identifier] = selections;
+					[responses addObject:[self responseDictionaryForAnswerAtIndexPath:selections.firstObject]];
 				}
 				break;
 			}
+			case ATSurveyQuestionTypeMultipleSelect:
+				for (NSIndexPath *indexPath in [self selectedIndexPathsForQuestionAtIndex:questionIndex]) {
+					[responses addObject:[self responseDictionaryForAnswerAtIndexPath:indexPath]];
+				}
+
+				break;
+		}
+
+		if (responses.count > 0) {
+			result[question.identifier] = responses;
 		}
 	}];
 
@@ -342,18 +401,37 @@
 	return answers.count > indexPath.row ? answers[indexPath.row] : nil;
 }
 
-- (NSArray *)selectionsForQuestionAtIndex:(NSInteger)index {
+- (NSArray *)selectedIndexPathsForQuestionAtIndex:(NSInteger)index {
 	NSMutableArray *result = [NSMutableArray array];
 
 	for (NSIndexPath *indexPath in self.selectedIndexPaths) {
 		if (indexPath.section != index) {
 			continue;
-		} else if ([self answerAtIndexPath:indexPath].identifier != nil) {
-			[result addObject:[self answerAtIndexPath:indexPath].identifier];
+		} else {
+			[result addObject:indexPath];
 		}
 	}
 
 	return result;
+}
+
+- (NSDictionary *)responseDictionaryForAnswerAtIndexPath:(NSIndexPath *)indexPath {
+	ApptentiveSurveyAnswer *answer = [self answerAtIndexPath:indexPath];
+	NSMutableDictionary *response = [NSMutableDictionary dictionaryWithObject:answer.identifier forKey:@"id"];
+
+	if (answer.type == ApptentiveSurveyAnswerTypeOther) {
+		response[@"value"] = [self trimmedTextAtIndexPath:indexPath] ?: @"";
+	}
+
+	return response;
+}
+
+- (NSString *)trimmedTextAtIndexPath:(NSIndexPath *)indexPath {
+	return [self.textAtIndexPath[indexPath] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+}
+
+- (BOOL)textFieldHasTextAtIndexPath:(NSIndexPath *)indexPath {
+	return [self trimmedTextAtIndexPath:indexPath].length > 0;
 }
 
 @end

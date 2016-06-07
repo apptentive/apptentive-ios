@@ -17,7 +17,8 @@
 					{
 						"id" : "56d49499c719925f3300000b",
 						"value": "Other",
-						"type": "other"
+						"type": "select_other",
+						"hint": "Other Placeholder"
 					}
 				],
 				"type" : "multichoice",
@@ -36,6 +37,12 @@
 					{
 						"id" : "56d49499c719925f3300000d",
 						"value" : "B"
+					},
+					{
+						"id" : "56d49499c719925f3300000b",
+						"value": "Other",
+						"type": "input_other",
+						"hint": "Other Placeholder"
 					}
 				],
 				"type" : "multichoice",

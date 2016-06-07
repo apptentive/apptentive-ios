@@ -20,6 +20,7 @@ typedef NS_ENUM(NSInteger, ApptentiveSurveyAnswerType) {
 
 @property (readonly, nonatomic) NSString *identifier;
 @property (readonly, nonatomic) NSString *value;
+@property (readonly, nonatomic) NSString *placeholder;
 @property (readonly, nonatomic) ApptentiveSurveyAnswerType type;
 
 @end

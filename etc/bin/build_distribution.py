@@ -54,11 +54,14 @@ class Builder(object):
 	BINARY_DIST = "BINARY_DIST"
 	build_root = "/tmp/apptentive_connect_build"
 	dist_type = None
-	def __init__(self, verbose=False, dist_type=None):
+	enable_bitcode = True
+	
+	def __init__(self, verbose=False, dist_type=None, enable_bitcode=True):
 		if not dist_type:
 			dist_type = self.BINARY_DIST
 		self.verbose = verbose
 		self.dist_type = dist_type
+		self.enable_bitcode = enable_bitcode
 		if dist_type not in [self.BINARY_DIST]:
 			log("Unknown dist_type: %s" % dist_type)
 			sys.exit(1)
@@ -73,7 +76,8 @@ class Builder(object):
 					if status != 0:
 						target_type = "simulator" if is_simulator else "device"
 						arch_type = "64bit" if is_64bit else "not 64bit"
-						log("Building for %s %s failed with code: %d" % (target_type, arch_type, status))
+						bitcode_type = "bitcode enabled" if self.enable_bitcode else "bitcode disabled"
+						log("Building for %s %s %s failed with code: %d" % (target_type, arch_type, bitcode_type, status))
 						log(output)
 						return False
 			library_dir = self._output_dir()
@@ -158,7 +162,10 @@ class Builder(object):
 		products_dir = self._products_dir(is_simulator=is_simulator, is_64bit=is_64bit)
 		symroot = os.path.join(self.build_root, "symroot")
 		temp_dir = os.path.join(self.build_root, "target_temp_dir")
-		return "CONFIGURATION_BUILD_DIR=%s SYMROOT=%s TARGET_TEMP_DIR=%s" % (escape_arg(products_dir), escape_arg(symroot), escape_arg(temp_dir))
+		options = "CONFIGURATION_BUILD_DIR=%s SYMROOT=%s TARGET_TEMP_DIR=%s" % (escape_arg(products_dir), escape_arg(symroot), escape_arg(temp_dir))
+		if self.enable_bitcode:
+			options += " ENABLE_BITCODE=YES OTHER_CFLAGS='-fembed-bitcode'"
+		return options
 
 	def _lipo_command(self):
 		output_dir = self._output_dir()

@@ -454,12 +454,20 @@
 - (void)viewModelValidationChanged:(ApptentiveSurveyViewModel *)viewModel isValid:(BOOL)valid {
 	[self.collectionViewLayout invalidateLayout];
 
-	CGFloat bottomContentOffset = self.collectionView.contentSize.height - CGRectGetHeight(self.collectionView.bounds);
+	CGFloat bottomContentInset = self.collectionView.contentInset.bottom;
+	CGFloat bottomContentOffset = self.collectionView.contentSize.height - CGRectGetHeight(self.collectionView.bounds) + bottomContentInset;
 	CGFloat toolbarAdjustment = (valid ? -1 : 1) * CGRectGetHeight(self.navigationController.toolbar.bounds);
 
 	[UIView animateWithDuration:0.2 animations:^{
-		if (self.collectionView.contentOffset.y >= bottomContentOffset - toolbarAdjustment) {
+		if ( bottomContentInset == 0 && self.collectionView.contentOffset.y >= bottomContentOffset - toolbarAdjustment) {
 			self.collectionView.contentOffset = CGPointMake(0, bottomContentOffset + toolbarAdjustment);
+		} else if (bottomContentInset != 0) {
+			UIEdgeInsets insets = self.collectionView.contentInset;
+			CGPoint contentOffset = self.collectionView.contentOffset;
+
+			insets.bottom -= toolbarAdjustment;
+			self.collectionView.contentInset = insets;
+			self.collectionView.contentOffset = contentOffset;
 		}
 	}];
 

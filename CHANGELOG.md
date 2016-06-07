@@ -1,3 +1,8 @@
+2016-05-31 frankus v3.1.0
+-------------------------
+Version 3.1.0 adds the ability to include a freeform "Other" choice for single-
+and multiple-selection question types in surveys.
+
 2016-04-26 frankus v3.0.0
 -------------------------
 Version 3.0.0 introduces a redesigned survey UI and enhanced styling capability.

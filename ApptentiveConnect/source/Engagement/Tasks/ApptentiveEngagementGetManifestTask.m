@@ -98,9 +98,7 @@
 
 			if (targets && interactions) {
 				[[Apptentive sharedConnection].engagementBackend didReceiveNewTargets:targets andInteractions:interactions maxAge:[request expiresMaxAge]];
-#if APPTENTIVE_DEBUG
 				[Apptentive sharedConnection].engagementBackend.engagementManifestJSON = targetsAndInteractions[@"raw"];
-#endif
 			} else {
 				ApptentiveLogError(@"An error occurred parsing the engagement manifest: %@", [parser parserError]);
 			}

@@ -1,0 +1,23 @@
+PUT
+/devices
+201
+Server: nginx
+Date: Fri, 22 Jan 2016 23:26:42 GMT
+Content-Type: application/json; charset=utf-8
+Transfer-Encoding: chunked
+Connection: keep-alive
+Strict-Transport-Security: max-age=31536000
+Vary: Authorization,Origin,Accept-Encoding
+Access-Control-Allow-Origin: *
+Access-Control-Request-Method: GET,PUT,POST,OPTIONS
+X-UA-Compatible: IE=Edge,chrome=1
+ETag: "8b85bf2e4abfd7489dbe7082afffd80b"
+Cache-Control: max-age=0, private, must-revalidate
+X-Content-Type-Options: nosniff
+X-Request-Id: 1461fcd300ce8dc65dd854d8cd225051
+X-Runtime: 0.059404
+X-Rack-Cache: invalidate, pass
+Content-Encoding: gzip
+X-Frame-Options: SAMEORIGIN
+
+{"id":"56a2bab28c2d4404d50000e7","os_name":"iPhone OS","os_version":"8.1","os_build":"15C50","os_api_level":null,"manufacturer":null,"model":"iOS Simulator","board":null,"product":null,"brand":null,"cpu":null,"hardware":"x86_64","device":null,"carrier":null,"current_carrier":null,"uuid":"c39bcc06-4005-44c7-9720-56f45c3a6080","network_type":null,"build_type":null,"build_id":null,"bootloader_version":null,"radio_version":null,"custom_data":null,"locale_country_code":"US","locale_language_code":"en","locale_raw":"en_US"}

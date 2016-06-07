@@ -198,6 +198,8 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 			[self updateVersionInfo];
 		}
 	}
+
+	[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveInteractionsDidUpdateNotification object:nil];
 }
 
 - (void)updateVersionInfo {

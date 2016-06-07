@@ -54,6 +54,10 @@ static ApptentiveHUDViewController *currentHUD;
 	self.textLabel = [[UILabel alloc] initWithFrame:CGRectZero];
 	self.textLabel.textColor = [UIColor whiteColor];
 	self.textLabel.font = [UIFont systemFontOfSize:15.0];
+	self.textLabel.textAlignment = NSTextAlignmentCenter;
+	self.textLabel.numberOfLines = 0;
+	self.textLabel.lineBreakMode = NSLineBreakByWordWrapping;
+	self.textLabel.preferredMaxLayoutWidth = 200;
 
 	self.textLabel.translatesAutoresizingMaskIntoConstraints = NO;
 

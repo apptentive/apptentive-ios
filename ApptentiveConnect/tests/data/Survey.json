@@ -13,6 +13,11 @@
 					{
 						"id" : "56d49499c719925f3300000a",
 						"value" : "B"
+					},
+					{
+						"id" : "56d49499c719925f3300000b",
+						"value": "Other",
+						"type": "other"
 					}
 				],
 				"type" : "multichoice",

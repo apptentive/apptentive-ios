@@ -1,12 +1,9 @@
 # xcode noise
 build/
-build/*
-*/build/*
 *.pbxuser
 *.mode1v3
 *.mode2v3
 *.perspectivev3
-xcuserdata/*
 xcuserdata/
 *.xccheckout
 *.xcscmblueprint
@@ -14,5 +11,7 @@ xcuserdata/
 # OSX noise
 .DS_Store
 
+# CocoaPods noise
+Pods/
 
 

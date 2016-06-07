@@ -329,7 +329,7 @@
 				NSIndexPath *indexPath = [NSIndexPath indexPathForItem:0 inSection:questionIndex];
 
 				if ([self textFieldHasTextAtIndexPath:indexPath]) {
-					[responses addObject:[self trimmedTextAtIndexPath:indexPath]];
+					[responses addObject:@{ @"value": [self trimmedTextAtIndexPath:indexPath] }];
 				}
 				break;
 			}

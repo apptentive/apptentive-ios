@@ -262,15 +262,17 @@ static ApptentiveTaskQueue *sharedTaskQueue = nil;
 					[self unsetActiveTask];
 					[task cleanup];
 					[tasks removeObject:task];
+					[self archive];
 					[self startOnNextRunLoopIteration];
 				} else {
 					// Retry it
 					[self performSelector:@selector(start) withObject:nil afterDelay:kATTaskQueueRetryPeriod];
 				}
 			} else {
-				task.failureCount = task.failureCount + 1;
 				[self unsetActiveTask];
+				[task cleanup];
 				[tasks removeObject:task];
+				[self archive];
 				[self startOnNextRunLoopIteration];
 			}
 		}

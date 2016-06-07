@@ -59,6 +59,7 @@
 - (NSDictionary *)apiJSON {
 	NSDictionary *superJSON = [super apiJSON];
 	NSMutableDictionary *survey = [NSMutableDictionary dictionary];
+	survey[@"id"] = self.surveyID;
 	if (self.pendingSurveyResponseID != nil) {
 		survey[@"nonce"] = self.pendingSurveyResponseID;
 	}

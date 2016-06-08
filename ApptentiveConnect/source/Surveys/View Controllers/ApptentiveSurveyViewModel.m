@@ -417,12 +417,17 @@
 
 - (NSDictionary *)responseDictionaryForAnswerAtIndexPath:(NSIndexPath *)indexPath {
 	ApptentiveSurveyAnswer *answer = [self answerAtIndexPath:indexPath];
-	NSMutableDictionary *response = [NSMutableDictionary dictionaryWithObject:answer.identifier forKey:@"id"];
+	NSMutableDictionary *response;
+	NSString *answerIdentifier = answer.identifier;
 
-	if (answer.type == ApptentiveSurveyAnswerTypeOther) {
-		response[@"value"] = [self trimmedTextAtIndexPath:indexPath] ?: @"";
+	if (answerIdentifier != nil) {
+		response = [NSMutableDictionary dictionaryWithObject:answerIdentifier forKey:@"id"];
+
+		if (answer.type == ApptentiveSurveyAnswerTypeOther) {
+			response[@"value"] = [self trimmedTextAtIndexPath:indexPath] ?: @"";
+		}
 	}
-
+	
 	return response;
 }
 

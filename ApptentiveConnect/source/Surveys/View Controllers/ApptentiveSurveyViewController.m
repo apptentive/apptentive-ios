@@ -511,9 +511,10 @@
 	BOOL keyboardVisible = bottomContentInset > 0;
 	CGFloat bottomContentOffset = self.collectionView.contentSize.height - CGRectGetHeight(self.collectionView.bounds) + bottomContentInset;
 	CGFloat toolbarAdjustment = (hidden ? -1 : 1) * CGRectGetHeight(self.navigationController.toolbar.bounds);
+	BOOL scrolledAllTheWayDown = self.collectionView.contentOffset.y >= bottomContentOffset - toolbarAdjustment;
 
 	[UIView animateWithDuration:0.2 animations:^{
-		if ( bottomContentInset == 0 && self.collectionView.contentOffset.y >= bottomContentOffset - toolbarAdjustment) {
+		if (!keyboardVisible && scrolledAllTheWayDown) {
 			self.collectionView.contentOffset = CGPointMake(0, bottomContentOffset + toolbarAdjustment);
 		} else if (keyboardVisible && hidden) {
 			// If we're hiding the toolbar with the keyboard visible, we need to add in a bit more bottom inset to keep things from moving around.
@@ -536,7 +537,7 @@
 	CGPoint contentOffset = self.collectionView.contentOffset;
 	[self.navigationController setToolbarHidden:hidden animated:YES];
 
-	if (hidden && !keyboardVisible) {
+	if (hidden && !keyboardVisible && scrolledAllTheWayDown) {
 		contentOffset.y += toolbarAdjustment;
 	}
 

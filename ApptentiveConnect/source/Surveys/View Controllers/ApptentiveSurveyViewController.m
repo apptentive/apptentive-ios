@@ -47,7 +47,7 @@
 @property (strong, nonatomic) NSIndexPath *editingIndexPath;
 
 @property (readonly, nonatomic) CGFloat lineHeightOfQuestionFont;
-@property (assign, nonatomic) BOOL shouldRemoveToolbarInset;
+@property (assign, nonatomic) CGFloat iOS9ToolbarInset;
 
 @end
 
@@ -191,6 +191,7 @@
 
 			cell.textView.text = [self.viewModel textOfAnswerAtIndexPath:indexPath];
 			cell.placeholderLabel.attributedText = [self.viewModel placeholderTextOfAnswerAtIndexPath:indexPath];
+			cell.placeholderLabel.hidden = cell.textView.text.length > 0;
 			cell.textView.delegate = self;
 			cell.textView.tag = [self.viewModel textFieldTagForIndexPath:indexPath];
 			cell.textView.accessibilityLabel = cell.placeholderLabel.text;
@@ -455,38 +456,7 @@
 - (void)viewModelValidationChanged:(ApptentiveSurveyViewModel *)viewModel isValid:(BOOL)valid {
 	[self.collectionViewLayout invalidateLayout];
 
-	CGFloat bottomContentInset = self.collectionView.contentInset.bottom;
-	CGFloat bottomContentOffset = self.collectionView.contentSize.height - CGRectGetHeight(self.collectionView.bounds) + bottomContentInset;
-	CGFloat toolbarAdjustment = (valid ? -1 : 1) * CGRectGetHeight(self.navigationController.toolbar.bounds);
-
-	[UIView animateWithDuration:0.2 animations:^{
-		if ( bottomContentInset == 0 && self.collectionView.contentOffset.y >= bottomContentOffset - toolbarAdjustment) {
-			self.collectionView.contentOffset = CGPointMake(0, bottomContentOffset + toolbarAdjustment);
-		} else if (bottomContentInset != 0) {
-			UIEdgeInsets insets = self.collectionView.contentInset;
-			CGPoint contentOffset = self.collectionView.contentOffset;
-
-			if (valid && !self.navigationController.toolbarHidden) {
-				insets.bottom -= toolbarAdjustment;
-			}
-
-			self.collectionView.contentInset = insets;
-			self.collectionView.contentOffset = contentOffset;
-		}
-	}];
-
-	CGPoint contentOffset = self.collectionView.contentOffset;
-	[self.navigationController setToolbarHidden:valid animated:YES];
-
-	// Work around a bug in iOS 9, where if the toolbar is hidden with the keyboard covering it,
-	// the CV's contentInset property is not adjusted accordingly.
-	if (valid && bottomContentInset != 0) {
-		self.shouldRemoveToolbarInset = YES;
-	} else {
-		self.shouldRemoveToolbarInset = NO;
-	}
-
-	self.collectionView.contentOffset = contentOffset;
+	[self setToolbarHidden:valid];
 
 	for (UICollectionViewCell *cell in self.collectionView.visibleCells) {
 		if ([cell isKindOfClass:[ApptentiveSurveyOtherCell class]]) {
@@ -512,11 +482,11 @@
 		self.collectionView.contentInset = UIEdgeInsetsMake(self.collectionView.contentInset.top, self.collectionView.contentInset.left, CGRectGetHeight(self.collectionView.bounds) - keyboardRect.origin.y, self.collectionView.contentInset.right);
 
 		[self.collectionViewLayout invalidateLayout];
-	} else if (self.shouldRemoveToolbarInset) {
+	} else if (self.iOS9ToolbarInset != 0) {
 		UIEdgeInsets contentInset = self.collectionView.contentInset;
-		contentInset.bottom -= 44;
+		contentInset.bottom += self.iOS9ToolbarInset;
 		self.collectionView.contentInset = contentInset;
-		self.shouldRemoveToolbarInset = NO;
+		self.iOS9ToolbarInset = 0;
 	}
 
 	CGFloat duration = ((NSNumber *)notification.userInfo[UIKeyboardAnimationDurationUserInfoKey]).doubleValue;
@@ -531,6 +501,40 @@
 }
 
 #pragma mark - Private 
+
+// If the survey is scrolled all the way to the bottom, we want to
+- (void)setToolbarHidden:(BOOL)hidden {
+	CGFloat bottomContentInset = self.collectionView.contentInset.bottom;
+	BOOL keyboardVisible = bottomContentInset > 0;
+	CGFloat bottomContentOffset = self.collectionView.contentSize.height - CGRectGetHeight(self.collectionView.bounds) + bottomContentInset;
+	CGFloat toolbarAdjustment = (hidden ? -1 : 1) * CGRectGetHeight(self.navigationController.toolbar.bounds);
+
+	[UIView animateWithDuration:0.2 animations:^{
+		if ( bottomContentInset == 0 && self.collectionView.contentOffset.y >= bottomContentOffset - toolbarAdjustment) {
+			self.collectionView.contentOffset = CGPointMake(0, bottomContentOffset + toolbarAdjustment);
+		} else if (keyboardVisible) {
+			UIEdgeInsets insets = self.collectionView.contentInset;
+			CGPoint contentOffset = self.collectionView.contentOffset;
+
+			if (hidden) {
+				insets.bottom -= toolbarAdjustment;
+				self.iOS9ToolbarInset = toolbarAdjustment;
+			}
+
+			self.collectionView.contentInset = insets;
+			self.collectionView.contentOffset = contentOffset;
+		}
+	}];
+
+	CGPoint contentOffset = self.collectionView.contentOffset;
+	[self.navigationController setToolbarHidden:hidden animated:YES];
+
+	if (hidden && !keyboardVisible) {
+		contentOffset.y += toolbarAdjustment;
+	}
+
+	self.collectionView.contentOffset = contentOffset;
+}
 
 - (void)maybeAnimateOtherSizeChangeAtIndexPath:(NSIndexPath *)indexPath {
 	if ([self.viewModel typeOfAnswerAtIndexPath:indexPath] == ApptentiveSurveyAnswerTypeOther) {

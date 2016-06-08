@@ -47,6 +47,7 @@
 @property (strong, nonatomic) NSIndexPath *editingIndexPath;
 
 @property (readonly, nonatomic) CGFloat lineHeightOfQuestionFont;
+@property (assign, nonatomic) BOOL shouldRemoveToolbarInset;
 
 @end
 
@@ -454,17 +455,37 @@
 - (void)viewModelValidationChanged:(ApptentiveSurveyViewModel *)viewModel isValid:(BOOL)valid {
 	[self.collectionViewLayout invalidateLayout];
 
-	CGFloat bottomContentOffset = self.collectionView.contentSize.height - CGRectGetHeight(self.collectionView.bounds);
+	CGFloat bottomContentInset = self.collectionView.contentInset.bottom;
+	CGFloat bottomContentOffset = self.collectionView.contentSize.height - CGRectGetHeight(self.collectionView.bounds) + bottomContentInset;
 	CGFloat toolbarAdjustment = (valid ? -1 : 1) * CGRectGetHeight(self.navigationController.toolbar.bounds);
 
 	[UIView animateWithDuration:0.2 animations:^{
-		if (self.collectionView.contentOffset.y >= bottomContentOffset - toolbarAdjustment) {
+		if ( bottomContentInset == 0 && self.collectionView.contentOffset.y >= bottomContentOffset - toolbarAdjustment) {
 			self.collectionView.contentOffset = CGPointMake(0, bottomContentOffset + toolbarAdjustment);
+		} else if (bottomContentInset != 0) {
+			UIEdgeInsets insets = self.collectionView.contentInset;
+			CGPoint contentOffset = self.collectionView.contentOffset;
+
+			if (valid && !self.navigationController.toolbarHidden) {
+				insets.bottom -= toolbarAdjustment;
+			}
+
+			self.collectionView.contentInset = insets;
+			self.collectionView.contentOffset = contentOffset;
 		}
 	}];
 
 	CGPoint contentOffset = self.collectionView.contentOffset;
 	[self.navigationController setToolbarHidden:valid animated:YES];
+
+	// Work around a bug in iOS 9, where if the toolbar is hidden with the keyboard covering it,
+	// the CV's contentInset property is not adjusted accordingly.
+	if (valid && bottomContentInset != 0) {
+		self.shouldRemoveToolbarInset = YES;
+	} else {
+		self.shouldRemoveToolbarInset = NO;
+	}
+
 	self.collectionView.contentOffset = contentOffset;
 
 	for (UICollectionViewCell *cell in self.collectionView.visibleCells) {
@@ -491,6 +512,11 @@
 		self.collectionView.contentInset = UIEdgeInsetsMake(self.collectionView.contentInset.top, self.collectionView.contentInset.left, CGRectGetHeight(self.collectionView.bounds) - keyboardRect.origin.y, self.collectionView.contentInset.right);
 
 		[self.collectionViewLayout invalidateLayout];
+	} else if (self.shouldRemoveToolbarInset) {
+		UIEdgeInsets contentInset = self.collectionView.contentInset;
+		contentInset.bottom -= 44;
+		self.collectionView.contentInset = contentInset;
+		self.shouldRemoveToolbarInset = NO;
 	}
 
 	CGFloat duration = ((NSNumber *)notification.userInfo[UIKeyboardAnimationDurationUserInfoKey]).doubleValue;

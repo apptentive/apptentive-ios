@@ -483,6 +483,7 @@
 
 		[self.collectionViewLayout invalidateLayout];
 	} else if (self.iOS9ToolbarInset != 0) {
+		// Remove any additional inset we added for hiding the toolbar when the keyboard was visible.
 		UIEdgeInsets contentInset = self.collectionView.contentInset;
 		contentInset.bottom += self.iOS9ToolbarInset;
 		self.collectionView.contentInset = contentInset;
@@ -502,7 +503,9 @@
 
 #pragma mark - Private 
 
-// If the survey is scrolled all the way to the bottom, we want to
+// If the survey is scrolled all the way to the bottom, we want to scroll down as the toolbar animates in
+// (and scroll up when it animates out, if necessary).
+// There are a lot of pecularities related to OS version and keyboard visibility we have to deal with as well.
 - (void)setToolbarHidden:(BOOL)hidden {
 	CGFloat bottomContentInset = self.collectionView.contentInset.bottom;
 	BOOL keyboardVisible = bottomContentInset > 0;
@@ -512,20 +515,24 @@
 	[UIView animateWithDuration:0.2 animations:^{
 		if ( bottomContentInset == 0 && self.collectionView.contentOffset.y >= bottomContentOffset - toolbarAdjustment) {
 			self.collectionView.contentOffset = CGPointMake(0, bottomContentOffset + toolbarAdjustment);
-		} else if (keyboardVisible) {
+		} else if (keyboardVisible && hidden) {
+			// If we're hiding the toolbar with the keyboard visible, we need to add in a bit more bottom inset to keep things from moving around.
 			UIEdgeInsets insets = self.collectionView.contentInset;
 			CGPoint contentOffset = self.collectionView.contentOffset;
 
-			if (hidden) {
-				insets.bottom -= toolbarAdjustment;
-				self.iOS9ToolbarInset = toolbarAdjustment;
-			}
+			insets.bottom -= toolbarAdjustment;
+
+			// On iOS9, we need to remember to remove that inset once the keyboard is dismissed.
+			self.iOS9ToolbarInset = toolbarAdjustment;
 
 			self.collectionView.contentInset = insets;
 			self.collectionView.contentOffset = contentOffset;
 		}
 	}];
 
+	// iOS 7 resets the contentOffset to CGPointZero when the toolbar animation takes place.
+	// So we have to save off the content offset and set it back after changing toolbar visibility.
+	// Once we drop iOS 7, all of the following but the call to -setToolbarHidden:animated: can be removed.
 	CGPoint contentOffset = self.collectionView.contentOffset;
 	[self.navigationController setToolbarHidden:hidden animated:YES];
 

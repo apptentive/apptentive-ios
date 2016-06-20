@@ -44,11 +44,6 @@
 		self.answeredQuestions = [NSMutableSet set];
 		self.deselectedIndexPaths = [NSMutableSet set];
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wundeclared-selector"
-		[self.viewModel.styleSheet performSelector:@selector(didBecomeActive:) withObject:nil];
-#pragma clang diagnostic pop
-
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(answeredQuestion:) name:ATSurveyDidAnswerQuestionNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didHide:) name:ATSurveyDidHideWindowNotification object:nil];
 	}

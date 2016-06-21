@@ -86,6 +86,10 @@
 - (NSInteger)numberOfAnswersForQuestionAtIndex:(NSInteger)index {
 	if ([self typeOfQuestionAtIndex:index] == ATSurveyQuestionTypeSingleLine || [self typeOfQuestionAtIndex:index] == ATSurveyQuestionTypeMultipleLine) {
 		return 1;
+	} else if ([self typeOfQuestionAtIndex:index] == ATSurveyQuestionTypeRange) {
+		ApptentiveSurveyQuestion *question = [self questionAtIndex:index];
+
+		return 1 + question.maximumValue - question.minimumValue;
 	} else {
 		return [self questionAtIndex:index].answers.count;
 	}
@@ -191,7 +195,7 @@
 
 	[self.selectedIndexPaths addObject:indexPath];
 
-	if ([self typeOfQuestionAtIndex:indexPath.section] == ATSurveyQuestionTypeSingleSelect) {
+	if ([self typeOfQuestionAtIndex:indexPath.section] == ATSurveyQuestionTypeSingleSelect || [self typeOfQuestionAtIndex:indexPath.section] == ATSurveyQuestionTypeRange) {
 		for (NSInteger answerIndex = 0; answerIndex < [self numberOfAnswersForQuestionAtIndex:indexPath.section]; answerIndex++) {
 			if (answerIndex != indexPath.item) {
 				NSIndexPath *deselectIndexPath = [NSIndexPath indexPathForItem:answerIndex inSection:indexPath.section];
@@ -287,6 +291,14 @@
 
 				break;
 			}
+			case ATSurveyQuestionTypeRange:
+				if (question.required) {
+					if ([self selectedIndexPathsForQuestionAtIndex:questionIndex].count == 0) {
+						[self.invalidQuestionIndexes addIndex:questionIndex];
+					}
+				}
+
+				break;
 		}
 	}];
 
@@ -347,6 +359,15 @@
 				}
 
 				break;
+			case ATSurveyQuestionTypeRange: {
+				NSArray<NSIndexPath *> *selections = [self selectedIndexPathsForQuestionAtIndex:questionIndex];
+
+				if (selections.count == 1) {
+					[responses addObject:@{ @"value": @(selections.firstObject.item + question.minimumValue) }];
+				}
+				break;
+			}
+
 		}
 
 		if (responses.count > 0) {
@@ -401,7 +422,7 @@
 	return answers.count > indexPath.row ? answers[indexPath.row] : nil;
 }
 
-- (NSArray *)selectedIndexPathsForQuestionAtIndex:(NSInteger)index {
+- (NSArray <NSIndexPath *>*)selectedIndexPathsForQuestionAtIndex:(NSInteger)index {
 	NSMutableArray *result = [NSMutableArray array];
 
 	for (NSIndexPath *indexPath in self.selectedIndexPaths) {

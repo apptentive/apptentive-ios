@@ -173,7 +173,25 @@
 				"randomize" : false,
 				"multiline" : true,
 				"required" : true
-			}
+			},
+		   {
+			   "type": "range",
+			   "id": "56d49499c719925f33000022",
+			   "required": false,
+			   "min": -5,
+			   "max": 5,
+			   "min_label": "Negative",
+			   "max_label": "Positive"
+		   },
+		   {
+			   "type": "range",
+			   "id": "56d49499c719925f33000023",
+			   "required": true,
+			   "min": 0,
+			   "max": 10,
+			   "min_label": "Not at all likely",
+			   "max_label": "Extremely likely"
+		   }
 		],
 		"multiple_responses" : true,
 		"name" : "Every Question Type",

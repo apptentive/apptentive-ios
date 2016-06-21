@@ -211,10 +211,12 @@
 
 			return cell;
 		}
+		case ATSurveyQuestionTypeRange:
 		case ATSurveyQuestionTypeSingleSelect:
 		case ATSurveyQuestionTypeMultipleSelect: {
-			NSString *reuseIdentifier = [self.viewModel typeOfQuestionAtIndex:indexPath.section] == ATSurveyQuestionTypeSingleSelect ? @"Radio" : @"Checkbox";
-			UIImage *buttonImage = [[ApptentiveBackend imageNamed:[self.viewModel typeOfQuestionAtIndex:indexPath.section] == ATSurveyQuestionTypeSingleSelect ? @"at_circle" : @"at_checkmark"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+			BOOL multipleSelect = [self.viewModel typeOfQuestionAtIndex:indexPath.section] == ATSurveyQuestionTypeMultipleSelect;
+			NSString *reuseIdentifier = multipleSelect ? @"Checkbox" : @"Radio";
+			UIImage *buttonImage = [[ApptentiveBackend imageNamed:multipleSelect ? @"at_checkmark" : @"at_circle"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 
 			if ([self.viewModel typeOfAnswerAtIndexPath:indexPath] == ApptentiveSurveyAnswerTypeOther) {
 				reuseIdentifier = [reuseIdentifier stringByAppendingString:@"Other"];
@@ -307,7 +309,7 @@
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
 	ATSurveyQuestionType questionType = [self.viewModel typeOfQuestionAtIndex:indexPath.section];
 
-	return (questionType == ATSurveyQuestionTypeMultipleSelect || questionType == ATSurveyQuestionTypeSingleSelect);
+	return (questionType == ATSurveyQuestionTypeMultipleSelect || questionType == ATSurveyQuestionTypeSingleSelect || questionType == ATSurveyQuestionTypeRange);
 }
 
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -337,6 +339,7 @@
 	CGSize itemSize = CGSizeMake(collectionView.bounds.size.width - sectionInset.left - sectionInset.right, 44.0);
 
 	switch ([self.viewModel typeOfQuestionAtIndex:indexPath.section]) {
+		case ATSurveyQuestionTypeRange:
 		case ATSurveyQuestionTypeSingleSelect:
 		case ATSurveyQuestionTypeMultipleSelect: {
 			CGFloat labelWidth = itemSize.width - CHOICE_HORIZONTAL_MARGIN;

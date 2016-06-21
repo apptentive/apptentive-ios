@@ -228,4 +228,25 @@
 	XCTAssertEqualObjects(indexPath, resultIndexPath, @"Index paths should survive being tagged and untagged");
 }
 
+- (void)testRange {
+	[self.viewModel selectAnswerAtIndexPath:[NSIndexPath indexPathForItem:2 inSection:10]];
+
+	XCTAssertEqualObjects(self.viewModel.answers[@"56d49499c719925f33000022"], @[ @{ @"value": @-3 } ]);
+
+	XCTAssertFalse([self.viewModel validate:YES]);
+
+	[self.viewModel selectAnswerAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:1]];
+	[self.viewModel selectAnswerAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:3]];
+	[self.viewModel selectAnswerAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:5]];
+
+	[self.viewModel setText:@"Foo" forAnswerAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:7]];
+	[self.viewModel setText:@"Bar" forAnswerAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:9]];
+
+	[self.viewModel selectAnswerAtIndexPath:[NSIndexPath indexPathForItem:5 inSection:11]];
+
+	XCTAssertEqualObjects(self.viewModel.answers[@"56d49499c719925f33000023"], @[ @{ @"value": @5 } ]);
+
+	XCTAssertTrue([self.viewModel validate:YES]);
+}
+
 @end

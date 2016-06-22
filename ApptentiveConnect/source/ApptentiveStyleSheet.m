@@ -334,8 +334,6 @@ NSString *const ApptentiveColorContextBackground = @"com.apptentive.color.contex
 
 		_fontDescriptorOverrides = [NSMutableDictionary dictionary];
 		_colorOverrides = [NSMutableDictionary dictionary];
-
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
 	}
 	return self;
 }
@@ -361,12 +359,12 @@ NSString *const ApptentiveColorContextBackground = @"com.apptentive.color.contex
 	return defaultColor;
 }
 
-- (void)didBecomeActive:(NSNotification *)notification {
+- (void)inheritDefaultColors {
 	_primaryColor = self.primaryColor ?: [self appearanceColorForClass:[UILabel class] property:@selector(textColor) default:[UIColor blackColor]];
 	_separatorColor = self.separatorColor ?: [self appearanceColorForClass:[UITableView class] property:@selector(separatorColor) default:[UIColor colorWithRed:199.0 / 255.0 green:200.0 / 255.0 blue:204.0 / 255.0 alpha:1.0]];
 	_backgroundColor = self.backgroundColor ?: [self appearanceColorForClass:[UITableViewCell class] property:@selector(backgroundColor) default:[UIColor whiteColor]];
 	_collectionBackgroundColor = self.collectionBackgroundColor ?: [self appearanceColorForClass:[UITableView class] property:@selector(backgroundColor) default:[UIColor groupTableViewBackgroundColor]];
-	_placeholderColor = self.placeholderColor ?: [UIColor colorWithRed:0 green:0 blue:25.0/255.0 alpha:56.0/255.0];
+	_placeholderColor = self.placeholderColor ?: [UIColor colorWithRed:0 green:0 blue:25.0 / 255.0 alpha:56.0 / 255.0];
 }
 
 - (void)setFontDescriptor:(UIFontDescriptor *)fontDescriptor forStyle:(NSString *)textStyle {
@@ -452,6 +450,11 @@ NSString *const ApptentiveColorContextBackground = @"com.apptentive.color.contex
 }
 
 - (UIColor *)colorForStyle:(NSString *)style {
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		[self inheritDefaultColors];
+	});
+
 	UIColor *result = self.colorOverrides[style];
 
 	if (result) {

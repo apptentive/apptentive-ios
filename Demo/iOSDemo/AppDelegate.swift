@@ -23,8 +23,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 		if let APIKey = NSUserDefaults.standardUserDefaults().stringForKey(APIKeyKey) {
 			self.connectWithAPIKey(APIKey)
-		} else {
-			print("\(Apptentive.sharedConnection())")
 		}
 
 		return true

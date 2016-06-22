@@ -8,6 +8,7 @@
 
 #import "ApptentiveSurveyOtherCell.h"
 
+
 @implementation ApptentiveSurveyOtherCell
 
 - (void)awakeFromNib {

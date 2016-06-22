@@ -81,7 +81,7 @@ The secondary text color to use in the Apptentive UI. Defaults to #8E8E93.
 /// The color to use for the background of collection views and grouped table views.
 @property (strong, nonatomic) UIColor *collectionBackgroundColor;
 
-/// The color used for text field placeholder text. The recommended color is the value for `primaryColor` with an alpha value of around 0.22. 
+/// The color used for text field placeholder text. The recommended color is the value for `primaryColor` with an alpha value of around 0.22.
 @property (strong, nonatomic) UIColor *placeholderColor;
 
 /// A global multiplier applied to all font sizes other than those with explicit overrides.

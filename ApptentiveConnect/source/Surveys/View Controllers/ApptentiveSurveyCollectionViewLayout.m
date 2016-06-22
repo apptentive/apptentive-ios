@@ -54,7 +54,7 @@
 		layoutAttributes.backgroundColor = [(id<ApptentiveCollectionViewDataSource>)self.collectionView.dataSource backgroundColor];
 	}
 
-	layoutAttributes.frame = UIEdgeInsetsInsetRect(CGRectMake(origin.x, origin.y, size.width, size.height), self.sectionInset	);
+	layoutAttributes.frame = UIEdgeInsetsInsetRect(CGRectMake(origin.x, origin.y, size.width, size.height), self.sectionInset);
 	layoutAttributes.zIndex = -1;
 
 	return layoutAttributes;

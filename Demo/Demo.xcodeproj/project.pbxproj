@@ -13,7 +13,6 @@
 		014B260D1CD16F72009BE289 /* Defaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 019958D31CD13A320044A185 /* Defaults.plist */; };
 		014B26111CD27D67009BE289 /* CustomDataCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014B26101CD27D67009BE289 /* CustomDataCell.swift */; };
 		014B26131CD2994B009BE289 /* ConnectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014B26121CD2994B009BE289 /* ConnectionViewController.swift */; };
-		018C24C71CD3F90B00AC8276 /* Mocks in Resources */ = {isa = PBXBuildFile; fileRef = 018C24C61CD3F90B00AC8276 /* Mocks */; };
 		019959021CD15DFA0044A185 /* EventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019959011CD15DFA0044A185 /* EventsViewController.swift */; };
 		019959041CD15E180044A185 /* InteractionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019959031CD15E180044A185 /* InteractionsViewController.swift */; };
 		019959061CD15E2A0044A185 /* MessagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019959051CD15E2A0044A185 /* MessagesViewController.swift */; };
@@ -77,7 +76,6 @@
 		014B26101CD27D67009BE289 /* CustomDataCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomDataCell.swift; sourceTree = "<group>"; };
 		014B26121CD2994B009BE289 /* ConnectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConnectionViewController.swift; sourceTree = "<group>"; };
 		018C24C51CD3F82500AC8276 /* iOSDemoUITests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "iOSDemoUITests-Bridging-Header.h"; sourceTree = "<group>"; };
-		018C24C61CD3F90B00AC8276 /* Mocks */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Mocks; sourceTree = "<group>"; };
 		019958CE1CD1375A0044A185 /* Apptentive.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Apptentive.h; path = ../../ApptentiveConnect/source/Apptentive.h; sourceTree = "<group>"; };
 		019958CF1CD137640044A185 /* Apptentive_Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Apptentive_Private.h; path = ../../ApptentiveConnect/source/Apptentive_Private.h; sourceTree = "<group>"; };
 		019958D01CD137CA0044A185 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -188,7 +186,6 @@
 		01FA581E1CD03B7800CF132B /* iOSDemoUITests */ = {
 			isa = PBXGroup;
 			children = (
-				018C24C61CD3F90B00AC8276 /* Mocks */,
 				01FA581F1CD03B7800CF132B /* iOSDemoUITests.swift */,
 				01FA58211CD03B7800CF132B /* Info.plist */,
 				018C24C51CD3F82500AC8276 /* iOSDemoUITests-Bridging-Header.h */,
@@ -321,7 +318,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				018C24C71CD3F90B00AC8276 /* Mocks in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

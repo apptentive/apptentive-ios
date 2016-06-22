@@ -9,12 +9,13 @@
 
 #import <UIKit/UIKit.h>
 
-#define kApptentiveVersionString @"3.1.0"
+#define kApptentiveVersionString @"3.1.1"
 #define kApptentivePlatformString @"iOS"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol ApptentiveDelegate, ApptentiveStyle;
+@protocol ApptentiveDelegate
+, ApptentiveStyle;
 
 /** Notification sent when Message Center unread messages count changes. */
 extern NSString *const ApptentiveMessageCenterUnreadCountChangedNotification;

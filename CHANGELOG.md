@@ -1,3 +1,9 @@
+2016-06-21 frankus v3.1.1
+-------------------------
+Version 3.1.1 fixes an issue where surveys could crash if the Apptentive
+singleton was instantiated after the app became active. It also improves the
+scrolling behavior in surveys.
+
 2016-06-08 frankus v3.1.0
 -------------------------
 Version 3.1.0 adds the ability to include a freeform "Other" choice for single-

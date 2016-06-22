@@ -30,11 +30,6 @@
 	[UITableView appearance].separatorColor = [UIColor redColor];
 	[UITableView appearanceWhenContainedIn:[ApptentiveNavigationController class], nil].backgroundColor = [UIColor greenColor];
 
-	XCTAssertNotEqualObjects([self.styleSheet colorForStyle:ApptentiveColorSeparator], [UIColor redColor]);
-	XCTAssertNotEqualObjects([self.styleSheet colorForStyle:ApptentiveColorCollectionBackground], [UIColor greenColor]);
-
-	[[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationDidBecomeActiveNotification object:nil];
-
 	XCTAssertEqualObjects([self.styleSheet colorForStyle:ApptentiveColorSeparator], [UIColor redColor]);
 	XCTAssertEqualObjects([self.styleSheet colorForStyle:ApptentiveColorCollectionBackground], [UIColor greenColor]);
 }

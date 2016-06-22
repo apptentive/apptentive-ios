@@ -837,7 +837,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.profileView.skipButton.hidden = NO;
 	self.profileView.titleLabel.text = self.interaction.profileEditTitle;
 
-	NSDictionary *placeholderAttributes = @{ NSForegroundColorAttributeName: [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveColorTextInputPlaceholder] };
+	NSDictionary *placeholderAttributes = @{NSForegroundColorAttributeName: [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveColorTextInputPlaceholder]};
 	self.profileView.nameField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:self.interaction.profileEditNamePlaceholder attributes:placeholderAttributes];
 	self.profileView.emailField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:self.interaction.profileEditEmailPlaceholder attributes:placeholderAttributes];
 
@@ -1171,7 +1171,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	CGFloat verticalOffset = CGRectGetMaxY(self.rectOfLastMessage) + footerSpace;
 	CGFloat toolbarHeight = self.navigationController.toolbarHidden ? 0 : CGRectGetHeight(self.navigationController.toolbar.bounds);
 
-	CGFloat iOS7FudgeFactor =  isIOS7 && self.view.window == nil ? topContentInset : 0;
+	CGFloat iOS7FudgeFactor = isIOS7 && self.view.window == nil ? topContentInset : 0;
 	CGFloat heightOfVisibleView = fmin(CGRectGetMinY(localKeyboardRect), CGRectGetHeight(self.view.bounds) - toolbarHeight - iOS7FudgeFactor);
 	CGFloat verticalOffsetMaximum = fmax(-64, self.tableView.contentSize.height - heightOfVisibleView);
 

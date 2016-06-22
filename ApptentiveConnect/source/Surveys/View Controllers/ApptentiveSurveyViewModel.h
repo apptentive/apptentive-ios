@@ -12,7 +12,8 @@
 
 @class ApptentiveSurvey, ApptentiveInteraction;
 
-@protocol ATSurveyViewModelDelegate, ApptentiveStyle;
+@protocol ATSurveyViewModelDelegate
+, ApptentiveStyle;
 
 
 @interface ApptentiveSurveyViewModel : NSObject

@@ -132,7 +132,7 @@
 		placeholder = [self answerAtIndexPath:indexPath].placeholder ?: @"";
 	}
 
-	return [[NSAttributedString alloc] initWithString:placeholder attributes:@{ NSForegroundColorAttributeName: [self.styleSheet colorForStyle:ApptentiveColorTextInputPlaceholder] }];
+	return [[NSAttributedString alloc] initWithString:placeholder attributes:@{NSForegroundColorAttributeName: [self.styleSheet colorForStyle:ApptentiveColorTextInputPlaceholder]}];
 }
 
 - (NSString *)textOfChoiceAtIndexPath:(NSIndexPath *)indexPath {
@@ -302,7 +302,7 @@
 		self.invalidQuestionIndexes = redToGreenQuestionIndexes;
 
 		NSMutableSet *redToGreenAnswerIndexPaths = [self.invalidAnswerIndexPaths mutableCopy];
-		[self.invalidAnswerIndexPaths enumerateObjectsUsingBlock:^(id  _Nonnull obj, BOOL * _Nonnull stop) {
+		[self.invalidAnswerIndexPaths enumerateObjectsUsingBlock:^(id _Nonnull obj, BOOL *_Nonnull stop) {
 			if (![previousInvalidAnswerIndexPaths containsObject:obj]) {
 				[redToGreenAnswerIndexPaths removeObject:obj];
 			}
@@ -427,7 +427,7 @@
 			response[@"value"] = [self trimmedTextAtIndexPath:indexPath] ?: @"";
 		}
 	}
-	
+
 	return response;
 }
 

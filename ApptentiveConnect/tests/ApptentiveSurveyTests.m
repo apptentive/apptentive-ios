@@ -44,11 +44,6 @@
 		self.answeredQuestions = [NSMutableSet set];
 		self.deselectedIndexPaths = [NSMutableSet set];
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wundeclared-selector"
-		[self.viewModel.styleSheet performSelector:@selector(didBecomeActive:) withObject:nil];
-#pragma clang diagnostic pop
-
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(answeredQuestion:) name:ATSurveyDidAnswerQuestionNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didHide:) name:ATSurveyDidHideWindowNotification object:nil];
 	}
@@ -187,13 +182,14 @@
 	[self.viewModel setText:@" Foo " forAnswerAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:7]];
 	[self.viewModel setText:@" Bar\n" forAnswerAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:9]];
 
-	NSDictionary *answer = @{ @"id": @"56d49499c719925f3300000b", @"value": @"Other Text" };
-	XCTAssertEqualObjects(self.viewModel.answers[@"56d49499c719925f3300000b"], @[ answer ]);
-	XCTAssertEqualObjects(self.viewModel.answers[@"56d49499c719925f33000011"], @[ @{ @"id": @"56d49499c719925f33000012" }]);
-	XCTAssertEqualObjects(self.viewModel.answers[@"56d49499c719925f33000019"], @[ @{ @"id": @"56d49499c719925f3300001a" }] );
+	NSDictionary *answer = @{ @"id": @"56d49499c719925f3300000b",
+		@"value": @"Other Text" };
+	XCTAssertEqualObjects(self.viewModel.answers[@"56d49499c719925f3300000b"], @[answer]);
+	XCTAssertEqualObjects(self.viewModel.answers[@"56d49499c719925f33000011"], @[@{ @"id": @"56d49499c719925f33000012" }]);
+	XCTAssertEqualObjects(self.viewModel.answers[@"56d49499c719925f33000019"], @[@{ @"id": @"56d49499c719925f3300001a" }]);
 
-	XCTAssertEqualObjects(self.viewModel.answers[@"56d49499c719925f3300001f"], @[ @{ @"value": @"Foo" } ]);
-	XCTAssertEqualObjects(self.viewModel.answers[@"56d49499c719925f33000021"], @[ @{ @"value": @"Bar" } ]);
+	XCTAssertEqualObjects(self.viewModel.answers[@"56d49499c719925f3300001f"], @[@{ @"value": @"Foo" }]);
+	XCTAssertEqualObjects(self.viewModel.answers[@"56d49499c719925f33000021"], @[@{ @"value": @"Bar" }]);
 }
 
 - (void)testMetrics {

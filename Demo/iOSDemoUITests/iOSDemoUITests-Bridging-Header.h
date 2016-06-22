@@ -9,7 +9,6 @@
 #ifndef iOSDemoUITests_Bridging_Header_h
 #define iOSDemoUITests_Bridging_Header_h
 
-#import <Mocktail/Mocktail.h>
 #import "Apptentive_Private.h"
 
 #endif /* iOSDemoUITests_Bridging_Header_h */

@@ -417,7 +417,12 @@
 
 - (NSDictionary *)responseDictionaryForAnswerAtIndexPath:(NSIndexPath *)indexPath {
 	ApptentiveSurveyAnswer *answer = [self answerAtIndexPath:indexPath];
-	NSMutableDictionary *response = [NSMutableDictionary dictionaryWithObject:answer.identifier forKey:@"id"];
+	NSMutableDictionary *response = [NSMutableDictionary dictionaryWithCapacity:2];
+
+	NSString *answerIdentifier = answer.identifier;
+	if (answerIdentifier != nil) {
+		response[@"id"] = answerIdentifier;
+	}
 
 	if (answer.type == ApptentiveSurveyAnswerTypeOther) {
 		response[@"value"] = [self trimmedTextAtIndexPath:indexPath] ?: @"";

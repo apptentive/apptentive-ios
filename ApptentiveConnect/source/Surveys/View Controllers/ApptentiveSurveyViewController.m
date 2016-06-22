@@ -501,7 +501,7 @@
 	}];
 }
 
-#pragma mark - Private 
+#pragma mark - Private
 
 // If the survey is scrolled all the way to the bottom, we want to scroll down as the toolbar animates in
 // (and scroll up when it animates out, if necessary).

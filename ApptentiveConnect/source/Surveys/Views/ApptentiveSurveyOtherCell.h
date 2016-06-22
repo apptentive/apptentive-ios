@@ -8,6 +8,7 @@
 
 #import "ApptentiveSurveyChoiceCell.h"
 
+
 @interface ApptentiveSurveyOtherCell : ApptentiveSurveyChoiceCell
 
 @property (strong, nonatomic) IBOutlet UITextField *textField;

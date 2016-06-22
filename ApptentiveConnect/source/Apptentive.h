@@ -14,7 +14,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol ApptentiveDelegate, ApptentiveStyle;
+@protocol ApptentiveDelegate
+, ApptentiveStyle;
 
 /** Notification sent when Message Center unread messages count changes. */
 extern NSString *const ApptentiveMessageCenterUnreadCountChangedNotification;

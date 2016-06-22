@@ -45,6 +45,9 @@
 
 - (NSString *)textOfAnswerAtIndexPath:(NSIndexPath *)indexPath;
 - (NSString *)textOfChoiceAtIndexPath:(NSIndexPath *)indexPath;
+- (NSString *)minimumLabelForQuestionAtIndex:(NSInteger)index;
+- (NSString *)maximumLabelForQuestionAtIndex:(NSInteger)index;
+
 - (BOOL)answerIsSelectedAtIndexPath:(NSIndexPath *)indexPath;
 - (BOOL)answerIsValidAtIndexPath:(NSIndexPath *)indexPath;
 - (BOOL)answerIsValidForQuestionAtIndex:(NSInteger)index;

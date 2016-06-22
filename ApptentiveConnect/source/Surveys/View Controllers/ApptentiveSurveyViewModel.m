@@ -159,6 +159,14 @@
 	return [self answerAtIndexPath:indexPath].type;
 }
 
+- (NSString *)minimumLabelForQuestionAtIndex:(NSInteger)index {
+	return [self questionAtIndex:index].minimumLabel;
+}
+
+- (NSString *)maximumLabelForQuestionAtIndex:(NSInteger)index {
+	return [self questionAtIndex:index].maximumLabel;
+}
+
 - (BOOL)answerIsValidForQuestionAtIndex:(NSInteger)index {
 	return ![self.invalidQuestionIndexes containsIndex:index];
 }

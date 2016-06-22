@@ -103,6 +103,8 @@
 		017D97471B0E5795004E045C /* ApptentiveMessageCenterMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 017D97451B0E5795004E045C /* ApptentiveMessageCenterMessageCell.m */; };
 		017D974A1B0E57C2004E045C /* ApptentiveMessageCenterReplyCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 017D97481B0E57C2004E045C /* ApptentiveMessageCenterReplyCell.h */; };
 		017D974B1B0E57C2004E045C /* ApptentiveMessageCenterReplyCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 017D97491B0E57C2004E045C /* ApptentiveMessageCenterReplyCell.m */; };
+		018389051D1A0D6100780B8E /* ApptentiveSurveyQuestionFooterView.h in Headers */ = {isa = PBXBuildFile; fileRef = 018389031D1A0D6100780B8E /* ApptentiveSurveyQuestionFooterView.h */; };
+		018389061D1A0D6100780B8E /* ApptentiveSurveyQuestionFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 018389041D1A0D6100780B8E /* ApptentiveSurveyQuestionFooterView.m */; };
 		019A63CB1C4DA5BE00DD5EBF /* Apptentive+Debugging.h in Headers */ = {isa = PBXBuildFile; fileRef = 019A63C91C4DA5BE00DD5EBF /* Apptentive+Debugging.h */; };
 		01A88FF81AFBFFAE002C49E7 /* testJsonDiffing.1.expected.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A88FF31AFBFDB6002C49E7 /* testJsonDiffing.1.expected.json */; };
 		01A88FF91AFBFFAE002C49E7 /* testJsonDiffing.1.new.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A88FF41AFBFDB6002C49E7 /* testJsonDiffing.1.new.json */; };
@@ -454,6 +456,8 @@
 		017D97451B0E5795004E045C /* ApptentiveMessageCenterMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveMessageCenterMessageCell.m; sourceTree = "<group>"; };
 		017D97481B0E57C2004E045C /* ApptentiveMessageCenterReplyCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveMessageCenterReplyCell.h; sourceTree = "<group>"; };
 		017D97491B0E57C2004E045C /* ApptentiveMessageCenterReplyCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveMessageCenterReplyCell.m; sourceTree = "<group>"; };
+		018389031D1A0D6100780B8E /* ApptentiveSurveyQuestionFooterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveSurveyQuestionFooterView.h; sourceTree = "<group>"; };
+		018389041D1A0D6100780B8E /* ApptentiveSurveyQuestionFooterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveSurveyQuestionFooterView.m; sourceTree = "<group>"; };
 		019A63C91C4DA5BE00DD5EBF /* Apptentive+Debugging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Apptentive+Debugging.h"; sourceTree = "<group>"; };
 		019A63CA1C4DA5BE00DD5EBF /* Apptentive+Debugging.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Apptentive+Debugging.m"; sourceTree = "<group>"; };
 		019CEBE91BDEDDE100CCEC97 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
@@ -827,6 +831,8 @@
 				014745BC1C863A0700542951 /* ApptentiveSurveyGreetingView.m */,
 				01382B401CDAB93400D57608 /* ApptentiveSurveyOtherCell.h */,
 				01382B411CDAB93400D57608 /* ApptentiveSurveyOtherCell.m */,
+				018389031D1A0D6100780B8E /* ApptentiveSurveyQuestionFooterView.h */,
+				018389041D1A0D6100780B8E /* ApptentiveSurveyQuestionFooterView.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1630,6 +1636,7 @@
 				01F1A9601B6823CD0088DBF0 /* ApptentiveAboutViewController.h in Headers */,
 				49509A61135658E200793EEC /* ApptentiveReachability.h in Headers */,
 				0132F8C51C851C0800A452E3 /* ApptentiveSurveyAnswerCell.h in Headers */,
+				018389051D1A0D6100780B8E /* ApptentiveSurveyQuestionFooterView.h in Headers */,
 				01B147B31B5D8D3A0000D041 /* ApptentiveMessageCenterProfileView.h in Headers */,
 				588F664A1B601F0B00F388E3 /* ApptentiveMessageCenterContextMessageCell.h in Headers */,
 				01C30CEB1B0D09F8006BC911 /* ApptentiveMessageCenterGreetingView.h in Headers */,
@@ -1992,6 +1999,7 @@
 				499912A9161B6AF700FDA15F /* ATWebClient+MessageCenter.m in Sources */,
 				4961A403161BBD7000E30037 /* ApptentiveMessageTask.m in Sources */,
 				01C30CEC1B0D09F8006BC911 /* ApptentiveMessageCenterGreetingView.m in Sources */,
+				018389061D1A0D6100780B8E /* ApptentiveSurveyQuestionFooterView.m in Sources */,
 				4961A40C161BBE0800E30037 /* ApptentivePersonUpdater.m in Sources */,
 				01D0C38D1BF3DC330024BA1A /* ApptentiveAttachmentController.m in Sources */,
 				4961A410161BBE1F00E30037 /* ApptentiveDeviceUpdater.m in Sources */,

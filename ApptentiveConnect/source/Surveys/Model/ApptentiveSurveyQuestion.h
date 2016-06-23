@@ -12,7 +12,8 @@ typedef NS_ENUM(NSInteger, ATSurveyQuestionType) {
 	ATSurveyQuestionTypeSingleSelect,
 	ATSurveyQuestionTypeMultipleSelect,
 	ATSurveyQuestionTypeSingleLine,
-	ATSurveyQuestionTypeMultipleLine
+	ATSurveyQuestionTypeMultipleLine,
+	ATSurveyQuestionTypeRange
 };
 
 @class ApptentiveSurveyAnswer;
@@ -30,6 +31,11 @@ typedef NS_ENUM(NSInteger, ATSurveyQuestionType) {
 @property (readonly, nonatomic) BOOL required;
 @property (readonly, nonatomic) NSInteger minimumSelectedCount;
 @property (readonly, nonatomic) NSInteger maximumSelectedCount;
+
+@property (readonly, nonatomic) NSInteger minimumValue;
+@property (readonly, nonatomic) NSInteger maximumValue;
+@property (readonly, nonatomic) NSString *minimumLabel;
+@property (readonly, nonatomic) NSString *maximumLabel;
 
 @property (readonly, nonatomic) NSArray<ApptentiveSurveyAnswer *> *answers;
 

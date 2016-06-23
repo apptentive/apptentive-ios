@@ -29,7 +29,11 @@
 		NSMutableArray *mutableQuestions = [NSMutableArray array];
 
 		for (NSDictionary *questionJSON in JSON[@"questions"]) {
-			[mutableQuestions addObject:[[ApptentiveSurveyQuestion alloc] initWithJSON:questionJSON]];
+			ApptentiveSurveyQuestion *question = [[ApptentiveSurveyQuestion alloc] initWithJSON:questionJSON];
+
+			if (question) {
+				[mutableQuestions addObject:question];
+			}
 		}
 
 		_questions = [mutableQuestions copy];

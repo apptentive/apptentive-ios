@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -1299,13 +1299,13 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
             <objects>
                 <collectionViewController id="0Su-Sq-q29" customClass="ApptentiveSurveyViewController" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" keyboardDismissMode="interactive" dataMode="prototypes" id="f2T-ot-d9N" customClass="ApptentiveSurveyCollectionView">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="800"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="Nth-y4-abX" customClass="ApptentiveSurveyCollectionViewLayout">
                             <size key="itemSize" width="306" height="44"/>
                             <size key="headerReferenceSize" width="306" height="71"/>
-                            <size key="footerReferenceSize" width="50" height="12"/>
+                            <size key="footerReferenceSize" width="50" height="31"/>
                             <inset key="sectionInset" minX="7" minY="6" maxX="7" maxY="0.0"/>
                         </collectionViewFlowLayout>
                         <cells>
@@ -1318,6 +1318,9 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
                                     <subviews>
                                         <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="f7n-H0-eAD" customClass="ApptentiveSurveyOptionButton">
                                             <rect key="frame" x="18" y="11" width="22" height="22"/>
+                                            <accessibility key="accessibilityConfiguration">
+                                                <accessibilityTraits key="traits" notEnabled="YES"/>
+                                            </accessibility>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="22" id="ElD-zZ-Wiw"/>
                                                 <constraint firstAttribute="width" constant="22" id="Uah-YA-HbC"/>
@@ -1330,6 +1333,9 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
                                         </button>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Radio" textAlignment="natural" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XeR-GW-QUi">
                                             <rect key="frame" x="51" y="11" width="236" height="22"/>
+                                            <accessibility key="accessibilityConfiguration">
+                                                <accessibilityTraits key="traits" notEnabled="YES"/>
+                                            </accessibility>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
@@ -1351,8 +1357,59 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
                                     <outlet property="textLabel" destination="XeR-GW-QUi" id="uot-NF-XjQ"/>
                                 </connections>
                             </collectionViewCell>
+                            <collectionViewCell opaque="NO" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Range" id="okc-Va-SE3" userLabel="Range" customClass="ApptentiveSurveyChoiceCell">
+                                <rect key="frame" x="123.5" y="185" width="73" height="79"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                    <rect key="frame" x="0.0" y="0.0" width="73" height="79"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="characterWrap" baselineAdjustment="alignBaselines" minimumFontSize="9" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="36H-6w-wxR">
+                                            <rect key="frame" x="26.5" y="11" width="20" height="27"/>
+                                            <accessibility key="accessibilityConfiguration">
+                                                <accessibilityTraits key="traits" notEnabled="YES"/>
+                                            </accessibility>
+                                            <constraints>
+                                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="20" id="awe-3S-hLc"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="V0d-qS-AUl" customClass="ApptentiveSurveyOptionButton">
+                                            <rect key="frame" x="25" y="49" width="22" height="22"/>
+                                            <accessibility key="accessibilityConfiguration">
+                                                <accessibilityTraits key="traits" notEnabled="YES"/>
+                                            </accessibility>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="22" id="SUc-ta-9Xx"/>
+                                                <constraint firstAttribute="height" constant="22" id="fFx-iS-OmJ"/>
+                                            </constraints>
+                                            <state key="normal" image="at_circle.png"/>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="style">
+                                                    <integer key="value" value="1"/>
+                                                </userDefinedRuntimeAttribute>
+                                            </userDefinedRuntimeAttributes>
+                                        </button>
+                                    </subviews>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
+                                <constraints>
+                                    <constraint firstItem="V0d-qS-AUl" firstAttribute="centerX" secondItem="okc-Va-SE3" secondAttribute="centerX" id="7xp-1S-nzf"/>
+                                    <constraint firstAttribute="bottom" secondItem="V0d-qS-AUl" secondAttribute="bottom" constant="8" id="Bab-3i-auf"/>
+                                    <constraint firstItem="36H-6w-wxR" firstAttribute="centerX" secondItem="okc-Va-SE3" secondAttribute="centerX" id="XEh-XC-HGf"/>
+                                    <constraint firstItem="V0d-qS-AUl" firstAttribute="top" secondItem="36H-6w-wxR" secondAttribute="bottom" constant="11" id="a3h-aP-EkV"/>
+                                    <constraint firstItem="36H-6w-wxR" firstAttribute="top" secondItem="okc-Va-SE3" secondAttribute="top" constant="11" id="u07-DV-fpx"/>
+                                </constraints>
+                                <size key="customSize" width="73" height="79"/>
+                                <connections>
+                                    <outlet property="button" destination="V0d-qS-AUl" id="44g-BD-6lW"/>
+                                    <outlet property="textLabel" destination="36H-6w-wxR" id="Mbv-9f-JZ9"/>
+                                </connections>
+                            </collectionViewCell>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="RadioOther" id="qJB-CQ-0Wg" customClass="ApptentiveSurveyOtherCell">
-                                <rect key="frame" x="7" y="185" width="306" height="88"/>
+                                <rect key="frame" x="7" y="264" width="306" height="88"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                     <rect key="frame" x="0.0" y="0.0" width="306" height="88"/>
@@ -1360,6 +1417,9 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
                                     <subviews>
                                         <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wHI-hM-kSE" customClass="ApptentiveSurveyOptionButton">
                                             <rect key="frame" x="18" y="11" width="22" height="22"/>
+                                            <accessibility key="accessibilityConfiguration">
+                                                <accessibilityTraits key="traits" notEnabled="YES"/>
+                                            </accessibility>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="22" id="IC7-BF-sAa"/>
                                                 <constraint firstAttribute="height" constant="22" id="ijf-RF-rCQ"/>
@@ -1372,6 +1432,9 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
                                         </button>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Radio with Other" textAlignment="natural" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xYx-2t-KcO">
                                             <rect key="frame" x="51" y="11" width="236" height="22"/>
+                                            <accessibility key="accessibilityConfiguration">
+                                                <accessibilityTraits key="traits" notEnabled="YES"/>
+                                            </accessibility>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
@@ -1407,7 +1470,7 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
                                 </connections>
                             </collectionViewCell>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Checkbox" id="VvL-CQ-YLL" customClass="ApptentiveSurveyChoiceCell">
-                                <rect key="frame" x="7" y="273" width="306" height="44"/>
+                                <rect key="frame" x="7" y="352" width="306" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                     <rect key="frame" x="0.0" y="0.0" width="306" height="44"/>
@@ -1415,6 +1478,9 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
                                     <subviews>
                                         <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zb3-bq-5N3" customClass="ApptentiveSurveyOptionButton">
                                             <rect key="frame" x="19" y="12" width="20" height="20"/>
+                                            <accessibility key="accessibilityConfiguration">
+                                                <accessibilityTraits key="traits" notEnabled="YES"/>
+                                            </accessibility>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="20" id="0t0-ZR-qwB"/>
                                                 <constraint firstAttribute="width" constant="20" id="hbd-Jb-ASu"/>
@@ -1427,6 +1493,9 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
                                         </button>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Checkmark" textAlignment="natural" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jfd-bx-kqH">
                                             <rect key="frame" x="51" y="11" width="236" height="22"/>
+                                            <accessibility key="accessibilityConfiguration">
+                                                <accessibilityTraits key="traits" notEnabled="YES"/>
+                                            </accessibility>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
@@ -1449,7 +1518,7 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
                                 </connections>
                             </collectionViewCell>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="CheckboxOther" id="331-1u-Jzv" customClass="ApptentiveSurveyOtherCell">
-                                <rect key="frame" x="7" y="317" width="306" height="88"/>
+                                <rect key="frame" x="7" y="396" width="306" height="88"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                     <rect key="frame" x="0.0" y="0.0" width="306" height="88"/>
@@ -1504,7 +1573,7 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
                                 </connections>
                             </collectionViewCell>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="MultilineText" id="UoN-6d-m4i" customClass="ApptentiveSurveyMultilineCell">
-                                <rect key="frame" x="7" y="405" width="306" height="88"/>
+                                <rect key="frame" x="7" y="484" width="306" height="88"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                     <rect key="frame" x="0.0" y="0.0" width="306" height="88"/>
@@ -1545,7 +1614,7 @@ Lines</string>
                                 </connections>
                             </collectionViewCell>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="SingleLineText" id="I2g-uG-Caj" customClass="ApptentiveSurveySingleLineCell">
-                                <rect key="frame" x="7" y="493" width="306" height="44"/>
+                                <rect key="frame" x="7" y="572" width="306" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                     <rect key="frame" x="0.0" y="0.0" width="306" height="44"/>
@@ -1616,9 +1685,39 @@ Lines</string>
                                 <outlet property="textLabel" destination="TTZ-vQ-g60" id="6L4-Zq-2W3"/>
                             </connections>
                         </collectionReusableView>
-                        <collectionReusableView key="sectionFooterView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Footer" id="0F3-e9-lGf">
-                            <rect key="frame" x="0.0" y="537" width="320" height="12"/>
+                        <collectionReusableView key="sectionFooterView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Footer" id="0F3-e9-lGf" customClass="ApptentiveSurveyQuestionFooterView">
+                            <rect key="frame" x="0.0" y="616" width="320" height="31"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Not at all likely" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yOh-Cb-cM5">
+                                    <rect key="frame" x="16" y="8.5" width="83" height="15"/>
+                                    <accessibility key="accessibilityConfiguration">
+                                        <accessibilityTraits key="traits" none="YES"/>
+                                    </accessibility>
+                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Extremely likely" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AXc-9K-wCm">
+                                    <rect key="frame" x="216" y="8.5" width="88" height="15"/>
+                                    <accessibility key="accessibilityConfiguration">
+                                        <accessibilityTraits key="traits" none="YES"/>
+                                    </accessibility>
+                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                            <constraints>
+                                <constraint firstItem="yOh-Cb-cM5" firstAttribute="leading" secondItem="0F3-e9-lGf" secondAttribute="leading" constant="16" id="FjM-WB-ckd"/>
+                                <constraint firstAttribute="bottom" secondItem="AXc-9K-wCm" secondAttribute="bottom" constant="8" id="NBo-Gp-j7j"/>
+                                <constraint firstAttribute="trailing" secondItem="AXc-9K-wCm" secondAttribute="trailing" constant="16" id="d76-x7-zgG"/>
+                                <constraint firstAttribute="bottom" secondItem="yOh-Cb-cM5" secondAttribute="bottom" constant="8" id="qhy-Lq-scW"/>
+                            </constraints>
+                            <connections>
+                                <outlet property="maximumLabel" destination="AXc-9K-wCm" id="nbq-XT-Gqv"/>
+                                <outlet property="minimumLabel" destination="yOh-Cb-cM5" id="fvF-pE-eDb"/>
+                            </connections>
                         </collectionReusableView>
                         <connections>
                             <outlet property="dataSource" destination="0Su-Sq-q29" id="RKu-Gn-4Gz"/>
@@ -1636,6 +1735,8 @@ Lines</string>
                         </barButtonItem>
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <size key="freeformSize" width="320" height="800"/>
                     <connections>
                         <outlet property="footerBackgroundView" destination="j6Y-7N-uj9" id="Pzp-uN-bkE"/>
                         <outlet property="footerView" destination="bBK-pb-4Z7" id="fuG-Zm-GSj"/>
@@ -1731,6 +1832,7 @@ Lines</string>
         </scene>
     </scenes>
     <resources>
+        <image name="at_circle.png" width="6" height="6"/>
         <image name="at_update_logo.png" width="85" height="16"/>
     </resources>
 </document>

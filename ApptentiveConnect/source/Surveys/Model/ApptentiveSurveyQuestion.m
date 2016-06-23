@@ -22,8 +22,12 @@
 			_type = ATSurveyQuestionTypeMultipleSelect;
 		} else if ([type isEqualToString:@"multichoice"]) {
 			_type = ATSurveyQuestionTypeSingleSelect;
-		} else {
+		} else if ([type isEqualToString:@"range"]) {
+			_type = ATSurveyQuestionTypeRange;
+		} else if ([type isEqualToString:@"singleline"]) {
 			_type = [JSON[@"multiline"] boolValue] ? ATSurveyQuestionTypeMultipleLine : ATSurveyQuestionTypeSingleLine;
+		} else {
+			return nil;
 		}
 
 		_identifier = JSON[@"id"];
@@ -42,11 +46,24 @@
 
 		NSMutableArray *mutableAnswers = [NSMutableArray array];
 
-		for (NSDictionary *answerJSON in JSON[@"answer_choices"]) {
-			[mutableAnswers addObject:[[ApptentiveSurveyAnswer alloc] initWithJSON:answerJSON]];
+		if (_type == ATSurveyQuestionTypeRange) {
+			_minimumValue = [(JSON[@"min"] ?: @0) integerValue];
+			_maximumValue = [(JSON[@"max"] ?: @10) integerValue];
+
+			_minimumLabel = JSON[@"min_label"];
+			_maximumLabel = JSON[@"max_label"];
+
+			for (NSInteger i = _minimumValue; i <= _maximumValue; i ++) {
+				[mutableAnswers addObject:[[ApptentiveSurveyAnswer alloc] initWithValue:i]];
+			}
+		} else {
+			for (NSDictionary *answerJSON in JSON[@"answer_choices"]) {
+				[mutableAnswers addObject:[[ApptentiveSurveyAnswer alloc] initWithJSON:answerJSON]];
+			}
 		}
 
 		_answers = [mutableAnswers copy];
+
 	}
 
 	return self;

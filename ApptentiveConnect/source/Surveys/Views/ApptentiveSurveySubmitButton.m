@@ -16,6 +16,8 @@
 
 	self.layer.borderWidth = 1.0 / [UIScreen mainScreen].scale;
 	self.layer.cornerRadius = 6.0;
+
+	[super awakeFromNib];
 }
 
 - (CGSize)intrinsicContentSize {

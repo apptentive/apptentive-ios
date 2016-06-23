@@ -23,6 +23,8 @@
 
 	self.textLabel.numberOfLines = 0;
 	self.instructionsTextLabel.numberOfLines = 0;
+
+	[super awakeFromNib];
 }
 
 - (void)layoutSubviews {

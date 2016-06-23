@@ -89,6 +89,8 @@
 	self.deleteButton.imageView.backgroundColor = [UIColor redColor];
 	self.deleteButton.imageView.tintColor = [UIColor whiteColor];
 	self.deleteButton.imageView.layer.cornerRadius = CGRectGetWidth(self.deleteButton.imageView.bounds) / 2.0;
+
+	[super awakeFromNib];
 }
 
 @end

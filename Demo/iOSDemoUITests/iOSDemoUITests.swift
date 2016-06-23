@@ -75,22 +75,23 @@ class iOSDemoUITests: XCTestCase {
 		app.tables.staticTexts["launch_survey"].tap()
 
 		let collectionViewsQuery = app.collectionViews
-		let cell = collectionViewsQuery.childrenMatchingType(.Cell).elementBoundByIndex(0)
-		let pleaseProvideAResponseTextField = cell.textFields["Please provide a response"]
-		pleaseProvideAResponseTextField.tap()
-		pleaseProvideAResponseTextField.tap()
-		cell.textFields["Please provide a response"]
+		let optionalCell = collectionViewsQuery.childrenMatchingType(.Cell).elementBoundByIndex(0)
+		let singleLineOptionalField = optionalCell.textFields["Please provide a response"]
+		singleLineOptionalField.tap()
+		optionalCell.textFields["Please provide a response"]
 		app.typeText("Automated UI Text.")
 
 		collectionViewsQuery.buttons["Submit"].tap()
 		XCTAssertTrue(app.toolbars.count == 1)
 
-		let cell2 = collectionViewsQuery.childrenMatchingType(.Cell).elementBoundByIndex(1)
-		let pleaseProvideAResponseTextField2 = cell2.textFields["Please provide a response"]
-		pleaseProvideAResponseTextField2.tap()
-		pleaseProvideAResponseTextField2.tap()
-		cell2.textFields["Please provide a response"]
+		let requiredCell = collectionViewsQuery.childrenMatchingType(.Cell).elementBoundByIndex(1)
+		let singleLineRequiredField = requiredCell.textFields["Please provide a response"]
+		singleLineRequiredField.tap()
+		singleLineRequiredField.tap()
+		requiredCell.textFields["Please provide a response"]
 		app.typeText("Automated UI Text.")
+
+		XCTAssertTrue(app.toolbars.count == 0)
 
 		collectionViewsQuery.buttons["Submit"].tap()
 		XCTAssertFalse(app.navigationBars["Single-Line Text"].exists)

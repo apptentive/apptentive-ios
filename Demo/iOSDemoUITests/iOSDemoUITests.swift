@@ -73,13 +73,7 @@ class iOSDemoUITests: XCTestCase {
 		}
 
 		app.tables.staticTexts["launch_survey"].tap()
-
 		let collectionViewsQuery = app.collectionViews
-		let optionalCell = collectionViewsQuery.childrenMatchingType(.Cell).elementBoundByIndex(0)
-		let singleLineOptionalField = optionalCell.textFields["Please provide a response"]
-		singleLineOptionalField.tap()
-		optionalCell.textFields["Please provide a response"]
-		app.typeText("Automated UI Text.")
 
 		collectionViewsQuery.buttons["Submit"].tap()
 		XCTAssertTrue(app.toolbars.count == 1)

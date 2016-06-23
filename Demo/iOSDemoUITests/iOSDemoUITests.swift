@@ -19,7 +19,7 @@ class iOSDemoUITests: XCTestCase {
 		}
 
         // Put setup code here. This method is called before the invocation of each test method in the class.
-		app.launchArguments = [ "-APIKey", APIKey ]
+		app.launchArguments = [ "-APIKey", APIKey, "-events", "<array><string>launch_survey</string><string>other_survey</string></array>" ]
         
         // In UI tests it is usually best to stop immediately when a failure occurs.
         continueAfterFailure = false
@@ -28,7 +28,11 @@ class iOSDemoUITests: XCTestCase {
 
         // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
 		let tabBarsQuery = app.tabBars
-		tabBarsQuery.buttons["Interactions"].tap()
+
+		while (!app.navigationBars["Interactions"].exists) {
+			tabBarsQuery.buttons["Interactions"].tap()
+		}
+
 		let actionButton = app.navigationBars["Interactions"].buttons["Share"]
 		let enabled = NSPredicate(format: "enabled == 1")
 		expectationForPredicate(enabled, evaluatedWithObject: actionButton, handler: nil)
@@ -59,4 +63,36 @@ class iOSDemoUITests: XCTestCase {
 		// Close message center
 		app.navigationBars["Message Center"].buttons["Close"].tap()
     }
+
+	func testSurveySingleLineText() {
+		let app = XCUIApplication()
+		let tabBarsQuery = app.tabBars
+
+		while (!app.navigationBars["Events"].exists) {
+			tabBarsQuery.buttons["Events"].tap()
+		}
+
+		app.tables.staticTexts["launch_survey"].tap()
+
+		let collectionViewsQuery = app.collectionViews
+		let cell = collectionViewsQuery.childrenMatchingType(.Cell).elementBoundByIndex(0)
+		let pleaseProvideAResponseTextField = cell.textFields["Please provide a response"]
+		pleaseProvideAResponseTextField.tap()
+		pleaseProvideAResponseTextField.tap()
+		cell.textFields["Please provide a response"]
+		app.typeText("Automated UI Text.")
+
+		collectionViewsQuery.buttons["Submit"].tap()
+		XCTAssertTrue(app.toolbars.count == 1)
+
+		let cell2 = collectionViewsQuery.childrenMatchingType(.Cell).elementBoundByIndex(1)
+		let pleaseProvideAResponseTextField2 = cell2.textFields["Please provide a response"]
+		pleaseProvideAResponseTextField2.tap()
+		pleaseProvideAResponseTextField2.tap()
+		cell2.textFields["Please provide a response"]
+		app.typeText("Automated UI Text.")
+
+		collectionViewsQuery.buttons["Submit"].tap()
+		XCTAssertFalse(app.navigationBars["Single-Line Text"].exists)
+	}
 }

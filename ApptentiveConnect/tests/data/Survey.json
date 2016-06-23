@@ -191,6 +191,12 @@
 			   "max": 10,
 			   "min_label": "Not at all likely",
 			   "max_label": "Extremely likely"
+		   },
+		   {
+			   "type": "foobar",
+			   "id": "56d49499c719925f33000023",
+			   "required": true,
+			   "foo": "bar"
 		   }
 		],
 		"multiple_responses" : true,

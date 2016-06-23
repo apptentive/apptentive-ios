@@ -117,6 +117,8 @@
 	[self.viewModel setText:@"Foo" forAnswerAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:7]];
 	[self.viewModel setText:@"Bar" forAnswerAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:9]];
 
+	[self.viewModel selectAnswerAtIndexPath:[NSIndexPath indexPathForItem:5 inSection:11]];
+
 	XCTAssertTrue([self.viewModel validate:YES]);
 	XCTAssertTrue(self.validationChanged);
 	self.validationChanged = NO;

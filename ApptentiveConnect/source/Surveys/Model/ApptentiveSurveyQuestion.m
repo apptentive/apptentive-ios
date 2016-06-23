@@ -24,8 +24,10 @@
 			_type = ATSurveyQuestionTypeSingleSelect;
 		} else if ([type isEqualToString:@"range"]) {
 			_type = ATSurveyQuestionTypeRange;
-		} else {
+		} else if ([type isEqualToString:@"singleline"]) {
 			_type = [JSON[@"multiline"] boolValue] ? ATSurveyQuestionTypeMultipleLine : ATSurveyQuestionTypeSingleLine;
+		} else {
+			return nil;
 		}
 
 		_identifier = JSON[@"id"];

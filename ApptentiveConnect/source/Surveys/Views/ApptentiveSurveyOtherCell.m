@@ -15,6 +15,8 @@
 	self.textField.layer.borderWidth = 1.0 / [UIScreen mainScreen].scale;
 	self.textField.layer.cornerRadius = 5.0;
 	self.valid = YES;
+
+	[super awakeFromNib];
 }
 
 - (UIView *)snapshotViewAfterScreenUpdates:(BOOL)afterUpdates {

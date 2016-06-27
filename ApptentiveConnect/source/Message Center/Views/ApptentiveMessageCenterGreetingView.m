@@ -36,6 +36,8 @@
 
 - (void)awakeFromNib {
 	self.bottomBorderHeightConstraint.constant = 1.0 / [UIScreen mainScreen].scale;
+
+	[super awakeFromNib];
 }
 
 - (void)setOrientation:(UIInterfaceOrientation)orientation {

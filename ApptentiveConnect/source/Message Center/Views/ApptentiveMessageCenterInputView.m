@@ -52,6 +52,8 @@
 	self.portraitSendBarConstraints = @[self.titleLabelToClearButton, self.attachButtonToSendButton, self.clearButtonToAttachButton, self.buttonCenters, self.buttonBaselines, self.clearButtonLeadingToSuperview, self.sendButtonVerticalCenter];
 
 	self.landscapeSendBarConstraints = @[[NSLayoutConstraint constraintWithItem:self.sendBar attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.clearButton attribute:NSLayoutAttributeTop multiplier:1.0 constant:0], [NSLayoutConstraint constraintWithItem:self.sendBar attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.sendButton attribute:NSLayoutAttributeBottom multiplier:1.0 constant:4.0], [NSLayoutConstraint constraintWithItem:self.attachButton attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.sendBar attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0.0]];
+
+	[super awakeFromNib];
 }
 
 - (void)setOrientation:(UIInterfaceOrientation)orientation {

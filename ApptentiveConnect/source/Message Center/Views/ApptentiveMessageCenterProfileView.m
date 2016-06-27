@@ -53,6 +53,8 @@
 	NSMutableSet *baseConstraintSet = [NSMutableSet setWithArray:self.containerView.constraints];
 	[baseConstraintSet minusSet:[NSSet setWithArray:self.portraitFullConstraints]];
 	self.baseConstraints = [baseConstraintSet allObjects];
+
+	[super awakeFromNib];
 }
 
 - (BOOL)becomeFirstResponder {

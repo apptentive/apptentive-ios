@@ -17,6 +17,8 @@
 	self.titleLabel.textAlignment = NSTextAlignmentCenter;
 	self.titleEdgeInsets = UIEdgeInsetsMake(-8.0, 0.0, 0.0, 0.0);
 	self.titleLabel.layer.masksToBounds = YES;
+
+	[super awakeFromNib];
 }
 
 - (void)layoutSubviews {

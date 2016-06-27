@@ -16,6 +16,8 @@
 	self.isAccessibilityElement = YES;
 
 	self.textLabel.numberOfLines = 0;
+
+	[super awakeFromNib];
 }
 
 - (void)setSelected:(BOOL)selected {

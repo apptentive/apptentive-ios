@@ -25,6 +25,8 @@
 
 	[self updateColors];
 	[self updateBorders];
+
+	[super awakeFromNib];
 }
 
 - (void)setStyle:(ATSurveyOptionButtonStyle)style {

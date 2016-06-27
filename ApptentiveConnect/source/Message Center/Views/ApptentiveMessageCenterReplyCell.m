@@ -15,6 +15,8 @@
 - (void)awakeFromNib {
 	self.messageLabel.textContainerInset = UIEdgeInsetsMake(-1, 0, 0, 0);
 	self.messageLabel.textContainer.lineFragmentPadding = 0;
+
+	[super awakeFromNib];
 }
 
 @end

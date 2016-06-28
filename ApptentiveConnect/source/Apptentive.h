@@ -115,7 +115,9 @@ Before calling any other methods on the shared `Apptentive` instance, set the AP
  */
 @property (copy, nonatomic, nullable) NSString *appID;
 
-/** An object conforming to the `ApptentiveDelegate` protocol */
+/** An object conforming to the `ApptentiveDelegate` protocol. 
+ If a `nil` value is passed for the view controller into methods such as	`-engage:fromViewController`,
+ the SDK will request a view controller from the delegate from which to present an interaction. */
 @property (weak, nonatomic) id<ApptentiveDelegate> delegate;
 
 ///---------------------------------
@@ -244,7 +246,7 @@ Returns a Boolean value indicating whether the given event will cause an Interac
  `@"app.launch"` here, along with the view controller an upgrade message might be displayed from.
 
  @param event A string representing the name of the event.
- @param viewController A view controller Apptentive UI may be presented from.
+ @param viewController A view controller Apptentive UI may be presented from. If `nil`, a view controller should be provided by the delegate.
 
  @return `YES` if an interaction was triggered by the event, `NO` otherwise.
  */
@@ -255,7 +257,7 @@ Returns a Boolean value indicating whether the given event will cause an Interac
 
  @param event A string representing the name of the event.
  @param customData A dictionary of key/value pairs to be associated with the event. Keys and values should conform to standards of NSJSONSerialization's `isValidJSONObject:`.
- @param viewController A view controller Apptentive UI may be presented from.
+ @param viewController A view controller Apptentive UI may be presented from. If `nil`, a view controller should be provided by the delegate.
 
  @return `YES` if an interaction was triggered by the event, `NO` otherwise.
 */
@@ -267,7 +269,7 @@ Returns a Boolean value indicating whether the given event will cause an Interac
  @param event A string representing the name of the event.
  @param customData A dictionary of key/value pairs to be associated with the event. Keys and values should conform to standards of NSJSONSerialization's `isValidJSONObject:`.
  @param extendedData An array of dictionaries with specific Apptentive formatting. For example, [Apptentive extendedDataDate:[NSDate date]].
- @param viewController A view controller Apptentive UI may be presented from.
+ @param viewController A view controller Apptentive UI may be presented from. If `nil`, a view controller should be provided by the delegate.
 
  @return `YES` if an interaction was triggered by the event, `NO` otherwise.
  */
@@ -530,8 +532,8 @@ Returns a Boolean value indicating whether the given event will cause an Interac
 @end
 
 /**
- The `ApptentiveDelegate` protocol allows your app to override the default behavior when
- the Message Center is launched from an incoming push notification. In most cases the
+ The `ApptentiveDelegate` protocol allows your app to override the default behavior when an
+ interaction is presented without a view controller having been specified. In most cases the
  default behavior (which walks the view controller stack from the main window's root view
  controller) will work, but if your app features custom container view controllers, it may
  behave unexpectedly. In that case an object in your app should implement the
@@ -542,7 +544,7 @@ Returns a Boolean value indicating whether the given event will cause an Interac
 @optional
 
 /**
- Returns a view controller from which to present the MessageCenter interaction.
+ Returns a view controller from which to present the an interaction.
 
  @param connection The `Apptentive` object that is requesting a view controller to present from.
 

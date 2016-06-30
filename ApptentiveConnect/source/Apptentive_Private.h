@@ -48,6 +48,8 @@ extern NSString *const ApptentiveConversationCreatedNotification;
 + (NSDictionary *)versionObjectWithVersion:(NSString *)version;
 + (NSDictionary *)timestampObjectWithDate:(NSDate *)date;
 
+- (UIViewController *)viewControllerForInteractions;
+
 @end
 
 /*! Replacement for NSLocalizedString within ApptentiveConnect. Pulls

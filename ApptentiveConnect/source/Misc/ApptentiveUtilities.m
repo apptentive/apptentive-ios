@@ -20,7 +20,7 @@
 
 UIViewController *topChildViewController(UIViewController *viewController) {
 	if ([viewController isKindOfClass:[UINavigationController class]]) {
-		return topChildViewController(((UINavigationController *)viewController).topViewController);
+		return topChildViewController(((UINavigationController *)viewController).visibleViewController);
 	} else if ([viewController isKindOfClass:[UITabBarController class]]) {
 		return topChildViewController(((UITabBarController *)viewController).selectedViewController);
 	} else if (viewController.presentedViewController) {

@@ -1,114 +1,123 @@
-/* (No Commment) */
+/* Accessibility label for 'show about' button */
 "About Apptentive" = "À propos d'Apptentive";
 
-/* (No Commment) */
-"Apptentive is a service that allows you to have a conversation with the makers of this app. Your input and feedback can help to provide you with a better overall experience.
+/* About apptentive introductory message */
+"Apptentive is a service that allows you to have a conversation with the makers of this app. Your input and feedback can help to provide you with a better overall experience.\n\nYour feedback is hosted by Apptentive and is subject to both Apptentive’s privacy policy and the privacy policy of this app’s developer." = "Apptentive est un service qui vous permet d'entrer en contact avec les créateurs de cette application. Vos suggestions et commentaires peuvent nous aider à vous fournir une meilleure expérience d'ensemble.\n\nVos commentaires sont hébergés par Apptentive et assujettis à la politique de confidentialité d'Apptentive ainsi qu'à la politique de confidentialité du développeur de cette application.";
 
-Your feedback is hosted by Apptentive and is subject to both Apptentive’s privacy policy and the privacy policy of this app’s developer." = "Apptentive est un service qui vous permet d'entrer en contact avec les créateurs de cette application. Vos suggestions et commentaires peuvent nous aider à vous fournir une meilleure expérience d'ensemble.
-
-Vos commentaires sont hébergés par Apptentive et assujettis à la politique de confidentialité d'Apptentive ainsi qu'à la politique de confidentialité du développeur de cette application.";
-
-/* (No Commment) */
+/* About apptentive privacy button label */
 "Apptentive’s Privacy Policy" = "Politique de confidentialité d'Apptentive";
 
-/* (No Commment) */
+/* Accessibility label for 'attach' button */
+"Attach" = "Joindre";
+
+/* Accessibility hint for 'attach' */
+"Attaches a photo or screenshot" = "Joint une photo ou une capture d’écran";
+
+/* Placeholder name for attachment */
+"Attachment %ld" = "Pièce jointe %ld";
+
+/* No comment provided by engineer. */
 "Authentication Failed" = "L'authentification a échoué";
 
-/* (No Commment) */
+/* Button that closes Message Center. */
 "Close" = "Fermer";
 
-/* (No Commment) */
+/* Accessibility hint for 'close' button */
 "Closes Message Center." = "Ferme le Centre de messages.";
 
-/* (No Commment) */
+/* Accessibility label for 'discard' button */
 "Discard" = "Supprimer";
 
-/* (No Commment) */
+/* Accessibility hint for 'discard' button */
 "Discards the message." = "Supprimer le message.";
 
-/* (No Commment) */
+/* Accessibilty hint for 'show about' button */
 "Displays information about this feature." = "Affiche des informations sur cette fonctionnalité.";
 
-/* (No Commment) */
+/* Accessibility hint for 'edit profile' button */
 "Displays name and email editor." = "Affiche l’écran de modification du nom et de l'e-mail.";
 
-/* (No Commment) */
+/* Title for enjoyment alert view. Parameter is app name. */
 "Do you love %@?" = "Adorez-vous %@?";
 
-/* (No Commment) */
+/* Message failed to send. */
 "Failed" = "A échoué";
 
-/* (No Commment) */
+/* No comment provided by engineer. */
 "Invalid response from server." = "Réponse non valide du serveur.";
 
-/* (No Commment) */
+/* About apptentive link button label */
 "Learn about Apptentive" = "En savoir plus sur Apptentive";
 
-/* (No Commment) */
+/* Message Center default title */
+"Message Center" = "Centre de messages";
+
+/* No comment provided by engineer. */
 "Network Connection Error" = "Erreur de connexion réseau";
 
-/* (No Commment) */
+/* no */
 "No" = "Non";
 
-/* (No Commment) */
+/* cancel title for app rating dialog */
 "No Thanks" = "Non merci";
 
-/* (No Commment) */
+/* OK button title */
 "OK" = "OK";
 
-/* (No Commment) */
+/* Unable to load the App Store title */
 "Oops!" = "Oups!";
 
-/* (No Commment) */
+/* Powered by followed by Apptentive logo. */
 "Powered by" = "Optimisée par";
 
-/* (No Commment) */
+/* Accessibility label for 'edit profile' button */
 "Profile" = "Profil";
 
-/* (No Commment) */
+/* Rate app button title */
 "Rate %@" = "Noter %@";
 
-/* (No Commment) */
+/* Remind me later button title */
 "Remind Me Later" = "Me le rappeler ultérieurement";
 
-/* (No Commment) */
-"Sending…" = "Envoi...";
-
-/* (No Commment) */
-"Sends the message." = "Envoie le message.";
-
-/* (No Commment) */
-"Sent" = "Envoyé";
-
-/* (No Commment) */
-"Server did not return properly formatted JSON." = "Le serveur n'a pas retourné un JSON au format correct.";
-
-/* (No Commment) */
-"Server error." = "Erreur de serveur.";
-
-/* (No Commment) */
-"Thank You" = "Merci";
-
-/* (No Commment) */
-"Unable to load the App Store" = "Impossible de charger l'App Store";
-
-/* (No Commment) */
-"We're so happy to hear that you love %@! It'd be really helpful if you rated us. Thanks so much for spending some time with us." = "Nous sommes vraiment contents d'apprendre que vous adorez %@! Votre évaluation nous serait extrêmement utile. Nous vous remercions infiniment pour le temps que vous pourriez nous consacrer.";
-
-/* (No Commment) */
-"We’re attempting to connect. Thanks for your patience!" = "Nous essayons de vous connecter. Merci pour votre patience !";
-
-/* (No Commment) */
-"Wrong username and/or password." = "Nom d'utilisateur et/ou mot de passe incorrect(s).";
-
-/* (No Commment) */
-"Yes" = "Oui";
-
-/* (No Commment) */
-"You must connect to the internet before you can send feedback." = "Vous devez vous connecter à internet pour pouvoir envoyer vos commentaires.";
-
-/* (No Commment) */
+/* No comment provided by engineer. */
 "required" = "obligatoire";
 
-/* (No Comment) */
-"Message Center" = "Centre de messages";
+/* Message is sending. */
+"Sending…" = "Envoi...";
+
+/* Accessibility hint for 'send' button */
+"Sends the message." = "Envoie le message.";
+
+/* Message sent successfully */
+"Sent" = "Envoyé";
+
+/* No comment provided by engineer. */
+"Server did not return properly formatted JSON." = "Le serveur n'a pas retourné un JSON au format correct.";
+
+/* No comment provided by engineer. */
+"Server error." = "Erreur de serveur.";
+
+/* Rate app title. */
+"Thank You" = "Merci";
+
+/* Attachment download failed alert title */
+"Unable to Download Attachment" = "Impossible de télécharger la pièce jointe";
+
+/* Unable to load the App Store message */
+"Unable to load the App Store" = "Impossible de charger l'App Store";
+
+/* Rate app message. Parameter is app name. */
+"We're so happy to hear that you love %@! It'd be really helpful if you rated us. Thanks so much for spending some time with us." = "Nous sommes vraiment contents d'apprendre que vous adorez %@! Votre évaluation nous serait extrêmement utile. Nous vous remercions infiniment pour le temps que vous pourriez nous consacrer.";
+
+/* Message Center configuration is waiting to be downloaded or encountered a server error. */
+"We’re attempting to connect. Thanks for your patience!" = "Nous essayons de vous connecter. Merci pour votre patience !";
+
+/* No comment provided by engineer. */
+"Wrong username and/or password." = "Nom d'utilisateur et/ou mot de passe incorrect(s).";
+
+/* yes */
+"Yes" = "Oui";
+
+/* Message Center configuration hasn't downloaded due to connection problem. */
+"You must connect to the internet before you can send feedback." = "Vous devez vous connecter à internet pour pouvoir envoyer vos commentaires.";
+

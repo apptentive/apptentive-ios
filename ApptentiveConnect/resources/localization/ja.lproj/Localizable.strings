@@ -1,114 +1,123 @@
-/* (No Commment) */
+/* Accessibility label for 'show about' button */
 "About Apptentive" = "Apptentive について";
 
-/* (No Commment) */
-"Apptentive is a service that allows you to have a conversation with the makers of this app. Your input and feedback can help to provide you with a better overall experience.
+/* About apptentive introductory message */
+"Apptentive is a service that allows you to have a conversation with the makers of this app. Your input and feedback can help to provide you with a better overall experience.\n\nYour feedback is hosted by Apptentive and is subject to both Apptentive’s privacy policy and the privacy policy of this app’s developer." = "Apptentive は、アプリ作成者と対話ができるサービスです。当製品の全体的な品質向上には、お客様のご意見及びフィードバックが欠かせません。\n\nお客様のフィードバックは Apptentive によって提供され、Apptentive の個人情報保護方針及び本アプリ開発者の個人情報保護方針両方が適用されます。";
 
-Your feedback is hosted by Apptentive and is subject to both Apptentive’s privacy policy and the privacy policy of this app’s developer." = "Apptentive は、アプリ作成者と対話ができるサービスです。当製品の全体的な品質向上には、お客様のご意見及びフィードバックが欠かせません。
-
-お客様のフィードバックは Apptentive によって提供され、Apptentive の個人情報保護方針及び本アプリ開発者の個人情報保護方針両方が適用されます。";
-
-/* (No Commment) */
+/* About apptentive privacy button label */
 "Apptentive’s Privacy Policy" = "Apptentive 個人情報保護方針";
 
-/* (No Commment) */
+/* Accessibility label for 'attach' button */
+"Attach" = "添付";
+
+/* Accessibility hint for 'attach' */
+"Attaches a photo or screenshot" = "写真もしくはスクリーンショットを添付";
+
+/* Placeholder name for attachment */
+"Attachment %ld" = "添付ファイル%ld";
+
+/* No comment provided by engineer. */
 "Authentication Failed" = "認証に失敗しました";
 
-/* (No Commment) */
+/* Button that closes Message Center. */
 "Close" = "閉じる";
 
-/* (No Commment) */
+/* Accessibility hint for 'close' button */
 "Closes Message Center." = "メッセージセンターを閉じる。";
 
-/* (No Commment) */
+/* Accessibility label for 'discard' button */
 "Discard" = "破棄";
 
-/* (No Commment) */
+/* Accessibility hint for 'discard' button */
 "Discards the message." = "メッセージを破棄する。";
 
-/* (No Commment) */
+/* Accessibilty hint for 'show about' button */
 "Displays information about this feature." = "この機能に関する情報を表示する。";
 
-/* (No Commment) */
+/* Accessibility hint for 'edit profile' button */
 "Displays name and email editor." = "氏名及びメール編集を表示する。";
 
-/* (No Commment) */
+/* Title for enjoyment alert view. Parameter is app name. */
 "Do you love %@?" = "%@ に夢中ですか？";
 
-/* (No Commment) */
+/* Message failed to send. */
 "Failed" = "失敗しました";
 
-/* (No Commment) */
+/* No comment provided by engineer. */
 "Invalid response from server." = "サーバーからの応答が無効です。";
 
-/* (No Commment) */
+/* About apptentive link button label */
 "Learn about Apptentive" = "Apptentive について学ぶ";
 
-/* (No Commment) */
+/* Message Center default title */
+"Message Center" = "メッセージ センター";
+
+/* No comment provided by engineer. */
 "Network Connection Error" = "ネットワーク接続エラー";
 
-/* (No Commment) */
+/* no */
 "No" = "いいえ";
 
-/* (No Commment) */
+/* cancel title for app rating dialog */
 "No Thanks" = "遠慮します";
 
-/* (No Commment) */
+/* OK button title */
 "OK" = "了解";
 
-/* (No Commment) */
+/* Unable to load the App Store title */
 "Oops!" = "おっと ！";
 
-/* (No Commment) */
+/* Powered by followed by Apptentive logo. */
 "Powered by" = "次により提供されています";
 
-/* (No Commment) */
+/* Accessibility label for 'edit profile' button */
 "Profile" = "プロフィール";
 
-/* (No Commment) */
+/* Rate app button title */
 "Rate %@" = "%@ を評価";
 
-/* (No Commment) */
+/* Remind me later button title */
 "Remind Me Later" = "後で通知する";
 
-/* (No Commment) */
-"Sending…" = "送信中。。。";
-
-/* (No Commment) */
-"Sends the message." = "メッセージを送信。";
-
-/* (No Commment) */
-"Sent" = "送信済";
-
-/* (No Commment) */
-"Server did not return properly formatted JSON." = "サーバーが適切に設定された JSON を返しませんでした。";
-
-/* (No Commment) */
-"Server error." = "サーバー エラーです。";
-
-/* (No Commment) */
-"Thank You" = "ありがとうございます";
-
-/* (No Commment) */
-"Unable to load the App Store" = "App ストアを読み込む事ができません";
-
-/* (No Commment) */
-"We're so happy to hear that you love %@! It'd be really helpful if you rated us. Thanks so much for spending some time with us." = "%@ に夢中だとお伺いして大変嬉しいです！ もしこのアプリを評価して下さったら非常に助かります。お時間を割いて頂きありがとうございます。";
-
-/* (No Commment) */
-"We’re attempting to connect. Thanks for your patience!" = "接続を試行中です。もう少々お待ち下さい。";
-
-/* (No Commment) */
-"Wrong username and/or password." = "ユーザー名及び／もしくはパスワードが違います。";
-
-/* (No Commment) */
-"Yes" = "はい";
-
-/* (No Commment) */
-"You must connect to the internet before you can send feedback." = "フィードバックを送信する前に、インターネットに接続しなくてはなりません。";
-
-/* (No Commment) */
+/* No comment provided by engineer. */
 "required" = "必須";
 
-/* (No Comment) */
-"Message Center" = "メッセージ センター";
+/* Message is sending. */
+"Sending…" = "送信中。。。";
+
+/* Accessibility hint for 'send' button */
+"Sends the message." = "メッセージを送信。";
+
+/* Message sent successfully */
+"Sent" = "送信済";
+
+/* No comment provided by engineer. */
+"Server did not return properly formatted JSON." = "サーバーが適切に設定された JSON を返しませんでした。";
+
+/* No comment provided by engineer. */
+"Server error." = "サーバー エラーです。";
+
+/* Rate app title. */
+"Thank You" = "ありがとうございます";
+
+/* Attachment download failed alert title */
+"Unable to Download Attachment" = "添付ファイルをダウンロードできません";
+
+/* Unable to load the App Store message */
+"Unable to load the App Store" = "App ストアを読み込む事ができません";
+
+/* Rate app message. Parameter is app name. */
+"We're so happy to hear that you love %@! It'd be really helpful if you rated us. Thanks so much for spending some time with us." = "%@ に夢中だとお伺いして大変嬉しいです！ もしこのアプリを評価して下さったら非常に助かります。お時間を割いて頂きありがとうございます。";
+
+/* Message Center configuration is waiting to be downloaded or encountered a server error. */
+"We’re attempting to connect. Thanks for your patience!" = "接続を試行中です。もう少々お待ち下さい。";
+
+/* No comment provided by engineer. */
+"Wrong username and/or password." = "ユーザー名及び／もしくはパスワードが違います。";
+
+/* yes */
+"Yes" = "はい";
+
+/* Message Center configuration hasn't downloaded due to connection problem. */
+"You must connect to the internet before you can send feedback." = "フィードバックを送信する前に、インターネットに接続しなくてはなりません。";
+

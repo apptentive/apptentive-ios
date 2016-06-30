@@ -71,7 +71,7 @@ class iOSDemoUITests: XCTestCase {
 		while (!app.navigationBars["Events"].exists) {
 			tabBarsQuery.buttons["Events"].tap()
 		}
-		
+
 		app.tables.staticTexts["singleline_survey"].tap()
 		let collectionViewsQuery = app.collectionViews
 		let submitButton = collectionViewsQuery.buttons["Submit"]
@@ -95,6 +95,52 @@ class iOSDemoUITests: XCTestCase {
 		app.typeText("Test\n")
 
 		// Should validate properly once both text fields are filled
+		XCTAssertTrue(app.toolbars.count == 0)
+
+		submitButton.tap()
+	}
+
+	func testMulitselectSurvey() {
+		let app = XCUIApplication()
+		let tabBarsQuery = app.tabBars
+
+		while (!app.navigationBars["Events"].exists) {
+			tabBarsQuery.buttons["Events"].tap()
+		}
+
+		app.tables.staticTexts["multichoice_survey"].tap()
+		let collectionViewsQuery = app.collectionViews
+
+		collectionViewsQuery.cells["A"].tap()
+		collectionViewsQuery.cells["B"].tap()
+		collectionViewsQuery.cells["C"].tap()
+		collectionViewsQuery.element.swipeUp()
+
+		collectionViewsQuery.cells["D"].tap()
+		collectionViewsQuery.cells["E"].tap()
+		collectionViewsQuery.cells["F"].tap()
+
+		let submitButton = collectionViewsQuery.buttons["Submit"]
+		submitButton.tap()
+
+		// Validation should fail (out of range and no required other text)
+		XCTAssertTrue(app.toolbars.count == 1)
+
+		collectionViewsQuery.cells["A"].tap()
+		collectionViewsQuery.cells["D"].tap()
+
+		// Validation should still fail (no required other text)
+		XCTAssertTrue(app.toolbars.count == 1)
+
+		collectionViewsQuery.cells["F"].textFields["Please specify"].tap()
+		app.typeText(" ")
+
+		// Whitespace doesn't count
+		XCTAssertTrue(app.toolbars.count == 1)
+
+		app.typeText("Test")
+
+		// Should validate now
 		XCTAssertTrue(app.toolbars.count == 0)
 
 		submitButton.tap()

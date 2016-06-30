@@ -633,8 +633,12 @@
 
 			if (showing) {
 				[cell.textField becomeFirstResponder];
+				cell.isAccessibilityElement = NO;
+				UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, cell.textField);
 			} else {
 				[cell.textField resignFirstResponder];
+				cell.isAccessibilityElement = YES;
+				UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, cell);
 			}
 		}];
 	}

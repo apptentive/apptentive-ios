@@ -19,8 +19,8 @@ class iOSDemoUITests: XCTestCase {
 		}
 
         // Put setup code here. This method is called before the invocation of each test method in the class.
-		app.launchArguments = [ "-APIKey", APIKey, "-events", "<array><string>multichoice_survey</string><string>singlechoice_survey</string><string>singleline_survey</string></array>" ]
-        
+		app.launchArguments = [ "-APIKey", APIKey, "-events", "<array><string>multichoice_survey</string><string>singlechoice_survey</string><string>singleline_survey</string><string>strings_survey</string></array>" ]
+
         // In UI tests it is usually best to stop immediately when a failure occurs.
         continueAfterFailure = false
         // UI tests must launch the application that they test. Doing this in setup will make sure it happens for each test method.
@@ -143,6 +143,49 @@ class iOSDemoUITests: XCTestCase {
 		// Should validate now
 		XCTAssertTrue(app.toolbars.count == 0)
 
+		submitButton.tap()
+	}
+
+	func testStringsSurvey() {
+		let app = XCUIApplication()
+		let tabBarsQuery = app.tabBars
+
+		while (!app.navigationBars["Events"].exists) {
+			tabBarsQuery.buttons["Events"].tap()
+		}
+
+		app.tables.staticTexts["strings_survey"].tap()
+		let collectionViewsQuery = app.collectionViews
+
+		// Title
+		XCTAssert(app.navigationBars["Vice lomo butcher"].exists)
+
+		// Introduction
+		XCTAssert(collectionViewsQuery.staticTexts["Kickstarter ethical tumblr direct trade, irony tote bag messenger bag."].exists)
+
+		// Single-choice question
+		XCTAssert(collectionViewsQuery.staticTexts["Truffaut try-hard disrupt migas narwhal fingerstache, gochujang affogato blue bottle jean shorts pour-over craft beer?"].exists)
+		XCTAssert(collectionViewsQuery.cells["Twee pug bitters, portland polaroid artisan iPhone retro single-origin coffee."].exists)
+		XCTAssert(collectionViewsQuery.cells["Kinfolk lomo hashtag migas stumptown before they sold out."].exists)
+
+		collectionViewsQuery.element.swipeUp()
+
+		// Multi-choice question
+		XCTAssert(collectionViewsQuery.staticTexts["Dreamcatcher taxidermy PBR&B deep v. Art party ugh ethical wolf migas disrupt?"].exists)
+		XCTAssert(collectionViewsQuery.cells["Trust fund skateboard 90's cronut 8-bit celiac fanny pack."].exists)
+		XCTAssert(collectionViewsQuery.cells["Crucifix VHS organic beard, echo park shabby chic master cleanse hoodie sartorial raw denim yuccie disrupt mustache letterpress single-origin coffee."].exists)
+
+		collectionViewsQuery.element.swipeUp()
+
+		// Short answer
+		XCTAssert(collectionViewsQuery.staticTexts["Heirloom cred sriracha readymade?"].exists)
+		XCTAssert(collectionViewsQuery.textFields["Please provide a response"].exists)
+
+		// Long answer
+		XCTAssert(collectionViewsQuery.staticTexts["Mumblecore synth fashion axe scenester health goth, selvage sartorial paleo fanny pack farm-to-table offal church-key gentrify?"].exists)
+		XCTAssert(collectionViewsQuery.textViews["Please leave detailed feedback"].exists)
+
+		let submitButton = collectionViewsQuery.buttons["Submit"]
 		submitButton.tap()
 	}
 }

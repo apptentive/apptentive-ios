@@ -19,7 +19,7 @@ class iOSDemoUITests: XCTestCase {
 		}
 
         // Put setup code here. This method is called before the invocation of each test method in the class.
-		app.launchArguments = [ "-APIKey", APIKey ]
+		app.launchArguments = [ "-APIKey", APIKey, "-events", "<array><string>multichoice_survey</string><string>singlechoice_survey</string><string>singleline_survey</string></array>" ]
         
         // In UI tests it is usually best to stop immediately when a failure occurs.
         continueAfterFailure = false
@@ -28,7 +28,11 @@ class iOSDemoUITests: XCTestCase {
 
         // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
 		let tabBarsQuery = app.tabBars
-		tabBarsQuery.buttons["Interactions"].tap()
+
+		while (!app.navigationBars["Interactions"].exists) {
+			tabBarsQuery.buttons["Interactions"].tap()
+		}
+
 		let actionButton = app.navigationBars["Interactions"].buttons["Share"]
 		let enabled = NSPredicate(format: "enabled == 1")
 		expectationForPredicate(enabled, evaluatedWithObject: actionButton, handler: nil)
@@ -59,4 +63,40 @@ class iOSDemoUITests: XCTestCase {
 		// Close message center
 		app.navigationBars["Message Center"].buttons["Close"].tap()
     }
+
+	func testSingleLineSurvey() {
+		let app = XCUIApplication()
+		let tabBarsQuery = app.tabBars
+
+		while (!app.navigationBars["Events"].exists) {
+			tabBarsQuery.buttons["Events"].tap()
+		}
+		
+		app.tables.staticTexts["singleline_survey"].tap()
+		let collectionViewsQuery = app.collectionViews
+		let submitButton = collectionViewsQuery.buttons["Submit"]
+
+		// Validation should fail with no responses
+		submitButton.tap()
+		XCTAssertTrue(app.toolbars.count == 1)
+
+		let requiredSingleLineCell = collectionViewsQuery.childrenMatchingType(.Cell).elementBoundByIndex(1)
+		let requiredSingleLineTextField = requiredSingleLineCell.textFields["Please provide a response"]
+		requiredSingleLineTextField.tap()
+		app.typeText("Test\n")
+
+		let requiredMultilineCell = collectionViewsQuery.childrenMatchingType(.Cell).elementBoundByIndex(3)
+		requiredMultilineCell.textViews["Please leave detailed feedback"].tap()
+		app.typeText("\t \n")
+
+		// Validation should fail with emtpy response
+		XCTAssertTrue(app.toolbars.count == 1)
+
+		app.typeText("Test\n")
+
+		// Should validate properly once both text fields are filled
+		XCTAssertTrue(app.toolbars.count == 0)
+
+		submitButton.tap()
+	}
 }

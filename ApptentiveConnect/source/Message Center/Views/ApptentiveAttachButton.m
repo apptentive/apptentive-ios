@@ -43,7 +43,7 @@
 	_badgeValue = badgeValue;
 
 	if (badgeValue > 0) {
-		[self setTitle:[self.numberFormatter stringFromNumber:@(self.badgeValue)] forState:UIControlStateNormal];
+		[self setTitle:[self.numberFormatter stringFromNumber:@(badgeValue)] forState:UIControlStateNormal];
 	} else {
 		[self setTitle:nil forState:UIControlStateNormal];
 	}

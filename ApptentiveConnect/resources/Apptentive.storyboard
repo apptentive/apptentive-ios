@@ -1692,7 +1692,7 @@ Lines</string>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Not at all likely" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yOh-Cb-cM5">
                                     <rect key="frame" x="16" y="8.5" width="83" height="15"/>
                                     <accessibility key="accessibilityConfiguration">
-                                        <accessibilityTraits key="traits" none="YES"/>
+                                        <accessibilityTraits key="traits" staticText="YES" notEnabled="YES"/>
                                     </accessibility>
                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -1701,7 +1701,7 @@ Lines</string>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Extremely likely" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AXc-9K-wCm">
                                     <rect key="frame" x="216" y="8.5" width="88" height="15"/>
                                     <accessibility key="accessibilityConfiguration">
-                                        <accessibilityTraits key="traits" none="YES"/>
+                                        <accessibilityTraits key="traits" staticText="YES" notEnabled="YES"/>
                                     </accessibility>
                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>

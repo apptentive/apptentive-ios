@@ -30,6 +30,7 @@ NSString *const ATInteractionMessageCenterEventLabelAttachmentDelete = @"attachm
 @property (strong, nonatomic) UIPopoverController *imagePickerPopoverController;
 @property (strong, nonatomic) NSMutableArray *mutableAttachments;
 @property (assign, nonatomic) CGSize collectionViewFooterSize;
+@property (strong, nonatomic) NSNumberFormatter *numberFormatter;
 
 @end
 
@@ -73,6 +74,8 @@ NSString *const ATInteractionMessageCenterEventLabelAttachmentDelete = @"attachm
 	self.collectionViewFooterSize = ((UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout).footerReferenceSize;
 	self.collectionView.backgroundColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveColorBackground];
 
+	self.numberFormatter = [[NSNumberFormatter alloc] init];
+
 	[self updateBadge];
 }
 
@@ -90,7 +93,10 @@ NSString *const ATInteractionMessageCenterEventLabelAttachmentDelete = @"attachm
 		NSInteger index = 1;
 
 		for (UIImage *image in self.mutableAttachments) {
-			NSString *name = [NSString stringWithFormat:ApptentiveLocalizedString(@"Attachment %ld", @"Placeholder name for attachment"), (long)index];
+			NSString *numberString = [self.numberFormatter stringFromNumber:@(index)];
+
+			// TODO: Localize this once server can accept non-ASCII filenames
+			NSString *name = [NSString stringWithFormat:@"Attachment %@", numberString];
 			ApptentiveFileAttachment *attachment = [ApptentiveFileAttachment newInstanceWithFileData:UIImageJPEGRepresentation(image, 0.6) MIMEType:@"image/jpeg" name:name];
 
 			index++;

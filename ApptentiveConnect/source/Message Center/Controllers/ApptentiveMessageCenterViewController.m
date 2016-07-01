@@ -178,6 +178,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.messageInputView.placeholderLabel.hidden = self.messageInputView.messageView.text.length > 0;
 
 	self.messageInputView.titleLabel.text = self.interaction.composerTitle;
+	self.neuMessageButtonItem.title = self.interaction.composerTitle;
 	[self.messageInputView.sendButton setTitle:self.interaction.composerSendButtonTitle forState:UIControlStateNormal];
 
 	self.messageInputView.sendButton.accessibilityHint = ApptentiveLocalizedString(@"Sends the message.", @"Accessibility hint for 'send' button");
@@ -219,6 +220,10 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 		self.profileView.nameField.backgroundColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveColorTextInputBackground];
 		self.profileView.emailField.backgroundColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveColorTextInputBackground];
+
+		NSDictionary *placeholderAttributes = @{NSForegroundColorAttributeName: [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveColorTextInputPlaceholder]};
+		self.profileView.nameField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:self.interaction.profileInitialNamePlaceholder attributes:placeholderAttributes];
+		self.profileView.emailField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:self.interaction.profileInitialEmailPlaceholder attributes:placeholderAttributes];
 
 		if (self.interaction.profileRequired && [self shouldShowProfileViewBeforeComposing:YES]) {
 			self.profileView.skipButton.hidden = YES;

@@ -84,16 +84,17 @@ NSString *const ApptentiveAPIRequestStatusChanged = @"ApptentiveAPIRequestStatus
 	NSIndexSet *clientErrorStatusCodes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(400, 100)]; // 4xx status codes
 	NSIndexSet *serverErrorStatusCodes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(500, 100)]; // 5xx status codes
 
+	// TODO: Consider localizing error titles
 	if ([okStatusCodes containsIndex:statusCode]) {
 		_failed = NO;
 	} else if ([clientErrorStatusCodes containsIndex:statusCode]) {
 		_failed = YES;
 		_shouldRetry = NO;
-		_errorTitle = ApptentiveLocalizedString(@"Bad Request", @"");
+		_errorTitle = @"Bad Request";
 	} else if ([serverErrorStatusCodes containsIndex:statusCode]) {
 		_failed = YES;
 		_shouldRetry = YES;
-		_errorTitle = ApptentiveLocalizedString(@"Server error.", @"");
+		_errorTitle = @"Server error.";
 	} else {
 		_failed = YES;
 		_shouldRetry = YES;

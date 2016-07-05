@@ -19,7 +19,7 @@ class iOSDemoUITests: XCTestCase {
 		}
 
         // Put setup code here. This method is called before the invocation of each test method in the class.
-		app.launchArguments = [ "-APIKey", APIKey, "-events", "<array><string>multichoice_survey</string><string>singlechoice_survey</string><string>singleline_survey</string><string>strings_survey</string></array>" ]
+		app.launchArguments = [ "-APIKey", APIKey, "-events", "<array><string>multichoice_survey</string><string>singlechoice_survey</string><string>singleline_survey</string><string>strings_survey</string><string>nps_survey</string></array>" ]
 
         // In UI tests it is usually best to stop immediately when a failure occurs.
         continueAfterFailure = false
@@ -145,6 +145,44 @@ class iOSDemoUITests: XCTestCase {
 
 		submitButton.tap()
 	}
+
+	func testRangeSurvey() {
+		let app = XCUIApplication()
+		let tabBarsQuery = app.tabBars
+
+		while (!app.navigationBars["Events"].exists) {
+			tabBarsQuery.buttons["Events"].tap()
+		}
+
+		app.tables.staticTexts["nps_survey"].tap()
+		let collectionViewsQuery = app.collectionViews
+
+		XCTAssert(app.staticTexts["Not at all likely"].exists)
+		XCTAssert(app.staticTexts["Extremely likely"].exists)
+
+		let submitButton = collectionViewsQuery.buttons["Submit"]
+		submitButton.tap()
+
+		// Validation should fail (no range selected)
+		XCTAssertTrue(app.toolbars.count == 1)
+
+		collectionViewsQuery.cells["5"].tap()
+		XCTAssert(collectionViewsQuery.cells["5"].selected)
+
+		collectionViewsQuery.cells["6"].tap()
+
+		// Validation should succeed
+		XCTAssertTrue(app.toolbars.count == 0)
+
+		XCTAssertFalse(collectionViewsQuery.cells["5"].selected)
+		XCTAssert(collectionViewsQuery.cells["6"].selected)
+
+		// Validation should succeed
+		XCTAssertTrue(app.toolbars.count == 0)
+
+		submitButton.tap()
+	}
+
 
 	func testStringsSurvey() {
 		let app = XCUIApplication()

@@ -14,7 +14,7 @@
 "Attaches a photo or screenshot" = "Joint une photo ou une capture d’écran";
 
 /* Placeholder name for attachment */
-"Attachment %ld" = "Pièce jointe %ld";
+"Attachment %@" = "Pièce jointe %@";
 
 /* No comment provided by engineer. */
 "Authentication Failed" = "L'authentification a échoué";

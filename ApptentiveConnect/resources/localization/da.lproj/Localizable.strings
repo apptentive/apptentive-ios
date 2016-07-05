@@ -14,7 +14,7 @@
 "Attaches a photo or screenshot" = "Vedhæfter et foto eller skærmbillede";
 
 /* Placeholder name for attachment */
-"Attachment %ld" = "Vedhæftning %ld";
+"Attachment %@" = "Vedhæftning %@";
 
 /* No comment provided by engineer. */
 "Authentication Failed" = "Godkendelse mislykkedes";

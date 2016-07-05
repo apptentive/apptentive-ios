@@ -14,7 +14,7 @@
 "Attaches a photo or screenshot" = "Funkcja załączenia zdjęcia lub zrzutu z ekranu";
 
 /* Placeholder name for attachment */
-"Attachment %ld" = "Załącznik %ld";
+"Attachment %@" = "Załącznik %@";
 
 /* No comment provided by engineer. */
 "Authentication Failed" = "Uwierzytelnienie nie powiodło się";

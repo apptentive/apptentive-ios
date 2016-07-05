@@ -14,7 +14,7 @@
 "Attaches a photo or screenshot" = "Bir fotoğraf ya da ekran resmi ekler";
 
 /* Placeholder name for attachment */
-"Attachment %ld" = "Eklenti %ld";
+"Attachment %@" = "Eklenti %@";
 
 /* No comment provided by engineer. */
 "Authentication Failed" = "Kimlik Doğrulaması Başarısız";

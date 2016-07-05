@@ -14,7 +14,7 @@
 "Attaches a photo or screenshot" = "قم بإرفاق صورة أو لقطة شاشة";
 
 /* Placeholder name for attachment */
-"Attachment %ld" = "المرفق رقم %ld";
+"Attachment %@" = "المرفق رقم %@";
 
 /* No comment provided by engineer. */
 "Authentication Failed" = "فشلت المصادقة";

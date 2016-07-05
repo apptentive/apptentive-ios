@@ -8,6 +8,12 @@
 
 #import "ApptentiveAttachButton.h"
 
+@interface ApptentiveAttachButton ()
+
+@property (strong, nonatomic) NSNumberFormatter *numberFormatter;
+
+@end
+
 
 @implementation ApptentiveAttachButton
 
@@ -17,6 +23,8 @@
 	self.titleLabel.textAlignment = NSTextAlignmentCenter;
 	self.titleEdgeInsets = UIEdgeInsetsMake(-8.0, 0.0, 0.0, 0.0);
 	self.titleLabel.layer.masksToBounds = YES;
+
+	self.numberFormatter = [[NSNumberFormatter alloc] init];
 
 	[super awakeFromNib];
 }
@@ -35,7 +43,7 @@
 	_badgeValue = badgeValue;
 
 	if (badgeValue > 0) {
-		[self setTitle:[NSString stringWithFormat:@"%ld", (long)badgeValue] forState:UIControlStateNormal];
+		[self setTitle:[self.numberFormatter stringFromNumber:@(badgeValue)] forState:UIControlStateNormal];
 	} else {
 		[self setTitle:nil forState:UIControlStateNormal];
 	}

@@ -14,7 +14,7 @@
 "Attaches a photo or screenshot" = "写真もしくはスクリーンショットを添付";
 
 /* Placeholder name for attachment */
-"Attachment %ld" = "添付ファイル%ld";
+"Attachment %@" = "添付ファイル%@";
 
 /* No comment provided by engineer. */
 "Authentication Failed" = "認証に失敗しました";

@@ -14,7 +14,7 @@
 "Attaches a photo or screenshot" = "Voegt een foto of screenshot toe als bijlage";
 
 /* Placeholder name for attachment */
-"Attachment %ld" = "Bijlage %ld";
+"Attachment %@" = "Bijlage %@";
 
 /* No comment provided by engineer. */
 "Authentication Failed" = "Verificatie mislukt";

@@ -14,7 +14,7 @@
 "Attaches a photo or screenshot" = "Anexar uma foto ou imagem";
 
 /* Placeholder name for attachment */
-"Attachment %ld" = "Anexo %ld";
+"Attachment %@" = "Anexo %@";
 
 /* No comment provided by engineer. */
 "Authentication Failed" = "Falha de autenticação";

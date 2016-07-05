@@ -14,7 +14,7 @@
 "Attaches a photo or screenshot" = "Επισυνάπτει μία φωτογραφία ή ένα στιγμιότυπο οθόνης";
 
 /* Placeholder name for attachment */
-"Attachment %ld" = "Συννημένο %ld";
+"Attachment %@" = "Συννημένο %@";
 
 /* No comment provided by engineer. */
 "Authentication Failed" = "Ο έλεγχος ταυτότητας απέτυχε";

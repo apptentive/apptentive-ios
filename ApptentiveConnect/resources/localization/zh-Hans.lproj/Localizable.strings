@@ -14,7 +14,7 @@
 "Attaches a photo or screenshot" = "附上一张照片或者屏幕截图";
 
 /* Placeholder name for attachment */
-"Attachment %ld" = "附件%ld";
+"Attachment %@" = "附件%@";
 
 /* No comment provided by engineer. */
 "Authentication Failed" = "验证失败";

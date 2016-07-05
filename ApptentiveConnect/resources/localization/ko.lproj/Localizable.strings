@@ -14,7 +14,7 @@
 "Attaches a photo or screenshot" = "사진이나 스크린샷 첨부";
 
 /* Placeholder name for attachment */
-"Attachment %ld" = "첨부 %ld";
+"Attachment %@" = "첨부 %@";
 
 /* No comment provided by engineer. */
 "Authentication Failed" = "인증 실패";

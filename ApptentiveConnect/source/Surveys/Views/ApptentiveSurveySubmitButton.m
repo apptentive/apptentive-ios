@@ -14,7 +14,7 @@
 - (void)awakeFromNib {
 	self.titleEdgeInsets = UIEdgeInsetsMake(4.0, 26.0, 4.0, 26.0);
 
-	self.layer.borderWidth = 1.0 / [UIScreen mainScreen].scale;
+	self.layer.borderWidth = 1.0;
 	self.layer.cornerRadius = 6.0;
 
 	[super awakeFromNib];

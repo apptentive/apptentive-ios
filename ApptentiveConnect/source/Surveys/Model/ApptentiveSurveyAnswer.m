@@ -24,11 +24,11 @@
 	return self;
 }
 
-- (instancetype)initWithValue:(NSInteger)value {
+- (instancetype)initWithValue:(NSString *)value {
 	self = [super init];
 
 	if (self) {
-		_value = [[NSNumber numberWithInteger:value] stringValue];
+		_value = value;
 		_type = ApptentiveSurveyAnswerTypeChoice;
 	}
 

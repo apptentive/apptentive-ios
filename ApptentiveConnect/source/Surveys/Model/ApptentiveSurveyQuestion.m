@@ -47,6 +47,8 @@
 		NSMutableArray *mutableAnswers = [NSMutableArray array];
 
 		if (_type == ATSurveyQuestionTypeRange) {
+			NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+
 			_minimumValue = [(JSON[@"min"] ?: @0) integerValue];
 			_maximumValue = [(JSON[@"max"] ?: @10) integerValue];
 
@@ -54,7 +56,7 @@
 			_maximumLabel = JSON[@"max_label"];
 
 			for (NSInteger i = _minimumValue; i <= _maximumValue; i ++) {
-				[mutableAnswers addObject:[[ApptentiveSurveyAnswer alloc] initWithValue:i]];
+				[mutableAnswers addObject:[[ApptentiveSurveyAnswer alloc] initWithValue:[numberFormatter stringFromNumber:@(i)]]];
 			}
 		} else {
 			for (NSDictionary *answerJSON in JSON[@"answer_choices"]) {

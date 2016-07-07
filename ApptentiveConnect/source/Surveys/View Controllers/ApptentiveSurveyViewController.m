@@ -261,6 +261,10 @@
 			cell.detailTextLabel.font = [self.viewModel.styleSheet fontForStyle:ApptentiveTextStyleSurveyInstructions];
 			cell.detailTextLabel.textColor = [self.viewModel.styleSheet colorForStyle:ApptentiveTextStyleSurveyInstructions];
 
+			if (detailText) {
+				cell.accessibilityHint = detailText;
+			}
+			
 			cell.accessibilityLabel = [self.viewModel textOfChoiceAtIndexPath:indexPath];
 			cell.accessibilityTraits |= UIAccessibilityTraitButton;
 			cell.button.image = buttonImage;
@@ -281,14 +285,6 @@
 				otherCell.textField.tag = [self.viewModel textFieldTagForIndexPath:indexPath];
 				otherCell.textField.font = [self.viewModel.styleSheet fontForStyle:ApptentiveTextStyleTextInput];
 				otherCell.textField.textColor = [self.viewModel.styleSheet colorForStyle:ApptentiveTextStyleTextInput];
-			} else if ([self.viewModel typeOfQuestionAtIndex:indexPath.section] == ATSurveyQuestionTypeRange) {
-				if (indexPath.item == 0) {
-					cell.accessibilityHint = [self.viewModel minimumLabelForQuestionAtIndex:indexPath.section];
-				} else if (indexPath.item == [self.viewModel numberOfAnswersForQuestionAtIndex:indexPath.section] - 1) {
-					cell.accessibilityHint = [self.viewModel maximumLabelForQuestionAtIndex:indexPath.section];
-				} else {
-					cell.accessibilityHint = nil;
-				}
 			}
 
 			return cell;

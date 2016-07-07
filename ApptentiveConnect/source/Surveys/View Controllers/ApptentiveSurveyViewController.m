@@ -17,7 +17,6 @@
 #import "ApptentiveSurveyQuestionFooterView.h"
 #import "ApptentiveSurveyCollectionViewLayout.h"
 #import "ApptentiveSurveyQuestionBackgroundView.h"
-#import "ApptentiveSurveyOptionButton.h"
 #import "ApptentiveSurveySubmitButton.h"
 #import "ApptentiveSurveyGreetingView.h"
 
@@ -246,6 +245,7 @@
 			}
 
 			UIImage *buttonImage = [[ApptentiveBackend imageNamed:buttonImageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+			UIImage *highlightedButtonImage = [[ApptentiveBackend imageNamed:[buttonImageName stringByAppendingString:@"_highlighted"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 
 			if ([self.viewModel typeOfAnswerAtIndexPath:indexPath] == ApptentiveSurveyAnswerTypeOther) {
 				reuseIdentifier = [reuseIdentifier stringByAppendingString:@"Other"];
@@ -261,11 +261,10 @@
 			cell.detailTextLabel.font = [self.viewModel.styleSheet fontForStyle:ApptentiveTextStyleSurveyInstructions];
 			cell.detailTextLabel.textColor = [self.viewModel.styleSheet colorForStyle:ApptentiveTextStyleSurveyInstructions];
 
-			cell.button.borderColor = [self.viewModel.styleSheet colorForStyle:ApptentiveColorSeparator];
 			cell.accessibilityLabel = [self.viewModel textOfChoiceAtIndexPath:indexPath];
 			cell.accessibilityTraits |= UIAccessibilityTraitButton;
-			[cell.button setImage:buttonImage forState:UIControlStateNormal];
-			cell.button.imageView.tintColor = [self.viewModel.styleSheet colorForStyle:ApptentiveColorBackground];
+			cell.button.image = buttonImage;
+			cell.button.highlightedImage = highlightedButtonImage;
 
 			cell.buttonTopConstraint.constant = (self.lineHeightOfQuestionFont - CGRectGetHeight(cell.button.bounds)) / 2.0;
 

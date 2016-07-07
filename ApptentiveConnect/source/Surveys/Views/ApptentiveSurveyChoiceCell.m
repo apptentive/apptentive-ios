@@ -7,7 +7,6 @@
 //
 
 #import "ApptentiveSurveyChoiceCell.h"
-#import "ApptentiveSurveyOptionButton.h"
 
 
 @implementation ApptentiveSurveyChoiceCell
@@ -26,7 +25,7 @@
 - (void)setSelected:(BOOL)selected {
 	[super setSelected:selected];
 
-	[self.button setSelected:selected];
+	[self.button setHighlighted:selected];
 }
 
 - (void)setHighlighted:(BOOL)highlighted {

@@ -14,6 +14,7 @@
 @interface ApptentiveSurveyChoiceCell : ApptentiveSurveyAnswerCell
 
 @property (strong, nonatomic) IBOutlet UILabel *textLabel;
+@property (strong, nonatomic) IBOutlet UILabel *detailTextLabel;
 @property (strong, nonatomic) IBOutlet ApptentiveSurveyOptionButton *button;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *buttonTopConstraint;
 

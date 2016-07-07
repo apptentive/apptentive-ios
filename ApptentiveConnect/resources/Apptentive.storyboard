@@ -1357,21 +1357,18 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
                                     <outlet property="textLabel" destination="XeR-GW-QUi" id="uot-NF-XjQ"/>
                                 </connections>
                             </collectionViewCell>
-                            <collectionViewCell opaque="NO" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Range" id="okc-Va-SE3" userLabel="Range" customClass="ApptentiveSurveyChoiceCell">
-                                <rect key="frame" x="123.5" y="185" width="73" height="79"/>
+                            <collectionViewCell opaque="NO" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="RangeMinimum" id="okc-Va-SE3" userLabel="Range Minimum" customClass="ApptentiveSurveyChoiceCell">
+                                <rect key="frame" x="7" y="185" width="73" height="79"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                     <rect key="frame" x="0.0" y="0.0" width="73" height="79"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="characterWrap" baselineAdjustment="alignBaselines" minimumFontSize="9" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="36H-6w-wxR">
-                                            <rect key="frame" x="26.5" y="11" width="20" height="27"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="characterWrap" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="36H-6w-wxR">
+                                            <rect key="frame" x="0.0" y="11" width="73" height="30"/>
                                             <accessibility key="accessibilityConfiguration">
                                                 <accessibilityTraits key="traits" notEnabled="YES"/>
                                             </accessibility>
-                                            <constraints>
-                                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="20" id="awe-3S-hLc"/>
-                                            </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
@@ -1392,20 +1389,146 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
                                                 </userDefinedRuntimeAttribute>
                                             </userDefinedRuntimeAttributes>
                                         </button>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Not at all likely" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fhA-48-7Ls">
+                                            <rect key="frame" x="25" y="79" width="83" height="14.5"/>
+                                            <accessibility key="accessibilityConfiguration">
+                                                <accessibilityTraits key="traits" staticText="YES" notEnabled="YES"/>
+                                            </accessibility>
+                                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
                                 <constraints>
                                     <constraint firstItem="V0d-qS-AUl" firstAttribute="centerX" secondItem="okc-Va-SE3" secondAttribute="centerX" id="7xp-1S-nzf"/>
+                                    <constraint firstItem="36H-6w-wxR" firstAttribute="leading" secondItem="okc-Va-SE3" secondAttribute="leading" id="AgZ-kh-LBL"/>
+                                    <constraint firstItem="fhA-48-7Ls" firstAttribute="leading" secondItem="V0d-qS-AUl" secondAttribute="leading" id="B4P-dF-Ohh"/>
                                     <constraint firstAttribute="bottom" secondItem="V0d-qS-AUl" secondAttribute="bottom" constant="8" id="Bab-3i-auf"/>
+                                    <constraint firstItem="fhA-48-7Ls" firstAttribute="top" secondItem="V0d-qS-AUl" secondAttribute="bottom" constant="8" id="DrO-wO-Iti"/>
+                                    <constraint firstAttribute="trailing" secondItem="36H-6w-wxR" secondAttribute="trailing" id="PDF-0u-dmR"/>
                                     <constraint firstItem="36H-6w-wxR" firstAttribute="centerX" secondItem="okc-Va-SE3" secondAttribute="centerX" id="XEh-XC-HGf"/>
-                                    <constraint firstItem="V0d-qS-AUl" firstAttribute="top" secondItem="36H-6w-wxR" secondAttribute="bottom" constant="11" id="a3h-aP-EkV"/>
+                                    <constraint firstItem="V0d-qS-AUl" firstAttribute="top" secondItem="36H-6w-wxR" secondAttribute="bottom" constant="8" id="a3h-aP-EkV"/>
                                     <constraint firstItem="36H-6w-wxR" firstAttribute="top" secondItem="okc-Va-SE3" secondAttribute="top" constant="11" id="u07-DV-fpx"/>
                                 </constraints>
                                 <size key="customSize" width="73" height="79"/>
                                 <connections>
                                     <outlet property="button" destination="V0d-qS-AUl" id="44g-BD-6lW"/>
+                                    <outlet property="detailTextLabel" destination="fhA-48-7Ls" id="BG0-jU-2qv"/>
                                     <outlet property="textLabel" destination="36H-6w-wxR" id="Mbv-9f-JZ9"/>
+                                </connections>
+                            </collectionViewCell>
+                            <collectionViewCell opaque="NO" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Range" id="7Vz-OR-8Vq" userLabel="Range" customClass="ApptentiveSurveyChoiceCell">
+                                <rect key="frame" x="123.5" y="185" width="73" height="79"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                    <rect key="frame" x="0.0" y="0.0" width="73" height="79"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="characterWrap" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="O2s-1I-ie4">
+                                            <rect key="frame" x="0.0" y="11" width="73" height="30"/>
+                                            <accessibility key="accessibilityConfiguration">
+                                                <accessibilityTraits key="traits" notEnabled="YES"/>
+                                            </accessibility>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9se-la-06w" customClass="ApptentiveSurveyOptionButton">
+                                            <rect key="frame" x="25" y="49" width="22" height="22"/>
+                                            <accessibility key="accessibilityConfiguration">
+                                                <accessibilityTraits key="traits" notEnabled="YES"/>
+                                            </accessibility>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="22" id="13Q-a7-HHI"/>
+                                                <constraint firstAttribute="height" constant="22" id="K5t-uD-k3k"/>
+                                            </constraints>
+                                            <state key="normal" image="at_circle.png"/>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="style">
+                                                    <integer key="value" value="1"/>
+                                                </userDefinedRuntimeAttribute>
+                                            </userDefinedRuntimeAttributes>
+                                        </button>
+                                    </subviews>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
+                                <constraints>
+                                    <constraint firstItem="O2s-1I-ie4" firstAttribute="top" secondItem="7Vz-OR-8Vq" secondAttribute="top" constant="11" id="B9e-1u-9Su"/>
+                                    <constraint firstItem="9se-la-06w" firstAttribute="top" secondItem="O2s-1I-ie4" secondAttribute="bottom" constant="8" id="CqA-8g-PGe"/>
+                                    <constraint firstAttribute="trailing" secondItem="O2s-1I-ie4" secondAttribute="trailing" id="FvI-dT-URe"/>
+                                    <constraint firstItem="O2s-1I-ie4" firstAttribute="centerX" secondItem="7Vz-OR-8Vq" secondAttribute="centerX" id="MVO-hl-UUm"/>
+                                    <constraint firstItem="9se-la-06w" firstAttribute="centerX" secondItem="7Vz-OR-8Vq" secondAttribute="centerX" id="Tja-Ig-bPt"/>
+                                    <constraint firstAttribute="bottom" secondItem="9se-la-06w" secondAttribute="bottom" constant="8" id="fTV-Rh-3e5"/>
+                                    <constraint firstItem="O2s-1I-ie4" firstAttribute="leading" secondItem="7Vz-OR-8Vq" secondAttribute="leading" id="kqu-3D-Dqu"/>
+                                </constraints>
+                                <size key="customSize" width="73" height="79"/>
+                                <connections>
+                                    <outlet property="button" destination="9se-la-06w" id="gcS-KZ-Fui"/>
+                                    <outlet property="textLabel" destination="O2s-1I-ie4" id="WbK-bb-Pgc"/>
+                                </connections>
+                            </collectionViewCell>
+                            <collectionViewCell opaque="NO" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="RangeMaximum" id="OlV-ns-e5c" userLabel="Range Maximum" customClass="ApptentiveSurveyChoiceCell">
+                                <rect key="frame" x="240" y="185" width="73" height="79"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                    <rect key="frame" x="0.0" y="0.0" width="73" height="79"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="characterWrap" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="56T-vU-eNv">
+                                            <rect key="frame" x="0.0" y="11" width="73" height="30"/>
+                                            <accessibility key="accessibilityConfiguration">
+                                                <accessibilityTraits key="traits" notEnabled="YES"/>
+                                            </accessibility>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Extremely likely" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="F6q-PO-OtH">
+                                            <rect key="frame" x="-41" y="79" width="88" height="14.5"/>
+                                            <accessibility key="accessibilityConfiguration">
+                                                <accessibilityTraits key="traits" staticText="YES" notEnabled="YES"/>
+                                            </accessibility>
+                                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vCy-0S-vv2" customClass="ApptentiveSurveyOptionButton">
+                                            <rect key="frame" x="25" y="49" width="22" height="22"/>
+                                            <accessibility key="accessibilityConfiguration">
+                                                <accessibilityTraits key="traits" notEnabled="YES"/>
+                                            </accessibility>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="22" id="LGr-De-SFp"/>
+                                                <constraint firstAttribute="height" constant="22" id="cTf-d5-2qv"/>
+                                            </constraints>
+                                            <state key="normal" image="at_circle.png"/>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="style">
+                                                    <integer key="value" value="1"/>
+                                                </userDefinedRuntimeAttribute>
+                                            </userDefinedRuntimeAttributes>
+                                        </button>
+                                    </subviews>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
+                                <constraints>
+                                    <constraint firstItem="56T-vU-eNv" firstAttribute="centerX" secondItem="OlV-ns-e5c" secondAttribute="centerX" id="0CQ-dX-dsf"/>
+                                    <constraint firstAttribute="bottom" secondItem="vCy-0S-vv2" secondAttribute="bottom" constant="8" id="Jc4-sW-2VA"/>
+                                    <constraint firstItem="F6q-PO-OtH" firstAttribute="trailing" secondItem="vCy-0S-vv2" secondAttribute="trailing" id="MFe-Ks-GxD"/>
+                                    <constraint firstAttribute="trailing" secondItem="56T-vU-eNv" secondAttribute="trailing" id="PJ4-gN-gXh"/>
+                                    <constraint firstItem="56T-vU-eNv" firstAttribute="top" secondItem="OlV-ns-e5c" secondAttribute="top" constant="11" id="Qah-Zx-CEd"/>
+                                    <constraint firstItem="vCy-0S-vv2" firstAttribute="centerX" secondItem="OlV-ns-e5c" secondAttribute="centerX" id="ZV3-8M-bua"/>
+                                    <constraint firstItem="56T-vU-eNv" firstAttribute="leading" secondItem="OlV-ns-e5c" secondAttribute="leading" id="fpL-cG-Od3"/>
+                                    <constraint firstItem="F6q-PO-OtH" firstAttribute="top" secondItem="vCy-0S-vv2" secondAttribute="bottom" constant="8" id="iGg-ph-IzU"/>
+                                    <constraint firstItem="vCy-0S-vv2" firstAttribute="top" secondItem="56T-vU-eNv" secondAttribute="bottom" constant="8" id="zRG-Eo-kJA"/>
+                                </constraints>
+                                <size key="customSize" width="73" height="79"/>
+                                <connections>
+                                    <outlet property="button" destination="vCy-0S-vv2" id="LCc-cN-i7S"/>
+                                    <outlet property="detailTextLabel" destination="F6q-PO-OtH" id="qxt-S3-At0"/>
+                                    <outlet property="textLabel" destination="56T-vU-eNv" id="W6Y-Gd-JPd"/>
                                 </connections>
                             </collectionViewCell>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="RadioOther" id="qJB-CQ-0Wg" customClass="ApptentiveSurveyOtherCell">
@@ -1688,36 +1811,6 @@ Lines</string>
                         <collectionReusableView key="sectionFooterView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Footer" id="0F3-e9-lGf" customClass="ApptentiveSurveyQuestionFooterView">
                             <rect key="frame" x="0.0" y="616" width="320" height="31"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <subviews>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Not at all likely" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yOh-Cb-cM5">
-                                    <rect key="frame" x="16" y="8.5" width="83" height="15"/>
-                                    <accessibility key="accessibilityConfiguration">
-                                        <accessibilityTraits key="traits" staticText="YES" notEnabled="YES"/>
-                                    </accessibility>
-                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                    <nil key="highlightedColor"/>
-                                </label>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Extremely likely" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AXc-9K-wCm">
-                                    <rect key="frame" x="216" y="8.5" width="88" height="15"/>
-                                    <accessibility key="accessibilityConfiguration">
-                                        <accessibilityTraits key="traits" staticText="YES" notEnabled="YES"/>
-                                    </accessibility>
-                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                    <nil key="highlightedColor"/>
-                                </label>
-                            </subviews>
-                            <constraints>
-                                <constraint firstItem="yOh-Cb-cM5" firstAttribute="leading" secondItem="0F3-e9-lGf" secondAttribute="leading" constant="16" id="FjM-WB-ckd"/>
-                                <constraint firstAttribute="bottom" secondItem="AXc-9K-wCm" secondAttribute="bottom" constant="8" id="NBo-Gp-j7j"/>
-                                <constraint firstAttribute="trailing" secondItem="AXc-9K-wCm" secondAttribute="trailing" constant="16" id="d76-x7-zgG"/>
-                                <constraint firstAttribute="bottom" secondItem="yOh-Cb-cM5" secondAttribute="bottom" constant="8" id="qhy-Lq-scW"/>
-                            </constraints>
-                            <connections>
-                                <outlet property="maximumLabel" destination="AXc-9K-wCm" id="nbq-XT-Gqv"/>
-                                <outlet property="minimumLabel" destination="yOh-Cb-cM5" id="fvF-pE-eDb"/>
-                            </connections>
                         </collectionReusableView>
                         <connections>
                             <outlet property="dataSource" destination="0Su-Sq-q29" id="RKu-Gn-4Gz"/>

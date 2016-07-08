@@ -17,7 +17,6 @@
 #import "ApptentiveSurveyQuestionFooterView.h"
 #import "ApptentiveSurveyCollectionViewLayout.h"
 #import "ApptentiveSurveyQuestionBackgroundView.h"
-#import "ApptentiveSurveyOptionButton.h"
 #import "ApptentiveSurveySubmitButton.h"
 #import "ApptentiveSurveyGreetingView.h"
 
@@ -35,8 +34,9 @@
 #define MULTILINE_HORIZONTAL_MARGIN 44
 #define MULTILINE_VERTICAL_MARGIN 14
 
-#define RANGE_VERTICAL_MARGIN 44
+#define RANGE_VERTICAL_MARGIN 49
 #define RANGE_FOOTER_VERTICAL_MARGIN 8
+#define RANGE_MINIMUM_WIDTH 27
 
 
 @interface ApptentiveSurveyViewController ()
@@ -219,11 +219,19 @@
 		case ATSurveyQuestionTypeRange:
 		case ATSurveyQuestionTypeSingleSelect:
 		case ATSurveyQuestionTypeMultipleSelect: {
-			NSString *reuseIdentifier, *buttonImageName;
+			NSString *reuseIdentifier, *buttonImageName, *detailText;
 
 			switch ([self.viewModel typeOfQuestionAtIndex:indexPath.section]) {
 				case ATSurveyQuestionTypeRange:
-					reuseIdentifier = @"Range";
+					if (indexPath.item == 0) {
+						reuseIdentifier = @"RangeMinimum";
+						detailText = [self.viewModel minimumLabelForQuestionAtIndex:indexPath.section];
+					} else if (indexPath.item == [self.viewModel numberOfAnswersForQuestionAtIndex:indexPath.section] - 1) {
+						reuseIdentifier = @"RangeMaximum";
+						detailText = [self.viewModel maximumLabelForQuestionAtIndex:indexPath.section];
+					} else {
+						reuseIdentifier = @"Range";
+					}
 					buttonImageName = @"at_circle";
 					break;
 				case ATSurveyQuestionTypeMultipleSelect:
@@ -237,6 +245,7 @@
 			}
 
 			UIImage *buttonImage = [[ApptentiveBackend imageNamed:buttonImageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+			UIImage *highlightedButtonImage = [[ApptentiveBackend imageNamed:[buttonImageName stringByAppendingString:@"_highlighted"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 
 			if ([self.viewModel typeOfAnswerAtIndexPath:indexPath] == ApptentiveSurveyAnswerTypeOther) {
 				reuseIdentifier = [reuseIdentifier stringByAppendingString:@"Other"];
@@ -248,11 +257,18 @@
 			cell.textLabel.font = [self.viewModel.styleSheet fontForStyle:UIFontTextStyleBody];
 			cell.textLabel.textColor = [self.viewModel.styleSheet colorForStyle:UIFontTextStyleBody];
 
-			cell.button.borderColor = [self.viewModel.styleSheet colorForStyle:ApptentiveColorSeparator];
+			cell.detailTextLabel.text = detailText;
+			cell.detailTextLabel.font = [self.viewModel.styleSheet fontForStyle:ApptentiveTextStyleSurveyInstructions];
+			cell.detailTextLabel.textColor = [self.viewModel.styleSheet colorForStyle:ApptentiveTextStyleSurveyInstructions];
+
+			if (detailText) {
+				cell.accessibilityHint = detailText;
+			}
+			
 			cell.accessibilityLabel = [self.viewModel textOfChoiceAtIndexPath:indexPath];
 			cell.accessibilityTraits |= UIAccessibilityTraitButton;
-			[cell.button setImage:buttonImage forState:UIControlStateNormal];
-			cell.button.imageView.tintColor = [self.viewModel.styleSheet colorForStyle:ApptentiveColorBackground];
+			cell.button.image = buttonImage;
+			cell.button.highlightedImage = highlightedButtonImage;
 
 			cell.buttonTopConstraint.constant = (self.lineHeightOfQuestionFont - CGRectGetHeight(cell.button.bounds)) / 2.0;
 
@@ -269,14 +285,6 @@
 				otherCell.textField.tag = [self.viewModel textFieldTagForIndexPath:indexPath];
 				otherCell.textField.font = [self.viewModel.styleSheet fontForStyle:ApptentiveTextStyleTextInput];
 				otherCell.textField.textColor = [self.viewModel.styleSheet colorForStyle:ApptentiveTextStyleTextInput];
-			} else if ([self.viewModel typeOfQuestionAtIndex:indexPath.section] == ATSurveyQuestionTypeRange) {
-				if (indexPath.item == 0) {
-					cell.accessibilityHint = [self.viewModel minimumLabelForQuestionAtIndex:indexPath.section];
-				} else if (indexPath.item == [self.viewModel numberOfAnswersForQuestionAtIndex:indexPath.section] - 1) {
-					cell.accessibilityHint = [self.viewModel maximumLabelForQuestionAtIndex:indexPath.section];
-				} else {
-					cell.accessibilityHint = nil;
-				}
 			}
 
 			return cell;
@@ -404,12 +412,23 @@
 			break;
 		}
 		case ATSurveyQuestionTypeRange: {
-			itemSize.width = floor(itemSize.width / [self.viewModel numberOfAnswersForQuestionAtIndex:indexPath.section]);
+			NSInteger numberOfAnswers = [self.viewModel numberOfAnswersForQuestionAtIndex:indexPath.section];
+			NSString *firstChoice = [self.viewModel textOfChoiceAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:indexPath.section]];
+			NSString *lastChoice = [self.viewModel textOfChoiceAtIndexPath:[NSIndexPath indexPathForItem:numberOfAnswers - 1 inSection:indexPath.section]];
 
 			UIFont *choiceFont = [self.viewModel.styleSheet fontForStyle:UIFontTextStyleBody];
-			CGSize labelSize = CGRectIntegral([[self.viewModel textOfChoiceAtIndexPath:indexPath] boundingRectWithSize:CGSizeMake(itemSize.width, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{ NSFontAttributeName: choiceFont } context:nil]).size;
+			CGSize firstLabelSize = CGRectIntegral([firstChoice boundingRectWithSize:CGSizeMake(itemSize.width, choiceFont.lineHeight) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{ NSFontAttributeName: choiceFont } context:nil]).size;
+			CGSize lastLabelSize = CGRectIntegral([lastChoice boundingRectWithSize:CGSizeMake(itemSize.width, choiceFont.lineHeight) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{ NSFontAttributeName: choiceFont } context:nil]).size;
 
-			itemSize.height = labelSize.height + RANGE_VERTICAL_MARGIN;
+			CGSize largestSize = CGSizeMake(fmax(firstLabelSize.width, lastLabelSize.width), fmax(firstLabelSize.height, lastLabelSize.height));
+
+			if (largestSize.width * numberOfAnswers > itemSize.width) {
+				itemSize.width = largestSize.width;
+			} else {
+				itemSize.width = floor(itemSize.width / [self.viewModel numberOfAnswersForQuestionAtIndex:indexPath.section]);
+			}
+
+			itemSize.height = largestSize.height + RANGE_VERTICAL_MARGIN;
 
 			if ([self.viewModel typeOfAnswerAtIndexPath:indexPath] == ApptentiveSurveyAnswerTypeOther && [self.viewModel answerIsSelectedAtIndexPath:indexPath]) {
 				itemSize.height += 44.0;

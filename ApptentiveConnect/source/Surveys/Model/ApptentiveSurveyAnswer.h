@@ -17,7 +17,7 @@ typedef NS_ENUM(NSInteger, ApptentiveSurveyAnswerType) {
 @interface ApptentiveSurveyAnswer : NSObject
 
 - (instancetype)initWithJSON:(NSDictionary *)JSON;
-- (instancetype)initWithValue:(NSInteger)value;
+- (instancetype)initWithValue:(NSString *)value;
 
 @property (readonly, nonatomic) NSString *identifier;
 @property (readonly, nonatomic) NSString *value;

@@ -10,14 +10,6 @@
 
 #import "ApptentiveLogger.h"
 
-// Can't get CocoaPods to do the right thing for debug builds.
-// So, do it explicitly.
-#if COCOAPODS
-#if DEBUG
-#define APPTENTIVE_LOGGING_LEVEL_INFO 1
-#endif
-#endif
-
 #ifndef APPTENTIVE_LOGGING_ENABLED
 #define APPTENTIVE_LOGGING_ENABLED 1
 #endif

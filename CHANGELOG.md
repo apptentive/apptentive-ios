@@ -1,8 +1,9 @@
-2016-07-07 frankus v3.2.0
+2016-07-08 frankus v3.2.0
 -------------------------
 Version 3.2.0 adds a range question type in order to support NPS-style survey
 questions. It also improves RTL language support and accessibility and includes
-several bug fixes. 
+several bug fixes. Logging now respects preprocessor macros when integrating
+via CocoaPods. 
 
 2016-06-21 frankus v3.1.1
 -------------------------

@@ -143,6 +143,18 @@ static ApptentiveTaskQueue *sharedTaskQueue = nil;
 	return result;
 }
 
+- (void)removeTasksOfClass:(Class)c {
+	@synchronized(self) {
+		NSArray *taskSnapshot = [tasks copy];
+		for (ApptentiveTask *task in taskSnapshot) {
+			if ([task isKindOfClass:c]) {
+				[task stop];
+				[tasks removeObject:task];
+			}
+		}
+	}
+}
+
 - (NSUInteger)count {
 	NSUInteger count = 0;
 	@synchronized(self) {

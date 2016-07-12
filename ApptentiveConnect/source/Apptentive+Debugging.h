@@ -41,7 +41,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (readonly, nonatomic) NSString *_Nullable manifestJSON;
 @property (readonly, nonatomic) NSDictionary<NSString *, NSObject *> *deviceInfo;
 @property (readonly, nonatomic, nullable) NSString *conversationToken;
+@property (strong, nonatomic, nullable) NSURL *localInteractionsURL;
 
+- (NSArray <NSString *>*)engagementEvents;
 - (NSArray *)engagementInteractions;
 - (NSString *)engagementInteractionNameAtIndex:(NSInteger)index;
 - (NSString *)engagementInteractionTypeAtIndex:(NSInteger)index;

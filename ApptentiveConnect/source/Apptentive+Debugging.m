@@ -36,6 +36,14 @@
 	self.APIKey = APIKey;
 }
 
+- (void)setLocalInteractionsURL:(NSURL *)localInteractionsURL {
+	self.engagementBackend.localEngagementManifestURL = localInteractionsURL;
+}
+
+- (NSURL *)localInteractionsURL {
+	return self.engagementBackend.localEngagementManifestURL;
+}
+
 - (NSString *)storagePath {
 	return [self class].supportDirectoryPath;
 }
@@ -73,6 +81,10 @@
 
 - (NSDictionary *)deviceInfo {
 	return [[[[ApptentiveDeviceInfo alloc] init] dictionaryRepresentation] objectForKey:@"device"];
+}
+
+- (NSArray *)engagementEvents {
+	return [self.engagementBackend targetedLocalEvents];
 }
 
 - (NSArray *)engagementInteractions {

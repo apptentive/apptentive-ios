@@ -65,6 +65,11 @@
 		device[@"hardware"] = machineName;
 	}
 
+	NSString *contentSizeCategory = [UIApplication sharedApplication].preferredContentSizeCategory;
+	if (contentSizeCategory) {
+		device[@"content_size_category"] = contentSizeCategory;
+	}
+
 	NSString *carrier = [ApptentiveDeviceInfo carrier];
 	if (carrier != nil) {
 		device[@"carrier"] = carrier;

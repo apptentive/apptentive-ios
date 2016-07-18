@@ -26,11 +26,11 @@
 
 - (void)setAPIKey:(NSString *)APIKey baseURL:(NSURL *)baseURL storagePath:(nonnull NSString *)storagePath {
 	if (![baseURL isEqual:self.baseURL]) {
-		ApptentiveLogInfo(@"Base URL of %@ will not be used due to SDK version. Using %@ instead.", baseURL, self.baseURL);
+		ApptentiveLogDebug(@"Base URL of %@ will not be used due to SDK version. Using %@ instead.", baseURL, self.baseURL);
 	}
 
 	if (![storagePath isEqualToString:self.storagePath]) {
-		ApptentiveLogInfo(@"Storage path of %@ will not be used due to SDK version. Using %@ instead.", storagePath, self.storagePath);
+		ApptentiveLogDebug(@"Storage path of %@ will not be used due to SDK version. Using %@ instead.", storagePath, self.storagePath);
 	}
 
 	self.APIKey = APIKey;

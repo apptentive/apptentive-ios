@@ -158,7 +158,7 @@
 }
 
 - (ATRecordRequestTaskResult)taskResultForTask:(ApptentiveRecordRequestTask *)task withRequest:(ApptentiveAPIRequest *)request withResult:(id)result {
-	//ApptentiveLogInfo(@"Successfully sent event: %@ %@", self, result);
+	ApptentiveLogDebug(@"Successfully sent event: %@ %@", self, result);
 	return ATRecordRequestTaskFinishedResult;
 }
 @end

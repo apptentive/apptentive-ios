@@ -936,7 +936,7 @@ static NSURLCache *imageCache = nil;
 		[self performSelectorOnMainThread:@selector(setupDataManager) withObject:nil waitUntilDone:YES];
 		return;
 	}
-	ApptentiveLogInfo(@"Setting up data manager");
+	ApptentiveLogDebug(@"Setting up data manager");
 
 	if (![[UIApplication sharedApplication] isProtectedDataAvailable]) {
 		self.state = ATBackendStateWaitingForDataProtectionUnlock;

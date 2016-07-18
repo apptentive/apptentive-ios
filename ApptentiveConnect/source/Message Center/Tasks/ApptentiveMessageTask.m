@@ -51,7 +51,7 @@
 
 - (BOOL)canStart {
 	if ([Apptentive sharedConnection].webClient == nil) {
-		ApptentiveLogDebug(@"Failed to send message because Apptentive API key is not set!");
+		ApptentiveLogError(@"Failed to send message because Apptentive API key is not set!");
 		return NO;
 	}
 	if (![ApptentiveConversationUpdater conversationExists]) {

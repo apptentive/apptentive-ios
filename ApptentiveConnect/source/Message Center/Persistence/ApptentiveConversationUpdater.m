@@ -56,7 +56,7 @@ NSString *const ATConversationLastUpdateValuePreferenceKey = @"ATConversationLas
 
 	ApptentiveConversation *currentConversation = [ApptentiveConversationUpdater currentConversation];
 	if (currentConversation == nil) {
-		ApptentiveLogInfo(@"Creating conversation");
+		ApptentiveLogDebug(@"Creating conversation");
 		creatingConversation = YES;
 		ApptentiveConversation *conversation = [[ApptentiveConversation alloc] init];
 		conversation.deviceID = [[Apptentive sharedConnection].backend deviceUUID];

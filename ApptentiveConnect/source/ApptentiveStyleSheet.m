@@ -40,6 +40,7 @@ NSString *const ApptentiveColorContextBackground = @"com.apptentive.color.contex
 @property (strong, nonatomic) NSMutableDictionary *colorOverrides;
 
 @property (strong, nonatomic) NSMutableDictionary *fontTable;
+@property (nonatomic) BOOL didInheritColors;
 
 + (NSArray *)UIKitTextStyles;
 + (NSArray *)apptentiveTextStyles;
@@ -450,10 +451,10 @@ NSString *const ApptentiveColorContextBackground = @"com.apptentive.color.contex
 }
 
 - (UIColor *)colorForStyle:(NSString *)style {
-	static dispatch_once_t onceToken;
-	dispatch_once(&onceToken, ^{
+	if (!self.didInheritColors) {
 		[self inheritDefaultColors];
-	});
+		self.didInheritColors = YES;
+	}
 
 	UIColor *result = self.colorOverrides[style];
 

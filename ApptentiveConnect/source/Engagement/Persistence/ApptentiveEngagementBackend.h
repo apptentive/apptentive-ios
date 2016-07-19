@@ -65,10 +65,6 @@ extern NSString *const ApptentiveEngagementMessageCenterEvent;
 - (void)interactionWasEngaged:(ApptentiveInteraction *)interaction;
 
 - (void)presentInteraction:(ApptentiveInteraction *)interaction fromViewController:(UIViewController *)viewController;
-- (void)presentUpgradeMessageInteraction:(ApptentiveInteraction *)interaction fromViewController:(UIViewController *)viewController;
-- (void)presentEnjoymentDialogInteraction:(ApptentiveInteraction *)interaction fromViewController:(UIViewController *)viewController;
-
-- (void)presentNavigateToLinkInteraction:(ApptentiveInteraction *)interaction;
 
 // Used for debugging only.
 - (void)resetUpgradeVersionInfo;

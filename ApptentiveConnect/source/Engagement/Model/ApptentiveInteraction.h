@@ -10,19 +10,6 @@
 
 @class ApptentiveInteractionUsageData;
 
-typedef NS_ENUM(NSInteger, ATInteractionType) {
-	ATInteractionTypeUnknown,
-	ATInteractionTypeUpgradeMessage,
-	ATInteractionTypeEnjoymentDialog,
-	ATInteractionTypeRatingDialog,
-	ATInteractionTypeMessageCenter,
-	ATInteractionTypeAppStoreRating,
-	ATInteractionTypeSurvey,
-	ATInteractionTypeTextModal,
-	ATInteractionTypeNavigateToLink,
-};
-
-
 @interface ApptentiveInteraction : NSObject <NSCoding, NSCopying>
 @property (copy, nonatomic) NSString *identifier;
 @property (assign, nonatomic) NSInteger priority;
@@ -36,8 +23,6 @@ typedef NS_ENUM(NSInteger, ATInteractionType) {
 // Used to engage local and app events
 + (ApptentiveInteraction *)localAppInteraction;
 + (ApptentiveInteraction *)apptentiveAppInteraction;
-
-- (ATInteractionType)interactionType;
 
 - (NSString *)codePointForEvent:(NSString *)event;
 

@@ -6,16 +6,8 @@
 //  Copyright (c) 2014 Apptentive, Inc. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-@class ApptentiveInteraction;
+#import "ApptentiveInteractionController.h"
 
 
-@interface ApptentiveInteractionSurveyController : NSObject
-
-@property (readonly, strong, nonatomic) ApptentiveInteraction *interaction;
-@property (strong, nonatomic) UIViewController *viewController;
-
-- (id)initWithInteraction:(ApptentiveInteraction *)interaction;
-- (void)showSurveyFromViewController:(UIViewController *)viewController;
-
+@interface ApptentiveInteractionSurveyController : ApptentiveInteractionController
 @end

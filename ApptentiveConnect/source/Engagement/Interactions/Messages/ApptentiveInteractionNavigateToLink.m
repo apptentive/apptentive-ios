@@ -7,17 +7,20 @@
 //
 
 #import "ApptentiveInteractionNavigateToLink.h"
+#import "ApptentiveInteraction.h"
 
 NSString *const ATInteractionNavigateToLinkEventLabelNavigate = @"navigate";
 
 
 @implementation ApptentiveInteractionNavigateToLink
 
-+ (void)navigateToLinkWithInteraction:(ApptentiveInteraction *)interaction {
-	NSAssert([interaction.type isEqualToString:@"NavigateToLink"], @"Attempted to load a NavigateToLink interaction with an interaction of type: %@", interaction.type);
++ (void)load {
+	[self registerInteractionControllerClass:self forType:@"NavigateToLink"];
+}
 
+- (void)presentInteractionFromViewController:(UIViewController *)viewController {
 	BOOL openedURL = NO;
-	NSString *urlString = interaction.configuration[@"url"];
+	NSString *urlString = self.interaction.configuration[@"url"];
 	NSURL *url = [NSURL URLWithString:urlString];
 	if (url) {
 		BOOL attemptToOpenURL = [[UIApplication sharedApplication] canOpenURL:url];
@@ -40,10 +43,10 @@ NSString *const ATInteractionNavigateToLinkEventLabelNavigate = @"navigate";
 	}
 
 	NSDictionary *userInfo = @{ @"url": (urlString ?: [NSNull null]),
-		@"success": @(openedURL),
-	};
+								@"success": @(openedURL),
+								};
 
-	[interaction engage:ATInteractionNavigateToLinkEventLabelNavigate fromViewController:nil userInfo:userInfo];
+	[self.interaction engage:ATInteractionNavigateToLinkEventLabelNavigate fromViewController:nil userInfo:userInfo];
 }
 
 @end

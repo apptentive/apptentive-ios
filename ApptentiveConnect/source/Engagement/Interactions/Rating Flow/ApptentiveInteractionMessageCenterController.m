@@ -11,11 +11,11 @@
 #import "ApptentiveBackend.h"
 #import "Apptentive_Private.h"
 #import "ApptentiveMessageCenterViewController.h"
+#import "ApptentiveInteraction.h"
 
 
 @interface ApptentiveInteractionMessageCenterController ()
 
-@property (readonly, strong, nonatomic) ApptentiveMessageCenterInteraction *interaction;
 @property (strong, nonatomic) UIViewController *viewController;
 
 @end
@@ -23,18 +23,17 @@
 
 @implementation ApptentiveInteractionMessageCenterController
 
-- (id)initWithInteraction:(ApptentiveInteraction *)interaction {
-	NSAssert([interaction.type isEqualToString:@"MessageCenter"], @"Attempted to load a MessageCenterController with an interaction of type: %@", interaction.type);
-
-	self = [super init];
-	if (self != nil) {
-		ApptentiveMessageCenterInteraction *messageCenterInteraction = [ApptentiveMessageCenterInteraction messageCenterInteractionFromInteraction:interaction];
-		_interaction = [messageCenterInteraction copy];
-	}
-	return self;
++ (void)load {
+	[self registerInteractionControllerClass:self forType:@"MessageCenter"];
 }
 
-- (void)showMessageCenterFromViewController:(UIViewController *)viewController {
+- (instancetype)initWithInteraction:(ApptentiveInteraction *)interaction {
+	ApptentiveMessageCenterInteraction *messageCenterInteraction = [ApptentiveMessageCenterInteraction messageCenterInteractionFromInteraction:interaction];
+
+	return [super initWithInteraction:messageCenterInteraction];
+}
+
+- (void)presentInteractionFromViewController:(UIViewController *)viewController {
 	self.viewController = viewController;
 
 	if (!self.viewController) {
@@ -43,11 +42,10 @@
 		UINavigationController *navigationController = [[Apptentive storyboard] instantiateViewControllerWithIdentifier:@"MessageCenterNavigation"];
 
 		ApptentiveMessageCenterViewController *messageCenter = navigationController.viewControllers.firstObject;
-		messageCenter.interaction = self.interaction;
+		messageCenter.interaction = (ApptentiveMessageCenterInteraction *)self.interaction;
 
 		[viewController presentViewController:navigationController animated:YES completion:nil];
 	}
 }
-
 
 @end

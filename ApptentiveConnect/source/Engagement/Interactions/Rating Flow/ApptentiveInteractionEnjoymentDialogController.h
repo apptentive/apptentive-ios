@@ -6,19 +6,8 @@
 //  Copyright (c) 2015 Apptentive, Inc. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-#import "ApptentiveInteraction.h"
+#import "ApptentiveInteractionController.h"
 
 
-@interface ApptentiveInteractionEnjoymentDialogController : NSObject <UIAlertViewDelegate>
-
-@property (strong, nonatomic) ApptentiveInteraction *interaction;
-@property (strong, nonatomic) UIViewController *viewController;
-
-@property (strong, nonatomic) UIAlertController *alertController;
-@property (strong, nonatomic) UIAlertView *alertView;
-
-- (instancetype)initWithInteraction:(ApptentiveInteraction *)interaction;
-- (void)presentEnjoymentDialogFromViewController:(UIViewController *)viewController;
-
+@interface ApptentiveInteractionEnjoymentDialogController : ApptentiveInteractionController <UIAlertViewDelegate>
 @end

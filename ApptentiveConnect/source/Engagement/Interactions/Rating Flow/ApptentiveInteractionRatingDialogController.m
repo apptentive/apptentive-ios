@@ -12,6 +12,7 @@
 #import "ApptentiveEngagementBackend.h"
 #import "Apptentive_Private.h"
 #import "ApptentiveBackend.h"
+#import "ApptentiveInteraction.h"
 
 NSString *const ATInteractionRatingDialogEventLabelLaunch = @"launch";
 NSString *const ATInteractionRatingDialogEventLabelCancel = @"cancel";
@@ -19,18 +20,44 @@ NSString *const ATInteractionRatingDialogEventLabelRate = @"rate";
 NSString *const ATInteractionRatingDialogEventLabelRemind = @"remind";
 NSString *const ATInteractionRatingDialogEventLabelDecline = @"decline";
 
+@interface ApptentiveInteractionRatingDialogController ()
+
+@property (strong, nonatomic) UIViewController *viewController;
+@property (strong, nonatomic) UIAlertController *alertController;
+@property (strong, nonatomic) UIAlertView *alertView;
+
+@end
+
 
 @implementation ApptentiveInteractionRatingDialogController
 
-- (instancetype)initWithInteraction:(ApptentiveInteraction *)interaction {
-	NSAssert([interaction.type isEqualToString:@"RatingDialog"], @"Attempted to load a RatingDialogController with an interaction of type: %@", interaction.type);
++ (void)load {
+	[self registerInteractionControllerClass:self forType:@"RatingDialog"];
+}
 
-	self = [super init];
-	if (self != nil) {
-		_interaction = [interaction copy];
+- (void)presentInteractionFromViewController:(UIViewController *)viewController {
+	if (!self.interaction) {
+		ApptentiveLogError(@"Cannot present a Rating Dialog alert without an interaction.");
+		return;
 	}
 
-	return self;
+	self.viewController = viewController;
+
+	if ([UIAlertController class]) {
+		self.alertController = [self alertControllerWithInteraction:self.interaction];
+
+		if (self.alertController) {
+			[viewController presentViewController:self.alertController animated:YES completion:^{
+				[self.interaction engage:ATInteractionRatingDialogEventLabelLaunch fromViewController:self.viewController];
+			}];
+		}
+	} else {
+		self.alertView = [self alertViewWithInteraction:self.interaction];
+
+		if (self.alertView) {
+			[self.alertView show];
+		}
+	}
 }
 
 - (NSString *)title {
@@ -61,31 +88,6 @@ NSString *const ATInteractionRatingDialogEventLabelDecline = @"decline";
 	NSString *remindText = self.interaction.configuration[@"remind_text"] ?: ApptentiveLocalizedString(@"Remind Me Later", @"Remind me later button title");
 
 	return remindText;
-}
-
-- (void)presentRatingDialogFromViewController:(UIViewController *)viewController {
-	if (!self.interaction) {
-		ApptentiveLogError(@"Cannot present a Rating Dialog alert without an interaction.");
-		return;
-	}
-
-	self.viewController = viewController;
-
-	if ([UIAlertController class]) {
-		self.alertController = [self alertControllerWithInteraction:self.interaction];
-
-		if (self.alertController) {
-			[viewController presentViewController:self.alertController animated:YES completion:^{
-				[self.interaction engage:ATInteractionRatingDialogEventLabelLaunch fromViewController:self.viewController];
-			}];
-		}
-	} else {
-		self.alertView = [self alertViewWithInteraction:self.interaction];
-
-		if (self.alertView) {
-			[self.alertView show];
-		}
-	}
 }
 
 #pragma mark UIAlertController

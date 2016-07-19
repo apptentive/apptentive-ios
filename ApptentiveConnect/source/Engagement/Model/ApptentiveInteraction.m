@@ -11,6 +11,8 @@
 #import "ApptentiveInteractionUsageData.h"
 #import "ApptentiveUtilities.h"
 #import "Apptentive_Private.h"
+#import "ApptentiveInteractionController.h"
+
 
 
 @implementation ApptentiveInteraction
@@ -45,31 +47,6 @@
 	interaction.vendor = ATEngagementCodePointApptentiveVendorKey;
 
 	return interaction;
-}
-
-- (ATInteractionType)interactionType {
-	ATInteractionType interactionType;
-	if ([self.type isEqualToString:@"UpgradeMessage"]) {
-		interactionType = ATInteractionTypeUpgradeMessage;
-	} else if ([self.type isEqualToString:@"EnjoymentDialog"]) {
-		interactionType = ATInteractionTypeEnjoymentDialog;
-	} else if ([self.type isEqualToString:@"RatingDialog"]) {
-		interactionType = ATInteractionTypeRatingDialog;
-	} else if ([self.type isEqualToString:@"MessageCenter"]) {
-		interactionType = ATInteractionTypeMessageCenter;
-	} else if ([self.type isEqualToString:@"AppStoreRating"]) {
-		interactionType = ATInteractionTypeAppStoreRating;
-	} else if ([self.type isEqualToString:@"Survey"]) {
-		interactionType = ATInteractionTypeSurvey;
-	} else if ([self.type isEqualToString:@"TextModal"]) {
-		interactionType = ATInteractionTypeTextModal;
-	} else if ([self.type isEqualToString:@"NavigateToLink"]) {
-		interactionType = ATInteractionTypeNavigateToLink;
-	} else {
-		interactionType = ATInteractionTypeUnknown;
-	}
-
-	return interactionType;
 }
 
 - (NSString *)description {

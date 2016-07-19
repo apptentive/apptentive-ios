@@ -12,7 +12,6 @@
 
 @interface ApptentiveInteractionUpgradeMessageViewController : UIViewController
 
-+ (instancetype)interactionUpgradeMessageViewControllerWithInteraction:(ApptentiveInteraction *)interaction;
-- (void)presentFromViewController:(UIViewController *)newPresentingViewController animated:(BOOL)animated;
+@property (strong, nonatomic) ApptentiveInteraction *upgradeMessageInteraction;
 
 @end

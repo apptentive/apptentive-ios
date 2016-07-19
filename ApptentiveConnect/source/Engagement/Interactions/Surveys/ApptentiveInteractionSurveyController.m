@@ -18,19 +18,20 @@
 
 NSString *const ATInteractionSurveyEventLabelLaunch = @"launch";
 
+@interface ApptentiveInteractionSurveyController ()
+
+@property (strong, nonatomic) UIViewController *viewController;
+
+@end
+
 
 @implementation ApptentiveInteractionSurveyController
 
-- (id)initWithInteraction:(ApptentiveInteraction *)interaction {
-	NSAssert([interaction.type isEqualToString:@"Survey"], @"Attempted to load a SurveyController with an interaction of type: %@", interaction.type);
-	self = [super init];
-	if (self != nil) {
-		_interaction = [interaction copy];
-	}
-	return self;
++ (void)load {
+	[self registerInteractionControllerClass:self forType:@"Survey"];
 }
 
-- (void)showSurveyFromViewController:(UIViewController *)viewController {
+- (void)presentInteractionFromViewController:(UIViewController *)viewController {
 	self.viewController = viewController;
 
 	UINavigationController *navigationController = [[Apptentive storyboard] instantiateViewControllerWithIdentifier:@"SurveyNavigation"];

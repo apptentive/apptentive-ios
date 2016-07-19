@@ -6,12 +6,8 @@
 //  Copyright (c) 2014 Apptentive, Inc. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-#import "ApptentiveInteraction.h"
+#import "ApptentiveInteractionController.h"
 
 
-@interface ApptentiveInteractionNavigateToLink : NSObject
-
-+ (void)navigateToLinkWithInteraction:(ApptentiveInteraction *)interaction;
-
+@interface ApptentiveInteractionNavigateToLink : ApptentiveInteractionController
 @end

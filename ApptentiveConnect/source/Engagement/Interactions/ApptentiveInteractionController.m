@@ -23,7 +23,7 @@ static NSMutableDictionary *interactionControllerClassRegistry;
 }
 
 + (Class)interactionControllerClassWithType:(NSString *)type {
-	return [interactionControllerClassRegistry objectForKey:type] ?: [ApptentiveInteractionController class];
+	return [interactionControllerClassRegistry objectForKey:type];
 }
 
 + (instancetype)interactionControllerWithInteraction:(ApptentiveInteraction *)interaction {

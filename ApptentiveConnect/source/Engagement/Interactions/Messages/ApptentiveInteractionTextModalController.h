@@ -8,8 +8,6 @@
 
 #import "ApptentiveInteractionController.h"
 
-typedef void (^alertActionHandler)(UIAlertAction *);
-
 
 @interface ApptentiveInteractionTextModalController : ApptentiveInteractionController <UIAlertViewDelegate>
 @end

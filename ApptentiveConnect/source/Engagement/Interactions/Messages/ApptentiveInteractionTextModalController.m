@@ -13,11 +13,12 @@
 #import "Apptentive_Private.h"
 #import "ApptentiveInteraction.h"
 
-
 NSString *const ATInteractionTextModalEventLabelLaunch = @"launch";
 NSString *const ATInteractionTextModalEventLabelCancel = @"cancel";
 NSString *const ATInteractionTextModalEventLabelDismiss = @"dismiss";
 NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
+
+typedef void (^alertActionHandler)(UIAlertAction *);
 
 @interface ApptentiveInteractionTextModalController ()
 

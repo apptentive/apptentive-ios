@@ -10,6 +10,7 @@
 
 @class ApptentiveInteractionUsageData;
 
+
 @interface ApptentiveInteraction : NSObject <NSCoding, NSCopying>
 @property (copy, nonatomic) NSString *identifier;
 @property (assign, nonatomic) NSInteger priority;

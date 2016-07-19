@@ -43,8 +43,8 @@ NSString *const ATInteractionNavigateToLinkEventLabelNavigate = @"navigate";
 	}
 
 	NSDictionary *userInfo = @{ @"url": (urlString ?: [NSNull null]),
-								@"success": @(openedURL),
-								};
+		@"success": @(openedURL),
+	};
 
 	[self.interaction engage:ATInteractionNavigateToLinkEventLabelNavigate fromViewController:nil userInfo:userInfo];
 }

@@ -13,6 +13,7 @@
 
 NSString *const ATInteractionUpgradeMessageEventLabelLaunch = @"launch";
 
+
 @implementation ApptentiveInteractionUpgradeMessageController
 
 + (void)load {

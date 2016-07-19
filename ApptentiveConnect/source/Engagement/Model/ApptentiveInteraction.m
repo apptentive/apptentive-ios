@@ -14,7 +14,6 @@
 #import "ApptentiveInteractionController.h"
 
 
-
 @implementation ApptentiveInteraction
 
 + (void)load {

@@ -10,9 +10,10 @@
 
 @class ApptentiveInteraction;
 
+
 @interface ApptentiveInteractionController : NSObject
 
-+ (void)registerInteractionControllerClass:(Class)class forType:(NSString *)type;
++ (void)registerInteractionControllerClass:(Class) class forType:(NSString *)type;
 + (instancetype)interactionControllerWithInteraction:(ApptentiveInteraction *)interaction;
 
 - (instancetype)initWithInteraction:(ApptentiveInteraction *)interaction;

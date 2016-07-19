@@ -18,6 +18,7 @@
 
 NSString *const ATInteractionSurveyEventLabelLaunch = @"launch";
 
+
 @interface ApptentiveInteractionSurveyController ()
 
 @property (strong, nonatomic) UIViewController *viewController;

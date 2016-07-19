@@ -19,6 +19,7 @@ NSString *const ATInteractionEnjoymentDialogEventLabelCancel = @"cancel";
 NSString *const ATInteractionEnjoymentDialogEventLabelYes = @"yes";
 NSString *const ATInteractionEnjoymentDialogEventLabelNo = @"no";
 
+
 @interface ApptentiveInteractionEnjoymentDialogController ()
 
 @property (strong, nonatomic) UIViewController *viewController;

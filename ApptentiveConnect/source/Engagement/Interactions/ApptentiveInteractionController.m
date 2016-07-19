@@ -11,9 +11,10 @@
 
 static NSMutableDictionary *interactionControllerClassRegistry;
 
+
 @implementation ApptentiveInteractionController
 
-+ (void)registerInteractionControllerClass:(Class)class forType:(NSString *)type {
++ (void)registerInteractionControllerClass:(Class) class forType:(NSString *)type {
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
 		interactionControllerClassRegistry = [[NSMutableDictionary alloc] init];
@@ -22,7 +23,7 @@ static NSMutableDictionary *interactionControllerClassRegistry;
 	[interactionControllerClassRegistry setObject:class forKey:type];
 }
 
-+ (Class)interactionControllerClassWithType:(NSString *)type {
+	+ (Class)interactionControllerClassWithType : (NSString *)type {
 	return [interactionControllerClassRegistry objectForKey:type];
 }
 

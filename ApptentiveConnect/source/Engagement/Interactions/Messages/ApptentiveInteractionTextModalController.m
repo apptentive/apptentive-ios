@@ -20,6 +20,7 @@ NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 
 typedef void (^alertActionHandler)(UIAlertAction *);
 
+
 @interface ApptentiveInteractionTextModalController ()
 
 @property (strong, nonatomic) UIViewController *viewController;

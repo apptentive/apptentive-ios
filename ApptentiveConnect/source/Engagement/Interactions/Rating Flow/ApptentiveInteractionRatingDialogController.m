@@ -20,6 +20,7 @@ NSString *const ATInteractionRatingDialogEventLabelRate = @"rate";
 NSString *const ATInteractionRatingDialogEventLabelRemind = @"remind";
 NSString *const ATInteractionRatingDialogEventLabelDecline = @"decline";
 
+
 @interface ApptentiveInteractionRatingDialogController ()
 
 @property (strong, nonatomic) UIViewController *viewController;

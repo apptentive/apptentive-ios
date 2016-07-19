@@ -18,6 +18,7 @@ NSString *const ATInteractionAppStoreRatingEventLabelOpenStoreKit = @"open_store
 NSString *const ATInteractionAppStoreRatingEventLabelOpenMacAppStore = @"open_mac_app_store";
 NSString *const ATInteractionAppStoreRatingEventLabelUnableToRate = @"unable_to_rate";
 
+
 @interface ApptentiveInteractionAppStoreController ()
 
 @property (strong, nonatomic) UIViewController *viewController;

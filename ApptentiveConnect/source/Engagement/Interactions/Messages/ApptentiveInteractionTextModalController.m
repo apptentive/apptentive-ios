@@ -24,11 +24,7 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 @interface ApptentiveInteractionTextModalController ()
 
 @property (strong, nonatomic) UIViewController *viewController;
-
-// Used in iOS 8 and later
 @property (strong, nonatomic) UIAlertController *alertController;
-
-// Used in iOS 7 and previous
 @property (strong, nonatomic) UIAlertView *alertView;
 
 @end

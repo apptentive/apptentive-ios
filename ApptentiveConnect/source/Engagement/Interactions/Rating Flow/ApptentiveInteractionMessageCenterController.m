@@ -14,13 +14,6 @@
 #import "ApptentiveInteraction.h"
 
 
-@interface ApptentiveInteractionMessageCenterController ()
-
-@property (strong, nonatomic) UIViewController *viewController;
-
-@end
-
-
 @implementation ApptentiveInteractionMessageCenterController
 
 + (void)load {
@@ -34,18 +27,12 @@
 }
 
 - (void)presentInteractionFromViewController:(UIViewController *)viewController {
-	self.viewController = viewController;
+	UINavigationController *navigationController = [[Apptentive storyboard] instantiateViewControllerWithIdentifier:@"MessageCenterNavigation"];
 
-	if (!self.viewController) {
-		ApptentiveLogError(@"No view controller to present Message Center interface!!");
-	} else {
-		UINavigationController *navigationController = [[Apptentive storyboard] instantiateViewControllerWithIdentifier:@"MessageCenterNavigation"];
+	ApptentiveMessageCenterViewController *messageCenter = navigationController.viewControllers.firstObject;
+	messageCenter.interaction = (ApptentiveMessageCenterInteraction *)self.interaction;
 
-		ApptentiveMessageCenterViewController *messageCenter = navigationController.viewControllers.firstObject;
-		messageCenter.interaction = (ApptentiveMessageCenterInteraction *)self.interaction;
-
-		[viewController presentViewController:navigationController animated:YES completion:nil];
-	}
+	[viewController presentViewController:navigationController animated:YES completion:nil];
 }
 
 @end

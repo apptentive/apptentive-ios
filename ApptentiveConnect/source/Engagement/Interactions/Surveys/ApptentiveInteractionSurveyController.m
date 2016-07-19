@@ -19,13 +19,6 @@
 NSString *const ATInteractionSurveyEventLabelLaunch = @"launch";
 
 
-@interface ApptentiveInteractionSurveyController ()
-
-@property (strong, nonatomic) UIViewController *viewController;
-
-@end
-
-
 @implementation ApptentiveInteractionSurveyController
 
 + (void)load {
@@ -33,8 +26,6 @@ NSString *const ATInteractionSurveyEventLabelLaunch = @"launch";
 }
 
 - (void)presentInteractionFromViewController:(UIViewController *)viewController {
-	self.viewController = viewController;
-
 	UINavigationController *navigationController = [[Apptentive storyboard] instantiateViewControllerWithIdentifier:@"SurveyNavigation"];
 	ApptentiveSurveyViewModel *viewModel = [[ApptentiveSurveyViewModel alloc] initWithInteraction:self.interaction];
 	if (viewModel) {
@@ -46,7 +37,7 @@ NSString *const ATInteractionSurveyEventLabelLaunch = @"launch";
 	NSDictionary *notificationInfo = @{ApptentiveSurveyIDKey: (self.interaction.identifier ?: [NSNull null])};
 	[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveSurveyShownNotification object:nil userInfo:notificationInfo];
 
-	[self.interaction engage:ATInteractionSurveyEventLabelLaunch fromViewController:self.viewController];
+	[self.interaction engage:ATInteractionSurveyEventLabelLaunch fromViewController:viewController];
 }
 
 

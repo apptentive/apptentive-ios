@@ -37,11 +37,6 @@ NSString *const ATInteractionRatingDialogEventLabelDecline = @"decline";
 }
 
 - (void)presentInteractionFromViewController:(UIViewController *)viewController {
-	if (!self.interaction) {
-		ApptentiveLogError(@"Cannot present a Rating Dialog alert without an interaction.");
-		return;
-	}
-
 	self.viewController = viewController;
 
 	if ([UIAlertController class]) {

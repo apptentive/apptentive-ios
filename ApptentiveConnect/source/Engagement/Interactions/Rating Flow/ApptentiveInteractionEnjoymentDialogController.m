@@ -36,11 +36,6 @@ NSString *const ATInteractionEnjoymentDialogEventLabelNo = @"no";
 }
 
 - (void)presentInteractionFromViewController:(UIViewController *)viewController {
-	if (!self.interaction) {
-		ApptentiveLogError(@"Cannot present an Enjoyment Dialog alert without an interaction.");
-		return;
-	}
-
 	self.viewController = viewController;
 
 	if ([UIAlertController class]) {

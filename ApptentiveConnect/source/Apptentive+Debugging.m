@@ -99,6 +99,10 @@
 	[self.engagementBackend presentInteraction:[self.engagementInteractions objectAtIndex:index] fromViewController:viewController];
 }
 
+- (void)presentInteractionWithJSON:(NSDictionary *)JSON fromViewController:(UIViewController *)viewController {
+	[self.engagementBackend presentInteraction:[ApptentiveInteraction interactionWithJSONDictionary:JSON] fromViewController:viewController];
+}
+
 - (NSString *)conversationToken {
 	return [ApptentiveConversationUpdater currentConversation].token;
 }

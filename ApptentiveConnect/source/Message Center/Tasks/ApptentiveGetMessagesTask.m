@@ -17,7 +17,7 @@
 #import "NSDictionary+Apptentive.h"
 #import "Apptentive_Private.h"
 
-static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessagesLastRetrievedMessagIDPreferenceKey";
+NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey = @"ATMessagesLastRetrievedMessagIDPreferenceKey";
 
 
 @interface ApptentiveGetMessagesTask ()

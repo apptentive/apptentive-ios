@@ -49,6 +49,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSString *)engagementInteractionTypeAtIndex:(NSInteger)index;
 - (void)presentInteractionAtIndex:(NSInteger)index fromViewController:(UIViewController *)viewController;
 - (void)presentInteractionWithJSON:(NSDictionary *)JSON fromViewController:(UIViewController *)viewController;
+
+- (void)resetSDK;
+
 @end
 
 NS_ASSUME_NONNULL_END

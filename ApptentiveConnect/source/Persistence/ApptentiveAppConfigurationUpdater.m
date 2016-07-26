@@ -250,4 +250,20 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 		[[NSNotificationCenter defaultCenter] postNotificationName:ATConfigurationPreferencesChangedNotification object:nil];
 	}
 }
+
++ (void)resetAppConfiguration {
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATConfigurationSDKVersionKey];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATConfigurationAppBuildNumberKey];
+
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATAppConfigurationExpirationPreferenceKey];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATAppConfigurationMetricsEnabledPreferenceKey];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATAppConfigurationHideBrandingKey];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATAppConfigurationNotificationPopupsEnabledKey];
+
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATAppConfigurationMessageCenterForegroundRefreshIntervalKey];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey];
+
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATAppConfigurationAppDisplayNameKey];
+}
+
 @end

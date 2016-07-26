@@ -21,6 +21,7 @@ extern NSString *const ATCurrentConversationPreferenceKey;
 + (BOOL)conversationExists;
 + (ApptentiveConversation *)currentConversation;
 + (BOOL)shouldUpdate;
++ (void)resetConversation;
 
 - (id)initWithDelegate:(NSObject<ApptentiveConversationUpdaterDelegate> *)delegate;
 - (void)createOrUpdateConversation;

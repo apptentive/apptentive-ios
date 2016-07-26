@@ -58,6 +58,11 @@ NSString *const ATPersonLastUpdateValuePreferenceKey = @"ATPersonLastUpdateValue
 	return nil;
 }
 
++ (void)resetPersonInfo {
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATPersonLastUpdateValuePreferenceKey];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATCurrentPersonPreferenceKey];
+}
+
 - (void)saveVersion {
 	NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self.sentPersonJSON];
 	[[NSUserDefaults standardUserDefaults] setObject:data forKey:ATPersonLastUpdateValuePreferenceKey];

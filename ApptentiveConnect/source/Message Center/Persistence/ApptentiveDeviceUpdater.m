@@ -51,6 +51,11 @@ NSString *const ATDeviceLastUpdateValuePreferenceKey = @"ATDeviceLastUpdateValue
 	return [[NSUserDefaults standardUserDefaults] dictionaryForKey:ATDeviceLastUpdateValuePreferenceKey];
 }
 
++ (void)resetDeviceInfo {
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATDeviceLastUpdatePreferenceKey];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATDeviceLastUpdateValuePreferenceKey];
+}
+
 - (id)initWithDelegate:(NSObject<ATDeviceUpdaterDelegate> *)aDelegate {
 	if ((self = [super init])) {
 		_delegate = aDelegate;

@@ -1,0 +1,577 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="CIDR_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$/../ApptentiveConnect">
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/tests/pt-BR.lproj/InfoPlist.strings" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/tests/ApptentiveSurveyTests.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/tests/ApptentiveMigrationTests.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/tests/el.lproj/InfoPlist.strings" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/tests/ja.lproj/InfoPlist.strings" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/tests/ru.lproj/InfoPlist.strings" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/tests/CodePointAndInteractionTests.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/tests/ApptentiveEngagementTests.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/tests/ApptentiveInteractionInvocationTests.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/tests/ar.lproj/InfoPlist.strings" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/tests/ApptentiveMetricsTests.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/tests/it.lproj/InfoPlist.strings" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/tests/CriteriaTests.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/tests/fr-CA.lproj/InfoPlist.strings" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/tests/ApptentiveAPIRequestTests.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/tests/data/ATDataModelv2.sqlite" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/tests/data/ATDataModelv4.sqlite" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/tests/data/testJsonDiffing.2.old.json" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/tests/data/Survey.json" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/tests/data/testJsonDiffing.2.new.json" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/tests/data/testJsonDiffing.1.old.json" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/tests/data/criteria/testCodePointInvokesVersion.json" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/tests/data/criteria/testOperatorContains.json" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/tests/data/criteria/testWhitespaceTrimming.json" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/tests/data/criteria/testOperatorEndsWith.json" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/tests/data/criteria/testInteractionInvokesTotal.json" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/tests/data/criteria/testOperatorStartsWith.json" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/tests/data/criteria/testCornerCasesThatShouldBeFalse.json" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/tests/data/criteria/testDefaultValues.json" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/tests/data/criteria/testCodePointLastInvokedAt.json" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/tests/data/criteria/testOperatorNot.json" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/tests/data/criteria/testCodePointInvokesTotal.json" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/tests/data/criteria/testPredicateParsing.json" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/tests/data/criteria/testOperatorExists.json" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/tests/data/criteria/testCornerCasesThatShouldBeTrue.json" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/tests/data/ATDataModelv1.sqlite" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/tests/data/testJsonDiffing.1.new.json" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/tests/data/testJsonDiffing.1.expected.json" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/tests/data/ATDataModelv3.sqlite" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/tests/data/ATDataModelv5.sqlite" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/tests/CriteriaTests.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/tests/es.lproj/InfoPlist.strings" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/tests/da.lproj/InfoPlist.strings" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/tests/nl.lproj/InfoPlist.strings" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/tests/ApptentiveInteractionUsageDataTests.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/tests/sv.lproj/InfoPlist.strings" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/tests/ApptentiveConnectTests-Prefix.pch" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/tests/zh-Hans.lproj/InfoPlist.strings" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/tests/ko.lproj/InfoPlist.strings" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/tests/ApptentiveStyleSheetTests.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/tests/ApptentiveUtilitiesTests.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/tests/zh-Hant.lproj/InfoPlist.strings" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/tests/en.lproj/InfoPlist.strings" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/tests/pl.lproj/InfoPlist.strings" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/tests/de.lproj/InfoPlist.strings" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/tests/fr.lproj/InfoPlist.strings" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/tests/ApptentiveConnectTests.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/tests/tr.lproj/InfoPlist.strings" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/tests/pt.lproj/InfoPlist.strings" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/tests/ApptentiveConnectTests-Info.plist" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/ApptentiveConnect.xcodeproj" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/Apptentive.storyboard" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/images/at_update_icon_mask/at_update_icon_mask@2x.png" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/images/at_update_icon_mask/at_update_icon_mask@3x.png" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/images/at_update_icon_mask/at_update_icon_mask.png" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/images/at_error_wait/at_error_wait@2x.png" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/images/at_error_wait/at_error_wait.png" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/images/at_error_wait/at_error_wait@3x.png" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/images/at_thanks/at_thanks@2x.png" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/images/at_thanks/at_thanks@3x.png" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/images/at_thanks/at_thanks.png" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/images/at_document/at_document@3x.png" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/images/at_document/at_document.png" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/images/at_document/at_document@2x.png" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/images/at_account/at_account.png" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/images/at_account/at_account@2x.png" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/images/at_account/at_account@3x.png" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/images/at_update_logo/at_update_logo@2x.png" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/images/at_update_logo/at_update_logo@3x.png" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/images/at_update_logo/at_update_logo.png" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/images/at_apptentive_logo/at_apptentive_logo@3x.png" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/images/at_apptentive_logo/at_apptentive_logo.png" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/images/at_apptentive_logo/at_apptentive_logo@2x.png" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/images/at_circle/at_circle@2x.png" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/images/at_circle/at_circle.png" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/images/at_circle/at_circle@3x.png" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/images/at_checkmark/at_checkmark@2x.png" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/images/at_checkmark/at_checkmark@3x.png" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/images/at_checkmark/at_checkmark.png" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/images/at_remove/at_remove@3x.png" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/images/at_remove/at_remove.png" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/images/at_remove/at_remove@2x.png" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/images/at_circle_highlighted/at_circle_highlighted@2x.png" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/images/at_circle_highlighted/at_circle_highlighted@3x.png" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/images/at_circle_highlighted/at_circle_highlighted.png" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/images/at_checkmark_highlighted/at_checkmark_highlighted@3x.png" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/images/at_checkmark_highlighted/at_checkmark_highlighted@2x.png" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/images/at_checkmark_highlighted/at_checkmark_highlighted.png" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/images/at_close/at_close.png" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/images/at_close/at_close@2x.png" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/images/at_close/at_close@3x.png" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/images/at_info/at_info.png" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/images/at_info/at_info@3x.png" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/images/at_info/at_info@2x.png" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/images/at_network_error/at_network_error.png" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/images/at_network_error/at_network_error@2x.png" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/images/at_network_error/at_network_error@3x.png" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/images/at_attach/at_attach.png" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/images/at_attach/at_attach@2x.png" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/images/at_attach/at_attach@3x.png" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/ApptentiveResources/Info.plist" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/localization/pt-BR.lproj/Localizable.strings" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/localization/sv.lproj/Localizable.strings" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/localization/fr.lproj/Localizable.strings" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/localization/ja.lproj/Localizable.strings" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/localization/el.lproj/Localizable.strings" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/localization/pl.lproj/Localizable.strings" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/localization/tr.lproj/Localizable.strings" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/localization/da.lproj/Localizable.strings" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/localization/ru.lproj/Localizable.strings" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/localization/it.lproj/Localizable.strings" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/localization/zh-Hans.lproj/Localizable.strings" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/localization/fr-CA.lproj/Localizable.strings" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/localization/zh-Hant.lproj/Localizable.strings" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/localization/de.lproj/Localizable.strings" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/localization/ko.lproj/Localizable.strings" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/localization/pt.lproj/Localizable.strings" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/localization/es.lproj/Localizable.strings" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/localization/en.lproj/Localizable.strings" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/localization/ar.lproj/Localizable.strings" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/resources/localization/nl.lproj/Localizable.strings" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/ext/OCMock/libOCMock.a" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/ext/OCMock/OCMock/OCMRecorder.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/ext/OCMock/OCMock/OCMFunctions.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/ext/OCMock/OCMock/OCMock.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/ext/OCMock/OCMock/OCMLocation.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/ext/OCMock/OCMock/OCMockObject.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/ext/OCMock/OCMock/NSNotificationCenter+OCMAdditions.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/ext/OCMock/OCMock/OCMStubRecorder.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/ext/OCMock/OCMock/OCMConstraint.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/ext/OCMock/OCMock/OCMArg.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/ext/OCMock/OCMock/OCMMacroState.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Misc/ApptentiveJSONSerialization.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Misc/ApptentiveLog.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Misc/NSDictionary+ATAdditions.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Misc/ApptentiveUtilities.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Misc/NSDictionary+Apptentive.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Misc/ApptentiveUtilities.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Misc/ApptentiveJSONSerialization.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Misc/ApptentiveLogger.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Misc/ApptentiveConnect-Prefix.pch" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Misc/ApptentiveLogger.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/URL Loading/ATConnectionManager.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/URL Loading/ApptentiveConnectionChannel.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/URL Loading/ApptentiveURLConnection.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/URL Loading/ApptentiveWebClient_Private.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/URL Loading/ApptentiveConnectionManager.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/URL Loading/ApptentiveURLConnection.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/URL Loading/ATAPIRequest.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/URL Loading/ApptentiveWebClient.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/URL Loading/ATConnectionChannel.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/URL Loading/ApptentiveWebClient.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/URL Loading/ApptentiveAPIRequest.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/URL Loading/ApptentiveURLConnection_Private.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Tasks/ApptentiveAppConfigurationUpdateTask.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Tasks/ApptentiveTask.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Tasks/ApptentiveTaskQueue.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Tasks/ApptentiveRecordRequestTask.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Tasks/ApptentiveTask.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Tasks/ApptentiveTaskQueue.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Tasks/ApptentiveRecordRequestTask.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Tasks/ApptentiveAppConfigurationUpdateTask.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Model/ApptentiveFileAttachment.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Model/ApptentiveRecord.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Model/ApptentiveEvent.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Model/ApptentiveData.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Model/ATDataModel.xcdatamodeld/ATDataModel 3.xcdatamodel" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Model/ATDataModel.xcdatamodeld/ATDataModel 4.xcdatamodel" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Model/ATDataModel.xcdatamodeld/ATDataModel 5.xcdatamodel" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Model/ATDataModel.xcdatamodeld/ATDataModel 2.xcdatamodel" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Model/ATDataModel.xcdatamodeld/ATDataModel.xcdatamodel" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Model/ApptentiveRecord.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Model/ApptentiveEvent.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Model/ApptentiveMessageSender.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Model/ApptentivePersonInfo.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Model/ApptentiveDeviceInfo.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Model/ApptentiveData.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Model/ApptentiveMessageSender.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Model/ApptentiveFileAttachment.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Model/ApptentiveDeviceInfo.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Model/ApptentiveConversation.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Model/ATDataModel v3 to v4.xcmappingmodel" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Model/ApptentiveMessage.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Model/ApptentivePersonInfo.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Model/ApptentiveMessage.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Model/ATDataModel v2 to v3.xcmappingmodel" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Model/ATDataModel v4 to v5.xcmappingmodel" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Model/ApptentiveConversation.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Model/ATDataModel v1 to v2.xcmappingmodel" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Surveys/Views/ApptentiveSurveyCollectionView.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Surveys/Views/ApptentiveSurveyGreetingView.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Surveys/Views/ApptentiveSurveySubmitButton.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Surveys/Views/ApptentiveSurveyQuestionView.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Surveys/Views/ApptentiveSurveyGreetingView.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Surveys/Views/ApptentiveSurveyMultilineCell.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Surveys/Views/ApptentiveSurveyQuestionView.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Surveys/Views/ApptentiveSurveySubmitButton.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Surveys/Views/ApptentiveSurveyAnswerCell.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Surveys/Views/ApptentiveSurveyAnswerCell.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Surveys/Views/ApptentiveSurveyMultilineCell.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Surveys/Views/ApptentiveSurveyQuestionFooterView.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Surveys/Views/ApptentiveSurveySingleLineCell.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Surveys/Views/ApptentiveSurveyQuestionFooterView.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Surveys/Views/ApptentiveSurveySingleLineCell.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Surveys/Views/ApptentiveSurveyOtherCell.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Surveys/Views/ApptentiveSurveyOtherCell.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Surveys/Views/ApptentiveSurveyQuestionBackgroundView.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Surveys/Views/ApptentiveSurveyChoiceCell.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Surveys/Views/ApptentiveSurveyCollectionView.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Surveys/Views/ApptentiveSurveyQuestionBackgroundView.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Surveys/Views/ApptentiveSurveyChoiceCell.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Surveys/Tasks/ApptentiveSurveyResponseTask.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Surveys/Tasks/ApptentiveSurveyResponseTask.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Surveys/View Controllers/ApptentiveSurveyViewModel.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Surveys/View Controllers/ApptentiveSurveyViewModel.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Surveys/View Controllers/ApptentiveSurveyCollectionViewLayout.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Surveys/View Controllers/ApptentiveSurveyLayoutAttributes.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Surveys/View Controllers/ApptentiveSurveyCollectionViewLayout.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Surveys/View Controllers/ApptentiveSurveyViewController.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Surveys/View Controllers/ApptentiveSurveyLayoutAttributes.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Surveys/View Controllers/ApptentiveSurveyViewController.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Surveys/URL Loading/ATWebClient+SurveyAdditions.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Surveys/URL Loading/ApptentiveWebClient+SurveyAdditions.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Surveys/Model/ApptentiveSurveyQuestionResponse.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Surveys/Model/ApptentiveSurveyQuestion.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Surveys/Model/ApptentiveSurveyResponse.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Surveys/Model/ApptentiveSurvey.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Surveys/Model/ApptentiveSurveyQuestionResponse.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Surveys/Model/ApptentiveSurveyAnswer.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Surveys/Model/ApptentiveSurveyAnswer.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Surveys/Model/ApptentiveSurvey.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Surveys/Model/ApptentiveSurveyQuestion.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Surveys/Model/ApptentiveSurveyResponse.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Reachability/ApptentiveReachability.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Reachability/ApptentiveReachability.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Apptentive+Debugging.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Apptentive.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Apptentive+Debugging.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Engagement/Model/ApptentiveMessageCenterInteraction.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Engagement/Model/ApptentiveInteraction.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Engagement/Model/ApptentiveEngagementManifestParser.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Engagement/Model/ApptentiveInteractionInvocation.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Engagement/Model/ApptentiveInteractionUsageData.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Engagement/Model/ApptentiveMessageCenterInteraction.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Engagement/Model/ApptentiveEngagementManifestParser.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Engagement/Model/ApptentiveInteractionUsageData.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Engagement/Model/ApptentiveInteraction.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Engagement/Model/ApptentiveInteractionInvocation.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Engagement/Tasks/ApptentiveEngagementGetManifestTask.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Engagement/Tasks/ApptentiveEngagementGetManifestTask.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Engagement/Persistence/ApptentiveEngagementBackend.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Engagement/Persistence/ApptentiveEngagementBackend.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Engagement/Interactions/Messages/ApptentiveInteractionNavigateToLink.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Engagement/Interactions/Messages/ApptentiveInteractionNavigateToLink.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Engagement/Interactions/Messages/ApptentiveInteractionTextModalController.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Engagement/Interactions/Messages/ApptentiveInteractionTextModalController.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Engagement/Interactions/Rating Flow/ApptentiveInteractionMessageCenterController.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Engagement/Interactions/Rating Flow/ApptentiveInteractionEnjoymentDialogController.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Engagement/Interactions/Rating Flow/ApptentiveInteractionMessageCenterController.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Engagement/Interactions/Rating Flow/ApptentiveInteractionRatingDialogController.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Engagement/Interactions/Rating Flow/ApptentiveInteractionEnjoymentDialogController.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Engagement/Interactions/Rating Flow/ApptentiveInteractionRatingDialogController.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Engagement/Interactions/Rating Flow/ApptentiveInteractionAppStoreController.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Engagement/Interactions/Rating Flow/ApptentiveInteractionAppStoreController.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Engagement/Interactions/Surveys/ApptentiveInteractionSurveyController.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Engagement/Interactions/Surveys/ApptentiveInteractionSurveyController.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Engagement/Interactions/Upgrade Message/ApptentiveInteractionUpgradeMessageViewController.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Engagement/Interactions/Upgrade Message/ApptentiveInteractionUpgradeMessageViewController.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Engagement/URL Loading/ApptentiveWebClient+EngagementAdditions.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Engagement/URL Loading/ATWebClient+EngagementAdditions.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Persistence/ApptentiveLegacyRecord.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Persistence/ApptentiveLegacyRecord.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Persistence/ApptentiveAppConfigurationUpdater.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Persistence/ApptentiveDataManager.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Persistence/ApptentiveBackend.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Persistence/ApptentiveDataManager.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Persistence/ApptentiveBackend.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Persistence/ApptentiveAppConfigurationUpdater.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Message Center/ApptentiveMessageCenterDataSource.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Message Center/Views/ApptentiveProgressNavigationBar.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Message Center/Views/ApptentiveMessageCenterReplyCell.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Message Center/Views/ApptentiveMessageCenterGreetingView.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Message Center/Views/ApptentiveAttachButton.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Message Center/Views/ApptentiveCompoundMessageCell.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Message Center/Views/ApptentiveMessageCenterInputView.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Message Center/Views/ApptentiveMessageCenterCellProtocols.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Message Center/Views/ApptentiveMessageCenterMessageCell.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Message Center/Views/ApptentiveAttachButton.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Message Center/Views/ApptentiveCompoundMessageCell.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Message Center/Views/ApptentiveMessageCenterProfileView.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Message Center/Views/ApptentiveProgressNavigationBar.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Message Center/Views/ApptentiveCompoundReplyCell.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Message Center/Views/ApptentiveMessageCenterContextMessageCell.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Message Center/Views/ApptentiveMessageCenterMessageCell.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Message Center/Views/ApptentiveIndexedCollectionView.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Message Center/Views/ApptentiveMessageCenterInputView.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Message Center/Views/ApptentiveMessageCenterGreetingView.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Message Center/Views/ApptentiveMessageCenterContextMessageCell.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Message Center/Views/ApptentiveAttachmentCell.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Message Center/Views/ApptentiveIndexedCollectionView.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Message Center/Views/ApptentiveCompoundReplyCell.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Message Center/Views/ApptentiveAttachmentCell.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Message Center/Views/ApptentiveMessageCenterStatusView.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Message Center/Views/ApptentiveMessageCenterProfileView.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Message Center/Views/ApptentiveMessageCenterReplyCell.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Message Center/Views/ApptentiveMessageCenterStatusView.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Message Center/Controllers/ApptentiveBannerViewController.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Message Center/Controllers/ApptentiveMessageCenterViewController.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Message Center/Controllers/ApptentiveAttachmentController.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Message Center/Controllers/ApptentiveBannerViewController.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Message Center/Controllers/ApptentiveAboutViewController.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Message Center/Controllers/ApptentiveAttachmentController.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Message Center/Controllers/ApptentiveMessageCenterErrorViewController.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Message Center/Controllers/ApptentiveAboutViewController.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Message Center/Controllers/ApptentiveMessageCenterViewController.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Message Center/Controllers/ApptentiveMessageCenterErrorViewController.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Message Center/Protocols/ApptentiveJSONModel.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Message Center/Tasks/ApptentiveMessageTask.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Message Center/Tasks/ApptentiveMessageTask.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Message Center/Tasks/ApptentiveGetMessagesTask.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Message Center/Tasks/ApptentiveGetMessagesTask.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Message Center/URL Loading/ApptentiveWebClient+MessageCenter.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Message Center/URL Loading/ATWebClient+MessageCenter.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Message Center/ApptentiveMessageCenterDataSource.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Message Center/Persistence/ApptentivePersonUpdater.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Message Center/Persistence/ApptentiveDeviceUpdater.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Message Center/Persistence/ApptentiveConversationUpdater.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Message Center/Persistence/ApptentivePersonUpdater.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Message Center/Persistence/ApptentiveDeviceUpdater.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Message Center/Persistence/ApptentiveConversationUpdater.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Apptentive_Private.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/ApptentiveStyleSheet.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Custom Views/ApptentiveHUDViewController.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Custom Views/ApptentiveNetworkImageIconView.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Custom Views/ApptentiveHUDViewController.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Custom Views/ApptentiveNetworkImageView.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Custom Views/ApptentivePassThroughWindow.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Custom Views/ApptentiveUnreadMessagesBadgeView.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Custom Views/ApptentiveNetworkImageView.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Custom Views/ApptentiveNetworkImageIconView.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Custom Views/ApptentivePassThroughWindow.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Custom Views/ApptentiveUnreadMessagesBadgeView.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Metrics/URL Loading/ATWebClient+Metrics.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Metrics/URL Loading/ApptentiveWebClient+Metrics.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Metrics/ATSurveyMetrics.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Metrics/ApptentiveMetrics.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Metrics/ApptentiveMetric.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Metrics/ApptentiveSurveyMetrics.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Metrics/ApptentiveMetrics.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Metrics/ApptentiveMetric.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/ApptentiveStyleSheet.m" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../ApptentiveConnect/source/Apptentive.m" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/README.md" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/iOSDemo/CustomDataCell.swift" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/iOSDemo/StringViewController.swift" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/iOSDemo/APIViewController.swift" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/iOSDemo/InteractionsViewController.swift" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/iOSDemo/Demo-Bridging-Header.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/iOSDemo/Info.plist" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/iOSDemo/Assets.xcassets" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/iOSDemo/EventsViewController.swift" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/iOSDemo/AppDelegate.swift" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/iOSDemo/Defaults.plist" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/iOSDemo/MessagesViewController.swift" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/iOSDemo/ConnectionViewController.swift" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/iOSDemo/Base.lproj/LaunchScreen.xib" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/iOSDemo/Base.lproj/Main.storyboard" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/iOSDemo/DataViewController.swift" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/iOSDemoUITests/iOSDemoUITests-Bridging-Header.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/iOSDemoUITests/iOSDemoUITests.swift" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/iOSDemoUITests/Info.plist" isTestSource="false" />
+    </content>
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module-library">
+      <library name="Header Search Paths">
+        <CLASSES>
+          <root url="file:///Applications/Xcode.app/Contents/PlugIns/Xcode3Core.ideplugin/Contents/SharedSupport/Developer/Library/Frameworks/InterfaceBuilderKit.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/PlugIns/Xcode3Core.ideplugin/Contents/SharedSupport/Developer/Library/Frameworks/DTPerformanceSession.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/Library/Frameworks/XCTest.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/HealthKit.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/PassKit.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/CoreAudioKit.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/MultipeerConnectivity.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/AssetsLibrary.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/WatchConnectivity.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/CoreVideo.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/StoreKit.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/SceneKit.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/OpenGLES.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/CFNetwork.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/Accelerate.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/Accelerate.framework/Frameworks/vImage.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/Accelerate.framework/Frameworks/vecLib.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/AddressBookUI.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/EventKit.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/WatchKit.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/GSS.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/AudioUnit.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/CoreSpotlight.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/LocalAuthentication.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/HealthKitUI.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/Metal.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/VideoToolbox.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/MediaToolbox.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/Contacts.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/QuickLook.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/SafariServices.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/GameplayKit.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/CoreGraphics.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/WebKit.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/CloudKit.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/CoreImage.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/EventKitUI.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/Photos.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/MetalPerformanceShaders.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/MediaPlayer.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/AVFoundation.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/JavaScriptCore.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/PushKit.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/CoreTelephony.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/CoreText.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/ReplayKit.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/SpriteKit.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/Twitter.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/NetworkExtension.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/CoreAudio.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/CoreData.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/UIKit.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/Foundation.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/MapKit.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/CoreFoundation.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/ContactsUI.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/CoreMedia.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/MediaAccessibility.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/ExternalAccessory.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/Security.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/ModelIO.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/GLKit.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/AudioToolbox.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/MetalKit.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/HomeKit.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/GameController.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/AVKit.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/CoreBluetooth.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/AdSupport.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/CoreMIDI.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/Social.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/SystemConfiguration.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/Accounts.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/OpenAL.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/NotificationCenter.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/ImageIO.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/PhotosUI.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/MobileCoreServices.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/AddressBook.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/NewsstandKit.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/MessageUI.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/GameKit.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/CoreLocation.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/QuartzCore.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/iAd.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/CoreMotion.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/usr/include" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/7.3.0/include" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1" />
+        </CLASSES>
+        <SOURCES>
+          <root url="file:///Applications/Xcode.app/Contents/PlugIns/Xcode3Core.ideplugin/Contents/SharedSupport/Developer/Library/Frameworks/InterfaceBuilderKit.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/PlugIns/Xcode3Core.ideplugin/Contents/SharedSupport/Developer/Library/Frameworks/DTPerformanceSession.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/Library/Frameworks/XCTest.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/HealthKit.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/PassKit.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/CoreAudioKit.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/MultipeerConnectivity.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/AssetsLibrary.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/WatchConnectivity.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/CoreVideo.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/StoreKit.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/SceneKit.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/OpenGLES.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/CFNetwork.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/Accelerate.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/Accelerate.framework/Frameworks/vImage.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/Accelerate.framework/Frameworks/vecLib.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/AddressBookUI.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/EventKit.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/WatchKit.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/GSS.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/AudioUnit.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/CoreSpotlight.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/LocalAuthentication.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/HealthKitUI.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/Metal.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/VideoToolbox.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/MediaToolbox.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/Contacts.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/QuickLook.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/SafariServices.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/GameplayKit.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/CoreGraphics.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/WebKit.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/CloudKit.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/CoreImage.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/EventKitUI.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/Photos.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/MetalPerformanceShaders.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/MediaPlayer.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/AVFoundation.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/JavaScriptCore.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/PushKit.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/CoreTelephony.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/CoreText.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/ReplayKit.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/SpriteKit.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/Twitter.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/NetworkExtension.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/CoreAudio.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/CoreData.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/UIKit.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/Foundation.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/MapKit.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/CoreFoundation.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/ContactsUI.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/CoreMedia.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/MediaAccessibility.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/ExternalAccessory.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/Security.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/ModelIO.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/GLKit.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/AudioToolbox.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/MetalKit.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/HomeKit.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/GameController.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/AVKit.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/CoreBluetooth.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/AdSupport.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/CoreMIDI.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/Social.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/SystemConfiguration.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/Accounts.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/OpenAL.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/NotificationCenter.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/ImageIO.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/PhotosUI.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/MobileCoreServices.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/AddressBook.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/NewsstandKit.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/MessageUI.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/GameKit.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/CoreLocation.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/QuartzCore.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/iAd.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/CoreMotion.framework/Headers" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/usr/include" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/7.3.0/include" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+  </component>
+</module>

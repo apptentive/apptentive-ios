@@ -17,13 +17,11 @@ typedef enum {
 	ATInteractionUpgradeMessageOkPressed,
 } ATInteractionUpgradeMessageAction;
 
-NSString *const ATInteractionUpgradeMessageEventLabelLaunch = @"launch";
 NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 
 
 @interface ApptentiveInteractionUpgradeMessageViewController ()
 
-@property (strong, nonatomic) ApptentiveInteraction *upgradeMessageInteraction;
 
 @property (strong, nonatomic) IBOutlet UIView *appIconContainer;
 @property (strong, nonatomic) IBOutlet UIButton *OKButton;
@@ -43,17 +41,6 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 
 
 @implementation ApptentiveInteractionUpgradeMessageViewController
-
-+ (instancetype)interactionUpgradeMessageViewControllerWithInteraction:(ApptentiveInteraction *)interaction {
-	NSAssert([interaction.type isEqualToString:@"UpgradeMessage"], @"Attempted to load an UpgradeMessageViewController with an interaction of type: %@", interaction.type);
-
-	UINavigationController *navigationController = [[Apptentive storyboard] instantiateViewControllerWithIdentifier:@"UpgradeMessageNavigation"];
-	ApptentiveInteractionUpgradeMessageViewController *result = (ApptentiveInteractionUpgradeMessageViewController *)navigationController.viewControllers.firstObject;
-
-	result.upgradeMessageInteraction = interaction;
-
-	return result;
-}
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
@@ -118,12 +105,6 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 	[self.navigationController dismissViewControllerAnimated:animated completion:completion];
 
 	[self.upgradeMessageInteraction engage:ATInteractionUpgradeMessageEventLabelClose fromViewController:self.presentingViewController];
-}
-
-- (void)presentFromViewController:(UIViewController *)newPresentingViewController animated:(BOOL)animated {
-	[newPresentingViewController presentViewController:self.navigationController animated:animated completion:nil];
-
-	[self.upgradeMessageInteraction engage:ATInteractionUpgradeMessageEventLabelLaunch fromViewController:self.presentingViewController];
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {

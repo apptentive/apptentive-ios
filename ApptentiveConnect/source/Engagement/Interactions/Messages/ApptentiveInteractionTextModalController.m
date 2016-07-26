@@ -11,31 +11,32 @@
 #import "ApptentiveInteractionInvocation.h"
 #import "ApptentiveEngagementBackend.h"
 #import "Apptentive_Private.h"
+#import "ApptentiveInteraction.h"
 
 NSString *const ATInteractionTextModalEventLabelLaunch = @"launch";
 NSString *const ATInteractionTextModalEventLabelCancel = @"cancel";
 NSString *const ATInteractionTextModalEventLabelDismiss = @"dismiss";
 NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 
+typedef void (^alertActionHandler)(UIAlertAction *);
+
+
+@interface ApptentiveInteractionTextModalController ()
+
+@property (strong, nonatomic) UIViewController *viewController;
+@property (strong, nonatomic) UIAlertController *alertController;
+@property (strong, nonatomic) UIAlertView *alertView;
+
+@end
+
 
 @implementation ApptentiveInteractionTextModalController
 
-- (instancetype)initWithInteraction:(ApptentiveInteraction *)interaction {
-	NSAssert([interaction.type isEqualToString:@"TextModal"], @"Attempted to load a TextModalController with an interaction of type: %@", interaction.type);
-	self = [super init];
-	if (self != nil) {
-		_interaction = [interaction copy];
-	}
-
-	return self;
++ (void)load {
+	[self registerInteractionControllerClass:self forType:@"TextModal"];
 }
 
-- (void)presentTextModalAlertFromViewController:(UIViewController *)viewController {
-	if (!self.interaction) {
-		ApptentiveLogError(@"Cannot present a TextModal alert without an interaction.");
-		return;
-	}
-
+- (void)presentInteractionFromViewController:(UIViewController *)viewController {
 	self.viewController = viewController;
 
 	if ([UIAlertController class]) {

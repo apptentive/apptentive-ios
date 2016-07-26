@@ -6,13 +6,8 @@
 //  Copyright (c) 2014 Apptentive, Inc. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-#import "ApptentiveInteraction.h"
+#import "ApptentiveInteractionController.h"
 
 
-@interface ApptentiveInteractionMessageCenterController : NSObject
-
-- (id)initWithInteraction:(ApptentiveInteraction *)interaction;
-- (void)showMessageCenterFromViewController:(UIViewController *)viewController;
-
+@interface ApptentiveInteractionMessageCenterController : ApptentiveInteractionController
 @end

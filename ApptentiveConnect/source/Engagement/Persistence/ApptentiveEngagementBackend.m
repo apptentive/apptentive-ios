@@ -23,6 +23,7 @@
 #import "ApptentiveInteractionSurveyController.h"
 #import "ApptentiveInteractionTextModalController.h"
 #import "ApptentiveInteractionNavigateToLink.h"
+#import "ApptentiveInteractionController.h"
 
 NSString *const ATEngagementInstallDateKey = @"ATEngagementInstallDateKey";
 NSString *const ATEngagementUpgradeDateKey = @"ATEngagementUpgradeDateKey";
@@ -474,92 +475,9 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 		return;
 	}
 
-	switch (interaction.interactionType) {
-		case ATInteractionTypeUpgradeMessage:
-			[self presentUpgradeMessageInteraction:interaction fromViewController:viewController];
-			break;
-		case ATInteractionTypeEnjoymentDialog:
-			[self presentEnjoymentDialogInteraction:interaction fromViewController:viewController];
-			break;
-		case ATInteractionTypeRatingDialog:
-			[self presentRatingDialogInteraction:interaction fromViewController:viewController];
-			break;
-		case ATInteractionTypeMessageCenter:
-			[self presentMessageCenterInteraction:interaction fromViewController:viewController];
-			break;
-		case ATInteractionTypeAppStoreRating:
-			[self presentAppStoreRatingInteraction:interaction fromViewController:viewController];
-			break;
-		case ATInteractionTypeSurvey:
-			[self presentSurveyInteraction:interaction fromViewController:viewController];
-			break;
-		case ATInteractionTypeTextModal:
-			[self presentTextModalInteraction:interaction fromViewController:viewController];
-			break;
-		case ATInteractionTypeNavigateToLink:
-			[self presentNavigateToLinkInteraction:interaction];
-			break;
-		case ATInteractionTypeUnknown:
-		default:
-			ApptentiveLogError(@"Attempting to present an unknown interaction type!");
-			break;
-	}
-}
+	ApptentiveInteractionController *controller = [ApptentiveInteractionController interactionControllerWithInteraction:interaction];
 
-- (void)presentUpgradeMessageInteraction:(ApptentiveInteraction *)interaction fromViewController:(UIViewController *)viewController {
-	NSAssert([interaction.type isEqualToString:@"UpgradeMessage"], @"Attempted to present an UpgradeMessage interaction with an interaction of type: %@", interaction.type);
-
-	ApptentiveInteractionUpgradeMessageViewController *upgradeMessage = [ApptentiveInteractionUpgradeMessageViewController interactionUpgradeMessageViewControllerWithInteraction:interaction];
-	[upgradeMessage presentFromViewController:viewController animated:YES];
-}
-
-- (void)presentEnjoymentDialogInteraction:(ApptentiveInteraction *)interaction fromViewController:(UIViewController *)viewController {
-	NSAssert([interaction.type isEqualToString:@"EnjoymentDialog"], @"Attempted to present an EnjoymentDialog interaction with an interaction of type: %@", interaction.type);
-
-	ApptentiveInteractionEnjoymentDialogController *enjoymentDialog = [[ApptentiveInteractionEnjoymentDialogController alloc] initWithInteraction:interaction];
-	[enjoymentDialog presentEnjoymentDialogFromViewController:viewController];
-}
-
-- (void)presentRatingDialogInteraction:(ApptentiveInteraction *)interaction fromViewController:(UIViewController *)viewController {
-	NSAssert([interaction.type isEqualToString:@"RatingDialog"], @"Attempted to present a RatingDialog interaction with an interaction of type: %@", interaction.type);
-
-	ApptentiveInteractionRatingDialogController *ratingDialog = [[ApptentiveInteractionRatingDialogController alloc] initWithInteraction:interaction];
-	[ratingDialog presentRatingDialogFromViewController:viewController];
-}
-
-- (void)presentMessageCenterInteraction:(ApptentiveInteraction *)interaction fromViewController:(UIViewController *)viewController {
-	NSAssert([interaction.type isEqualToString:@"MessageCenter"], @"Attempted to present a MessageCenter interaction with an interaction of type: %@", interaction.type);
-
-	ApptentiveInteractionMessageCenterController *messageCenter = [[ApptentiveInteractionMessageCenterController alloc] initWithInteraction:interaction];
-	[messageCenter showMessageCenterFromViewController:viewController];
-}
-
-- (void)presentAppStoreRatingInteraction:(ApptentiveInteraction *)interaction fromViewController:(UIViewController *)viewController {
-	NSAssert([interaction.type isEqualToString:@"AppStoreRating"], @"Attempted to present an App Store Rating interaction with an interaction of type: %@", interaction.type);
-
-	ApptentiveInteractionAppStoreController *appStore = [[ApptentiveInteractionAppStoreController alloc] initWithInteraction:interaction];
-	[appStore openAppStoreFromViewController:viewController];
-}
-
-- (void)presentSurveyInteraction:(ApptentiveInteraction *)interaction fromViewController:(UIViewController *)viewController {
-	NSAssert([interaction.type isEqualToString:@"Survey"], @"Attempted to present a Survey interaction with an interaction of type: %@", interaction.type);
-
-	ApptentiveInteractionSurveyController *survey = [[ApptentiveInteractionSurveyController alloc] initWithInteraction:interaction];
-	[survey showSurveyFromViewController:viewController];
-}
-
-- (void)presentTextModalInteraction:(ApptentiveInteraction *)interaction fromViewController:(UIViewController *)viewController {
-	NSAssert([interaction.type isEqualToString:@"TextModal"], @"Attempted to present a Text Modal interaction with an interaction of type: %@", interaction.type);
-
-	ApptentiveInteractionTextModalController *textModal = [[ApptentiveInteractionTextModalController alloc] initWithInteraction:interaction];
-	[textModal presentTextModalAlertFromViewController:viewController];
-}
-
-
-- (void)presentNavigateToLinkInteraction:(ApptentiveInteraction *)interaction {
-	NSAssert([interaction.type isEqualToString:@"NavigateToLink"], @"Attempted to present a NavigateToLink interaction with an interaction of type: %@", interaction.type);
-
-	[ApptentiveInteractionNavigateToLink navigateToLinkWithInteraction:interaction];
+	[controller presentInteractionFromViewController:viewController];
 }
 
 - (void)resetUpgradeVersionInfo {

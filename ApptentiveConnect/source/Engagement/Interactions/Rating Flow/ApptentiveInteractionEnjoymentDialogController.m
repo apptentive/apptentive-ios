@@ -12,6 +12,7 @@
 #import "ApptentiveEngagementBackend.h"
 #import "Apptentive_Private.h"
 #import "ApptentiveBackend.h"
+#import "ApptentiveInteraction.h"
 
 NSString *const ATInteractionEnjoymentDialogEventLabelLaunch = @"launch";
 NSString *const ATInteractionEnjoymentDialogEventLabelCancel = @"cancel";
@@ -19,17 +20,39 @@ NSString *const ATInteractionEnjoymentDialogEventLabelYes = @"yes";
 NSString *const ATInteractionEnjoymentDialogEventLabelNo = @"no";
 
 
+@interface ApptentiveInteractionEnjoymentDialogController ()
+
+@property (strong, nonatomic) UIViewController *viewController;
+@property (strong, nonatomic) UIAlertController *alertController;
+@property (strong, nonatomic) UIAlertView *alertView;
+
+@end
+
+
 @implementation ApptentiveInteractionEnjoymentDialogController
 
-- (instancetype)initWithInteraction:(ApptentiveInteraction *)interaction {
-	NSAssert([interaction.type isEqualToString:@"EnjoymentDialog"], @"Attempted to load an EnjoymentDialogController with an interaction of type: %@", interaction.type);
++ (void)load {
+	[self registerInteractionControllerClass:self forType:@"EnjoymentDialog"];
+}
 
-	self = [super init];
-	if (self != nil) {
-		_interaction = [interaction copy];
+- (void)presentInteractionFromViewController:(UIViewController *)viewController {
+	self.viewController = viewController;
+
+	if ([UIAlertController class]) {
+		self.alertController = [self alertControllerWithInteraction:self.interaction];
+
+		if (self.alertController) {
+			[viewController presentViewController:self.alertController animated:YES completion:^{
+				[self.interaction engage:ATInteractionEnjoymentDialogEventLabelLaunch fromViewController:self.viewController];
+			}];
+		}
+	} else {
+		self.alertView = [self alertViewWithInteraction:self.interaction];
+
+		if (self.alertView) {
+			[self.alertView show];
+		}
 	}
-
-	return self;
 }
 
 - (NSString *)title {
@@ -54,31 +77,6 @@ NSString *const ATInteractionEnjoymentDialogEventLabelNo = @"no";
 	NSString *noText = self.interaction.configuration[@"no_text"] ?: ApptentiveLocalizedString(@"No", @"no");
 
 	return noText;
-}
-
-- (void)presentEnjoymentDialogFromViewController:(UIViewController *)viewController {
-	if (!self.interaction) {
-		ApptentiveLogError(@"Cannot present an Enjoyment Dialog alert without an interaction.");
-		return;
-	}
-
-	self.viewController = viewController;
-
-	if ([UIAlertController class]) {
-		self.alertController = [self alertControllerWithInteraction:self.interaction];
-
-		if (self.alertController) {
-			[viewController presentViewController:self.alertController animated:YES completion:^{
-                [self.interaction engage:ATInteractionEnjoymentDialogEventLabelLaunch fromViewController:self.viewController];
-			}];
-		}
-	} else {
-		self.alertView = [self alertViewWithInteraction:self.interaction];
-
-		if (self.alertView) {
-			[self.alertView show];
-		}
-	}
 }
 
 #pragma mark UIAlertController

@@ -19,18 +19,20 @@ NSString *const ATInteractionAppStoreRatingEventLabelOpenMacAppStore = @"open_ma
 NSString *const ATInteractionAppStoreRatingEventLabelUnableToRate = @"unable_to_rate";
 
 
+@interface ApptentiveInteractionAppStoreController ()
+
+@property (strong, nonatomic) UIViewController *viewController;
+
+@end
+
+
 @implementation ApptentiveInteractionAppStoreController
 
-- (id)initWithInteraction:(ApptentiveInteraction *)interaction {
-	NSAssert([interaction.type isEqualToString:@"AppStoreRating"], @"Attempted to load an AppStoreRating interaction with an interaction of type: %@", interaction.type);
-	self = [super init];
-	if (self != nil) {
-		_interaction = [interaction copy];
-	}
-	return self;
++ (void)load {
+	[self registerInteractionControllerClass:self forType:@"AppStoreRating"];
 }
 
-- (void)openAppStoreFromViewController:(UIViewController *)viewController {
+- (void)presentInteractionFromViewController:(UIViewController *)viewController {
 	self.viewController = viewController;
 
 	[self openAppStoreToRateApp];

@@ -141,6 +141,10 @@
 		01D0C3A01BF3EEA10024BA1A /* at_attach@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01D0C39D1BF3EE9B0024BA1A /* at_attach@3x.png */; };
 		01D3128E1B69349900B369E1 /* ApptentiveProgressNavigationBar.h in Headers */ = {isa = PBXBuildFile; fileRef = 01D3128C1B69349900B369E1 /* ApptentiveProgressNavigationBar.h */; };
 		01D3128F1B69349900B369E1 /* ApptentiveProgressNavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 01D3128D1B69349900B369E1 /* ApptentiveProgressNavigationBar.m */; };
+		01D334331D3DA6020065A03A /* ApptentiveInteractionController.h in Headers */ = {isa = PBXBuildFile; fileRef = 01D334311D3DA6020065A03A /* ApptentiveInteractionController.h */; };
+		01D334341D3DA6020065A03A /* ApptentiveInteractionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01D334321D3DA6020065A03A /* ApptentiveInteractionController.m */; };
+		01D334371D3DAA460065A03A /* ApptentiveInteractionUpgradeMessageController.h in Headers */ = {isa = PBXBuildFile; fileRef = 01D334351D3DAA460065A03A /* ApptentiveInteractionUpgradeMessageController.h */; };
+		01D334381D3DAA460065A03A /* ApptentiveInteractionUpgradeMessageController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01D334361D3DAA460065A03A /* ApptentiveInteractionUpgradeMessageController.m */; };
 		01DD9E081C6534CD003C4B1D /* Apptentive+Debugging.m in Sources */ = {isa = PBXBuildFile; fileRef = 019A63CA1C4DA5BE00DD5EBF /* Apptentive+Debugging.m */; };
 		01E25CE51C88B1EE005BF2D2 /* ApptentiveSurveyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 01E25CE41C88B1EE005BF2D2 /* ApptentiveSurveyTests.m */; };
 		01E25CE71C88B38E005BF2D2 /* Survey.json in Resources */ = {isa = PBXBuildFile; fileRef = 01E25CE61C88B21B005BF2D2 /* Survey.json */; };
@@ -507,6 +511,10 @@
 		01D0C39D1BF3EE9B0024BA1A /* at_attach@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_attach@3x.png"; sourceTree = "<group>"; };
 		01D3128C1B69349900B369E1 /* ApptentiveProgressNavigationBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveProgressNavigationBar.h; sourceTree = "<group>"; };
 		01D3128D1B69349900B369E1 /* ApptentiveProgressNavigationBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveProgressNavigationBar.m; sourceTree = "<group>"; };
+		01D334311D3DA6020065A03A /* ApptentiveInteractionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveInteractionController.h; sourceTree = "<group>"; };
+		01D334321D3DA6020065A03A /* ApptentiveInteractionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveInteractionController.m; sourceTree = "<group>"; };
+		01D334351D3DAA460065A03A /* ApptentiveInteractionUpgradeMessageController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveInteractionUpgradeMessageController.h; sourceTree = "<group>"; };
+		01D334361D3DAA460065A03A /* ApptentiveInteractionUpgradeMessageController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveInteractionUpgradeMessageController.m; sourceTree = "<group>"; };
 		01E25CE41C88B1EE005BF2D2 /* ApptentiveSurveyTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveSurveyTests.m; sourceTree = "<group>"; };
 		01E25CE61C88B21B005BF2D2 /* Survey.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Survey.json; sourceTree = "<group>"; };
 		01E25CE81C88C70E005BF2D2 /* ApptentiveHUDViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveHUDViewController.h; sourceTree = "<group>"; };
@@ -1543,7 +1551,7 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
-		58729BC11A2D34D0008C934B /* Messages */ = {
+		58729BC11A2D34D0008C934B /* Notes */ = {
 			isa = PBXGroup;
 			children = (
 				584EAC6C1A786E4500AC7F05 /* ApptentiveInteractionTextModalController.h */,
@@ -1551,6 +1559,7 @@
 				583DF06C1A44CD6E00BF0207 /* ApptentiveInteractionNavigateToLink.h */,
 				583DF06D1A44CD6E00BF0207 /* ApptentiveInteractionNavigateToLink.m */,
 			);
+			name = Notes;
 			path = Messages;
 			sourceTree = "<group>";
 		};
@@ -1607,6 +1616,8 @@
 			children = (
 				58DCC0D2180F445700A3A7AE /* ApptentiveInteractionUpgradeMessageViewController.h */,
 				58DCC0D3180F445700A3A7AE /* ApptentiveInteractionUpgradeMessageViewController.m */,
+				01D334351D3DAA460065A03A /* ApptentiveInteractionUpgradeMessageController.h */,
+				01D334361D3DAA460065A03A /* ApptentiveInteractionUpgradeMessageController.m */,
 			);
 			path = "Upgrade Message";
 			sourceTree = "<group>";
@@ -1629,10 +1640,12 @@
 		58DCC0D1180F43E200A3A7AE /* Interactions */ = {
 			isa = PBXGroup;
 			children = (
-				58729BC11A2D34D0008C934B /* Messages */,
+				58729BC11A2D34D0008C934B /* Notes */,
 				58AB416918F608560034FAA5 /* Surveys */,
 				58D17D4418C5656D00D123BC /* Rating Flow */,
 				58D17D4318C5656100D123BC /* Upgrade Message */,
+				01D334311D3DA6020065A03A /* ApptentiveInteractionController.h */,
+				01D334321D3DA6020065A03A /* ApptentiveInteractionController.m */,
 			);
 			path = Interactions;
 			sourceTree = "<group>";
@@ -1682,6 +1695,7 @@
 				0132F8C71C851C0800A452E3 /* ApptentiveSurveyChoiceCell.h in Headers */,
 				0132F8C91C851C0800A452E3 /* ApptentiveSurveyMultilineCell.h in Headers */,
 				01C85EE61CADBB8800743DA0 /* ApptentiveStyleSheet.h in Headers */,
+				01D334371D3DAA460065A03A /* ApptentiveInteractionUpgradeMessageController.h in Headers */,
 				58B703EE1B0EB6DB0024478C /* ApptentiveMessageCenterViewController.h in Headers */,
 				49CEFF5D15168B54006D8BA8 /* ApptentiveAppConfigurationUpdater.h in Headers */,
 				4987FA80157ACAB500AF2078 /* ApptentiveSurveyMetrics.h in Headers */,
@@ -1691,6 +1705,7 @@
 				0127EA0E1BF1271C0005481A /* ApptentiveAttachmentCell.h in Headers */,
 				493AEB2D15990A4D00DFD4C7 /* ApptentiveSurvey.h in Headers */,
 				493AEB3315990A4D00DFD4C7 /* ApptentiveSurveyQuestion.h in Headers */,
+				01D334331D3DA6020065A03A /* ApptentiveInteractionController.h in Headers */,
 				493AEB3C15990A4D00DFD4C7 /* ApptentiveWebClient+SurveyAdditions.h in Headers */,
 				493AEB3F15990A4D00DFD4C7 /* ApptentiveSurveyViewController.h in Headers */,
 				498EFB7015BA48B300A1043B /* ApptentiveAppConfigurationUpdateTask.h in Headers */,
@@ -2014,6 +2029,7 @@
 				49CEFF5E15168B54006D8BA8 /* ApptentiveAppConfigurationUpdater.m in Sources */,
 				49735D631832DF1F00D48DE7 /* ApptentiveMessageCenterDataSource.m in Sources */,
 				0132F8CE1C851C0800A452E3 /* ApptentiveSurveyQuestionBackgroundView.m in Sources */,
+				01D334341D3DA6020065A03A /* ApptentiveInteractionController.m in Sources */,
 				4987FA81157ACAB500AF2078 /* ATSurveyMetrics.m in Sources */,
 				4987FA9D157AE53700AF2078 /* ApptentiveMetrics.m in Sources */,
 				0132F8C41C851C0800A452E3 /* ApptentiveSurveyCollectionView.m in Sources */,
@@ -2045,6 +2061,7 @@
 				0132F8D41C851C0800A452E3 /* ApptentiveSurveySubmitButton.m in Sources */,
 				0132F8D81C851C2300A452E3 /* ApptentiveSurveyAnswer.m in Sources */,
 				49F8AFE916CC4A550070FFEA /* ApptentiveDeviceInfo.m in Sources */,
+				01D334381D3DAA460065A03A /* ApptentiveInteractionUpgradeMessageController.m in Sources */,
 				49F8AFF116CC4A550070FFEA /* ApptentiveMessageSender.m in Sources */,
 				49F8AFF316CC4A550070FFEA /* ApptentivePersonInfo.m in Sources */,
 				49F8AFFC16CC4D860070FFEA /* ApptentiveRecord.m in Sources */,

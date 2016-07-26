@@ -119,4 +119,22 @@
 	return [ApptentiveConversationUpdater currentConversation].token;
 }
 
+- (void)resetSDK {
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ApptentiveCustomDeviceDataPreferenceKey];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ApptentiveCustomPersonDataPreferenceKey];
+
+	[self.engagementBackend resetEngagementData];
+	[self.backend resetBackendData];
+
+	self.personName = nil;
+	self.personEmailAddress = nil;
+
+	self.APIKey = nil;
+	self.appID = nil;
+
+	[self setValue:nil forKey:@"backend"];
+	[self setValue:nil forKey:@"webClient"];
+	[self setValue:nil forKey:@"engagementBackend"];
+}
+
 @end

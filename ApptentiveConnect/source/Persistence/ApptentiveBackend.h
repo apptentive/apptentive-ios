@@ -109,6 +109,8 @@ extern NSString *const ATBackendBecameReadyNotification;
 
 - (NSURLCache *)imageCache;
 
+- (void)resetBackendData;
+
 @end
 
 @protocol ATBackendMessageDelegate <NSObject>

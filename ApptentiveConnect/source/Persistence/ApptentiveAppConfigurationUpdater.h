@@ -34,4 +34,7 @@ extern NSString *const ATAppConfigurationAppDisplayNameKey;
 - (void)update;
 - (void)cancel;
 - (float)percentageComplete;
+
++ (void)resetAppConfiguration;
+
 @end

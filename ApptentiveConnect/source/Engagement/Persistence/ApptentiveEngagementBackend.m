@@ -523,6 +523,7 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 }
 
 - (void)loadCachedEngagementManifest {
+	_engagementTargets = [[NSMutableDictionary alloc] init];
 	NSFileManager *fm = [NSFileManager defaultManager];
 	if ([fm fileExistsAtPath:[ApptentiveEngagementBackend cachedTargetsStoragePath]]) {
 		@try {
@@ -542,6 +543,26 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 			ApptentiveLogError(@"Unable to unarchive engagement interactions: %@", exception);
 		}
 	}
+}
+
+- (void)resetEngagementData {
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATEngagementInstallDateKey];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATEngagementUpgradeDateKey];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATEngagementLastUsedVersionKey];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATEngagementIsUpdateVersionKey];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATEngagementIsUpdateBuildKey];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATEngagementCodePointsInvokesTotalKey];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATEngagementCodePointsInvokesVersionKey];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATEngagementCodePointsInvokesBuildKey];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATEngagementCodePointsInvokesLastDateKey];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATEngagementInteractionsInvokesTotalKey];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATEngagementInteractionsInvokesVersionKey];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATEngagementInteractionsInvokesLastDateKey];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATEngagementInteractionsInvokesBuildKey];
+
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATEngagementInteractionsSDKVersionKey];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATEngagementInteractionsAppBuildNumberKey];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATEngagementCachedInteractionsExpirationPreferenceKey];
 }
 
 @end

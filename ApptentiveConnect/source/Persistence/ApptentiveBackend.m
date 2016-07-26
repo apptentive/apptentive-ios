@@ -298,39 +298,7 @@ static NSURLCache *imageCache = nil;
 }
 
 - (NSString *)deviceUUID {
-	static dispatch_once_t onceToken;
-	dispatch_once(&onceToken, ^{
-		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-		NSString *uuid = [defaults objectForKey:ATUUIDPreferenceKey];
-
-		if (uuid && [uuid hasPrefix:@"ios:"]) {
-			// Existing UUID is a legacy value. Back it up.
-			[defaults setObject:uuid forKey:ATLegacyUUIDPreferenceKey];
-		}
-
-		UIDevice *device = [UIDevice currentDevice];
-		if ([NSUUID class] && [device respondsToSelector:@selector(identifierForVendor)]) {
-			NSString *vendorID = [[device identifierForVendor] UUIDString];
-			if (vendorID && ![vendorID isEqualToString:uuid]) {
-				uuid = vendorID;
-				[defaults setObject:uuid forKey:ATUUIDPreferenceKey];
-			}
-		}
-		if (!uuid) {
-			// Fall back.
-			CFUUIDRef uuidRef = CFUUIDCreate(NULL);
-			CFStringRef uuidStringRef = CFUUIDCreateString(NULL, uuidRef);
-
-			uuid = [NSString stringWithFormat:@"ios:%@", (__bridge NSString *)uuidStringRef];
-
-			CFRelease(uuidRef), uuidRef = NULL;
-			CFRelease(uuidStringRef), uuidStringRef = NULL;
-			[defaults setObject:uuid forKey:ATUUIDPreferenceKey];
-			[defaults synchronize];
-		}
-		self.cachedDeviceUUID = uuid;
-	});
-	return self.cachedDeviceUUID;
+	return [UIDevice currentDevice].identifierForVendor.UUIDString;
 }
 
 - (NSString *)appName {
@@ -812,6 +780,28 @@ static NSURLCache *imageCache = nil;
 	}
 
 	[self.messageDelegate backend:self messageProgressDidChange:progress];
+}
+
+#pragma mark - Debugging
+
+- (void)resetBackendData {
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATUUIDPreferenceKey];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATLegacyUUIDPreferenceKey];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATInfoDistributionKey];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATInfoDistributionVersionKey];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATAppConfigurationAppDisplayNameKey];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATAppConfigurationHideBrandingKey];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATAppConfigurationNotificationPopupsEnabledKey];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATAppConfigurationMessageCenterForegroundRefreshIntervalKey];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATMessagesLastRetrievedMessageIDPreferenceKey];
+
+	[ApptentiveConversationUpdater resetConversation];
+	[ApptentiveDeviceUpdater resetDeviceInfo];
+	[ApptentivePersonUpdater resetPersonInfo];
+	[ApptentiveAppConfigurationUpdater resetAppConfiguration];
+
+	// TODO: Delete core data stuff
 }
 
 #pragma mark - Private methods

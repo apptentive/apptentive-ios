@@ -15,7 +15,6 @@
 #import "ApptentiveEvent.h"
 #import "ApptentiveMetric.h"
 #import "ApptentiveRecordRequestTask.h"
-#import "ApptentiveSurveyMetrics.h"
 #import "ApptentiveTaskQueue.h"
 #import "ApptentiveEngagementBackend.h"
 
@@ -24,20 +23,9 @@
 static NSString *ATInteractionAppEventLabelLaunch = @"launch";
 static NSString *ATInteractionAppEventLabelExit = @"exit";
 
-// Legacy metric event labels
-
-static NSString *ATMetricNameSurveyCancel = @"survey.cancel";
-static NSString *ATMetricNameSurveySubmit = @"survey.submit";
-static NSString *ATMetricNameSurveyAnswerQuestion = @"survey.question_response";
-
-
 @interface ApptentiveMetrics ()
 
 - (void)addLaunchMetric;
-
-- (ATSurveyEvent)surveyEventTypeFromNotification:(NSNotification *)notification;
-- (void)surveyDidHide:(NSNotification *)notification;
-- (void)surveyDidAnswerQuestion:(NSNotification *)notification;
 
 - (void)appWillTerminate:(NSNotification *)notification;
 - (void)appDidEnterBackground:(NSNotification *)notification;
@@ -158,9 +146,6 @@ static NSString *ATMetricNameSurveyAnswerQuestion = @"survey.question_response";
 		[ApptentiveMetrics registerDefaults];
 		[self updateWithCurrentPreferences];
 
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(surveyDidHide:) name:ATSurveyDidHideWindowNotification object:nil];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(surveyDidAnswerQuestion:) name:ATSurveyDidAnswerQuestionNotification object:nil];
-
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(preferencesChanged:) name:ATConfigurationPreferencesChangedNotification object:nil];
 
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillTerminate:) name:UIApplicationWillTerminateNotification object:nil];
@@ -211,68 +196,6 @@ static NSString *ATMetricNameSurveyAnswerQuestion = @"survey.question_response";
 	@autoreleasepool {
 		[[Apptentive sharedConnection].engagementBackend engageApptentiveAppEvent:ATInteractionAppEventLabelLaunch];
 	}
-}
-
-- (ATSurveyEvent)surveyEventTypeFromNotification:(NSNotification *)notification {
-	ATSurveyEvent event = ATSurveyEventUnknown;
-	if ([[notification userInfo] objectForKey:ATSurveyMetricsEventKey]) {
-		event = [(NSNumber *)[[notification userInfo] objectForKey:ATSurveyMetricsEventKey] intValue];
-	}
-	if (event != ATSurveyEventTappedSend && event != ATSurveyEventTappedCancel && event != ATSurveyEventAnsweredQuestion) {
-		event = ATSurveyEventUnknown;
-		ApptentiveLogError(@"Unknown survey event type: %d", event);
-	}
-	return event;
-}
-
-- (void)surveyDidHide:(NSNotification *)notification {
-	NSMutableDictionary *info = [[NSMutableDictionary alloc] init];
-
-	NSString *surveyID = [[notification userInfo] objectForKey:ATSurveyMetricsSurveyIDKey];
-	if (surveyID != nil) {
-		[info setObject:surveyID forKey:@"id"];
-	}
-
-	NSString *surveyInteractionID = [[notification userInfo] objectForKey:@"interaction_id"];
-	if (surveyInteractionID) {
-		info[@"interaction_id"] = surveyInteractionID;
-	}
-
-	ATSurveyEvent eventType = [self surveyEventTypeFromNotification:notification];
-
-	if (eventType == ATSurveyEventTappedSend) {
-		[self addMetricWithName:ATMetricNameSurveySubmit info:info];
-	} else if (eventType == ATSurveyEventTappedCancel) {
-		[self addMetricWithName:ATMetricNameSurveyCancel info:info];
-	}
-
-	info = nil;
-}
-
-- (void)surveyDidAnswerQuestion:(NSNotification *)notification {
-	NSMutableDictionary *info = [[NSMutableDictionary alloc] init];
-
-	NSString *surveyID = [[notification userInfo] objectForKey:ATSurveyMetricsSurveyIDKey];
-	if (surveyID != nil) {
-		[info setObject:surveyID forKey:@"survey_id"];
-	}
-
-	NSString *questionID = [[notification userInfo] objectForKey:ATSurveyMetricsSurveyQuestionIDKey];
-	if (questionID != nil) {
-		[info setObject:questionID forKey:@"id"];
-	}
-
-	NSString *surveyInteractionID = [[notification userInfo] objectForKey:@"interaction_id"];
-	if (surveyInteractionID) {
-		info[@"interaction_id"] = surveyInteractionID;
-	}
-
-	ATSurveyEvent eventType = [self surveyEventTypeFromNotification:notification];
-	if (eventType == ATSurveyEventAnsweredQuestion) {
-		[self addMetricWithName:ATMetricNameSurveyAnswerQuestion info:info];
-	}
-
-	info = nil;
 }
 
 - (void)appWillTerminate:(NSNotification *)notification {

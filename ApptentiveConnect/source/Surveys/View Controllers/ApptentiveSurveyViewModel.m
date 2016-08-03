@@ -15,9 +15,12 @@
 #import "ApptentiveInteraction.h"
 #import "ApptentiveSurveyResponse.h"
 #import "ApptentiveSurveyResponseTask.h"
-#import "ApptentiveSurveyMetrics.h"
 #import "ApptentiveTaskQueue.h"
 #import "ApptentiveData.h"
+
+NSString *const ApptentiveInteractionSurveyEventLabelQuestionResponse = @"question_response";
+NSString *const ApptentiveInteractionSurveyEventLabelSubmit = @"submit";
+NSString *const ApptentiveInteractionSurveyEventLabelCancel = @"cancel";
 
 
 @interface ApptentiveSurveyViewModel ()
@@ -250,9 +253,6 @@
 		task.pendingSurveyResponseID = pendingSurveyResponseID;
 		[[ApptentiveTaskQueue sharedTaskQueue] addTask:task];
 	});
-
-	NSDictionary *notificationInfo = @{ApptentiveSurveyIDKey: (self.interaction.identifier ?: [NSNull null])};
-	[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveSurveySentNotification object:nil userInfo:notificationInfo];
 }
 
 #pragma mark - Validation & Output
@@ -391,31 +391,16 @@
 - (void)answerChangedAtIndexPath:(NSIndexPath *)indexPath {
 	ApptentiveSurveyQuestion *question = [self questionAtIndex:indexPath.section];
 
-	NSDictionary *metricsInfo = @{ ATSurveyMetricsSurveyIDKey: self.interaction.identifier ?: [NSNull null],
-		ATSurveyMetricsSurveyQuestionIDKey: question.identifier ?: [NSNull null],
-		ATSurveyMetricsEventKey: @(ATSurveyEventAnsweredQuestion),
-		@"interaction_id": self.interaction.identifier ?: [NSNull null],
-	};
-
-	[[NSNotificationCenter defaultCenter] postNotificationName:ATSurveyDidAnswerQuestionNotification object:nil userInfo:metricsInfo];
+	[self.interaction engage:ApptentiveInteractionSurveyEventLabelQuestionResponse fromViewController:nil userInfo:@{ @"id": question.identifier ?: [NSNull null]}];
 }
 
 - (void)didCancel {
-	[self didCloseWindowWithEvent:ATSurveyEventTappedCancel];
+	[self.interaction engage:ApptentiveInteractionSurveyEventLabelCancel fromViewController:nil];
 }
 
 - (void)didSubmit {
-	[self didCloseWindowWithEvent:ATSurveyEventTappedSend];
-}
-
-- (void)didCloseWindowWithEvent:(ATSurveyEvent)event {
-	NSDictionary *metricsInfo = @{ ATSurveyMetricsSurveyIDKey: self.interaction.identifier ?: [NSNull null],
-		ATSurveyWindowTypeKey: @(ATSurveyWindowTypeSurvey),
-		ATSurveyMetricsEventKey: @(event),
-		@"interaction_id": self.interaction.identifier ?: [NSNull null],
-	};
-
-	[[NSNotificationCenter defaultCenter] postNotificationName:ATSurveyDidHideWindowNotification object:nil userInfo:metricsInfo];
+	[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveSurveySentNotification object:@{ ApptentiveSurveyIDKey: self.interaction.identifier }];
+	[self.interaction engage:ApptentiveInteractionSurveyEventLabelSubmit fromViewController:nil];
 }
 
 #pragma mark - Private

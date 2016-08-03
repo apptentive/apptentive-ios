@@ -9,14 +9,13 @@
 #import <XCTest/XCTest.h>
 #import "ApptentiveSurveyViewModel.h"
 #import "ApptentiveInteraction.h"
-#import "ApptentiveSurveyMetrics.h"
 #import "ApptentiveStyleSheet.h"
+#import "ApptentiveInteractionUsageData.h"
 
 
 @interface ApptentiveSurveyTests : XCTestCase <ATSurveyViewModelDelegate>
 
 @property (strong, nonatomic) ApptentiveSurveyViewModel *viewModel;
-@property (strong, nonatomic) NSMutableSet *answeredQuestions;
 @property (strong, nonatomic) NSDictionary *didHideUserInfo;
 @property (assign, nonatomic) BOOL validationChanged;
 @property (strong, nonatomic) NSMutableSet *deselectedIndexPaths;
@@ -41,11 +40,7 @@
 		self.viewModel = [[ApptentiveSurveyViewModel alloc] initWithInteraction:surveyInteraction];
 		self.viewModel.delegate = self;
 
-		self.answeredQuestions = [NSMutableSet set];
 		self.deselectedIndexPaths = [NSMutableSet set];
-
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(answeredQuestion:) name:ATSurveyDidAnswerQuestionNotification object:nil];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didHide:) name:ATSurveyDidHideWindowNotification object:nil];
 	}
 }
 
@@ -54,14 +49,6 @@
 	self.viewModel.delegate = nil;
 
 	[super tearDown];
-}
-
-- (void)answeredQuestion:(NSNotification *)notification {
-	[self.answeredQuestions addObject:notification.userInfo[ATSurveyMetricsSurveyQuestionIDKey]];
-}
-
-- (void)didHide:(NSNotification *)notification {
-	self.didHideUserInfo = notification.userInfo;
 }
 
 - (void)viewModelValidationChanged:(ApptentiveSurveyViewModel *)viewModel isValid:(BOOL)valid {
@@ -195,6 +182,11 @@
 }
 
 - (void)testMetrics {
+	[Apptentive sharedConnection].APIKey = @"bogus_api_key"; // trigger creation of engagement backend
+
+	ApptentiveInteractionUsageData *usageData = [ApptentiveInteractionUsageData usageData];
+	NSInteger preCount = [(NSNumber *)usageData.predicateEvaluationDictionary[@"code_point/com.apptentive#Survey#question_response/invokes/total"] integerValue];
+
 	[self.viewModel selectAnswerAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:1]];
 	[self.viewModel selectAnswerAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:3]];
 	[self.viewModel selectAnswerAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:5]];
@@ -202,20 +194,10 @@
 	[self.viewModel commitChangeAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:7]];
 	[self.viewModel commitChangeAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:9]];
 
-	XCTAssertEqual(self.answeredQuestions.count, 5);
-	XCTAssertTrue([self.answeredQuestions containsObject:@"56d49499c719925f3300000b"]);
-	XCTAssertTrue([self.answeredQuestions containsObject:@"56d49499c719925f33000011"]);
-	XCTAssertTrue([self.answeredQuestions containsObject:@"56d49499c719925f33000019"]);
-	XCTAssertTrue([self.answeredQuestions containsObject:@"56d49499c719925f3300001f"]);
-	XCTAssertTrue([self.answeredQuestions containsObject:@"56d49499c719925f33000021"]);
+	usageData = [ApptentiveInteractionUsageData usageData];
+	NSInteger postCount = [(NSNumber *)usageData.predicateEvaluationDictionary[@"code_point/com.apptentive#Survey#question_response/invokes/total"] integerValue];
 
-	[self.viewModel didSubmit];
-
-	XCTAssertEqualObjects(self.didHideUserInfo[ATSurveyMetricsEventKey], @(ATSurveyEventTappedSend));
-
-	[self.viewModel didCancel];
-
-	XCTAssertEqualObjects(self.didHideUserInfo[ATSurveyMetricsEventKey], @(ATSurveyEventTappedCancel));
+	XCTAssertEqual(postCount - preCount, 5);
 }
 
 - (void)testTagForIndexPath {

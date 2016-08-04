@@ -135,9 +135,10 @@
 
 		[self.viewModel submit];
 
-		[self dismissViewControllerAnimated:YES completion:nil];
-
-		[self.viewModel didSubmit];
+		UIViewController *presentingViewController = self.presentingViewController;
+		[self dismissViewControllerAnimated:YES completion:^{
+			[self.viewModel didSubmit:presentingViewController];
+		}];
 
 		if (self.viewModel.showThankYou) {
 			ApptentiveHUDViewController *HUD = [[ApptentiveHUDViewController alloc] init];
@@ -149,9 +150,10 @@
 }
 
 - (IBAction)close:(id)sender {
-	[self dismissViewControllerAnimated:YES completion:nil];
-
-	[self.viewModel didCancel];
+	UIViewController *presentingViewController = self.presentingViewController;
+	[self dismissViewControllerAnimated:YES completion:^{
+		[self.viewModel didCancel:presentingViewController];
+	}];
 }
 
 - (IBAction)showAbout:(id)sender {

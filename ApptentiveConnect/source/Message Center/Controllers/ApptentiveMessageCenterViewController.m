@@ -762,11 +762,13 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 - (IBAction)dismiss:(id)sender {
 	[self.attachmentController resignFirstResponder];
 
-	[self.interaction engage:ATInteractionMessageCenterEventLabelClose fromViewController:self];
-
 	[self.dataSource stop];
 
-	[self dismissViewControllerAnimated:YES completion:nil];
+	UIViewController *presentingViewController = self.presentingViewController;
+
+	[self dismissViewControllerAnimated:YES completion:^{
+		[self.interaction engage:ATInteractionMessageCenterEventLabelClose fromViewController:presentingViewController];
+	}];
 }
 
 - (IBAction)sendButtonPressed:(id)sender {

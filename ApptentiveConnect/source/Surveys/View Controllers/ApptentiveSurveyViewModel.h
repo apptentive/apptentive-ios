@@ -63,8 +63,8 @@
 - (BOOL)validate:(BOOL)isSubmit;
 - (void)submit;
 
-- (void)didCancel;
-- (void)didSubmit;
+- (void)didCancel:(UIViewController *)presentingViewController;
+- (void)didSubmit:(UIViewController *)presentingViewController;
 - (void)commitChangeAtIndexPath:(NSIndexPath *)indexPath;
 
 @property (readonly, nonatomic) NSDictionary *answers;

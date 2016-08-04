@@ -394,13 +394,13 @@ NSString *const ApptentiveInteractionSurveyEventLabelCancel = @"cancel";
 	[self.interaction engage:ApptentiveInteractionSurveyEventLabelQuestionResponse fromViewController:nil userInfo:@{ @"id": question.identifier ?: [NSNull null]}];
 }
 
-- (void)didCancel {
-	[self.interaction engage:ApptentiveInteractionSurveyEventLabelCancel fromViewController:nil];
+- (void)didCancel:(UIViewController *)presentingViewController {
+	[self.interaction engage:ApptentiveInteractionSurveyEventLabelCancel fromViewController:presentingViewController];
 }
 
-- (void)didSubmit {
+- (void)didSubmit:(UIViewController *)presentingViewController {
 	[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveSurveySentNotification object:@{ ApptentiveSurveyIDKey: self.interaction.identifier }];
-	[self.interaction engage:ApptentiveInteractionSurveyEventLabelSubmit fromViewController:nil];
+	[self.interaction engage:ApptentiveInteractionSurveyEventLabelSubmit fromViewController:presentingViewController];
 }
 
 #pragma mark - Private

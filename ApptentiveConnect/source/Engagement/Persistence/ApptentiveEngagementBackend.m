@@ -9,6 +9,7 @@
 #import "ApptentiveEngagementBackend.h"
 #import "ApptentiveBackend.h"
 #import "ApptentiveEngagementGetManifestTask.h"
+#import "ApptentiveEngagementManifestParser.h"
 #import "ApptentiveTaskQueue.h"
 #import "ApptentiveInteraction.h"
 #import "ApptentiveInteractionInvocation.h"

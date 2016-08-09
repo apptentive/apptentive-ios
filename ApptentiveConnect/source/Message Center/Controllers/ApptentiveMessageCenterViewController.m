@@ -137,7 +137,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[Apptentive sharedConnection].backend.messageDelegate = self;
 
 	self.dateFormatter = [[NSDateFormatter alloc] init];
-	self.dateFormatter.dateFormat = [NSDateFormatter dateFormatFromTemplate:@"MMMMdyyyy" options:0 locale:[NSLocale currentLocale]];
+    self.dateFormatter.dateStyle = NSDateFormatterLongStyle;
+    self.dateFormatter.timeStyle = NSDateFormatterNoStyle;
 	self.dataSource.dateFormatter.dateFormat = self.dateFormatter.dateFormat; // Used to determine if date changed between messages
 
 	self.navigationItem.title = self.interaction.title;

@@ -9,7 +9,7 @@
 #import "ApptentiveInteractionController.h"
 #import "ApptentiveInteraction.h"
 
-static NSMutableDictionary *interactionControllerClassRegistry;
+static NSDictionary *interactionControllerClassRegistry;
 
 
 @implementation ApptentiveInteractionController
@@ -17,14 +17,22 @@ static NSMutableDictionary *interactionControllerClassRegistry;
 + (void)registerInteractionControllerClass:(Class) class forType:(NSString *)type {
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-		interactionControllerClassRegistry = [[NSMutableDictionary alloc] init];
+        interactionControllerClassRegistry = @{};
 	});
-
-	[interactionControllerClassRegistry setObject:class forKey:type];
+    
+    @synchronized ([ApptentiveInteractionController class]) {
+        NSMutableDictionary *registry = [interactionControllerClassRegistry mutableCopy];
+        registry[type] = class;
+        interactionControllerClassRegistry = [NSDictionary dictionaryWithDictionary:registry];
+    }
 }
 
-	+ (Class)interactionControllerClassWithType : (NSString *)type {
-	return [interactionControllerClassRegistry objectForKey:type];
++ (Class)interactionControllerClassWithType:(NSString *)type {
+    Class result;
+    @synchronized ([ApptentiveInteractionController class]) {
+        result = interactionControllerClassRegistry[type];
+    }
+    return result;
 }
 
 + (instancetype)interactionControllerWithInteraction:(ApptentiveInteraction *)interaction {

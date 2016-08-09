@@ -33,21 +33,23 @@
 @dynamic remoteThumbnailURL;
 
 + (BOOL)canCreateThumbnailForMIMEType:(NSString *)MIMEType {
-	static NSMutableSet *thumbnailableMIMETypes;
+	static NSSet *thumbnailableMIMETypes;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
 		CFArrayRef thumbnailableUTIs = CGImageSourceCopyTypeIdentifiers();
-		thumbnailableMIMETypes = [NSMutableSet set];
+		
+		NSMutableSet *mimeTypes = [NSMutableSet set];
 
 		for (CFIndex i = 0; i < CFArrayGetCount(thumbnailableUTIs); i ++) {
 			CFStringRef UTI = CFArrayGetValueAtIndex(thumbnailableUTIs, i);
 			CFStringRef MIMEType = UTTypeCopyPreferredTagWithClass(UTI, kUTTagClassMIMEType);
 			if (MIMEType) {
-				[thumbnailableMIMETypes addObject:(__bridge id _Nonnull)(MIMEType)];
+				[mimeTypes addObject:(__bridge id _Nonnull)(MIMEType)];
 				CFRelease(MIMEType);
 			}
 		}
-
+		
+		thumbnailableMIMETypes = [NSSet setWithSet:mimeTypes];
 		CFRelease(thumbnailableUTIs);
 	});
 

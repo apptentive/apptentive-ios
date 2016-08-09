@@ -227,17 +227,18 @@ UIViewController *topChildViewController(UIViewController *viewController) {
 }
 
 + (NSArray *)availableAppLocalizations {
-	static NSMutableArray *localAppLocalizations = nil;
+	static NSArray *localAppLocalizations = nil;
 	@synchronized(self) {
 		if (localAppLocalizations == nil) {
 			NSArray *rawLocalizations = [[NSBundle mainBundle] localizations];
-			localAppLocalizations = [[NSMutableArray alloc] init];
+			NSMutableArray *localizations = [[NSMutableArray alloc] init];
 			for (NSString *loc in rawLocalizations) {
 				NSString *s = [NSLocale canonicalLocaleIdentifierFromString:loc];
-				if (![localAppLocalizations containsObject:s]) {
-					[localAppLocalizations addObject:s];
+				if (![localizations containsObject:s]) {
+					[localizations addObject:s];
 				}
 			}
+            localAppLocalizations = [NSArray arrayWithArray:localizations];
 		}
 	}
 	return localAppLocalizations;

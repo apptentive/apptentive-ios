@@ -15,7 +15,7 @@
 @property (copy, nonatomic) NSString *identifier;
 @property (assign, nonatomic) NSInteger priority;
 @property (copy, nonatomic) NSString *type;
-@property (strong, nonatomic) NSDictionary *configuration;
+@property (copy, nonatomic) NSDictionary *configuration;
 @property (copy, nonatomic) NSString *version;
 @property (copy, nonatomic) NSString *vendor;
 

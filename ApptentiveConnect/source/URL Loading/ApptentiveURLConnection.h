@@ -26,8 +26,8 @@
 @property (assign, nonatomic) float percentComplete;
 @property (readonly, nonatomic) NSTimeInterval expiresMaxAge;
 
-@property (strong, nonatomic) NSData *HTTPBody;
-@property (strong, nonatomic) NSString *HTTPMethod;
+@property (copy, nonatomic) NSData *HTTPBody;
+@property (copy, nonatomic) NSString *HTTPMethod;
 
 /*! The delegate for this class is a weak reference. */
 - (id)initWithURL:(NSURL *)url delegate:(NSObject<ApptentiveURLConnectionDelegate> *)aDelegate;

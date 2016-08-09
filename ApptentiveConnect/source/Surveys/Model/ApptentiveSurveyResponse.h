@@ -19,9 +19,9 @@ typedef enum {
 
 
 @interface ApptentiveSurveyResponse : ApptentiveRecord <ApptentiveJSONModel>
-@property (strong, nonatomic) NSString *pendingSurveyResponseID;
-@property (strong, nonatomic) NSData *answersData;
-@property (strong, nonatomic) NSString *surveyID;
+@property (copy, nonatomic) NSString *pendingSurveyResponseID;
+@property (copy, nonatomic) NSData *answersData;
+@property (copy, nonatomic) NSString *surveyID;
 @property (strong, nonatomic) NSNumber *pendingState;
 
 - (void)setAnswers:(NSDictionary *)answers;

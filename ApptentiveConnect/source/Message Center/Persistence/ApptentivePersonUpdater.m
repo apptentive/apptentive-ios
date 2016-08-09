@@ -18,7 +18,7 @@ NSString *const ATPersonLastUpdateValuePreferenceKey = @"ATPersonLastUpdateValue
 
 @interface ApptentivePersonUpdater ()
 
-@property (strong, nonatomic) NSDictionary *sentPersonJSON;
+@property (copy, nonatomic) NSDictionary *sentPersonJSON;
 @property (strong, nonatomic) ApptentiveAPIRequest *request;
 
 @end

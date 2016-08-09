@@ -33,7 +33,7 @@ extern NSString *const ATBackendBecameReadyNotification;
 @interface ApptentiveBackend : NSObject <ApptentiveConversationUpdaterDelegate, ATDeviceUpdaterDelegate, ATPersonUpdaterDelegate, NSFetchedResultsControllerDelegate, UIAlertViewDelegate>
 /*! The feedback currently being worked on by the user. */
 @property (strong, nonatomic) ATFeedback *currentFeedback;
-@property (strong, nonatomic) NSDictionary *currentCustomData;
+@property (copy, nonatomic) NSDictionary *currentCustomData;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;

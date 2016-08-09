@@ -16,8 +16,8 @@
 @property (strong, nonatomic) NSMutableDictionary *headers;
 @property (strong, nonatomic) NSInputStream *HTTPBodyStream;
 @property (strong, nonatomic) NSMutableURLRequest *request;
-@property (strong, nonatomic) NSString *statusLine;
-@property (strong, nonatomic) NSDictionary *responseHeaders;
+@property (copy, nonatomic) NSString *statusLine;
+@property (copy, nonatomic) NSDictionary *responseHeaders;
 @property (readwrite, assign, nonatomic) NSInteger statusCode;
 @property (readwrite, assign, nonatomic) NSTimeInterval expiresMaxAge;
 @property (readwrite, assign, nonatomic) BOOL failedAuthentication;

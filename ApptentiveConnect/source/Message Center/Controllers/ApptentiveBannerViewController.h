@@ -15,8 +15,8 @@
 
 @property (weak, nonatomic) id<ApptentiveBannerViewControllerDelegate> delegate;
 @property (strong, nonatomic) NSURL *imageURL;
-@property (strong, nonatomic) NSString *titleText;
-@property (strong, nonatomic) NSString *messageText;
+@property (copy, nonatomic) NSString *titleText;
+@property (copy, nonatomic) NSString *messageText;
 
 + (instancetype)bannerWithImageURL:(NSURL *)imageURL title:(NSString *)title message:(NSString *)message;
 - (void)show;

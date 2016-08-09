@@ -15,7 +15,7 @@
 
 @property (copy, nonatomic) NSString *interactionID;
 @property (assign, nonatomic) NSInteger priority;
-@property (strong, nonatomic) NSDictionary *criteria;
+@property (copy, nonatomic) NSDictionary *criteria;
 
 + (ApptentiveInteractionInvocation *)invocationWithJSONDictionary:(NSDictionary *)jsonDictionary;
 + (NSArray *)invocationsWithJSONArray:(NSArray *)jsonArray;

@@ -13,6 +13,6 @@
 
 @interface ApptentiveMessageTask : ApptentiveTask <ApptentiveAPIRequestDelegate>
 
-@property (strong, nonatomic) NSString *pendingMessageID;
+@property (copy, nonatomic) NSString *pendingMessageID;
 
 @end

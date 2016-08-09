@@ -13,9 +13,9 @@
 
 @interface ApptentiveEvent : ApptentiveRecord <ApptentiveJSONModel>
 
-@property (strong, nonatomic) NSString *pendingEventID;
-@property (strong, nonatomic) NSData *dictionaryData;
-@property (strong, nonatomic) NSString *label;
+@property (copy, nonatomic) NSString *pendingEventID;
+@property (copy, nonatomic) NSData *dictionaryData;
+@property (copy, nonatomic) NSString *label;
 
 + (instancetype)newInstanceWithLabel:(NSString *)label;
 + (instancetype)findEventWithPendingID:(NSString *)pendingEventID;

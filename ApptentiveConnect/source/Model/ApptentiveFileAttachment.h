@@ -14,9 +14,9 @@
 
 
 @interface ApptentiveFileAttachment : NSManagedObject
-@property (strong, nonatomic) NSString *localPath;
-@property (strong, nonatomic) NSString *mimeType; // starts w/ lowercase b/c Core Data is stupid
-@property (strong, nonatomic) NSString *name;
+@property (copy, nonatomic) NSString *localPath;
+@property (copy, nonatomic) NSString *mimeType; // starts w/ lowercase b/c Core Data is stupid
+@property (copy, nonatomic) NSString *name;
 @property (strong, nonatomic) NSURL *remoteURL;
 @property (strong, nonatomic) NSURL *remoteThumbnailURL;
 @property (strong, nonatomic) ApptentiveMessage *message;

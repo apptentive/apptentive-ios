@@ -20,7 +20,7 @@ NSString *const ATDeviceLastUpdateValuePreferenceKey = @"ATDeviceLastUpdateValue
 
 @interface ApptentiveDeviceUpdater ()
 
-@property (strong, nonatomic) NSDictionary *sentDeviceJSON;
+@property (copy, nonatomic) NSDictionary *sentDeviceJSON;
 @property (strong, nonatomic) ApptentiveAPIRequest *request;
 
 @end

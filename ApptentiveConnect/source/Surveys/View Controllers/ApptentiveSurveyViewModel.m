@@ -25,7 +25,7 @@ NSString *const ApptentiveInteractionSurveyEventLabelCancel = @"cancel";
 
 @interface ApptentiveSurveyViewModel ()
 
-@property (strong, nonatomic) NSString *currentMultilineText;
+@property (copy, nonatomic) NSString *currentMultilineText;
 @property (strong, nonatomic) NSMutableSet *selectedIndexPaths;
 @property (strong, nonatomic) NSMutableDictionary *textAtIndexPath;
 @property (strong, nonatomic) NSMutableIndexSet *invalidQuestionIndexes;

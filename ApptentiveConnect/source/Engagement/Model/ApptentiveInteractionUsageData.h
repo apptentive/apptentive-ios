@@ -25,14 +25,14 @@
 @property (strong, nonatomic) NSNumber *currentTime;
 @property (strong, nonatomic) NSNumber *isUpdateVersion;
 @property (strong, nonatomic) NSNumber *isUpdateBuild;
-@property (strong, nonatomic) NSDictionary *codePointInvokesTotal;
-@property (strong, nonatomic) NSDictionary *codePointInvokesVersion;
-@property (strong, nonatomic) NSDictionary *codePointInvokesBuild;
-@property (strong, nonatomic) NSDictionary *codePointInvokesTimeAgo;
-@property (strong, nonatomic) NSDictionary *interactionInvokesTotal;
-@property (strong, nonatomic) NSDictionary *interactionInvokesVersion;
-@property (strong, nonatomic) NSDictionary *interactionInvokesBuild;
-@property (strong, nonatomic) NSDictionary *interactionInvokesTimeAgo;
+@property (copy, nonatomic) NSDictionary *codePointInvokesTotal;
+@property (copy, nonatomic) NSDictionary *codePointInvokesVersion;
+@property (copy, nonatomic) NSDictionary *codePointInvokesBuild;
+@property (copy, nonatomic) NSDictionary *codePointInvokesTimeAgo;
+@property (copy, nonatomic) NSDictionary *interactionInvokesTotal;
+@property (copy, nonatomic) NSDictionary *interactionInvokesVersion;
+@property (copy, nonatomic) NSDictionary *interactionInvokesBuild;
+@property (copy, nonatomic) NSDictionary *interactionInvokesTimeAgo;
 
 + (ApptentiveInteractionUsageData *)usageData;
 

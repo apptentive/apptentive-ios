@@ -14,10 +14,10 @@
 
 @interface ApptentiveRecord : NSManagedObject <ApptentiveJSONModel>
 
-@property (strong, nonatomic) NSString *apptentiveID;
+@property (copy, nonatomic) NSString *apptentiveID;
 @property (strong, nonatomic) NSNumber *creationTime;
 @property (strong, nonatomic) NSNumber *clientCreationTime;
-@property (strong, nonatomic) NSString *clientCreationTimezone;
+@property (copy, nonatomic) NSString *clientCreationTimezone;
 @property (strong, nonatomic) NSNumber *clientCreationUTCOffset;
 
 - (void)setup;

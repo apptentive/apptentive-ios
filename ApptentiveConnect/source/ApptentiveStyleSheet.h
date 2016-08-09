@@ -36,19 +36,19 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ApptentiveStyleSheet : NSObject <ApptentiveStyle>
 
 /// The font family to be used in the Apptentive UI
-@property (strong, nonatomic) NSString *fontFamily;
+@property (copy, nonatomic) NSString *fontFamily;
 
 /// The font face suffix for a light weight of the font.
-@property (strong, nonatomic, nullable) NSString *lightFaceAttribute;
+@property (copy, nonatomic, nullable) NSString *lightFaceAttribute;
 
 /// The font face suffix for a regular/book weight of the font.
-@property (strong, nonatomic, nullable) NSString *regularFaceAttribute;
+@property (copy, nonatomic, nullable) NSString *regularFaceAttribute;
 
 /// The font face suffix for a medium weight of the font.
-@property (strong, nonatomic, nullable) NSString *mediumFaceAttribute;
+@property (copy, nonatomic, nullable) NSString *mediumFaceAttribute;
 
 /// The font face suffix for a bold weight of the font.
-@property (strong, nonatomic, nullable) NSString *boldFaceAttribute;
+@property (copy, nonatomic, nullable) NSString *boldFaceAttribute;
 
 /**
  The primary text color to use in the Apptentive UI. Defaults to black. 

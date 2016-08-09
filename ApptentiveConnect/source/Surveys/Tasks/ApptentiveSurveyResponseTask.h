@@ -12,5 +12,5 @@
 
 
 @interface ApptentiveSurveyResponseTask : ApptentiveTask <ApptentiveAPIRequestDelegate>
-@property (strong, nonatomic) NSString *pendingSurveyResponseID;
+@property (copy, nonatomic) NSString *pendingSurveyResponseID;
 @end

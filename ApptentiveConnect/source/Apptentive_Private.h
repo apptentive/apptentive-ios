@@ -27,7 +27,7 @@ extern NSString *const ApptentiveConversationCreatedNotification;
 @property (readonly, nonatomic) ApptentiveBackend *backend;
 @property (readonly, nonatomic) ApptentiveEngagementBackend *engagementBackend;
 
-@property (strong, nonatomic) NSDictionary *pushUserInfo;
+@property (copy, nonatomic) NSDictionary *pushUserInfo;
 @property (strong, nonatomic) UIViewController *pushViewController;
 
 @property (readonly, nonatomic) BOOL didAccessStyleSheet;

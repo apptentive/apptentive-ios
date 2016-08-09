@@ -26,19 +26,19 @@ typedef NS_ENUM(NSInteger, ATPendingMessageState) {
 
 @interface ApptentiveMessage : ApptentiveRecord <ApptentiveJSONModel>
 
-@property (strong, nonatomic) NSString *pendingMessageID;
+@property (copy, nonatomic) NSString *pendingMessageID;
 @property (strong, nonatomic) NSNumber *pendingState;
 @property (strong, nonatomic) NSNumber *priority;
 @property (strong, nonatomic) NSNumber *seenByUser;
 @property (strong, nonatomic) NSNumber *sentByUser;
 @property (strong, nonatomic) NSNumber *errorOccurred;
-@property (strong, nonatomic) NSString *errorMessageJSON;
+@property (copy, nonatomic) NSString *errorMessageJSON;
 @property (strong, nonatomic) ApptentiveMessageSender *sender;
-@property (strong, nonatomic) NSData *customData;
+@property (copy, nonatomic) NSData *customData;
 @property (strong, nonatomic) NSNumber *hidden;
 @property (strong, nonatomic) NSNumber *automated;
-@property (strong, nonatomic) NSString *body;
-@property (strong, nonatomic) NSString *title;
+@property (copy, nonatomic) NSString *body;
+@property (copy, nonatomic) NSString *title;
 @property (strong, nonatomic) NSOrderedSet *attachments;
 
 + (instancetype)newInstanceWithBody:(NSString *)body attachments:(NSArray *)attachments;

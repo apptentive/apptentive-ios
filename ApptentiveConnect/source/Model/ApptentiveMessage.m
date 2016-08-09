@@ -183,7 +183,7 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 
 			self.attachments = attachments;
 		} else if (self.attachments.count == attachmentsJSON.count) {
-			for (NSInteger i = 0; i < self.attachments.count; i++) {
+			for (NSUInteger i = 0; i < self.attachments.count; i++) {
 				ApptentiveFileAttachment *originalAttachment = [self.attachments objectAtIndex:i];
 				NSDictionary *newJSON = [attachmentsJSON objectAtIndex:i];
 				[originalAttachment updateWithJSON:newJSON];

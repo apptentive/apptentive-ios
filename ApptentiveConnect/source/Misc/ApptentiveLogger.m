@@ -137,9 +137,9 @@ static dispatch_queue_t loggingQueue;
 	__block BOOL result = YES;
 
 	dispatch_sync(loggingQueue, ^{
-		if (logHandle) {
-			[logHandle synchronizeFile];
-			[logHandle closeFile];
+		if (self->logHandle) {
+			[self->logHandle synchronizeFile];
+			[self->logHandle closeFile];
 		}
 		
 		NSFileManager *fm = [NSFileManager defaultManager];
@@ -195,14 +195,14 @@ static dispatch_queue_t loggingQueue;
 			NSString *fullMessage = [[NSString alloc] initWithFormat:@"%@ %s:%d [%@] %@", filename, function, line, level, message];
 			
 			NSLog(@"[%@] %@", level, message);
-			if (creatingLogPathFailed == NO && logHandle != nil) {
+			if (self->creatingLogPathFailed == NO && self->logHandle != nil) {
 				NSString *dateString = [ApptentiveUtilities stringRepresentationOfDate:date];
 				NSMutableString *fileLogMessage = [NSMutableString stringWithFormat:@"%@  %@", dateString, fullMessage];
 				if ([fileLogMessage hasSuffix:@"\n"] == NO) {
 					[fileLogMessage appendString:@"\n"];
 				}
 				@try {
-					[logHandle writeData:[fileLogMessage dataUsingEncoding:NSUTF8StringEncoding]];
+					[self->logHandle writeData:[fileLogMessage dataUsingEncoding:NSUTF8StringEncoding]];
 				}
 				@catch (NSException *exception) {
 					// Probably out of space on the device.

@@ -192,7 +192,6 @@ NSString *const ATAppConfigurationAppDisplayNameKey = @"ATAppConfigurationAppDis
 	// Store expiration.
 	if (expiresMaxAge > 0) {
 		NSDate *date = [NSDate dateWithTimeInterval:expiresMaxAge sinceDate:[NSDate date]];
-		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 		[defaults setObject:date forKey:ATAppConfigurationExpirationPreferenceKey];
 		[defaults synchronize];
 	}

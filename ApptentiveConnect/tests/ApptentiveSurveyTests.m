@@ -86,7 +86,7 @@
 	[self.viewModel selectAnswerAtIndexPath:[NSIndexPath indexPathForItem:1 inSection:0]];
 
 	XCTAssertTrue([self.viewModel answerIsSelectedAtIndexPath:[NSIndexPath indexPathForItem:1 inSection:0]]);
-	XCTAssertEqual(self.deselectedIndexPaths.count, 0);
+	XCTAssertEqual(self.deselectedIndexPaths.count, (NSUInteger)0);
 }
 
 - (void)testValidation {

@@ -139,22 +139,4 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 
 	self.webView.scrollView.contentInset = UIEdgeInsetsMake(topInset, 0.0, 0.0, 0.0);
 }
-
-
-- (void)viewDidUnload {
-	[self setAppIconContainer:nil];
-	[self setAppIconView:nil];
-	[self setPoweredByApptentiveIconView:nil];
-	[self setPoweredByApptentiveLogo:nil];
-	[self setPoweredByBackground:nil];
-	[self setPoweredByHeight:nil];
-	[self setWebView:nil];
-
-	[self setAppIconContainerHeight:nil];
-	[self setOKButtonBottomSpace:nil];
-	[self setOKButtonHeight:nil];
-	[self setPoweredByBottomSpace:nil];
-
-	[super viewDidUnload];
-}
 @end

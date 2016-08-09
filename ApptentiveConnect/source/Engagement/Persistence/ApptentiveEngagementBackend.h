@@ -69,6 +69,6 @@ extern NSString *const ApptentiveEngagementMessageCenterEvent;
 // Used for debugging only.
 - (void)resetUpgradeVersionInfo;
 - (NSArray *)allEngagementInteractions;
-@property (strong, nonatomic) NSData *engagementManifestJSON;
+@property (copy, nonatomic) NSData *engagementManifestJSON;
 
 @end

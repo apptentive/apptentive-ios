@@ -77,7 +77,7 @@ static NSURLCache *imageCache = nil;
 @property (strong, nonatomic) ApptentiveDeviceUpdater *deviceUpdater;
 @property (strong, nonatomic) ApptentivePersonUpdater *personUpdater;
 @property (strong, nonatomic) NSFetchedResultsController *unreadCountController;
-@property (assign, nonatomic) NSInteger previousUnreadCount;
+@property (assign, nonatomic) NSUInteger previousUnreadCount;
 @property (assign, nonatomic) BOOL shouldStopWorking;
 @property (assign, nonatomic) BOOL networkAvailable;
 

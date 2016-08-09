@@ -42,10 +42,10 @@
 
 		for (CFIndex i = 0; i < CFArrayGetCount(thumbnailableUTIs); i ++) {
 			CFStringRef UTI = CFArrayGetValueAtIndex(thumbnailableUTIs, i);
-			CFStringRef MIMEType = UTTypeCopyPreferredTagWithClass(UTI, kUTTagClassMIMEType);
-			if (MIMEType) {
-				[mimeTypes addObject:(__bridge id _Nonnull)(MIMEType)];
-				CFRelease(MIMEType);
+			CFStringRef localMIMEType = UTTypeCopyPreferredTagWithClass(UTI, kUTTagClassMIMEType);
+			if (localMIMEType) {
+				[mimeTypes addObject:(__bridge id _Nonnull)(localMIMEType)];
+				CFRelease(localMIMEType);
 			}
 		}
 		

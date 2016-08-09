@@ -66,7 +66,7 @@ static ApptentiveConnectionManager *sharedSingleton = nil;
 	[channel cancelConnection:connection];
 }
 
-- (void)setMaximumActiveConnections:(NSInteger)maximumConnections forChannel:(NSString *)channelName {
+- (void)setMaximumActiveConnections:(NSUInteger)maximumConnections forChannel:(NSString *)channelName {
 	ApptentiveConnectionChannel *channel = [self channelForName:channelName];
 	channel.maximumConnections = maximumConnections;
 }

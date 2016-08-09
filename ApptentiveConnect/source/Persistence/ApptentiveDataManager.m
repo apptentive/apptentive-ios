@@ -37,9 +37,9 @@ typedef enum {
 @property (readwrite, nonatomic) BOOL didFailToMigrateStore;
 @property (readwrite, nonatomic) BOOL didMigrateStore;
 
-@property (strong, nonatomic) NSString *modelName;
+@property (copy, nonatomic) NSString *modelName;
 @property (strong, nonatomic) NSBundle *bundle;
-@property (strong, nonatomic) NSString *supportDirectoryPath;
+@property (copy, nonatomic) NSString *supportDirectoryPath;
 
 @end
 

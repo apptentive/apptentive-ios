@@ -72,16 +72,16 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 
 	NSArray *actions = config[@"actions"];
 	for (NSDictionary *action in actions) {
-		NSString *title = action[@"label"];
+		NSString *buttonTitle = action[@"label"];
 
 		// Better to use default button text than to potentially create an un-cancelable alert with no buttons.
 		// 'UIAlertView: Buttons added must have a title.'
-		if (!title) {
+		if (!buttonTitle) {
 			ApptentiveLogError(@"Apptentive Note button action does not have a title!");
-			title = @"button";
+			buttonTitle = @"button";
 		}
 
-		[alertView addButtonWithTitle:title];
+		[alertView addButtonWithTitle:buttonTitle];
 	}
 
 	return alertView;
@@ -114,7 +114,7 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 	BOOL cancelActionAdded = NO;
 	NSArray *actions = config[@"actions"];
 
-	for (int i = 0; i < actions.count; i++) {
+	for (NSUInteger i = 0; i < actions.count; i++) {
 		NSDictionary *actionForButton = actions[i];
 
 		// Action position saved here and sent when button is tapped.

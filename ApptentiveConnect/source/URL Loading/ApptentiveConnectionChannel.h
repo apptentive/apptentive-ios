@@ -11,7 +11,7 @@
 
 
 @interface ApptentiveConnectionChannel : NSObject
-@property (assign, nonatomic) NSInteger maximumConnections;
+@property (assign, nonatomic) NSUInteger maximumConnections;
 
 - (void)update;
 - (void)addConnection:(ApptentiveURLConnection *)connection;

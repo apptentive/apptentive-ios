@@ -22,7 +22,7 @@ NSString *const ApptentiveAPIRequestStatusChanged = @"ApptentiveAPIRequestStatus
 @interface ApptentiveAPIRequest ()
 
 @property (strong, nonatomic) ApptentiveURLConnection *connection;
-@property (strong, nonatomic) NSString *channelName;
+@property (copy, nonatomic) NSString *channelName;
 @property (assign, nonatomic) BOOL cancelled;
 
 @end

@@ -158,11 +158,11 @@
 		BOOL parameterIsDictionary = [parameter isKindOfClass:[NSDictionary class]];
 		BOOL parameterIsComplexType = parameterIsDictionary && [((NSDictionary *)parameter).allKeys containsObject:@"_type"];
 		BOOL parameterIsPrimitiveType = [parameter isKindOfClass:[NSString class]] || [parameter isKindOfClass:[NSNumber class]] || [parameter isKindOfClass:[NSNull class]];
-		BOOL hasError = NO;
 
 		if (parameterIsPrimitiveType || parameterIsComplexType) {
 			predicate = [self compoundPredicateForKeyPath:trimmedKey operatorsAndValues:@{ @"==": parameter }];
 		} else if (parameterIsArray) {
+			BOOL hasError = NO;
 			NSCompoundPredicateType predicateType = [self compoundPredicateTypeFromString:trimmedKey hasError:&hasError];
 			if (!hasError) {
 				predicate = [self compoundPredicateWithType:predicateType criteriaArray:(NSArray *)parameter];
@@ -178,6 +178,7 @@
 				}
 			} else if ([trimmedKey isEqualToString:@"$not"]) {
 				// Work around "Common Law Feature" where $not expressions are incorrect
+				BOOL hasError = NO;
 				NSCompoundPredicateType predicateType = [self compoundPredicateTypeFromString:trimmedKey hasError:&hasError];
 				if (!hasError) {
 					predicate = [self compoundPredicateWithType:predicateType criteriaArray:@[parameter]];
@@ -272,9 +273,9 @@
 				BOOL hasError;
 				NSPredicateOperatorType operatorType = [self predicateOperatorTypeFromString:operatorString hasError:&hasError];
 				if (!hasError && [self operator:operatorType isValidForParameter:parameter]) {
-					NSPredicate *predicate = [self predicateWithLeftKeyPath:keyPath forObject:evaluatedObject rightComplexObject:(NSDictionary *)parameter operatorType:operatorType];
+					NSPredicate *localPredicate = [self predicateWithLeftKeyPath:keyPath forObject:evaluatedObject rightComplexObject:(NSDictionary *)parameter operatorType:operatorType];
 					
-					return [predicate evaluateWithObject:nil];
+					return [localPredicate evaluateWithObject:nil];
 				} else {
 					return NO;
 				}

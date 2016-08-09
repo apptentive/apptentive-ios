@@ -14,10 +14,10 @@
 
 @interface ApptentiveMessageSender : NSManagedObject
 
-@property (strong, nonatomic) NSString *apptentiveID;
-@property (strong, nonatomic) NSString *name;
-@property (strong, nonatomic) NSString *emailAddress;
-@property (strong, nonatomic) NSString *profilePhotoURL;
+@property (copy, nonatomic) NSString *apptentiveID;
+@property (copy, nonatomic) NSString *name;
+@property (copy, nonatomic) NSString *emailAddress;
+@property (copy, nonatomic) NSString *profilePhotoURL;
 @property (strong, nonatomic) NSSet *sentMessages;
 @property (strong, nonatomic) NSSet *receivedMessages;
 

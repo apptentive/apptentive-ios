@@ -189,7 +189,7 @@ UIViewController *topChildViewController(UIViewController *viewController) {
 	NSUInteger maxComponents = MAX(leftComponents.count, rightComponents.count);
 
 	NSComparisonResult comparisonResult = NSOrderedSame;
-	for (int i = 0; i < maxComponents; i++) {
+	for (NSUInteger i = 0; i < maxComponents; i++) {
 		NSInteger leftComponent = 0;
 		if (i < leftComponents.count) {
 			leftComponent = [leftComponents[i] integerValue];
@@ -391,7 +391,7 @@ done:
 
 	NSArray *newKeys = [new.allKeys sortedArrayUsingSelector:@selector(compare:)];
 	NSArray *oldKeys = [old.allKeys sortedArrayUsingSelector:@selector(compare:)];
-	NSInteger i = 0, j = 0;
+	NSUInteger i = 0, j = 0;
 
 	while (i < [newKeys count] || j < [oldKeys count]) {
 		NSComparisonResult comp = NSOrderedSame;

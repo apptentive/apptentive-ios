@@ -17,5 +17,5 @@
 - (void)addConnection:(ApptentiveURLConnection *)connection toChannel:(NSString *)channelName;
 - (void)cancelAllConnectionsInChannel:(NSString *)channelName;
 - (void)cancelConnection:(ApptentiveURLConnection *)connection inChannel:(NSString *)channelName;
-- (void)setMaximumActiveConnections:(NSInteger)maximumConnections forChannel:(NSString *)channelName;
+- (void)setMaximumActiveConnections:(NSUInteger)maximumConnections forChannel:(NSString *)channelName;
 @end

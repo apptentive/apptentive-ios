@@ -264,7 +264,7 @@ NSString *const ApptentiveInteractionSurveyEventLabelCancel = @"cancel";
 	self.invalidQuestionIndexes = [NSMutableIndexSet indexSet];
 	self.invalidAnswerIndexPaths = [NSMutableSet set];
 
-	[self.survey.questions enumerateObjectsUsingBlock:^(ApptentiveSurveyQuestion *_Nonnull question, NSUInteger questionIndex, BOOL *_Nonnull stop) {
+	[self.survey.questions enumerateObjectsUsingBlock:^(ApptentiveSurveyQuestion *_Nonnull question, NSUInteger questionIndex, BOOL *_Nonnull questionsStop) {
 		switch (question.type) {
 			case ATSurveyQuestionTypeSingleLine:
 			case ATSurveyQuestionTypeMultipleLine: {
@@ -279,7 +279,7 @@ NSString *const ApptentiveInteractionSurveyEventLabelCancel = @"cancel";
 			case ATSurveyQuestionTypeMultipleSelect: {
 				NSInteger __block numberOfSelections = 0;
 
-				[question.answers enumerateObjectsUsingBlock:^(ApptentiveSurveyAnswer * _Nonnull answer, NSUInteger answerIndex, BOOL * _Nonnull stop) {
+				[question.answers enumerateObjectsUsingBlock:^(ApptentiveSurveyAnswer * _Nonnull answer, NSUInteger answerIndex, BOOL * _Nonnull answersStop) {
 					NSIndexPath *answerIndexPath = [NSIndexPath indexPathForItem:answerIndex inSection:questionIndex];
 
 					if ([self.selectedIndexPaths containsObject:answerIndexPath]) {
@@ -412,7 +412,7 @@ NSString *const ApptentiveInteractionSurveyEventLabelCancel = @"cancel";
 - (ApptentiveSurveyAnswer *)answerAtIndexPath:(NSIndexPath *)indexPath {
 	NSArray *answers = [self questionAtIndex:indexPath.section].answers;
 
-	return answers.count > indexPath.row ? answers[indexPath.row] : nil;
+	return answers.count > (NSUInteger)indexPath.row ? answers[indexPath.row] : nil;
 }
 
 - (NSArray <NSIndexPath *>*)selectedIndexPathsForQuestionAtIndex:(NSInteger)index {

@@ -481,9 +481,9 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 - (NSArray *)targetedLocalEvents {
 	NSArray *localCodePoints = [self.engagementTargets.allKeys filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF BEGINSWITH[c] %@", @"local#app#"]];
 	NSMutableArray *eventNames = [NSMutableArray array];
-	[localCodePoints enumerateObjectsUsingBlock:^(NSString *  _Nonnull codePoint, NSUInteger idx, BOOL * _Nonnull stop) {
+	for (NSString *codePoint in localCodePoints) {
 		[eventNames addObject:[codePoint substringFromIndex:10]];
-	}];
+	}
 
 	return eventNames;
 }

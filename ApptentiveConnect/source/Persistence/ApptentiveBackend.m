@@ -26,6 +26,10 @@
 #import "ApptentiveEngagementBackend.h"
 #import "ApptentiveMessageCenterViewController.h"
 
+#if APPTENTIVE_DEBUG
+#import "Apptentive+Debugging.h"
+#endif
+
 typedef NS_ENUM(NSInteger, ATBackendState) {
 	ATBackendStateStarting,
 	ATBackendStateWaitingForDataProtectionUnlock,

@@ -9,6 +9,7 @@
 #import "ApptentiveEngagementBackend.h"
 #import "ApptentiveBackend.h"
 #import "ApptentiveEngagementGetManifestTask.h"
+#import "ApptentiveEngagementManifestParser.h"
 #import "ApptentiveTaskQueue.h"
 #import "ApptentiveInteraction.h"
 #import "ApptentiveInteractionInvocation.h"
@@ -74,25 +75,9 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 		[[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
 
 		_engagementTargets = [[NSMutableDictionary alloc] init];
-		NSFileManager *fm = [NSFileManager defaultManager];
-		if ([fm fileExistsAtPath:[ApptentiveEngagementBackend cachedTargetsStoragePath]]) {
-			@try {
-				NSDictionary *archivedTargets = [NSKeyedUnarchiver unarchiveObjectWithFile:[ApptentiveEngagementBackend cachedTargetsStoragePath]];
-				[_engagementTargets addEntriesFromDictionary:archivedTargets];
-			} @catch (NSException *exception) {
-				ApptentiveLogError(@"Unable to unarchive engagement targets: %@", exception);
-			}
-		}
-
 		_engagementInteractions = [[NSMutableDictionary alloc] init];
-		if ([fm fileExistsAtPath:[ApptentiveEngagementBackend cachedInteractionsStoragePath]]) {
-			@try {
-				NSDictionary *archivedInteractions = [NSKeyedUnarchiver unarchiveObjectWithFile:[ApptentiveEngagementBackend cachedInteractionsStoragePath]];
-				[_engagementInteractions addEntriesFromDictionary:archivedInteractions];
-			} @catch (NSException *exception) {
-				ApptentiveLogError(@"Unable to unarchive engagement interactions: %@", exception);
-			}
-		}
+
+		[self loadCachedEngagementManifest];
 
 		[self invalidateInteractionCacheIfNeeded];
 
@@ -131,7 +116,7 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 }
 
 - (void)checkForEngagementManifest {
-	if ([self shouldRetrieveNewEngagementManifest]) {
+	if (!self.localEngagementManifestURL && [self shouldRetrieveNewEngagementManifest]) {
 		ApptentiveEngagementGetManifestTask *task = [[ApptentiveEngagementGetManifestTask alloc] init];
 		[[ApptentiveTaskQueue sharedTaskQueue] addTask:task];
 		task = nil;
@@ -491,6 +476,72 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 
 - (NSArray *)allEngagementInteractions {
 	return [self.engagementInteractions allValues];
+}
+
+- (NSArray *)targetedLocalEvents {
+	NSArray *localCodePoints = [self.engagementTargets.allKeys filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF BEGINSWITH[c] %@", @"local#app#"]];
+	NSMutableArray *eventNames = [NSMutableArray array];
+	for (NSString *codePoint in localCodePoints) {
+		[eventNames addObject:[codePoint substringFromIndex:10]];
+	}
+
+	return eventNames;
+}
+
+- (void)setLocalEngagementManifestURL:(NSURL *)localEngagementManifestURL {
+	if (_localEngagementManifestURL != localEngagementManifestURL) {
+		_localEngagementManifestURL = localEngagementManifestURL;
+
+		if (localEngagementManifestURL == nil) {
+			[self loadCachedEngagementManifest];
+			[self checkForEngagementManifest];
+			[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveInteractionsDidUpdateNotification object:nil];
+		} else {
+			[[ApptentiveTaskQueue sharedTaskQueue] removeTasksOfClass:[ApptentiveEngagementGetManifestTask class]];
+
+			NSData *localData = [NSData dataWithContentsOfURL:localEngagementManifestURL];
+
+			ApptentiveEngagementManifestParser *parser = [[ApptentiveEngagementManifestParser alloc] init];
+
+			NSDictionary *targetsAndInteractions = [parser targetsAndInteractionsForEngagementManifest:localData];
+			NSDictionary *targets = targetsAndInteractions[@"targets"];
+			NSDictionary *interactions = targetsAndInteractions[@"interactions"];
+
+			if (targets && interactions) {
+				[self.engagementTargets removeAllObjects];
+				[self.engagementTargets addEntriesFromDictionary:targets];
+
+				[self.engagementInteractions removeAllObjects];
+				[self.engagementInteractions addEntriesFromDictionary:interactions];
+
+				[Apptentive sharedConnection].engagementBackend.engagementManifestJSON = targetsAndInteractions[@"raw"];
+			} else {
+				ApptentiveLogError(@"An error occurred parsing the engagement manifest: %@", [parser parserError]);
+			}
+		}
+	}
+}
+
+- (void)loadCachedEngagementManifest {
+	NSFileManager *fm = [NSFileManager defaultManager];
+	if ([fm fileExistsAtPath:[ApptentiveEngagementBackend cachedTargetsStoragePath]]) {
+		@try {
+			NSDictionary *archivedTargets = [NSKeyedUnarchiver unarchiveObjectWithFile:[ApptentiveEngagementBackend cachedTargetsStoragePath]];
+			[_engagementTargets addEntriesFromDictionary:archivedTargets];
+		} @catch (NSException *exception) {
+			ApptentiveLogError(@"Unable to unarchive engagement targets: %@", exception);
+		}
+	}
+
+	_engagementInteractions = [[NSMutableDictionary alloc] init];
+	if ([fm fileExistsAtPath:[ApptentiveEngagementBackend cachedInteractionsStoragePath]]) {
+		@try {
+			NSDictionary *archivedInteractions = [NSKeyedUnarchiver unarchiveObjectWithFile:[ApptentiveEngagementBackend cachedInteractionsStoragePath]];
+			[_engagementInteractions addEntriesFromDictionary:archivedInteractions];
+		} @catch (NSException *exception) {
+			ApptentiveLogError(@"Unable to unarchive engagement interactions: %@", exception);
+		}
+	}
 }
 
 @end

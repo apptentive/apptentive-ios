@@ -19,6 +19,7 @@
 
 - (void)addTask:(ApptentiveTask *)task;
 - (BOOL)hasTaskOfClass:(Class)c;
+- (void)removeTasksOfClass:(Class)c;
 - (NSUInteger)count;
 - (ApptentiveTask *)taskAtIndex:(NSUInteger)index;
 - (NSUInteger)countOfTasksWithTaskNamesInSet:(NSSet *)taskNames;

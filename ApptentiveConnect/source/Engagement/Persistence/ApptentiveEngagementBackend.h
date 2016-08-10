@@ -67,8 +67,11 @@ extern NSString *const ApptentiveEngagementMessageCenterEvent;
 - (void)presentInteraction:(ApptentiveInteraction *)interaction fromViewController:(UIViewController *)viewController;
 
 // Used for debugging only.
+@property (strong, nonatomic) NSURL *localEngagementManifestURL;
+@property (copy, nonatomic) NSData *engagementManifestJSON;
+
 - (void)resetUpgradeVersionInfo;
 - (NSArray *)allEngagementInteractions;
-@property (copy, nonatomic) NSData *engagementManifestJSON;
+- (NSArray <NSString *>*)targetedLocalEvents;
 
 @end

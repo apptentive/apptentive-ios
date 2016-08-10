@@ -51,14 +51,6 @@ Apptentive's [API changelog](docs/APIChanges.md) is also updated with each relea
 
 Please see the [Apptentive testing guide](http://www.apptentive.com/docs/ios/testing/) for directions on how to test that the Rating Prompt, Surveys, and other Apptentive features have been configured correctly.
 
-## Apptentive Demo App
-
-The Apptentive sample application `iOSDemo` is included in the `Demo` directory in this repository.
-
-Use iOSDemo to test Apptentive's features before integrating the SDK in your app.
-
-Message Center, the Ratings Prompt, Surveys, and [other Apptentive interactions](http://www.apptentive.com/docs/ios/features/) can all be tested before integrating Apptentive in your own app. See the `README.md` file in the `Demo` directory for more information.
-
 # Apptentive Example App
 
 To see an example of how the Apptentive iOS SDK can be integrated with your app, take a look at the `iOSExample` app in the `Example` directory in this repository.

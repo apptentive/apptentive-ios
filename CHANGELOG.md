@@ -1,9 +1,15 @@
+2016-08-09 frankus v3.2.1
+-------------------------
+Version 3.2.1 improves stability and reliability and fixes several warnings when
+building with Xcode 8.0 beta. This release is intended to be compatible with
+iOS 10. In addition, the Demo app has been removed from the repository. 
+
 2016-07-08 frankus v3.2.0
 -------------------------
 Version 3.2.0 adds a range question type in order to support NPS-style survey
 questions. It also improves RTL language support and accessibility and includes
 several bug fixes. Logging now respects preprocessor macros when integrating
-via CocoaPods. 
+via CocoaPods.
 
 2016-06-21 frankus v3.1.1
 -------------------------

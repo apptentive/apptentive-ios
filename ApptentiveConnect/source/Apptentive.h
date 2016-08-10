@@ -9,7 +9,7 @@
 
 #import <UIKit/UIKit.h>
 
-#define kApptentiveVersionString @"3.2.0"
+#define kApptentiveVersionString @"3.2.1"
 #define kApptentivePlatformString @"iOS"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -103,7 +103,7 @@ Before calling any other methods on the shared `Apptentive` instance, set the AP
 
 /**
   APIKey property with legacy capitalization.
- 
+
  @deprecated Capitalize `API` in the property/setter name.
  */
 @property (copy, nonatomic, nullable) NSString *apiKey __deprecated_msg("Use 'APIKey' instead.");
@@ -115,7 +115,7 @@ Before calling any other methods on the shared `Apptentive` instance, set the AP
  */
 @property (copy, nonatomic, nullable) NSString *appID;
 
-/** An object conforming to the `ApptentiveDelegate` protocol. 
+/** An object conforming to the `ApptentiveDelegate` protocol.
  If a `nil` value is passed for the view controller into methods such as	`-engage:fromViewController`,
  the SDK will request a view controller from the delegate from which to present an interaction. */
 @property (weak, nonatomic) id<ApptentiveDelegate> delegate;

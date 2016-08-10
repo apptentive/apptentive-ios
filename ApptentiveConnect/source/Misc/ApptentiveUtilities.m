@@ -238,7 +238,7 @@ UIViewController *topChildViewController(UIViewController *viewController) {
 					[localizations addObject:s];
 				}
 			}
-            localAppLocalizations = [NSArray arrayWithArray:localizations];
+			localAppLocalizations = [NSArray arrayWithArray:localizations];
 		}
 	}
 	return localAppLocalizations;

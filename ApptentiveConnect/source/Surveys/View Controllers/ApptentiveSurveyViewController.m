@@ -266,7 +266,7 @@
 			if (detailText) {
 				cell.accessibilityHint = detailText;
 			}
-			
+
 			cell.accessibilityLabel = [self.viewModel textOfChoiceAtIndexPath:indexPath];
 			cell.accessibilityTraits |= UIAccessibilityTraitButton;
 			cell.button.image = buttonImage;

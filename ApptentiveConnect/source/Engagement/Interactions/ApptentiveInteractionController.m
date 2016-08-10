@@ -19,20 +19,20 @@ static NSDictionary *interactionControllerClassRegistry;
 	dispatch_once(&onceToken, ^{
         interactionControllerClassRegistry = @{};
 	});
-    
-    @synchronized ([ApptentiveInteractionController class]) {
-        NSMutableDictionary *registry = [interactionControllerClassRegistry mutableCopy];
-        registry[type] = class;
-        interactionControllerClassRegistry = [NSDictionary dictionaryWithDictionary:registry];
-    }
+
+	@synchronized([ApptentiveInteractionController class]) {
+		NSMutableDictionary *registry = [interactionControllerClassRegistry mutableCopy];
+		registry[type] = class;
+		interactionControllerClassRegistry = [NSDictionary dictionaryWithDictionary:registry];
+	}
 }
 
-+ (Class)interactionControllerClassWithType:(NSString *)type {
-    Class result;
-    @synchronized ([ApptentiveInteractionController class]) {
-        result = interactionControllerClassRegistry[type];
-    }
-    return result;
+	+ (Class)interactionControllerClassWithType : (NSString *)type {
+	Class result;
+	@synchronized([ApptentiveInteractionController class]) {
+		result = interactionControllerClassRegistry[type];
+	}
+	return result;
 }
 
 + (instancetype)interactionControllerWithInteraction:(ApptentiveInteraction *)interaction {

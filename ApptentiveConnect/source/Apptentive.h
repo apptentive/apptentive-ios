@@ -250,7 +250,7 @@ Returns a Boolean value indicating whether the given event will cause an Interac
 
  @return `YES` if an interaction was triggered by the event, `NO` otherwise.
  */
-- (BOOL)engage:(NSString *)event fromViewController:( UIViewController * _Nullable)viewController;
+- (BOOL)engage:(NSString *)event fromViewController:(UIViewController *_Nullable)viewController;
 
 /**
  Shows interaction UI, if applicable, related to a given event, and attaches the specified custom data to the event.
@@ -261,7 +261,7 @@ Returns a Boolean value indicating whether the given event will cause an Interac
 
  @return `YES` if an interaction was triggered by the event, `NO` otherwise.
 */
-- (BOOL)engage:(NSString *)event withCustomData:(nullable NSDictionary *)customData fromViewController:(UIViewController * _Nullable)viewController;
+- (BOOL)engage:(NSString *)event withCustomData:(nullable NSDictionary *)customData fromViewController:(UIViewController *_Nullable)viewController;
 
 /**
  Shows interaction UI, if applicable, related to a given event. Attaches the specified custom data to the event along with the specified extended data.
@@ -273,7 +273,7 @@ Returns a Boolean value indicating whether the given event will cause an Interac
 
  @return `YES` if an interaction was triggered by the event, `NO` otherwise.
  */
-- (BOOL)engage:(NSString *)event withCustomData:(nullable NSDictionary *)customData withExtendedData:(nullable NSArray<NSDictionary *> *)extendedData fromViewController:(UIViewController * _Nullable)viewController;
+- (BOOL)engage:(NSString *)event withCustomData:(nullable NSDictionary *)customData withExtendedData:(nullable NSArray<NSDictionary *> *)extendedData fromViewController:(UIViewController *_Nullable)viewController;
 
 /**
  Dismisses Message Center.

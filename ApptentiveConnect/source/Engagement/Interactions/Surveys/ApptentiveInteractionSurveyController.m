@@ -34,7 +34,7 @@ NSString *const ATInteractionSurveyEventLabelLaunch = @"launch";
 		[viewController presentViewController:navigationController animated:YES completion:nil];
 	}
 
-	[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveSurveyShownNotification object:@{ ApptentiveSurveyIDKey: self.interaction.identifier }];
+	[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveSurveyShownNotification object:@{ApptentiveSurveyIDKey: self.interaction.identifier}];
 	[self.interaction engage:ATInteractionSurveyEventLabelLaunch fromViewController:viewController];
 }
 

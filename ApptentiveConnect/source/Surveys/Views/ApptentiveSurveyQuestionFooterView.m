@@ -8,6 +8,7 @@
 
 #import "ApptentiveSurveyQuestionFooterView.h"
 
+
 @implementation ApptentiveSurveyQuestionFooterView
 
 @end

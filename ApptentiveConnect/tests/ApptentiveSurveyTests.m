@@ -211,7 +211,7 @@
 - (void)testRange {
 	[self.viewModel selectAnswerAtIndexPath:[NSIndexPath indexPathForItem:2 inSection:10]];
 
-	XCTAssertEqualObjects(self.viewModel.answers[@"56d49499c719925f33000022"], @[ @{ @"value": @-3 } ]);
+	XCTAssertEqualObjects(self.viewModel.answers[@"56d49499c719925f33000022"], @[@{ @"value": @-3 }]);
 
 	XCTAssertFalse([self.viewModel validate:YES]);
 
@@ -224,7 +224,7 @@
 
 	[self.viewModel selectAnswerAtIndexPath:[NSIndexPath indexPathForItem:5 inSection:11]];
 
-	XCTAssertEqualObjects(self.viewModel.answers[@"56d49499c719925f33000023"], @[ @{ @"value": @5 } ]);
+	XCTAssertEqualObjects(self.viewModel.answers[@"56d49499c719925f33000023"], @[@{ @"value": @5 }]);
 
 	XCTAssertTrue([self.viewModel validate:YES]);
 }

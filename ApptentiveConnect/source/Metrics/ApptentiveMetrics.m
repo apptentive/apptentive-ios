@@ -23,6 +23,7 @@
 static NSString *ATInteractionAppEventLabelLaunch = @"launch";
 static NSString *ATInteractionAppEventLabelExit = @"exit";
 
+
 @interface ApptentiveMetrics ()
 
 - (void)addLaunchMetric;

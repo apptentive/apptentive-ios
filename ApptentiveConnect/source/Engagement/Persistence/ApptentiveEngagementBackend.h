@@ -72,6 +72,6 @@ extern NSString *const ApptentiveEngagementMessageCenterEvent;
 
 - (void)resetUpgradeVersionInfo;
 - (NSArray *)allEngagementInteractions;
-- (NSArray <NSString *>*)targetedLocalEvents;
+- (NSArray<NSString *> *)targetedLocalEvents;
 
 @end

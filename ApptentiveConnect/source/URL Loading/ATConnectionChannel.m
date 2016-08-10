@@ -38,7 +38,7 @@
 
 	@synchronized(self) {
 		@autoreleasepool {
-			while ([self.active count] < self.maximumConnections && [self.waiting count]> 0) {
+			while ([self.active count]<self.maximumConnections && [self.waiting count]> 0) {
 				ApptentiveURLConnection *loader = [self.waiting objectAtIndex:0];
 				[self.active addObject:loader];
 				[loader addObserver:self forKeyPath:@"isFinished" options:NSKeyValueObservingOptionNew context:NULL];

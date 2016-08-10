@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
+
 @interface ApptentiveSurveyQuestionFooterView : UICollectionReusableView
 
 @property (strong, nonatomic) IBOutlet UILabel *minimumLabel;

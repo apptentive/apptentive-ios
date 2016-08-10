@@ -49,13 +49,13 @@
 		if (_type == ATSurveyQuestionTypeRange) {
 			NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
 
-			_minimumValue = [(JSON[@"min"] ?: @0) integerValue];
-			_maximumValue = [(JSON[@"max"] ?: @10) integerValue];
+			_minimumValue = [(JSON[@"min"] ?: @0)integerValue];
+			_maximumValue = [(JSON[@"max"] ?: @10)integerValue];
 
 			_minimumLabel = JSON[@"min_label"];
 			_maximumLabel = JSON[@"max_label"];
 
-			for (NSInteger i = _minimumValue; i <= _maximumValue; i ++) {
+			for (NSInteger i = _minimumValue; i <= _maximumValue; i++) {
 				[mutableAnswers addObject:[[ApptentiveSurveyAnswer alloc] initWithValue:[numberFormatter stringFromNumber:@(i)]]];
 			}
 		} else {
@@ -65,7 +65,6 @@
 		}
 
 		_answers = [mutableAnswers copy];
-
 	}
 
 	return self;

@@ -8,6 +8,7 @@
 
 #import "ApptentiveAttachButton.h"
 
+
 @interface ApptentiveAttachButton ()
 
 @property (strong, nonatomic) NSNumberFormatter *numberFormatter;

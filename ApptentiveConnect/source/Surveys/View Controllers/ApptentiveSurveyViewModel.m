@@ -391,7 +391,7 @@ NSString *const ApptentiveInteractionSurveyEventLabelCancel = @"cancel";
 - (void)answerChangedAtIndexPath:(NSIndexPath *)indexPath {
 	ApptentiveSurveyQuestion *question = [self questionAtIndex:indexPath.section];
 
-	[self.interaction engage:ApptentiveInteractionSurveyEventLabelQuestionResponse fromViewController:nil userInfo:@{ @"id": question.identifier ?: [NSNull null]}];
+	[self.interaction engage:ApptentiveInteractionSurveyEventLabelQuestionResponse fromViewController:nil userInfo:@{ @"id": question.identifier ?: [NSNull null] }];
 }
 
 - (void)didCancel:(UIViewController *)presentingViewController {
@@ -399,7 +399,7 @@ NSString *const ApptentiveInteractionSurveyEventLabelCancel = @"cancel";
 }
 
 - (void)didSubmit:(UIViewController *)presentingViewController {
-	[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveSurveySentNotification object:@{ ApptentiveSurveyIDKey: self.interaction.identifier }];
+	[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveSurveySentNotification object:@{ApptentiveSurveyIDKey: self.interaction.identifier}];
 	[self.interaction engage:ApptentiveInteractionSurveyEventLabelSubmit fromViewController:presentingViewController];
 }
 
@@ -415,7 +415,7 @@ NSString *const ApptentiveInteractionSurveyEventLabelCancel = @"cancel";
 	return answers.count > (NSUInteger)indexPath.row ? answers[indexPath.row] : nil;
 }
 
-- (NSArray <NSIndexPath *>*)selectedIndexPathsForQuestionAtIndex:(NSInteger)index {
+- (NSArray<NSIndexPath *> *)selectedIndexPathsForQuestionAtIndex:(NSInteger)index {
 	NSMutableArray *result = [NSMutableArray array];
 
 	for (NSIndexPath *indexPath in self.selectedIndexPaths) {

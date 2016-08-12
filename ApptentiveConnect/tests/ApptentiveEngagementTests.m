@@ -33,6 +33,7 @@
  
  app_release/version - The currently running application version (string).
  app_release/build - The currently running application build "number" (string).
+ app_release/debug - Whether the currently running application is a debug build (boolean).
  
  sdk/version - The currently running SDK version (string).
  sdk/distribution - The current SDK distribution, if available (string).
@@ -187,6 +188,27 @@
 
 	invocation.criteria = @{ @"time_since_install/total": @{@"$lte": @"5", @"$gt": @"3"} };
 	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Should fail with invalid types.");
+}
+
+- (void)testInteractionCriteriaDebug {
+	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
+	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] init];
+
+#if APPTENTIVE_DEBUG
+	invocation.criteria = @{ @"app_release/debug": @YES };
+#else
+	invocation.criteria = @{ @"app_release/debug": @NO };
+#endif
+
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Debug boolean");
+
+#if APPTENTIVE_DEBUG
+	invocation.criteria = @{ @"app_release/debug": @NO };
+#else
+	invocation.criteria = @{ @"app_release/debug": @YES };
+#endif
+
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Debug boolean");
 }
 
 - (void)testInteractionCriteriaVersion {

@@ -87,6 +87,12 @@
 - (NSDictionary *)appReleaseJSON {
 	NSMutableDictionary *result = [NSMutableDictionary dictionary];
 
+#ifdef APPTENTIVE_DEBUG
+	result[@"debug"] = @YES;
+#else
+	result[@"debug"] = @NO;
+#endif
+
 	NSString *appVersion = [ApptentiveUtilities appVersionString];
 	if (appVersion) {
 		result[@"version"] = appVersion;

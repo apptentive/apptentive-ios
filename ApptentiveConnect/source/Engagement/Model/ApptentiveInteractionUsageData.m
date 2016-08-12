@@ -103,6 +103,10 @@
 		predicateEvaluationDictionary[@"app_release/build"] = self.applicationBuild;
 	}
 
+	if (self.isDebugBuild) {
+		predicateEvaluationDictionary[@"app_release/debug"] = self.isDebugBuild;
+	}
+
 	if (self.sdkVersion) {
 		predicateEvaluationDictionary[@"sdk/version"] = [Apptentive versionObjectWithVersion:self.sdkVersion];
 	} else {
@@ -254,6 +258,18 @@
 	}
 
 	return _applicationBuild;
+}
+
+- (NSNumber *)isDebugBuild {
+	if (!_isDebugBuild) {
+#if APPTENTIVE_DEBUG
+		_isDebugBuild = @YES;
+#else
+		_isDebugBuild = @NO;
+#endif
+	}
+
+	return _isDebugBuild;
 }
 
 - (NSString *)sdkVersion {

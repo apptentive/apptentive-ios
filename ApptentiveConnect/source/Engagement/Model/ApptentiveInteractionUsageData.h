@@ -25,6 +25,7 @@
 @property (strong, nonatomic) NSNumber *currentTime;
 @property (strong, nonatomic) NSNumber *isUpdateVersion;
 @property (strong, nonatomic) NSNumber *isUpdateBuild;
+@property (strong, nonatomic) NSNumber *isDebugBuild;
 @property (copy, nonatomic) NSDictionary *codePointInvokesTotal;
 @property (copy, nonatomic) NSDictionary *codePointInvokesVersion;
 @property (copy, nonatomic) NSDictionary *codePointInvokesBuild;

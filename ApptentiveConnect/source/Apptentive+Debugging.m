@@ -13,6 +13,7 @@
 #import "ApptentiveInteraction.h"
 #import "ApptentiveDeviceInfo.h"
 #import "ApptentiveMessageCenterViewController.h"
+#import "ApptentiveTaskQueue.h"
 
 
 @implementation Apptentive (Debugging)
@@ -121,6 +122,8 @@
 }
 
 - (void)resetSDK {
+	[[ApptentiveTaskQueue sharedTaskQueue] clear];
+
 	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ApptentiveCustomDeviceDataPreferenceKey];
 	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ApptentiveCustomPersonDataPreferenceKey];
 

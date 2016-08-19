@@ -26,6 +26,7 @@
 - (ApptentiveTask *)taskAtIndex:(NSUInteger)index withTaskNameInSet:(NSSet *)taskNames;
 - (void)start;
 - (void)stop;
+- (void)clear;
 
 - (NSString *)queueDescription;
 @end

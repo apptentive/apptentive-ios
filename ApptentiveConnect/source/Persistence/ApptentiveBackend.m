@@ -777,7 +777,7 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 	[ApptentivePersonUpdater resetPersonInfo];
 	[ApptentiveAppConfigurationUpdater resetAppConfiguration];
 
-	// TODO: Delete core data stuff
+	[self.dataManager shutDownAndCleanUp];
 }
 
 #pragma mark - Private methods

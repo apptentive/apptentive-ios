@@ -332,4 +332,10 @@ static ApptentiveTaskQueue *sharedTaskQueue = nil;
 		}
 	}
 }
+
+- (void)clear {
+	[self stop];
+	[tasks removeAllObjects];
+	[self archive];
+}
 @end

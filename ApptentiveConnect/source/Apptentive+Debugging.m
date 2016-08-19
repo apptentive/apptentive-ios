@@ -12,6 +12,7 @@
 #import "ApptentiveEngagementBackend.h"
 #import "ApptentiveInteraction.h"
 #import "ApptentiveDeviceInfo.h"
+#import "ApptentiveMessageCenterViewController.h"
 
 
 @implementation Apptentive (Debugging)
@@ -125,6 +126,8 @@
 
 	[self.engagementBackend resetEngagementData];
 	[self.backend resetBackendData];
+
+	[ApptentiveMessageCenterViewController resetPreferences];
 
 	self.personName = nil;
 	self.personEmailAddress = nil;

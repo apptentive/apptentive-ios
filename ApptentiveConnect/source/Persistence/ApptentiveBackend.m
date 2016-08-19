@@ -43,9 +43,6 @@ NSString *const ATLegacyUUIDPreferenceKey = @"ATLegacyUUIDPreferenceKey";
 NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 
-static NSURLCache *imageCache = nil;
-
-
 @interface ApptentiveBackend ()
 - (void)updateConfigurationIfNeeded;
 
@@ -358,17 +355,6 @@ static NSURLCache *imageCache = nil;
 	return imageCachePath;
 }
 
-- (NSURLCache *)imageCache {
-	static dispatch_once_t onceToken;
-	dispatch_once(&onceToken, ^{
-		NSString *imageCachePath = [self imageCachePath];
-		if (imageCachePath) {
-			imageCache = [[NSURLCache alloc] initWithMemoryCapacity:1*1024*1024 diskCapacity:10*1024*1024 diskPath:imageCachePath];
-		}
-	});
-	return imageCache;
-}
-
 #pragma mark Message Center
 - (BOOL)presentMessageCenterFromViewController:(UIViewController *)viewController {
 	return [self presentMessageCenterFromViewController:viewController withCustomData:nil];
@@ -623,21 +609,11 @@ static NSURLCache *imageCache = nil;
 }
 
 - (NSString *)distributionName {
-	static NSString *cachedDistributionName = nil;
-	static dispatch_once_t onceToken = 0;
-	dispatch_once(&onceToken, ^{
-		cachedDistributionName = (NSString *)[[Apptentive resourceBundle] objectForInfoDictionaryKey:ATInfoDistributionKey];
-	});
-	return cachedDistributionName;
+	return [[Apptentive resourceBundle] objectForInfoDictionaryKey:ATInfoDistributionKey];
 }
 
 - (NSString *)distributionVersion {
-	static NSString *cachedDistributionVersion = nil;
-	static dispatch_once_t onceToken = 0;
-	dispatch_once(&onceToken, ^{
-		cachedDistributionVersion = (NSString *)[[Apptentive resourceBundle] objectForInfoDictionaryKey:ATInfoDistributionVersionKey];
-	});
-	return cachedDistributionVersion;
+	 return [[Apptentive resourceBundle] objectForInfoDictionaryKey:ATInfoDistributionVersionKey];
 }
 
 - (NSUInteger)unreadMessageCount {
@@ -822,6 +798,10 @@ static NSURLCache *imageCache = nil;
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleRemoteNotificationInUIApplicationStateActive) name:UIApplicationDidBecomeActiveNotification object:nil];
 
 	self.activeMessageTasks = [NSMutableSet set];
+
+	if ([self imageCachePath]) {
+		_imageCache = [[NSURLCache alloc] initWithMemoryCapacity:1*1024*1024 diskCapacity:10*1024*1024 diskPath:[self imageCachePath]];
+	}
 
 	[self checkForMessagesAtBackgroundRefreshInterval];
 }

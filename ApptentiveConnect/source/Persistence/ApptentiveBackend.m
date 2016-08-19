@@ -43,9 +43,6 @@ NSString *const ATLegacyUUIDPreferenceKey = @"ATLegacyUUIDPreferenceKey";
 NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 
-static NSURLCache *imageCache = nil;
-
-
 @interface ApptentiveBackend ()
 - (void)updateConfigurationIfNeeded;
 
@@ -356,17 +353,6 @@ static NSURLCache *imageCache = nil;
 	}
 	NSString *imageCachePath = [cachePath stringByAppendingPathComponent:@"images.cache"];
 	return imageCachePath;
-}
-
-- (NSURLCache *)imageCache {
-	static dispatch_once_t onceToken;
-	dispatch_once(&onceToken, ^{
-		NSString *imageCachePath = [self imageCachePath];
-		if (imageCachePath) {
-			imageCache = [[NSURLCache alloc] initWithMemoryCapacity:1*1024*1024 diskCapacity:10*1024*1024 diskPath:imageCachePath];
-		}
-	});
-	return imageCache;
 }
 
 #pragma mark Message Center
@@ -804,6 +790,10 @@ static NSURLCache *imageCache = nil;
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleRemoteNotificationInUIApplicationStateActive) name:UIApplicationDidBecomeActiveNotification object:nil];
 
 	self.activeMessageTasks = [NSMutableSet set];
+
+	if ([self imageCachePath]) {
+		_imageCache = [[NSURLCache alloc] initWithMemoryCapacity:1*1024*1024 diskCapacity:10*1024*1024 diskPath:[self imageCachePath]];
+	}
 
 	[self checkForMessagesAtBackgroundRefreshInterval];
 }

@@ -118,6 +118,11 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 @implementation ApptentiveMessageCenterViewController
 
++ (void)resetPreferences {
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATMessageCenterDraftMessageKey];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATMessageCenterDidSkipProfileKey];
+}
+
 - (void)viewDidLoad {
 	// TODO: Figure out a way to avoid tightly coupling this
 	[Apptentive sharedConnection].backend.presentedMessageCenterViewController = self;

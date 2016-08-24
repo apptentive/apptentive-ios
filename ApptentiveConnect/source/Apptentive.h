@@ -142,7 +142,7 @@ Before calling any other methods on the shared `Apptentive` instance, set the AP
  hide the "Message Center" button in your interface.
  **/
 
-- (BOOL)canShowMessageCenter;
+@property (readonly, nonatomic) BOOL canShowMessageCenter;
 
 /**
  Presents Message Center modally from the specified view controller.
@@ -176,7 +176,7 @@ Before calling any other methods on the shared `Apptentive` instance, set the AP
 
  @return The number of unread messages.
  */
-- (NSUInteger)unreadMessageCount;
+@property (readonly, nonatomic) NSUInteger unreadMessageCount;
 
 /**
  Returns a "badge" than can be used as a UITableViewCell accessoryView to indicate the current number of unread messages.

@@ -193,7 +193,7 @@ Before calling any other methods on the shared `Apptentive` instance, set the AP
 
  @return A badge view suitable for use as a table view cell accessory view.
  */
-- (UIView *)unreadMessageCountAccessoryView:(BOOL)apptentiveHeart;
+- (UIView *)unreadMessageCountAccessoryView:(BOOL)apptentiveHeart NS_SWIFT_NAME(unreadMessageCountAccessoryView(apptentiveHeart:));
 
 /**
  Forwards a push notification from your application delegate to Apptentive Connect.
@@ -255,8 +255,7 @@ Returns a Boolean value indicating whether the given event will cause an Interac
 
  @return `YES` if an interaction was triggered by the event, `NO` otherwise.
  */
-- (BOOL)engage:(NSString *)event fromViewController:(UIViewController *_Nullable)viewController;
-
+- (BOOL)engage:(NSString *)event fromViewController:(UIViewController *_Nullable)viewController NS_SWIFT_NAME(engageEvent(_:from:));
 /**
  Shows interaction UI, if applicable, related to a given event, and attaches the specified custom data to the event.
 
@@ -266,8 +265,7 @@ Returns a Boolean value indicating whether the given event will cause an Interac
 
  @return `YES` if an interaction was triggered by the event, `NO` otherwise.
 */
-- (BOOL)engage:(NSString *)event withCustomData:(nullable NSDictionary *)customData fromViewController:(UIViewController *_Nullable)viewController;
-
+- (BOOL)engage:(NSString *)event withCustomData:(nullable NSDictionary *)customData fromViewController:(UIViewController *_Nullable)viewController NS_SWIFT_NAME(engageEvent(_:withCustomData:from:));
 /**
  Shows interaction UI, if applicable, related to a given event. Attaches the specified custom data to the event along with the specified extended data.
 
@@ -278,7 +276,7 @@ Returns a Boolean value indicating whether the given event will cause an Interac
 
  @return `YES` if an interaction was triggered by the event, `NO` otherwise.
  */
-- (BOOL)engage:(NSString *)event withCustomData:(nullable NSDictionary *)customData withExtendedData:(nullable NSArray<NSDictionary *> *)extendedData fromViewController:(UIViewController *_Nullable)viewController;
+- (BOOL)engage:(NSString *)event withCustomData:(nullable NSDictionary *)customData withExtendedData:(nullable NSArray<NSDictionary *> *)extendedData fromViewController:(UIViewController *_Nullable)viewController NS_SWIFT_NAME(engageEvent(_:withCustomData:withExtendedData:from:));
 
 /**
  Dismisses Message Center.
@@ -301,7 +299,7 @@ Returns a Boolean value indicating whether the given event will cause an Interac
 
  @return An extended data dictionary representing a point in time, to be included in an event's extended data.
  */
-+ (NSDictionary *)extendedDataDate:(NSDate *)date;
++ (NSDictionary *)extendedDataDate:(NSDate *)date NS_SWIFT_NAME(extendedData(date:));
 
 /**
  Used to specify a geographic coordinate in an event's extended data.
@@ -311,7 +309,7 @@ Returns a Boolean value indicating whether the given event will cause an Interac
 
  @return An extended data dictionary representing a geographic coordinate, to be included in an event's extended data.
  */
-+ (NSDictionary *)extendedDataLocationForLatitude:(double)latitude longitude:(double)longitude;
++ (NSDictionary *)extendedDataLocationForLatitude:(double)latitude longitude:(double)longitude NS_SWIFT_NAME(extendedData(latitude:longitude:));
 
 /**
  Used to specify a commercial transaction (incorporating multiple items) in an event's extended data.
@@ -332,7 +330,8 @@ Returns a Boolean value indicating whether the given event will cause an Interac
 											   shipping:(nullable NSNumber *)shipping
 													tax:(nullable NSNumber *)tax
 											   currency:(nullable NSString *)currency
-										  commerceItems:(nullable NSArray<NSDictionary *> *)commerceItems;
+										  commerceItems:(nullable NSArray<NSDictionary *> *)commerceItems
+NS_SWIFT_NAME(extendedData(transactionID:affiliation:revenue:shipping:tax:currency:commerceItems:));
 
 /**
  Used to specify a commercial transaction (consisting of a single item) in an event's extended data.
@@ -351,7 +350,8 @@ Returns a Boolean value indicating whether the given event will cause an Interac
 											category:(nullable NSString *)category
 											   price:(nullable NSNumber *)price
 											quantity:(nullable NSNumber *)quantity
-											currency:(nullable NSString *)currency;
+											currency:(nullable NSString *)currency
+NS_SWIFT_NAME(extendedData(itemID:name:category:price:quantity:currency:));
 
 
 ///-------------------------------------
@@ -365,7 +365,7 @@ Returns a Boolean value indicating whether the given event will cause an Interac
 
  @param text The text to attach to the user's feedback as a file.
  */
-- (void)sendAttachmentText:(NSString *)text;
+- (void)sendAttachmentText:(NSString *)text NS_SWIFT_NAME(sendAttachment(text:));
 
 /**
  Attaches an image the user's feedback.
@@ -374,7 +374,7 @@ Returns a Boolean value indicating whether the given event will cause an Interac
 
  @param image The image to attach to the user's feedback as a file.
  */
-- (void)sendAttachmentImage:(UIImage *)image;
+- (void)sendAttachmentImage:(UIImage *)image NS_SWIFT_NAME(sendAttachment(image:));
 
 /**
  Attaches an arbitrary file to the user's feedback.
@@ -384,7 +384,7 @@ Returns a Boolean value indicating whether the given event will cause an Interac
  @param fileData The contents of the file as data.
  @param mimeType The MIME type of the file data.
  */
-- (void)sendAttachmentFile:(NSData *)fileData withMimeType:(NSString *)mimeType;
+- (void)sendAttachmentFile:(NSData *)fileData withMimeType:(NSString *)mimeType NS_SWIFT_NAME(sendAttachment(data:mimeType:));
 
 ///---------------------------------------
 /// @name Add Custom Device or Person Data
@@ -532,7 +532,7 @@ Returns a Boolean value indicating whether the given event will cause an Interac
  @param deviceToken The device token used to send Remote Notifications.
  **/
 
-- (void)setPushNotificationIntegration:(ApptentivePushProvider)pushProvider withDeviceToken:(NSData *)deviceToken;
+- (void)setPushNotificationIntegration:(ApptentivePushProvider)pushProvider withDeviceToken:(NSData *)deviceToken NS_SWIFT_NAME(setPushProvider(_:deviceToken:));
 
 @end
 
@@ -555,7 +555,7 @@ Returns a Boolean value indicating whether the given event will cause an Interac
 
  @return The view controller your app would like the interaction to be presented from.
  */
-- (UIViewController *)viewControllerForInteractionsWithConnection:(Apptentive *)connection;
+- (UIViewController *)viewControllerForInteractionsWithConnection:(Apptentive *)connection NS_SWIFT_NAME(viewControllerForInteractions(with:));
 
 @end
 

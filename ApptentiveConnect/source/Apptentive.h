@@ -92,7 +92,10 @@ Before calling any other methods on the shared `Apptentive` instance, set the AP
 /// @name Basic Usage
 ///---------------------------------
 /** The shared singleton of `Apptentive`. */
-+ (Apptentive *)sharedConnection;
++ (instancetype)sharedConnection;
+
+/** Alias for `sharedConnection` */
+@property (class, readonly, nonatomic) Apptentive *shared;
 
 /**
  The API key for Apptentive.

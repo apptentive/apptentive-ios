@@ -14,6 +14,6 @@ class PictureCell: UICollectionViewCell {
 	@IBOutlet var likeButton: UIButton!
 	
 	override func awakeFromNib() {
-		self.layer.shadowColor = UIColor.lightGrayColor().CGColor
+		self.layer.shadowColor = UIColor.lightGray.cgColor
 	}
 }

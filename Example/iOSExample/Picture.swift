@@ -8,37 +8,26 @@
 
 import UIKit
 import QuickLook
-import ImageIO
 
 class Picture: NSObject {
-	let URL: NSURL
-	let image: UIImage?
+	let URL: Foundation.URL
+	var image: UIImage? = nil
 	var likeCount: Int
 	
-	init(URL: NSURL, likeCount: Int) {
+	init(URL: Foundation.URL, likeCount: Int) {
 		self.URL = URL
 		self.likeCount = likeCount
-		
-		if let imageSource = CGImageSourceCreateWithURL(self.URL, nil) {
-			let options = [
-				kCGImageSourceThumbnailMaxPixelSize: 600,
-				kCGImageSourceCreateThumbnailFromImageIfAbsent: true
-			] as [NSObject: AnyObject]
-			
-			self.image = UIImage(CGImage: CGImageSourceCreateThumbnailAtIndex(imageSource, 0, options)!)
-		} else {
-			self.image = nil
-		}
+		self.image = UIImage(contentsOfFile: URL.path)
 	}
 }
 
 extension Picture: QLPreviewItem {
-	var previewItemName: String? {
+	var previewItemTitle: String? {
 		get {
 			return "\(self.likeCount) Likes"
 		}
 	}
-	var previewItemURL: NSURL {
+	var previewItemURL: Foundation.URL? {
 		get {
 			return self.URL
 		}

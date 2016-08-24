@@ -23,32 +23,32 @@ class FavoritesViewController: PicturesViewController {
 		self.source = manager.favoriteDataSource
 	}
 	
-	override func viewWillAppear(animated: Bool) {
+	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
 		
 		updateEmpty(animated)
 	}
 	
-	private func updateEmpty(animated: Bool) {
+	fileprivate func updateEmpty(_ animated: Bool) {
 		let alpha: CGFloat = self.source.numberOfPictures() == 0 ? 1.0 : 0.0
 		let duration = animated ? 0.1 : 0.0
 		
-		UIView.animateWithDuration(duration) { () -> Void in
+		UIView.animate(withDuration: duration) { () -> Void in
 			self.noFavoritesLabel.alpha = alpha
 		}
 	}
 
-	@IBAction override func toggleLike(sender: UIButton) {
+	@IBAction override func toggleLike(_ sender: UIButton) {
 		if let cell = sender.superview?.superview as? UICollectionViewCell {
-			if let indexPath = self.collectionView?.indexPathForCell(cell) {
+			if let indexPath = self.collectionView?.indexPath(for: cell) {
 				// Will always mean "unlike" in favorites-only view
-				sender.selected = false
+				sender.isSelected = false
 
-				Apptentive.sharedConnection().engage("photo_unliked", withCustomData: ["photo_name": self.source.imageNameAtIndex(indexPath.item)], fromViewController: self)
-				
-				self.source?.setLiked(indexPath.item, liked: false)
+				Apptentive.shared.engageEvent("photo_unliked", withCustomData: ["photo_name": self.source.imageNameAtIndex(indexPath.item)], from: self)
 
-				self.collectionView!.deleteItemsAtIndexPaths([indexPath])
+				self.source?.setLiked((indexPath as NSIndexPath).item, liked: false)
+
+				self.collectionView!.deleteItems(at: [indexPath])
 				self.updateEmpty(true)				
 			}
 		}

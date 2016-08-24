@@ -18,13 +18,13 @@ class PictureManager {
 	var pictureDataSource: PictureDataSource
 	
 	init() {
-		if let picturesFolderPath = NSBundle.mainBundle().pathForResource("Pictures", ofType: nil) {
-			let enumerator = NSFileManager.defaultManager().enumeratorAtPath(picturesFolderPath)
+		if let picturesFolderPath = Bundle.main.path(forResource: "Pictures", ofType: nil) {
+			let enumerator = FileManager.default.enumerator(atPath: picturesFolderPath)
 			
 			while let element = enumerator?.nextObject() as? String {
-				let pictureURL = NSURL.fileURLWithPath(NSString(string: picturesFolderPath).stringByAppendingPathComponent(element as String))
+				let pictureURL = URL(fileURLWithPath: NSString(string: picturesFolderPath).appendingPathComponent(element as String))
 				let randomLikeCount = Int(arc4random_uniform(1000))
-				pictures.append(Picture(URL: pictureURL, likeCount: randomLikeCount))
+				pictures.append(Picture(URL: pictureURL as URL, likeCount: randomLikeCount))
 			}
 		}
 		
@@ -41,21 +41,21 @@ class PictureManager {
 		self.pictureDataSource.pictures = self.pictures.shuffled()
 	}
 	
-	private func assignRandomLikes() {
+	fileprivate func assignRandomLikes() {
 		self.pictures.forEach { (picture) in
 			picture.likeCount =  Int(arc4random_uniform(1000))
 		}
 	}
 	
-	private func indexOfFavorite(picture: Picture) -> Int? {
-		return self.favoriteDataSource.pictures.indexOf(picture)
+	fileprivate func indexOfFavorite(_ picture: Picture) -> Int? {
+		return self.favoriteDataSource.pictures.index(of: picture)
 	}
 	
-	func isFavorite(picture: Picture) -> Bool {
+	func isFavorite(_ picture: Picture) -> Bool {
 		return self.indexOfFavorite(picture) != nil
 	}
 	
-	func addFavorite(picture: Picture) {
+	func addFavorite(_ picture: Picture) {
 		if !self.isFavorite(picture) {
 			picture.likeCount += 1
 			
@@ -63,11 +63,11 @@ class PictureManager {
 		}
 	}
 	
-	func removeFavorite(picture: Picture) {
+	func removeFavorite(_ picture: Picture) {
 		if let index = self.indexOfFavorite(picture) {
 			picture.likeCount -= 1
 			
-			self.favoriteDataSource.pictures.removeAtIndex(index)
+			self.favoriteDataSource.pictures.remove(at: index)
 		}
 	}
 }
@@ -84,27 +84,27 @@ class PictureDataSource {
 		return self.pictures.count
 	}
 	
-	func likeCountAtIndex(index: Int) -> Int {
+	func likeCountAtIndex(_ index: Int) -> Int {
 		return self.pictures[index].likeCount
 	}
 	
-	func imageAtIndex(index: Int) -> UIImage? {
+	func imageAtIndex(_ index: Int) -> UIImage? {
 		return self.pictures[index].image
 	}
 	
-	func imageSizeAtIndex(index: Int) -> CGSize {
-		return self.imageAtIndex(index)?.size ?? CGSizeZero
+	func imageSizeAtIndex(_ index: Int) -> CGSize {
+		return self.imageAtIndex(index)?.size ?? CGSize.zero
 	}
 	
-	func imageNameAtIndex(index: Int) -> String {
-		return self.pictures[index].URL.URLByDeletingPathExtension!.lastPathComponent!
+	func imageNameAtIndex(_ index: Int) -> String {
+		return pictures[index].URL.deletingPathExtension().lastPathComponent
 	}
 	
-	func isLikedAtIndex(index: Int) -> Bool {
+	func isLikedAtIndex(_ index: Int) -> Bool {
 		return self.manager!.isFavorite(pictures[index])
 	}
 	
-	func setLiked(index: Int, liked: Bool) {
+	func setLiked(_ index: Int, liked: Bool) {
 		if liked && !self.isLikedAtIndex(index) {
 			self.manager!.addFavorite(self.pictures[index])
 		} else if !liked {
@@ -114,11 +114,11 @@ class PictureDataSource {
 }
 
 extension PictureDataSource: QLPreviewControllerDataSource {
-	@objc func numberOfPreviewItemsInPreviewController(controller: QLPreviewController) -> Int {
+	@objc func numberOfPreviewItems(in controller: QLPreviewController) -> Int {
 		return self.numberOfPictures()
 	}
 	
-	@objc func previewController(controller: QLPreviewController, previewItemAtIndex index: Int) -> QLPreviewItem {
+	@objc func previewController(_ controller: QLPreviewController, previewItemAt index: Int) -> QLPreviewItem {
 		return self.pictures[index]
 	}
 }

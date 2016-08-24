@@ -94,8 +94,10 @@ Before calling any other methods on the shared `Apptentive` instance, set the AP
 /** The shared singleton of `Apptentive`. */
 + (instancetype)sharedConnection;
 
+#if __has_feature(objc_class_property)
 /** Alias for `sharedConnection` */
 @property (class, readonly, nonatomic) Apptentive *shared;
+#endif
 
 /**
  The API key for Apptentive.

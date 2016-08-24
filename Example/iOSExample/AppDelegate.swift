@@ -14,24 +14,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
 
 	var window: UIWindow?
 
-	func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-		Apptentive.sharedConnection().APIKey = "<Your Apptentive API Key>"
+	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+		Apptentive.shared.apiKey = "<#Your Apptentive API Key#>"
 
-		precondition(Apptentive.sharedConnection().APIKey != "<Your Apptentive API Key>", "Please set your Apptentive API key above")
+		precondition(Apptentive.shared.apiKey != "<#Your Apptentive API Key#>", "Please set your Apptentive API key above")
 
 		if let tabBarController = self.window?.rootViewController as? UITabBarController {
 			tabBarController.delegate = self
 		}
-		
+
 		return true
 	}
 
 	// MARK: Tab bar controller delegate
-	func tabBarController(tabBarController: UITabBarController, didSelectViewController viewController: UIViewController) {
-		if tabBarController.viewControllers?.indexOf(viewController) ?? 0 == 0 {
-			Apptentive.sharedConnection().engage("photos_tab_selected", fromViewController: tabBarController)
+	func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
+		if tabBarController.viewControllers?.index(of: viewController) ?? 0 == 0 {
+			Apptentive.shared.engageEvent("photos_tab_selected", from: tabBarController)
 		} else {
-			Apptentive.sharedConnection().engage("favorites_tab_selected", fromViewController: tabBarController)
+			Apptentive.shared.engageEvent("favorites_tab_selected", from: tabBarController)
 		}
 	}
 }

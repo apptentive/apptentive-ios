@@ -365,7 +365,7 @@ NS_SWIFT_NAME(extendedData(itemID:name:category:price:quantity:currency:));
 
  @param text The text to attach to the user's feedback as a file.
  */
-- (void)sendAttachmentText:(NSString *)text NS_SWIFT_NAME(sendAttachment(text:));
+- (void)sendAttachmentText:(NSString *)text NS_SWIFT_NAME(sendAttachment(_:));
 
 /**
  Attaches an image the user's feedback.
@@ -374,7 +374,7 @@ NS_SWIFT_NAME(extendedData(itemID:name:category:price:quantity:currency:));
 
  @param image The image to attach to the user's feedback as a file.
  */
-- (void)sendAttachmentImage:(UIImage *)image NS_SWIFT_NAME(sendAttachment(image:));
+- (void)sendAttachmentImage:(UIImage *)image NS_SWIFT_NAME(sendAttachment(_:));
 
 /**
  Attaches an arbitrary file to the user's feedback.
@@ -384,7 +384,7 @@ NS_SWIFT_NAME(extendedData(itemID:name:category:price:quantity:currency:));
  @param fileData The contents of the file as data.
  @param mimeType The MIME type of the file data.
  */
-- (void)sendAttachmentFile:(NSData *)fileData withMimeType:(NSString *)mimeType NS_SWIFT_NAME(sendAttachment(data:mimeType:));
+- (void)sendAttachmentFile:(NSData *)fileData withMimeType:(NSString *)mimeType NS_SWIFT_NAME(sendAttachment(_:mimeType:));
 
 ///---------------------------------------
 /// @name Add Custom Device or Person Data
@@ -444,7 +444,7 @@ NS_SWIFT_NAME(extendedData(itemID:name:category:price:quantity:currency:));
  @param string Custom data of type `NSString`.
  @param key A key to associate the data with.
  */
-- (void)addCustomDeviceDataString:(NSString *)string withKey:(NSString *)key;
+- (void)addCustomDeviceDataString:(NSString *)string withKey:(NSString *)key NS_SWIFT_NAME(addCustomDeviceData(_:withKey:));
 
 /**
  Adds custom numeric data associated with the current device.
@@ -455,7 +455,7 @@ NS_SWIFT_NAME(extendedData(itemID:name:category:price:quantity:currency:));
  @param number Custom data of type `NSNumber`.
  @param key A key to associate the data with.
  */
-- (void)addCustomDeviceDataNumber:(NSNumber *)number withKey:(NSString *)key;
+- (void)addCustomDeviceDataNumber:(NSNumber *)number withKey:(NSString *)key NS_SWIFT_NAME(addCustomDeviceData(_:withKey:));
 
 /**
  Adds custom Boolean data associated with the current device.
@@ -466,7 +466,7 @@ NS_SWIFT_NAME(extendedData(itemID:name:category:price:quantity:currency:));
  @param boolValue Custom data of type `BOOL`.
  @param key A key to associate the data with.
  */
-- (void)addCustomDeviceDataBool:(BOOL)boolValue withKey:(NSString *)key;
+- (void)addCustomDeviceDataBool:(BOOL)boolValue withKey:(NSString *)key NS_SWIFT_NAME(addCustomDeviceData(_:withKey:));
 
 /**
  Adds custom text data associated with the current person.
@@ -477,7 +477,7 @@ NS_SWIFT_NAME(extendedData(itemID:name:category:price:quantity:currency:));
  @param string Custom data of type `NSString`.
  @param key A key to associate the data with.
  */
-- (void)addCustomPersonDataString:(NSString *)string withKey:(NSString *)key;
+- (void)addCustomPersonDataString:(NSString *)string withKey:(NSString *)key NS_SWIFT_NAME(addCustomPersonData(_:withKey:));
 
 /**
  Adds custom numeric data associated with the current person.
@@ -488,7 +488,8 @@ NS_SWIFT_NAME(extendedData(itemID:name:category:price:quantity:currency:));
  @param number Custom data of type `NSNumber`.
  @param key A key to associate the data with.
  */
-- (void)addCustomPersonDataNumber:(NSNumber *)number withKey:(NSString *)key;
+- (void)addCustomPersonDataNumber:(NSNumber *)number withKey:(NSString *)key NS_SWIFT_NAME(addCustomPersonData(_:withKey:));
+
 
 /**
  Adds custom Boolean data associated with the current person.
@@ -499,7 +500,7 @@ NS_SWIFT_NAME(extendedData(itemID:name:category:price:quantity:currency:));
  @param boolValue Custom data of type `BOOL`.
  @param key A key to associate the data with.
  */
-- (void)addCustomPersonDataBool:(BOOL)boolValue withKey:(NSString *)key;
+- (void)addCustomPersonDataBool:(BOOL)boolValue withKey:(NSString *)key NS_SWIFT_NAME(addCustomPersonData(_:withKey:));
 
 ///---------------------------------------
 /// @name Open App Store

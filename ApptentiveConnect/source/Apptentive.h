@@ -414,7 +414,7 @@ NS_SWIFT_NAME(extendedData(itemID:name:category:price:quantity:currency:));
  @param object Custom data of type `NSDate`, `NSNumber`, or `NSString`.
  @param key A key to associate the data with.
  */
-- (void)addCustomPersonData:(NSObject<NSCoding> *)object withKey:(NSString *)key;
+- (void)addCustomPersonData:(NSObject<NSCoding> *)object withKey:(NSString *)key NS_SWIFT_UNAVAILABLE("Use the string, number, or boolean custom data setter");
 
 /**
  Adds custom data associated with the current device.
@@ -425,7 +425,7 @@ NS_SWIFT_NAME(extendedData(itemID:name:category:price:quantity:currency:));
  @param object Custom data of type `NSDate`, `NSNumber`, or `NSString`.
  @param key A key to associate the data with.
  */
-- (void)addCustomDeviceData:(NSObject<NSCoding> *)object withKey:(NSString *)key;
+- (void)addCustomDeviceData:(NSObject<NSCoding> *)object withKey:(NSString *)key NS_SWIFT_UNAVAILABLE("Use the string, number, or boolean custom data setter");
 
 /**
  Removes custom data associated with the current person.

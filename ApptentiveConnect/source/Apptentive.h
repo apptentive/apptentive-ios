@@ -102,11 +102,11 @@ Before calling any other methods on the shared `Apptentive` instance, set the AP
 @property (copy, nonatomic, nullable) NSString *APIKey;
 
 /**
-  APIKey property with legacy capitalization.
+ APIKey property with legacy capitalization.
 
  @deprecated Capitalize `API` in the property/setter name.
  */
-@property (copy, nonatomic, nullable) NSString *apiKey __deprecated_msg("Use 'APIKey' instead.");
+@property (copy, nonatomic, nullable) NSString *apiKey __deprecated_msg("Use 'APIKey' instead.") NS_SWIFT_UNAVAILABLE("Creates ambiguous name if translated to Swift 3.");
 
 /**
  The app's iTunes App ID.

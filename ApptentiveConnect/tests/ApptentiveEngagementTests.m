@@ -195,17 +195,17 @@
 	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] init];
 
 #if APPTENTIVE_DEBUG
-	invocation.criteria = @{ @"app_release/debug": @YES };
+	invocation.criteria = @{ @"application/debug": @YES };
 #else
-	invocation.criteria = @{ @"app_release/debug": @NO };
+	invocation.criteria = @{ @"application/debug": @NO };
 #endif
 
 	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Debug boolean");
 
 #if APPTENTIVE_DEBUG
-	invocation.criteria = @{ @"app_release/debug": @NO };
+	invocation.criteria = @{ @"application/debug": @NO };
 #else
-	invocation.criteria = @{ @"app_release/debug": @YES };
+	invocation.criteria = @{ @"application/debug": @YES };
 #endif
 
 	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Debug boolean");

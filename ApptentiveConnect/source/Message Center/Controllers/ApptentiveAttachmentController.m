@@ -50,8 +50,10 @@ NSString *const ATInteractionMessageCenterEventLabelAttachmentDelete = @"attachm
 	// Hide the attach button if tapping it will cause a crash (due to unsupported portrait orientation).
 	BOOL isPhone = [UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone;
 	BOOL supportsPortraitOrientation = ([[UIApplication sharedApplication] supportedInterfaceOrientationsForWindow:self.attachButton.window] & UIInterfaceOrientationMaskPortrait) != 0;
+	BOOL requiresPhotoLibraryUsageDescription = [[NSProcessInfo processInfo] respondsToSelector:@selector(isOperatingSystemAtLeastVersion:)] && [[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){10, 0, 0}];
+	BOOL hasPhotoLibraryUsageDescription = [[NSBundle mainBundle].infoDictionary objectForKey:@"NSPhotoLibraryUsageDescription"] != nil;
 
-	self.attachButton.hidden = isPhone && !supportsPortraitOrientation;
+	self.attachButton.hidden = (isPhone && !supportsPortraitOrientation) || (requiresPhotoLibraryUsageDescription && !hasPhotoLibraryUsageDescription);
 
 	CGSize marginWithInsets = CGSizeMake(ATTACHMENT_MARGIN.width - (ATTACHMENT_INSET.left), ATTACHMENT_MARGIN.height - (ATTACHMENT_INSET.top));
 	CGFloat height = [ApptentiveAttachmentCell heightForScreen:[UIScreen mainScreen] withMargin:marginWithInsets];

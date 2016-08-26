@@ -123,11 +123,13 @@
 	result[@"programming_language"] = @"Objective-C";
 	result[@"author_name"] = @"Apptentive, Inc.";
 	result[@"platform"] = kApptentivePlatformString;
-	NSString *distribution = [[Apptentive sharedConnection].backend distributionName];
+
+	NSString *distribution = [Apptentive sharedConnection].distributionName;
 	if (distribution) {
 		result[@"distribution"] = distribution;
 	}
-	NSString *distributionVersion = [[Apptentive sharedConnection].backend distributionVersion];
+	NSString *distributionVersion = [Apptentive sharedConnection].distributionVersion;
+;
 	if (distributionVersion) {
 		result[@"distribution_version"] = distributionVersion;
 	}

@@ -98,11 +98,11 @@
 	[client setObject:kApptentiveVersionString forKey:@"version"];
 	[client setObject:kApptentivePlatformString forKey:@"os"];
 	[client setObject:@"Apptentive, Inc." forKey:@"author"];
-	NSString *distribution = [[Apptentive sharedConnection].backend distributionName];
+	NSString *distribution = [Apptentive sharedConnection].distributionName;
 	if (distribution) {
 		[client setObject:distribution forKey:@"distribution"];
 	}
-	NSString *distributionVersion = [[Apptentive sharedConnection].backend distributionVersion];
+	NSString *distributionVersion = [Apptentive sharedConnection].distributionVersion;
 	if (distributionVersion) {
 		[client setObject:distributionVersion forKey:@"distribution_version"];
 	}
@@ -135,11 +135,11 @@
 	[d setObject:kApptentiveVersionString forKey:@"record[client][version]"];
 	[d setObject:kApptentivePlatformString forKey:@"record[client][os]"];
 	[d setObject:@"Apptentive, Inc." forKey:@"record[client][author]"];
-	NSString *distribution = [[Apptentive sharedConnection].backend distributionName];
+	NSString *distribution = [Apptentive sharedConnection].distributionName;
 	if (distribution) {
 		[d setObject:distribution forKey:@"record[client][distribution]"];
 	}
-	NSString *distributionVersion = [[Apptentive sharedConnection].backend distributionVersion];
+	NSString *distributionVersion = [Apptentive sharedConnection].distributionVersion;
 	if (distributionVersion) {
 		[d setObject:distributionVersion forKey:@"record[client][distribution_version]"];
 	}

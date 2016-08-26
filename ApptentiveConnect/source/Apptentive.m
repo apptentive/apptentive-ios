@@ -21,14 +21,6 @@
 #import "ApptentiveAboutViewController.h"
 #import "ApptentiveStyleSheet.h"
 
-// Can't get CocoaPods to do the right thing for debug builds.
-// So, do it explicitly.
-#if COCOAPODS
-#if DEBUG
-#define APPTENTIVE_DEBUG_LOG_VIEWER 1
-#endif
-#endif
-
 NSString *const ApptentiveMessageCenterUnreadCountChangedNotification = @"ApptentiveMessageCenterUnreadCountChangedNotification";
 
 NSString *const ApptentiveAppRatingFlowUserAgreedToRateAppNotification = @"ApptentiveAppRatingFlowUserAgreedToRateAppNotification";
@@ -115,7 +107,21 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 }
 
 - (void)setAPIKey:(NSString *)APIKey {
+	NSString *distributionName = @"source";
+	NSString *distributionVersion = kApptentiveVersionString;
+
+#if APPTENTIVE_COCOAPODS
+	distributionName = @"CocoaPods-Source";
+#endif
+
+	[self setAPIKey:APIKey distributionName:distributionName distributionVersion:distributionVersion];
+}
+
+- (void)setAPIKey:(NSString *)APIKey distributionName:(NSString *)distributionName distributionVersion:(NSString *)distributionVersion {
 	if (![self.webClient.APIKey isEqualToString:APIKey]) {
+		_distributionName = distributionName;
+		_distributionVersion = distributionVersion;
+
 		_webClient = [[ApptentiveWebClient alloc] initWithBaseURL:[NSURL URLWithString:@"https://api.apptentive.com"] APIKey:APIKey];
 
 		_backend = [[ApptentiveBackend alloc] init];

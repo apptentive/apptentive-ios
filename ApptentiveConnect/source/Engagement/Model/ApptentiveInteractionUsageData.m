@@ -104,7 +104,7 @@
 	}
 
 	if (self.isDebugBuild) {
-		predicateEvaluationDictionary[@"app_release/debug"] = self.isDebugBuild;
+		predicateEvaluationDictionary[@"application/debug"] = self.isDebugBuild;
 	}
 
 	if (self.sdkVersion) {

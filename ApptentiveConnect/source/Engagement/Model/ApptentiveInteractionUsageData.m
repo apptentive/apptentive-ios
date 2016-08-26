@@ -281,14 +281,14 @@
 
 - (NSString *)sdkDistribution {
 	if (!_sdkDistribution) {
-		_sdkDistribution = [[[Apptentive sharedConnection].backend distributionName] copy];
+		_sdkDistribution = [[Apptentive sharedConnection].distributionName copy];
 	}
 	return _sdkDistribution;
 }
 
 - (NSString *)sdkDistributionVersion {
 	if (!_sdkDistributionVersion) {
-		_sdkDistributionVersion = [[[Apptentive sharedConnection].backend distributionVersion] copy];
+		_sdkDistributionVersion = [[Apptentive sharedConnection].distributionVersion copy];
 	}
 	return _sdkDistributionVersion;
 }

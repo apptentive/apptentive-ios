@@ -654,24 +654,6 @@ static NSURLCache *imageCache = nil;
 	return [NSURL URLWithString:@"http://www.apptentive.com/privacy"];
 }
 
-- (NSString *)distributionName {
-	static NSString *cachedDistributionName = nil;
-	static dispatch_once_t onceToken = 0;
-	dispatch_once(&onceToken, ^{
-		cachedDistributionName = (NSString *)[[Apptentive resourceBundle] objectForInfoDictionaryKey:ATInfoDistributionKey];
-	});
-	return cachedDistributionName;
-}
-
-- (NSString *)distributionVersion {
-	static NSString *cachedDistributionVersion = nil;
-	static dispatch_once_t onceToken = 0;
-	dispatch_once(&onceToken, ^{
-		cachedDistributionVersion = (NSString *)[[Apptentive resourceBundle] objectForInfoDictionaryKey:ATInfoDistributionVersionKey];
-	});
-	return cachedDistributionVersion;
-}
-
 - (NSUInteger)unreadMessageCount {
 	return self.previousUnreadCount;
 }

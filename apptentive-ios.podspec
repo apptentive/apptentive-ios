@@ -16,8 +16,7 @@ Pod::Spec.new do |s|
 		'ApptentiveConnect/source/Model/*.xcmappingmodel',
 		'ApptentiveConnect/resources/localization/*.lproj',
 		'ApptentiveConnect/resources/images/**/*.*',
-		'ApptentiveConnect/resources/Apptentive.storyboard',
-		'ApptentiveConnect/resources/CocoaPodsResources/Info.plist'
+		'ApptentiveConnect/resources/Apptentive.storyboard'
 		] }
   s.weak_frameworks = 'StoreKit', 'CoreTelephony'
   s.prefix_header_contents = '#import "ApptentiveLog.h"'

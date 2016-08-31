@@ -31,6 +31,8 @@ extern NSString *const ApptentiveConversationCreatedNotification;
 @property (strong, nonatomic) UIViewController *pushViewController;
 
 @property (readonly, nonatomic) BOOL didAccessStyleSheet;
+@property (readonly, nonatomic) NSString *distributionName;
+@property (readonly, nonatomic) NSString *distributionVersion;
 
 // For debugging only.
 - (void)resetUpgradeData;

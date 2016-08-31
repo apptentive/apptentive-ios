@@ -85,9 +85,6 @@ extern NSString *const ATBackendBecameReadyNotification;
 - (NSURL *)apptentiveHomepageURL;
 - (NSURL *)apptentivePrivacyPolicyURL;
 
-- (NSString *)distributionName;
-- (NSString *)distributionVersion;
-
 - (NSUInteger)unreadMessageCount;
 
 - (void)messageCenterEnteredForeground;

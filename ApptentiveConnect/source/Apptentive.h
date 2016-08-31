@@ -102,6 +102,17 @@ Before calling any other methods on the shared `Apptentive` instance, set the AP
 @property (copy, nonatomic, nullable) NSString *APIKey;
 
 /**
+ Sets the API key along with distribution name and distribution version.
+ This is used when the Apptentive SDK is bundled into another SDK for
+ distribution, for example Apache Cordova.
+ 
+ @param APIKey The API key to use for the first connection to the Apptentive API.
+ @param distributionName The name of the distribution that includes the Apptentive SDK. For example "Cordova".
+ @param distributionVersion The version of the distribution that includes the Apptentive SDK.
+ */
+- (void)setAPIKey:(NSString *)APIKey distributionName:(NSString *)distributionName distributionVersion:(NSString *)distributionVersion;
+
+/**
   APIKey property with legacy capitalization.
 
  @deprecated Capitalize `API` in the property/setter name.

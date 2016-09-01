@@ -23,7 +23,6 @@
 	return self;
 }
 
-
 + (NSString *)carrier {
 	NSString *result = nil;
 	if ([CTTelephonyNetworkInfo class]) {

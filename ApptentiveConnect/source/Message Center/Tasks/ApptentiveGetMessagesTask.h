@@ -10,7 +10,7 @@
 #import "ApptentiveAPIRequest.h"
 #import "ApptentiveMessage.h"
 
-static NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey;
+extern NSString *const ATMessagesLastRetrievedMessageIDPreferenceKey;
 
 
 @interface ApptentiveGetMessagesTask : ApptentiveTask <ApptentiveAPIRequestDelegate>

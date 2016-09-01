@@ -12,6 +12,8 @@
 #import "ApptentiveEngagementBackend.h"
 #import "ApptentiveInteraction.h"
 #import "ApptentiveDeviceInfo.h"
+#import "ApptentiveMessageCenterViewController.h"
+#import "ApptentiveTaskQueue.h"
 
 
 @implementation Apptentive (Debugging)
@@ -117,6 +119,28 @@
 
 - (NSString *)conversationToken {
 	return [ApptentiveConversationUpdater currentConversation].token;
+}
+
+- (void)resetSDK {
+	[[ApptentiveTaskQueue sharedTaskQueue] clear];
+
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ApptentiveCustomDeviceDataPreferenceKey];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ApptentiveCustomPersonDataPreferenceKey];
+
+	[self.engagementBackend resetEngagementData];
+	[self.backend resetBackendData];
+
+	[ApptentiveMessageCenterViewController resetPreferences];
+
+	self.personName = nil;
+	self.personEmailAddress = nil;
+
+	self.APIKey = nil;
+	self.appID = nil;
+
+	[self setValue:nil forKey:@"backend"];
+	[self setValue:nil forKey:@"webClient"];
+	[self setValue:nil forKey:@"engagementBackend"];
 }
 
 @end

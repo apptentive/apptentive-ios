@@ -24,4 +24,6 @@
 - (NSURL *)persistentStoreURL;
 - (BOOL)setupAndVerify;
 
+- (void) shutDownAndCleanUp;
+
 @end

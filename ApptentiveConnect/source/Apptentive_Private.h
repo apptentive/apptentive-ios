@@ -12,6 +12,8 @@ extern NSString *const ApptentiveCustomPersonDataChangedNotification;
 extern NSString *const ApptentiveCustomDeviceDataChangedNotification;
 extern NSString *const ApptentiveInteractionsDidUpdateNotification;
 extern NSString *const ApptentiveConversationCreatedNotification;
+extern NSString *const ApptentiveCustomDeviceDataPreferenceKey;
+extern NSString *const ApptentiveCustomPersonDataPreferenceKey;
 
 @class ApptentiveMessage, ApptentiveWebClient, ApptentiveBackend, ApptentiveEngagementBackend;
 
@@ -33,9 +35,6 @@ extern NSString *const ApptentiveConversationCreatedNotification;
 @property (readonly, nonatomic) BOOL didAccessStyleSheet;
 @property (readonly, nonatomic) NSString *distributionName;
 @property (readonly, nonatomic) NSString *distributionVersion;
-
-// For debugging only.
-- (void)resetUpgradeData;
 
 /*!
  * Returns the NSBundle corresponding to the bundle containing Apptentive's

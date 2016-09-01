@@ -21,6 +21,7 @@ extern NSString *const ATPersonLastUpdateValuePreferenceKey;
 
 + (BOOL)shouldUpdate;
 + (NSDictionary *)lastSavedVersion;
++ (void)resetPersonInfo;
 
 - (id)initWithDelegate:(NSObject<ATPersonUpdaterDelegate> *)delegate;
 - (void)update;

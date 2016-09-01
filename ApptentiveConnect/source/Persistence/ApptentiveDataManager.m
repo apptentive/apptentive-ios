@@ -130,6 +130,19 @@ typedef enum {
 	return YES;
 }
 
+- (void)shutDownAndCleanUp {
+	NSURL *persistentStoreURL = self.persistentStoreURL;
+	NSError *error;
+
+	self.managedObjectContext = nil;
+	self.managedObjectModel = nil;
+	self.persistentStoreCoordinator = nil;
+
+	if (![[NSFileManager defaultManager] removeItemAtURL:persistentStoreURL error:&error]) {
+		NSLog(@"Unable to delete persistent store URL");
+	}
+}
+
 - (NSPersistentStoreCoordinator *)persistentStoreCoordinator {
 	@synchronized(self) {
 		if (_persistentStoreCoordinator != nil) {

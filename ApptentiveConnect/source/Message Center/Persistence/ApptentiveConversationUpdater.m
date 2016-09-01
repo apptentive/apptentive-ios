@@ -39,6 +39,12 @@ NSString *const ATConversationLastUpdateValuePreferenceKey = @"ATConversationLas
 	[defaults registerDefaults:defaultPreferences];
 }
 
++ (void)resetConversation {
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATCurrentConversationPreferenceKey];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATConversationLastUpdatePreferenceKey];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATConversationLastUpdateValuePreferenceKey];
+}
+
 - (id)initWithDelegate:(NSObject<ApptentiveConversationUpdaterDelegate> *)delegate {
 	if ((self = [super init])) {
 		_delegate = delegate;

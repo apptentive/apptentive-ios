@@ -20,6 +20,7 @@ extern NSString *const ATDeviceLastUpdateValuePreferenceKey;
 @property (weak, nonatomic) NSObject<ATDeviceUpdaterDelegate> *delegate;
 + (BOOL)shouldUpdate;
 + (NSDictionary *)lastSavedVersion;
++ (void)resetDeviceInfo;
 
 - (id)initWithDelegate:(NSObject<ATDeviceUpdaterDelegate> *)delegate;
 - (void)update;

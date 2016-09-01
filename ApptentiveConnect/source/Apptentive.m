@@ -114,10 +114,10 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 }
 
 - (void)setAPIKey:(NSString *)APIKey distributionName:(NSString *)distributionName distributionVersion:(NSString *)distributionVersion {
-	if (![self.webClient.APIKey isEqualToString:APIKey]) {
-		_distributionName = distributionName;
-		_distributionVersion = distributionVersion;
+	_distributionName = distributionName;
+	_distributionVersion = distributionVersion;
 
+	if (![self.webClient.APIKey isEqualToString:APIKey] && APIKey != nil) {
 		_webClient = [[ApptentiveWebClient alloc] initWithBaseURL:[NSURL URLWithString:@"https://api.apptentive.com"] APIKey:APIKey];
 
 		_backend = [[ApptentiveBackend alloc] init];
@@ -514,10 +514,6 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 	}
 
 	return (apptentivePayload != nil);
-}
-
-- (void)resetUpgradeData {
-	[self.engagementBackend resetUpgradeVersionInfo];
 }
 
 - (void)dismissMessageCenterAnimated:(BOOL)animated completion:(void (^)(void))completion {

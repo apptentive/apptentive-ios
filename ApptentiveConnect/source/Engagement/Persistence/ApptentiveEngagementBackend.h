@@ -71,6 +71,7 @@ extern NSString *const ApptentiveEngagementMessageCenterEvent;
 @property (copy, nonatomic) NSData *engagementManifestJSON;
 
 - (void)resetUpgradeVersionInfo;
+- (void)resetEngagementData;
 - (NSArray *)allEngagementInteractions;
 - (NSArray<NSString *> *)targetedLocalEvents;
 

@@ -104,7 +104,9 @@ extern NSString *const ATBackendBecameReadyNotification;
 
 - (void)updatePersonIfNeeded;
 
-- (NSURLCache *)imageCache;
+@property (readonly, nonatomic) NSURLCache *imageCache;
+
+- (void)resetBackendData;
 
 @end
 

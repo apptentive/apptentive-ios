@@ -10,11 +10,11 @@
 
 
 @implementation ApptentiveJSONSerialization
-+ (NSData *)dataWithJSONObject:(id)obj options:(ATJSONWritingOptions)opt error:(NSError **)error {
++ (NSData *)dataWithJSONObject:(id)obj options:(NSJSONWritingOptions)opt error:(NSError **)error {
 	if ([NSJSONSerialization isValidJSONObject:obj]) {
 		NSData *jsonData = nil;
 		@try {
-			jsonData = [NSJSONSerialization dataWithJSONObject:obj options:opterr error:error];
+			jsonData = [NSJSONSerialization dataWithJSONObject:obj options:opt error:error];
 		} @catch (NSException *exception) {
 			ApptentiveLogError(@"Unable to create JSON data from object: %@ Exception: %@", obj, exception);
 		}
@@ -25,7 +25,7 @@
 	}
 }
 
-+ (NSString *)stringWithJSONObject:(id)obj options:(ATJSONWritingOptions)opt error:(NSError **)error {
++ (NSString *)stringWithJSONObject:(id)obj options:(NSJSONWritingOptions)opt error:(NSError **)error {
 	NSData *d = [ApptentiveJSONSerialization dataWithJSONObject:obj options:opt error:error];
 	if (!d) {
 		return nil;

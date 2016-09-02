@@ -28,7 +28,7 @@
 	} else {
 		postJSON = [conversation apiJSON];
 	}
-	NSString *postString = [ApptentiveJSONSerialization stringWithJSONObject:postJSON options:ATJSONWritingPrettyPrinted error:&error];
+	NSString *postString = [ApptentiveJSONSerialization stringWithJSONObject:postJSON options:NSJSONWritingPrettyPrinted error:&error];
 	if (!postString && error != nil) {
 		ApptentiveLogError(@"Error while encoding JSON: %@", error);
 		return nil;
@@ -48,7 +48,7 @@
 		return nil;
 	}
 	putJSON = [conversation apiUpdateJSON];
-	NSString *putString = [ApptentiveJSONSerialization stringWithJSONObject:putJSON options:ATJSONWritingPrettyPrinted error:&error];
+	NSString *putString = [ApptentiveJSONSerialization stringWithJSONObject:putJSON options:NSJSONWritingPrettyPrinted error:&error];
 	if (!putString && error != nil) {
 		ApptentiveLogError(@"Error while encoding JSON: %@", error);
 		return nil;
@@ -66,7 +66,7 @@
 	NSError *error = nil;
 	NSDictionary *postJSON = [deviceInfo apiJSON];
 
-	NSString *postString = [ApptentiveJSONSerialization stringWithJSONObject:postJSON options:ATJSONWritingPrettyPrinted error:&error];
+	NSString *postString = [ApptentiveJSONSerialization stringWithJSONObject:postJSON options:NSJSONWritingPrettyPrinted error:&error];
 	if (!postString && error != nil) {
 		ApptentiveLogError(@"Error while encoding JSON: %@", error);
 		return nil;
@@ -90,7 +90,7 @@
 	NSError *error = nil;
 	NSDictionary *postJSON = [personInfo apiJSON];
 
-	NSString *postString = [ApptentiveJSONSerialization stringWithJSONObject:postJSON options:ATJSONWritingPrettyPrinted error:&error];
+	NSString *postString = [ApptentiveJSONSerialization stringWithJSONObject:postJSON options:NSJSONWritingPrettyPrinted error:&error];
 	if (!postString && error != nil) {
 		ApptentiveLogError(@"Error while encoding JSON: %@", error);
 		return nil;
@@ -114,7 +114,7 @@
 	NSError *error = nil;
 	NSDictionary *postJSON = [message apiJSON];
 
-	NSString *postString = [ApptentiveJSONSerialization stringWithJSONObject:postJSON options:ATJSONWritingPrettyPrinted error:&error];
+	NSString *postString = [ApptentiveJSONSerialization stringWithJSONObject:postJSON options:NSJSONWritingPrettyPrinted error:&error];
 	if (!postString && error != nil) {
 		ApptentiveLogError(@"Error while encoding JSON: %@", error);
 		return nil;

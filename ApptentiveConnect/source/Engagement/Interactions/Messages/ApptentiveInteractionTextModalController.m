@@ -25,7 +25,6 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 
 @property (strong, nonatomic) UIViewController *viewController;
 @property (strong, nonatomic) UIAlertController *alertController;
-@property (strong, nonatomic) UIAlertView *alertView;
 
 @end
 
@@ -39,52 +38,13 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 - (void)presentInteractionFromViewController:(UIViewController *)viewController {
 	self.viewController = viewController;
 
-	if ([UIAlertController class]) {
-		self.alertController = [self alertControllerWithInteraction:self.interaction];
+	self.alertController = [self alertControllerWithInteraction:self.interaction];
 
-		if (self.alertController) {
-			[viewController presentViewController:self.alertController animated:YES completion:^{
-				[self.interaction engage:ATInteractionTextModalEventLabelLaunch fromViewController:self.viewController];
-			}];
-		}
-	} else {
-		self.alertView = [self alertViewWithInteraction:self.interaction];
-
-		if (self.alertView) {
-			[self.alertView show];
-		}
+	if (self.alertController) {
+		[viewController presentViewController:self.alertController animated:YES completion:^{
+			[self.interaction engage:ATInteractionTextModalEventLabelLaunch fromViewController:self.viewController];
+		}];
 	}
-}
-
-#pragma mark UIAlertView
-
-- (UIAlertView *)alertViewWithInteraction:(ApptentiveInteraction *)interaction {
-	NSDictionary *config = interaction.configuration;
-	NSString *title = config[@"title"];
-	NSString *message = config[@"body"];
-
-	if (!title && !message) {
-		ApptentiveLogError(@"Skipping display of Apptentive Note that does not have a title and body.");
-		return nil;
-	}
-
-	UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:nil otherButtonTitles:nil];
-
-	NSArray *actions = config[@"actions"];
-	for (NSDictionary *action in actions) {
-		NSString *buttonTitle = action[@"label"];
-
-		// Better to use default button text than to potentially create an un-cancelable alert with no buttons.
-		// 'UIAlertView: Buttons added must have a title.'
-		if (!buttonTitle) {
-			ApptentiveLogError(@"Apptentive Note button action does not have a title!");
-			buttonTitle = @"button";
-		}
-
-		[alertView addButtonWithTitle:buttonTitle];
-	}
-
-	return alertView;
 }
 
 #pragma mark UIAlertController
@@ -153,7 +113,7 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 	// Exception: 'Actions added to UIAlertController must have a title'
 	if (!title) {
 		ApptentiveLogError(@"Apptentive Note button action does not have a title!");
-		title = @"button";
+		title = ApptentiveLocalizedString(@"OK", @"OK");
 	}
 
 	UIAlertActionStyle style = UIAlertActionStyleDefault;
@@ -232,43 +192,6 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 	return [^(UIAlertAction *alertAction) {
 		[self interactionAction:actionConfig];
 	} copy];
-}
-
-#pragma mark UIAlertViewDelegate
-
-- (void)didPresentAlertView:(UIAlertView *)alertView {
-	[self.interaction engage:ATInteractionTextModalEventLabelLaunch fromViewController:self.viewController];
-}
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-	NSArray *actions = self.interaction.configuration[@"actions"];
-	NSDictionary *actionForButton = [actions objectAtIndex:buttonIndex];
-
-	if (actionForButton) {
-		NSMutableDictionary *actionConfig = [NSMutableDictionary dictionary];
-		actionConfig[@"position"] = @(buttonIndex);
-		[actionConfig addEntriesFromDictionary:actionForButton];
-
-		NSString *actionTitle = actionConfig[@"label"];
-		NSString *buttonTitle = [alertView buttonTitleAtIndex:buttonIndex];
-
-		if (![actionTitle isEqualToString:buttonTitle]) {
-			ApptentiveLogError(@"Cannot find an action for the tapped UIAlertView button.");
-		} else {
-			NSString *actionType = actionConfig[@"action"];
-			if ([actionType isEqualToString:@"dismiss"]) {
-				[self dismissAction:actionConfig];
-			} else if ([actionType isEqualToString:@"interaction"]) {
-				[self interactionAction:actionConfig];
-			} else {
-				ApptentiveLogError(@"Apptentive note contains an unknown action.");
-			}
-		}
-	}
-}
-
-- (void)dealloc {
-	_alertView.delegate = nil;
 }
 
 @end

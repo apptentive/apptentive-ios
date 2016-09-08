@@ -83,7 +83,6 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 	self.webView.scrollView.showsHorizontalScrollIndicator = NO;
 	self.webView.scrollView.showsVerticalScrollIndicator = NO;
 
-	[self updateIconContainerHeightForOrientation:[UIApplication sharedApplication].statusBarOrientation];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -107,26 +106,19 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 	[self.upgradeMessageInteraction engage:ATInteractionUpgradeMessageEventLabelClose fromViewController:self.presentingViewController];
 }
 
-- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
-	[self updateIconContainerHeightForOrientation:toInterfaceOrientation];
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+	[super traitCollectionDidChange: previousTraitCollection];
 
-	[UIView animateWithDuration:duration animations:^{
-		[self.view layoutIfNeeded];
-	}];
-}
-
-- (void)updateIconContainerHeightForOrientation:(UIInterfaceOrientation)orientation {
-	BOOL isPortrait = UIInterfaceOrientationIsPortrait(orientation);
-	BOOL isIPad = [UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad;
+	BOOL isRegularHeight = self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassRegular;
 	CGFloat topInset = 0.0;
 
-	if (isIPad || isPortrait) {
+	if (isRegularHeight) {
 		topInset = self.appIconView.hidden ? 50.0 : 90.0;
 
 		self.appIconContainerHeight.constant = 124.0;
 		self.OKButtonHeight.constant = 44.0;
 
-		if (isIPad) {
+		if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
 			self.OKButtonBottomSpace.constant = 0.0;
 			self.poweredByBottomSpace.constant = 44.0;
 		}

@@ -251,9 +251,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidHide:) name:UIKeyboardDidHideNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(saveDraft) name:UIApplicationDidEnterBackgroundNotification object:nil];
 
-	// Fix iOS 7 bug where contentSize gets set to zero
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(fixContentSize:) name:UIKeyboardDidShowNotification object:nil];
-
 	// Respond to dynamic type size changes
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateHeaderFooterTextSize:) name:UIContentSizeCategoryDidChangeNotification object:nil];
 
@@ -261,14 +258,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[self.attachmentController viewDidLoad];
 
 	[self updateSendButtonEnabledStatus];
-
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated"
-	UIInterfaceOrientation interfaceOrientation = [UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad ? UIInterfaceOrientationPortrait : self.interfaceOrientation;
-#pragma clang diagnostic pop
-	self.greetingView.orientation = interfaceOrientation;
-	self.profileView.orientation = interfaceOrientation;
-	self.messageInputView.orientation = interfaceOrientation;
 }
 
 - (void)dealloc {
@@ -288,22 +277,11 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	}
 }
 
-- (void)didReceiveMemoryWarning {
-	[super didReceiveMemoryWarning];
-	// Dispose of any resources that can be recreated.
-}
+- (void)updateViewConstraints {
+	// Experimentally, this seems to be the right place to kick the header view and make it resize on orientation change.
+	self.tableView.tableHeaderView = self.greetingView;
 
-- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
-	[UIView animateWithDuration:duration animations:^{
-		UIInterfaceOrientation interfaceOrientation = [UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad ? UIInterfaceOrientationPortrait : toInterfaceOrientation;
-
-		self.greetingView.orientation = interfaceOrientation;
-		self.profileView.orientation = interfaceOrientation;
-		self.messageInputView.orientation = interfaceOrientation;
-		
-		self.tableView.tableHeaderView = self.greetingView;
-		[self resizeFooterView:nil];
-	}];
+	[super updateViewConstraints];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -406,8 +384,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		replyCell.senderLabel.text = [self.dataSource senderOfMessageAtIndexPath:indexPath];
 
 		cell = replyCell;
-	} else if (type == ATMessageCenterMessageTypeContextMessage) {
-		// TODO: handle title
+	} else { // Message cell
 		ApptentiveMessageCenterContextMessageCell *contextMessageCell = [tableView dequeueReusableCellWithIdentifier:@"ContextMessage" forIndexPath:indexPath];
 
 		cell = contextMessageCell;
@@ -658,7 +635,10 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	attachmentCell.progressView.hidden = YES;
 	attachmentCell.progressView.progress = 0;
 
-	[[[UIAlertView alloc] initWithTitle:ApptentiveLocalizedString(@"Unable to Download Attachment", @"Attachment download failed alert title") message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:ApptentiveLocalizedString(@"Unable to Download Attachment", @"Attachment download failed alert title") message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
+	[alertController addAction:[UIAlertAction actionWithTitle:ApptentiveLocalizedString(@"OK", @"OK") style:UIAlertActionStyleCancel handler:nil]];
+
+	[self presentViewController:alertController animated:YES completion:nil];
 }
 
 #pragma mark Collection view delegate
@@ -1176,16 +1156,13 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		self.lastKnownKeyboardRect = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
 	}
 
-	BOOL isIOS7 = ![NSProcessInfo instancesRespondToSelector:@selector(isOperatingSystemAtLeastVersion:)];
 	CGRect localKeyboardRect = self.view.window ? [self.view.window convertRect:self.lastKnownKeyboardRect toView:self.tableView.superview] : self.lastKnownKeyboardRect;
 
-	CGFloat topContentInset = isIOS7 ? 64.0 : self.tableView.contentInset.top;
 	CGFloat footerSpace = [self.dataSource numberOfMessageGroups] > 0 ? self.tableView.sectionFooterHeight : 0;
 	CGFloat verticalOffset = CGRectGetMaxY(self.rectOfLastMessage) + footerSpace;
 	CGFloat toolbarHeight = self.navigationController.toolbarHidden ? 0 : CGRectGetHeight(self.navigationController.toolbar.bounds);
 
-	CGFloat iOS7FudgeFactor = isIOS7 && self.view.window == nil ? topContentInset : 0;
-	CGFloat heightOfVisibleView = fmin(CGRectGetMinY(localKeyboardRect), CGRectGetHeight(self.view.bounds) - toolbarHeight - iOS7FudgeFactor);
+	CGFloat heightOfVisibleView = fmin(CGRectGetMinY(localKeyboardRect), CGRectGetHeight(self.view.bounds) - toolbarHeight);
 	CGFloat verticalOffsetMaximum = fmax(-64, self.tableView.contentSize.height - heightOfVisibleView);
 
 	verticalOffset = fmin(verticalOffset, verticalOffsetMaximum);
@@ -1206,7 +1183,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		}
 
 		CGRect localKeyboardRect = self.view.window ? [self.view.window convertRect:self.lastKnownKeyboardRect toView:self.tableView.superview] : self.lastKnownKeyboardRect;
-		CGFloat topContentInset = [NSProcessInfo instancesRespondToSelector:@selector(isOperatingSystemAtLeastVersion:)] ? self.tableView.contentInset.top : 64.0;
+		CGFloat topContentInset = self.tableView.contentInset.top;
 
 		// Available space is between the top of the keyboard and the bottom of the navigation bar
 		height = fmin(CGRectGetMinY(localKeyboardRect), CGRectGetHeight(self.view.bounds)) - topContentInset;
@@ -1295,18 +1272,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 	[self resizeFooterView:nil];
 
-	// iOS 7 needs a sec to allow the keyboard to disappear before scrolling
-	dispatch_async(dispatch_get_main_queue(), ^{
-		[self scrollToLastMessageAnimated:YES];
-	});
-}
-
-// Fix a bug where iOS7 resets the contentSize to zero sometimes
-- (void)fixContentSize:(NSNotification *)notification {
-	if (self.tableView.contentSize.height == 0) {
-		self.tableView.tableFooterView = self.tableView.tableFooterView;
-		[self scrollToFooterView:nil];
-	}
+	[self scrollToLastMessageAnimated:YES];
 }
 
 - (void)updateHeaderFooterTextSize:(NSNotification *)notification {

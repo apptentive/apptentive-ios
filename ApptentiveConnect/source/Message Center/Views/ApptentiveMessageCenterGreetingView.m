@@ -40,12 +40,11 @@
 	[super awakeFromNib];
 }
 
-- (void)setOrientation:(UIInterfaceOrientation)orientation {
-	_orientation = orientation;
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+	[super traitCollectionDidChange:previousTraitCollection];
 
 	self.translatesAutoresizingMaskIntoConstraints = NO;
-	[self updateConstraints];
-
+	[self setNeedsUpdateConstraints];
 	[self sizeToFit];
 	self.translatesAutoresizingMaskIntoConstraints = YES;
 }
@@ -55,7 +54,7 @@
 }
 
 - (void)updateConstraints {
-	if (UIInterfaceOrientationIsLandscape(self.orientation)) {
+	if (self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassCompact) {
 		// Landscape on phone: Center vertically, offset horizontally
 		self.imageCenterYConstraint.constant = 0.0;
 		self.textCenterYConstraint.constant = 0.0;

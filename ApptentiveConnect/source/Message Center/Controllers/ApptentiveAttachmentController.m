@@ -183,9 +183,10 @@ NSString *const ATInteractionMessageCenterEventLabelAttachmentDelete = @"attachm
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
 	if (kind == UICollectionElementKindSectionFooter) {
 		return [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"Add" forIndexPath:indexPath];
+	} else {
+		// Should never get here (prevents analyzer warning).
+		return [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:@"" forIndexPath:indexPath];
 	}
-
-	return nil;
 }
 
 #pragma mark Collection view delegate

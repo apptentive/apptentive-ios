@@ -58,23 +58,6 @@ NSString *const ATInteractionAboutViewEventLabelClose = @"close";
 		@"privacy": self.privacyButton }];
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-	[super viewWillAppear:animated];
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated"
-	[self resizeForOrientation:self.interfaceOrientation duration:0];
-#pragma clang diagnostic pop
-}
-
-- (void)viewDidLayoutSubviews {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated"
-	if ([[NSProcessInfo processInfo] respondsToSelector:@selector(isOperatingSystemAtLeastVersion:)] && [[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){8, 0, 0}]) {
-		[self resizeForOrientation:self.interfaceOrientation duration:0];
-	}
-#pragma clang diagnostic pop
-}
-
 - (void)viewWillDisappear:(BOOL)animated {
 	[super viewWillDisappear:animated];
 
@@ -95,13 +78,11 @@ NSString *const ATInteractionAboutViewEventLabelClose = @"close";
 	[[UIApplication sharedApplication] openURL:components.URL];
 }
 
-- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
-	[self resizeForOrientation:toInterfaceOrientation duration:duration];
-}
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+	[super traitCollectionDidChange: previousTraitCollection];
 
-- (void)resizeForOrientation:(UIInterfaceOrientation)orientation duration:(NSTimeInterval)duration {
-	BOOL isCompactHeight = CGRectGetHeight(self.view.bounds) < 400.0;
-	BOOL isCompactWidth = CGRectGetWidth(self.view.bounds) < 480.0;
+	BOOL isCompactHeight = self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassCompact;
+	BOOL isCompactWidth = self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassCompact;
 
 	self.imageViewHeightConstraint.constant = isCompactHeight ? 44.0 : 100.0;
 	self.aboutLabel.preferredMaxLayoutWidth = CGRectGetWidth(self.view.bounds) - 40.0;
@@ -118,11 +99,7 @@ NSString *const ATInteractionAboutViewEventLabelClose = @"close";
 		self.privacyButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
 	}
 
-	if (duration > 0) {
-		[UIView animateWithDuration:duration animations:^{
-			[self.view layoutIfNeeded];
-		}];
-	}
+	[self.view layoutIfNeeded];
 }
 
 @end

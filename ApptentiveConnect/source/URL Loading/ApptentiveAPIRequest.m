@@ -1,5 +1,5 @@
 //
-//  ATAPIRequest.m
+//  ApptentiveAPIRequest.m
 //  ApptentiveConnect
 //
 //  Created by Andrew Wooster on 5/24/11.
@@ -62,13 +62,6 @@ NSString *const ApptentiveAPIRequestStatusChanged = @"ApptentiveAPIRequestStatus
 		if (_connection) {
 			[[ApptentiveConnectionManager sharedSingleton] cancelConnection:self.connection inChannel:self.channelName];
 		}
-	}
-}
-
-- (void)showAlert {
-	if (self.failed) {
-		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:self.errorTitle message:self.errorMessage delegate:nil cancelButtonTitle:ApptentiveLocalizedString(@"Close", nil) otherButtonTitles:nil];
-		[alert show];
 	}
 }
 

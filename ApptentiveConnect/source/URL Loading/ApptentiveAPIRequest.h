@@ -46,6 +46,5 @@ typedef enum {
 - (id)initWithConnection:(ApptentiveURLConnection *)connection channelName:(NSString *)channelName;
 - (void)start;
 - (void)cancel;
-- (void)showAlert;
 
 @end

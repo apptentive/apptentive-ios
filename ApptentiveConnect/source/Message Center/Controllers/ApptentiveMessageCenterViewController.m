@@ -258,6 +258,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[self.attachmentController viewDidLoad];
 
 	[self updateSendButtonEnabledStatus];
+
+	[self.greetingView sizeToFit];
 }
 
 - (void)dealloc {
@@ -277,11 +279,12 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	}
 }
 
-- (void)updateViewConstraints {
-	// Experimentally, this seems to be the right place to kick the header view and make it resize on orientation change.
-	self.tableView.tableHeaderView = self.greetingView;
-
-	[super updateViewConstraints];
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+	[coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+		self.tableView.tableHeaderView = self.greetingView;
+		[self resizeFooterView:nil];
+	} completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+	}];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

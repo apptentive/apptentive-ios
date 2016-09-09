@@ -271,6 +271,7 @@
 			cell.accessibilityTraits |= UIAccessibilityTraitButton;
 			cell.button.image = buttonImage;
 			cell.button.highlightedImage = highlightedButtonImage;
+			[cell.button sizeToFit];
 
 			cell.buttonTopConstraint.constant = (self.lineHeightOfQuestionFont - CGRectGetHeight(cell.button.bounds)) / 2.0;
 

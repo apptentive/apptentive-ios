@@ -1,12 +1,16 @@
 PODS:
-  - apptentive-ios (3.0.0)
+  - apptentive-ios (3.2.1)
 
 DEPENDENCIES:
-  - apptentive-ios
+  - apptentive-ios (from `..`)
+
+EXTERNAL SOURCES:
+  apptentive-ios:
+    :path: ..
 
 SPEC CHECKSUMS:
-  apptentive-ios: 219a23dd081d942bf8348a502ae3f574afd61889
+  apptentive-ios: bb0b126f7d2a3bc87fac843da3a71df7f50d433e
 
-PODFILE CHECKSUM: 0ef4936540053b9f76bd040531b6a634b1c2f89a
+PODFILE CHECKSUM: cb0ef1a06586ce30a702dbe19487b2f9897c87af
 
-COCOAPODS: 1.0.0
+COCOAPODS: 1.0.1

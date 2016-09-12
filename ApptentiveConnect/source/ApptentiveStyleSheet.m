@@ -9,29 +9,30 @@
 #import "ApptentiveStyleSheet.h"
 #import "Apptentive.h"
 
-NSString *const ApptentiveTextStyleHeaderTitle = @"com.apptentive.header.title";
-NSString *const ApptentiveTextStyleHeaderMessage = @"com.apptentive.header.message";
-NSString *const ApptentiveTextStyleMessageDate = @"com.apptentive.message.date";
-NSString *const ApptentiveTextStyleMessageSender = @"com.apptentive.message.sender";
-NSString *const ApptentiveTextStyleMessageStatus = @"com.apptentive.message.status";
-NSString *const ApptentiveTextStyleMessageCenterStatus = @"com.apptentive.messageCenter.status";
-NSString *const ApptentiveTextStyleSurveyInstructions = @"com.apptentive.survey.question.instructions";
-NSString *const ApptentiveTextStyleDoneButton = @"com.apptentive.doneButton";
-NSString *const ApptentiveTextStyleButton = @"com.apptentive.button";
-NSString *const ApptentiveTextStyleSubmitButton = @"com.apptentive.submitButton";
-NSString *const ApptentiveTextStyleTextInput = @"com.apptentive.textInput";
+ApptentiveStyleIdentifier ApptentiveTextStyleBody = @"com.apptentive.body";
+ApptentiveStyleIdentifier ApptentiveTextStyleHeaderTitle = @"com.apptentive.header.title";
+ApptentiveStyleIdentifier ApptentiveTextStyleHeaderMessage = @"com.apptentive.header.message";
+ApptentiveStyleIdentifier ApptentiveTextStyleMessageDate = @"com.apptentive.message.date";
+ApptentiveStyleIdentifier ApptentiveTextStyleMessageSender = @"com.apptentive.message.sender";
+ApptentiveStyleIdentifier ApptentiveTextStyleMessageStatus = @"com.apptentive.message.status";
+ApptentiveStyleIdentifier ApptentiveTextStyleMessageCenterStatus = @"com.apptentive.messageCenter.status";
+ApptentiveStyleIdentifier ApptentiveTextStyleSurveyInstructions = @"com.apptentive.survey.question.instructions";
+ApptentiveStyleIdentifier ApptentiveTextStyleDoneButton = @"com.apptentive.doneButton";
+ApptentiveStyleIdentifier ApptentiveTextStyleButton = @"com.apptentive.button";
+ApptentiveStyleIdentifier ApptentiveTextStyleSubmitButton = @"com.apptentive.submitButton";
+ApptentiveStyleIdentifier ApptentiveTextStyleTextInput = @"com.apptentive.textInput";
 
-NSString *const ApptentiveColorHeaderBackground = @"com.apptentive.color.header.background";
-NSString *const ApptentiveColorFooterBackground = @"com.apptentive.color.footer.background";
-NSString *const ApptentiveColorFailure = @"com.apptentive.color.failure";
-NSString *const ApptentiveColorSeparator = @"com.apptentive.color.separator";
-NSString *const ApptentiveColorBackground = @"com.apptentive.color.cellBackground";
-NSString *const ApptentiveColorCollectionBackground = @"com.apptentive.color.collectionBackground";
-NSString *const ApptentiveColorTextInputBackground = @"com.apptentive.color.textInputBackground";
-NSString *const ApptentiveColorTextInputPlaceholder = @"com.apptentive.color.textInputPlaceholder";
-NSString *const ApptentiveColorMessageBackground = @"com.apptentive.color.messageBackground";
-NSString *const ApptentiveColorReplyBackground = @"com.apptentive.color.replyBackground";
-NSString *const ApptentiveColorContextBackground = @"com.apptentive.color.contextBackground";
+ApptentiveStyleIdentifier ApptentiveColorHeaderBackground = @"com.apptentive.color.header.background";
+ApptentiveStyleIdentifier ApptentiveColorFooterBackground = @"com.apptentive.color.footer.background";
+ApptentiveStyleIdentifier ApptentiveColorFailure = @"com.apptentive.color.failure";
+ApptentiveStyleIdentifier ApptentiveColorSeparator = @"com.apptentive.color.separator";
+ApptentiveStyleIdentifier ApptentiveColorBackground = @"com.apptentive.color.cellBackground";
+ApptentiveStyleIdentifier ApptentiveColorCollectionBackground = @"com.apptentive.color.collectionBackground";
+ApptentiveStyleIdentifier ApptentiveColorTextInputBackground = @"com.apptentive.color.textInputBackground";
+ApptentiveStyleIdentifier ApptentiveColorTextInputPlaceholder = @"com.apptentive.color.textInputPlaceholder";
+ApptentiveStyleIdentifier ApptentiveColorMessageBackground = @"com.apptentive.color.messageBackground";
+ApptentiveStyleIdentifier ApptentiveColorReplyBackground = @"com.apptentive.color.replyBackground";
+ApptentiveStyleIdentifier ApptentiveColorContextBackground = @"com.apptentive.color.contextBackground";
 
 
 @interface ApptentiveStyleSheet ()
@@ -42,15 +43,14 @@ NSString *const ApptentiveColorContextBackground = @"com.apptentive.color.contex
 @property (strong, nonatomic) NSMutableDictionary *fontTable;
 @property (nonatomic) BOOL didInheritColors;
 
-+ (NSArray *)UIKitTextStyles;
 + (NSArray *)apptentiveTextStyles;
 + (NSArray *)apptentiveColorStyles;
 
-+ (NSNumber *)sizeForTextStyle:(NSString *)textStyle;
-+ (NSInteger)weightForTextStyle:(NSString *)textStyle;
++ (NSNumber *)sizeForTextStyle:(ApptentiveStyleIdentifier)textStyle;
++ (NSInteger)weightForTextStyle:(ApptentiveStyleIdentifier)textStyle;
 
 + (NSString *)defaultFontFamilyName;
-- (UIFontDescriptor *)fontDescriptorForStyle:(NSString *)textStyle;
+- (UIFontDescriptor *)fontDescriptorForStyle:(ApptentiveStyleIdentifier)textStyle;
 - (NSString *)faceAttributeForWeight:(NSInteger)weight;
 
 @end
@@ -59,7 +59,7 @@ NSString *const ApptentiveColorContextBackground = @"com.apptentive.color.contex
 @implementation ApptentiveStyleSheet
 
 // TODO: Adjust for content size category?
-+ (NSInteger)weightForTextStyle:(NSString *)textStyle {
++ (NSInteger)weightForTextStyle:(ApptentiveStyleIdentifier)textStyle {
 	static NSDictionary<NSString *, NSNumber *> *faceForStyle;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
@@ -80,7 +80,7 @@ NSString *const ApptentiveColorContextBackground = @"com.apptentive.color.contex
 	return faceForStyle[textStyle].integerValue;
 }
 
-+ (NSNumber *)sizeForTextStyle:(NSString *)textStyle {
++ (NSNumber *)sizeForTextStyle:(ApptentiveStyleIdentifier)textStyle {
 	static NSDictionary<NSString *, NSDictionary<NSString *, NSNumber *> *> *sizeForCategoryForStyle;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
@@ -368,11 +368,11 @@ NSString *const ApptentiveColorContextBackground = @"com.apptentive.color.contex
 	_placeholderColor = self.placeholderColor ?: [UIColor colorWithRed:0 green:0 blue:25.0 / 255.0 alpha:56.0 / 255.0];
 }
 
-- (void)setFontDescriptor:(UIFontDescriptor *)fontDescriptor forStyle:(NSString *)textStyle {
+- (void)setFontDescriptor:(UIFontDescriptor *)fontDescriptor forStyle:(ApptentiveStyleIdentifier)textStyle {
 	[self.fontDescriptorOverrides setObject:fontDescriptor forKey:textStyle];
 }
 
-- (UIFontDescriptor *)fontDescriptorForStyle:(NSString *)textStyle {
+- (UIFontDescriptor *)fontDescriptorForStyle:(ApptentiveStyleIdentifier)textStyle {
 	if (self.fontDescriptorOverrides[textStyle]) {
 		return self.fontDescriptorOverrides[textStyle];
 	}
@@ -380,9 +380,9 @@ NSString *const ApptentiveColorContextBackground = @"com.apptentive.color.contex
 	NSString *face;
 	NSNumber *size;
 
-	if ([[[self class] UIKitTextStyles] containsObject:textStyle]) {
+	if ([textStyle isEqualToString:UIFontTextStyleBody] || [textStyle isEqualToString:ApptentiveTextStyleBody]) {
 		// fontDescriptorWithFamily doesn't properly override the font family for the system font :(
-		UIFontDescriptor *modelFontDescriptor = [UIFontDescriptor preferredFontDescriptorWithTextStyle:textStyle];
+		UIFontDescriptor *modelFontDescriptor = [UIFontDescriptor preferredFontDescriptorWithTextStyle:UIFontTextStyleBody];
 		face = [self faceAttributeForFontDescriptor:modelFontDescriptor];
 		size = [modelFontDescriptor objectForKey:UIFontDescriptorSizeAttribute];
 	} else {
@@ -430,7 +430,7 @@ NSString *const ApptentiveColorContextBackground = @"com.apptentive.color.contex
 	}
 }
 
-- (UIFont *)fontForStyle:(NSString *)textStyle {
+- (UIFont *)fontForStyle:(ApptentiveStyleIdentifier)textStyle {
 	return [UIFont fontWithDescriptor:[self fontDescriptorForStyle:textStyle] size:0.0];
 }
 

@@ -15,10 +15,10 @@ class MoreViewController: UITableViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
-		self.messageCenterCell.accessoryView = Apptentive.sharedConnection().unreadMessageCountAccessoryView(true)
+		self.messageCenterCell.accessoryView = Apptentive.shared.unreadMessageCountAccessoryView(apptentiveHeart: true)
 	}
 		
-	override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-		Apptentive.sharedConnection().presentMessageCenterFromViewController(self)
+	override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		Apptentive.shared.presentMessageCenter(from: self)
 	}
 }

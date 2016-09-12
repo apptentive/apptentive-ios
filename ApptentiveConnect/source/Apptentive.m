@@ -70,13 +70,17 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 	return apptentiveDirectoryPath;
 }
 
-+ (Apptentive *)sharedConnection {
++ (instancetype)sharedConnection {
 	static Apptentive *sharedConnection = nil;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
 		sharedConnection = [[Apptentive alloc] init];
 	});
 	return sharedConnection;
+}
+
++ (instancetype)shared {
+	return [self sharedConnection];
 }
 
 - (id)init {

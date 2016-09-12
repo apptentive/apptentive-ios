@@ -25,7 +25,7 @@
 	}
 
 	NSError *error = nil;
-	NSString *postString = [ApptentiveJSONSerialization stringWithJSONObject:[surveyResponse apiJSON] options:ATJSONWritingPrettyPrinted error:&error];
+	NSString *postString = [ApptentiveJSONSerialization stringWithJSONObject:[surveyResponse apiJSON] options:0 error:&error];
 	if (!postString && error != nil) {
 		ApptentiveLogError(@"ATWebClient+SurveyAdditions: Error while encoding JSON: %@", error);
 		return nil;

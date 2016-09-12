@@ -29,9 +29,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
 	// MARK: Tab bar controller delegate
 	func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
 		if tabBarController.viewControllers?.index(of: viewController) ?? 0 == 0 {
-			Apptentive.shared.engageEvent("photos_tab_selected", from: tabBarController)
+			Apptentive.shared.engage(event: "photos_tab_selected", from: tabBarController)
 		} else {
-			Apptentive.shared.engageEvent("favorites_tab_selected", from: tabBarController)
+			Apptentive.shared.engage(event: "favorites_tab_selected", from: tabBarController)
 		}
 	}
 }

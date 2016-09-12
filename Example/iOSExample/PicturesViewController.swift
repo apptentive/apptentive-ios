@@ -94,7 +94,7 @@ class PicturesViewController: UICollectionViewController, UICollectionViewDelega
 		
 		self.navigationController?.pushViewController(previewController, animated: true)
 		
-		Apptentive.shared.engageEvent("photo_viewed", withCustomData: ["photo_name": self.source.imageNameAtIndex(indexPath.item)], from: previewController)
+		Apptentive.shared.engage(event: "photo_viewed", withCustomData: ["photo_name": self.source.imageNameAtIndex(indexPath.item)], from: previewController)
 	}
 	
 	@IBAction func toggleLike(_ sender: UIButton) {
@@ -106,9 +106,9 @@ class PicturesViewController: UICollectionViewController, UICollectionViewDelega
 		self.collectionView!.reloadItems(at: [IndexPath(item: index, section: 0)])
 		
 		if (sender.isSelected) {
-			Apptentive.shared.engageEvent("photo_liked", withCustomData: ["photo_name": self.source.imageNameAtIndex(index)], from: self)
+			Apptentive.shared.engage(event: "photo_liked", withCustomData: ["photo_name": self.source.imageNameAtIndex(index)], from: self)
 		} else {
-			Apptentive.shared.engageEvent("photo_unliked", withCustomData: ["photo_name": self.source.imageNameAtIndex(index)], from: self)
+			Apptentive.shared.engage(event: "photo_unliked", withCustomData: ["photo_name": self.source.imageNameAtIndex(index)], from: self)
 		}
 	}
 }

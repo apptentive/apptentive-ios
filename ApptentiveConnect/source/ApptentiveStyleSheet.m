@@ -248,7 +248,7 @@ ApptentiveStyleIdentifier ApptentiveColorContextBackground = @"com.apptentive.co
 	static NSArray *_UIKitTextStyles;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-		if ([[NSProcessInfo processInfo] respondsToSelector:@selector(isOperatingSystemAtLeastVersion:)] && [[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){ 9, 0, 0}]) {
+		if ([[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){ 9, 0, 0}]) {
 		_UIKitTextStyles = @[
 							 UIFontTextStyleBody,
 							 UIFontTextStyleCallout,

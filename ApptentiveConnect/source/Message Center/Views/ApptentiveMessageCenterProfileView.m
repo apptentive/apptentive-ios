@@ -65,12 +65,6 @@
 	}
 }
 
-- (void)setOrientation:(UIInterfaceOrientation)orientation {
-	_orientation = orientation;
-	[self updateConstraints];
-	[self sizeToFit];
-}
-
 - (void)setBorderColor:(UIColor *)borderColor {
 	_borderColor = borderColor;
 
@@ -82,7 +76,7 @@
 	[self.containerView removeConstraints:self.containerView.constraints];
 	[self.containerView addConstraints:self.baseConstraints];
 
-	if (UIInterfaceOrientationIsLandscape(self.orientation)) {
+	if (self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassCompact) {
 		switch (self.mode) {
 			case ATMessageCenterProfileModeFull:
 				[self.containerView addConstraints:self.landscapeFullConstraints];

@@ -50,7 +50,7 @@ NSString *const ATInteractionMessageCenterEventLabelAttachmentDelete = @"attachm
 	// Hide the attach button if tapping it will cause a crash (due to unsupported portrait orientation).
 	BOOL isPhone = [UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone;
 	BOOL supportsPortraitOrientation = ([[UIApplication sharedApplication] supportedInterfaceOrientationsForWindow:self.attachButton.window] & UIInterfaceOrientationMaskPortrait) != 0;
-	BOOL requiresPhotoLibraryUsageDescription = [[NSProcessInfo processInfo] respondsToSelector:@selector(isOperatingSystemAtLeastVersion:)] && [[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){10, 0, 0}];
+	BOOL requiresPhotoLibraryUsageDescription = [[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){10, 0, 0}];
 	BOOL hasPhotoLibraryUsageDescription = [[NSBundle mainBundle].infoDictionary objectForKey:@"NSPhotoLibraryUsageDescription"] != nil;
 
 	self.attachButton.hidden = (isPhone && !supportsPortraitOrientation) || (requiresPhotoLibraryUsageDescription && !hasPhotoLibraryUsageDescription);
@@ -183,9 +183,10 @@ NSString *const ATInteractionMessageCenterEventLabelAttachmentDelete = @"attachm
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
 	if (kind == UICollectionElementKindSectionFooter) {
 		return [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"Add" forIndexPath:indexPath];
+	} else {
+		// Should never get here (prevents analyzer warning).
+		return [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:@"" forIndexPath:indexPath];
 	}
-
-	return nil;
 }
 
 #pragma mark Collection view delegate

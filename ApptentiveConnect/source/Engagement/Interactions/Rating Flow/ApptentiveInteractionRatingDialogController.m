@@ -25,7 +25,6 @@ NSString *const ATInteractionRatingDialogEventLabelDecline = @"decline";
 
 @property (strong, nonatomic) UIViewController *viewController;
 @property (strong, nonatomic) UIAlertController *alertController;
-@property (strong, nonatomic) UIAlertView *alertView;
 
 @end
 
@@ -39,20 +38,12 @@ NSString *const ATInteractionRatingDialogEventLabelDecline = @"decline";
 - (void)presentInteractionFromViewController:(UIViewController *)viewController {
 	self.viewController = viewController;
 
-	if ([UIAlertController class]) {
-		self.alertController = [self alertControllerWithInteraction:self.interaction];
+	self.alertController = [self alertControllerWithInteraction:self.interaction];
 
-		if (self.alertController) {
-			[viewController presentViewController:self.alertController animated:YES completion:^{
-				[self.interaction engage:ATInteractionRatingDialogEventLabelLaunch fromViewController:self.viewController];
-			}];
-		}
-	} else {
-		self.alertView = [self alertViewWithInteraction:self.interaction];
-
-		if (self.alertView) {
-			[self.alertView show];
-		}
+	if (self.alertController) {
+		[viewController presentViewController:self.alertController animated:YES completion:^{
+			[self.interaction engage:ATInteractionRatingDialogEventLabelLaunch fromViewController:self.viewController];
+		}];
 	}
 }
 
@@ -109,43 +100,6 @@ NSString *const ATInteractionRatingDialogEventLabelDecline = @"decline";
 	}]];
 
 	return alertController;
-}
-
-#pragma mark UIAlertView
-
-- (UIAlertView *)alertViewWithInteraction:(ApptentiveInteraction *)interaction {
-	if (!self.title && !self.body) {
-		ApptentiveLogError(@"Skipping display of Rating Dialog that does not have a title or body.");
-		return nil;
-	}
-
-	UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:self.title message:self.body delegate:self cancelButtonTitle:self.declineText otherButtonTitles:self.rateText, self.remindText, nil];
-
-	return alertView;
-}
-
-#pragma mark UIAlertViewDelegate
-
-- (void)didPresentAlertView:(UIAlertView *)alertView {
-	[self.interaction engage:ATInteractionRatingDialogEventLabelLaunch fromViewController:self.viewController];
-}
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-	if (alertView == self.alertView) {
-		if (buttonIndex == 1) { // rate
-			[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveAppRatingFlowUserAgreedToRateAppNotification object:nil];
-
-			[self.interaction engage:ATInteractionRatingDialogEventLabelRate fromViewController:self.viewController];
-		} else if (buttonIndex == 2) { // remind later
-			[self.interaction engage:ATInteractionRatingDialogEventLabelRemind fromViewController:self.viewController];
-		} else if (buttonIndex == 0) { // no thanks
-			[self.interaction engage:ATInteractionRatingDialogEventLabelDecline fromViewController:self.viewController];
-		}
-	}
-}
-
-- (void)dealloc {
-	_alertView.delegate = nil;
 }
 
 @end

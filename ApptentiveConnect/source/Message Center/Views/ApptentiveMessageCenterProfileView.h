@@ -24,7 +24,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterProfileMode) {
 @property (weak, nonatomic) IBOutlet UIButton *skipButton;
 @property (weak, nonatomic) IBOutlet UIButton *saveButton;
 @property (weak, nonatomic) IBOutlet UILabel *requiredLabel;
-@property (assign, nonatomic) UIInterfaceOrientation orientation;
 @property (strong, nonatomic) UIColor *borderColor;
 
 @end

@@ -24,7 +24,6 @@ NSString *const ATInteractionEnjoymentDialogEventLabelNo = @"no";
 
 @property (strong, nonatomic) UIViewController *viewController;
 @property (strong, nonatomic) UIAlertController *alertController;
-@property (strong, nonatomic) UIAlertView *alertView;
 
 @end
 
@@ -37,21 +36,12 @@ NSString *const ATInteractionEnjoymentDialogEventLabelNo = @"no";
 
 - (void)presentInteractionFromViewController:(UIViewController *)viewController {
 	self.viewController = viewController;
+	self.alertController = [self alertControllerWithInteraction:self.interaction];
 
-	if ([UIAlertController class]) {
-		self.alertController = [self alertControllerWithInteraction:self.interaction];
-
-		if (self.alertController) {
-			[viewController presentViewController:self.alertController animated:YES completion:^{
-				[self.interaction engage:ATInteractionEnjoymentDialogEventLabelLaunch fromViewController:self.viewController];
-			}];
-		}
-	} else {
-		self.alertView = [self alertViewWithInteraction:self.interaction];
-
-		if (self.alertView) {
-			[self.alertView show];
-		}
+	if (self.alertController) {
+		[viewController presentViewController:self.alertController animated:YES completion:^{
+			[self.interaction engage:ATInteractionEnjoymentDialogEventLabelLaunch fromViewController:self.viewController];
+		}];
 	}
 }
 
@@ -105,46 +95,6 @@ NSString *const ATInteractionEnjoymentDialogEventLabelNo = @"no";
 	}]];
 
 	return alertController;
-}
-
-#pragma mark UIAlertView
-
-- (UIAlertView *)alertViewWithInteraction:(ApptentiveInteraction *)interaction {
-	if (!self.title && !self.body) {
-		ApptentiveLogError(@"Skipping display of Enjoyment Dialog that does not have a title or body.");
-		return nil;
-	}
-
-	UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:self.title message:self.body delegate:self cancelButtonTitle:nil otherButtonTitles:self.noText, self.yesText, nil];
-
-	return alertView;
-}
-
-#pragma mark UIAlertViewDelegate
-
-- (void)didPresentAlertView:(UIAlertView *)alertView {
-	[self.interaction engage:ATInteractionEnjoymentDialogEventLabelLaunch fromViewController:self.viewController];
-}
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-	if (alertView == self.alertView) {
-		if (buttonIndex == 0) { // no
-			if (!self.viewController) {
-				UIViewController *candidateVC = [ApptentiveUtilities rootViewControllerForCurrentWindow];
-				if (candidateVC) {
-					self.viewController = candidateVC;
-				}
-			}
-
-			[self.interaction engage:ATInteractionEnjoymentDialogEventLabelNo fromViewController:self.viewController];
-		} else if (buttonIndex == 1) { // yes
-			[self.interaction engage:ATInteractionEnjoymentDialogEventLabelYes fromViewController:self.viewController];
-		}
-	}
-}
-
-- (void)dealloc {
-	_alertView.delegate = nil;
 }
 
 @end

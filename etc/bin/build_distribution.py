@@ -110,19 +110,6 @@ class Builder(object):
 			bundle_source = os.path.join(self._products_dir(), "ApptentiveResources.bundle")
 			bundle_dest = os.path.join(self._output_dir(), "ApptentiveResources.bundle")
 			(status, output) = self._ditto_file(bundle_source, bundle_dest)
-			# Update the Info.plist in the ApptentiveResources.bundle.
-			bundle_plist_path = os.path.join(bundle_dest, "Info.plist")
-			if not os.path.exists(bundle_plist_path):
-				log("Unable to find bundle Info.plist at %s" % bundle_plist_path)
-				return False
-			plist = biplist.readPlist(bundle_plist_path)
-			plist_key = "ATInfoDistributionKey"
-			if self.dist_type == self.BINARY_DIST:
-				plist[plist_key] = "binary"
-			else:
-				log("Unknown dist_type")
-				return False
-			biplist.writePlist(plist, bundle_plist_path)
 
 		# Try to get the version.
 		version = None
@@ -165,6 +152,7 @@ class Builder(object):
 		options = "CONFIGURATION_BUILD_DIR=%s SYMROOT=%s TARGET_TEMP_DIR=%s" % (escape_arg(products_dir), escape_arg(symroot), escape_arg(temp_dir))
 		if self.enable_bitcode:
 			options += " ENABLE_BITCODE=YES OTHER_CFLAGS='-fembed-bitcode'"
+		options += " GCC_PREPROCESSOR_DEFINITIONS='APPTENTIVE_BINARY=1'"
 		return options
 
 	def _lipo_command(self):

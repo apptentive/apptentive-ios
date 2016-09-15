@@ -129,7 +129,7 @@
 		result[@"distribution"] = distribution;
 	}
 	NSString *distributionVersion = [Apptentive sharedConnection].distributionVersion;
-;
+
 	if (distributionVersion) {
 		result[@"distribution_version"] = distributionVersion;
 	}

@@ -43,6 +43,7 @@ NSString *const ATLegacyUUIDPreferenceKey = @"ATLegacyUUIDPreferenceKey";
 NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
 NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 
+
 @interface ApptentiveBackend ()
 - (void)updateConfigurationIfNeeded;
 
@@ -786,7 +787,7 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 	self.activeMessageTasks = [NSMutableSet set];
 
 	if ([self imageCachePath]) {
-		_imageCache = [[NSURLCache alloc] initWithMemoryCapacity:1*1024*1024 diskCapacity:10*1024*1024 diskPath:[self imageCachePath]];
+		_imageCache = [[NSURLCache alloc] initWithMemoryCapacity:1 * 1024 * 1024 diskCapacity:10 * 1024 * 1024 diskPath:[self imageCachePath]];
 	}
 
 	[self checkForMessagesAtBackgroundRefreshInterval];

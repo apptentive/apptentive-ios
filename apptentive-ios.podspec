@@ -1,13 +1,13 @@
 Pod::Spec.new do |s|
   s.name     = 'apptentive-ios'
   s.module_name = 'Apptentive'
-  s.version  = '3.2.1'
+  s.version  = '3.3.0'
   s.license  = 'BSD'
   s.summary  = 'Apptentive Customer Communications SDK.'
   s.homepage = 'https://www.apptentive.com/'
   s.authors  = { 'Apptentive SDK Team' => 'sdks@apptentive.com' }
   s.source   = { :git => 'https://github.com/apptentive/apptentive-ios.git', :tag => "v#{s.version}" }
-  s.platform = :ios, '7.0'
+  s.platform = :ios, '8.0'
   s.source_files   = 'ApptentiveConnect/source/**/*.{h,m}'
   s.requires_arc = true
   s.frameworks     = 'AVFoundation', 'CoreData', 'CoreGraphics', 'Foundation', 'ImageIO', 'MobileCoreServices', 'QuartzCore', 'QuickLook', 'SystemConfiguration', 'UIKit'

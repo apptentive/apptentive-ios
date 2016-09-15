@@ -1,3 +1,10 @@
+2016-09-16 frankus v3.3.0
+-------------------------
+Version 3.3.0 drops iOS 7 support and fixes a number of deprecation warnings
+when building for iOS 8+. It fixes several bugs including better layout support
+for localized labels in Message Center. New Swift 3 names are added for many
+methods, properties, and constants. 
+
 2016-08-09 frankus v3.2.1
 -------------------------
 Version 3.2.1 improves stability and reliability and fixes several warnings when

@@ -338,12 +338,18 @@ typedef enum {
 
 	// Move files around.
 	NSString *guid = [[NSProcessInfo processInfo] globallyUniqueString];
-	guid = [guid stringByAppendingPathExtension:localModelName];
+	guid = [guid stringByAppendingPathComponent:localModelName];
 	guid = [guid stringByAppendingPathExtension:storeExtension];
 	NSString *appSupportPath = [storePath stringByDeletingLastPathComponent];
 	NSString *backupPath = [appSupportPath stringByAppendingPathComponent:guid];
 
 	NSFileManager *fileManager = [NSFileManager defaultManager];
+
+	if (![fileManager createDirectoryAtPath:[backupPath stringByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:error]) {
+		ApptentiveLogError(@"Unable to create backup source store path.");
+		return NO;
+	}
+
 	if (![fileManager moveItemAtPath:[sourceStoreURL path] toPath:backupPath error:error]) {
 		ApptentiveLogError(@"Unable to backup source store path.");
 		return NO;

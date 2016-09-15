@@ -112,6 +112,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 @property (readonly, nonatomic) NSDictionary *bodyLengthDictionary;
 
 @property (assign, nonatomic) CGRect lastKnownKeyboardRect;
+@property (assign, nonatomic) BOOL iOSAfter8_0;
 
 @end
 
@@ -260,6 +261,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[self updateSendButtonEnabledStatus];
 
 	[self.greetingView sizeToFit];
+
+	self.iOSAfter8_0 = [[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){8, 1, 0}];
 }
 
 - (void)dealloc {
@@ -504,7 +507,9 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
 	UITableViewHeaderFooterView *headerView = (UITableViewHeaderFooterView *)view;
-	headerView.textLabel.font = [[Apptentive sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleMessageDate];
+	if (self.iOSAfter8_0) {
+		headerView.textLabel.font = [[Apptentive sharedConnection].styleSheet fontForStyle:ApptentiveTextStyleMessageDate];
+	}
 	headerView.textLabel.textColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveTextStyleMessageDate];
 }
 

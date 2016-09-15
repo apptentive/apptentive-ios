@@ -19,7 +19,7 @@
 #define APPTENTIVE_PREFER_PROPERTIES
 #endif
 #else
-#define APPTENTIVE_SWIFT_NAME(x) /*x*/
+#define APPTENTIVE_SWIFT_NAME(x)		  /*x*/
 #define APPTENTIVE_SWIFT_UNAVAILABLE(msg) /*msg*/
 #endif
 
@@ -173,7 +173,7 @@ Before calling any other methods on the shared `Apptentive` instance, set the AP
 #ifdef APPTENTIVE_PREFER_PROPERTIES
 @property (readonly, nonatomic) BOOL canShowMessageCenter;
 #else
-- (BOOL) canShowMessageCenter;
+- (BOOL)canShowMessageCenter;
 #endif
 
 /**
@@ -211,7 +211,7 @@ Before calling any other methods on the shared `Apptentive` instance, set the AP
 #ifdef APPTENTIVE_PREFER_PROPERTIES
 @property (readonly, nonatomic) NSUInteger unreadMessageCount;
 #else
-- (NSUInteger) unreadMessageCount;
+- (NSUInteger)unreadMessageCount;
 #endif
 
 /**
@@ -362,7 +362,7 @@ Returns a Boolean value indicating whether the given event will cause an Interac
 													tax:(nullable NSNumber *)tax
 											   currency:(nullable NSString *)currency
 										  commerceItems:(nullable NSArray<NSDictionary *> *)commerceItems
-APPTENTIVE_SWIFT_NAME(extendedData(transactionID:affiliation:revenue:shipping:tax:currency:commerceItems:));
+	APPTENTIVE_SWIFT_NAME(extendedData(transactionID:affiliation:revenue:shipping:tax:currency:commerceItems:));
 
 /**
  Used to specify a commercial transaction (consisting of a single item) in an event's extended data.
@@ -382,7 +382,7 @@ APPTENTIVE_SWIFT_NAME(extendedData(transactionID:affiliation:revenue:shipping:ta
 											   price:(nullable NSNumber *)price
 											quantity:(nullable NSNumber *)quantity
 											currency:(nullable NSString *)currency
-APPTENTIVE_SWIFT_NAME(extendedData(itemID:name:category:price:quantity:currency:));
+	APPTENTIVE_SWIFT_NAME(extendedData(itemID:name:category:price:quantity:currency:));
 
 
 ///-------------------------------------
@@ -618,7 +618,7 @@ APPTENTIVE_SWIFT_NAME(extendedData(itemID:name:category:price:quantity:currency:
 #define NS_EXTENSIBLE_STRING_ENUM
 #endif
 
-typedef NSString * ApptentiveStyleIdentifier NS_EXTENSIBLE_STRING_ENUM;
+typedef NSString *ApptentiveStyleIdentifier NS_EXTENSIBLE_STRING_ENUM;
 
 /**
  @param textStyle the text style whose font should be returned.

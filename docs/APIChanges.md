@@ -1,5 +1,12 @@
 This document tracks changes to the API between versions.
 
+# 3.3.0
+
+* Drops support for iOS 7 devices and requires Xcode 8. 
+* Building for iOS 8 and later devices no longer results in deprecation warnings. 
+* New Swift 3 names for a number of methods and properties. Swift 2.x projects should continue to work with the existing names. 
+* A new `shared` property on the `Apptentive` class that aliases the `+sharedConnection` method (This class property is currently not visible in our documentation due to a limitation in our documentation software). 
+
 # 3.0.0
 
 * The `ATConnect` class has been renamed to `Apptentive`. A compatibility alias is provided for legacy code.

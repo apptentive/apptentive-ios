@@ -283,10 +283,10 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
-	[coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+	[coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> _Nonnull context) {
 		self.tableView.tableHeaderView = self.greetingView;
 		[self resizeFooterView:nil];
-	} completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+	} completion:^(id<UIViewControllerTransitionCoordinatorContext> _Nonnull context){
 	}];
 }
 

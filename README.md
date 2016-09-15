@@ -22,9 +22,9 @@ You should begin by setting your app's API key, then engaging Apptentive events 
 ``` objective-c
 #import "Apptentive.h"
 ...
-[Apptentive sharedConnection].APIKey = @"<Your API Key>";
+Apptentive.shared.APIKey = @"<Your API Key>";
 ...
-[[Apptentive sharedConnection] engage:@"event_name" fromViewController:viewController];
+[Apptentive.shared engage:@"event_name" fromViewController:viewController];
 ```
 
 Or, in Swift:
@@ -32,9 +32,9 @@ Or, in Swift:
 ``` Swift
 import Apptentive
 ...
-Apptentive.sharedConnection().APIKey = "<Your API Key>"
+Apptentive.shared.APIKey = "<Your API Key>"
 ...
-Apptentive.sharedConnection().engage("event_name", fromViewController: viewController)
+Apptentive.shared.engage(event: "event_name", from: viewController)
 ```
 
 Later, on your Apptentive dashboard, you will target these events with Apptentive features such as Message Center, Ratings Prompts, and Surveys.

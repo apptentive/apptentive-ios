@@ -82,7 +82,6 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 	[self.webView loadHTMLString:html baseURL:[NSURL URLWithString:@"http://"]];
 	self.webView.scrollView.showsHorizontalScrollIndicator = NO;
 	self.webView.scrollView.showsVerticalScrollIndicator = NO;
-
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -107,7 +106,7 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 }
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
-	[super traitCollectionDidChange: previousTraitCollection];
+	[super traitCollectionDidChange:previousTraitCollection];
 
 	BOOL isRegularHeight = self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassRegular;
 	CGFloat topInset = 0.0;

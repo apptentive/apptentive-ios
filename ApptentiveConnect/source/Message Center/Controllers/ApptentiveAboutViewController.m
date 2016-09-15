@@ -79,7 +79,7 @@ NSString *const ATInteractionAboutViewEventLabelClose = @"close";
 }
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
-	[super traitCollectionDidChange: previousTraitCollection];
+	[super traitCollectionDidChange:previousTraitCollection];
 
 	BOOL isCompactHeight = self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassCompact;
 	BOOL isCompactWidth = self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassCompact;

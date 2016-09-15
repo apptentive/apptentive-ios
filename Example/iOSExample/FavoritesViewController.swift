@@ -44,7 +44,7 @@ class FavoritesViewController: PicturesViewController {
 				// Will always mean "unlike" in favorites-only view
 				sender.isSelected = false
 
-				Apptentive.shared.engageEvent("photo_unliked", withCustomData: ["photo_name": self.source.imageNameAtIndex(indexPath.item)], from: self)
+				Apptentive.shared.engage(event: "photo_unliked", withCustomData: ["photo_name": self.source.imageNameAtIndex(indexPath.item)], from: self)
 
 				self.source?.setLiked((indexPath as NSIndexPath).item, liked: false)
 

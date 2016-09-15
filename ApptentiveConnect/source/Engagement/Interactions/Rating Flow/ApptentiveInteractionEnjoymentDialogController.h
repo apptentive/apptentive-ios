@@ -9,5 +9,5 @@
 #import "ApptentiveInteractionController.h"
 
 
-@interface ApptentiveInteractionEnjoymentDialogController : ApptentiveInteractionController <UIAlertViewDelegate>
+@interface ApptentiveInteractionEnjoymentDialogController : ApptentiveInteractionController
 @end

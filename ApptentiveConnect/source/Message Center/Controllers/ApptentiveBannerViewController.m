@@ -98,17 +98,6 @@
 	self.imageView.layer.cornerRadius = CGRectGetHeight(self.imageView.bounds) / 2.0;
 }
 
-- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
-	[self.window resignKeyWindow];
-	self.window.rootViewController = nil;
-}
-
-- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
-	[self.window makeKeyAndVisible];
-	self.window.rootViewController = self;
-	self.window.frame = self.bannerView.bounds;
-}
-
 - (void)setHasIcon:(BOOL)hasIcon {
 	self.imageView.hidden = !hasIcon;
 

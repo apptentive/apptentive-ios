@@ -20,6 +20,5 @@
 @property (weak, nonatomic) IBOutlet UIView *borderView;
 
 @property (assign, nonatomic) BOOL isOnScreen;
-@property (assign, nonatomic) UIInterfaceOrientation orientation;
 
 @end

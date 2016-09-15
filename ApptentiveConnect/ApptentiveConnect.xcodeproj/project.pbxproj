@@ -188,7 +188,7 @@
 		492F2F1C16ED597F0030E48A /* ApptentiveRecordRequestTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 492F2F1A16ED597F0030E48A /* ApptentiveRecordRequestTask.h */; };
 		492F2F1D16ED597F0030E48A /* ApptentiveRecordRequestTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 492F2F1B16ED597F0030E48A /* ApptentiveRecordRequestTask.m */; };
 		49352AC4138C97A2000E464A /* ApptentiveAPIRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 49352AC1138C97A2000E464A /* ApptentiveAPIRequest.h */; };
-		49352AC5138C97A2000E464A /* ATAPIRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 49352AC2138C97A2000E464A /* ATAPIRequest.m */; };
+		49352AC5138C97A2000E464A /* ApptentiveAPIRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 49352AC2138C97A2000E464A /* ApptentiveAPIRequest.m */; };
 		49352ADD138CA1DC000E464A /* ApptentiveURLConnection_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 49352ADC138CA1DC000E464A /* ApptentiveURLConnection_Private.h */; };
 		4936AE771379DEBB00A4B17F /* ApptentiveUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 4936AE751379DEBB00A4B17F /* ApptentiveUtilities.h */; };
 		4936AE781379DEBB00A4B17F /* ApptentiveUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 4936AE761379DEBB00A4B17F /* ApptentiveUtilities.m */; };
@@ -555,7 +555,7 @@
 		492F2F1A16ED597F0030E48A /* ApptentiveRecordRequestTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveRecordRequestTask.h; sourceTree = "<group>"; };
 		492F2F1B16ED597F0030E48A /* ApptentiveRecordRequestTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveRecordRequestTask.m; sourceTree = "<group>"; };
 		49352AC1138C97A2000E464A /* ApptentiveAPIRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveAPIRequest.h; sourceTree = "<group>"; };
-		49352AC2138C97A2000E464A /* ATAPIRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATAPIRequest.m; sourceTree = "<group>"; };
+		49352AC2138C97A2000E464A /* ApptentiveAPIRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveAPIRequest.m; sourceTree = "<group>"; };
 		49352ADC138CA1DC000E464A /* ApptentiveURLConnection_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveURLConnection_Private.h; sourceTree = "<group>"; };
 		49358DBB1BF3336700516F1E /* ApptentiveInteractionInvocationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveInteractionInvocationTests.m; sourceTree = "<group>"; };
 		4936AE751379DEBB00A4B17F /* ApptentiveUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveUtilities.h; sourceTree = "<group>"; };
@@ -1107,7 +1107,7 @@
 				491748B91341177000A7D11E /* ApptentiveWebClient.m */,
 				49B877101464958C00594A5D /* ApptentiveWebClient_Private.h */,
 				49352AC1138C97A2000E464A /* ApptentiveAPIRequest.h */,
-				49352AC2138C97A2000E464A /* ATAPIRequest.m */,
+				49352AC2138C97A2000E464A /* ApptentiveAPIRequest.m */,
 			);
 			path = "URL Loading";
 			sourceTree = "<group>";
@@ -2003,7 +2003,7 @@
 				586C47AA18B424E900725C22 /* ApptentiveInteractionEnjoymentDialogController.m in Sources */,
 				013C1A7C1B713D5C002434B8 /* ApptentiveMessageCenterErrorViewController.m in Sources */,
 				0132F8D21C851C0800A452E3 /* ApptentiveSurveySingleLineCell.m in Sources */,
-				49352AC5138C97A2000E464A /* ATAPIRequest.m in Sources */,
+				49352AC5138C97A2000E464A /* ApptentiveAPIRequest.m in Sources */,
 				49EA5AB114BD08AD004F8A4D /* ApptentiveLegacyRecord.m in Sources */,
 				0132F8AD1C851BFA00A452E3 /* ApptentiveSurveyLayoutAttributes.m in Sources */,
 				0132F8C61C851C0800A452E3 /* ApptentiveSurveyAnswerCell.m in Sources */,

@@ -24,7 +24,6 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *placeholderLabel;
 
-@property (assign, nonatomic) UIInterfaceOrientation orientation;
 @property (strong, nonatomic) UIColor *borderColor;
 
 @end

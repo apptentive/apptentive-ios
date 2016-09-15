@@ -81,7 +81,7 @@ static ApptentiveHUDViewController *currentHUD;
 	self.interval = self.interval ?: 2.0;
 	self.animationDuration = fmin(self.animationDuration ?: 0.25, self.interval / 2.0);
 
-	BOOL mustSizeWindow = ![[NSProcessInfo processInfo] respondsToSelector:@selector(isOperatingSystemAtLeastVersion:)] || ![[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){9, 0, 0}];
+	BOOL mustSizeWindow = ![[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){9, 0, 0}];
 
 	if (mustSizeWindow) {
 		self.hostWindow = [[ApptentivePassThroughWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];

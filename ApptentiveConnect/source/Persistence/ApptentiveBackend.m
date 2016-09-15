@@ -66,7 +66,6 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 - (void)personDataChanged:(NSNotification *)notification;
 - (void)deviceDataChanged:(NSNotification *)notification;
 - (void)startMonitoringUnreadMessages;
-- (void)checkForProperConfiguration;
 
 @property (strong, nonatomic) UIViewController *presentingViewController;
 @property (assign, nonatomic) BOOL working;
@@ -415,11 +414,6 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 		// Call completion block even if we do nothing.
 		completion();
 	}
-}
-
-#pragma mark UIAlertViewDelegate
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
 }
 
 #pragma mark Accessors
@@ -812,7 +806,6 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 	[ApptentiveMetrics sharedMetrics];
 
 	// One-shot actions at startup.
-	[self performSelector:@selector(checkForProperConfiguration) withObject:nil afterDelay:1];
 	[self performSelector:@selector(checkForEngagementManifest) withObject:nil afterDelay:3];
 	[self performSelector:@selector(updateDeviceIfNeeded) withObject:nil afterDelay:7];
 	[self performSelector:@selector(checkForMessages) withObject:nil afterDelay:8];
@@ -834,7 +827,7 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 }
 
 - (void)continueStartupWithDataManagerFailure {
-	[self performSelector:@selector(checkForProperConfiguration) withObject:nil afterDelay:1];
+	ApptentiveLogError(@"Data manager failed to start up.");
 }
 
 - (void)updateWorking {
@@ -957,21 +950,4 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 	}
 }
 
-- (void)checkForProperConfiguration {
-	static BOOL checkedAlready = NO;
-	if (checkedAlready) {
-		// Don't display more than once.
-		return;
-	}
-	checkedAlready = YES;
-#if TARGET_IPHONE_SIMULATOR
-	if ([Apptentive resourceBundle] == nil) {
-		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Unable to Find Resources" message:@"Unable to find `ApptentiveResources.bundle`. Did you remember to add it to your target's Copy Bundle Resources build phase?" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-		[alert show];
-	} else if (self.persistentStoreCoordinator == nil || self.managedObjectContext == nil) {
-		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Unable to Setup Core Data" message:@"Unable to setup Core Data store. Did you link against Core Data? If so, something else may be wrong." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-		[alert show];
-	}
-#endif
-}
 @end

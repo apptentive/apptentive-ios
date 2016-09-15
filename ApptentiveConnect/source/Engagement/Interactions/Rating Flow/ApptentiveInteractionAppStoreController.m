@@ -80,17 +80,19 @@ NSString *const ATInteractionAppStoreRatingEventLabelUnableToRate = @"unable_to_
 	NSString *message;
 	NSString *cancelButtonTitle;
 #if TARGET_IPHONE_SIMULATOR
-	title = @"Unable to open the App Store";
-	message = @"The iOS Simulator is unable to open the App Store app. Please try again on a real iOS device.";
-	cancelButtonTitle = @"OK";
+	title = ApptentiveLocalizedString(@"Unable to open the App Store", @"iOS simulator unable to load the App store title");
+	message = ApptentiveLocalizedString(@"The iOS Simulator is unable to open the App Store app. Please try again on a real iOS device.", @"iOS simulator unable to load the App store message");
 #else
 	title = ApptentiveLocalizedString(@"Oops!", @"Unable to load the App Store title");
 	message = ApptentiveLocalizedString(@"Unable to load the App Store", @"Unable to load the App Store message");
-	cancelButtonTitle = ApptentiveLocalizedString(@"OK", @"OK button title");
 #endif
+	cancelButtonTitle = ApptentiveLocalizedString(@"OK", @"OK button title");
 
-	UIAlertView *errorAlert = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:cancelButtonTitle otherButtonTitles:nil];
-	[errorAlert show];
+
+	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+	[alertController addAction:[UIAlertAction actionWithTitle:cancelButtonTitle style:UIAlertActionStyleCancel handler:nil]];
+
+	[self.viewController presentViewController:alertController animated:YES completion:nil];
 }
 
 - (BOOL)shouldOpenAppStoreViaStoreKit {
@@ -174,11 +176,6 @@ NSString *const ATInteractionAppStoreRatingEventLabelUnableToRate = @"unable_to_
 #pragma mark SKStoreProductViewControllerDelegate
 - (void)productViewControllerDidFinish:(SKStoreProductViewController *)productViewController {
 	[productViewController dismissViewControllerAnimated:YES completion:NULL];
-}
-
-#pragma mark UIAlertViewDelegate
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-	//Unable to open app store
 }
 
 - (void)openMacAppStore {

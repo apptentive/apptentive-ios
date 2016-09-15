@@ -56,11 +56,6 @@
 	[super awakeFromNib];
 }
 
-- (void)setOrientation:(UIInterfaceOrientation)orientation {
-	_orientation = orientation;
-	[self updateConstraints];
-}
-
 - (void)setBorderColor:(UIColor *)borderColor {
 	_borderColor = borderColor;
 
@@ -71,7 +66,7 @@
 - (void)updateConstraints {
 	CGFloat outerVerticalSpace = self.regularOuterVerticalSpace;
 
-	if (UIInterfaceOrientationIsLandscape(self.orientation)) {
+	if (self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassCompact) {
 		self.titleLabel.alpha = 0;
 
 		[self.containerView removeConstraints:self.portraitConstraints];

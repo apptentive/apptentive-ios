@@ -12,5 +12,5 @@
 @class ApptentiveInteraction;
 
 
-@interface ApptentiveInteractionAppStoreController : ApptentiveInteractionController <SKStoreProductViewControllerDelegate, UIAlertViewDelegate>
+@interface ApptentiveInteractionAppStoreController : ApptentiveInteractionController <SKStoreProductViewControllerDelegate>
 @end

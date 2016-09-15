@@ -110,6 +110,10 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 	NSString *distributionName = @"source";
 	NSString *distributionVersion = kApptentiveVersionString;
 
+#if APPTENTIVE_BINARY
+	distributionName = @"binary";
+#endif
+
 #if APPTENTIVE_COCOAPODS
 	distributionName = @"CocoaPods-Source";
 #endif
@@ -582,7 +586,20 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 #pragma mark - Debugging and diagnostics
 
 - (void)setAPIKey:(NSString *)APIKey baseURL:(NSURL *)baseURL {
-	if (![APIKey isEqualToString:self.webClient.APIKey] || ![baseURL isEqual:self.webClient.baseURL]) {
+	NSString *distributionName = @"source";
+	NSString *distributionVersion = kApptentiveVersionString;
+
+#if APPTENTIVE_BINARY
+	distributionName = @"binary";
+#endif
+
+#if APPTENTIVE_COCOAPODS
+	distributionName = @"CocoaPods-Source";
+#endif
+
+	_distributionName = distributionName;
+	_distributionVersion = distributionVersion;
+if (![APIKey isEqualToString:self.webClient.APIKey] || ![baseURL isEqual:self.webClient.baseURL]) {
 		_webClient = [[ApptentiveWebClient alloc] initWithBaseURL:baseURL APIKey:APIKey];
 
 		_backend = [[ApptentiveBackend alloc] init];

@@ -15,9 +15,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
 	var window: UIWindow?
 
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-		Apptentive.shared.apiKey = "edbf34735084c94fe345baaa93a408c655132984bde1a8fe75ddd15b79b771a3"
+		Apptentive.shared.apiKey = "<#Your Apptentive API Key#>"
 
-		precondition(Apptentive.shared.apiKey != "<Your Apptentive API Key>", "Please set your Apptentive API key above")
+		precondition(Apptentive.shared.apiKey != "<#Your Apptentive API Key#>", "Please set your Apptentive API key above")
 
 		if let tabBarController = self.window?.rootViewController as? UITabBarController {
 			tabBarController.delegate = self

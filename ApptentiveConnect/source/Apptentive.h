@@ -130,6 +130,7 @@ Before calling any other methods on the shared `Apptentive` instance, set the AP
 
 /**
   APIKey property with legacy capitalization.
+
  @deprecated Capitalize `API` in the property/setter name.
  */
 

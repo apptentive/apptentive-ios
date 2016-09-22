@@ -87,31 +87,27 @@
 - (NSDictionary *)appReleaseJSON {
 	NSMutableDictionary *result = [NSMutableDictionary dictionary];
 
+	result[@"type"] = @"ios";
+
 #ifdef APPTENTIVE_DEBUG
 	result[@"debug"] = @YES;
 #else
 	result[@"debug"] = @NO;
 #endif
 
-	NSString *appVersion = [ApptentiveUtilities appVersionString];
-	if (appVersion) {
-		result[@"version"] = appVersion;
+	// Marketing version
+	NSString *shortVersionString = [ApptentiveUtilities appBundleShortVersionString];
+	if (shortVersionString) {
+		result[@"cf_bundle_short_version_string"] = shortVersionString;
 	}
 
-	NSString *buildNumber = [ApptentiveUtilities buildNumberString];
-	if (buildNumber) {
-		result[@"build_number"] = buildNumber;
+	// Build number
+	NSString *version = [ApptentiveUtilities appBundleVersionString];
+	if (version) {
+		result[@"cf_bundle_version"] = version;
 	}
 
-	NSString *appStoreReceiptFileName = [ApptentiveUtilities appStoreReceiptFileName];
-	if (appStoreReceiptFileName) {
-		NSDictionary *receiptInfo = @{ @"file_name": appStoreReceiptFileName,
-			@"has_receipt": @([ApptentiveUtilities appStoreReceiptExists]),
-		};
-
-		result[@"app_store_receipt"] = receiptInfo;
-	}
-
+	result[@"app_store_receipt"] = @([ApptentiveUtilities appStoreReceiptExists]);
 	result[@"overriding_styles"] = @([Apptentive sharedConnection].didAccessStyleSheet);
 
 	return result;

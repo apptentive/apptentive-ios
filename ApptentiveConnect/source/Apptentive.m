@@ -541,15 +541,10 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 }
 
 + (NSBundle *)resourceBundle {
-	NSString *path = [[NSBundle bundleForClass:[ApptentiveBackend class]] bundlePath];
-	NSString *bundlePath = [path stringByAppendingPathComponent:@"ApptentiveResources.bundle"];
-	NSFileManager *fm = [NSFileManager defaultManager];
-	if ([fm fileExistsAtPath:bundlePath]) {
-		NSBundle *bundle = [[NSBundle alloc] initWithPath:bundlePath];
-		return bundle;
-	} else {
-		return nil;
-	}
+	NSBundle *bundleForClass = [NSBundle bundleForClass:[self class]];
+	NSString *resourceBundlePath = [bundleForClass pathForResource:@"ApptentiveResources" ofType:@"bundle"];
+
+	return resourceBundlePath ? [NSBundle bundleWithPath:resourceBundlePath] : [NSBundle bundleForClass:[self class]];
 }
 
 #pragma mark - Message notification banner

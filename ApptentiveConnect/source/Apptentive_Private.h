@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Apptentive, Inc. All rights reserved.
 //
 
-#import "Apptentive.h"
+#import <Apptentive/Apptentive.h>
 
 extern NSString *const ApptentiveCustomPersonDataChangedNotification;
 extern NSString *const ApptentiveCustomDeviceDataChangedNotification;

@@ -653,8 +653,8 @@
 		017D97491B0E57C2004E045C /* ApptentiveMessageCenterReplyCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveMessageCenterReplyCell.m; sourceTree = "<group>"; };
 		018389031D1A0D6100780B8E /* ApptentiveSurveyQuestionFooterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveSurveyQuestionFooterView.h; sourceTree = "<group>"; };
 		018389041D1A0D6100780B8E /* ApptentiveSurveyQuestionFooterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveSurveyQuestionFooterView.m; sourceTree = "<group>"; };
-		019A63C91C4DA5BE00DD5EBF /* Apptentive+Debugging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Apptentive+Debugging.h"; sourceTree = "<group>"; };
-		019A63CA1C4DA5BE00DD5EBF /* Apptentive+Debugging.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Apptentive+Debugging.m"; sourceTree = "<group>"; };
+		019A63C91C4DA5BE00DD5EBF /* Apptentive+Debugging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Apptentive+Debugging.h"; path = "../debug/Apptentive+Debugging.h"; sourceTree = "<group>"; };
+		019A63CA1C4DA5BE00DD5EBF /* Apptentive+Debugging.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "Apptentive+Debugging.m"; path = "../debug/Apptentive+Debugging.m"; sourceTree = "<group>"; };
 		019CEBE91BDEDDE100CCEC97 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		019CEBEA1BDEDDE100CCEC97 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		019CEBF01BDEDE9400CCEC97 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Localizable.strings"; sourceTree = "<group>"; };

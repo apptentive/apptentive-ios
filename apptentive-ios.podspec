@@ -11,13 +11,13 @@ Pod::Spec.new do |s|
   s.source_files   = 'ApptentiveConnect/source/**/*.{h,m}'
   s.requires_arc = true
   s.frameworks     = 'AVFoundation', 'CoreData', 'CoreGraphics', 'Foundation', 'ImageIO', 'MobileCoreServices', 'QuartzCore', 'QuickLook', 'SystemConfiguration', 'UIKit'
-  s.resources = [
+  s.resource_bundle = { 'ApptentiveResources' => [
 		'ApptentiveConnect/source/Model/*.xcdatamodeld',
 		'ApptentiveConnect/source/Model/*.xcmappingmodel',
 		'ApptentiveConnect/resources/localization/*.lproj',
 		'ApptentiveConnect/resources/images/**/*.*',
 		'ApptentiveConnect/resources/Apptentive.storyboard'
-		]
+		] }
   s.weak_frameworks = 'StoreKit', 'CoreTelephony'
   s.prefix_header_contents = '#import "ApptentiveLog.h"'
   s.pod_target_xcconfig = { "GCC_PREPROCESSOR_DEFINITIONS[config=Debug]" => "APPTENTIVE_LOGGING_LEVEL_DEBUG=1 APPTENTIVE_LOGGING_LEVEL_INFO=1 APPTENTIVE_LOGGING_LEVEL_WARNING=1 APPTENTIVE_LOGGING_LEVEL_ERROR=1 APPTENTIVE_COCOAPODS=1",

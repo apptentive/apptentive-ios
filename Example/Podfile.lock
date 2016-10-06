@@ -5,7 +5,6 @@ PODS:
 
 DEPENDENCIES:
   - apptentive-ios (from `..`)
-  - apptentive-ios/Debug (from `..`)
 
 EXTERNAL SOURCES:
   apptentive-ios:
@@ -14,6 +13,6 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   apptentive-ios: 80f0f9d081f6a893bb644526f65f98f6667d9e99
 
-PODFILE CHECKSUM: 43e899aa45be464c21e4fcef54b465ee8c567833
+PODFILE CHECKSUM: d9f8c76e781b9e490f735f6b0369a9f3d1c4fd0e
 
 COCOAPODS: 1.0.1

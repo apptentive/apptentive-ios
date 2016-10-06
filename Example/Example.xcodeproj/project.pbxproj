@@ -289,6 +289,7 @@
 				<string>0116DA171BA37FA800E50BC3</string>
 				<string>0116DA181BA37FA800E50BC3</string>
 				<string>4956825534C86BCBBC09618E</string>
+				<string>595F879CCF99109DB7E02EE3</string>
 			</array>
 			<key>isa</key>
 			<string>PBXGroup</string>
@@ -324,6 +325,7 @@
 				<string>0118C22E1B754945009D6C4B</string>
 				<string>0116DA2B1BA3800A00E50BC3</string>
 				<string>01045DE81CFE574900355633</string>
+				<string>EA02089031ED00D08DE8C0D1</string>
 			</array>
 			<key>isa</key>
 			<string>PBXGroup</string>
@@ -442,6 +444,7 @@
 				<string>0116DA201BA37FA800E50BC3</string>
 				<string>0116DA221BA37FA800E50BC3</string>
 				<string>0116DA231BA37FA800E50BC3</string>
+				<string>994EAF29EFFF0DC0E81AD093</string>
 			</array>
 			<key>isa</key>
 			<string>PBXFrameworksBuildPhase</string>
@@ -470,9 +473,12 @@
 			<string>014E035B1B7401A50059A3C6</string>
 			<key>buildPhases</key>
 			<array>
+				<string>8DCA1E0F3CB79D3120A7D6A9</string>
 				<string>014E03361B7401A50059A3C6</string>
 				<string>014E03371B7401A50059A3C6</string>
 				<string>014E03381B7401A50059A3C6</string>
+				<string>5F56E8C990E88345C1CBFA2B</string>
+				<string>780D9E3C6F1B963C24E30AC0</string>
 			</array>
 			<key>buildRules</key>
 			<array/>
@@ -788,6 +794,8 @@
 		</dict>
 		<key>014E035C1B7401A50059A3C6</key>
 		<dict>
+			<key>baseConfigurationReference</key>
+			<string>087DAE66C5ABF9C039A9D402</string>
 			<key>buildSettings</key>
 			<dict>
 				<key>ASSETCATALOG_COMPILER_APPICON_NAME</key>
@@ -816,6 +824,8 @@
 		</dict>
 		<key>014E035D1B7401A50059A3C6</key>
 		<dict>
+			<key>baseConfigurationReference</key>
+			<string>0314422204ABDFBD897E11B9</string>
 			<key>buildSettings</key>
 			<dict>
 				<key>ASSETCATALOG_COMPILER_APPICON_NAME</key>
@@ -962,6 +972,36 @@
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 		</dict>
+		<key>0314422204ABDFBD897E11B9</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>text.xcconfig</string>
+			<key>name</key>
+			<string>Pods-iOSExample.release.xcconfig</string>
+			<key>path</key>
+			<string>Pods/Target Support Files/Pods-iOSExample/Pods-iOSExample.release.xcconfig</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>087DAE66C5ABF9C039A9D402</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>text.xcconfig</string>
+			<key>name</key>
+			<string>Pods-iOSExample.debug.xcconfig</string>
+			<key>path</key>
+			<string>Pods/Target Support Files/Pods-iOSExample/Pods-iOSExample.debug.xcconfig</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
 		<key>4956825534C86BCBBC09618E</key>
 		<dict>
 			<key>explicitFileType</key>
@@ -974,6 +1014,118 @@
 			<string>Pods.framework</string>
 			<key>sourceTree</key>
 			<string>BUILT_PRODUCTS_DIR</string>
+		</dict>
+		<key>595F879CCF99109DB7E02EE3</key>
+		<dict>
+			<key>explicitFileType</key>
+			<string>wrapper.framework</string>
+			<key>includeInIndex</key>
+			<string>0</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>path</key>
+			<string>Pods_iOSExample.framework</string>
+			<key>sourceTree</key>
+			<string>BUILT_PRODUCTS_DIR</string>
+		</dict>
+		<key>5F56E8C990E88345C1CBFA2B</key>
+		<dict>
+			<key>buildActionMask</key>
+			<string>2147483647</string>
+			<key>files</key>
+			<array/>
+			<key>inputPaths</key>
+			<array/>
+			<key>isa</key>
+			<string>PBXShellScriptBuildPhase</string>
+			<key>name</key>
+			<string>[CP] Embed Pods Frameworks</string>
+			<key>outputPaths</key>
+			<array/>
+			<key>runOnlyForDeploymentPostprocessing</key>
+			<string>0</string>
+			<key>shellPath</key>
+			<string>/bin/sh</string>
+			<key>shellScript</key>
+			<string>"${SRCROOT}/Pods/Target Support Files/Pods-iOSExample/Pods-iOSExample-frameworks.sh"
+</string>
+			<key>showEnvVarsInLog</key>
+			<string>0</string>
+		</dict>
+		<key>780D9E3C6F1B963C24E30AC0</key>
+		<dict>
+			<key>buildActionMask</key>
+			<string>2147483647</string>
+			<key>files</key>
+			<array/>
+			<key>inputPaths</key>
+			<array/>
+			<key>isa</key>
+			<string>PBXShellScriptBuildPhase</string>
+			<key>name</key>
+			<string>[CP] Copy Pods Resources</string>
+			<key>outputPaths</key>
+			<array/>
+			<key>runOnlyForDeploymentPostprocessing</key>
+			<string>0</string>
+			<key>shellPath</key>
+			<string>/bin/sh</string>
+			<key>shellScript</key>
+			<string>"${SRCROOT}/Pods/Target Support Files/Pods-iOSExample/Pods-iOSExample-resources.sh"
+</string>
+			<key>showEnvVarsInLog</key>
+			<string>0</string>
+		</dict>
+		<key>8DCA1E0F3CB79D3120A7D6A9</key>
+		<dict>
+			<key>buildActionMask</key>
+			<string>2147483647</string>
+			<key>files</key>
+			<array/>
+			<key>inputPaths</key>
+			<array/>
+			<key>isa</key>
+			<string>PBXShellScriptBuildPhase</string>
+			<key>name</key>
+			<string>[CP] Check Pods Manifest.lock</string>
+			<key>outputPaths</key>
+			<array/>
+			<key>runOnlyForDeploymentPostprocessing</key>
+			<string>0</string>
+			<key>shellPath</key>
+			<string>/bin/sh</string>
+			<key>shellScript</key>
+			<string>diff "${PODS_ROOT}/../Podfile.lock" "${PODS_ROOT}/Manifest.lock" &gt; /dev/null
+if [[ $? != 0 ]] ; then
+    cat &lt;&lt; EOM
+error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.
+EOM
+    exit 1
+fi
+</string>
+			<key>showEnvVarsInLog</key>
+			<string>0</string>
+		</dict>
+		<key>994EAF29EFFF0DC0E81AD093</key>
+		<dict>
+			<key>fileRef</key>
+			<string>595F879CCF99109DB7E02EE3</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>EA02089031ED00D08DE8C0D1</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>087DAE66C5ABF9C039A9D402</string>
+				<string>0314422204ABDFBD897E11B9</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>Pods</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
 		</dict>
 	</dict>
 	<key>rootObject</key>

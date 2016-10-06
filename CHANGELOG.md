@@ -1,3 +1,7 @@
+2016-10-06 frankus v3.3.1
+-------------------------
+Version 3.3.1 adds a framework target that can be used for Carthage support.  
+
 2016-09-16 frankus v3.3.0
 -------------------------
 Version 3.3.0 drops iOS 7 support and fixes a number of deprecation warnings

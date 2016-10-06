@@ -6,20 +6,6 @@
 	objectVersion = 46;
 	objects = {
 
-/* Begin PBXAggregateTarget section */
-		016987181DA57A45008C4C78 /* Apptentive-Universal */ = {
-			isa = PBXAggregateTarget;
-			buildConfigurationList = 016987191DA57A45008C4C78 /* Build configuration list for PBXAggregateTarget "Apptentive-Universal" */;
-			buildPhases = (
-				0169871C1DA57A4C008C4C78 /* ShellScript */,
-			);
-			dependencies = (
-			);
-			name = "Apptentive-Universal";
-			productName = "Apptentive-Universal";
-		};
-/* End PBXAggregateTarget section */
-
 /* Begin PBXBuildFile section */
 		011B08CE1C0D0CCC004F4F5D /* ApptentiveUtilitiesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 49509DFA13583FB800793EEC /* ApptentiveUtilitiesTests.m */; };
 		011B08CF1C0D0CCC004F4F5D /* ApptentiveMigrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 49129ED3174068730026C2E1 /* ApptentiveMigrationTests.m */; };
@@ -2109,11 +2095,6 @@
 						DevelopmentTeam = 86WML2UN43;
 						ProvisioningStyle = Automatic;
 					};
-					016987181DA57A45008C4C78 = {
-						CreatedOnToolsVersion = 8.0;
-						DevelopmentTeam = 86WML2UN43;
-						ProvisioningStyle = Automatic;
-					};
 					0169874E1DA5C422008C4C78 = {
 						CreatedOnToolsVersion = 8.0;
 						DevelopmentTeam = 86WML2UN43;
@@ -2156,7 +2137,6 @@
 				496DC38B1333D35600743F65 /* ApptentiveConnectTests */,
 				49D1118B13341A7C00603373 /* ApptentiveResources */,
 				016986711DA57944008C4C78 /* Apptentive */,
-				016987181DA57A45008C4C78 /* Apptentive-Universal */,
 				0169874E1DA5C422008C4C78 /* ApptentiveDebugging */,
 			);
 		};
@@ -2329,20 +2309,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		0169871C1DA57A4C008C4C78 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Credit: https://medium.com/@syshen/create-an-ios-universal-framework-148eb130a46c\n\n######################\n# Options\n######################\n\nREVEAL_ARCHIVE_IN_FINDER=true\n\nFRAMEWORK_NAME=\"Apptentive\"\n\nSIMULATOR_LIBRARY_PATH=\"${BUILD_DIR}/${CONFIGURATION}-iphonesimulator/${FRAMEWORK_NAME}.framework\"\n\nDEVICE_LIBRARY_PATH=\"${BUILD_DIR}/${CONFIGURATION}-iphoneos/${FRAMEWORK_NAME}.framework\"\n\nUNIVERSAL_LIBRARY_DIR=\"${BUILD_DIR}/${CONFIGURATION}-iphoneuniversal\"\n\nFRAMEWORK=\"${UNIVERSAL_LIBRARY_DIR}/${FRAMEWORK_NAME}.framework\"\n\n######################\n# Build Frameworks\n######################\n\nxcodebuild -project ${PROJECT_NAME}.xcodeproj -scheme ${FRAMEWORK_NAME} -sdk iphonesimulator -configuration ${CONFIGURATION} clean build CONFIGURATION_BUILD_DIR=${BUILD_DIR}/${CONFIGURATION}-iphonesimulator GCC_PREPROCESSOR_DEFINITIONS='APPTENTIVE_FRAMEWORK=1' 2>&1\n\nxcodebuild -project ${PROJECT_NAME}.xcodeproj -scheme ${FRAMEWORK_NAME} -sdk iphoneos -configuration ${CONFIGURATION} clean build CONFIGURATION_BUILD_DIR=${BUILD_DIR}/${CONFIGURATION}-iphoneos GCC_PREPROCESSOR_DEFINITIONS='APPTENTIVE_FRAMEWORK=1' 2>&1\n\n######################\n# Create directory for universal\n######################\n\nrm -rf \"${UNIVERSAL_LIBRARY_DIR}\"\n\nmkdir \"${UNIVERSAL_LIBRARY_DIR}\"\n\nmkdir \"${FRAMEWORK}\"\n\n\n######################\n# Copy files Framework\n######################\n\ncp -r \"${DEVICE_LIBRARY_PATH}/.\" \"${FRAMEWORK}\"\n\n\n######################\n# Make an universal binary\n######################\n\nlipo \"${SIMULATOR_LIBRARY_PATH}/${FRAMEWORK_NAME}\" \"${DEVICE_LIBRARY_PATH}/${FRAMEWORK_NAME}\" -create -output \"${FRAMEWORK}/${FRAMEWORK_NAME}\" | echo\n\n                                                                      ######################\n                                                                      # On Release, copy the result to release directory\n                                                                      ######################\n                                                                      OUTPUT_DIR=\"${PROJECT_DIR}/Output/${FRAMEWORK_NAME}-${CONFIGURATION}-iphoneuniversal/\"\n                                                                      \n                                                                      rm -rf \"$OUTPUT_DIR\"\n                                                                      mkdir -p \"$OUTPUT_DIR\"\n                                                                      \n                                                                      cp -r \"${FRAMEWORK}\" \"$OUTPUT_DIR\"\n                                                                      \n                                                                      if [ ${REVEAL_ARCHIVE_IN_FINDER} = true ]; then\n                                                                      open \"${OUTPUT_DIR}/\"\n                                                                      fi\n";
-			showEnvVarsInLog = 0;
-		};
 		49E891C0134FDBC000DD098A /* Localize (Release Only) */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -2797,22 +2763,6 @@
 			};
 			name = Release;
 		};
-		0169871A1DA57A45008C4C78 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DEVELOPMENT_TEAM = 86WML2UN43;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Debug;
-		};
-		0169871B1DA57A45008C4C78 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DEVELOPMENT_TEAM = 86WML2UN43;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Release;
-		};
 		016987551DA5C422008C4C78 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -3145,15 +3095,6 @@
 			buildConfigurations = (
 				016986771DA57944008C4C78 /* Debug */,
 				016986781DA57944008C4C78 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		016987191DA57A45008C4C78 /* Build configuration list for PBXAggregateTarget "Apptentive-Universal" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				0169871A1DA57A45008C4C78 /* Debug */,
-				0169871B1DA57A45008C4C78 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

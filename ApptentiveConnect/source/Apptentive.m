@@ -110,6 +110,10 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 	NSString *distributionName = @"source";
 	NSString *distributionVersion = kApptentiveVersionString;
 
+#if APPTENTIVE_FRAMEWORK
+	distributionName = @"framework";
+#endif
+
 #if APPTENTIVE_BINARY
 	distributionName = @"binary";
 #endif
@@ -584,6 +588,10 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 - (void)setAPIKey:(NSString *)APIKey baseURL:(NSURL *)baseURL {
 	NSString *distributionName = @"source";
 	NSString *distributionVersion = kApptentiveVersionString;
+
+#if APPTENTIVE_FRAMEWORK
+	distributionName = @"framework";
+#endif
 
 #if APPTENTIVE_BINARY
 	distributionName = @"binary";

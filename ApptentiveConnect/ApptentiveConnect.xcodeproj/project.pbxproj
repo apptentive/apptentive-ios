@@ -639,8 +639,8 @@
 		017D97491B0E57C2004E045C /* ApptentiveMessageCenterReplyCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveMessageCenterReplyCell.m; sourceTree = "<group>"; };
 		018389031D1A0D6100780B8E /* ApptentiveSurveyQuestionFooterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveSurveyQuestionFooterView.h; sourceTree = "<group>"; };
 		018389041D1A0D6100780B8E /* ApptentiveSurveyQuestionFooterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveSurveyQuestionFooterView.m; sourceTree = "<group>"; };
-		019A63C91C4DA5BE00DD5EBF /* Apptentive+Debugging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Apptentive+Debugging.h"; path = "../debug/Apptentive+Debugging.h"; sourceTree = "<group>"; };
-		019A63CA1C4DA5BE00DD5EBF /* Apptentive+Debugging.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "Apptentive+Debugging.m"; path = "../debug/Apptentive+Debugging.m"; sourceTree = "<group>"; };
+		019A63C91C4DA5BE00DD5EBF /* Apptentive+Debugging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Apptentive+Debugging.h"; path = "debug/Apptentive+Debugging.h"; sourceTree = "<group>"; };
+		019A63CA1C4DA5BE00DD5EBF /* Apptentive+Debugging.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "Apptentive+Debugging.m"; path = "debug/Apptentive+Debugging.m"; sourceTree = "<group>"; };
 		019CEBE91BDEDDE100CCEC97 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		019CEBEA1BDEDDE100CCEC97 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		019CEBF01BDEDE9400CCEC97 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Localizable.strings"; sourceTree = "<group>"; };
@@ -1274,6 +1274,15 @@
 			path = resources/images/at_circle_highlighted;
 			sourceTree = SOURCE_ROOT;
 		};
+		01B71CED1DA71E8300653ED8 /* debug */ = {
+			isa = PBXGroup;
+			children = (
+				019A63C91C4DA5BE00DD5EBF /* Apptentive+Debugging.h */,
+				019A63CA1C4DA5BE00DD5EBF /* Apptentive+Debugging.m */,
+			);
+			name = debug;
+			sourceTree = "<group>";
+		};
 		01D0C39A1BF3EE9B0024BA1A /* at_attach */ = {
 			isa = PBXGroup;
 			children = (
@@ -1457,6 +1466,7 @@
 			isa = PBXGroup;
 			children = (
 				49C00295133413BB0071F088 /* source */,
+				01B71CED1DA71E8300653ED8 /* debug */,
 				492F2F0B16E3F8060030E48A /* resources */,
 				49C002861334137E0071F088 /* tests */,
 				016986731DA57944008C4C78 /* Apptentive */,
@@ -1611,8 +1621,6 @@
 			children = (
 				49C00297133413BB0071F088 /* Apptentive.h */,
 				49C00298133413BB0071F088 /* Apptentive.m */,
-				019A63C91C4DA5BE00DD5EBF /* Apptentive+Debugging.h */,
-				019A63CA1C4DA5BE00DD5EBF /* Apptentive+Debugging.m */,
 				4967278116B9D9CB00C679B8 /* Apptentive_Private.h */,
 				01C85EE41CADBB8700743DA0 /* ApptentiveStyleSheet.h */,
 				01C85EE51CADBB8800743DA0 /* ApptentiveStyleSheet.m */,

@@ -107,22 +107,7 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 }
 
 - (void)setAPIKey:(NSString *)APIKey {
-	NSString *distributionName = @"source";
-	NSString *distributionVersion = kApptentiveVersionString;
-
-#if APPTENTIVE_FRAMEWORK
-	distributionName = @"framework";
-#endif
-
-#if APPTENTIVE_BINARY
-	distributionName = @"binary";
-#endif
-
-#if APPTENTIVE_COCOAPODS
-	distributionName = @"CocoaPods-Source";
-#endif
-
-	[self setAPIKey:APIKey distributionName:distributionName distributionVersion:distributionVersion];
+	[self setAPIKey:APIKey distributionName:[[self class] defaultDistribution] distributionVersion:kApptentiveVersionString];
 }
 
 - (void)setAPIKey:(NSString *)APIKey distributionName:(NSString *)distributionName distributionVersion:(NSString *)distributionVersion {
@@ -551,6 +536,24 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 	return resourceBundlePath ? [NSBundle bundleWithPath:resourceBundlePath] : [NSBundle bundleForClass:[self class]];
 }
 
++ (NSString *)defaultDistribution {
+	NSString *distributionName = @"source";
+
+#if APPTENTIVE_FRAMEWORK
+	distributionName = @"framework";
+#endif
+
+#if APPTENTIVE_BINARY
+	distributionName = @"binary";
+#endif
+
+#if APPTENTIVE_COCOAPODS
+	distributionName = @"CocoaPods-Source";
+#endif
+
+	return distributionName;
+}
+
 #pragma mark - Message notification banner
 
 - (void)showNotificationBannerForMessage:(ApptentiveMessage *)message {
@@ -586,24 +589,9 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 #pragma mark - Debugging and diagnostics
 
 - (void)setAPIKey:(NSString *)APIKey baseURL:(NSURL *)baseURL {
-	NSString *distributionName = @"source";
-	NSString *distributionVersion = kApptentiveVersionString;
-
-#if APPTENTIVE_FRAMEWORK
-	distributionName = @"framework";
-#endif
-
-#if APPTENTIVE_BINARY
-	distributionName = @"binary";
-#endif
-
-#if APPTENTIVE_COCOAPODS
-	distributionName = @"CocoaPods-Source";
-#endif
-
-	_distributionName = distributionName;
-	_distributionVersion = distributionVersion;
-if (![APIKey isEqualToString:self.webClient.APIKey] || ![baseURL isEqual:self.webClient.baseURL]) {
+	_distributionName = [[self class] defaultDistribution];
+	_distributionVersion = kApptentiveVersionString;
+	if (![APIKey isEqualToString:self.webClient.APIKey] || ![baseURL isEqual:self.webClient.baseURL]) {
 		_webClient = [[ApptentiveWebClient alloc] initWithBaseURL:baseURL APIKey:APIKey];
 
 		_backend = [[ApptentiveBackend alloc] init];

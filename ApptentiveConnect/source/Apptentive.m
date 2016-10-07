@@ -551,6 +551,10 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 	distributionName = @"CocoaPods-Source";
 #endif
 
+#if CARTHAGE
+	distributionName = @"Carthage-Source";
+#endif
+
 	return distributionName;
 }
 

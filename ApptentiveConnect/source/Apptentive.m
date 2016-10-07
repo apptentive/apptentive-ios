@@ -551,7 +551,10 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 	distributionName = @"CocoaPods-Source";
 #endif
 
-#if CARTHAGE
+#define DO_EXPAND(VAL)  VAL ## 1
+#define EXPAND(VAL)     DO_EXPAND(VAL)
+
+#if defined(CARTHAGE) && (EXPAND(CARTHAGE) != 1)
 	distributionName = @"Carthage-Source";
 #endif
 

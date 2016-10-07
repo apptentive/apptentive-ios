@@ -908,7 +908,7 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 		NSPredicate *unreadPredicate = [NSPredicate predicateWithFormat:@"seenByUser == %@ AND sentByUser == %@", @(NO), @(NO)];
 		request.predicate = unreadPredicate;
 
-		NSFetchedResultsController *newController = [[NSFetchedResultsController alloc] initWithFetchRequest:request managedObjectContext:[self managedObjectContext] sectionNameKeyPath:nil cacheName:@"at-unread-messages-cache"];
+		NSFetchedResultsController *newController = [[NSFetchedResultsController alloc] initWithFetchRequest:request managedObjectContext:[self managedObjectContext] sectionNameKeyPath:nil cacheName:nil];
 		newController.delegate = self;
 		self.unreadCountController = newController;
 

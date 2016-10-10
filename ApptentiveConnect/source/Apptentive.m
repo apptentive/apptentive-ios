@@ -533,7 +533,8 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 	NSBundle *bundleForClass = [NSBundle bundleForClass:[self class]];
 	NSString *resourceBundlePath = [bundleForClass pathForResource:@"ApptentiveResources" ofType:@"bundle"];
 
-	return resourceBundlePath ? [NSBundle bundleWithPath:resourceBundlePath] : [NSBundle bundleForClass:[self class]];
+	// Resources may sit alongside this class in a framework or may be nested in resource bundle.
+	return resourceBundlePath ? [NSBundle bundleWithPath:resourceBundlePath] : bundleForClass;
 }
 
 + (NSString *)defaultDistribution {

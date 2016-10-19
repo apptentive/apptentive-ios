@@ -27,9 +27,7 @@
 - (NSString *)description {
 	NSString *title = [NSString stringWithFormat:@"Engamement Framework Usage Data:"];
 
-	NSDictionary *data = @{ @"timeSinceInstallTotal": self.timeSinceInstallTotal ?: [NSNull null],
-		@"timeSinceInstallVersion": self.timeSinceInstallVersion ?: [NSNull null],
-		@"timeSinceInstallBuild": self.timeSinceInstallBuild ?: [NSNull null],
+	NSDictionary *data = @{
 		@"applicationVersion": self.applicationVersion ?: [NSNull null],
 		@"applicationBuild": self.applicationBuild ?: [NSNull null],
 		@"sdkVersion": self.sdkVersion ?
@@ -50,7 +48,9 @@
 		@"interactionInvokesTotal": self.interactionInvokesTotal ?: [NSNull null],
 		@"interactionInvokesVersion": self.interactionInvokesVersion ?: [NSNull null],
 		@"interactionInovkesBuild": self.interactionInvokesBuild ?: [NSNull null],
-		@"interactionInvokesTimeAgo": self.interactionInvokesTimeAgo ?: [NSNull null] };
+		@"interactionInvokesTimeAgo": self.interactionInvokesTimeAgo ?: [NSNull null]
+	};
+
 	NSDictionary *description = @{title: data};
 
 	return [description description];
@@ -77,9 +77,7 @@
 }
 
 - (NSDictionary *)predicateEvaluationDictionary {
-	NSMutableDictionary *predicateEvaluationDictionary = [NSMutableDictionary dictionaryWithDictionary:@{ @"time_since_install/total": self.timeSinceInstallTotal,
-		@"time_since_install/version": self.timeSinceInstallVersion,
-		@"time_since_install/build": self.timeSinceInstallBuild,
+	NSMutableDictionary *predicateEvaluationDictionary = [NSMutableDictionary dictionaryWithDictionary:@{
 		@"is_update/version": self.isUpdateVersion,
 		@"is_update/build": self.isUpdateBuild }];
 	if (self.timeAtInstallTotal) {
@@ -90,8 +88,6 @@
 	}
 
 	if (self.applicationVersion) {
-		predicateEvaluationDictionary[@"application_version"] = self.applicationVersion;
-		predicateEvaluationDictionary[@"app_release/version"] = self.applicationVersion;
 		predicateEvaluationDictionary[@"application/version"] = [Apptentive versionObjectWithVersion:self.applicationVersion];
 	} else {
 		ApptentiveLogWarning(@"Unable to get application version. Using default value of 0.0.0");
@@ -99,8 +95,10 @@
 	}
 
 	if (self.applicationBuild) {
-		predicateEvaluationDictionary[@"application_build"] = self.applicationBuild;
-		predicateEvaluationDictionary[@"app_release/build"] = self.applicationBuild;
+		predicateEvaluationDictionary[@"application/build"] = [Apptentive versionObjectWithVersion:self.applicationBuild];
+	} else {
+		ApptentiveLogWarning(@"Unable to get application build. Using default value of 0.0.0");
+		predicateEvaluationDictionary[@"application/build"] = [Apptentive versionObjectWithVersion:@"0.0.0"];
 	}
 
 	if (self.isDebugBuild) {
@@ -201,33 +199,6 @@
 	}
 
 	return predicateEvaluationDictionary;
-}
-
-- (NSNumber *)timeSinceInstallTotal {
-	if (!_timeSinceInstallTotal) {
-		NSDate *installDate = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementInstallDateKey] ?: [NSDate date];
-		_timeSinceInstallTotal = @(fabs([installDate timeIntervalSinceNow]));
-	}
-
-	return _timeSinceInstallTotal;
-}
-
-- (NSNumber *)timeSinceInstallVersion {
-	if (!_timeSinceInstallVersion) {
-		NSDate *versionInstallDate = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementUpgradeDateKey] ?: [NSDate date];
-		_timeSinceInstallVersion = @(fabs([versionInstallDate timeIntervalSinceNow]));
-	}
-
-	return _timeSinceInstallVersion;
-}
-
-- (NSNumber *)timeSinceInstallBuild {
-	if (!_timeSinceInstallBuild) {
-		NSDate *buildInstallDate = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementUpgradeDateKey] ?: [NSDate date];
-		_timeSinceInstallBuild = @(fabs([buildInstallDate timeIntervalSinceNow]));
-	}
-
-	return _timeSinceInstallBuild;
 }
 
 - (NSDate *)timeAtInstallTotal {

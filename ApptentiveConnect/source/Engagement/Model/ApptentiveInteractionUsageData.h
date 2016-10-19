@@ -12,9 +12,6 @@
 
 @interface ApptentiveInteractionUsageData : NSObject
 
-@property (strong, nonatomic) NSNumber *timeSinceInstallTotal;
-@property (strong, nonatomic) NSNumber *timeSinceInstallVersion;
-@property (strong, nonatomic) NSNumber *timeSinceInstallBuild;
 @property (strong, nonatomic) NSDate *timeAtInstallTotal;
 @property (strong, nonatomic) NSDate *timeAtInstallVersion;
 @property (copy, nonatomic) NSString *applicationVersion;

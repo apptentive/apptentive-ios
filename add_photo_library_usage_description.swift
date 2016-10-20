@@ -4,9 +4,26 @@ import Foundation
 
 func addPhotoLibraryUsageDescription(to plistURL: URL, forLanguage language: String) {
 	let usageDescriptions = [
+		"ar": "يُتيح ذلك إرفاق الصور بالرسائل.",
+		"da": "Dette giver mulighed for, at billeder kan vedhæftes beskeder.",
+		"de": "Dies erlaubt das Anhängen von Bildern an einer Nachricht",
+		"el": "Αυτό επιτρέπει στις εικόνες να επισυναφθούν στα μηνύματα.",
 		"en": "This allows images to be attached to messages.",
-		"de": "Auf diese Weise können Bilder an Nachrichten anhängen."
-		// TODO: Add all languages
+		"es": "Esto permite adjuntar fotografías a los mensajes.",
+		"fr-CA": "Ceci permet que des images soient ajoutées en pièce jointe aux messages.",
+		"fr": "Ceci permet aux images d'être incluses aux messages.",
+		"it": "Ciò consente di allegare immagini ai messaggi.",
+		"ja": "これによって画像をメッセージに添付できます。",
+		"ko": "이렇게 하면 이미지를 메시지에 첨부할 수 있습니다.",
+		"nl": "Hiermee kunnen afbeeldingen aan berichten worden bijgevoegd.",
+		"pl": "To pozwala na załączanie zdjęć do wiadomości.",
+		"pt-BR": "Isso permite que as imagens sejam anexadas às mensagens.",
+		"pt": "Isto permite que imagens sejam anexadas a mensagens.",
+		"ru": "Это позволяет прикреплять изображения к сообщениям.",
+		"sv": "Detta gör att bilder kan bifogas i meddelanden.",
+		"tr": "Bu, mesajlara görüntü eklenmesini sağlar.",
+		"zh-Hans": "这能让图片作为消息的附件。",
+		"zh-Hant": "這能讓圖片作為消息的附件。"
 	]
 		
 	guard let usageDescription = usageDescriptions[language] else {

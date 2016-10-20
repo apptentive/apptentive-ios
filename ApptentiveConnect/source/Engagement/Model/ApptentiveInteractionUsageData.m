@@ -28,8 +28,8 @@
 	NSString *title = [NSString stringWithFormat:@"Engamement Framework Usage Data:"];
 
 	NSDictionary *data = @{
-		@"applicationVersion": self.applicationVersion ?: [NSNull null],
-		@"applicationBuild": self.applicationBuild ?: [NSNull null],
+		@"applicationCFBundleShortVersionString": self.applicationCFBundleShortVersionString ?: [NSNull null],
+		@"applicationCFBundleVersion": self.applicationCFBundleVersion ?: [NSNull null],
 		@"sdkVersion": self.sdkVersion ?
 		[NSNull null],
 		@"sdkDistribution" :
@@ -78,27 +78,28 @@
 
 - (NSDictionary *)predicateEvaluationDictionary {
 	NSMutableDictionary *predicateEvaluationDictionary = [NSMutableDictionary dictionaryWithDictionary:@{
-		@"is_update/version": self.isUpdateVersion,
-		@"is_update/build": self.isUpdateBuild }];
+		@"is_update/cf_bundle_short_version_string": self.isUpdateVersion,
+		@"is_update/cf_bundle_version": self.isUpdateBuild }];
 	if (self.timeAtInstallTotal) {
 		predicateEvaluationDictionary[@"time_at_install/total"] = [Apptentive timestampObjectWithDate:self.timeAtInstallTotal];
 	}
 	if (self.timeAtInstallVersion) {
-		predicateEvaluationDictionary[@"time_at_install/version"] = [Apptentive timestampObjectWithDate:self.timeAtInstallVersion];
+		predicateEvaluationDictionary[@"time_at_install/cf_bundle_short_version_string"] = [Apptentive timestampObjectWithDate:self.timeAtInstallVersion];
+		predicateEvaluationDictionary[@"time_at_install/cf_bundle_version"] = [Apptentive timestampObjectWithDate:self.timeAtInstallVersion];
 	}
 
-	if (self.applicationVersion) {
-		predicateEvaluationDictionary[@"application/version"] = [Apptentive versionObjectWithVersion:self.applicationVersion];
+	if (self.applicationCFBundleShortVersionString) {
+		predicateEvaluationDictionary[@"application/cf_bundle_short_version_string"] = [Apptentive versionObjectWithVersion:self.applicationCFBundleShortVersionString];
 	} else {
 		ApptentiveLogWarning(@"Unable to get application version. Using default value of 0.0.0");
-		predicateEvaluationDictionary[@"application/version"] = [Apptentive versionObjectWithVersion:@"0.0.0"];
+		predicateEvaluationDictionary[@"application/cf_bundle_short_version_string"] = [Apptentive versionObjectWithVersion:@"0.0.0"];
 	}
 
-	if (self.applicationBuild) {
-		predicateEvaluationDictionary[@"application/build"] = [Apptentive versionObjectWithVersion:self.applicationBuild];
+	if (self.applicationCFBundleVersion) {
+		predicateEvaluationDictionary[@"application/cf_bundle_version"] = [Apptentive versionObjectWithVersion:self.applicationCFBundleVersion];
 	} else {
 		ApptentiveLogWarning(@"Unable to get application build. Using default value of 0.0.0");
-		predicateEvaluationDictionary[@"application/build"] = [Apptentive versionObjectWithVersion:@"0.0.0"];
+		predicateEvaluationDictionary[@"application/cf_bundle_version"] = [Apptentive versionObjectWithVersion:@"0.0.0"];
 	}
 
 	if (self.isDebugBuild) {
@@ -215,20 +216,20 @@
 	return _timeAtInstallVersion;
 }
 
-- (NSString *)applicationVersion {
-	if (!_applicationVersion) {
-		_applicationVersion = [[ApptentiveUtilities appVersionString] copy];
+- (NSString *)applicationCFBundleShortVersionString {
+	if (!_applicationCFBundleShortVersionString) {
+		_applicationCFBundleShortVersionString = [[ApptentiveUtilities appVersionString] copy];
 	}
 
-	return _applicationVersion;
+	return _applicationCFBundleShortVersionString;
 }
 
-- (NSString *)applicationBuild {
-	if (!_applicationBuild) {
-		_applicationBuild = [[ApptentiveUtilities buildNumberString] copy];
+- (NSString *)applicationCFBundleVersion {
+	if (!_applicationCFBundleVersion) {
+		_applicationCFBundleVersion = [[ApptentiveUtilities buildNumberString] copy];
 	}
 
-	return _applicationBuild;
+	return _applicationCFBundleVersion;
 }
 
 - (NSNumber *)isDebugBuild {
@@ -305,7 +306,7 @@
 		NSMutableDictionary *predicateSyntax = [NSMutableDictionary dictionary];
 		NSDictionary *codePointsInvokesVersion = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementCodePointsInvokesVersionKey];
 		for (NSString *codePoint in codePointsInvokesVersion) {
-			[predicateSyntax setObject:[codePointsInvokesVersion objectForKey:codePoint] forKey:[NSString stringWithFormat:@"code_point/%@/invokes/version", [ApptentiveUtilities stringByEscapingForPredicate:codePoint]]];
+			[predicateSyntax setObject:[codePointsInvokesVersion objectForKey:codePoint] forKey:[NSString stringWithFormat:@"code_point/%@/invokes/cf_bundle_short_version_string", [ApptentiveUtilities stringByEscapingForPredicate:codePoint]]];
 		}
 		_codePointInvokesVersion = [[NSDictionary alloc] initWithDictionary:predicateSyntax];
 	}
@@ -317,7 +318,7 @@
 		NSMutableDictionary *predicateSyntax = [NSMutableDictionary dictionary];
 		NSDictionary *codePointsInvokesBuild = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementCodePointsInvokesBuildKey];
 		for (NSString *codePoint in codePointsInvokesBuild) {
-			[predicateSyntax setObject:[codePointsInvokesBuild objectForKey:codePoint] forKey:[NSString stringWithFormat:@"code_point/%@/invokes/build", [ApptentiveUtilities stringByEscapingForPredicate:codePoint]]];
+			[predicateSyntax setObject:[codePointsInvokesBuild objectForKey:codePoint] forKey:[NSString stringWithFormat:@"code_point/%@/invokes/cf_bundle_version", [ApptentiveUtilities stringByEscapingForPredicate:codePoint]]];
 		}
 		_codePointInvokesBuild = [[NSDictionary alloc] initWithDictionary:predicateSyntax];
 	}
@@ -361,7 +362,7 @@
 		NSMutableDictionary *predicateSyntax = [NSMutableDictionary dictionary];
 		NSDictionary *interactionsInvokesVersion = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementInteractionsInvokesVersionKey];
 		for (NSString *interactionID in interactionsInvokesVersion) {
-			[predicateSyntax setObject:[interactionsInvokesVersion objectForKey:interactionID] forKey:[NSString stringWithFormat:@"interactions/%@/invokes/version", interactionID]];
+			[predicateSyntax setObject:[interactionsInvokesVersion objectForKey:interactionID] forKey:[NSString stringWithFormat:@"interactions/%@/invokes/cf_bundle_short_version_string", interactionID]];
 		}
 		_interactionInvokesVersion = [[NSDictionary alloc] initWithDictionary:predicateSyntax];
 	}
@@ -374,7 +375,7 @@
 		NSMutableDictionary *predicateSyntax = [NSMutableDictionary dictionary];
 		NSDictionary *interactionsInvokesBuild = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementInteractionsInvokesBuildKey];
 		for (NSString *interactionID in interactionsInvokesBuild) {
-			[predicateSyntax setObject:[interactionsInvokesBuild objectForKey:interactionID] forKey:[NSString stringWithFormat:@"interactions/%@/invokes/build", interactionID]];
+			[predicateSyntax setObject:[interactionsInvokesBuild objectForKey:interactionID] forKey:[NSString stringWithFormat:@"interactions/%@/invokes/cf_bundle_version", interactionID]];
 		}
 		_interactionInvokesBuild = [[NSDictionary alloc] initWithDictionary:predicateSyntax];
 	}

@@ -39,8 +39,8 @@
  sdk/distribution - The current SDK distribution, if available (string).
  sdk/distribution_version - The current version of the SDK distribution, if available (string).
  
- is_update/version - Returns true if we have seen a version prior to the current one.
- is_update/build - Returns true if we have seen a build prior to the current one.
+ is_update/cf_bundle_short_version_string - Returns true if we have seen a version prior to the current one.
+ is_update/cf_bundle_version - Returns true if we have seen a build prior to the current one.
  
  code_point.code_point_name.invokes.total - The total number of times code_point_name has been invoked across all versions of the app (regardless if an Interaction was shown at that point)  (integer)
  code_point.code_point_name.invokes.version - The number of times code_point_name has been invoked in the current version of the app (regardless if an Interaction was shown at that point) (integer)
@@ -92,8 +92,8 @@
 	ApptentiveInteractionUsageData *usageData = [ApptentiveInteractionUsageData usageData];
 	usageData.timeAtInstallTotal = [NSDate dateWithTimeIntervalSinceNow: -6 * 60 * 60 * 24];
 	usageData.timeAtInstallVersion = [NSDate dateWithTimeIntervalSinceNow: -6 * 60 * 60 * 24];
-	usageData.applicationVersion = @"1.8.9";
-	usageData.applicationBuild = @"39";
+	usageData.applicationCFBundleShortVersionString = @"1.8.9";
+	usageData.applicationCFBundleVersion = @"39";
 	usageData.isUpdateVersion = @NO;
 	usageData.isUpdateBuild = @NO;
 	usageData.codePointInvokesTotal = @{};
@@ -109,13 +109,13 @@
 - (void)testUnknownKeyInCriteria {
 	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
 	invocation.criteria = @{ @"time_at_install/total": @{ @"$before": @(6 * 60 * 60 * 24) },
-							 @"time_at_install/version": @{ @"$before": @(6 * 60 * 60 * 24) } };
+							 @"time_at_install/cf_bundle_short_version_string": @{ @"$before": @(6 * 60 * 60 * 24) } };
 
 	ApptentiveInteractionUsageData *usageData = [ApptentiveInteractionUsageData usageData];
 	usageData.timeAtInstallTotal = [NSDate dateWithTimeIntervalSinceNow: -7 * 60 * 60 * 24];
 	usageData.timeAtInstallVersion = [NSDate dateWithTimeIntervalSinceNow: -7 * 60 * 60 * 24];
-	usageData.applicationVersion = @"1.8.9";
-	usageData.applicationBuild = @"39";
+	usageData.applicationCFBundleShortVersionString = @"1.8.9";
+	usageData.applicationCFBundleVersion = @"39";
 	usageData.isUpdateVersion = @NO;
 	usageData.isUpdateBuild = @NO;
 	usageData.codePointInvokesTotal = @{};
@@ -197,10 +197,10 @@
 	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
 	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] init];
 
-	invocation.criteria = @{ @"application/version": [Apptentive versionObjectWithVersion:@"1.2.8"] };
-	usageData.applicationVersion = @"1.2.8";
+	invocation.criteria = @{ @"application/cf_bundle_short_version_string": [Apptentive versionObjectWithVersion:@"1.2.8"] };
+	usageData.applicationCFBundleShortVersionString = @"1.2.8";
 	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Version number");
-	usageData.applicationVersion = @"v1.2.8";
+	usageData.applicationCFBundleShortVersionString = @"v1.2.8";
 	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Version number must not have a 'v' in front!");
 }
 
@@ -208,24 +208,24 @@
 	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
 	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] init];
 
-	invocation.criteria = @{ @"application/build": [Apptentive versionObjectWithVersion:@"39"] };
-	usageData.applicationBuild = @"39";
+	invocation.criteria = @{ @"application/cf_bundle_version": [Apptentive versionObjectWithVersion:@"39"] };
+	usageData.applicationCFBundleVersion = @"39";
 	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Build number");
 
-	usageData.applicationBuild = @"v39";
+	usageData.applicationCFBundleVersion = @"v39";
 	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Build number must not have a 'v' in front!");
 
-	usageData.applicationBuild = @"3.0";
+	usageData.applicationCFBundleVersion = @"3.0";
 	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Build number must not have a 'v' in front!");
 
-	invocation.criteria = @{ @"application/build": [Apptentive versionObjectWithVersion:@"3.0"] };
-	usageData.applicationBuild = @"3.0";
+	invocation.criteria = @{ @"application/cf_bundle_version": [Apptentive versionObjectWithVersion:@"3.0"] };
+	usageData.applicationCFBundleVersion = @"3.0";
 	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Build number");
 
-	usageData.applicationBuild = @"v3.0";
+	usageData.applicationCFBundleVersion = @"v3.0";
 	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Build number must not have a 'v' in front!");
 
-	invocation.criteria = @{ @"application/build": @{@"$contains": @3.0} };
+	invocation.criteria = @{ @"application/cf_bundle_version": @{@"$contains": @3.0} };
 	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Should fail with invalid types.");
 }
 
@@ -293,34 +293,34 @@
 	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
 	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] init];
 
-	invocation.criteria = @{ @"code_point/app.launch/invokes/version": @1 };
-	usageData.codePointInvokesVersion = @{ @"code_point/app.launch/invokes/version": @1 };
+	invocation.criteria = @{ @"code_point/app.launch/invokes/cf_bundle_short_version_string": @1 };
+	usageData.codePointInvokesVersion = @{ @"code_point/app.launch/invokes/cf_bundle_short_version_string": @1 };
 	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"This version has been invoked 1 time.");
-	usageData.codePointInvokesVersion = @{ @"code_point/app.launch/invokes/version": @0 };
+	usageData.codePointInvokesVersion = @{ @"code_point/app.launch/invokes/cf_bundle_short_version_string": @0 };
 	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Codepoint version invokes.");
-	usageData.codePointInvokesVersion = @{ @"code_point/app.launch/invokes/version": @2 };
+	usageData.codePointInvokesVersion = @{ @"code_point/app.launch/invokes/cf_bundle_short_version_string": @2 };
 	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Codepoint version invokes.");
 
 
-	invocation.criteria = @{ @"code_point/big.win/invokes/version": @7 };
-	usageData.codePointInvokesVersion = @{ @"code_point/big.win/invokes/version": @7 };
+	invocation.criteria = @{ @"code_point/big.win/invokes/cf_bundle_short_version_string": @7 };
+	usageData.codePointInvokesVersion = @{ @"code_point/big.win/invokes/cf_bundle_short_version_string": @7 };
 	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Codepoint version invokes.");
-	usageData.codePointInvokesVersion = @{ @"code_point/big.win/invokes/version": @1 };
+	usageData.codePointInvokesVersion = @{ @"code_point/big.win/invokes/cf_bundle_short_version_string": @1 };
 	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Codepoint version invokes.");
-	usageData.codePointInvokesVersion = @{ @"code_point/big.win/invokes/version": @19 };
+	usageData.codePointInvokesVersion = @{ @"code_point/big.win/invokes/cf_bundle_short_version_string": @19 };
 	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Codepoint version invokes.");
 
-	invocation.criteria = @{ @"code_point/big.win/invokes/version": @{@"$gte": @5, @"$lte": @5} };
-	usageData.codePointInvokesVersion = @{ @"code_point/big.win/invokes/version": @5 };
+	invocation.criteria = @{ @"code_point/big.win/invokes/cf_bundle_short_version_string": @{@"$gte": @5, @"$lte": @5} };
+	usageData.codePointInvokesVersion = @{ @"code_point/big.win/invokes/cf_bundle_short_version_string": @5 };
 	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Codepoint version invokes.");
-	usageData.codePointInvokesVersion = @{ @"code_point/big.win/invokes/version": @3 };
+	usageData.codePointInvokesVersion = @{ @"code_point/big.win/invokes/cf_bundle_short_version_string": @3 };
 	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Codepoint version invokes.");
-	usageData.codePointInvokesVersion = @{ @"code_point/big.win/invokes/version": @19 };
+	usageData.codePointInvokesVersion = @{ @"code_point/big.win/invokes/cf_bundle_short_version_string": @19 };
 	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Codepoint version invokes.");
 
 
-	invocation.criteria = @{ @"code_point/big.win/invokes/version": @{@"$gte": @"5", @"$lte": @"5"} };
-	usageData.codePointInvokesVersion = @{ @"code_point/big.win/invokes/version": @5 };
+	invocation.criteria = @{ @"code_point/big.win/invokes/cf_bundle_short_version_string": @{@"$gte": @"5", @"$lte": @"5"} };
+	usageData.codePointInvokesVersion = @{ @"code_point/big.win/invokes/cf_bundle_short_version_string": @5 };
 	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Should fail with invalid types.");
 }
 
@@ -328,57 +328,57 @@
 	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
 	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] init];
 
-	invocation.criteria = @{ @"code_point/app.launch/invokes/version": @1,
-		@"application/version": [Apptentive versionObjectWithVersion:@"1.3.0"],
-		@"application/build": [Apptentive versionObjectWithVersion:@"39"] };
-	usageData.codePointInvokesVersion = @{ @"code_point/app.launch/invokes/version": @1 };
-	usageData.applicationVersion = @"1.3.0";
+	invocation.criteria = @{ @"code_point/app.launch/invokes/cf_bundle_short_version_string": @1,
+		@"application/cf_bundle_short_version_string": [Apptentive versionObjectWithVersion:@"1.3.0"],
+		@"application/cf_bundle_version": [Apptentive versionObjectWithVersion:@"39"] };
+	usageData.codePointInvokesVersion = @{ @"code_point/app.launch/invokes/cf_bundle_short_version_string": @1 };
+	usageData.applicationCFBundleShortVersionString = @"1.3.0";
 	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Test Upgrade Message without build number.");
-	usageData.applicationBuild = @"39";
+	usageData.applicationCFBundleVersion = @"39";
 	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Test Upgrade Message.");
-	usageData.codePointInvokesVersion = @{ @"code_point/app.launch/invokes/version": @2 };
-	usageData.applicationVersion = @"1.3.0";
+	usageData.codePointInvokesVersion = @{ @"code_point/app.launch/invokes/cf_bundle_short_version_string": @2 };
+	usageData.applicationCFBundleShortVersionString = @"1.3.0";
 	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Test Upgrade Message.");
-	usageData.codePointInvokesVersion = @{ @"code_point/app.launch/invokes/version": @1 };
-	usageData.applicationVersion = @"1.3.1";
-	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Test Upgrade Message.");
-
-	invocation.criteria = @{ @"application/version": [Apptentive versionObjectWithVersion:@"1.3.0"],
-		@"code_point/app.launch/invokes/version": @{@"$gte": @1} };
-	usageData.codePointInvokesVersion = @{ @"code_point/app.launch/invokes/version": @1 };
-	usageData.applicationVersion = @"1.3.0";
-	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Test Upgrade Message.");
-	usageData.codePointInvokesVersion = @{ @"code_point/app.launch/invokes/version": @2 };
-	usageData.applicationVersion = @"1.3.0";
-	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Test Upgrade Message.");
-	usageData.codePointInvokesVersion = @{ @"code_point/app.launch/invokes/version": @0 };
-	usageData.applicationVersion = @"1.3.0";
+	usageData.codePointInvokesVersion = @{ @"code_point/app.launch/invokes/cf_bundle_short_version_string": @1 };
+	usageData.applicationCFBundleShortVersionString = @"1.3.1";
 	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Test Upgrade Message.");
 
-	invocation.criteria = @{ @"application/version": [Apptentive versionObjectWithVersion:@"1.3.0"],
-		@"code_point/app.launch/invokes/version": @{@"$lte": @4} };
-	usageData.codePointInvokesVersion = @{ @"code_point/app.launch/invokes/version": @1 };
-	usageData.applicationVersion = @"1.3.0";
+	invocation.criteria = @{ @"application/cf_bundle_short_version_string": [Apptentive versionObjectWithVersion:@"1.3.0"],
+		@"code_point/app.launch/invokes/cf_bundle_short_version_string": @{@"$gte": @1} };
+	usageData.codePointInvokesVersion = @{ @"code_point/app.launch/invokes/cf_bundle_short_version_string": @1 };
+	usageData.applicationCFBundleShortVersionString = @"1.3.0";
 	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Test Upgrade Message.");
-	usageData.codePointInvokesVersion = @{ @"code_point/app.launch/invokes/version": @4 };
-	usageData.applicationVersion = @"1.3.0";
+	usageData.codePointInvokesVersion = @{ @"code_point/app.launch/invokes/cf_bundle_short_version_string": @2 };
+	usageData.applicationCFBundleShortVersionString = @"1.3.0";
 	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Test Upgrade Message.");
-	usageData.codePointInvokesVersion = @{ @"code_point/app.launch/invokes/version": @5 };
-	usageData.applicationVersion = @"1.3.0";
+	usageData.codePointInvokesVersion = @{ @"code_point/app.launch/invokes/cf_bundle_short_version_string": @0 };
+	usageData.applicationCFBundleShortVersionString = @"1.3.0";
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Test Upgrade Message.");
+
+	invocation.criteria = @{ @"application/cf_bundle_short_version_string": [Apptentive versionObjectWithVersion:@"1.3.0"],
+		@"code_point/app.launch/invokes/cf_bundle_short_version_string": @{@"$lte": @4} };
+	usageData.codePointInvokesVersion = @{ @"code_point/app.launch/invokes/cf_bundle_short_version_string": @1 };
+	usageData.applicationCFBundleShortVersionString = @"1.3.0";
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Test Upgrade Message.");
+	usageData.codePointInvokesVersion = @{ @"code_point/app.launch/invokes/cf_bundle_short_version_string": @4 };
+	usageData.applicationCFBundleShortVersionString = @"1.3.0";
+	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Test Upgrade Message.");
+	usageData.codePointInvokesVersion = @{ @"code_point/app.launch/invokes/cf_bundle_short_version_string": @5 };
+	usageData.applicationCFBundleShortVersionString = @"1.3.0";
 	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Test Upgrade Message.");
 
 
-	invocation.criteria = @{ @"code_point/app.launch/invokes/version": @[@1],
+	invocation.criteria = @{ @"code_point/app.launch/invokes/cf_bundle_short_version_string": @[@1],
 		@"application_version": @"1.3.0",
 		@"application_build": @"39" };
-	usageData.codePointInvokesVersion = @{ @"code_point/app.launch/invokes/version": @1 };
-	usageData.applicationVersion = @"1.3.0";
-	usageData.applicationBuild = @"39";
+	usageData.codePointInvokesVersion = @{ @"code_point/app.launch/invokes/cf_bundle_short_version_string": @1 };
+	usageData.applicationCFBundleShortVersionString = @"1.3.0";
+	usageData.applicationCFBundleVersion = @"39";
 	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Should fail with invalid types.");
 }
 
 - (void)testNewUpgradeMessageCriteria {
-	NSString *jsonString = @"{\"interactions\":[{\"id\":\"52fadf097724c5c09f000012\",\"type\":\"UpgradeMessage\",\"configuration\":{}}],\"targets\":{\"local#app#upgrade_message_test\":[{\"interaction_id\":\"52fadf097724c5c09f000012\",\"criteria\":{\"application/version\":{\"_type\":\"version\",\"version\":\"999\"},\"time_at_install/version\":{\"$after\":-604800},\"is_update/version\":true,\"interactions/52fadf097724c5c09f000012/invokes/total\":0}}]}}";
+	NSString *jsonString = @"{\"interactions\":[{\"id\":\"52fadf097724c5c09f000012\",\"type\":\"UpgradeMessage\",\"configuration\":{}}],\"targets\":{\"local#app#upgrade_message_test\":[{\"interaction_id\":\"52fadf097724c5c09f000012\",\"criteria\":{\"application/cf_bundle_short_version_string\":{\"_type\":\"version\",\"version\":\"999\"},\"time_at_install/cf_bundle_short_version_string\":{\"$after\":-604800},\"is_update/cf_bundle_short_version_string\":true,\"interactions/52fadf097724c5c09f000012/invokes/total\":0}}]}}";
 
 	/*
 	targets = {
@@ -387,7 +387,7 @@
 												criteria = {
 													"application_version" = 999;
 													"interactions/52fadf097724c5c09f000012/invokes/total" = 0;
-													"is_update/version" = 1;
+													"is_update/cf_bundle_short_version_string" = 1;
 													"time_at_install/version" = {
 														"$before" = -604800;
 													};
@@ -409,28 +409,28 @@
 	ApptentiveInteractionInvocation *upgradeMessageInteractionInvocation = [ApptentiveInteractionInvocation invocationWithJSONDictionary:appLaunchInteraction];
 	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] init];
 
-	usageData.applicationVersion = @"999";
+	usageData.applicationCFBundleShortVersionString = @"999";
 	usageData.interactionInvokesTotal = @{ @"interactions/52fadf097724c5c09f000012/invokes/total": @0 };
 	usageData.isUpdateVersion = @YES;
 	usageData.timeAtInstallVersion = [NSDate dateWithTimeIntervalSinceNow:-2 * 24 * 60 * 60];
 	XCTAssertTrue([upgradeMessageInteractionInvocation criteriaAreMetForUsageData:usageData], @"Upgrade Message criteria met!");
 
 	usageData = [[ApptentiveInteractionUsageData alloc] init];
-	usageData.applicationVersion = @"998";
+	usageData.applicationCFBundleShortVersionString = @"998";
 	usageData.interactionInvokesTotal = @{ @"interactions/52fadf097724c5c09f000012/invokes/total": @0 };
 	usageData.isUpdateVersion = @YES;
 	usageData.timeAtInstallVersion = [NSDate dateWithTimeIntervalSinceNow:-2 * 24 * 60 * 60];
 	XCTAssertFalse([upgradeMessageInteractionInvocation criteriaAreMetForUsageData:usageData], @"Upgrade Message criteria not met!");
 
 	usageData = [[ApptentiveInteractionUsageData alloc] init];
-	usageData.applicationVersion = @"999";
+	usageData.applicationCFBundleShortVersionString = @"999";
 	usageData.interactionInvokesTotal = @{ @"interactions/52fadf097724c5c09f000012/invokes/total": @0 };
 	usageData.isUpdateVersion = @NO;
 	usageData.timeAtInstallVersion = [NSDate dateWithTimeIntervalSinceNow:-2 * 24 * 60 * 60];
 	XCTAssertFalse([upgradeMessageInteractionInvocation criteriaAreMetForUsageData:usageData], @"Upgrade Message criteria not met!");
 
 	usageData = [[ApptentiveInteractionUsageData alloc] init];
-	usageData.applicationVersion = @"999";
+	usageData.applicationCFBundleShortVersionString = @"999";
 	usageData.interactionInvokesTotal = @{ @"interactions/52fadf097724c5c09f000012/invokes/total": @1 };
 	usageData.isUpdateVersion = @YES;
 	usageData.timeAtInstallVersion = [NSDate dateWithTimeIntervalSinceNow:-2 * 24 * 60 * 60];
@@ -438,9 +438,9 @@
 }
 
 - (void)testComplexCriteria {
-	NSDictionary *complexCriteria = @{ @"$or": @[@{@"time_at_install/version": @{@"$after": @(-259200)}},
+	NSDictionary *complexCriteria = @{ @"$or": @[@{@"time_at_install/cf_bundle_short_version_string": @{@"$after": @(-259200)}},
 		@{@"$and": @[@{@"code_point/app.launch/invokes/total": @2},
-			@{@"interactions/526fe2836dd8bf546a00000b/invokes/version": @0},
+			@{@"interactions/526fe2836dd8bf546a00000b/invokes/cf_bundle_short_version_string": @0},
 			@{@"$or": @[@{@"code_point/small.win/invokes/total": @2},
 				@{@"code_point/big.win/invokes/total": @2}]}]}]
 	};
@@ -462,7 +462,7 @@
 	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"3 fails the initial OR clause. 8 fails the other clause.");
 
 	usageData.timeAtInstallVersion = [NSDate dateWithTimeIntervalSinceNow:-3 * dayTimeInterval];
-	usageData.interactionInvokesVersion = @{ @"interactions/526fe2836dd8bf546a00000b/invokes/version": @0 };
+	usageData.interactionInvokesVersion = @{ @"interactions/526fe2836dd8bf546a00000b/invokes/cf_bundle_short_version_string": @0 };
 	usageData.codePointInvokesTotal = @{ @"code_point/app.launch/invokes/total": @2,
 		@"code_point/small.win/invokes/total": @0,
 		@"code_point/big.win/invokes/total": @2 };
@@ -478,7 +478,7 @@
 	usageData.codePointInvokesTotal = @{ @"code_point/app.launch/invokes/total": @2,
 		@"code_point/small.win/invokes/total": @2,
 		@"code_point/big.win/invokes/total": @1 };
-	usageData.interactionInvokesVersion = @{ @"interactions/526fe2836dd8bf546a00000b/invokes/version": @8 };
+	usageData.interactionInvokesVersion = @{ @"interactions/526fe2836dd8bf546a00000b/invokes/cf_bundle_short_version_string": @8 };
 	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"The middle case is incorrect.");
 }
 
@@ -506,119 +506,119 @@
 	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] init];
 
 	//Version
-	invocation.criteria = @{ @"is_update/version": @YES };
+	invocation.criteria = @{ @"is_update/cf_bundle_short_version_string": @YES };
 	usageData.isUpdateVersion = @YES;
 	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Test isUpdate");
 
-	invocation.criteria = @{ @"is_update/version": @NO };
+	invocation.criteria = @{ @"is_update/cf_bundle_short_version_string": @NO };
 	usageData.isUpdateVersion = @NO;
 	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Test isUpdate");
 
-	invocation.criteria = @{ @"is_update/version": @YES };
+	invocation.criteria = @{ @"is_update/cf_bundle_short_version_string": @YES };
 	usageData.isUpdateVersion = @NO;
 	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Test isUpdate");
 
-	invocation.criteria = @{ @"is_update/version": @NO };
+	invocation.criteria = @{ @"is_update/cf_bundle_short_version_string": @NO };
 	usageData.isUpdateVersion = @YES;
 	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Test isUpdate");
 
 	//Build
-	invocation.criteria = @{ @"is_update/build": @YES };
+	invocation.criteria = @{ @"is_update/cf_bundle_version": @YES };
 	usageData.isUpdateBuild = @YES;
 	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Test isUpdate");
 
-	invocation.criteria = @{ @"is_update/build": @NO };
+	invocation.criteria = @{ @"is_update/cf_bundle_version": @NO };
 	usageData.isUpdateBuild = @NO;
 	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Test isUpdate");
 
-	invocation.criteria = @{ @"is_update/build": @YES };
+	invocation.criteria = @{ @"is_update/cf_bundle_version": @YES };
 	usageData.isUpdateBuild = @NO;
 	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Test isUpdate");
 
-	invocation.criteria = @{ @"is_update/build": @NO };
+	invocation.criteria = @{ @"is_update/cf_bundle_version": @NO };
 	usageData.isUpdateBuild = @YES;
 	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Test isUpdate");
 
 
-	invocation.criteria = @{ @"is_update/build": @[[NSNull null]] };
+	invocation.criteria = @{ @"is_update/cf_bundle_version": @[[NSNull null]] };
 	usageData.isUpdateBuild = @NO;
 	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Should fail with invalid types.");
-	invocation.criteria = @{ @"is_update/build": @{@"$gt": @"lajd;fl ajsd;flj"} };
+	invocation.criteria = @{ @"is_update/cf_bundle_version": @{@"$gt": @"lajd;fl ajsd;flj"} };
 	usageData.isUpdateBuild = @NO;
 	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Should fail with invalid types.");
 }
 
 - (void)testInvokesVersion {
 	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
-	invocation.criteria = @{ @"interactions/526fe2836dd8bf546a00000b/invokes/version": @{@"$lte": @6} };
+	invocation.criteria = @{ @"interactions/526fe2836dd8bf546a00000b/invokes/cf_bundle_short_version_string": @{@"$lte": @6} };
 
 	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] init];
 	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Invokes version should default to 0 when not set.");
 
-	invocation.criteria = @{ @"interactions/526fe2836dd8bf546a00000b/invokes/version": @{@"$gte": @6} };
+	invocation.criteria = @{ @"interactions/526fe2836dd8bf546a00000b/invokes/cf_bundle_short_version_string": @{@"$gte": @6} };
 	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Invokes version should default to 0 when not set.");
 
-	invocation.criteria = @{ @"interactions/526fe2836dd8bf546a00000b/invokes/version": @{@"$lte": @6} };
-	usageData.interactionInvokesVersion = @{ @"interactions/526fe2836dd8bf546a00000b/invokes/version": @1 };
+	invocation.criteria = @{ @"interactions/526fe2836dd8bf546a00000b/invokes/cf_bundle_short_version_string": @{@"$lte": @6} };
+	usageData.interactionInvokesVersion = @{ @"interactions/526fe2836dd8bf546a00000b/invokes/cf_bundle_short_version_string": @1 };
 	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Invokes version");
 
-	invocation.criteria = @{ @"interactions/526fe2836dd8bf546a00000b/invokes/version": @{@"$lte": @6} };
-	usageData.interactionInvokesVersion = @{ @"interactions/526fe2836dd8bf546a00000b/invokes/version": @7 };
+	invocation.criteria = @{ @"interactions/526fe2836dd8bf546a00000b/invokes/cf_bundle_short_version_string": @{@"$lte": @6} };
+	usageData.interactionInvokesVersion = @{ @"interactions/526fe2836dd8bf546a00000b/invokes/cf_bundle_short_version_string": @7 };
 	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Invokes version");
 }
 
 - (void)testInvokesBuild {
 	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
-	invocation.criteria = @{ @"interactions/526fe2836dd8bf546a00000b/invokes/build": @{@"$lte": @6} };
+	invocation.criteria = @{ @"interactions/526fe2836dd8bf546a00000b/invokes/cf_bundle_version": @{@"$lte": @6} };
 
 	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] init];
 	XCTAssertNotNil([invocation criteriaPredicate], @"Criteria should parse correctly.");
 	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Invokes build should default to 0 when not set.");
 
-	invocation.criteria = @{ @"interactions/526fe2836dd8bf546a00000b/invokes/build": @{@"$gte": @6} };
+	invocation.criteria = @{ @"interactions/526fe2836dd8bf546a00000b/invokes/cf_bundle_version": @{@"$gte": @6} };
 	XCTAssertNotNil([invocation criteriaPredicate], @"Criteria should parse correctly.");
 	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Invokes build should default to 0 when not set.");
 
-	invocation.criteria = @{ @"interactions/526fe2836dd8bf546a00000b/invokes/build": @{@"$lte": @6} };
+	invocation.criteria = @{ @"interactions/526fe2836dd8bf546a00000b/invokes/cf_bundle_version": @{@"$lte": @6} };
 	XCTAssertNotNil([invocation criteriaPredicate], @"Criteria should parse correctly.");
-	usageData.interactionInvokesBuild = @{ @"interactions/526fe2836dd8bf546a00000b/invokes/build": @1 };
+	usageData.interactionInvokesBuild = @{ @"interactions/526fe2836dd8bf546a00000b/invokes/cf_bundle_version": @1 };
 	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Invokes build");
 
-	invocation.criteria = @{ @"interactions/526fe2836dd8bf546a00000b/invokes/build": @{@"$lte": @6} };
+	invocation.criteria = @{ @"interactions/526fe2836dd8bf546a00000b/invokes/cf_bundle_version": @{@"$lte": @6} };
 	XCTAssertNotNil([invocation criteriaPredicate], @"Criteria should parse correctly.");
-	usageData.interactionInvokesBuild = @{ @"interactions/526fe2836dd8bf546a00000b/invokes/build": @7 };
+	usageData.interactionInvokesBuild = @{ @"interactions/526fe2836dd8bf546a00000b/invokes/cf_bundle_version": @7 };
 	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Invokes build");
 }
 
 - (void)testEnjoymentDialogCriteria {
 	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
-	invocation.criteria = @{ @"$or": @[@{@"code_point/local#app#init/invokes/version": @{@"$gte": @10}},
+	invocation.criteria = @{ @"$or": @[@{@"code_point/local#app#init/invokes/cf_bundle_short_version_string": @{@"$gte": @10}},
 		@{@"time_at_install/total": @{@"$before": @-864000}},
 		@{@"code_point/local#app#testRatingFlow/invokes/total": @{@"$gt": @10}}],
-		@"interactions/533ed97a7724c5457e00003f/invokes/version": @0 };
+		@"interactions/533ed97a7724c5457e00003f/invokes/cf_bundle_short_version_string": @0 };
 	XCTAssertNotNil([invocation criteriaPredicate], @"Criteria should parse correctly.");
 
 
 	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] init];
-	usageData.codePointInvokesVersion = @{ @"code_point/local#app#init/invokes/version": @9 };
+	usageData.codePointInvokesVersion = @{ @"code_point/local#app#init/invokes/cf_bundle_short_version_string": @9 };
 	usageData.timeAtInstallTotal = [NSDate dateWithTimeIntervalSinceNow:-863999];
 	usageData.codePointInvokesTotal = @{ @"code_point/local#app#testRatingFlow/invokes/total": @9 };
-	usageData.interactionInvokesVersion = @{ @"interactions/533ed97a7724c5457e00003f/invokes/version": @0 };
+	usageData.interactionInvokesVersion = @{ @"interactions/533ed97a7724c5457e00003f/invokes/cf_bundle_short_version_string": @0 };
 	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"The OR clauses are failing.");
 
-	usageData.codePointInvokesVersion = @{ @"code_point/local#app#init/invokes/version": @11 };
+	usageData.codePointInvokesVersion = @{ @"code_point/local#app#init/invokes/cf_bundle_short_version_string": @11 };
 	usageData.timeAtInstallTotal = [NSDate dateWithTimeIntervalSinceNow:-863999];
 	usageData.codePointInvokesTotal = @{ @"code_point/local#app#testRatingFlow/invokes/total": @9 };
-	usageData.interactionInvokesVersion = @{ @"interactions/533ed97a7724c5457e00003f/invokes/version": @0 };
+	usageData.interactionInvokesVersion = @{ @"interactions/533ed97a7724c5457e00003f/invokes/cf_bundle_short_version_string": @0 };
 	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"One of the OR clauses is true. The other ANDed clause is also true. Should work.");
 
-	usageData.codePointInvokesVersion = @{ @"code_point/local#app#init/invokes/version": @11 };
+	usageData.codePointInvokesVersion = @{ @"code_point/local#app#init/invokes/cf_bundle_short_version_string": @11 };
 	usageData.timeAtInstallTotal = [NSDate dateWithTimeIntervalSinceNow:-864001];
 	usageData.codePointInvokesTotal = @{ @"code_point/local#app#testRatingFlow/invokes/total": @11 };
-	usageData.interactionInvokesVersion = @{ @"interactions/533ed97a7724c5457e00003f/invokes/version": @0 };
+	usageData.interactionInvokesVersion = @{ @"interactions/533ed97a7724c5457e00003f/invokes/cf_bundle_short_version_string": @0 };
 	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"All of the OR clauses are true. The other ANDed clause is also true. Should work.");
 
-	usageData.interactionInvokesVersion = @{ @"interactions/533ed97a7724c5457e00003f/invokes/version": @1 };
+	usageData.interactionInvokesVersion = @{ @"interactions/533ed97a7724c5457e00003f/invokes/cf_bundle_short_version_string": @1 };
 	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"All the OR clauses are true. The other ANDed clause is not true. Should fail.");
 }
 

@@ -258,6 +258,7 @@
 		016987661DA5C60F008C4C78 /* Apptentive.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 016986721DA57944008C4C78 /* Apptentive.framework */; };
 		016987701DA5D678008C4C78 /* Apptentive_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 4967278116B9D9CB00C679B8 /* Apptentive_Private.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		016A4E191CAF312900AD22A9 /* ApptentiveAPIRequestTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 016A4E171CAF30F900AD22A9 /* ApptentiveAPIRequestTests.m */; };
+		016E4A361DB9982900E45EE4 /* testV7Criteria.json in Resources */ = {isa = PBXBuildFile; fileRef = 016E4A2D1DB9659000E45EE4 /* testV7Criteria.json */; };
 		0171DFED1BF2D019006F8BEA /* ApptentiveCompoundReplyCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 0171DFEB1BF2D019006F8BEA /* ApptentiveCompoundReplyCell.h */; };
 		0171DFEE1BF2D019006F8BEA /* ApptentiveCompoundReplyCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0171DFEC1BF2D019006F8BEA /* ApptentiveCompoundReplyCell.m */; };
 		017D97421B0E3770004E045C /* ApptentiveMessageCenterStatusView.h in Headers */ = {isa = PBXBuildFile; fileRef = 017D97401B0E3770004E045C /* ApptentiveMessageCenterStatusView.h */; };
@@ -628,6 +629,13 @@
 		016987511DA5C422008C4C78 /* ApptentiveDebugging.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ApptentiveDebugging.h; sourceTree = "<group>"; };
 		016987521DA5C422008C4C78 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		016A4E171CAF30F900AD22A9 /* ApptentiveAPIRequestTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveAPIRequestTests.m; sourceTree = "<group>"; };
+		016E4A271DB9659000E45EE4 /* testOperatorAfter.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testOperatorAfter.json; sourceTree = "<group>"; };
+		016E4A281DB9659000E45EE4 /* testOperatorBefore.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testOperatorBefore.json; sourceTree = "<group>"; };
+		016E4A291DB9659000E45EE4 /* testOperatorGreaterThan.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testOperatorGreaterThan.json; sourceTree = "<group>"; };
+		016E4A2A1DB9659000E45EE4 /* testOperatorGreaterThanOrEqual.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testOperatorGreaterThanOrEqual.json; sourceTree = "<group>"; };
+		016E4A2B1DB9659000E45EE4 /* testOperatorLessThan.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testOperatorLessThan.json; sourceTree = "<group>"; };
+		016E4A2C1DB9659000E45EE4 /* testOperatorLessThanOrEqual.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testOperatorLessThanOrEqual.json; sourceTree = "<group>"; };
+		016E4A2D1DB9659000E45EE4 /* testV7Criteria.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testV7Criteria.json; sourceTree = "<group>"; };
 		0171DFEB1BF2D019006F8BEA /* ApptentiveCompoundReplyCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveCompoundReplyCell.h; sourceTree = "<group>"; };
 		0171DFEC1BF2D019006F8BEA /* ApptentiveCompoundReplyCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveCompoundReplyCell.m; sourceTree = "<group>"; };
 		0171DFEF1BF2D1F1006F8BEA /* ApptentiveMessageCenterCellProtocols.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ApptentiveMessageCenterCellProtocols.h; sourceTree = "<group>"; };
@@ -1296,20 +1304,27 @@
 		01F6FD5F1BFAA28B004513C2 /* criteria */ = {
 			isa = PBXGroup;
 			children = (
-				01F6FE2B1C0118F3004513C2 /* testWhitespaceTrimming.json */,
-				01F6FD601BFAA28B004513C2 /* testCornerCasesThatShouldBeFalse.json */,
-				01F6FD611BFAA28B004513C2 /* testCornerCasesThatShouldBeTrue.json */,
-				01F6FD621BFAA28B004513C2 /* testDefaultValues.json */,
-				01F6FD631BFAA28B004513C2 /* testPredicateParsing.json */,
-				01F6FD9C1BFBF0D9004513C2 /* testOperatorContains.json */,
-				01F6FDA01BFBF0D9004513C2 /* testOperatorStartsWith.json */,
-				01F6FD9D1BFBF0D9004513C2 /* testOperatorEndsWith.json */,
-				01F6FD9F1BFBF0D9004513C2 /* testOperatorNot.json */,
-				01F6FD9E1BFBF0D9004513C2 /* testOperatorExists.json */,
 				01F6FD981BFBF0D9004513C2 /* testCodePointInvokesTotal.json */,
 				01F6FD991BFBF0D9004513C2 /* testCodePointInvokesVersion.json */,
 				01F6FD9A1BFBF0D9004513C2 /* testCodePointLastInvokedAt.json */,
+				01F6FD601BFAA28B004513C2 /* testCornerCasesThatShouldBeFalse.json */,
+				01F6FD611BFAA28B004513C2 /* testCornerCasesThatShouldBeTrue.json */,
+				01F6FD621BFAA28B004513C2 /* testDefaultValues.json */,
 				01F6FD9B1BFBF0D9004513C2 /* testInteractionInvokesTotal.json */,
+				016E4A271DB9659000E45EE4 /* testOperatorAfter.json */,
+				016E4A281DB9659000E45EE4 /* testOperatorBefore.json */,
+				01F6FD9C1BFBF0D9004513C2 /* testOperatorContains.json */,
+				01F6FD9D1BFBF0D9004513C2 /* testOperatorEndsWith.json */,
+				01F6FD9E1BFBF0D9004513C2 /* testOperatorExists.json */,
+				016E4A291DB9659000E45EE4 /* testOperatorGreaterThan.json */,
+				016E4A2A1DB9659000E45EE4 /* testOperatorGreaterThanOrEqual.json */,
+				016E4A2B1DB9659000E45EE4 /* testOperatorLessThan.json */,
+				016E4A2C1DB9659000E45EE4 /* testOperatorLessThanOrEqual.json */,
+				01F6FD9F1BFBF0D9004513C2 /* testOperatorNot.json */,
+				01F6FDA01BFBF0D9004513C2 /* testOperatorStartsWith.json */,
+				01F6FD631BFAA28B004513C2 /* testPredicateParsing.json */,
+				016E4A2D1DB9659000E45EE4 /* testV7Criteria.json */,
+				01F6FE2B1C0118F3004513C2 /* testWhitespaceTrimming.json */,
 			);
 			path = criteria;
 			sourceTree = "<group>";
@@ -2237,6 +2252,7 @@
 				01A88FFC1AFBFFAE002C49E7 /* testJsonDiffing.2.old.json in Resources */,
 				49E7408B184045C900413697 /* v2WALDatabase in Resources */,
 				49E7408818403E6200413697 /* v2CorruptDatabase in Resources */,
+				016E4A361DB9982900E45EE4 /* testV7Criteria.json in Resources */,
 				01A88FFB1AFBFFAE002C49E7 /* testJsonDiffing.2.new.json in Resources */,
 				01F6FDA31BFBF3E2004513C2 /* testCodePointLastInvokedAt.json in Resources */,
 				01F6FDA41BFBF3E2004513C2 /* testInteractionInvokesTotal.json in Resources */,

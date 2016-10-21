@@ -202,6 +202,12 @@
 	XCTAssertTrue([invocation criteriaAreMetForUsageData:usageData], @"Version number");
 	usageData.applicationCFBundleShortVersionString = @"v1.2.8";
 	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Version number must not have a 'v' in front!");
+
+	invocation.criteria = @{ @"application/version": [Apptentive versionObjectWithVersion:@"1.2.8"] };
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"application/version not a valid key");
+
+	invocation.criteria = @{ @"application/version_code": [Apptentive versionObjectWithVersion:@"1.2.8"] };
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"application/version not a valid key");
 }
 
 - (void)testInteractionCriteriaBuild {
@@ -227,6 +233,10 @@
 
 	invocation.criteria = @{ @"application/cf_bundle_version": @{@"$contains": @3.0} };
 	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Should fail with invalid types.");
+
+	usageData.applicationCFBundleVersion = @"3.0";
+	invocation.criteria = @{ @"application/build": [Apptentive versionObjectWithVersion:@"3.0.0"] };
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"application/build not a valid key");
 }
 
 - (void)testInteractionCriteriaSDK {
@@ -318,10 +328,17 @@
 	usageData.codePointInvokesVersion = @{ @"code_point/big.win/invokes/cf_bundle_short_version_string": @19 };
 	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Codepoint version invokes.");
 
-
 	invocation.criteria = @{ @"code_point/big.win/invokes/cf_bundle_short_version_string": @{@"$gte": @"5", @"$lte": @"5"} };
 	usageData.codePointInvokesVersion = @{ @"code_point/big.win/invokes/cf_bundle_short_version_string": @5 };
 	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Should fail with invalid types.");
+
+	invocation.criteria = @{ @"code_point/big.win/invokes/version": @1 };
+	usageData.codePointInvokesVersion = @{ @"code_point/big.win/invokes/cf_bundle_short_version_string": @1 };
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Should fail with invalid key.");
+
+	invocation.criteria = @{ @"interactions/big.win/invokes/version": @1 };
+	usageData.codePointInvokesVersion = @{ @"interactions/big.win/invokes/cf_bundle_short_version_string": @1 };
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Should fail with invalid key.");
 }
 
 - (void)testUpgradeMessageCriteria {
@@ -435,6 +452,12 @@
 	usageData.isUpdateVersion = @YES;
 	usageData.timeAtInstallVersion = [NSDate dateWithTimeIntervalSinceNow:-2 * 24 * 60 * 60];
 	XCTAssertFalse([upgradeMessageInteractionInvocation criteriaAreMetForUsageData:usageData], @"Upgrade Message criteria not met!");
+
+	upgradeMessageInteractionInvocation.criteria = @{ @"time_at_install/version": @{ @"$before": @(-1 * 24 * 60 * 60) }};
+	XCTAssertFalse([upgradeMessageInteractionInvocation criteriaAreMetForUsageData:usageData], @"Bad key returns false");
+
+	upgradeMessageInteractionInvocation.criteria = @{ @"time_at_install/build": @{ @"$before": @(-1 * 24 * 60 * 60) }};
+	XCTAssertFalse([upgradeMessageInteractionInvocation criteriaAreMetForUsageData:usageData], @"Bad key returns false");
 }
 
 - (void)testComplexCriteria {
@@ -546,6 +569,17 @@
 	invocation.criteria = @{ @"is_update/cf_bundle_version": @{@"$gt": @"lajd;fl ajsd;flj"} };
 	usageData.isUpdateBuild = @NO;
 	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Should fail with invalid types.");
+
+	usageData.isUpdateVersion = @NO;
+	usageData.isUpdateBuild = @NO;
+	invocation.criteria = @{ @"is_update/version_code": @NO };
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Should fail with invalid key.");
+
+	invocation.criteria = @{ @"is_update/version": @NO };
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Should fail with invalid key.");
+
+	invocation.criteria = @{ @"is_update/build": @NO };
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Should fail with invalid key.");
 }
 
 - (void)testInvokesVersion {
@@ -564,6 +598,9 @@
 
 	invocation.criteria = @{ @"interactions/526fe2836dd8bf546a00000b/invokes/cf_bundle_short_version_string": @{@"$lte": @6} };
 	usageData.interactionInvokesVersion = @{ @"interactions/526fe2836dd8bf546a00000b/invokes/cf_bundle_short_version_string": @7 };
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Invokes version");
+
+	invocation.criteria = @{ @"interactions/526fe2836dd8bf546a00000b/invokes/version": @{@"$lte": @7} };
 	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Invokes version");
 }
 
@@ -587,6 +624,9 @@
 	invocation.criteria = @{ @"interactions/526fe2836dd8bf546a00000b/invokes/cf_bundle_version": @{@"$lte": @6} };
 	XCTAssertNotNil([invocation criteriaPredicate], @"Criteria should parse correctly.");
 	usageData.interactionInvokesBuild = @{ @"interactions/526fe2836dd8bf546a00000b/invokes/cf_bundle_version": @7 };
+	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Invokes build");
+
+	invocation.criteria = @{ @"interactions/526fe2836dd8bf546a00000b/invokes/build": @{@"$lte": @7} };
 	XCTAssertFalse([invocation criteriaAreMetForUsageData:usageData], @"Invokes build");
 }
 

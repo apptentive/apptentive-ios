@@ -14,7 +14,7 @@
       }
     },
     {
-      "time_at_install/version": {
+      "time_at_install/cf_bundle_short_version_string": {
         "$before": 1
       }
     },

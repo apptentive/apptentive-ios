@@ -24,33 +24,33 @@
 
 @implementation ApptentiveInteractionUsageDataTests
 
-- (void)testapplicationCFBundleShortVersionString {
+- (void)testApplicationVersion {
 	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
-	invocation.criteria = @{ @"application/cf_bundle_short_version_string": @{@"$eq": @{@"_type": @"version", @"version": @"4.0.0"}} };
+	invocation.criteria = @{ @"application/version": @{@"$eq": @{@"_type": @"version", @"version": @"4.0.0"}} };
 
 	ApptentiveInteractionUsageData *usage = [[ApptentiveInteractionUsageData alloc] init];
-	usage.applicationCFBundleShortVersionString = @"2";
+	usage.applicationVersion = @"2";
 
 	NSDictionary *evaluationDictionary = [usage predicateEvaluationDictionary];
-	NSDictionary *versionValue = evaluationDictionary[@"application/cf_bundle_short_version_string"];
-	XCTAssertNotNil(versionValue, @"No application/cf_bundle_short_version_string key found.");
+	NSDictionary *versionValue = evaluationDictionary[@"application/version"];
+	XCTAssertNotNil(versionValue, @"No application/version key found.");
 	XCTAssertEqualObjects(versionValue[@"_type"], @"version");
 	XCTAssertEqualObjects(versionValue[@"version"], @"2");
 
 	XCTAssertFalse([invocation criteriaAreMetForUsageData:usage], @"4.0.0 is not 2");
-	usage.applicationCFBundleShortVersionString = @"4.0";
+	usage.applicationVersion = @"4.0";
 	XCTAssertTrue([invocation criteriaAreMetForUsageData:usage], @"4.0 is like 4.0.0");
 }
 
-- (void)testDefaultapplicationCFBundleShortVersionString {
+- (void)testDefaultApplicationVersion {
 	ApptentiveInteractionUsageData *usage = [[ApptentiveInteractionUsageData alloc] init];
 
 	id mockedUsage = OCMPartialMock(usage);
-	OCMStub([mockedUsage applicationCFBundleShortVersionString]).andReturn(nil);
+	OCMStub([mockedUsage applicationVersion]).andReturn(nil);
 
 	NSDictionary *evaluationDictionary = [usage predicateEvaluationDictionary];
-	NSDictionary *versionValue = evaluationDictionary[@"application/cf_bundle_short_version_string"];
-	XCTAssertNotNil(versionValue, @"No application/cf_bundle_short_version_string key found.");
+	NSDictionary *versionValue = evaluationDictionary[@"application/version"];
+	XCTAssertNotNil(versionValue, @"No application/version key found.");
 	XCTAssertEqualObjects(versionValue[@"_type"], @"version");
 	XCTAssertEqualObjects(versionValue[@"version"], @"0.0.0");
 }
@@ -95,7 +95,7 @@
 	XCTAssertEqualObjects(timeAtInstallValue[@"_type"], @"datetime");
 	XCTAssertEqualObjects(timeAtInstallValue[@"sec"], @([usage.timeAtInstallTotal timeIntervalSince1970]));
 
-	NSDictionary *timeAtInstallVersionValue = evaluationDictionary[@"time_at_install/cf_bundle_short_version_string"];
+	NSDictionary *timeAtInstallVersionValue = evaluationDictionary[@"time_at_install/version"];
 	XCTAssertNotNil(timeAtInstallVersionValue, @"No time_at_install/version key found.");
 	XCTAssertEqualObjects(timeAtInstallVersionValue[@"_type"], @"datetime");
 	XCTAssertEqualObjects(timeAtInstallVersionValue[@"sec"], @([usage.timeAtInstallVersion timeIntervalSince1970]));

@@ -158,10 +158,10 @@ NSString *const ApptentiveAPIRequestStatusChanged = @"ApptentiveAPIRequestStatus
 	}
 	_failed = YES;
 	if (sender.failedAuthentication || sender.statusCode == 401) {
-		_errorTitle = ApptentiveLocalizedString(@"Authentication Failed", @"");
-		_errorMessage = ApptentiveLocalizedString(@"Wrong username and/or password.", @"");
+		_errorTitle = @"Authentication Failed";
+		_errorMessage = @"Wrong username and/or password.";
 	} else {
-		_errorTitle = ApptentiveLocalizedString(@"Network Connection Error", @"");
+		_errorTitle = @"Network Connection Error";
 		_errorMessage = [sender.connectionError localizedDescription];
 	}
 	NSData *d = [sender responseData];

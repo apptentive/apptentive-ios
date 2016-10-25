@@ -1,0 +1,79 @@
+{
+  "$and": [
+    {
+      "application/cf_bundle_version": {
+        "$exists": true
+      }
+    },
+    {
+      "application/cf_bundle_short_version_string": {
+        "$exists": true
+      }
+    },
+    {
+      "application/version_code": {
+        "$exists": false
+      }
+    },
+    {
+      "application/version_name": {
+        "$exists": false
+      }
+    },
+    {
+      "application/version": {
+        "$exists": false
+      }
+    },
+    {
+      "is_update/cf_bundle_version": {
+        "$exists": true
+      }
+    },
+    {
+      "is_update/cf_bundle_short_version_string": {
+        "$exists": true
+      }
+    },
+    {
+      "is_update/version_code": {
+        "$exists": false
+      }
+    },
+    {
+      "is_update/version_name": {
+        "$exists": false
+      }
+    },
+    {
+      "is_update/version": {
+        "$exists": false
+      }
+    },
+    {
+      "time_at_install/cf_bundle_version": {
+        "$exists": true
+      }
+    },
+    {
+      "time_at_install/cf_bundle_short_version_string": {
+        "$exists": true
+      }
+    },
+    {
+      "time_at_install/version_code": {
+        "$exists": false
+      }
+    },
+    {
+      "time_at_install/version_name": {
+        "$exists": false
+      }
+    },
+    {
+      "time_at_install/version": {
+        "$exists": false
+      }
+    }
+  ]
+}

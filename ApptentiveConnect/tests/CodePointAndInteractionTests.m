@@ -34,7 +34,7 @@
 }
 
 - (void)incrementVersionCodePoint:(NSString *)codePoint {
-	NSString *fullCodePoint = [NSString stringWithFormat:@"code_point/%@/invokes/version", codePoint];
+	NSString *fullCodePoint = [NSString stringWithFormat:@"code_point/%@/invokes/cf_bundle_short_version_string", codePoint];
 	NSMutableDictionary *mutableCodePoints = [self.usageData.codePointInvokesVersion mutableCopy];
 	mutableCodePoints[fullCodePoint] = @([mutableCodePoints[fullCodePoint] integerValue] + 1);
 	self.usageData.codePointInvokesVersion = [NSDictionary dictionaryWithDictionary:mutableCodePoints];
@@ -167,11 +167,11 @@
 	[super setUp];
 
 	self.usageData.codePointInvokesTotal = @{ @"code_point/switch.code.point/invokes/total": @0 };
-	self.usageData.codePointInvokesVersion = @{ @"code_point/test.code.point/invokes/version": @0 };
+	self.usageData.codePointInvokesVersion = @{ @"code_point/test.code.point/invokes/cf_bundle_short_version_string": @0 };
 }
 
 - (NSString *)codePointFormatString {
-	return @"code_point/%@/invokes/version";
+	return @"code_point/%@/invokes/cf_bundle_short_version_string";
 }
 
 - (void)testGt {

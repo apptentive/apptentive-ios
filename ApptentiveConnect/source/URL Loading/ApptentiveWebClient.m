@@ -20,7 +20,7 @@
 
 NSString *const ATWebClientDefaultChannelName = @"ATWebClient";
 
-#define kApptentiveAPIVersion @"6"
+#define kApptentiveAPIVersion @"7"
 
 
 @implementation ApptentiveWebClient

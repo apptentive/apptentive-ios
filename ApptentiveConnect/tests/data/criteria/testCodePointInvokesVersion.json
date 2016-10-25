@@ -2,41 +2,41 @@
   "$or": [
     {
       "code_point/switch.code.point/invokes/total": 0,
-      "code_point/test.code.point/invokes/cf_bundle_short_version_string": {
+      "code_point/test.code.point/invokes/version": {
         "$gt": 2
       }
     },
     {
       "code_point/switch.code.point/invokes/total": 1,
-      "code_point/test.code.point/invokes/cf_bundle_short_version_string": {
+      "code_point/test.code.point/invokes/version": {
         "$gte": 2
       }
     },
     {
       "code_point/switch.code.point/invokes/total": 2,
-      "code_point/test.code.point/invokes/cf_bundle_short_version_string": {
+      "code_point/test.code.point/invokes/version": {
         "$ne": 2
       }
     },
     {
       "code_point/switch.code.point/invokes/total": 3,
-      "code_point/test.code.point/invokes/cf_bundle_short_version_string": {
+      "code_point/test.code.point/invokes/version": {
         "$eq": 2
       }
     },
     {
       "code_point/switch.code.point/invokes/total": 4,
-      "code_point/test.code.point/invokes/cf_bundle_short_version_string": 2
+      "code_point/test.code.point/invokes/version": 2
     },
     {
       "code_point/switch.code.point/invokes/total": 5,
-      "code_point/test.code.point/invokes/cf_bundle_short_version_string": {
+      "code_point/test.code.point/invokes/version": {
         "$lte": 2
       }
     },
     {
       "code_point/switch.code.point/invokes/total": 6,
-      "code_point/test.code.point/invokes/cf_bundle_short_version_string": {
+      "code_point/test.code.point/invokes/version": {
         "$lt": 2
       }
     }

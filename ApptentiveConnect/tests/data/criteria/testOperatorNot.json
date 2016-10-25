@@ -1,13 +1,13 @@
 {
   "$and": [
     {
-      "application/cf_bundle_short_version_string": {
+      "application/version": {
         "$exists": true
       }
     },
     {
       "$not": {
-        "application/cf_bundle_short_version_string": {
+        "application/version": {
           "$exists": false
         }
       }
@@ -15,7 +15,7 @@
     {
       "$not": {
         "$not": {
-          "application/cf_bundle_short_version_string": {
+          "application/version": {
             "$exists": true
           }
         }
@@ -25,7 +25,7 @@
       "$not": {
         "$not": {
           "$not": {
-            "application/cf_bundle_short_version_string": {
+            "application/version": {
               "$exists": false
             }
           }
@@ -37,7 +37,7 @@
         "$not": {
           "$not": {
             "$not": {
-              "application/cf_bundle_short_version_string": {
+              "application/version": {
                 "$exists": true
               }
             }
@@ -51,7 +51,7 @@
           "$not": {
             "$not": {
               "$not": {
-                "application/cf_bundle_short_version_string": {
+                "application/version": {
                   "$exists": false
                 }
               }
@@ -67,7 +67,7 @@
             "$not": {
               "$not": {
                 "$not": {
-                  "application/cf_bundle_short_version_string": {
+                  "application/version": {
                     "$exists": true
                   }
                 }

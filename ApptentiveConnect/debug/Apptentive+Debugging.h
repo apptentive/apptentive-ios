@@ -50,6 +50,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)presentInteractionAtIndex:(NSInteger)index fromViewController:(UIViewController *)viewController;
 - (void)presentInteractionWithJSON:(NSDictionary *)JSON fromViewController:(UIViewController *)viewController;
 
+- (void)checkSDKConfiguration;
 - (void)resetSDK;
 
 @end

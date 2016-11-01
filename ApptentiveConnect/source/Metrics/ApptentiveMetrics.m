@@ -153,7 +153,9 @@ static NSString *ATInteractionAppEventLabelExit = @"exit";
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillEnterForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
 
-		[self performSelector:@selector(addLaunchMetric) withObject:nil afterDelay:0.1];
+		if ([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
+			[self performSelector:@selector(addLaunchMetric) withObject:nil afterDelay:0.1];
+		}
 	}
 }
 

@@ -396,6 +396,9 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 	if (_working != working) {
 		_working = working;
 		if (_working) {
+#if APPTENTIVE_DEBUG
+			[Apptentive.shared checkSDKConfiguration];
+#endif
 			[[ApptentiveTaskQueue sharedTaskQueue] start];
 
 			[self updateConversationIfNeeded];

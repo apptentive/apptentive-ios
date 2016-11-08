@@ -696,6 +696,7 @@
 		01E25CE91C88C70E005BF2D2 /* ApptentiveHUDViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveHUDViewController.m; sourceTree = "<group>"; };
 		01E25CEA1C88C70E005BF2D2 /* ApptentivePassThroughWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentivePassThroughWindow.h; sourceTree = "<group>"; };
 		01E25CEB1C88C70E005BF2D2 /* ApptentivePassThroughWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentivePassThroughWindow.m; sourceTree = "<group>"; };
+		01E7A7DD1DCBB0F900FE1AFF /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = resources/Info.plist; sourceTree = SOURCE_ROOT; };
 		01F1A95E1B6823CD0088DBF0 /* ApptentiveAboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveAboutViewController.h; sourceTree = "<group>"; };
 		01F1A95F1B6823CD0088DBF0 /* ApptentiveAboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveAboutViewController.m; sourceTree = "<group>"; };
 		01F6FD601BFAA28B004513C2 /* testCornerCasesThatShouldBeFalse.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testCornerCasesThatShouldBeFalse.json; sourceTree = "<group>"; };
@@ -1339,6 +1340,7 @@
 				016085281BA77B0500050FDB /* Images */,
 				01F6FDC51BFD41F1004513C2 /* Apptentive.storyboard */,
 				49E891CC134FE2AA00DD098A /* localization */,
+				01E7A7DD1DCBB0F900FE1AFF /* Info.plist */,
 			);
 			name = resources;
 			path = Resources;
@@ -2107,6 +2109,10 @@
 						CreatedOnToolsVersion = 8.0;
 						DevelopmentTeam = 86WML2UN43;
 						ProvisioningStyle = Automatic;
+					};
+					49D1118B13341A7C00603373 = {
+						DevelopmentTeam = 86WML2UN43;
+						ProvisioningStyle = Manual;
 					};
 				};
 			};
@@ -3068,12 +3074,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				DEVELOPMENT_TEAM = 86WML2UN43;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ApptentiveResources/ApptentiveResources-Prefix.pch";
+				INFOPLIST_FILE = "$(SRCROOT)/resources/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -3085,12 +3093,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				DEVELOPMENT_TEAM = 86WML2UN43;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ApptentiveResources/ApptentiveResources-Prefix.pch";
+				INFOPLIST_FILE = "$(SRCROOT)/resources/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";

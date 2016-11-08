@@ -1,3 +1,8 @@
+2016-11-07 frankus v3.3.2
+-------------------------
+Version 3.3.2 fixes a bug with section caching do reduce log noise, along with other 
+stability and reliability fixes.  
+
 2016-10-06 frankus v3.3.1
 -------------------------
 Version 3.3.1 adds a framework target that can be used for Carthage support.  

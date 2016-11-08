@@ -537,6 +537,9 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 	return resourceBundlePath ? [NSBundle bundleWithPath:resourceBundlePath] : bundleForClass;
 }
 
+#define DO_EXPAND(VAL)  VAL##1
+#define EXPAND(VAL)     DO_EXPAND(VAL)
+
 + (NSString *)defaultDistribution {
 	NSString *distributionName = @"source";
 
@@ -551,9 +554,6 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 #if APPTENTIVE_COCOAPODS
 	distributionName = @"CocoaPods-Source";
 #endif
-
-#define DO_EXPAND(VAL)  VAL ## 1
-#define EXPAND(VAL)     DO_EXPAND(VAL)
 
 #if defined(CARTHAGE) && (EXPAND(CARTHAGE) != 1)
 	distributionName = @"Carthage-Source";

@@ -12,6 +12,8 @@ The following guides explain the integration process:
 
  - [Xcode project setup guide](http://www.apptentive.com/docs/ios/setup/xcode/)
  - [CocoaPods installation guide](http://www.apptentive.com/docs/ios/setup/cocoapods)
+ 
+ As of version 3.3.1, we also support Carthage. 
 
 ## Using Apptentive in your App
 

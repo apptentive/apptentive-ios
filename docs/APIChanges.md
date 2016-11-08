@@ -1,5 +1,9 @@
 This document tracks changes to the API between versions.
 
+# 3.3.1
+
+* Adds a dynamic framework target to the ApptentiveConnect project. The static library and resource bundle targets should be considered deprecated.
+
 # 3.3.0
 
 * Drops support for iOS 7 devices and requires Xcode 8. 

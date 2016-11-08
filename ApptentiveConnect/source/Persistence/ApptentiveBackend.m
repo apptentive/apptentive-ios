@@ -89,34 +89,7 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 @synthesize supportDirectoryPath = _supportDirectoryPath;
 
 + (UIImage *)imageNamed:(NSString *)name {
-	NSString *imagePath = nil;
-	UIImage *result = nil;
-	CGFloat scale = [[UIScreen mainScreen] scale];
-	if (scale > 1.0) {
-		imagePath = [[Apptentive resourceBundle] pathForResource:[NSString stringWithFormat:@"%@@2x", name] ofType:@"png"];
-	} else {
-		imagePath = [[Apptentive resourceBundle] pathForResource:[NSString stringWithFormat:@"%@", name] ofType:@"png"];
-	}
-
-	if (!imagePath) {
-		if (scale > 1.0) {
-			imagePath = [[Apptentive resourceBundle] pathForResource:[NSString stringWithFormat:@"%@@2x", name] ofType:@"png" inDirectory:@"generated"];
-		} else {
-			imagePath = [[Apptentive resourceBundle] pathForResource:[NSString stringWithFormat:@"%@", name] ofType:@"png" inDirectory:@"generated"];
-		}
-	}
-
-	if (imagePath) {
-		result = [UIImage imageWithContentsOfFile:imagePath];
-	} else {
-		result = [UIImage imageNamed:name];
-	}
-	if (!result) {
-		ApptentiveLogError(@"Unable to find image named: %@", name);
-		ApptentiveLogError(@"sought at: %@", imagePath);
-		ApptentiveLogError(@"bundle is: %@", [Apptentive resourceBundle]);
-	}
-	return result;
+	return [UIImage imageNamed:name inBundle:[Apptentive resourceBundle] compatibleWithTraitCollection:nil];
 }
 
 - (id)init {
@@ -423,6 +396,9 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 	if (_working != working) {
 		_working = working;
 		if (_working) {
+#if APPTENTIVE_DEBUG
+			[Apptentive.shared checkSDKConfiguration];
+#endif
 			[[ApptentiveTaskQueue sharedTaskQueue] start];
 
 			[self updateConversationIfNeeded];
@@ -935,7 +911,7 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 		NSPredicate *unreadPredicate = [NSPredicate predicateWithFormat:@"seenByUser == %@ AND sentByUser == %@", @(NO), @(NO)];
 		request.predicate = unreadPredicate;
 
-		NSFetchedResultsController *newController = [[NSFetchedResultsController alloc] initWithFetchRequest:request managedObjectContext:[self managedObjectContext] sectionNameKeyPath:nil cacheName:@"at-unread-messages-cache"];
+		NSFetchedResultsController *newController = [[NSFetchedResultsController alloc] initWithFetchRequest:request managedObjectContext:[self managedObjectContext] sectionNameKeyPath:nil cacheName:nil];
 		newController.delegate = self;
 		self.unreadCountController = newController;
 

@@ -8,7 +8,6 @@
 
 #import "ApptentiveAPIRequest.h"
 #import "Apptentive.h"
-#import "Apptentive+Debugging.h"
 #import "Apptentive_Private.h"
 #import "ApptentiveConnectionManager.h"
 #import "ApptentiveJSONSerialization.h"
@@ -114,14 +113,6 @@ NSString *const ApptentiveAPIRequestStatusChanged = @"ApptentiveAPIRequestStatus
 			if (sender.statusCode == 422) {
 				ApptentiveLogError(@"API Request was sent with malformed data");
 			}
-			if ([Apptentive sharedConnection].debuggingOptions & ApptentiveDebuggingOptionsLogHTTPFailures ||
-				[Apptentive sharedConnection].debuggingOptions & ApptentiveDebuggingOptionsLogAllHTTPRequests) {
-				ApptentiveLogDebug(@"Request was:\n%@", [self.connection requestAsString]);
-				ApptentiveLogDebug(@"Response was:\n%@", [self.connection responseAsString]);
-			}
-		} else if ([Apptentive sharedConnection].debuggingOptions & ApptentiveDebuggingOptionsLogAllHTTPRequests) {
-			ApptentiveLogDebug(@"Request was:\n%@", [self.connection requestAsString]);
-			ApptentiveLogDebug(@"Response was:\n%@", [self.connection responseAsString]);
 		}
 
 		if (!d) break;
@@ -167,10 +158,10 @@ NSString *const ApptentiveAPIRequestStatusChanged = @"ApptentiveAPIRequestStatus
 	}
 	_failed = YES;
 	if (sender.failedAuthentication || sender.statusCode == 401) {
-		_errorTitle = ApptentiveLocalizedString(@"Authentication Failed", @"");
-		_errorMessage = ApptentiveLocalizedString(@"Wrong username and/or password.", @"");
+		_errorTitle = @"Authentication Failed";
+		_errorMessage = @"Wrong username and/or password.";
 	} else {
-		_errorTitle = ApptentiveLocalizedString(@"Network Connection Error", @"");
+		_errorTitle = @"Network Connection Error";
 		_errorMessage = [sender.connectionError localizedDescription];
 	}
 	NSData *d = [sender responseData];
@@ -180,13 +171,6 @@ NSString *const ApptentiveAPIRequestStatusChanged = @"ApptentiveAPIRequestStatus
 		responseString = nil;
 	}
 
-	if ([Apptentive sharedConnection].debuggingOptions & ApptentiveDebuggingOptionsLogHTTPFailures ||
-		[Apptentive sharedConnection].debuggingOptions & ApptentiveDebuggingOptionsLogAllHTTPRequests) {
-		ApptentiveLogError(@"Connection failed. %@, %@", self.errorTitle, self.errorMessage);
-		ApptentiveLogInfo(@"Status was: %d", sender.statusCode);
-		ApptentiveLogDebug(@"Request was:\n%@", [self.connection requestAsString]);
-		ApptentiveLogDebug(@"Response was:\n%@", [self.connection responseAsString]);
-	}
 	if (self.delegate) {
 		[self.delegate at_APIRequestDidFail:self];
 	}

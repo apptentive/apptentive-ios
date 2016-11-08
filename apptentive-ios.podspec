@@ -25,6 +25,6 @@ Pod::Spec.new do |s|
   s.public_header_files = 'ApptentiveConnect/source/Apptentive.h', 'ApptentiveConnect/source/ApptentiveStyleSheet.h'
 
 	s.subspec 'Debug' do |sp|
-	  sp.source_files = [ 'ApptentiveConnect/debug/*.{h,m}', 'ApptentiveConnect/source/Apptentive_Private.h' ]
+	  sp.source_files = [ 'ApptentiveConnect/debug/*.{h,m}', 'ApptentiveConnect/source/source/**/*.{h,m}' ]
 	end
 end

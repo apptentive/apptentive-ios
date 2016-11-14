@@ -632,17 +632,7 @@
 		}
 	}];
 
-	// iOS 7 resets the contentOffset to CGPointZero when the toolbar animation takes place.
-	// So we have to save off the content offset and set it back after changing toolbar visibility.
-	// Once we drop iOS 7, all of the following but the call to -setToolbarHidden:animated: can be removed.
-	CGPoint contentOffset = self.collectionView.contentOffset;
 	[self.navigationController setToolbarHidden:hidden animated:YES];
-
-	if (hidden && !keyboardVisible && scrolledAllTheWayDown) {
-		contentOffset.y += toolbarAdjustment;
-	}
-
-	self.collectionView.contentOffset = contentOffset;
 }
 
 - (void)maybeAnimateOtherSizeChangeAtIndexPath:(NSIndexPath *)indexPath {

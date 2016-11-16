@@ -6,7 +6,7 @@
       }
     },
     {
-      "is_update/version": false
+      "is_update/cf_bundle_short_version_string": false
     },
     {
       "time_at_install/total": {
@@ -14,7 +14,7 @@
       }
     },
     {
-      "time_at_install/version": {
+      "time_at_install/cf_bundle_short_version_string": {
         "$before": 1
       }
     },
@@ -22,7 +22,7 @@
       "code_point/invalid_code_point/invokes/total": 0
     },
     {
-      "code_point/invalid_code_point/invokes/version": 0
+      "code_point/invalid_code_point/invokes/cf_bundle_short_version_string": 0
     },
     {
       "code_point/invalid_code_point/last_invoked_at/total": null
@@ -31,7 +31,7 @@
       "interactions/invalid_interaction/invokes/total": 0
     },
     {
-      "interactions/invalid_interaction/invokes/version": 0
+      "interactions/invalid_interaction/invokes/cf_bundle_short_version_string": 0
     },
     {
       "interactions/invalid_interaction/last_invoked_at/total": null

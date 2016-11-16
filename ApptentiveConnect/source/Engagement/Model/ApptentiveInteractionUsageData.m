@@ -151,6 +151,11 @@
 			NSObject *value = deviceData[key];
 			if (value) {
 				NSString *criteriaKey = [NSString stringWithFormat:@"device/%@", [ApptentiveUtilities stringByEscapingForPredicate:key]];
+
+				if ([key isEqualToString:@"os_version"]) {
+					value = [Apptentive versionObjectWithVersion:(NSString *)value];
+				}
+
 				predicateEvaluationDictionary[criteriaKey] = value;
 			}
 		}

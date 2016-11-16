@@ -1,7 +1,7 @@
 {
   "$and": [
     {
-      "application/version": {
+      "application/cf_bundle_short_version_string": {
       }
     },
     {

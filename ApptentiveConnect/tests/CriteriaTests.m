@@ -176,3 +176,14 @@
 }
 
 @end
+
+@interface V7Criteria : CriteriaTest
+@end
+
+@implementation V7Criteria
+
+- (void)testV7Criteria {
+	XCTAssertTrue([self.interaction criteriaAreMet]);
+}
+
+@end

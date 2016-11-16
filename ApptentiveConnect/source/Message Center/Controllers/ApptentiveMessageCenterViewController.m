@@ -152,7 +152,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.tableView.separatorColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveColorSeparator];
 	self.tableView.backgroundColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveColorCollectionBackground];
 
-	self.greetingView.backgroundColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveColorBackground];
+	self.greetingView.backgroundColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveColorHeaderBackground];
 	self.greetingView.borderView.backgroundColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveColorSeparator];
 
 	self.greetingView.titleLabel.text = self.interaction.greetingTitle;

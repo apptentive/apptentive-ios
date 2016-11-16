@@ -29,6 +29,7 @@
 NSString *const ATEngagementInstallDateKey = @"ATEngagementInstallDateKey";
 NSString *const ATEngagementUpgradeDateKey = @"ATEngagementUpgradeDateKey";
 NSString *const ATEngagementLastUsedVersionKey = @"ATEngagementLastUsedVersionKey";
+NSString *const ATEngagementLastUsedShortVersionStringKey = @"ATEngagementLastUsedShortVersionStringKey";
 NSString *const ATEngagementIsUpdateVersionKey = @"ATEngagementIsUpdateVersionKey";
 NSString *const ATEngagementIsUpdateBuildKey = @"ATEngagementIsUpdateBuildKey";
 NSString *const ATEngagementCodePointsInvokesTotalKey = @"ATEngagementCodePointsInvokesTotalKey";
@@ -196,18 +197,23 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 		[defaults setObject:[NSDate date] forKey:ATEngagementInstallDateKey];
 	}
 
+	NSString *currentBundleShortVersionString = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+	NSString *lastBundleShortVersionString = [defaults objectForKey:ATEngagementLastUsedShortVersionStringKey];
+
+	if (lastBundleShortVersionString && ![lastBundleShortVersionString isEqualToString:currentBundleShortVersionString]) {
+		[defaults setObject:@YES forKey:ATEngagementIsUpdateVersionKey];
+	}
+
 	NSString *currentBundleVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString *)kCFBundleVersionKey];
 	NSString *lastBundleVersion = [defaults objectForKey:ATEngagementLastUsedVersionKey];
 
-	// Both version and build are required (by iTunes Connect) to be updated upon App Store release.
-	// If the bundle version has changed, we can mark both version and build as updated.
 	if (lastBundleVersion && ![lastBundleVersion isEqualToString:currentBundleVersion]) {
-		[defaults setObject:@YES forKey:ATEngagementIsUpdateVersionKey];
 		[defaults setObject:@YES forKey:ATEngagementIsUpdateBuildKey];
 	}
 
-	if (lastBundleVersion == nil || ![lastBundleVersion isEqualToString:currentBundleVersion]) {
+	if (lastBundleVersion == nil || ![lastBundleShortVersionString isEqualToString:currentBundleShortVersionString] || ![lastBundleVersion isEqualToString:currentBundleVersion]) {
 		[defaults setObject:currentBundleVersion forKey:ATEngagementLastUsedVersionKey];
+		[defaults setObject:currentBundleShortVersionString forKey:ATEngagementLastUsedShortVersionStringKey];
 		[defaults setObject:[NSDate date] forKey:ATEngagementUpgradeDateKey];
 		[defaults setObject:@{} forKey:ATEngagementCodePointsInvokesVersionKey];
 		[defaults setObject:@{} forKey:ATEngagementCodePointsInvokesBuildKey];

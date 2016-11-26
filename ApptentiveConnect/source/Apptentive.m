@@ -609,6 +609,33 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 	}
 }
 
+#if APPTENTIVE_DEBUG
+- (void)checkSDKConfiguration {
+	BOOL hasPhotoLibraryUsageDescription = [[NSBundle mainBundle].infoDictionary objectForKey:@"NSPhotoLibraryUsageDescription"] != nil;
+
+	if (!hasPhotoLibraryUsageDescription) {
+		ApptentiveLogError(@"No Photo Library Usage Description Set. This will cause your app to be rejected during app review.");
+	}
+
+	BOOL hasAppIDSet = self.appID != nil;
+
+	if (!hasAppIDSet) {
+		ApptentiveLogError(@"No App ID set. This may keep the ratings prompt from directing users to your app in the App Store.");
+	}
+
+	BOOL hasResources = [Apptentive resourceBundle] != nil;
+
+	if (!hasResources) {
+		ApptentiveLogError(@"Missing resources.");
+#if APPTENTIVE_COCOAPODS
+		ApptentiveLogError(@"Try cleaning derived data and/or `pod deintegrate && pod install`.");
+#else
+		ApptentiveLogError(@"Please make sure the resources are added to the appropriate target(s).");
+#endif
+	}
+}
+#endif
+
 @end
 
 

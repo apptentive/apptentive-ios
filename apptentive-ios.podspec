@@ -23,8 +23,4 @@ Pod::Spec.new do |s|
   s.pod_target_xcconfig = { "GCC_PREPROCESSOR_DEFINITIONS[config=Debug]" => "APPTENTIVE_LOGGING_LEVEL_DEBUG=1 APPTENTIVE_LOGGING_LEVEL_INFO=1 APPTENTIVE_LOGGING_LEVEL_WARNING=1 APPTENTIVE_LOGGING_LEVEL_ERROR=1 APPTENTIVE_COCOAPODS=1 APPTENTIVE_DEBUG=1",
   "GCC_PREPROCESSOR_DEFINITIONS[config=Release]" => "APPTENTIVE_LOGGING_LEVEL_INFO=1 APPTENTIVE_LOGGING_LEVEL_WARNING=1 APPTENTIVE_LOGGING_LEVEL_ERROR=1 APPTENTIVE_COCOAPODS=1" }
   s.public_header_files = 'ApptentiveConnect/source/Apptentive.h', 'ApptentiveConnect/source/ApptentiveStyleSheet.h'
-
-	s.subspec 'Debug' do |sp|
-	  sp.source_files = [ 'ApptentiveConnect/debug/*.{h,m}', 'ApptentiveConnect/source/source/**/*.{h,m}' ]
-	end
 end

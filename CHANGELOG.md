@@ -1,3 +1,7 @@
+2016-11-23 frankus v3.3.3
+-------------------------
+Version 3.3.3 fixes a bug where launch events weren't being recorded in some instances.  
+
 2016-11-07 frankus v3.3.2
 -------------------------
 Version 3.3.2 fixes a bug with section caching do reduce log noise, along with other 

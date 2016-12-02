@@ -9,7 +9,7 @@
 
 #import <UIKit/UIKit.h>
 
-#define kApptentiveVersionString @"3.3.2"
+#define kApptentiveVersionString @"3.3.3"
 #define kApptentivePlatformString @"iOS"
 
 #ifdef __swift_compiler_version_at_least
@@ -565,6 +565,10 @@ Returns a Boolean value indicating whether the given event will cause an Interac
  **/
 
 - (void)setPushNotificationIntegration:(ApptentivePushProvider)pushProvider withDeviceToken:(NSData *)deviceToken APPTENTIVE_SWIFT_NAME(setPushProvider(_:deviceToken:));
+
+#if APPTENTIVE_DEBUG
+- (void)checkSDKConfiguration;
+#endif
 
 @end
 

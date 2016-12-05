@@ -12,6 +12,7 @@
 #import "ApptentiveBackend.h"
 #import "ApptentiveUtilities.h"
 #import "NSDictionary+Apptentive.h"
+#import "ApptentiveDeviceInfo.h"
 
 #define kATConversationCodingVersion 1
 
@@ -73,11 +74,8 @@
 - (NSDictionary *)apiJSON {
 	NSMutableDictionary *result = [NSMutableDictionary dictionary];
 
-	NSString *deviceUUID = [[Apptentive sharedConnection].backend deviceUUID];
-	if (deviceUUID) {
-		NSDictionary *deviceInfo = @{ @"uuid": deviceUUID };
-		result[@"device"] = deviceInfo;
-	}
+	result[@"person"] = [[ApptentivePersonInfo currentPerson].apiJSON objectForKey:@"person"];
+	result[@"device"] = [[[ApptentiveDeviceInfo alloc] init].apiJSON objectForKey:@"device"];
 	result[@"app_release"] = [self appReleaseJSON];
 	result[@"sdk"] = [self sdkJSON];
 

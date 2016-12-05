@@ -531,8 +531,6 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 			ApptentiveTaskQueue *queue = [ApptentiveTaskQueue sharedTaskQueue];
 			[queue start];
 			[self updateConfigurationIfNeeded];
-			[self updateDeviceIfNeeded];
-			[self updatePersonIfNeeded];
 			[self updateEngagementManifestIfNeeded];
 		}
 	}

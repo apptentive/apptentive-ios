@@ -107,7 +107,7 @@
 		result[@"cf_bundle_version"] = version;
 	}
 
-	result[@"app_store_receipt"] = @([ApptentiveUtilities appStoreReceiptExists]);
+	result[@"app_store_receipt"] = @{ @"has_receipt": @([ApptentiveUtilities appStoreReceiptExists]) };
 	result[@"overriding_styles"] = @([Apptentive sharedConnection].didAccessStyleSheet);
 
 	return result;

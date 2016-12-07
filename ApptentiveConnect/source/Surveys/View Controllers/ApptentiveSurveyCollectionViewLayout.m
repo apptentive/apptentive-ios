@@ -10,8 +10,34 @@
 #import "ApptentiveSurveyCollectionView.h"
 #import "ApptentiveSurveyLayoutAttributes.h"
 
+@interface ApptentiveSurveyCollectionViewLayout ()
+
+@property (assign, nonatomic) CGFloat headerHeight;
+
+@end
+
 
 @implementation ApptentiveSurveyCollectionViewLayout
+
+- (instancetype)init {
+	self = [super init];
+
+	if (self) {
+		[self updateHeaderHeight];
+	}
+
+	return self;
+}
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+	self = [super initWithCoder:aDecoder];
+
+	if (self) {
+		[self updateHeaderHeight];
+	}
+
+	return self;
+}
 
 - (CGSize)collectionViewContentSize {
 	CGSize superSize = [super collectionViewContentSize];
@@ -60,13 +86,16 @@
 	return layoutAttributes;
 }
 
-- (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect {
-	CGFloat headerHeight = 0;
-	if ([self.collectionView isKindOfClass:[ApptentiveSurveyCollectionView class]]) {
-		headerHeight = CGRectGetHeight(((ApptentiveSurveyCollectionView *)self.collectionView).collectionHeaderView.bounds) + self.sectionInset.bottom;
-	}
+- (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath {
+	UICollectionViewLayoutAttributes *result = [super layoutAttributesForItemAtIndexPath:indexPath];
 
-	rect = CGRectOffset(rect, 0, -headerHeight);
+	result.frame = CGRectOffset(result.frame, 0, [self headerHeight]);
+
+	return result;
+}
+
+- (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect {
+	rect = CGRectOffset(rect, 0, -self.headerHeight);
 
 	NSArray *superAttributes = [super layoutAttributesForElementsInRect:rect];
 	NSMutableArray *newAttributes = [superAttributes mutableCopy];
@@ -87,11 +116,27 @@
 	[newAttributes removeAllObjects];
 	for (UICollectionViewLayoutAttributes *attributes in result) {
 		UICollectionViewLayoutAttributes *movedAttributes = [attributes copy];
-		movedAttributes.frame = CGRectOffset(attributes.frame, 0, headerHeight);
+		movedAttributes.frame = CGRectOffset(attributes.frame, 0, self.headerHeight);
 		[newAttributes addObject:movedAttributes];
 	}
 
 	return newAttributes;
+}
+
+- (void)invalidateLayout {
+	[super invalidateLayout];
+
+	[self updateHeaderHeight];
+}
+
+#pragma mark - Private
+
+- (void)updateHeaderHeight {
+	if ([self.collectionView isKindOfClass:[ApptentiveSurveyCollectionView class]]) {
+		self.headerHeight = CGRectGetHeight(((ApptentiveSurveyCollectionView *)self.collectionView).collectionHeaderView.bounds) + self.sectionInset.bottom;
+	} else {
+		self.headerHeight = 0;
+	}
 }
 
 @end

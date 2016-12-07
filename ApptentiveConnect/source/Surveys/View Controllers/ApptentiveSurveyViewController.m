@@ -99,6 +99,8 @@
 	self.navigationController.toolbar.translucent = NO;
 	self.navigationController.toolbar.barTintColor = [style colorForStyle:ApptentiveColorFailure];
 	self.navigationController.toolbar.userInteractionEnabled = NO;
+
+	[self.collectionView layoutSubviews];
 }
 
 - (void)dealloc {

@@ -1,3 +1,7 @@
+2016-12-07 frankus v3.4.0
+-------------------------
+Version 3.4.0 contains a number of bug fixes.  
+
 2016-11-23 frankus v3.3.3
 -------------------------
 Version 3.3.3 fixes a bug where launch events weren't being recorded in some instances.  

@@ -263,6 +263,10 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[self.greetingView sizeToFit];
 
 	self.iOSAfter8_0 = [[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){8, 1, 0}];
+
+	if (self.interaction.contextMessageBody) {
+		self.contextMessage = [[Apptentive sharedConnection].backend automatedMessageWithTitle:nil body:self.interaction.contextMessageBody];
+	}
 }
 
 - (void)dealloc {
@@ -315,11 +319,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		[self scrollToLastMessageAnimated:NO];
 
 		self.isSubsequentDisplay = YES;
-	}
-
-	self.contextMessage = nil;
-	if (self.interaction.contextMessageBody) {
-		self.contextMessage = [[Apptentive sharedConnection].backend automatedMessageWithTitle:nil body:self.interaction.contextMessageBody];
 	}
 }
 

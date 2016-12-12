@@ -400,6 +400,7 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 			[self updateConversationIfNeeded];
 			[self updateConfigurationIfNeeded];
 			[self updateEngagementManifestIfNeeded];
+			[self updateDeviceIfNeeded];
 		} else {
 			[[ApptentiveTaskQueue sharedTaskQueue] stop];
 			[ApptentiveTaskQueue releaseSharedTaskQueue];

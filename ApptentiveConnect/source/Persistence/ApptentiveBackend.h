@@ -31,7 +31,7 @@ extern NSString *const ATBackendBecameReadyNotification;
 @protocol ATBackendMessageDelegate;
 
 /*! Handles all of the backend activities, such as sending feedback. */
-@interface ApptentiveBackend : NSObject <ApptentiveConversationUpdaterDelegate, ATDeviceUpdaterDelegate, ATPersonUpdaterDelegate, NSFetchedResultsControllerDelegate>
+@interface ApptentiveBackend : NSObject <ApptentiveConversationUpdaterDelegate, NSFetchedResultsControllerDelegate>
 /*! The feedback currently being worked on by the user. */
 @property (strong, nonatomic) ATFeedback *currentFeedback;
 @property (copy, nonatomic) NSDictionary *currentCustomData;

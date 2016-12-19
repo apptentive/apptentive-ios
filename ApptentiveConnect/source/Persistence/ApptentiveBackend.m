@@ -448,7 +448,7 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 		return;
 	}
 	if (!self.deviceUpdater && [ApptentiveDeviceUpdater shouldUpdate]) {
-		self.deviceUpdater = [[ApptentiveDeviceUpdater alloc] initWithDelegate:self];
+		self.deviceUpdater = [[ApptentiveDeviceUpdater alloc] init];
 		[self.deviceUpdater update];
 	}
 }
@@ -462,7 +462,7 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 		return;
 	}
 	if (!self.personUpdater && [ApptentivePersonUpdater shouldUpdate]) {
-		self.personUpdater = [[ApptentivePersonUpdater alloc] initWithDelegate:self];
+		self.personUpdater = [[ApptentivePersonUpdater alloc] init];
 		[self.personUpdater update];
 	}
 }
@@ -532,25 +532,6 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 - (void)conversationUpdater:(ApptentiveConversationUpdater *)updater updatedConversationSuccessfully:(BOOL)success {
 	if (self.conversationUpdater == updater) {
 		self.conversationUpdater = nil;
-	}
-}
-
-#pragma mark ATDeviceUpdaterDelegate
-- (void)deviceUpdater:(ApptentiveDeviceUpdater *)aDeviceUpdater didFinish:(BOOL)success {
-	if (self.deviceUpdater == aDeviceUpdater) {
-		self.deviceUpdater = nil;
-	}
-}
-
-#pragma mark ATPersonUpdaterDelegate
-- (void)personUpdater:(ApptentivePersonUpdater *)aPersonUpdater didFinish:(BOOL)success {
-	if (self.personUpdater == aPersonUpdater) {
-		self.personUpdater = nil;
-		// Give task queue a bump if necessary.
-		if (success && [self isReady] && !self.shouldStopWorking) {
-			ApptentiveTaskQueue *queue = [ApptentiveTaskQueue sharedTaskQueue];
-			[queue start];
-		}
 	}
 }
 

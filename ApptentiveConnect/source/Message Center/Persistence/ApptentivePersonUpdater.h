@@ -8,27 +8,16 @@
 
 #import <Foundation/Foundation.h>
 
-#import "ApptentiveAPIRequest.h"
 #import "ApptentivePersonInfo.h"
 
 extern NSString *const ATPersonLastUpdateValuePreferenceKey;
 
-@protocol ATPersonUpdaterDelegate;
 
-
-@interface ApptentivePersonUpdater : NSObject <ApptentiveAPIRequestDelegate>
-@property (weak, nonatomic) NSObject<ATPersonUpdaterDelegate> *delegate;
+@interface ApptentivePersonUpdater : NSObject
 
 + (BOOL)shouldUpdate;
 + (NSDictionary *)lastSavedVersion;
 + (void)resetPersonInfo;
-
-- (id)initWithDelegate:(NSObject<ATPersonUpdaterDelegate> *)delegate;
 - (void)update;
-- (void)cancel;
-- (float)percentageComplete;
-@end
 
-@protocol ATPersonUpdaterDelegate <NSObject>
-- (void)personUpdater:(ApptentivePersonUpdater *)personUpdater didFinish:(BOOL)success;
 @end

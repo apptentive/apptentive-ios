@@ -8,36 +8,16 @@
 
 #import "ApptentivePersonUpdater.h"
 
-#import "ApptentiveConversationUpdater.h"
 #import "ApptentiveUtilities.h"
-#import "ApptentiveWebClient+MessageCenter.h"
 #import "Apptentive_Private.h"
+#import "ApptentiveQueuedRequest.h"
+#import "ApptentiveData.h"
+#import "ApptentiveBackend.h"
 
 NSString *const ATPersonLastUpdateValuePreferenceKey = @"ATPersonLastUpdateValuePreferenceKey";
 
 
-@interface ApptentivePersonUpdater ()
-
-@property (copy, nonatomic) NSDictionary *sentPersonJSON;
-@property (strong, nonatomic) ApptentiveAPIRequest *request;
-
-@end
-
-
 @implementation ApptentivePersonUpdater
-
-- (id)initWithDelegate:(NSObject<ATPersonUpdaterDelegate> *)aDelegate {
-	if ((self = [super init])) {
-		[ApptentivePersonUpdater registerDefaults];
-		_delegate = aDelegate;
-	}
-	return self;
-}
-
-- (void)dealloc {
-	_delegate = nil;
-	[self cancel];
-}
 
 + (BOOL)shouldUpdate {
 	[ApptentivePersonUpdater registerDefaults];
@@ -63,59 +43,16 @@ NSString *const ATPersonLastUpdateValuePreferenceKey = @"ATPersonLastUpdateValue
 	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATCurrentPersonPreferenceKey];
 }
 
-- (void)saveVersion {
-	NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self.sentPersonJSON];
-	[[NSUserDefaults standardUserDefaults] setObject:data forKey:ATPersonLastUpdateValuePreferenceKey];
-	self.sentPersonJSON = nil;
-}
-
 - (void)update {
-	[self cancel];
 	ApptentivePersonInfo *person = [ApptentivePersonInfo currentPerson];
-	self.sentPersonJSON = person.dictionaryRepresentation;
-	self.request = [[Apptentive sharedConnection].webClient requestForUpdatingPerson:person];
-	self.request.delegate = self;
-	[self.request start];
-}
 
-- (void)cancel {
-	if (self.request) {
-		self.request.delegate = nil;
-		[self.request cancel];
-		self.request = nil;
-	}
-}
+	[ApptentiveQueuedRequest enqueueRequestWithPath:@"people" payload:person.apiJSON attachments:nil inContext:Apptentive.shared.backend.managedObjectContext];
 
-- (float)percentageComplete {
-	if (self.request) {
-		return [self.request percentageComplete];
-	} else {
-		return 0.0f;
-	}
-}
+	[Apptentive.shared.backend processQueuedRecords];
 
-#pragma mark ATATIRequestDelegate
-- (void)at_APIRequestDidFinish:(ApptentiveAPIRequest *)sender result:(NSObject *)result {
-	@synchronized(self) {
-		if ([result isKindOfClass:[NSDictionary class]]) {
-			[self processResult:(NSDictionary *)result];
-		} else {
-			ApptentiveLogError(@"Person result is not NSDictionary!");
-			[self.delegate personUpdater:self didFinish:NO];
-		}
-	}
-}
+	NSData *data = [NSKeyedArchiver archivedDataWithRootObject:person.dictionaryRepresentation];
+	[[NSUserDefaults standardUserDefaults] setObject:data forKey:ATPersonLastUpdateValuePreferenceKey];
 
-- (void)at_APIRequestDidProgress:(ApptentiveAPIRequest *)sender {
-	// pass
-}
-
-- (void)at_APIRequestDidFail:(ApptentiveAPIRequest *)sender {
-	@synchronized(self) {
-		ApptentiveLogInfo(@"Request failed: %@, %@", sender.errorTitle, sender.errorMessage);
-
-		[self.delegate personUpdater:self didFinish:NO];
-	}
 }
 
 #pragma mark - Private
@@ -126,17 +63,4 @@ NSString *const ATPersonLastUpdateValuePreferenceKey = @"ATPersonLastUpdateValue
 	[[NSUserDefaults standardUserDefaults] registerDefaults:defaultPreferences];
 }
 
-- (void)processResult:(NSDictionary *)jsonPerson {
-	ApptentivePersonInfo *person = [ApptentivePersonInfo newPersonFromJSON:jsonPerson];
-
-	if (person) {
-		// Save out the value we sent to the server.
-		[self saveVersion];
-
-		[self.delegate personUpdater:self didFinish:YES];
-	} else {
-		[self.delegate personUpdater:self didFinish:NO];
-	}
-	person = nil;
-}
 @end

@@ -8,22 +8,16 @@
 
 #import "ApptentiveDeviceUpdater.h"
 
-#import "ApptentiveConversationUpdater.h"
 #import "ApptentiveUtilities.h"
-#import "ApptentiveWebClient+MessageCenter.h"
 #import "Apptentive_Private.h"
+#import "ApptentiveQueuedRequest.h"
+#import "ApptentiveData.h"
+#import "ApptentiveDeviceInfo.h"
+#import "ApptentiveBackend.h"
 
 
 NSString *const ATDeviceLastUpdatePreferenceKey = @"ATDeviceLastUpdatePreferenceKey";
 NSString *const ATDeviceLastUpdateValuePreferenceKey = @"ATDeviceLastUpdateValuePreferenceKey";
-
-
-@interface ApptentiveDeviceUpdater ()
-
-@property (copy, nonatomic) NSDictionary *sentDeviceJSON;
-@property (strong, nonatomic) ApptentiveAPIRequest *request;
-
-@end
 
 
 @implementation ApptentiveDeviceUpdater
@@ -31,10 +25,10 @@ NSString *const ATDeviceLastUpdateValuePreferenceKey = @"ATDeviceLastUpdateValue
 + (void)registerDefaults {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	NSDictionary *defaultPreferences =
-		[NSDictionary dictionaryWithObjectsAndKeys:
-						  [NSDate distantPast], ATDeviceLastUpdatePreferenceKey,
-					  [NSDictionary dictionary], ATDeviceLastUpdateValuePreferenceKey,
-					  nil];
+	[NSDictionary dictionaryWithObjectsAndKeys:
+	 [NSDate distantPast], ATDeviceLastUpdatePreferenceKey,
+	 [NSDictionary dictionary], ATDeviceLastUpdateValuePreferenceKey,
+	 nil];
 	[defaults registerDefaults:defaultPreferences];
 }
 
@@ -56,65 +50,15 @@ NSString *const ATDeviceLastUpdateValuePreferenceKey = @"ATDeviceLastUpdateValue
 	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATDeviceLastUpdateValuePreferenceKey];
 }
 
-- (id)initWithDelegate:(NSObject<ATDeviceUpdaterDelegate> *)aDelegate {
-	if ((self = [super init])) {
-		_delegate = aDelegate;
-	}
-	return self;
-}
-
-- (void)dealloc {
-	_delegate = nil;
-	[self cancel];
-}
-
 - (void)update {
-	[self cancel];
 	ApptentiveDeviceInfo *deviceInfo = [[ApptentiveDeviceInfo alloc] init];
-	self.sentDeviceJSON = deviceInfo.dictionaryRepresentation;
-	self.request = [[Apptentive sharedConnection].webClient requestForUpdatingDevice:deviceInfo];
-	self.request.delegate = self;
-	[self.request start];
-	deviceInfo = nil;
-}
 
-- (void)cancel {
-	if (self.request) {
-		self.request.delegate = nil;
-		[self.request cancel];
-		self.request = nil;
-	}
-}
 
-- (float)percentageComplete {
-	if (self.request) {
-		return [self.request percentageComplete];
-	} else {
-		return 0.0f;
-	}
-}
+	[ApptentiveQueuedRequest enqueueRequestWithPath:@"devices" payload:deviceInfo.apiJSON attachments:nil inContext:Apptentive.shared.backend.managedObjectContext];
 
-#pragma mark ATATIRequestDelegate
-- (void)at_APIRequestDidFinish:(ApptentiveAPIRequest *)sender result:(NSObject *)result {
-	@synchronized(self) {
-		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	[Apptentive.shared.backend processQueuedRecords];
 
-		[defaults setObject:[NSDate date] forKey:ATDeviceLastUpdatePreferenceKey];
-		[defaults setObject:self.sentDeviceJSON forKey:ATDeviceLastUpdateValuePreferenceKey];
-		[self.delegate deviceUpdater:self didFinish:YES];
-	}
-}
-
-- (void)at_APIRequestDidProgress:(ApptentiveAPIRequest *)sender {
-	// pass
-}
-
-- (void)at_APIRequestDidFail:(ApptentiveAPIRequest *)sender {
-	@synchronized(self) {
-		ApptentiveLogInfo(@"Request failed: %@, %@", sender.errorTitle, sender.errorMessage);
-
-		[self.delegate deviceUpdater:self didFinish:NO];
-	}
+	[[NSUserDefaults standardUserDefaults] setObject:deviceInfo.dictionaryRepresentation forKey:ATDeviceLastUpdateValuePreferenceKey];
 }
 
 @end

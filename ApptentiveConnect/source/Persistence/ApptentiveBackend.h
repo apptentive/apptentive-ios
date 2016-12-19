@@ -48,6 +48,7 @@ extern NSString *const ATBackendBecameReadyNotification;
 @property (readonly, strong, nonatomic) ApptentiveSerialNetworkQueue *serialQueue;
 
 - (void)startup;
+- (void)processQueuedRecords;
 
 /*! Message send progress. */
 @property (weak, nonatomic) id<ATBackendMessageDelegate> messageDelegate;

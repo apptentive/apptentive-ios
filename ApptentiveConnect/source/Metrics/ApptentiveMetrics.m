@@ -17,6 +17,7 @@
 #import "ApptentiveRecordRequestTask.h"
 #import "ApptentiveTaskQueue.h"
 #import "ApptentiveEngagementBackend.h"
+#import "ApptentiveQueuedRequest.h"
 
 // Engagement event labels
 
@@ -128,16 +129,9 @@ static NSString *ATInteractionAppEventLabelExit = @"exit";
 		}
 	}
 
-	if (![ApptentiveData save]) {
-		event = nil;
-		return;
-	}
+	[ApptentiveQueuedRequest enqueueRequestWithPath:@"events" payload:event.apiJSON attachments:nil inContext:Apptentive.shared.backend.managedObjectContext];
 
-	ApptentiveRecordRequestTask *task = [[ApptentiveRecordRequestTask alloc] init];
-	task.event = event;
-	[[ApptentiveTaskQueue sharedTaskQueue] addTask:task];
-	event = nil;
-	task = nil;
+	[Apptentive.shared.backend processQueuedRecords];
 }
 
 - (void)backendBecameAvailable:(NSNotification *)notification {

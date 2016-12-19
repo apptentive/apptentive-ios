@@ -25,6 +25,7 @@
 #import "ApptentivePersonUpdater.h"
 #import "ApptentiveEngagementBackend.h"
 #import "ApptentiveMessageCenterViewController.h"
+#import "ApptentiveQueuedRequest.h"
 
 typedef NS_ENUM(NSInteger, ATBackendState) {
 	ATBackendStateStarting,
@@ -195,31 +196,22 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 	NSError *error;
 	if (![[self managedObjectContext] save:&error]) {
 		ApptentiveLogError(@"Error (%@) saving message: %@", error, message);
+		return NO;
 	}
 
-	// Give it a wee bit o' delay.
-	NSString *pendingMessageID = [message pendingMessageID];
-	double delayInSeconds = 1.5;
-	dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-	ApptentiveMessageTask *task = [[ApptentiveMessageTask alloc] init];
-	task.pendingMessageID = pendingMessageID;
+	[ApptentiveQueuedRequest enqueueRequestWithPath:@"messages" payload:message.apiJSON attachments:message.attachments inContext:[self managedObjectContext]];
 
-	if (!message.automated.boolValue) {
-		[self.activeMessageTasks addObject:task];
-		[self updateMessageTaskProgress];
-	}
-
-	dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
-		[[ApptentiveTaskQueue sharedTaskQueue] addTask:task];
-		[[ApptentiveTaskQueue sharedTaskQueue] start];
-
-		if ([ApptentiveReachability sharedReachability].currentNetworkStatus == ApptentiveNetworkNotReachable) {
-			message.pendingState = @(ATPendingMessageStateError);
-			[self messageTaskDidFinish:task];
-		}
-	});
+	[self processQueuedRecords];
 
 	return YES;
+}
+
+#pragma mark -
+
+- (void)processQueuedRecords {
+	if (self.isReady) {
+		[self.serialQueue resumeWithDependency:nil];
+	}
 }
 
 - (NSString *)supportDirectoryPath {
@@ -746,6 +738,10 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 		[self performSelectorOnMainThread:@selector(setup) withObject:nil waitUntilDone:YES];
 		return;
 	}
+
+	NSString *token = [ApptentiveConversationUpdater currentConversation].token ?: Apptentive.shared.APIKey;
+	_networkQueue = [[ApptentiveNetworkQueue alloc] initWithBaseURL:Apptentive.shared.baseURL token:token SDKVersion:kApptentiveVersionString platform:@"iOS"];
+
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startWorking:) name:UIApplicationDidBecomeActiveNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startWorking:) name:UIApplicationWillEnterForegroundNotification object:nil];
 
@@ -775,6 +771,10 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 
 - (void)continueStartupWithDataManagerSuccess {
 	self.state = ATBackendStateReady;
+
+	NSString *token = [ApptentiveConversationUpdater currentConversation].token;
+	_serialQueue = [[ApptentiveSerialNetworkQueue alloc] initWithBaseURL:Apptentive.shared.baseURL token:token SDKVersion:kApptentiveVersionString platform:@"iOS" parentManagedObjectContext:self.managedObjectContext];
+
 	[ApptentiveMetrics sharedMetrics];
 
 	// One-shot actions at startup.

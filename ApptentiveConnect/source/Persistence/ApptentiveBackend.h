@@ -14,6 +14,7 @@
 #import "ApptentivePersonUpdater.h"
 #import "ApptentiveFileAttachment.h"
 #import "ApptentiveMessage.h"
+#import "ApptentiveSerialNetworkQueue.h"
 
 @class ApptentiveMessageCenterViewController;
 
@@ -42,6 +43,9 @@ extern NSString *const ATBackendBecameReadyNotification;
 
 @property (readonly, assign, nonatomic) BOOL hideBranding;
 @property (readonly, assign, nonatomic) BOOL notificationPopupsEnabled;
+
+@property (readonly, strong, nonatomic) ApptentiveNetworkQueue *networkQueue;
+@property (readonly, strong, nonatomic) ApptentiveSerialNetworkQueue *serialQueue;
 
 - (void)startup;
 

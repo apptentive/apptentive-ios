@@ -22,7 +22,6 @@ NS_ASSUME_NONNULL_BEGIN
 @interface Apptentive ()
 
 @property (assign, nonatomic) ApptentiveDebuggingOptions debuggingOptions;
-@property (readonly, nonatomic) NSURL *_Nullable baseURL;
 
 - (void)setAPIKey:(NSString *)APIKey baseURL:(NSURL *)baseURL;
 

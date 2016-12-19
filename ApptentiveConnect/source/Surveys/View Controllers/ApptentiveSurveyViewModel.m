@@ -14,9 +14,9 @@
 #import "Apptentive_Private.h"
 #import "ApptentiveInteraction.h"
 #import "ApptentiveSurveyResponse.h"
-#import "ApptentiveSurveyResponseTask.h"
-#import "ApptentiveTaskQueue.h"
 #import "ApptentiveData.h"
+#import "ApptentiveBackend.h"
+#import "ApptentiveQueuedRequest.h"
 
 NSString *const ApptentiveInteractionSurveyEventLabelQuestionResponse = @"question_response";
 NSString *const ApptentiveInteractionSurveyEventLabelSubmit = @"submit";
@@ -245,14 +245,10 @@ NSString *const ApptentiveInteractionSurveyEventLabelCancel = @"cancel";
 	[response setAnswers:self.answers];
 	[ApptentiveData save];
 
-	NSString *pendingSurveyResponseID = [response pendingSurveyResponseID];
-	double delayInSeconds = 1.5;
-	dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-	dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
-		ApptentiveSurveyResponseTask *task = [[ApptentiveSurveyResponseTask alloc] init];
-		task.pendingSurveyResponseID = pendingSurveyResponseID;
-		[[ApptentiveTaskQueue sharedTaskQueue] addTask:task];
-	});
+	NSString *path = [NSString stringWithFormat:@"/surveys/%@/respond", response.surveyID];
+	[ApptentiveQueuedRequest enqueueRequestWithPath:path payload:response.apiJSON attachments:nil inContext:response.managedObjectContext];
+
+	[Apptentive.shared.backend processQueuedRecords];
 }
 
 #pragma mark - Validation & Output

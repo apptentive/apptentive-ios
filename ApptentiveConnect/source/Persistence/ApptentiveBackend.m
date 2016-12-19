@@ -772,7 +772,7 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 - (void)continueStartupWithDataManagerSuccess {
 	self.state = ATBackendStateReady;
 
-	NSString *token = [ApptentiveConversationUpdater currentConversation].token;
+	NSString *token = [ApptentiveConversationUpdater currentConversation].token ?: Apptentive.shared.APIKey;
 	_serialQueue = [[ApptentiveSerialNetworkQueue alloc] initWithBaseURL:Apptentive.shared.baseURL token:token SDKVersion:kApptentiveVersionString platform:@"iOS" parentManagedObjectContext:self.managedObjectContext];
 
 	[ApptentiveMetrics sharedMetrics];

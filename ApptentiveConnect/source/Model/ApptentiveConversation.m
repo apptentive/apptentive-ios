@@ -12,7 +12,12 @@
 #import "ApptentiveBackend.h"
 #import "ApptentiveUtilities.h"
 #import "NSDictionary+Apptentive.h"
-#import "ApptentiveDeviceInfo.h"
+#import "ApptentiveEngagementBackend.h"
+#import "ApptentiveConsumerData.h"
+#import "ApptentivePerson.h"
+#import "ApptentiveDevice.h"
+#import "ApptentiveAppRelease.h"
+#import "ApptentiveSDK.h"
 
 #define kATConversationCodingVersion 1
 
@@ -87,67 +92,20 @@
 - (NSDictionary *)apiJSON {
 	NSMutableDictionary *result = [NSMutableDictionary dictionary];
 
-	result[@"person"] = [[ApptentivePersonInfo currentPerson].apiJSON objectForKey:@"person"];
-	result[@"device"] = [[[ApptentiveDeviceInfo alloc] init].apiJSON objectForKey:@"device"];
-	result[@"app_release"] = [self appReleaseJSON];
-	result[@"sdk"] = [self sdkJSON];
-
-	return result;
-}
-
-- (NSDictionary *)appReleaseJSON {
-	NSMutableDictionary *result = [NSMutableDictionary dictionary];
-
-	result[@"type"] = @"ios";
-
-#ifdef APPTENTIVE_DEBUG
-	result[@"debug"] = @YES;
-#else
-	result[@"debug"] = @NO;
-#endif
-
-	// Marketing version
-	NSString *shortVersionString = [ApptentiveUtilities appBundleShortVersionString];
-	if (shortVersionString) {
-		result[@"cf_bundle_short_version_string"] = shortVersionString;
-	}
-
-	// Build number
-	NSString *version = [ApptentiveUtilities appBundleVersionString];
-	if (version) {
-		result[@"cf_bundle_version"] = version;
-	}
-
-	result[@"app_store_receipt"] = @{ @"has_receipt": @([ApptentiveUtilities appStoreReceiptExists]) };
-	result[@"overriding_styles"] = @([Apptentive sharedConnection].didAccessStyleSheet);
-
-	return result;
-}
-
-- (NSDictionary *)sdkJSON {
-	NSMutableDictionary *result = [NSMutableDictionary dictionary];
-	result[@"version"] = kApptentiveVersionString;
-	result[@"programming_language"] = @"Objective-C";
-	result[@"author_name"] = @"Apptentive, Inc.";
-	result[@"platform"] = kApptentivePlatformString;
-
-	NSString *distribution = [Apptentive sharedConnection].distributionName;
-	if (distribution) {
-		result[@"distribution"] = distribution;
-	}
-	NSString *distributionVersion = [Apptentive sharedConnection].distributionVersion;
-
-	if (distributionVersion) {
-		result[@"distribution_version"] = distributionVersion;
-	}
+	result[@"person"] = Apptentive.shared.backend.session.person.JSONDictionary;
+	result[@"device"] = Apptentive.shared.backend.session.device.JSONDictionary;
+	result[@"app_release"] = Apptentive.shared.backend.session.appRelease.JSONDictionary;
+	result[@"sdk"] = Apptentive.shared.backend.session.SDK.JSONDictionary;
 
 	return result;
 }
 
 - (NSDictionary *)apiUpdateJSON {
 	NSMutableDictionary *result = [NSMutableDictionary dictionary];
-	result[@"app_release"] = [self appReleaseJSON];
-	result[@"sdk"] = [self sdkJSON];
+
+	result[@"app_release"] = Apptentive.shared.backend.session.appRelease.JSONDictionary;
+	result[@"sdk"] = Apptentive.shared.backend.session.SDK.JSONDictionary;
+
 	return result;
 }
 @end

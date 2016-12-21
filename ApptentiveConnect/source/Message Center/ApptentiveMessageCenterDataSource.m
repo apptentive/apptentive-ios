@@ -14,6 +14,7 @@
 #import "ApptentiveData.h"
 #import "ApptentiveMessageSender.h"
 #import "ApptentiveAttachmentCell.h"
+#import "ApptentiveFileAttachment.h"
 
 NSString *const ATMessageCenterServerErrorDomain = @"com.apptentive.MessageCenterServerError";
 NSString *const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenterErrorMessages";

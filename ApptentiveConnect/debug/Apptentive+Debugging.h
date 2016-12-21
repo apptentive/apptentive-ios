@@ -40,6 +40,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (readonly, nonatomic, nullable) NSString *conversationToken;
 @property (strong, nonatomic, nullable) NSURL *localInteractionsURL;
 
+@property (readonly, nonatomic) NSDictionary *customPersonData;
+@property (readonly, nonatomic) NSDictionary *customDeviceData;
+
 - (NSArray<NSString *> *)engagementEvents;
 - (NSArray *)engagementInteractions;
 - (NSString *)engagementInteractionNameAtIndex:(NSInteger)index;

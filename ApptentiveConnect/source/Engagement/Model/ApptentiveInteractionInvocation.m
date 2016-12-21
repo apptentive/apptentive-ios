@@ -85,14 +85,6 @@
 	return copy;
 }
 
-- (BOOL)isValid {
-	return [self criteriaAreMet];
-}
-
-- (BOOL)criteriaAreMet {
-	return [self criteriaAreMetForUsageData:[ApptentiveInteractionUsageData usageData]];
-}
-
 - (BOOL)criteriaAreMetForUsageData:(ApptentiveInteractionUsageData *)usageData {
 	BOOL criteriaAreMet = NO;
 
@@ -128,6 +120,10 @@
 	}
 
 	return criteriaAreMet;
+}
+
+- (BOOL)criteriaAreMetForConsumerData:(ApptentiveConsumerData *)data {
+	return [self criteriaAreMetForUsageData:[ApptentiveInteractionUsageData usageDataWithConsumerData:data]];
 }
 
 - (NSPredicate *)criteriaPredicate {

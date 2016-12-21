@@ -22,25 +22,9 @@
 #import "ApptentiveInteractionTextModalController.h"
 #import "ApptentiveInteractionNavigateToLink.h"
 #import "ApptentiveInteractionController.h"
+#import "ApptentiveEngagement.h"
 #import "ApptentiveEngagementManifest.h"
 
-NSString *const ATEngagementInstallDateKey = @"ATEngagementInstallDateKey";
-NSString *const ATEngagementUpgradeDateKey = @"ATEngagementUpgradeDateKey";
-NSString *const ATEngagementLastUsedVersionKey = @"ATEngagementLastUsedVersionKey";
-NSString *const ATEngagementLastUsedShortVersionStringKey = @"ATEngagementLastUsedShortVersionStringKey";
-NSString *const ATEngagementIsUpdateVersionKey = @"ATEngagementIsUpdateVersionKey";
-NSString *const ATEngagementIsUpdateBuildKey = @"ATEngagementIsUpdateBuildKey";
-NSString *const ATEngagementCodePointsInvokesTotalKey = @"ATEngagementCodePointsInvokesTotalKey";
-NSString *const ATEngagementCodePointsInvokesVersionKey = @"ATEngagementCodePointsInvokesVersionKey";
-NSString *const ATEngagementCodePointsInvokesBuildKey = @"ATEngagementCodePointsInvokesBuildKey";
-NSString *const ATEngagementCodePointsInvokesLastDateKey = @"ATEngagementCodePointsInvokesLastDateKey";
-NSString *const ATEngagementInteractionsInvokesTotalKey = @"ATEngagementInteractionsInvokesTotalKey";
-NSString *const ATEngagementInteractionsInvokesVersionKey = @"ATEngagementInteractionsInvokesVersionKey";
-NSString *const ATEngagementInteractionsInvokesLastDateKey = @"ATEngagementInteractionsInvokesLastDateKey";
-NSString *const ATEngagementInteractionsInvokesBuildKey = @"ATEngagementInteractionsInvokesBuildKey";
-
-NSString *const ATEngagementInteractionsSDKVersionKey = @"ATEngagementInteractionsSDKVersionKey";
-NSString *const ATEngagementInteractionsAppBuildNumberKey = @"ATEngagementInteractionsAppBuildNumberKey";
 NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEngagementCachedInteractionsExpirationPreferenceKey";
 
 NSString *const ATEngagementCodePointHostAppVendorKey = @"local";
@@ -53,55 +37,6 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 
 @implementation ApptentiveEngagementBackend
 
-- (id)init {
-	if ((self = [super init])) {
-		NSDictionary *defaults = @{ ATEngagementIsUpdateVersionKey: @NO,
-			ATEngagementIsUpdateBuildKey: @NO,
-			ATEngagementCodePointsInvokesTotalKey: @{},
-			ATEngagementCodePointsInvokesVersionKey: @{},
-			ATEngagementCodePointsInvokesLastDateKey: @{},
-			ATEngagementInteractionsInvokesTotalKey: @{},
-			ATEngagementInteractionsInvokesVersionKey: @{},
-			ATEngagementInteractionsInvokesLastDateKey: @{} };
-		[[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
-	}
-
-	return self;
-}
-
-- (void)updateVersionInfo {
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-
-	NSDate *installDate = [defaults objectForKey:ATEngagementInstallDateKey];
-	if (!installDate) {
-		[defaults setObject:[NSDate date] forKey:ATEngagementInstallDateKey];
-	}
-
-	NSString *currentBundleShortVersionString = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-	NSString *lastBundleShortVersionString = [defaults objectForKey:ATEngagementLastUsedShortVersionStringKey];
-
-	if (lastBundleShortVersionString && ![lastBundleShortVersionString isEqualToString:currentBundleShortVersionString]) {
-		[defaults setObject:@YES forKey:ATEngagementIsUpdateVersionKey];
-	}
-
-	NSString *currentBundleVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString *)kCFBundleVersionKey];
-	NSString *lastBundleVersion = [defaults objectForKey:ATEngagementLastUsedVersionKey];
-
-	if (lastBundleVersion && ![lastBundleVersion isEqualToString:currentBundleVersion]) {
-		[defaults setObject:@YES forKey:ATEngagementIsUpdateBuildKey];
-	}
-
-	if (lastBundleVersion == nil || ![lastBundleShortVersionString isEqualToString:currentBundleShortVersionString] || ![lastBundleVersion isEqualToString:currentBundleVersion]) {
-		[defaults setObject:currentBundleVersion forKey:ATEngagementLastUsedVersionKey];
-		[defaults setObject:currentBundleShortVersionString forKey:ATEngagementLastUsedShortVersionStringKey];
-		[defaults setObject:[NSDate date] forKey:ATEngagementUpgradeDateKey];
-		[defaults setObject:@{} forKey:ATEngagementCodePointsInvokesVersionKey];
-		[defaults setObject:@{} forKey:ATEngagementCodePointsInvokesBuildKey];
-		[defaults setObject:@{} forKey:ATEngagementInteractionsInvokesVersionKey];
-		[defaults setObject:@{} forKey:ATEngagementInteractionsInvokesBuildKey];
-	}
-}
-
 - (BOOL)canShowInteractionForLocalEvent:(NSString *)event {
 	NSString *codePoint = [[ApptentiveInteraction localAppInteraction] codePointForEvent:event];
 
@@ -109,7 +44,7 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 }
 
 - (BOOL)canShowInteractionForCodePoint:(NSString *)codePoint {
-	ApptentiveInteraction *interaction = [[Apptentive sharedConnection].engagementBackend interactionForEvent:codePoint];
+	ApptentiveInteraction *interaction = [self interactionForEvent:codePoint];
 
 	return (interaction != nil);
 }
@@ -130,7 +65,7 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 		}
 
 		if (invocation && [invocation isKindOfClass:[ApptentiveInteractionInvocation class]]) {
-			if ([invocation isValid]) {
+			if ([invocation criteriaAreMetForConsumerData:Apptentive.shared.backend.session]) {
 				interactionID = invocation.interactionID;
 				break;
 			}
@@ -150,6 +85,10 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 	ApptentiveInteraction *interaction = [self interactionForInvocations:invocations];
 
 	return interaction;
+}
+
++ (NSString *)consumerDataStoragePath {
+	return [[Apptentive supportDirectoryPath] stringByAppendingPathComponent:@"consumerData"];
 }
 
 + (NSString *)stringByEscapingCodePointSeparatorCharactersInString:(NSString *)string {
@@ -219,105 +158,19 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 }
 
 - (void)codePointWasSeen:(NSString *)codePoint {
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-
-	NSDictionary *invokesTotal = [defaults objectForKey:ATEngagementCodePointsInvokesTotalKey];
-	if (![invokesTotal objectForKey:codePoint]) {
-		NSMutableDictionary *addedCodePoint = [NSMutableDictionary dictionaryWithDictionary:invokesTotal];
-		[addedCodePoint setObject:@0 forKey:codePoint];
-		[defaults setObject:addedCodePoint forKey:ATEngagementCodePointsInvokesTotalKey];
-	}
-
-	NSDictionary *invokesVersion = [defaults objectForKey:ATEngagementCodePointsInvokesVersionKey];
-	if (![invokesVersion objectForKey:codePoint]) {
-		NSMutableDictionary *addedCodePoint = [NSMutableDictionary dictionaryWithDictionary:invokesVersion];
-		[addedCodePoint setObject:@0 forKey:codePoint];
-		[defaults setObject:addedCodePoint forKey:ATEngagementCodePointsInvokesVersionKey];
-	}
-
-	NSDictionary *invokesBuild = [defaults objectForKey:ATEngagementCodePointsInvokesBuildKey];
-	if (![invokesBuild objectForKey:codePoint]) {
-		NSMutableDictionary *addedCodePoint = [NSMutableDictionary dictionaryWithDictionary:invokesBuild];
-		[addedCodePoint setObject:@0 forKey:codePoint];
-		[defaults setObject:addedCodePoint forKey:ATEngagementCodePointsInvokesBuildKey];
-	}
+	[Apptentive.shared.backend.session.engagement warmCodePoint:codePoint];
 }
 
 - (void)codePointWasEngaged:(NSString *)codePoint {
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-
-	NSMutableDictionary *codePointsInvokesTotal = [[defaults objectForKey:ATEngagementCodePointsInvokesTotalKey] mutableCopy];
-	NSNumber *codePointInvokesTotal = [codePointsInvokesTotal objectForKey:codePoint] ?: @0;
-	codePointInvokesTotal = @(codePointInvokesTotal.intValue + 1);
-	[codePointsInvokesTotal setObject:codePointInvokesTotal forKey:codePoint];
-	[defaults setObject:codePointsInvokesTotal forKey:ATEngagementCodePointsInvokesTotalKey];
-
-	NSMutableDictionary *codePointsInvokesVersion = [[defaults objectForKey:ATEngagementCodePointsInvokesVersionKey] mutableCopy];
-	NSNumber *codePointInvokesVersion = [codePointsInvokesVersion objectForKey:codePoint] ?: @0;
-	codePointInvokesVersion = @(codePointInvokesVersion.intValue + 1);
-	[codePointsInvokesVersion setObject:codePointInvokesVersion forKey:codePoint];
-	[defaults setObject:codePointsInvokesVersion forKey:ATEngagementCodePointsInvokesVersionKey];
-
-	NSMutableDictionary *codePointsInvokesBuild = [[defaults objectForKey:ATEngagementCodePointsInvokesBuildKey] mutableCopy];
-	NSNumber *codePointInvokesBuild = [codePointsInvokesBuild objectForKey:codePoint] ?: @0;
-	codePointInvokesBuild = @(codePointInvokesBuild.intValue + 1);
-	[codePointsInvokesBuild setObject:codePointInvokesBuild forKey:codePoint];
-	[defaults setObject:codePointsInvokesBuild forKey:ATEngagementCodePointsInvokesBuildKey];
-
-	NSMutableDictionary *codePointsInvokesTimeAgo = [[defaults objectForKey:ATEngagementCodePointsInvokesLastDateKey] mutableCopy];
-	[codePointsInvokesTimeAgo setObject:[NSDate date] forKey:codePoint];
-	[defaults setObject:codePointsInvokesTimeAgo forKey:ATEngagementCodePointsInvokesLastDateKey];
+	[Apptentive.shared.backend.session.engagement engageCodePoint:codePoint];
 }
 
 - (void)interactionWasSeen:(NSString *)interactionID {
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-
-	NSDictionary *invokesTotal = [defaults objectForKey:ATEngagementInteractionsInvokesTotalKey];
-	if (![invokesTotal objectForKey:interactionID]) {
-		NSMutableDictionary *addedInteraction = [NSMutableDictionary dictionaryWithDictionary:invokesTotal];
-		[addedInteraction setObject:@0 forKey:interactionID];
-		[defaults setObject:addedInteraction forKey:ATEngagementInteractionsInvokesTotalKey];
-	}
-
-	NSDictionary *invokesVersion = [defaults objectForKey:ATEngagementInteractionsInvokesVersionKey];
-	if (![invokesVersion objectForKey:interactionID]) {
-		NSMutableDictionary *addedInteraction = [NSMutableDictionary dictionaryWithDictionary:invokesVersion];
-		[addedInteraction setObject:@0 forKey:interactionID];
-		[defaults setObject:addedInteraction forKey:ATEngagementInteractionsInvokesVersionKey];
-	}
-
-	NSDictionary *invokesBuild = [defaults objectForKey:ATEngagementInteractionsInvokesBuildKey];
-	if (![invokesBuild objectForKey:interactionID]) {
-		NSMutableDictionary *addedInteraction = [NSMutableDictionary dictionaryWithDictionary:invokesBuild];
-		[addedInteraction setObject:@0 forKey:interactionID];
-		[defaults setObject:addedInteraction forKey:ATEngagementInteractionsInvokesBuildKey];
-	}
+	[Apptentive.shared.backend.session.engagement warmInteraction:interactionID];
 }
 
 - (void)interactionWasEngaged:(ApptentiveInteraction *)interaction {
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-
-	NSMutableDictionary *interactionsInvokesTotal = [[defaults objectForKey:ATEngagementInteractionsInvokesTotalKey] mutableCopy];
-	NSNumber *interactionInvokesTotal = [interactionsInvokesTotal objectForKey:interaction.identifier] ?: @0;
-	interactionInvokesTotal = @(interactionInvokesTotal.intValue + 1);
-	[interactionsInvokesTotal setObject:interactionInvokesTotal forKey:interaction.identifier];
-	[defaults setObject:interactionsInvokesTotal forKey:ATEngagementInteractionsInvokesTotalKey];
-
-	NSMutableDictionary *interactionsInvokesVersion = [[defaults objectForKey:ATEngagementInteractionsInvokesVersionKey] mutableCopy];
-	NSNumber *interactionInvokesVersion = [interactionsInvokesVersion objectForKey:interaction.identifier] ?: @0;
-	interactionInvokesVersion = @(interactionInvokesVersion.intValue + 1);
-	[interactionsInvokesVersion setObject:interactionInvokesVersion forKey:interaction.identifier];
-	[defaults setObject:interactionsInvokesVersion forKey:ATEngagementInteractionsInvokesVersionKey];
-
-	NSMutableDictionary *interactionsInvokesBuild = [[defaults objectForKey:ATEngagementInteractionsInvokesBuildKey] mutableCopy];
-	NSNumber *interactionInvokesBuild = [interactionsInvokesBuild objectForKey:interaction.identifier] ?: @0;
-	interactionInvokesBuild = @(interactionInvokesBuild.intValue + 1);
-	[interactionsInvokesBuild setObject:interactionInvokesBuild forKey:interaction.identifier];
-	[defaults setObject:interactionsInvokesBuild forKey:ATEngagementInteractionsInvokesBuildKey];
-
-	NSMutableDictionary *interactionsInvokesLastDate = [[defaults objectForKey:ATEngagementInteractionsInvokesLastDateKey] mutableCopy];
-	[interactionsInvokesLastDate setObject:[NSDate date] forKey:interaction.identifier];
-	[defaults setObject:interactionsInvokesLastDate forKey:ATEngagementInteractionsInvokesLastDateKey];
+	[Apptentive.shared.backend.session.engagement engageInteraction:interaction.identifier];
 }
 
 - (void)presentInteraction:(ApptentiveInteraction *)interaction fromViewController:(UIViewController *)viewController {
@@ -343,15 +196,6 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 	[controller presentInteractionFromViewController:viewController];
 }
 
-- (void)resetUpgradeVersionInfo {
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	[defaults removeObjectForKey:ATEngagementLastUsedVersionKey];
-	[defaults removeObjectForKey:ATEngagementUpgradeDateKey];
-	[defaults setObject:@{} forKey:ATEngagementCodePointsInvokesVersionKey];
-	[defaults setObject:@{} forKey:ATEngagementInteractionsInvokesVersionKey];
-	[defaults synchronize];
-}
-
 - (NSArray *)allEngagementInteractions {
 	return Apptentive.shared.backend.manifest.interactions.allValues;
 }
@@ -369,57 +213,55 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 
 - (void)setLocalEngagementManifestURL:(NSURL *)localEngagementManifestURL {
 #warning fixme
-//	if (_localEngagementManifestURL != localEngagementManifestURL) {
-//		_localEngagementManifestURL = localEngagementManifestURL;
-//
-//		if (localEngagementManifestURL == nil) {
-//			[self loadCachedEngagementManifest];
-//			[self checkForEngagementManifest];
-//			[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveInteractionsDidUpdateNotification object:nil];
-//		} else {
-//			[[ApptentiveTaskQueue sharedTaskQueue] removeTasksOfClass:[ApptentiveEngagementGetManifestTask class]];
-//
-//			NSData *localData = [NSData dataWithContentsOfURL:localEngagementManifestURL];
-//
-//			ApptentiveEngagementManifestParser *parser = [[ApptentiveEngagementManifestParser alloc] init];
-//
-//			NSDictionary *targetsAndInteractions = [parser targetsAndInteractionsForEngagementManifest:localData];
-//			NSDictionary *targets = targetsAndInteractions[@"targets"];
-//			NSDictionary *interactions = targetsAndInteractions[@"interactions"];
-//
-//			if (targets && interactions) {
-//				[self.engagementTargets removeAllObjects];
-//				[self.engagementTargets addEntriesFromDictionary:targets];
-//
-//				[self.engagementInteractions removeAllObjects];
-//				[self.engagementInteractions addEntriesFromDictionary:interactions];
-//
-//				[Apptentive sharedConnection].engagementBackend.engagementManifestJSON = targetsAndInteractions[@"raw"];
-//			} else {
-//				ApptentiveLogError(@"An error occurred parsing the engagement manifest: %@", [parser parserError]);
-//			}
-//		}
-//	}
+	//	if (_localEngagementManifestURL != localEngagementManifestURL) {
+	//		_localEngagementManifestURL = localEngagementManifestURL;
+	//
+	//		if (localEngagementManifestURL == nil) {
+	//			[self loadCachedEngagementManifest];
+	//			[self checkForEngagementManifest];
+	//			[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveInteractionsDidUpdateNotification object:nil];
+	//		} else {
+	//			[[ApptentiveTaskQueue sharedTaskQueue] removeTasksOfClass:[ApptentiveEngagementGetManifestTask class]];
+	//
+	//			NSData *localData = [NSData dataWithContentsOfURL:localEngagementManifestURL];
+	//
+	//			ApptentiveEngagementManifestParser *parser = [[ApptentiveEngagementManifestParser alloc] init];
+	//
+	//			NSDictionary *targetsAndInteractions = [parser targetsAndInteractionsForEngagementManifest:localData];
+	//			NSDictionary *targets = targetsAndInteractions[@"targets"];
+	//			NSDictionary *interactions = targetsAndInteractions[@"interactions"];
+	//
+	//			if (targets && interactions) {
+	//				[self.engagementTargets removeAllObjects];
+	//				[self.engagementTargets addEntriesFromDictionary:targets];
+	//
+	//				[self.engagementInteractions removeAllObjects];
+	//				[self.engagementInteractions addEntriesFromDictionary:interactions];
+	//
+	//				[Apptentive sharedConnection].engagementBackend.engagementManifestJSON = targetsAndInteractions[@"raw"];
+	//			} else {
+	//				ApptentiveLogError(@"An error occurred parsing the engagement manifest: %@", [parser parserError]);
+	//			}
+	//		}
+	//	}
 }
 
 - (void)resetEngagementData {
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATEngagementInstallDateKey];
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATEngagementUpgradeDateKey];
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATEngagementLastUsedVersionKey];
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATEngagementIsUpdateVersionKey];
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATEngagementIsUpdateBuildKey];
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATEngagementCodePointsInvokesTotalKey];
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATEngagementCodePointsInvokesVersionKey];
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATEngagementCodePointsInvokesBuildKey];
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATEngagementCodePointsInvokesLastDateKey];
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATEngagementInteractionsInvokesTotalKey];
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATEngagementInteractionsInvokesVersionKey];
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATEngagementInteractionsInvokesLastDateKey];
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATEngagementInteractionsInvokesBuildKey];
+}
 
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATEngagementInteractionsSDKVersionKey];
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATEngagementInteractionsAppBuildNumberKey];
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATEngagementCachedInteractionsExpirationPreferenceKey];
+#pragma mark Consumer Data Delegate
+
+- (void)consumerDataDeviceDidChange:(ApptentiveConsumerData *)consumerData {
+	// tell backend to update device
+}
+
+- (void)consumerDataConversationDidChange:(ApptentiveConsumerData *)consumerData {
+
+	// tell backend to update conversation
+}
+
+- (void)consumerDataPersonDidChange:(ApptentiveConsumerData *)consumerData {
+
 }
 
 @end

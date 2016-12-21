@@ -13,6 +13,8 @@
 #import "ApptentiveMessageSender.h"
 #import "NSDictionary+Apptentive.h"
 #import "ApptentiveMessageCenterInteraction.h"
+#import "ApptentiveFileAttachment.h"
+
 
 NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 

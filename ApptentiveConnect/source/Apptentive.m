@@ -19,6 +19,10 @@
 #import "ApptentiveAboutViewController.h"
 #import "ApptentiveStyleSheet.h"
 #import "ApptentiveAppConfiguration.h"
+#import "ApptentivePerson.h"
+#import "ApptentiveDevice.h"
+#import "ApptentiveMutablePerson.h"
+#import "ApptentiveMutableDevice.h"
 
 NSString *const ApptentiveMessageCenterUnreadCountChangedNotification = @"ApptentiveMessageCenterUnreadCountChangedNotification";
 
@@ -148,19 +152,23 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 }
 
 - (NSString *)personName {
-	return [ApptentivePersonInfo currentPerson].name;
+	return self.backend.session.person.name;
 }
 
 - (void)setPersonName:(NSString *)personName {
-	[ApptentivePersonInfo currentPerson].name = personName;
+	[self.backend.session updatePerson:^(ApptentiveMutablePerson *person) {
+		person.name = personName;
+	}];
 }
 
 - (NSString *)personEmailAddress {
-	return [ApptentivePersonInfo currentPerson].emailAddress;
+	return self.backend.session.person.emailAddress;
 }
 
 - (void)setPersonEmailAddress:(NSString *)personEmailAddress {
-	[ApptentivePersonInfo currentPerson].emailAddress = personEmailAddress;
+	[self.backend.session updatePerson:^(ApptentiveMutablePerson *person) {
+		person.emailAddress = personEmailAddress;
+	}];
 }
 
 - (void)sendAttachmentText:(NSString *)text {
@@ -176,35 +184,47 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 }
 
 - (NSDictionary *)customPersonData {
-	return _customPersonData;
+	return self.backend.session.person.customData;
 }
 
 - (NSDictionary *)customDeviceData {
-	return _customDeviceData;
+	return self.backend.session.device.customData;
 }
 
 - (void)addCustomDeviceDataString:(NSString *)string withKey:(NSString *)key {
-	[self addCustomDeviceData:string withKey:key];
+	[self.backend.session updateDevice:^(ApptentiveMutableDevice *device) {
+		[device addCustomString:string withKey:key];
+	}];
 }
 
 - (void)addCustomDeviceDataNumber:(NSNumber *)number withKey:(NSString *)key {
-	[self addCustomDeviceData:number withKey:key];
+	[self.backend.session updateDevice:^(ApptentiveMutableDevice *device) {
+		[device addCustomNumber:number withKey:key];
+	}];
 }
 
 - (void)addCustomDeviceDataBool:(BOOL)boolValue withKey:(NSString *)key {
-	[self addCustomDeviceData:@(boolValue) withKey:key];
+	[self.backend.session updateDevice:^(ApptentiveMutableDevice *device) {
+		[device addCustomBool:boolValue withKey:key];
+	}];
 }
 
 - (void)addCustomPersonDataString:(NSString *)string withKey:(NSString *)key {
-	[self addCustomPersonData:string withKey:key];
+	[self.backend.session updatePerson:^(ApptentiveMutablePerson *person) {
+		[person addCustomString:string withKey:key];
+	}];
 }
 
 - (void)addCustomPersonDataNumber:(NSNumber *)number withKey:(NSString *)key {
-	[self addCustomPersonData:number withKey:key];
+	[self.backend.session updatePerson:^(ApptentiveMutablePerson *person) {
+		[person addCustomNumber:number withKey:key];
+	}];
 }
 
 - (void)addCustomPersonDataBool:(BOOL)boolValue withKey:(NSString *)key {
-	[self addCustomPersonData:@(boolValue) withKey:key];
+	[self.backend.session updatePerson:^(ApptentiveMutablePerson *person) {
+		[person addCustomBool:boolValue withKey:key];
+	}];
 }
 
 + (NSDictionary *)versionObjectWithVersion:(NSString *)version {

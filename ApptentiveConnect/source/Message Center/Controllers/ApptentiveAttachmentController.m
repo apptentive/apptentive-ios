@@ -12,6 +12,7 @@
 #import "ApptentiveMessageCenterViewController.h"
 #import "ApptentiveMessageCenterInteraction.h"
 #import "Apptentive_Private.h"
+#import "ApptentiveFileAttachment.h"
 
 #define MAX_NUMBER_OF_ATTACHMENTS 4
 #define ATTACHMENT_MARGIN CGSizeMake(16.0, 15.0)

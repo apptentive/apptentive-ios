@@ -890,7 +890,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 			@"valid": @([ApptentiveUtilities emailAddressIsValid:self.profileView.emailField.text]) }];
 	}
 
-	[[Apptentive sharedConnection].backend updatePersonIfNeeded];
+	// TODO: make sure person gets updated
 
 	self.composeButtonItem.enabled = YES;
 	self.neuMessageButtonItem.enabled = YES;

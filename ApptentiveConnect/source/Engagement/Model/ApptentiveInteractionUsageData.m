@@ -12,48 +12,31 @@
 #import "Apptentive_Private.h"
 #import "ApptentiveEngagementBackend.h"
 #import "ApptentiveUtilities.h"
-#import "ApptentiveDeviceInfo.h"
-#import "ApptentivePersonInfo.h"
+#import "ApptentiveVersion.h"
+#import "ApptentiveAppRelease.h"
+#import "ApptentiveSDK.h"
+#import "ApptentiveEngagement.h"
+#import "ApptentiveCount.h"
+#import "ApptentiveDevice.h"
+#import "ApptentivePerson.h"
 
 
 @implementation ApptentiveInteractionUsageData
 
-+ (ApptentiveInteractionUsageData *)usageData {
-	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] init];
++ (ApptentiveInteractionUsageData *)usageDataWithConsumerData:(ApptentiveConsumerData *)data {
+	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] initWithConsumerData:data];
 
 	return usageData;
 }
 
-- (NSString *)description {
-	NSString *title = [NSString stringWithFormat:@"Engamement Framework Usage Data:"];
+- (instancetype)initWithConsumerData:(ApptentiveConsumerData *)data {
+	self = [super init];
 
-	NSDictionary *data = @{
-		@"applicationCFBundleShortVersionString": self.applicationCFBundleShortVersionString ?: [NSNull null],
-		@"applicationCFBundleVersion": self.applicationCFBundleVersion ?: [NSNull null],
-		@"sdkVersion": self.sdkVersion ?
-		[NSNull null],
-		@"sdkDistribution" :
-		self.sdkDistribution ?
-		[NSNull null],
-		@"sdkDistributionVersion" :
-		self.sdkDistributionVersion ?
-		[NSNull null],
-		@"isUpdateVersion" :
-		self.isUpdateVersion ?: [NSNull null],
-		@"isUpdateBuild": self.isUpdateBuild ?: [NSNull null],
-		@"codePointInvokesTotal": self.codePointInvokesTotal ?: [NSNull null],
-		@"codePointInvokesVersion": self.codePointInvokesVersion ?: [NSNull null],
-		@"codePointInvokesBuild": self.codePointInvokesBuild ?: [NSNull null],
-		@"codePointInvokesTimeAgo": self.codePointInvokesTimeAgo ?: [NSNull null],
-		@"interactionInvokesTotal": self.interactionInvokesTotal ?: [NSNull null],
-		@"interactionInvokesVersion": self.interactionInvokesVersion ?: [NSNull null],
-		@"interactionInovkesBuild": self.interactionInvokesBuild ?: [NSNull null],
-		@"interactionInvokesTimeAgo": self.interactionInvokesTimeAgo ?: [NSNull null]
-	};
+	if (self) {
+		_data = data;
+	}
 
-	NSDictionary *description = @{title: data};
-
-	return [description description];
+	return self;
 }
 
 + (void)keyPathWasSeen:(NSString *)keyPath {
@@ -76,335 +59,108 @@
 	}
 }
 
+- (NSDictionary *)versionObjectWithVersion:(ApptentiveVersion *)version {
+	return @{ @"_type": @"version", @"version": version.versionString ?: @"0.0.0" };
+}
+
+- (NSDictionary *)countDictionaryForCount:(ApptentiveCount *)count withPrefix:(NSString *)prefix {
+	NSMutableDictionary *result = [NSMutableDictionary dictionaryWithCapacity:4];
+
+	result[[prefix stringByAppendingString:@"/invokes/total"]] = @(count.totalCount);
+	result[[prefix stringByAppendingString:@"/invokes/cf_bundle_short_version_string"]] = @(count.versionCount);
+	result[[prefix stringByAppendingString:@"/invokes/cf_bundle_version"]] = @(count.buildCount);
+	result[[prefix stringByAppendingString:@"/last_invoked_at/total"]] = count.lastInvoked ? [Apptentive timestampObjectWithDate:count.lastInvoked] : [NSNull null];
+
+	return result;
+}
+
 - (NSDictionary *)predicateEvaluationDictionary {
-	NSMutableDictionary *predicateEvaluationDictionary = [NSMutableDictionary dictionaryWithDictionary:@{
-		@"is_update/cf_bundle_short_version_string": self.isUpdateVersion,
-		@"is_update/cf_bundle_version": self.isUpdateBuild }];
-	if (self.timeAtInstallTotal) {
-		predicateEvaluationDictionary[@"time_at_install/total"] = [Apptentive timestampObjectWithDate:self.timeAtInstallTotal];
-	}
-	if (self.timeAtInstallVersion) {
-		predicateEvaluationDictionary[@"time_at_install/cf_bundle_short_version_string"] = [Apptentive timestampObjectWithDate:self.timeAtInstallVersion];
-		predicateEvaluationDictionary[@"time_at_install/cf_bundle_version"] = [Apptentive timestampObjectWithDate:self.timeAtInstallVersion];
+	NSMutableDictionary *result = [NSMutableDictionary dictionary];
+
+	result[@"is_update/cf_bundle_short_version_string"] = @(self.data.appRelease.isUpdateVersion);
+	result[@"is_update/cf_bundle_version"] = @(self.data.appRelease.isUpdateBuild);
+
+	result[@"time_at_install/total"] = [Apptentive timestampObjectWithDate:self.data.appRelease.timeAtInstallTotal];
+	result[@"time_at_install/cf_bundle_short_version_string"] = [Apptentive timestampObjectWithDate:self.data.appRelease.timeAtInstallVersion];
+	result[@"time_at_install/cf_bundle_version"] = [Apptentive timestampObjectWithDate:self.data.appRelease.timeAtInstallBuild];
+
+	result[@"application/cf_bundle_short_version_string"] = [self versionObjectWithVersion:self.data.appRelease.version];
+	result[@"application/cf_bundle_version"] = [self versionObjectWithVersion:self.data.appRelease.build];
+	result[@"application/debug"] = @(self.data.appRelease.debugBuild);
+
+	result[@"sdk/version"] = [self versionObjectWithVersion:self.data.SDK.version];
+	result[@"sdk/distribution"] = self.data.SDK.distributionName;
+	result[@"sdk/distribution_version"] = self.data.SDK.distributionVersion;
+
+	result[@"current_time"] = [Apptentive timestampObjectWithDate:self.data.currentTime];
+
+	for (NSString *key in self.data.engagement.codePoints) {
+		[result addEntriesFromDictionary:[self countDictionaryForCount:self.data.engagement.codePoints[key] withPrefix:[@"code_point/" stringByAppendingString:[ApptentiveUtilities stringByEscapingForPredicate:key]]]];
 	}
 
-	if (self.applicationCFBundleShortVersionString) {
-		predicateEvaluationDictionary[@"application/cf_bundle_short_version_string"] = [Apptentive versionObjectWithVersion:self.applicationCFBundleShortVersionString];
-	} else {
-		ApptentiveLogWarning(@"Unable to get application version. Using default value of 0.0.0");
-		predicateEvaluationDictionary[@"application/cf_bundle_short_version_string"] = [Apptentive versionObjectWithVersion:@"0.0.0"];
+	for (NSString *key in self.data.engagement.interactions) {
+		[result addEntriesFromDictionary:[self countDictionaryForCount:self.data.engagement.interactions[key] withPrefix:[@"interactions/" stringByAppendingString:[ApptentiveUtilities stringByEscapingForPredicate:key]]]];
 	}
-
-	if (self.applicationCFBundleVersion) {
-		predicateEvaluationDictionary[@"application/cf_bundle_version"] = [Apptentive versionObjectWithVersion:self.applicationCFBundleVersion];
-	} else {
-		ApptentiveLogWarning(@"Unable to get application build. Using default value of 0.0.0");
-		predicateEvaluationDictionary[@"application/cf_bundle_version"] = [Apptentive versionObjectWithVersion:@"0.0.0"];
-	}
-
-	if (self.isDebugBuild) {
-		predicateEvaluationDictionary[@"application/debug"] = self.isDebugBuild;
-	}
-
-	if (self.sdkVersion) {
-		predicateEvaluationDictionary[@"sdk/version"] = [Apptentive versionObjectWithVersion:self.sdkVersion];
-	} else {
-		ApptentiveLogError(@"Unable to find SDK version. Interaction critera don't make sense without one.");
-		return nil;
-	}
-
-	if (self.sdkDistribution) {
-		predicateEvaluationDictionary[@"sdk/distribution"] = self.sdkDistribution;
-	}
-	if (self.sdkDistributionVersion) {
-		predicateEvaluationDictionary[@"sdk/distribution_version"] = self.sdkDistributionVersion;
-	}
-
-	predicateEvaluationDictionary[@"current_time"] = [Apptentive timestampObjectWithNumber:self.currentTime];
-	[predicateEvaluationDictionary addEntriesFromDictionary:self.codePointInvokesTotal];
-	[predicateEvaluationDictionary addEntriesFromDictionary:self.codePointInvokesVersion];
-	[predicateEvaluationDictionary addEntriesFromDictionary:self.codePointInvokesBuild];
-	[predicateEvaluationDictionary addEntriesFromDictionary:self.codePointInvokesTimeAgo];
-	[predicateEvaluationDictionary addEntriesFromDictionary:self.interactionInvokesTotal];
-	[predicateEvaluationDictionary addEntriesFromDictionary:self.interactionInvokesVersion];
-	[predicateEvaluationDictionary addEntriesFromDictionary:self.interactionInvokesBuild];
-	[predicateEvaluationDictionary addEntriesFromDictionary:self.interactionInvokesTimeAgo];
 
 	// Device
-	ApptentiveDeviceInfo *deviceInfo = [[ApptentiveDeviceInfo alloc] init];
-	if (deviceInfo) {
-		NSDictionary *deviceData = deviceInfo.dictionaryRepresentation[@"device"];
+	NSDictionary *deviceData = self.data.device.JSONDictionary;
 
-		// Device information
-		for (NSString *key in [deviceData allKeys]) {
-			if ([key isEqualToString:@"custom_data"]) {
-				// Custom data is added below.
-				continue;
-			}
-
-			if ([key isEqualToString:@"integration_config"]) {
-				// Skip "integration_config"; not used for targeting.
-				continue;
-			}
-
-			NSObject *value = deviceData[key];
-			if (value) {
-				NSString *criteriaKey = [NSString stringWithFormat:@"device/%@", [ApptentiveUtilities stringByEscapingForPredicate:key]];
-
-				if ([key isEqualToString:@"os_version"]) {
-					value = [Apptentive versionObjectWithVersion:(NSString *)value];
-				}
-
-				predicateEvaluationDictionary[criteriaKey] = value;
-			}
+	// Device information
+	for (NSString *key in deviceData) {
+		if ([key isEqualToString:@"custom_data"] || [key isEqualToString:@"integration_config"]) {
+			continue;
 		}
 
-		// Device custom data
-		NSDictionary *customData = deviceData[@"custom_data"];
-		if (customData) {
-			for (NSString *key in customData) {
-				NSObject *value = customData[key];
-				if (value) {
-					NSString *criteriaKey = [NSString stringWithFormat:@"device/custom_data/%@", [ApptentiveUtilities stringByEscapingForPredicate:key]];
-					predicateEvaluationDictionary[criteriaKey] = value;
-				}
+		NSObject *value = deviceData[key];
+		if (value) {
+			NSString *criteriaKey = [NSString stringWithFormat:@"device/%@", [ApptentiveUtilities stringByEscapingForPredicate:key]];
+
+			if ([key isEqualToString:@"os_version"]) {
+				value = [Apptentive versionObjectWithVersion:(NSString *)value];
 			}
+
+			result[criteriaKey] = value;
+		}
+	}
+
+	// Device custom data
+	NSDictionary *customDeviceData = deviceData[@"custom_data"];
+	for (NSString *key in customDeviceData) {
+		NSObject *value = customDeviceData[key];
+		if (value) {
+			NSString *criteriaKey = [NSString stringWithFormat:@"device/custom_data/%@", [ApptentiveUtilities stringByEscapingForPredicate:key]];
+			result[criteriaKey] = value;
 		}
 	}
 
 	// Person
-	ApptentivePersonInfo *personInfo = [ApptentivePersonInfo currentPerson];
-	if (personInfo) {
-		NSDictionary *personData = personInfo.dictionaryRepresentation[@"person"];
+	NSDictionary *personData = self.data.person.JSONDictionary;
 
-		// Person information
-		for (NSString *key in [personData allKeys]) {
-			if ([key isEqualToString:@"custom_data"]) {
-				// Custom data is added below.
-				continue;
-			}
-
-			NSObject *value = personData[key];
-			if (value) {
-				NSString *criteriaKey = [NSString stringWithFormat:@"person/%@", [ApptentiveUtilities stringByEscapingForPredicate:key]];
-				predicateEvaluationDictionary[criteriaKey] = value;
-			}
+	// Person information
+	for (NSString *key in [personData allKeys]) {
+		if ([key isEqualToString:@"custom_data"]) {
+			// Custom data is added below.
+			continue;
 		}
 
-		// Person custom data
-		NSDictionary *customData = personData[@"custom_data"];
-		if (customData) {
-			for (NSString *key in customData) {
-				NSObject *value = customData[key];
-				if (value) {
-					NSString *criteriaKey = [NSString stringWithFormat:@"person/custom_data/%@", [ApptentiveUtilities stringByEscapingForPredicate:key]];
-					predicateEvaluationDictionary[criteriaKey] = value;
-				}
-			}
+		NSObject *value = personData[key];
+		if (value) {
+			NSString *criteriaKey = [NSString stringWithFormat:@"person/%@", [ApptentiveUtilities stringByEscapingForPredicate:key]];
+			result[criteriaKey] = value;
 		}
 	}
 
-	return predicateEvaluationDictionary;
-}
-
-- (NSDate *)timeAtInstallTotal {
-	if (!_timeAtInstallTotal) {
-		_timeAtInstallTotal = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementInstallDateKey] ?: [NSDate date];
-	}
-	return _timeAtInstallTotal;
-}
-
-- (NSDate *)timeAtInstallVersion {
-	if (!_timeAtInstallVersion) {
-		_timeAtInstallVersion = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementUpgradeDateKey] ?: [NSDate date];
-	}
-	return _timeAtInstallVersion;
-}
-
-- (NSString *)applicationCFBundleShortVersionString {
-	if (!_applicationCFBundleShortVersionString) {
-		_applicationCFBundleShortVersionString = [[ApptentiveUtilities appVersionString] copy];
-	}
-
-	return _applicationCFBundleShortVersionString;
-}
-
-- (NSString *)applicationCFBundleVersion {
-	if (!_applicationCFBundleVersion) {
-		_applicationCFBundleVersion = [[ApptentiveUtilities buildNumberString] copy];
-	}
-
-	return _applicationCFBundleVersion;
-}
-
-- (NSNumber *)isDebugBuild {
-	if (!_isDebugBuild) {
-#if APPTENTIVE_DEBUG
-		_isDebugBuild = @YES;
-#else
-		_isDebugBuild = @NO;
-#endif
-	}
-
-	return _isDebugBuild;
-}
-
-- (NSString *)sdkVersion {
-	if (!_sdkVersion) {
-		_sdkVersion = [kApptentiveVersionString copy];
-	}
-	return _sdkVersion;
-}
-
-- (NSString *)sdkDistribution {
-	if (!_sdkDistribution) {
-		_sdkDistribution = [[Apptentive sharedConnection].distributionName copy];
-	}
-	return _sdkDistribution;
-}
-
-- (NSString *)sdkDistributionVersion {
-	if (!_sdkDistributionVersion) {
-		_sdkDistributionVersion = [[Apptentive sharedConnection].distributionVersion copy];
-	}
-	return _sdkDistributionVersion;
-}
-
-- (NSNumber *)currentTime {
-	if (!_currentTime) {
-		_currentTime = @([[NSDate date] timeIntervalSince1970]);
-	}
-	return _currentTime;
-}
-
-- (NSNumber *)isUpdateVersion {
-	if (!_isUpdateVersion) {
-		_isUpdateVersion = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementIsUpdateVersionKey] ?: @(NO);
-	}
-
-	return _isUpdateVersion;
-}
-
-- (NSNumber *)isUpdateBuild {
-	if (!_isUpdateBuild) {
-		_isUpdateBuild = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementIsUpdateBuildKey] ?: @(NO);
-	}
-
-	return _isUpdateBuild;
-}
-
-- (NSDictionary *)codePointInvokesTotal {
-	if (!_codePointInvokesTotal) {
-		NSMutableDictionary *predicateSyntax = [NSMutableDictionary dictionary];
-		NSDictionary *codePointsInvokesTotal = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementCodePointsInvokesTotalKey];
-		for (NSString *codePoint in codePointsInvokesTotal) {
-			[predicateSyntax setObject:[codePointsInvokesTotal objectForKey:codePoint] forKey:[NSString stringWithFormat:@"code_point/%@/invokes/total", [ApptentiveUtilities stringByEscapingForPredicate:codePoint]]];
+	// Person custom data
+	NSDictionary *customPersonData = personData[@"custom_data"];
+	for (NSString *key in customPersonData) {
+		NSObject *value = customPersonData[key];
+		if (value) {
+			NSString *criteriaKey = [NSString stringWithFormat:@"person/custom_data/%@", [ApptentiveUtilities stringByEscapingForPredicate:key]];
+			result[criteriaKey] = value;
 		}
-		_codePointInvokesTotal = [[NSDictionary alloc] initWithDictionary:predicateSyntax];
 	}
 
-	return _codePointInvokesTotal;
-}
-
-- (NSDictionary *)codePointInvokesVersion {
-	if (!_codePointInvokesVersion) {
-		NSMutableDictionary *predicateSyntax = [NSMutableDictionary dictionary];
-		NSDictionary *codePointsInvokesVersion = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementCodePointsInvokesVersionKey];
-		for (NSString *codePoint in codePointsInvokesVersion) {
-			[predicateSyntax setObject:[codePointsInvokesVersion objectForKey:codePoint] forKey:[NSString stringWithFormat:@"code_point/%@/invokes/cf_bundle_short_version_string", [ApptentiveUtilities stringByEscapingForPredicate:codePoint]]];
-		}
-		_codePointInvokesVersion = [[NSDictionary alloc] initWithDictionary:predicateSyntax];
-	}
-	return _codePointInvokesVersion;
-}
-
-- (NSDictionary *)codePointInvokesBuild {
-	if (!_codePointInvokesBuild) {
-		NSMutableDictionary *predicateSyntax = [NSMutableDictionary dictionary];
-		NSDictionary *codePointsInvokesBuild = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementCodePointsInvokesBuildKey];
-		for (NSString *codePoint in codePointsInvokesBuild) {
-			[predicateSyntax setObject:[codePointsInvokesBuild objectForKey:codePoint] forKey:[NSString stringWithFormat:@"code_point/%@/invokes/cf_bundle_version", [ApptentiveUtilities stringByEscapingForPredicate:codePoint]]];
-		}
-		_codePointInvokesBuild = [[NSDictionary alloc] initWithDictionary:predicateSyntax];
-	}
-	return _codePointInvokesBuild;
-}
-
-- (NSDictionary *)codePointInvokesTimeAgo {
-	if (!_codePointInvokesTimeAgo) {
-		NSMutableDictionary *predicateSyntax = [NSMutableDictionary dictionary];
-		NSDictionary *codePointsInvokesLastDate = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementCodePointsInvokesLastDateKey];
-		for (NSString *codePoint in codePointsInvokesLastDate) {
-			NSString *key = [NSString stringWithFormat:@"code_point/%@/last_invoked_at/total", [ApptentiveUtilities stringByEscapingForPredicate:codePoint]];
-			NSDate *lastDate = [codePointsInvokesLastDate objectForKey:codePoint];
-
-			if (lastDate) {
-				predicateSyntax[key] = [Apptentive timestampObjectWithDate:lastDate];
-			} else {
-				predicateSyntax[key] = [NSNull null];
-			}
-		}
-		_codePointInvokesTimeAgo = [[NSDictionary alloc] initWithDictionary:predicateSyntax];
-	}
-	return _codePointInvokesTimeAgo;
-}
-
-- (NSDictionary *)interactionInvokesTotal {
-	if (!_interactionInvokesTotal) {
-		NSMutableDictionary *predicateSyntax = [NSMutableDictionary dictionary];
-		NSDictionary *interactionsInvokesTotal = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementInteractionsInvokesTotalKey];
-		for (NSString *interactionID in interactionsInvokesTotal) {
-			[predicateSyntax setObject:[interactionsInvokesTotal objectForKey:interactionID] forKey:[NSString stringWithFormat:@"interactions/%@/invokes/total", interactionID]];
-		}
-		_interactionInvokesTotal = [[NSDictionary alloc] initWithDictionary:predicateSyntax];
-	}
-
-	return _interactionInvokesTotal;
-}
-
-- (NSDictionary *)interactionInvokesVersion {
-	if (!_interactionInvokesVersion) {
-		NSMutableDictionary *predicateSyntax = [NSMutableDictionary dictionary];
-		NSDictionary *interactionsInvokesVersion = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementInteractionsInvokesVersionKey];
-		for (NSString *interactionID in interactionsInvokesVersion) {
-			[predicateSyntax setObject:[interactionsInvokesVersion objectForKey:interactionID] forKey:[NSString stringWithFormat:@"interactions/%@/invokes/cf_bundle_short_version_string", interactionID]];
-		}
-		_interactionInvokesVersion = [[NSDictionary alloc] initWithDictionary:predicateSyntax];
-	}
-
-	return _interactionInvokesVersion;
-}
-
-- (NSDictionary *)interactionInvokesBuild {
-	if (!_interactionInvokesBuild) {
-		NSMutableDictionary *predicateSyntax = [NSMutableDictionary dictionary];
-		NSDictionary *interactionsInvokesBuild = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementInteractionsInvokesBuildKey];
-		for (NSString *interactionID in interactionsInvokesBuild) {
-			[predicateSyntax setObject:[interactionsInvokesBuild objectForKey:interactionID] forKey:[NSString stringWithFormat:@"interactions/%@/invokes/cf_bundle_version", interactionID]];
-		}
-		_interactionInvokesBuild = [[NSDictionary alloc] initWithDictionary:predicateSyntax];
-	}
-
-	return _interactionInvokesBuild;
-}
-
-- (NSDictionary *)interactionInvokesTimeAgo {
-	if (!_interactionInvokesTimeAgo) {
-		NSMutableDictionary *predicateSyntax = [NSMutableDictionary dictionary];
-		NSDictionary *interactionInvokesLastDate = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementInteractionsInvokesLastDateKey];
-		for (NSString *interactionID in interactionInvokesLastDate) {
-			NSString *key = [NSString stringWithFormat:@"interactions/%@/last_invoked_at/total", interactionID];
-			NSDate *lastDate = [interactionInvokesLastDate objectForKey:interactionID];
-
-			if (lastDate) {
-				predicateSyntax[key] = [Apptentive timestampObjectWithDate:lastDate];
-			} else {
-				predicateSyntax[key] = [NSNull null];
-			}
-		}
-		_interactionInvokesTimeAgo = [[NSDictionary alloc] initWithDictionary:predicateSyntax];
-	}
-	return _interactionInvokesTimeAgo;
+	return result;
 }
 
 @end

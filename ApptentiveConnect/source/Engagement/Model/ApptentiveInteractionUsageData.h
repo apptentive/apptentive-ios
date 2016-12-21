@@ -9,30 +9,15 @@
 #import <Foundation/Foundation.h>
 #import "ApptentiveInteraction.h"
 
+@class ApptentiveConsumerData;
 
 @interface ApptentiveInteractionUsageData : NSObject
 
-@property (strong, nonatomic) NSDate *timeAtInstallTotal;
-@property (strong, nonatomic) NSDate *timeAtInstallVersion;
-@property (copy, nonatomic) NSString *applicationCFBundleShortVersionString;
-@property (copy, nonatomic) NSString *applicationCFBundleVersion;
-@property (copy, nonatomic) NSString *sdkVersion;
-@property (copy, nonatomic) NSString *sdkDistribution;
-@property (copy, nonatomic) NSString *sdkDistributionVersion;
-@property (strong, nonatomic) NSNumber *currentTime;
-@property (strong, nonatomic) NSNumber *isUpdateVersion;
-@property (strong, nonatomic) NSNumber *isUpdateBuild;
-@property (strong, nonatomic) NSNumber *isDebugBuild;
-@property (copy, nonatomic) NSDictionary *codePointInvokesTotal;
-@property (copy, nonatomic) NSDictionary *codePointInvokesVersion;
-@property (copy, nonatomic) NSDictionary *codePointInvokesBuild;
-@property (copy, nonatomic) NSDictionary *codePointInvokesTimeAgo;
-@property (copy, nonatomic) NSDictionary *interactionInvokesTotal;
-@property (copy, nonatomic) NSDictionary *interactionInvokesVersion;
-@property (copy, nonatomic) NSDictionary *interactionInvokesBuild;
-@property (copy, nonatomic) NSDictionary *interactionInvokesTimeAgo;
+@property (readonly, strong, nonatomic) ApptentiveConsumerData *data;
 
-+ (ApptentiveInteractionUsageData *)usageData;
++ (instancetype)usageDataWithConsumerData:(ApptentiveConsumerData *)data;
+
+- (instancetype)initWithConsumerData:(ApptentiveConsumerData *)data;
 
 - (NSDictionary *)predicateEvaluationDictionary;
 

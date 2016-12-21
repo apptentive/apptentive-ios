@@ -10,10 +10,10 @@
 #import "ApptentiveBackend.h"
 #import "ApptentiveEngagementBackend.h"
 #import "ApptentiveInteraction.h"
-#import "ApptentiveDeviceInfo.h"
 #import "ApptentiveMessageCenterViewController.h"
 #import "ApptentiveConversation.h"
-
+#import "ApptentiveDevice.h"
+#import "ApptentivePerson.h"
 
 @implementation Apptentive (Debugging)
 
@@ -65,7 +65,7 @@
 }
 
 - (NSDictionary *)deviceInfo {
-	return [[[[ApptentiveDeviceInfo alloc] init] dictionaryRepresentation] objectForKey:@"device"];
+	return Apptentive.shared.backend.session.device.JSONDictionary;
 }
 
 - (NSArray *)engagementEvents {
@@ -101,7 +101,7 @@
 }
 
 - (NSString *)conversationToken {
-	return Apptentive.shared.backend.conversation.token;
+	return Apptentive.shared.backend.session.token;
 }
 
 - (void)resetSDK {
@@ -122,6 +122,14 @@
 	[self setValue:nil forKey:@"backend"];
 	[self setValue:nil forKey:@"webClient"];
 	[self setValue:nil forKey:@"engagementBackend"];
+}
+
+- (NSDictionary *)customPersonData {
+	return self.backend.session.person.customData;
+}
+
+- (NSDictionary *)customDeviceData {
+	return self.backend.session.device.customData;
 }
 
 @end

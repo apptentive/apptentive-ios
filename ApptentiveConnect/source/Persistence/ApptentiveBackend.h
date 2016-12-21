@@ -9,40 +9,32 @@
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
 
-#import "ApptentiveDeviceUpdater.h"
-#import "ApptentivePersonUpdater.h"
-#import "ApptentiveFileAttachment.h"
 #import "ApptentiveMessage.h"
 #import "ApptentiveSerialNetworkQueue.h"
-#import "ApptentiveRequestOperation.h"
+#import "ApptentiveConsumerData.h"
 
-@class ApptentiveMessageCenterViewController;
 
 extern NSString *const ATBackendBecameReadyNotification;
 extern NSString *const ATConfigurationPreferencesChangedNotification;
 
-#define USE_STAGING 0
-
-@class ApptentiveConversation, ApptentiveEngagementManifest, ApptentiveAppConfiguration;
+@class ApptentiveConversation, ApptentiveEngagementManifest, ApptentiveAppConfiguration, ApptentiveMessageCenterViewController;
 
 @protocol ATBackendMessageDelegate;
 
 /*! Handles all of the backend activities, such as sending feedback. */
-@interface ApptentiveBackend : NSObject <NSFetchedResultsControllerDelegate, ApptentiveRequestOperationDelegate>
+@interface ApptentiveBackend : NSObject <NSFetchedResultsControllerDelegate, ApptentiveConsumerDataDelegate, ApptentiveRequestOperationDelegate>
 
 @property (copy, nonatomic) NSDictionary *currentCustomData;
-@property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
-@property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSString *supportDirectoryPath;
 @property (strong, nonatomic) UIViewController *presentedMessageCenterViewController;
 
 @property (readonly, strong, nonatomic) ApptentiveNetworkQueue *networkQueue;
 @property (readonly, strong, nonatomic) ApptentiveSerialNetworkQueue *serialQueue;
 
-@property (readonly, strong, nonatomic) ApptentiveConversation *conversation;
 @property (readonly, strong, nonatomic) ApptentiveAppConfiguration *configuration;
 @property (readonly, strong, nonatomic) ApptentiveEngagementManifest *manifest;
+@property (readonly, strong, nonatomic) ApptentiveConsumerData *session;
 
 - (void)startup;
 - (void)processQueuedRecords;
@@ -95,8 +87,6 @@ extern NSString *const ATConfigurationPreferencesChangedNotification;
 
 - (void)fetchMessagesInBackground:(void (^)(UIBackgroundFetchResult))completionHandler;
 - (void)completeMessageFetchWithResult:(UIBackgroundFetchResult)fetchResult;
-
-- (void)updatePersonIfNeeded;
 
 @property (readonly, nonatomic) NSURLCache *imageCache;
 

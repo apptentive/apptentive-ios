@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ApptentiveConsumerData.h"
 
 extern NSString *const ATEngagementInstallDateKey;
 extern NSString *const ATEngagementUpgradeDateKey;
@@ -35,8 +36,6 @@ extern NSString *const ApptentiveEngagementMessageCenterEvent;
 
 @interface ApptentiveEngagementBackend : NSObject
 
-- (void)updateVersionInfo;
-
 - (ApptentiveInteraction *)interactionForEvent:(NSString *)event;
 
 - (ApptentiveInteraction *)interactionForInvocations:(NSArray *)invocations;
@@ -63,7 +62,6 @@ extern NSString *const ApptentiveEngagementMessageCenterEvent;
 @property (strong, nonatomic) NSURL *localEngagementManifestURL;
 @property (copy, nonatomic) NSData *engagementManifestJSON;
 
-- (void)resetUpgradeVersionInfo;
 - (void)resetEngagementData;
 - (NSArray *)allEngagementInteractions;
 - (NSArray<NSString *> *)targetedLocalEvents;

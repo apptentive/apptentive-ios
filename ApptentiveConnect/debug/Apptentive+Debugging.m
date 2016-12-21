@@ -7,13 +7,12 @@
 //
 
 #import "Apptentive+Debugging.h"
-#import "ApptentiveWebClient.h"
 #import "ApptentiveBackend.h"
 #import "ApptentiveEngagementBackend.h"
 #import "ApptentiveInteraction.h"
 #import "ApptentiveDeviceInfo.h"
 #import "ApptentiveMessageCenterViewController.h"
-#import "ApptentiveTaskQueue.h"
+#import "ApptentiveConversation.h"
 
 
 @implementation Apptentive (Debugging)
@@ -26,18 +25,6 @@
 	return kApptentiveVersionString;
 }
 
-- (void)setAPIKey:(NSString *)APIKey baseURL:(NSURL *)baseURL storagePath:(nonnull NSString *)storagePath {
-	if (![baseURL isEqual:self.baseURL]) {
-		ApptentiveLogDebug(@"Base URL of %@ will not be used due to SDK version. Using %@ instead.", baseURL, self.baseURL);
-	}
-
-	if (![storagePath isEqualToString:self.storagePath]) {
-		ApptentiveLogDebug(@"Storage path of %@ will not be used due to SDK version. Using %@ instead.", storagePath, self.storagePath);
-	}
-
-	self.APIKey = APIKey;
-}
-
 - (void)setLocalInteractionsURL:(NSURL *)localInteractionsURL {
 	self.engagementBackend.localEngagementManifestURL = localInteractionsURL;
 }
@@ -48,10 +35,6 @@
 
 - (NSString *)storagePath {
 	return [self class].supportDirectoryPath;
-}
-
-- (NSURL *)baseURL {
-	return self.webClient.baseURL;
 }
 
 - (UIView *)unreadAccessoryView {
@@ -118,12 +101,10 @@
 }
 
 - (NSString *)conversationToken {
-	return [ApptentiveConversationUpdater currentConversation].token;
+	return Apptentive.shared.backend.conversation.token;
 }
 
 - (void)resetSDK {
-	[[ApptentiveTaskQueue sharedTaskQueue] clear];
-
 	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ApptentiveCustomDeviceDataPreferenceKey];
 	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ApptentiveCustomPersonDataPreferenceKey];
 

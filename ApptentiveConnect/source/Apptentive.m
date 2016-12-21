@@ -12,14 +12,13 @@
 #import "ApptentiveEngagementBackend.h"
 #import "ApptentiveInteraction.h"
 #import "ApptentiveUtilities.h"
-#import "ApptentiveAppConfigurationUpdater.h"
 #import "ApptentiveMessageSender.h"
-#import "ApptentiveWebClient.h"
 #import "ApptentiveMessageCenterViewController.h"
 #import "ApptentiveBannerViewController.h"
 #import "ApptentiveUnreadMessagesBadgeView.h"
 #import "ApptentiveAboutViewController.h"
 #import "ApptentiveStyleSheet.h"
+#import "ApptentiveAppConfiguration.h"
 
 NSString *const ApptentiveMessageCenterUnreadCountChangedNotification = @"ApptentiveMessageCenterUnreadCountChangedNotification";
 
@@ -111,21 +110,21 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 }
 
 - (void)setAPIKey:(NSString *)APIKey distributionName:(NSString *)distributionName distributionVersion:(NSString *)distributionVersion {
+	[self setAPIKey:APIKey baseURL:[NSURL URLWithString:@"https://api.apptentive.com/"] distributionName:distributionName distributionVersion:distributionVersion];
+}
+
+- (void)setAPIKey:(NSString *)APIKey baseURL:(NSURL *)baseURL distributionName:(NSString *)distributionName distributionVersion:(NSString *)distributionVersion {
 	_distributionName = distributionName;
 	_distributionVersion = distributionVersion;
 
-	if (![self.webClient.APIKey isEqualToString:APIKey] && APIKey != nil) {
-		_webClient = [[ApptentiveWebClient alloc] initWithBaseURL:[NSURL URLWithString:@"https://api.apptentive.com"] APIKey:APIKey];
-
+	if (![self.APIKey isEqualToString:APIKey] || ![baseURL isEqual:self.baseURL]) {
+		_APIKey = APIKey;
+		_baseURL = baseURL;
 		_backend = [[ApptentiveBackend alloc] init];
 		_engagementBackend = [[ApptentiveEngagementBackend alloc] init];
 
 		[self.backend startup];
 	}
-}
-
-- (NSString *)APIKey {
-	return self.webClient.APIKey;
 }
 
 - (NSString *)apiKey {
@@ -565,7 +564,7 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 #pragma mark - Message notification banner
 
 - (void)showNotificationBannerForMessage:(ApptentiveMessage *)message {
-	if (self.backend.notificationPopupsEnabled && [message isKindOfClass:[ApptentiveMessage class]]) {
+	if (self.backend.configuration.messageCenter.notificationPopupEnabled && [message isKindOfClass:[ApptentiveMessage class]]) {
 		// TODO: Display something if body is empty
 		ApptentiveMessage *textMessage = (ApptentiveMessage *)message;
 		NSURL *profilePhotoURL = textMessage.sender.profilePhotoURL ? [NSURL URLWithString:textMessage.sender.profilePhotoURL] : nil;
@@ -599,9 +598,9 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 - (void)setAPIKey:(NSString *)APIKey baseURL:(NSURL *)baseURL {
 	_distributionName = [[self class] defaultDistribution];
 	_distributionVersion = kApptentiveVersionString;
-	if (![APIKey isEqualToString:self.webClient.APIKey] || ![baseURL isEqual:self.webClient.baseURL]) {
-		_webClient = [[ApptentiveWebClient alloc] initWithBaseURL:baseURL APIKey:APIKey];
-
+	if (![self.APIKey isEqualToString:APIKey] || ![baseURL isEqual:self.baseURL]) {
+		_APIKey = APIKey;
+		_baseURL = baseURL;
 		_backend = [[ApptentiveBackend alloc] init];
 		_engagementBackend = [[ApptentiveEngagementBackend alloc] init];
 

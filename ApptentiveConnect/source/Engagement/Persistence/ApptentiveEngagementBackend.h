@@ -35,14 +35,7 @@ extern NSString *const ApptentiveEngagementMessageCenterEvent;
 
 @interface ApptentiveEngagementBackend : NSObject
 
-- (void)checkForEngagementManifest;
-- (BOOL)shouldRetrieveNewEngagementManifest;
-
-- (void)didReceiveNewTargets:(NSDictionary *)targets andInteractions:(NSDictionary *)interactions maxAge:(NSTimeInterval)expiresMaxAge;
-
 - (void)updateVersionInfo;
-+ (NSString *)cachedTargetsStoragePath;
-+ (NSString *)cachedInteractionsStoragePath;
 
 - (ApptentiveInteraction *)interactionForEvent:(NSString *)event;
 

@@ -7,7 +7,6 @@
 //
 
 #import "ApptentiveRecord.h"
-#import "ApptentiveRecordRequestTask.h"
 #import "ApptentiveJSONModel.h"
 
 
@@ -20,9 +19,5 @@
 + (instancetype)newInstanceWithLabel:(NSString *)label;
 + (instancetype)findEventWithPendingID:(NSString *)pendingEventID;
 - (void)addEntriesFromDictionary:(NSDictionary *)dictionary;
-
-- (void)cleanupAfterTask:(ApptentiveRecordRequestTask *)task;
-- (ApptentiveAPIRequest *)requestForTask:(ApptentiveRecordRequestTask *)task;
-- (ATRecordRequestTaskResult)taskResultForTask:(ApptentiveRecordRequestTask *)task withRequest:(ApptentiveAPIRequest *)request withResult:(id)result;
 
 @end

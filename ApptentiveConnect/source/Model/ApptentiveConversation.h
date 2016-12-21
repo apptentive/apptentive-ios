@@ -12,9 +12,9 @@
 
 
 @interface ApptentiveConversation : NSObject <NSCoding, ApptentiveJSONModel>
-@property (copy, nonatomic) NSString *token;
-@property (copy, nonatomic) NSString *personID;
-@property (copy, nonatomic) NSString *deviceID;
+@property (readonly, nonatomic) NSString *token;
+@property (readonly, nonatomic) NSString *personID;
+@property (readonly, nonatomic) NSString *deviceID;
 
 - (NSDictionary *)apiUpdateJSON;
 @end

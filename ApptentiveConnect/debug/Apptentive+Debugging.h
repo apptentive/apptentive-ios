@@ -30,8 +30,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface Apptentive (Debugging)
 
-- (void)setAPIKey:(NSString *)APIKey baseURL:(NSURL *)baseURL storagePath:(NSString *)storagePath;
-
 @property (readonly, nonatomic) NSURL *_Nullable baseURL;
 @property (readonly, nonatomic) NSString *storagePath;
 @property (readonly, nonatomic) NSString *SDKVersion;

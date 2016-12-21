@@ -7,9 +7,7 @@
 //
 
 #import "ApptentiveEvent.h"
-#import "ApptentiveRecordRequestTask.h"
 #import "ApptentiveData.h"
-#import "ApptentiveWebClient+Metrics.h"
 #import "Apptentive_Private.h"
 
 
@@ -144,20 +142,4 @@
 	}
 }
 
-#pragma mark ATRequestTaskprovider
-- (NSURL *)managedObjectURIRepresentationForTask:(ApptentiveRecordRequestTask *)task {
-	return [[self objectID] URIRepresentation];
-}
-
-- (void)cleanupAfterTask:(ApptentiveRecordRequestTask *)task {
-	[ApptentiveData deleteManagedObject:self];
-}
-
-- (ApptentiveAPIRequest *)requestForTask:(ApptentiveRecordRequestTask *)task {
-	return [[Apptentive sharedConnection].webClient requestForSendingEvent:self];
-}
-
-- (ATRecordRequestTaskResult)taskResultForTask:(ApptentiveRecordRequestTask *)task withRequest:(ApptentiveAPIRequest *)request withResult:(id)result {
-	return ATRecordRequestTaskFinishedResult;
-}
 @end

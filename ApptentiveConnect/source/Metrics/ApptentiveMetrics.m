@@ -8,15 +8,12 @@
 
 #import "ApptentiveMetrics.h"
 
-#import "ApptentiveAppConfigurationUpdater.h"
 #import "ApptentiveBackend.h"
 #import "Apptentive_Private.h"
 #import "ApptentiveData.h"
 #import "ApptentiveEvent.h"
-#import "ApptentiveMetric.h"
-#import "ApptentiveRecordRequestTask.h"
-#import "ApptentiveTaskQueue.h"
 #import "ApptentiveEngagementBackend.h"
+#import "ApptentiveAppConfiguration.h"
 #import "ApptentiveQueuedRequest.h"
 
 // Engagement event labels
@@ -50,15 +47,6 @@ static NSString *ATInteractionAppEventLabelExit = @"exit";
 		sharedSingleton = [[ApptentiveMetrics alloc] init];
 	});
 	return sharedSingleton;
-}
-
-+ (void)registerDefaults {
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	NSDictionary *defaultPreferences =
-		[NSDictionary dictionaryWithObjectsAndKeys:
-						  [NSNumber numberWithBool:YES], ATAppConfigurationMetricsEnabledPreferenceKey,
-					  nil];
-	[defaults registerDefaults:defaultPreferences];
 }
 
 - (void)addMetricWithName:(NSString *)name info:(NSDictionary *)userInfo {
@@ -138,7 +126,6 @@ static NSString *ATInteractionAppEventLabelExit = @"exit";
 	@autoreleasepool {
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:ATBackendBecameReadyNotification object:nil];
 
-		[ApptentiveMetrics registerDefaults];
 		[self updateWithCurrentPreferences];
 
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(preferencesChanged:) name:ATConfigurationPreferencesChangedNotification object:nil];
@@ -167,26 +154,6 @@ static NSString *ATInteractionAppEventLabelExit = @"exit";
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (BOOL)upgradeLegacyMetric:(ApptentiveMetric *)metric {
-	if (metricsEnabled == NO) {
-		return NO;
-	}
-
-	ApptentiveEvent *event = [ApptentiveEvent newInstanceWithLabel:metric.name];
-	[event addEntriesFromDictionary:[metric info]];
-	if (![ApptentiveData save]) {
-		event = nil;
-		return NO;
-	}
-
-	ApptentiveRecordRequestTask *task = [[ApptentiveRecordRequestTask alloc] init];
-	task.event = event;
-	[[ApptentiveTaskQueue sharedTaskQueue] addTask:task];
-	event = nil;
-	task = nil;
-	return YES;
-}
-
 #pragma mark - Private methods
 
 - (void)addLaunchMetric {
@@ -212,11 +179,7 @@ static NSString *ATInteractionAppEventLabelExit = @"exit";
 }
 
 - (void)updateWithCurrentPreferences {
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-
-	NSNumber *enabled = [defaults objectForKey:ATAppConfigurationMetricsEnabledPreferenceKey];
-	if (enabled != nil) {
-		metricsEnabled = [enabled boolValue];
-	}
+	metricsEnabled = Apptentive.shared.backend.configuration.metricsEnabled;
 }
+
 @end

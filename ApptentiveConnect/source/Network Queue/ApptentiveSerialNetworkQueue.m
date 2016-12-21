@@ -107,10 +107,10 @@
 
 		[self updateMessageErrorStatus];
 
-		ApptentiveLogError(@"Network request %@ failed with error: %@", operation.request.URL.absoluteString, error);
+		ApptentiveLogError(@"@% %@ failed with error: %@", operation.request.HTTPMethod, operation.request.URL.absoluteString, error);
 	}
 
-	ApptentiveLogInfo(@"Network request %@ will retry in %f seconds.",  operation.request.URL.absoluteString, self.backoffDelay);
+	ApptentiveLogInfo(@"%@ %@ will retry in %f seconds.",  operation.request.HTTPMethod, operation.request.URL.absoluteString, self.backoffDelay);
 
 	[self removeActiveOperation:operation];
 }
@@ -120,7 +120,7 @@
 
 	[self updateMessageErrorStatus];
 
-	ApptentiveLogDebug(@"Network request %@ finished successfully.", operation.request.URL.absoluteString);
+	ApptentiveLogDebug(@"%@ %@ finished successfully.", operation.request.HTTPMethod, operation.request.URL.absoluteString);
 
 	[self removeActiveOperation:operation];
 }
@@ -130,7 +130,7 @@
 
 	[self updateMessageErrorStatus];
 
-	ApptentiveLogError(@"Network request %@ failed with error: %@. Not retrying.", operation.request.URL.absoluteString, error);
+	ApptentiveLogError(@"%@ %@ failed with error: %@. Not retrying.", operation.request.HTTPMethod, operation.request.URL.absoluteString, error);
 
 	[self removeActiveOperation:operation];
 }

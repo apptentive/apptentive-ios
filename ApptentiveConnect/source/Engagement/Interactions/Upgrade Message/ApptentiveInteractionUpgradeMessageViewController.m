@@ -12,6 +12,7 @@
 #import "ApptentiveBackend.h"
 #import "ApptentiveUtilities.h"
 #import "ApptentiveAboutViewController.h"
+#import "ApptentiveAppConfiguration.h"
 
 typedef enum {
 	ATInteractionUpgradeMessageOkPressed,
@@ -68,7 +69,7 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 	}
 
 	// Powered by Apptentive logo
-	if ([[self.upgradeMessageInteraction.configuration objectForKey:@"show_powered_by"] boolValue] && ![Apptentive sharedConnection].backend.hideBranding) {
+	if ([[self.upgradeMessageInteraction.configuration objectForKey:@"show_powered_by"] boolValue] && !Apptentive.shared.backend.configuration.hideBranding) {
 		self.poweredByApptentiveLogo.text = ApptentiveLocalizedString(@"Powered by", @"Powered by followed by Apptentive logo.");
 		UIImage *poweredByApptentiveIcon = [ApptentiveBackend imageNamed:@"at_update_logo"];
 		[self.poweredByApptentiveIconView setImage:poweredByApptentiveIcon];

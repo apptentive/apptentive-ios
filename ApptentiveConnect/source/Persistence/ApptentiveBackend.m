@@ -7,23 +7,22 @@
 //
 
 #import "ApptentiveBackend.h"
-#import "ApptentiveAppConfigurationUpdateTask.h"
-#import "ApptentiveEngagementGetManifestTask.h"
 #import "Apptentive.h"
 #import "Apptentive_Private.h"
 #import "ApptentiveDataManager.h"
 #import "ApptentiveDeviceUpdater.h"
 #import "ApptentiveMetrics.h"
 #import "ApptentiveReachability.h"
-#import "ApptentiveTaskQueue.h"
 #import "ApptentiveUtilities.h"
-#import "ApptentiveWebClient.h"
 #import "ApptentiveMessageSender.h"
 #import "ApptentiveLog.h"
 #import "ApptentivePersonUpdater.h"
 #import "ApptentiveEngagementBackend.h"
 #import "ApptentiveMessageCenterViewController.h"
 #import "ApptentiveQueuedRequest.h"
+#import "ApptentiveAppConfiguration.h"
+#import "ApptentiveEngagementManifest.h"
+#import "ApptentiveConversation.h"
 
 typedef NS_ENUM(NSInteger, ATBackendState) {
 	ATBackendStateStarting,
@@ -32,6 +31,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 };
 
 NSString *const ATBackendBecameReadyNotification = @"ATBackendBecameReadyNotification";
+NSString *const ATConfigurationPreferencesChangedNotification = @"ATConfigurationPreferencesChangedNotification";
 
 NSString *const ATUUIDPreferenceKey = @"ATUUIDPreferenceKey";
 NSString *const ATLegacyUUIDPreferenceKey = @"ATLegacyUUIDPreferenceKey";
@@ -69,7 +69,6 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 @property (copy, nonatomic) NSString *cachedDeviceUUID;
 @property (assign, nonatomic) ATBackendState state;
 @property (strong, nonatomic) ApptentiveDataManager *dataManager;
-@property (strong, nonatomic) ApptentiveConversationUpdater *conversationUpdater;
 @property (strong, nonatomic) ApptentiveDeviceUpdater *deviceUpdater;
 @property (strong, nonatomic) ApptentivePersonUpdater *personUpdater;
 @property (strong, nonatomic) NSFetchedResultsController *unreadCountController;
@@ -77,7 +76,10 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 @property (assign, nonatomic) BOOL shouldStopWorking;
 @property (assign, nonatomic) BOOL networkAvailable;
 
+@property (strong, nonatomic) ApptentiveRequestOperation *conversationOperation;
+@property (strong, nonatomic) ApptentiveRequestOperation *configurationOperation;
 @property (strong, nonatomic) ApptentiveRequestOperation *getMessagesOperation;
+@property (strong, nonatomic) ApptentiveRequestOperation *manifestOperation;
 @property (strong, nonatomic) NSString *lastMessageID; // TODO: move into conversation object
 
 @end
@@ -92,6 +94,37 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 
 - (id)init {
 	if ((self = [super init])) {
+		// Conversation
+		if ([[NSFileManager defaultManager] fileExistsAtPath:[self conversationPath]]) {
+			_conversation = [NSKeyedUnarchiver unarchiveObjectWithFile:[self conversationPath]];
+		} else if ([[NSUserDefaults standardUserDefaults] objectForKey:@"ATCurrentConversationPreferenceKey"]) {
+			_conversation = [NSKeyedUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:@"ATCurrentConversationPreferenceKey"]];
+		} else {
+			_conversation = [[ApptentiveConversation alloc] init];
+		}
+
+		// Configuration
+		if ([[NSFileManager defaultManager] fileExistsAtPath:[self configurationPath]]) {
+			_configuration = [NSKeyedUnarchiver unarchiveObjectWithFile:[self configurationPath]];
+		} else if ([[NSUserDefaults standardUserDefaults] objectForKey:@"ATConfigurationSDKVersionKey"]) {
+			_configuration = [[ApptentiveAppConfiguration alloc] initWithUserDefaults:[NSUserDefaults standardUserDefaults]];
+		} else {
+			_configuration = [[ApptentiveAppConfiguration alloc] init];
+		}
+		
+		// Interaction Manifest
+		if ([[NSFileManager defaultManager] fileExistsAtPath:[self manifestPath]]) {
+			_manifest = [NSKeyedUnarchiver unarchiveObjectWithFile:[self manifestPath]];
+		} else if ([[NSUserDefaults standardUserDefaults] objectForKey:@"ATEngagementInteractionsSDKVersionKey"]) {
+			_manifest = [[ApptentiveEngagementManifest alloc] initWithCachePath:[self supportDirectoryPath] userDefaults:[NSUserDefaults standardUserDefaults]];
+		} else {
+			_manifest = [[ApptentiveEngagementManifest alloc] init];
+		}
+
+
+		NSString *token = self.conversation.token ?: Apptentive.shared.APIKey;
+		_networkQueue = [[ApptentiveNetworkQueue alloc] initWithBaseURL:Apptentive.shared.baseURL token:token SDKVersion:kApptentiveVersionString platform:@"iOS"];
+
 		[self setup];
 	}
 	return self;
@@ -191,9 +224,8 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 }
 
 - (BOOL)sendMessage:(ApptentiveMessage *)message {
-	ApptentiveConversation *conversation = [ApptentiveConversationUpdater currentConversation];
-	if (conversation) {
-		ApptentiveMessageSender *sender = [ApptentiveMessageSender findSenderWithID:conversation.personID inContext:self.managedObjectContext];
+	if (self.conversation.token != nil) {
+		ApptentiveMessageSender *sender = [ApptentiveMessageSender findSenderWithID:self.conversation.personID inContext:self.managedObjectContext];
 		if (sender) {
 			message.sender = sender;
 		}
@@ -266,31 +298,28 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 }
 
 - (NSString *)appName {
-	NSString *displayName = [[NSUserDefaults standardUserDefaults] objectForKey:ATAppConfigurationAppDisplayNameKey];
-	if (displayName) {
-		return displayName;
-	}
-
 	NSArray *appNameKeys = [NSArray arrayWithObjects:@"CFBundleDisplayName", (NSString *)kCFBundleNameKey, nil];
+
 	NSMutableArray *infoDictionaries = [NSMutableArray array];
+
 	if ([[NSBundle mainBundle] localizedInfoDictionary]) {
 		[infoDictionaries addObject:[[NSBundle mainBundle] localizedInfoDictionary]];
 	}
+
 	if ([[NSBundle mainBundle] infoDictionary]) {
 		[infoDictionaries addObject:[[NSBundle mainBundle] infoDictionary]];
 	}
+
 	for (NSDictionary *infoDictionary in infoDictionaries) {
-		if (displayName != nil) {
-			break;
-		}
 		for (NSString *appNameKey in appNameKeys) {
-			displayName = [infoDictionary objectForKey:appNameKey];
+			NSString *displayName = [infoDictionary objectForKey:appNameKey];
 			if (displayName != nil) {
-				break;
+				return displayName;
 			}
 		}
 	}
-	return displayName;
+
+	return nil;
 }
 
 - (BOOL)isReady {
@@ -320,6 +349,18 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 	}
 	NSString *imageCachePath = [cachePath stringByAppendingPathComponent:@"images.cache"];
 	return imageCachePath;
+}
+
+- (NSString *)conversationPath {
+	return [[self supportDirectoryPath] stringByAppendingPathComponent:@"conversation"];
+}
+
+- (NSString *)configurationPath {
+	return [[self supportDirectoryPath] stringByAppendingPathComponent:@"configuration"];
+}
+
+- (NSString *)manifestPath {
+	return [[self supportDirectoryPath] stringByAppendingPathComponent:@"interactions"];
 }
 
 #pragma mark Message Center
@@ -393,15 +434,13 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 #if APPTENTIVE_DEBUG
 			[Apptentive.shared checkSDKConfiguration];
 #endif
-			[[ApptentiveTaskQueue sharedTaskQueue] start];
-
 			[self updateConversationIfNeeded];
 			[self updateConfigurationIfNeeded];
 			[self updateEngagementManifestIfNeeded];
 			[self updateDeviceIfNeeded];
 		} else {
-			[[ApptentiveTaskQueue sharedTaskQueue] stop];
-			[ApptentiveTaskQueue releaseSharedTaskQueue];
+			[self.networkQueue cancelAllOperations];
+			[self.serialQueue cancelAllOperations];
 		}
 	}
 }
@@ -427,9 +466,21 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 #pragma mark - Request operation delegate
 
 - (void)requestOperationDidFinish:(ApptentiveRequestOperation *)operation {
-	ApptentiveLogDebug(@"Network request %@ finished successfully.", operation.request.URL.absoluteString);
+	ApptentiveLogDebug(@"%@ %@ finished successfully.", operation.request.HTTPMethod, operation.request.URL.absoluteString);
 
-	if (operation == self.getMessagesOperation) {
+	if (operation == self.conversationOperation) {
+		[self processConversationResponse:(NSDictionary *)operation.responseObject];
+
+		self.conversationOperation = nil;
+	} else if (operation == self.configurationOperation) {
+		[self processConfigurationResponse:(NSDictionary *)operation.responseObject cacheLifetime:operation.cacheLifetime];
+
+		self.configurationOperation = nil;
+	} else if (operation == self.manifestOperation) {
+		[self processManifestResponse:(NSDictionary *)operation.responseObject cacheLifetime:operation.cacheLifetime];
+
+		self.manifestOperation = nil;
+	} else if (operation == self.getMessagesOperation) {
 		[self processMessagesResponse:(NSDictionary *)operation.responseObject];
 
 		self.getMessagesOperation = nil;
@@ -438,95 +489,104 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 
 - (void)requestOperationWillRetry:(ApptentiveRequestOperation *)operation withError:(NSError *)error {
 	if (error) {
-		ApptentiveLogError(@"Network request %@ failed with error: %@", operation.request.URL.absoluteString, error);
+		ApptentiveLogError(@"@% %@ failed with error: %@", operation.request.HTTPMethod, operation.request.URL.absoluteString, error);
 	}
 
-	ApptentiveLogInfo(@"Network request %@ will retry in %f seconds.",  operation.request.URL.absoluteString, self.networkQueue.backoffDelay);
+	ApptentiveLogInfo(@"%@ %@ will retry in %f seconds.",  operation.request.HTTPMethod, operation.request.URL.absoluteString, self.networkQueue.backoffDelay);
 }
 
 
 - (void)requestOperation:(ApptentiveRequestOperation *)operation didFailWithError:(NSError *)error {
-	ApptentiveLogError(@"Network request %@ failed with error: %@. Not retrying.", operation.request.URL.absoluteString, error);
+	ApptentiveLogError(@"%@ %@ failed with error: %@. Not retrying.", operation.request.HTTPMethod, operation.request.URL.absoluteString, error);
 
-	if (operation == self.getMessagesOperation) {
+	if (operation == self.conversationOperation) {
+		self.conversationOperation = nil;
+	} else if (operation == self.configurationOperation) {
+		self.configurationOperation = nil;
+	} else if (operation == self.manifestOperation) {
+		self.manifestOperation = nil;
+	} else if (operation == self.getMessagesOperation) {
 		self.getMessagesOperation = nil;
 	}
 }
 
+- (void)processConversationResponse:(NSDictionary *)conversationResponse {
+	NSString *token = [conversationResponse valueForKey:@"token"];
+
+	if (token != nil) {
+		[self.conversation setValue:token forKey:@"token"];
+		// TODO: set person and device ID?
+
+		[NSKeyedArchiver archiveRootObject:self.conversation toFile:[self conversationPath]];
+
+		self.networkQueue.token = token;
+		self.serialQueue.token = token;
+
+		[self processQueuedRecords];
+	}
+}
+
+- (void)processConfigurationResponse:(NSDictionary *)configurationResponse cacheLifetime:(NSTimeInterval)cacheLifetime {
+	_configuration = [[ApptentiveAppConfiguration alloc] initWithJSONDictionary:configurationResponse cacheLifetime:cacheLifetime];
+
+	[NSKeyedArchiver archiveRootObject:self.configuration toFile:[self configurationPath]];
+
+	dispatch_async(dispatch_get_main_queue(), ^{
+		[[NSNotificationCenter defaultCenter] postNotificationName:ATConfigurationPreferencesChangedNotification object:self.configuration];
+	});
+}
+
 #pragma mark -
 
-- (BOOL)hideBranding {
-	return [[NSUserDefaults standardUserDefaults] boolForKey:ATAppConfigurationHideBrandingKey];
-}
-
-- (BOOL)notificationPopupsEnabled {
-	return [[NSUserDefaults standardUserDefaults] boolForKey:ATAppConfigurationNotificationPopupsEnabledKey];
-}
-
 - (void)updateConversationIfNeeded {
-	if (![[NSThread currentThread] isMainThread]) {
-		[self performSelectorOnMainThread:@selector(updateConversationIfNeeded) withObject:nil waitUntilDone:NO];
+	if (self.conversationOperation != nil) {
 		return;
 	}
-	if (!self.conversationUpdater && [ApptentiveConversationUpdater shouldUpdate]) {
-		self.conversationUpdater = [[ApptentiveConversationUpdater alloc] initWithDelegate:self];
-		[self.conversationUpdater createOrUpdateConversation];
-	}
-}
 
-- (void)updateDeviceIfNeeded {
-	if (![[NSThread currentThread] isMainThread]) {
-		[self performSelectorOnMainThread:@selector(updateDeviceIfNeeded) withObject:nil waitUntilDone:NO];
-		return;
+	if (self.conversation.token == nil) {
+		self.conversationOperation = [[ApptentiveRequestOperation alloc] initWithPath:@"/conversation" method:@"POST" payload:self.conversation.apiJSON delegate:self dataSource:self.networkQueue];
+	} else {
+		// TODO: only do this if SDK or app release has changed.
+		self.conversationOperation = [[ApptentiveRequestOperation alloc] initWithPath:@"/conversation" method:@"PUT" payload:self.conversation.apiUpdateJSON delegate:self dataSource:self.networkQueue];
 	}
-	if (![ApptentiveConversationUpdater conversationExists]) {
-		return;
-	}
-	if (!self.deviceUpdater && [ApptentiveDeviceUpdater shouldUpdate]) {
-		self.deviceUpdater = [[ApptentiveDeviceUpdater alloc] init];
-		[self.deviceUpdater update];
-	}
-}
 
-- (void)updatePersonIfNeeded {
-	if (![[NSThread currentThread] isMainThread]) {
-		[self performSelectorOnMainThread:@selector(updatePersonIfNeeded) withObject:nil waitUntilDone:NO];
-		return;
-	}
-	if (![ApptentiveConversationUpdater conversationExists]) {
-		return;
-	}
-	if (!self.personUpdater && [ApptentivePersonUpdater shouldUpdate]) {
-		self.personUpdater = [[ApptentivePersonUpdater alloc] init];
-		[self.personUpdater update];
-	}
-}
-
-- (BOOL)isUpdatingPerson {
-	return self.personUpdater != nil;
+	[self.networkQueue addOperation:self.conversationOperation];
 }
 
 - (void)updateConfigurationIfNeeded {
-	if (![ApptentiveConversationUpdater conversationExists]) {
+	if (self.configurationOperation != nil) {
 		return;
 	}
 
-	ApptentiveTaskQueue *queue = [ApptentiveTaskQueue sharedTaskQueue];
-	if (![queue hasTaskOfClass:[ApptentiveAppConfigurationUpdateTask class]]) {
-		ApptentiveAppConfigurationUpdateTask *task = [[ApptentiveAppConfigurationUpdateTask alloc] init];
-		[queue addTask:task];
-		task = nil;
+	self.configurationOperation = [[ApptentiveRequestOperation alloc] initWithPath:@"/conversation/configuration" method:@"GET" payload:nil delegate:self dataSource:self.networkQueue];
+
+	if (!self.conversation.token && self.conversationOperation) {
+		[self.configurationOperation addDependency:self.conversationOperation];
 	}
+
+	[self.networkQueue addOperation:self.configurationOperation];
 }
 
 - (void)updateEngagementManifestIfNeeded {
-	if (![ApptentiveConversationUpdater conversationExists]) {
+	if (self.manifestOperation != nil) {
 		return;
 	}
 
-	if (![[ApptentiveTaskQueue sharedTaskQueue] hasTaskOfClass:[ApptentiveEngagementGetManifestTask class]]) {
-		[[Apptentive sharedConnection].engagementBackend checkForEngagementManifest];
+	self.manifestOperation = [[ApptentiveRequestOperation alloc] initWithPath:@"/interactions" method:@"GET" payload:nil delegate:self dataSource:self.networkQueue];
+
+	if (!self.conversation.token && self.conversationOperation) {
+		[self.manifestOperation addDependency:self.conversationOperation];
 	}
+
+	[self.networkQueue addOperation:self.manifestOperation];
+}
+
+- (void)updateDeviceIfNeeded {
+	// re-do once we merge storage stuff
+}
+
+- (void)updatePersonIfNeeded {
+	// re-do once we merge storage stuff
 }
 
 #pragma mark NSFetchedResultsControllerDelegate
@@ -546,30 +606,6 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 	}
 }
 
-#pragma mark ATActivityFeedUpdaterDelegate
-
-- (void)conversationUpdater:(ApptentiveConversationUpdater *)updater createdConversationSuccessfully:(BOOL)success {
-	if (self.conversationUpdater == updater) {
-		self.conversationUpdater = nil;
-		if (!success) {
-			// Retry after delay.
-			[self performSelector:@selector(updateConversationIfNeeded) withObject:nil afterDelay:20];
-		} else {
-			// Queued tasks can probably start now.
-			ApptentiveTaskQueue *queue = [ApptentiveTaskQueue sharedTaskQueue];
-			[queue start];
-			[self updateConfigurationIfNeeded];
-			[self updateEngagementManifestIfNeeded];
-		}
-	}
-}
-
-- (void)conversationUpdater:(ApptentiveConversationUpdater *)updater updatedConversationSuccessfully:(BOOL)success {
-	if (self.conversationUpdater == updater) {
-		self.conversationUpdater = nil;
-	}
-}
-
 - (void)messageCenterWillDismiss:(ApptentiveMessageCenterViewController *)messageCenter {
 	if (self.presentedMessageCenterViewController) {
 		self.presentedMessageCenterViewController = nil;
@@ -582,30 +618,30 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 	return [NSURL URLWithString:@"http://www.apptentive.com/privacy"];
 }
 
+#pragma mark - Manifest
+
+- (void)processManifestResponse:(NSDictionary *)manifestResponse cacheLifetime:(NSTimeInterval)cacheLifetime {
+	_manifest = [[ApptentiveEngagementManifest alloc] initWithJSONDictionary:manifestResponse cacheLifetime:cacheLifetime];
+
+	[NSKeyedArchiver archiveRootObject:_manifest toFile:[self manifestPath]];
+
+	dispatch_async(dispatch_get_main_queue(), ^{
+		[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveInteractionsDidUpdateNotification object:self.manifest];
+	});
+}
+
+#pragma mark - Messages
+
 - (NSUInteger)unreadMessageCount {
 	return self.previousUnreadCount;
 }
 
 - (void)checkForMessagesAtForegroundRefreshInterval {
-	NSNumber *refreshIntervalNumber = [[NSUserDefaults standardUserDefaults] objectForKey:ATAppConfigurationMessageCenterForegroundRefreshIntervalKey];
-	int refreshInterval = 8;
-	if (refreshIntervalNumber != nil) {
-		refreshInterval = [refreshIntervalNumber intValue];
-		refreshInterval = MAX(4, refreshInterval);
-	}
-
-	[self checkForMessagesAtRefreshInterval:refreshInterval];
+	[self checkForMessagesAtRefreshInterval:self.configuration.messageCenter.foregroundPollingInterval];
 }
 
 - (void)checkForMessagesAtBackgroundRefreshInterval {
-	NSNumber *refreshIntervalNumber = [[NSUserDefaults standardUserDefaults] objectForKey:ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey];
-	int refreshInterval = 60;
-	if (refreshIntervalNumber != nil) {
-		refreshInterval = [refreshIntervalNumber intValue];
-		refreshInterval = MAX(30, refreshInterval);
-	}
-
-	[self checkForMessagesAtRefreshInterval:refreshInterval];
+	[self checkForMessagesAtRefreshInterval:self.configuration.messageCenter.backgroundPollingInterval];
 }
 
 - (void)checkForMessagesAtRefreshInterval:(NSTimeInterval)refreshInterval {
@@ -640,7 +676,7 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 }
 
 - (void)checkForMessages {
-	if (!self.isReady || [ApptentiveConversationUpdater currentConversation] == nil || self.getMessagesOperation != nil) {
+	if (!self.isReady || self.conversation.token == nil || self.getMessagesOperation != nil) {
 		return;
 	}
 
@@ -651,7 +687,6 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 
 - (void)processMessagesResponse:(NSDictionary *)response {
 	NSArray *messages = response[@"items"];
-	ApptentiveConversation *conversation = [ApptentiveConversationUpdater currentConversation];
 
 	if ([messages isKindOfClass:[NSArray class]]) {
 		NSManagedObjectContext *context = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
@@ -664,7 +699,7 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 				ApptentiveMessage *message = [ApptentiveMessage messageWithJSON:messageJSON inContext:context];
 
 				if (message) {
-					if (conversation && [conversation.personID isEqualToString:message.sender.apptentiveID]) {
+					if ([self.conversation.personID isEqualToString:message.sender.apptentiveID]) {
 						message.sentByUser = @(YES);
 						message.seenByUser = @(YES);
 					}
@@ -712,8 +747,6 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 	}
 }
 
-#pragma mark - Message task delegate
-
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
 	if (object == self.serialQueue && ([keyPath isEqualToString:@"messageSendProgress"] || [keyPath isEqualToString:@"messageTaskCount"])) {
 		NSNumber *numberProgress = change[NSKeyValueChangeNewKey];
@@ -732,21 +765,6 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 #pragma mark - Debugging
 
 - (void)resetBackendData {
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATUUIDPreferenceKey];
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATLegacyUUIDPreferenceKey];
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATInfoDistributionKey];
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATInfoDistributionVersionKey];
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATAppConfigurationAppDisplayNameKey];
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATAppConfigurationHideBrandingKey];
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATAppConfigurationNotificationPopupsEnabledKey];
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATAppConfigurationMessageCenterForegroundRefreshIntervalKey];
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey];
-
-	[ApptentiveConversationUpdater resetConversation];
-	[ApptentiveDeviceUpdater resetDeviceInfo];
-	[ApptentivePersonUpdater resetPersonInfo];
-	[ApptentiveAppConfigurationUpdater resetAppConfiguration];
-
 	[self.dataManager shutDownAndCleanUp];
 }
 
@@ -758,9 +776,6 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 		[self performSelectorOnMainThread:@selector(setup) withObject:nil waitUntilDone:YES];
 		return;
 	}
-
-	NSString *token = [ApptentiveConversationUpdater currentConversation].token ?: Apptentive.shared.APIKey;
-	_networkQueue = [[ApptentiveNetworkQueue alloc] initWithBaseURL:Apptentive.shared.baseURL token:token SDKVersion:kApptentiveVersionString platform:@"iOS"];
 
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startWorking:) name:UIApplicationDidBecomeActiveNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startWorking:) name:UIApplicationWillEnterForegroundNotification object:nil];
@@ -792,7 +807,7 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 - (void)continueStartupWithDataManagerSuccess {
 	self.state = ATBackendStateReady;
 
-	NSString *token = [ApptentiveConversationUpdater currentConversation].token ?: Apptentive.shared.APIKey;
+	NSString *token = self.conversation.token ?: Apptentive.shared.APIKey;
 	_serialQueue = [[ApptentiveSerialNetworkQueue alloc] initWithBaseURL:Apptentive.shared.baseURL token:token SDKVersion:kApptentiveVersionString platform:@"iOS" parentManagedObjectContext:self.managedObjectContext];
 	[self.serialQueue addObserver:self forKeyPath:@"messageSendProgress" options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew context:nil];
 	[self.serialQueue addObserver:self forKeyPath:@"messageTaskCount" options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew context:nil];
@@ -800,7 +815,7 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 	[ApptentiveMetrics sharedMetrics];
 
 	// One-shot actions at startup.
-	[self performSelector:@selector(checkForEngagementManifest) withObject:nil afterDelay:3];
+	[self performSelector:@selector(updateEngagementManifestIfNeeded) withObject:nil afterDelay:3];
 	[self performSelector:@selector(updateDeviceIfNeeded) withObject:nil afterDelay:7];
 	[self performSelector:@selector(checkForMessages) withObject:nil afterDelay:8];
 	[self performSelector:@selector(updatePersonIfNeeded) withObject:nil afterDelay:9];
@@ -873,15 +888,6 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 
 - (void)deviceDataChanged:(NSNotification *)notification {
 	[self performSelector:@selector(updateDeviceIfNeeded) withObject:nil afterDelay:1];
-}
-
-- (void)checkForEngagementManifest {
-	@autoreleasepool {
-		if (![self isReady]) {
-			return;
-		}
-		[[Apptentive sharedConnection].engagementBackend checkForEngagementManifest];
-	}
 }
 
 - (void)setupDataManager {

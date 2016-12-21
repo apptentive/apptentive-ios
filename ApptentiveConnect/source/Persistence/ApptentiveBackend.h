@@ -9,7 +9,6 @@
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
 
-#import "ApptentiveConversationUpdater.h"
 #import "ApptentiveDeviceUpdater.h"
 #import "ApptentivePersonUpdater.h"
 #import "ApptentiveFileAttachment.h"
@@ -20,21 +19,17 @@
 @class ApptentiveMessageCenterViewController;
 
 extern NSString *const ATBackendBecameReadyNotification;
+extern NSString *const ATConfigurationPreferencesChangedNotification;
 
 #define USE_STAGING 0
 
-@class ApptentiveAppConfigurationUpdater;
-@class ApptentiveDataManager;
-@class ATFeedback;
-@class ApptentiveAPIRequest;
-@class ApptentiveMessageTask;
+@class ApptentiveConversation, ApptentiveEngagementManifest, ApptentiveAppConfiguration;
 
 @protocol ATBackendMessageDelegate;
 
 /*! Handles all of the backend activities, such as sending feedback. */
-@interface ApptentiveBackend : NSObject <ApptentiveConversationUpdaterDelegate, NSFetchedResultsControllerDelegate, ApptentiveRequestOperationDelegate>
-/*! The feedback currently being worked on by the user. */
-@property (strong, nonatomic) ATFeedback *currentFeedback;
+@interface ApptentiveBackend : NSObject <NSFetchedResultsControllerDelegate, ApptentiveRequestOperationDelegate>
+
 @property (copy, nonatomic) NSDictionary *currentCustomData;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
@@ -42,11 +37,12 @@ extern NSString *const ATBackendBecameReadyNotification;
 @property (readonly, strong, nonatomic) NSString *supportDirectoryPath;
 @property (strong, nonatomic) UIViewController *presentedMessageCenterViewController;
 
-@property (readonly, assign, nonatomic) BOOL hideBranding;
-@property (readonly, assign, nonatomic) BOOL notificationPopupsEnabled;
-
 @property (readonly, strong, nonatomic) ApptentiveNetworkQueue *networkQueue;
 @property (readonly, strong, nonatomic) ApptentiveSerialNetworkQueue *serialQueue;
+
+@property (readonly, strong, nonatomic) ApptentiveConversation *conversation;
+@property (readonly, strong, nonatomic) ApptentiveAppConfiguration *configuration;
+@property (readonly, strong, nonatomic) ApptentiveEngagementManifest *manifest;
 
 - (void)startup;
 - (void)processQueuedRecords;
@@ -99,9 +95,6 @@ extern NSString *const ATBackendBecameReadyNotification;
 
 - (void)fetchMessagesInBackground:(void (^)(UIBackgroundFetchResult))completionHandler;
 - (void)completeMessageFetchWithResult:(UIBackgroundFetchResult)fetchResult;
-
-/*! True if the backend is currently updating the person. */
-- (BOOL)isUpdatingPerson;
 
 - (void)updatePersonIfNeeded;
 

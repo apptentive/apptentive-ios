@@ -23,13 +23,26 @@
 	[NSKeyedUnarchiver setClass:self forClassName:@"ATConversation"];
 }
 
-- (id)initWithCoder:(NSCoder *)coder {
-	if ((self = [super init])) {
-		// Apptentive Conversation Token
-		self.token = (NSString *)[coder decodeObjectForKey:@"token"];
-		self.personID = (NSString *)[coder decodeObjectForKey:@"personID"];
-		self.deviceID = (NSString *)[coder decodeObjectForKey:@"deviceID"];
+- (instancetype)init
+{
+	self = [super init];
+
+	if (self) {
+		_deviceID = Apptentive.shared.backend.deviceUUID;
 	}
+
+	return self;
+}
+
+- (id)initWithCoder:(NSCoder *)coder {
+	self = [super init];
+
+	if (self) {
+		_token = (NSString *)[coder decodeObjectForKey:@"token"];
+		_personID = (NSString *)[coder decodeObjectForKey:@"personID"];
+		_deviceID = (NSString *)[coder decodeObjectForKey:@"deviceID"];
+	}
+
 	return self;
 }
 
@@ -58,15 +71,15 @@
 - (void)updateWithJSON:(NSDictionary *)json {
 	NSString *tokenObject = [json at_safeObjectForKey:@"token"];
 	if (tokenObject != nil) {
-		self.token = tokenObject;
+		_token = tokenObject;
 	}
 	NSString *deviceIDObject = [json at_safeObjectForKey:@"device_id"];
 	if (deviceIDObject != nil) {
-		self.deviceID = deviceIDObject;
+		_deviceID = deviceIDObject;
 	}
 	NSString *personIDObject = [json at_safeObjectForKey:@"person_id"];
 	if (personIDObject != nil) {
-		self.personID = personIDObject;
+		_personID = personIDObject;
 	}
 }
 

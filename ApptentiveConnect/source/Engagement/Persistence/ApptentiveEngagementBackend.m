@@ -8,9 +8,6 @@
 
 #import "ApptentiveEngagementBackend.h"
 #import "ApptentiveBackend.h"
-#import "ApptentiveEngagementGetManifestTask.h"
-#import "ApptentiveEngagementManifestParser.h"
-#import "ApptentiveTaskQueue.h"
 #import "ApptentiveInteraction.h"
 #import "ApptentiveInteractionInvocation.h"
 #import "Apptentive_Private.h"
@@ -25,6 +22,7 @@
 #import "ApptentiveInteractionTextModalController.h"
 #import "ApptentiveInteractionNavigateToLink.h"
 #import "ApptentiveInteractionController.h"
+#import "ApptentiveEngagementManifest.h"
 
 NSString *const ATEngagementInstallDateKey = @"ATEngagementInstallDateKey";
 NSString *const ATEngagementUpgradeDateKey = @"ATEngagementUpgradeDateKey";
@@ -53,14 +51,6 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 
 
-@interface ApptentiveEngagementBackend ()
-
-@property (strong, nonatomic) NSMutableDictionary *engagementTargets;
-@property (strong, nonatomic) NSMutableDictionary *engagementInteractions;
-
-@end
-
-
 @implementation ApptentiveEngagementBackend
 
 - (id)init {
@@ -74,119 +64,9 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 			ATEngagementInteractionsInvokesVersionKey: @{},
 			ATEngagementInteractionsInvokesLastDateKey: @{} };
 		[[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
-
-		_engagementTargets = [[NSMutableDictionary alloc] init];
-		_engagementInteractions = [[NSMutableDictionary alloc] init];
-
-		[self loadCachedEngagementManifest];
-
-		[self invalidateInteractionCacheIfNeeded];
-
-		[self updateVersionInfo];
 	}
 
 	return self;
-}
-
-- (BOOL)invalidateInteractionCacheIfNeeded {
-	BOOL invalidateCache = NO;
-
-#if APPTENTIVE_DEBUG
-	invalidateCache = YES;
-#endif
-
-	NSString *previousBuild = [[NSUserDefaults standardUserDefaults] stringForKey:ATEngagementInteractionsAppBuildNumberKey];
-	if (![previousBuild isEqualToString:[ApptentiveUtilities buildNumberString]]) {
-		invalidateCache = YES;
-	}
-
-	NSString *previousSDKVersion = [[NSUserDefaults standardUserDefaults] stringForKey:ATEngagementInteractionsSDKVersionKey];
-	if (![previousSDKVersion isEqualToString:kApptentiveVersionString]) {
-		invalidateCache = YES;
-	}
-
-	if (invalidateCache) {
-		[self invalidateInteractionCache];
-	}
-
-	return invalidateCache;
-}
-
-- (void)invalidateInteractionCache {
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATEngagementCachedInteractionsExpirationPreferenceKey];
-}
-
-- (void)checkForEngagementManifest {
-	if (!self.localEngagementManifestURL && [self shouldRetrieveNewEngagementManifest]) {
-		ApptentiveEngagementGetManifestTask *task = [[ApptentiveEngagementGetManifestTask alloc] init];
-		[[ApptentiveTaskQueue sharedTaskQueue] addTask:task];
-		task = nil;
-	}
-}
-
-- (BOOL)shouldRetrieveNewEngagementManifest {
-	NSDate *expiration = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementCachedInteractionsExpirationPreferenceKey];
-	if (expiration) {
-		NSDate *now = [NSDate date];
-		NSComparisonResult comparison = [expiration compare:now];
-		if (comparison == NSOrderedSame || comparison == NSOrderedAscending) {
-			return YES;
-		} else {
-			NSFileManager *fm = [NSFileManager defaultManager];
-			if (![fm fileExistsAtPath:[ApptentiveEngagementBackend cachedTargetsStoragePath]]) {
-				return YES;
-			}
-
-			if (![fm fileExistsAtPath:[ApptentiveEngagementBackend cachedInteractionsStoragePath]]) {
-				return YES;
-			}
-
-			return NO;
-		}
-	} else {
-		return YES;
-	}
-}
-
-- (void)didReceiveNewTargets:(NSDictionary *)targets andInteractions:(NSDictionary *)interactions maxAge:(NSTimeInterval)expiresMaxAge {
-	if (!targets || !interactions) {
-		ApptentiveLogError(@"Error receiving new Engagement Framework targets and interactions.");
-		return;
-	}
-
-	ApptentiveLogInfo(@"Received remote Interactions from Apptentive.");
-
-	@synchronized(self) {
-		if ([[Apptentive sharedConnection].backend supportDirectoryPath]) {
-			[NSKeyedArchiver archiveRootObject:targets toFile:[ApptentiveEngagementBackend cachedTargetsStoragePath]];
-			[NSKeyedArchiver archiveRootObject:interactions toFile:[ApptentiveEngagementBackend cachedInteractionsStoragePath]];
-
-			if (expiresMaxAge > 0) {
-				NSDate *date = [NSDate dateWithTimeInterval:expiresMaxAge sinceDate:[NSDate date]];
-				NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-				[defaults setObject:date forKey:ATEngagementCachedInteractionsExpirationPreferenceKey];
-			}
-
-			[self.engagementTargets removeAllObjects];
-			[self.engagementTargets addEntriesFromDictionary:targets];
-
-			[self.engagementInteractions removeAllObjects];
-			[self.engagementInteractions addEntriesFromDictionary:interactions];
-
-			NSString *buildNumber = [ApptentiveUtilities buildNumberString];
-			if ([ApptentiveUtilities buildNumberString]) {
-				[[NSUserDefaults standardUserDefaults] setObject:buildNumber forKey:ATEngagementInteractionsAppBuildNumberKey];
-			} else {
-				[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATEngagementInteractionsAppBuildNumberKey];
-			}
-
-			[[NSUserDefaults standardUserDefaults] setObject:kApptentiveVersionString forKey:ATEngagementInteractionsSDKVersionKey];
-
-			[self updateVersionInfo];
-		}
-	}
-
-	[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveInteractionsDidUpdateNotification object:nil];
 }
 
 - (void)updateVersionInfo {
@@ -220,14 +100,6 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 		[defaults setObject:@{} forKey:ATEngagementInteractionsInvokesVersionKey];
 		[defaults setObject:@{} forKey:ATEngagementInteractionsInvokesBuildKey];
 	}
-}
-
-+ (NSString *)cachedTargetsStoragePath {
-	return [[[Apptentive sharedConnection].backend supportDirectoryPath] stringByAppendingPathComponent:@"cachedtargets.objects"];
-}
-
-+ (NSString *)cachedInteractionsStoragePath {
-	return [[[Apptentive sharedConnection].backend supportDirectoryPath] stringByAppendingPathComponent:@"cachedinteractionsV2.objects"];
 }
 
 - (BOOL)canShowInteractionForLocalEvent:(NSString *)event {
@@ -267,14 +139,14 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 
 	ApptentiveInteraction *interaction = nil;
 	if (interactionID) {
-		interaction = self.engagementInteractions[interactionID];
+		interaction = Apptentive.shared.backend.manifest.interactions[interactionID];
 	}
 
 	return interaction;
 }
 
 - (ApptentiveInteraction *)interactionForEvent:(NSString *)event {
-	NSArray *invocations = self.engagementTargets[event];
+	NSArray *invocations = Apptentive.shared.backend.manifest.targets[event];
 	ApptentiveInteraction *interaction = [self interactionForInvocations:invocations];
 
 	return interaction;
@@ -481,11 +353,12 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 }
 
 - (NSArray *)allEngagementInteractions {
-	return [self.engagementInteractions allValues];
+	return Apptentive.shared.backend.manifest.interactions.allValues;
 }
 
 - (NSArray *)targetedLocalEvents {
-	NSArray *localCodePoints = [self.engagementTargets.allKeys filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF BEGINSWITH[c] %@", @"local#app#"]];
+	NSDictionary *targets = Apptentive.shared.backend.manifest.targets;
+	NSArray *localCodePoints = [targets.allKeys filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF BEGINSWITH[c] %@", @"local#app#"]];
 	NSMutableArray *eventNames = [NSMutableArray array];
 	for (NSString *codePoint in localCodePoints) {
 		[eventNames addObject:[codePoint substringFromIndex:10]];
@@ -495,60 +368,38 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 }
 
 - (void)setLocalEngagementManifestURL:(NSURL *)localEngagementManifestURL {
-	if (_localEngagementManifestURL != localEngagementManifestURL) {
-		_localEngagementManifestURL = localEngagementManifestURL;
-
-		if (localEngagementManifestURL == nil) {
-			[self loadCachedEngagementManifest];
-			[self checkForEngagementManifest];
-			[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveInteractionsDidUpdateNotification object:nil];
-		} else {
-			[[ApptentiveTaskQueue sharedTaskQueue] removeTasksOfClass:[ApptentiveEngagementGetManifestTask class]];
-
-			NSData *localData = [NSData dataWithContentsOfURL:localEngagementManifestURL];
-
-			ApptentiveEngagementManifestParser *parser = [[ApptentiveEngagementManifestParser alloc] init];
-
-			NSDictionary *targetsAndInteractions = [parser targetsAndInteractionsForEngagementManifest:localData];
-			NSDictionary *targets = targetsAndInteractions[@"targets"];
-			NSDictionary *interactions = targetsAndInteractions[@"interactions"];
-
-			if (targets && interactions) {
-				[self.engagementTargets removeAllObjects];
-				[self.engagementTargets addEntriesFromDictionary:targets];
-
-				[self.engagementInteractions removeAllObjects];
-				[self.engagementInteractions addEntriesFromDictionary:interactions];
-
-				[Apptentive sharedConnection].engagementBackend.engagementManifestJSON = targetsAndInteractions[@"raw"];
-			} else {
-				ApptentiveLogError(@"An error occurred parsing the engagement manifest: %@", [parser parserError]);
-			}
-		}
-	}
-}
-
-- (void)loadCachedEngagementManifest {
-	_engagementTargets = [[NSMutableDictionary alloc] init];
-	NSFileManager *fm = [NSFileManager defaultManager];
-	if ([fm fileExistsAtPath:[ApptentiveEngagementBackend cachedTargetsStoragePath]]) {
-		@try {
-			NSDictionary *archivedTargets = [NSKeyedUnarchiver unarchiveObjectWithFile:[ApptentiveEngagementBackend cachedTargetsStoragePath]];
-			[_engagementTargets addEntriesFromDictionary:archivedTargets];
-		} @catch (NSException *exception) {
-			ApptentiveLogError(@"Unable to unarchive engagement targets: %@", exception);
-		}
-	}
-
-	_engagementInteractions = [[NSMutableDictionary alloc] init];
-	if ([fm fileExistsAtPath:[ApptentiveEngagementBackend cachedInteractionsStoragePath]]) {
-		@try {
-			NSDictionary *archivedInteractions = [NSKeyedUnarchiver unarchiveObjectWithFile:[ApptentiveEngagementBackend cachedInteractionsStoragePath]];
-			[_engagementInteractions addEntriesFromDictionary:archivedInteractions];
-		} @catch (NSException *exception) {
-			ApptentiveLogError(@"Unable to unarchive engagement interactions: %@", exception);
-		}
-	}
+#warning fixme
+//	if (_localEngagementManifestURL != localEngagementManifestURL) {
+//		_localEngagementManifestURL = localEngagementManifestURL;
+//
+//		if (localEngagementManifestURL == nil) {
+//			[self loadCachedEngagementManifest];
+//			[self checkForEngagementManifest];
+//			[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveInteractionsDidUpdateNotification object:nil];
+//		} else {
+//			[[ApptentiveTaskQueue sharedTaskQueue] removeTasksOfClass:[ApptentiveEngagementGetManifestTask class]];
+//
+//			NSData *localData = [NSData dataWithContentsOfURL:localEngagementManifestURL];
+//
+//			ApptentiveEngagementManifestParser *parser = [[ApptentiveEngagementManifestParser alloc] init];
+//
+//			NSDictionary *targetsAndInteractions = [parser targetsAndInteractionsForEngagementManifest:localData];
+//			NSDictionary *targets = targetsAndInteractions[@"targets"];
+//			NSDictionary *interactions = targetsAndInteractions[@"interactions"];
+//
+//			if (targets && interactions) {
+//				[self.engagementTargets removeAllObjects];
+//				[self.engagementTargets addEntriesFromDictionary:targets];
+//
+//				[self.engagementInteractions removeAllObjects];
+//				[self.engagementInteractions addEntriesFromDictionary:interactions];
+//
+//				[Apptentive sharedConnection].engagementBackend.engagementManifestJSON = targetsAndInteractions[@"raw"];
+//			} else {
+//				ApptentiveLogError(@"An error occurred parsing the engagement manifest: %@", [parser parserError]);
+//			}
+//		}
+//	}
 }
 
 - (void)resetEngagementData {

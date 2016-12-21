@@ -15,6 +15,7 @@
 #import "ApptentiveFileAttachment.h"
 #import "ApptentiveMessage.h"
 #import "ApptentiveSerialNetworkQueue.h"
+#import "ApptentiveRequestOperation.h"
 
 @class ApptentiveMessageCenterViewController;
 
@@ -31,7 +32,7 @@ extern NSString *const ATBackendBecameReadyNotification;
 @protocol ATBackendMessageDelegate;
 
 /*! Handles all of the backend activities, such as sending feedback. */
-@interface ApptentiveBackend : NSObject <ApptentiveConversationUpdaterDelegate, NSFetchedResultsControllerDelegate>
+@interface ApptentiveBackend : NSObject <ApptentiveConversationUpdaterDelegate, NSFetchedResultsControllerDelegate, ApptentiveRequestOperationDelegate>
 /*! The feedback currently being worked on by the user. */
 @property (strong, nonatomic) ATFeedback *currentFeedback;
 @property (copy, nonatomic) NSDictionary *currentCustomData;

@@ -43,8 +43,9 @@ typedef NS_ENUM(NSInteger, ATPendingMessageState) {
 
 + (instancetype)newInstanceWithBody:(NSString *)body attachments:(NSArray *)attachments;
 + (void)clearComposingMessages;
-+ (ApptentiveMessage *)findMessageWithID:(NSString *)apptentiveID;
-+ (ApptentiveMessage *)findMessageWithPendingID:(NSString *)pendingID;
++ (instancetype)findMessageWithID:(NSString *)apptentiveID inContext:(NSManagedObjectContext *)context;
++ (instancetype)findMessageWithPendingID:(NSString *)pendingID inContext:(NSManagedObjectContext *)context;
++ (instancetype)messageWithJSON:(NSDictionary *)json inContext:(NSManagedObjectContext *)context;
 - (NSArray *)errorsFromErrorMessage;
 
 @end

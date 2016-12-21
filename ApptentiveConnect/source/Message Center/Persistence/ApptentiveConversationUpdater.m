@@ -180,7 +180,7 @@ NSString *const ATConversationLastUpdateValuePreferenceKey = @"ATConversationLas
 
 - (void)processResult:(NSDictionary *)jsonActivityFeed {
 	if (creatingConversation) {
-		ApptentiveConversation *conversation = (ApptentiveConversation *)[ApptentiveConversation newInstanceWithJSON:jsonActivityFeed];
+		ApptentiveConversation *conversation = (ApptentiveConversation *)[ApptentiveConversation newInstanceWithJSON:jsonActivityFeed inContext:Apptentive.shared.backend.managedObjectContext];
 		if (conversation) {
 			NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 			NSData *conversationData = [NSKeyedArchiver archivedDataWithRootObject:conversation];

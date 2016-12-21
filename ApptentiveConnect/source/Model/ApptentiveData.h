@@ -13,6 +13,7 @@
 @interface ApptentiveData : NSObject
 + (NSManagedObject *)newEntityNamed:(NSString *)entityName;
 + (NSArray *)findEntityNamed:(NSString *)entityName withPredicate:(NSPredicate *)predicate;
++ (NSArray *)findEntityNamed:(NSString *)entityName withPredicate:(NSPredicate *)predicate inContext:(NSManagedObjectContext *)context;
 + (NSManagedObject *)findEntityWithURI:(NSURL *)URL;
 + (NSUInteger)countEntityNamed:(NSString *)entityName withPredicate:(NSPredicate *)predicate;
 + (void)removeEntitiesNamed:(NSString *)entityName withPredicate:(NSPredicate *)predicate;

@@ -21,8 +21,8 @@
 @property (strong, nonatomic) NSSet *sentMessages;
 @property (strong, nonatomic) NSSet *receivedMessages;
 
-+ (ApptentiveMessageSender *)findSenderWithID:(NSString *)apptentiveID;
-+ (ApptentiveMessageSender *)newOrExistingMessageSenderFromJSON:(NSDictionary *)json;
++ (ApptentiveMessageSender *)findSenderWithID:(NSString *)apptentiveID inContext:(NSManagedObjectContext *)context;
++ (ApptentiveMessageSender *)newOrExistingMessageSenderFromJSON:(NSDictionary *)json inContext:(NSManagedObjectContext *)context;
 - (NSDictionary *)apiJSON;
 @end
 

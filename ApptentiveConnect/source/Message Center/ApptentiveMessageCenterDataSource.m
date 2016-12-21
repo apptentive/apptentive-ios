@@ -319,13 +319,20 @@ NSString *const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenter
 	NSIndexPath *attachmentIndexPath = [self indexPathForTask:downloadTask];
 	[self removeTask:downloadTask];
 
-	ApptentiveFileAttachment *attachment = [self fileAttachmentAtIndexPath:attachmentIndexPath];
+	__block NSURL *finalLocation;
+	[self.fetchedMessagesController.managedObjectContext performBlockAndWait:^{
+		finalLocation = [self fileAttachmentAtIndexPath:attachmentIndexPath].permanentLocation;
+	}];
+
 	// -beginMoveToStorageFrom: must be called on this (background) thread.
-	NSURL *finalLocation = [attachment beginMoveToStorageFrom:location];
+	NSError *error;
+	if (![[NSFileManager defaultManager] moveItemAtURL:location toURL:finalLocation error:&error]) {
+		ApptentiveLogError(@"Unable to move attachment to final location: %@", error);
+	}
 
 	dispatch_async(dispatch_get_main_queue(), ^{
 		// -completeMoveToStorageFor: must be called on main thread.
-		[attachment completeMoveToStorageFor:finalLocation];
+		[[self fileAttachmentAtIndexPath:attachmentIndexPath] completeMoveToStorageFor:finalLocation];
 		[self.delegate messageCenterDataSource:self didLoadAttachmentThumbnailAtIndexPath:attachmentIndexPath];
 	});
 }

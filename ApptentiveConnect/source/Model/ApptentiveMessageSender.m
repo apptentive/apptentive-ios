@@ -21,19 +21,20 @@
 @dynamic sentMessages;
 @dynamic receivedMessages;
 
-+ (instancetype)newInstanceWithID:(NSString *)apptentiveID {
-	ApptentiveMessageSender *result = (ApptentiveMessageSender *)[ApptentiveData newEntityNamed:@"ATMessageSender"];
++ (instancetype)newInstanceWithID:(NSString *)apptentiveID inContext:(NSManagedObjectContext *)context {
+	ApptentiveMessageSender *result = (ApptentiveMessageSender *)[[NSManagedObject alloc] initWithEntity:[NSEntityDescription entityForName:@"ATMessageSender" inManagedObjectContext:context] insertIntoManagedObjectContext:context];
+
 	result.apptentiveID = apptentiveID;
 
 	return result;
 }
 
-+ (ApptentiveMessageSender *)findSenderWithID:(NSString *)apptentiveID {
++ (ApptentiveMessageSender *)findSenderWithID:(NSString *)apptentiveID inContext:(NSManagedObjectContext *)context {
 	ApptentiveMessageSender *result = nil;
 
 	@synchronized(self) {
 		NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"(apptentiveID == %@)", apptentiveID];
-		NSArray *results = [ApptentiveData findEntityNamed:@"ATMessageSender" withPredicate:fetchPredicate];
+		NSArray *results = [ApptentiveData findEntityNamed:@"ATMessageSender" withPredicate:fetchPredicate inContext:context];
 		if (results && [results count]) {
 			result = [results objectAtIndex:0];
 		}
@@ -41,15 +42,15 @@
 	return result;
 }
 
-+ (ApptentiveMessageSender *)newOrExistingMessageSenderFromJSON:(NSDictionary *)json {
++ (ApptentiveMessageSender *)newOrExistingMessageSenderFromJSON:(NSDictionary *)json inContext:(NSManagedObjectContext *)context {
 	if (!json) return nil;
 
 	NSString *apptentiveID = [json at_safeObjectForKey:@"id"];
 	if (!apptentiveID) return nil;
 
-	ApptentiveMessageSender *sender = [ApptentiveMessageSender findSenderWithID:apptentiveID];
+	ApptentiveMessageSender *sender = [ApptentiveMessageSender findSenderWithID:apptentiveID inContext:context];
 	if (!sender) {
-		sender = [ApptentiveMessageSender newInstanceWithID:apptentiveID];
+		sender = [ApptentiveMessageSender newInstanceWithID:apptentiveID inContext:context];
 	}
 
 	NSString *senderEmail = [json at_safeObjectForKey:@"email"];

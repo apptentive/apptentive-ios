@@ -8,8 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
+@class NSManagedObjectContext;
+
 @protocol ApptentiveJSONModel <NSObject>
-+ (instancetype)newInstanceWithJSON:(NSDictionary *)json;
++ (instancetype)newInstanceWithJSON:(NSDictionary *)json inContext:(NSManagedObjectContext *)context;
 - (void)updateWithJSON:(NSDictionary *)json;
 - (NSDictionary *)apiJSON;
 @end

@@ -27,14 +27,14 @@
 @property (readonly, nonatomic) BOOL canCreateThumbnail;
 
 + (instancetype)newInstanceWithFileData:(NSData *)fileData MIMEType:(NSString *)MIMEType name:(NSString *)name;
-+ (instancetype)newInstanceWithJSON:(NSDictionary *)JSON;
++ (instancetype)newInstanceWithJSON:(NSDictionary *)JSON inContext:(NSManagedObjectContext *)context;
 + (void)addMissingExtensions;
 - (void)updateWithJSON:(NSDictionary *)JSON;
 
 - (void)setFileData:(NSData *)data MIMEType:(NSString *)MIMEType name:(NSString *)name;
 
 /** Can be called from background thread. */
-- (NSURL *)beginMoveToStorageFrom:(NSURL *)temporaryLocation;
+- (NSURL *)permanentLocation;
 
 /** Must be called from main thread. */
 - (void)completeMoveToStorageFor:(NSURL *)storageLocation;

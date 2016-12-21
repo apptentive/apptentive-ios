@@ -18,7 +18,6 @@
 #import "ApptentiveTaskQueue.h"
 #import "ApptentiveUtilities.h"
 #import "ApptentiveWebClient.h"
-#import "ApptentiveGetMessagesTask.h"
 #import "ApptentiveMessageSender.h"
 #import "ApptentiveLog.h"
 #import "ApptentivePersonUpdater.h"
@@ -77,6 +76,9 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 @property (assign, nonatomic) NSUInteger previousUnreadCount;
 @property (assign, nonatomic) BOOL shouldStopWorking;
 @property (assign, nonatomic) BOOL networkAvailable;
+
+@property (strong, nonatomic) ApptentiveRequestOperation *getMessagesOperation;
+@property (strong, nonatomic) NSString *lastMessageID; // TODO: move into conversation object
 
 @end
 
@@ -191,7 +193,7 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 - (BOOL)sendMessage:(ApptentiveMessage *)message {
 	ApptentiveConversation *conversation = [ApptentiveConversationUpdater currentConversation];
 	if (conversation) {
-		ApptentiveMessageSender *sender = [ApptentiveMessageSender findSenderWithID:conversation.personID];
+		ApptentiveMessageSender *sender = [ApptentiveMessageSender findSenderWithID:conversation.personID inContext:self.managedObjectContext];
 		if (sender) {
 			message.sender = sender;
 		}
@@ -422,6 +424,35 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 	return [self.dataManager persistentStoreCoordinator];
 }
 
+#pragma mark - Request operation delegate
+
+- (void)requestOperationDidFinish:(ApptentiveRequestOperation *)operation {
+	ApptentiveLogDebug(@"Network request %@ finished successfully.", operation.request.URL.absoluteString);
+
+	if (operation == self.getMessagesOperation) {
+		[self processMessagesResponse:(NSDictionary *)operation.responseObject];
+
+		self.getMessagesOperation = nil;
+	}
+}
+
+- (void)requestOperationWillRetry:(ApptentiveRequestOperation *)operation withError:(NSError *)error {
+	if (error) {
+		ApptentiveLogError(@"Network request %@ failed with error: %@", operation.request.URL.absoluteString, error);
+	}
+
+	ApptentiveLogInfo(@"Network request %@ will retry in %f seconds.",  operation.request.URL.absoluteString, self.networkQueue.backoffDelay);
+}
+
+
+- (void)requestOperation:(ApptentiveRequestOperation *)operation didFailWithError:(NSError *)error {
+	ApptentiveLogError(@"Network request %@ failed with error: %@. Not retrying.", operation.request.URL.absoluteString, error);
+
+	if (operation == self.getMessagesOperation) {
+		self.getMessagesOperation = nil;
+	}
+}
+
 #pragma mark -
 
 - (BOOL)hideBranding {
@@ -609,34 +640,68 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 }
 
 - (void)checkForMessages {
-	@autoreleasepool {
-		@synchronized(self) {
-			if (![self isReady] || self.shouldStopWorking) {
+	if (!self.isReady || [ApptentiveConversationUpdater currentConversation] == nil || self.getMessagesOperation != nil) {
+		return;
+	}
+
+	self.getMessagesOperation = [[ApptentiveRequestOperation alloc] initWithPath:@"conversation" method:@"GET" payloadData:nil delegate:self dataSource:self.networkQueue];
+
+	[self.networkQueue addOperation:self.getMessagesOperation];
+}
+
+- (void)processMessagesResponse:(NSDictionary *)response {
+	NSArray *messages = response[@"items"];
+	ApptentiveConversation *conversation = [ApptentiveConversationUpdater currentConversation];
+
+	if ([messages isKindOfClass:[NSArray class]]) {
+		NSManagedObjectContext *context = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+		context.parentContext = self.managedObjectContext;
+
+		[context performBlock:^{
+			NSString *lastMessageID = nil;
+
+			for (NSDictionary *messageJSON in messages) {
+				ApptentiveMessage *message = [ApptentiveMessage messageWithJSON:messageJSON inContext:context];
+
+				if (message) {
+					if (conversation && [conversation.personID isEqualToString:message.sender.apptentiveID]) {
+						message.sentByUser = @(YES);
+						message.seenByUser = @(YES);
+					}
+
+					message.pendingState = @(ATPendingMessageStateConfirmed);
+
+					lastMessageID = message.apptentiveID;
+				}
+			}
+
+			NSError *error = nil;
+			if (![context save:&error]) {
+				ApptentiveLogError(@"Failed to save received messages: %@", error);
 				return;
 			}
-			ApptentiveTaskQueue *queue = [ApptentiveTaskQueue sharedTaskQueue];
-			if (![queue hasTaskOfClass:[ApptentiveGetMessagesTask class]]) {
-				ApptentiveGetMessagesTask *task = [[ApptentiveGetMessagesTask alloc] init];
-				[queue addTask:task];
-				task = nil;
-			}
-		}
+
+			dispatch_async(dispatch_get_main_queue(), ^{
+				NSError *mainContextSaveError;
+				if (![self.managedObjectContext save:&mainContextSaveError]) {
+					ApptentiveLogError(@"Failed to save received messages in main context: %@", error);
+				}
+
+				[self completeMessageFetchWithResult:lastMessageID != nil ? UIBackgroundFetchResultNewData : UIBackgroundFetchResultNoData];
+
+				self.lastMessageID = lastMessageID;
+			});
+		}];
+	} else {
+		ApptentiveLogError(@"Expected array of dictionaries for message response");
+		[self completeMessageFetchWithResult:UIBackgroundFetchResultFailed];
 	}
 }
 
 - (void)fetchMessagesInBackground:(void (^)(UIBackgroundFetchResult))completionHandler {
 	self.backgroundFetchBlock = completionHandler;
 
-	@autoreleasepool {
-		@synchronized(self) {
-			ApptentiveTaskQueue *queue = [ApptentiveTaskQueue sharedTaskQueue];
-			if (![queue hasTaskOfClass:[ApptentiveGetMessagesTask class]]) {
-				ApptentiveGetMessagesTask *task = [[ApptentiveGetMessagesTask alloc] init];
-				[queue addTask:task];
-				task = nil;
-			}
-		}
-	}
+	[self checkForMessages];
 }
 
 - (void)completeMessageFetchWithResult:(UIBackgroundFetchResult)fetchResult {
@@ -676,7 +741,6 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATAppConfigurationNotificationPopupsEnabledKey];
 	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATAppConfigurationMessageCenterForegroundRefreshIntervalKey];
 	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey];
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATMessagesLastRetrievedMessageIDPreferenceKey];
 
 	[ApptentiveConversationUpdater resetConversation];
 	[ApptentiveDeviceUpdater resetDeviceInfo];

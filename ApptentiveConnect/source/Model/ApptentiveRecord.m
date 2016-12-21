@@ -19,7 +19,7 @@
 @dynamic clientCreationTimezone;
 @dynamic clientCreationUTCOffset;
 
-+ (instancetype)newInstanceWithJSON:(NSDictionary *)json {
++ (instancetype)newInstanceWithJSON:(NSDictionary *)json inContext:(NSManagedObjectContext *)context {
 	NSAssert(NO, @"Abstract method called.");
 	return nil;
 }

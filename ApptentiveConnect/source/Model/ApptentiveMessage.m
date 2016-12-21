@@ -42,15 +42,21 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 }
 
 + (instancetype)newInstanceWithJSON:(NSDictionary *)json {
-	ApptentiveMessage *message = nil;
-	NSString *apptentiveID = [json at_safeObjectForKey:@"id"];
+	NSAssert(NO, @"Shouldn't call newInstanceWithJSON without context argument");
+	return nil;
+}
 
-	if (apptentiveID) {
-		message = [self findMessageWithID:apptentiveID];
-	}
++ (instancetype)messageWithJSON:(NSDictionary *)json inContext:(NSManagedObjectContext *)context {
+	ApptentiveMessage *message = [ApptentiveMessage findMessageWithPendingID:json[@"nonce"] inContext:context];
+
 	if (message == nil) {
-		message = (ApptentiveMessage *)[ApptentiveData newEntityNamed:@"ATMessage"];
+		message = [self findMessageWithID:json[@"id"] inContext:context];
 	}
+
+	if (message == nil) {
+		message = (ApptentiveMessage *)[[NSManagedObject alloc] initWithEntity:[NSEntityDescription entityForName:@"ATMessage" inManagedObjectContext:context] insertIntoManagedObjectContext:context];
+	}
+
 	[message updateWithJSON:json];
 
 	// If server creation time is set, overwrite client creation time.
@@ -74,12 +80,12 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 	return result;
 }
 
-+ (ApptentiveMessage *)findMessageWithID:(NSString *)apptentiveID {
++ (ApptentiveMessage *)findMessageWithID:(NSString *)apptentiveID inContext:(NSManagedObjectContext *)context {
 	ApptentiveMessage *result = nil;
 
 	@synchronized(self) {
 		NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"(apptentiveID == %@)", apptentiveID];
-		NSArray *results = [ApptentiveData findEntityNamed:@"ATMessage" withPredicate:fetchPredicate];
+		NSArray *results = [ApptentiveData findEntityNamed:@"ATMessage" withPredicate:fetchPredicate inContext:context];
 		if (results && [results count]) {
 			result = [results objectAtIndex:0];
 		}
@@ -87,12 +93,12 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 	return result;
 }
 
-+ (ApptentiveMessage *)findMessageWithPendingID:(NSString *)pendingID {
++ (ApptentiveMessage *)findMessageWithPendingID:(NSString *)pendingID inContext:(NSManagedObjectContext *)context {
 	ApptentiveMessage *result = nil;
 
 	@synchronized(self) {
 		NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"(pendingMessageID == %@)", pendingID];
-		NSArray *results = [ApptentiveData findEntityNamed:@"ATMessage" withPredicate:fetchPredicate];
+		NSArray *results = [ApptentiveData findEntityNamed:@"ATMessage" withPredicate:fetchPredicate inContext:context];
 		if (results && [results count] != 0) {
 			result = [results objectAtIndex:0];
 		}
@@ -145,7 +151,7 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 
 	NSDictionary *senderDict = [json at_safeObjectForKey:@"sender"];
 	if (senderDict != nil) {
-		ApptentiveMessageSender *sender = [ApptentiveMessageSender newOrExistingMessageSenderFromJSON:senderDict];
+		ApptentiveMessageSender *sender = [ApptentiveMessageSender newOrExistingMessageSenderFromJSON:senderDict inContext:self.managedObjectContext];
 		[self setValue:sender forKey:@"sender"];
 		sender = nil;
 	}
@@ -173,7 +179,7 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 			for (id tmpAttachment in attachmentsJSON) {
 				if ([tmpAttachment isKindOfClass:[NSDictionary class]]) {
 					NSDictionary *attachmentJSON = (NSDictionary *)tmpAttachment;
-					ApptentiveFileAttachment *attachment = [ApptentiveFileAttachment newInstanceWithJSON:attachmentJSON];
+					ApptentiveFileAttachment *attachment = [ApptentiveFileAttachment newInstanceWithJSON:attachmentJSON inContext:self.managedObjectContext];
 
 					if (attachment) {
 						[attachments addObject:attachment];

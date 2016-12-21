@@ -21,7 +21,10 @@
 }
 
 + (NSArray *)findEntityNamed:(NSString *)entityName withPredicate:(NSPredicate *)predicate {
-	NSManagedObjectContext *context = [[Apptentive sharedConnection].backend managedObjectContext];
+	return [self findEntityNamed:entityName withPredicate:predicate inContext:[[Apptentive sharedConnection].backend managedObjectContext]];
+}
+
++ (NSArray *)findEntityNamed:(NSString *)entityName withPredicate:(NSPredicate *)predicate inContext:(NSManagedObjectContext *)context {
 	NSFetchRequest *fetchType = [[NSFetchRequest alloc] initWithEntityName:entityName];
 	fetchType.predicate = predicate;
 	NSError *fetchError = nil;

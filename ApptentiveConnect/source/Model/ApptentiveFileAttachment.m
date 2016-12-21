@@ -62,8 +62,8 @@
 	return attachment;
 }
 
-+ (instancetype)newInstanceWithJSON:(NSDictionary *)JSON {
-	ApptentiveFileAttachment *attachment = (ApptentiveFileAttachment *)[ApptentiveData newEntityNamed:@"ATFileAttachment"];
++ (instancetype)newInstanceWithJSON:(NSDictionary *)JSON inContext:(NSManagedObjectContext *)context {
+	ApptentiveFileAttachment *attachment = (ApptentiveFileAttachment *)[[NSManagedObject alloc] initWithEntity:[NSEntityDescription entityForName:@"ATFileAttachment" inManagedObjectContext:context] insertIntoManagedObjectContext:context];
 	[attachment updateWithJSON:JSON];
 
 	return attachment;
@@ -166,21 +166,9 @@
 	}
 }
 
-- (NSURL *)beginMoveToStorageFrom:(NSURL *)temporaryLocation {
-	if (temporaryLocation && temporaryLocation.isFileURL) {
-		NSString *name = [[ApptentiveUtilities randomStringOfLength:20] stringByAppendingPathExtension:self.extension];
-		NSURL *newLocation = [NSURL fileURLWithPath:[[self class] fullLocalPathForFilename:name]];
-		NSError *error = nil;
-		if ([[NSFileManager defaultManager] moveItemAtURL:temporaryLocation toURL:newLocation error:&error]) {
-			return newLocation;
-		} else {
-			ApptentiveLogError(@"Unable to write attachment to URL: %@, %@", newLocation, error);
-			return nil;
-		}
-	} else {
-		ApptentiveLogError(@"Temporary file location (%@) is nil or not file URL", temporaryLocation);
-		return nil;
-	}
+- (NSURL *)permanentLocation {
+	NSString *name = [[ApptentiveUtilities randomStringOfLength:20] stringByAppendingPathExtension:self.extension];
+	return [NSURL fileURLWithPath:[[self class] fullLocalPathForFilename:name]];
 }
 
 - (void)completeMoveToStorageFor:(NSURL *)storageLocation {

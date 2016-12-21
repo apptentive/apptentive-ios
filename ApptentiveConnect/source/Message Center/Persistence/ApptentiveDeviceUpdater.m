@@ -54,7 +54,7 @@ NSString *const ATDeviceLastUpdateValuePreferenceKey = @"ATDeviceLastUpdateValue
 	ApptentiveDeviceInfo *deviceInfo = [[ApptentiveDeviceInfo alloc] init];
 
 
-	[ApptentiveQueuedRequest enqueueRequestWithPath:@"devices" payload:deviceInfo.apiJSON attachments:nil inContext:Apptentive.shared.backend.managedObjectContext];
+	[ApptentiveQueuedRequest enqueueRequestWithPath:@"devices" payload:deviceInfo.apiJSON attachments:nil identifier:nil inContext:Apptentive.shared.backend.managedObjectContext];
 
 	[Apptentive.shared.backend processQueuedRecords];
 

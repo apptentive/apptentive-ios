@@ -26,6 +26,7 @@
 
 - (void)processFailedResponse:(NSHTTPURLResponse *)response withError:(NSError *)error __attribute__((objc_requires_super));
 - (void)processResponse:(NSHTTPURLResponse *)response withObject:(NSObject *)responseObject __attribute__((objc_requires_super));
+- (void)retryTaskWithError:(NSError *)error __attribute__((objc_requires_super));
 
 @end
 

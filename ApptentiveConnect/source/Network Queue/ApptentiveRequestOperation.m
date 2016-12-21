@@ -98,6 +98,8 @@
 					[self processFailedResponse:(NSHTTPURLResponse *)response withError:error];
 				}
 			}
+		} else {
+			[self processFailedResponse:(NSHTTPURLResponse *)response withError:error];
 		}
 	}];
 

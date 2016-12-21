@@ -291,7 +291,10 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 			[[ApptentiveMessageCenterInteraction interactionForInvokingMessageEvents] engage:ATInteractionMessageCenterEventLabelRead fromViewController:nil userInfo:userInfo];
 		}
 
-		[ApptentiveData save];
+		// Doing this synchronously triggers Core Data's recursive save detection.
+		dispatch_async(dispatch_get_main_queue(), ^{
+			[ApptentiveData save];
+		});
 	}
 }
 

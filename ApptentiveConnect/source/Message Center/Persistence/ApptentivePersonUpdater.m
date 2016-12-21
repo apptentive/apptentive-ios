@@ -46,7 +46,7 @@ NSString *const ATPersonLastUpdateValuePreferenceKey = @"ATPersonLastUpdateValue
 - (void)update {
 	ApptentivePersonInfo *person = [ApptentivePersonInfo currentPerson];
 
-	[ApptentiveQueuedRequest enqueueRequestWithPath:@"people" payload:person.apiJSON attachments:nil inContext:Apptentive.shared.backend.managedObjectContext];
+	[ApptentiveQueuedRequest enqueueRequestWithPath:@"people" payload:person.apiJSON attachments:nil identifier:nil inContext:Apptentive.shared.backend.managedObjectContext];
 
 	[Apptentive.shared.backend processQueuedRecords];
 

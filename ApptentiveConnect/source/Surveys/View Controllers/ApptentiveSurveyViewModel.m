@@ -246,7 +246,7 @@ NSString *const ApptentiveInteractionSurveyEventLabelCancel = @"cancel";
 	[ApptentiveData save];
 
 	NSString *path = [NSString stringWithFormat:@"/surveys/%@/respond", response.surveyID];
-	[ApptentiveQueuedRequest enqueueRequestWithPath:path payload:response.apiJSON attachments:nil inContext:response.managedObjectContext];
+	[ApptentiveQueuedRequest enqueueRequestWithPath:path payload:response.apiJSON attachments:nil identifier:nil inContext:response.managedObjectContext];
 
 	[Apptentive.shared.backend processQueuedRecords];
 }

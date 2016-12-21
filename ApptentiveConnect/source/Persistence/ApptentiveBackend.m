@@ -199,7 +199,7 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 		return NO;
 	}
 
-	[ApptentiveQueuedRequest enqueueRequestWithPath:@"messages" payload:message.apiJSON attachments:message.attachments inContext:[self managedObjectContext]];
+	[ApptentiveQueuedRequest enqueueRequestWithPath:@"messages" payload:message.apiJSON attachments:message.attachments identifier:message.pendingMessageID inContext:[self managedObjectContext]];
 
 	[self processQueuedRecords];
 

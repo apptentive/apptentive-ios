@@ -10,6 +10,7 @@
 #import "ApptentiveQueuedRequest.h"
 #import "ApptentiveQueuedAttachment.h"
 #import "ApptentiveUtilities.h"
+#import "ApptentiveMessage.h"
 
 
 @implementation ApptentiveMessageRequestOperation
@@ -92,5 +93,40 @@
 - (ApptentiveQueuedRequest *)requestInfo {
 	return self.messageRequestInfo;
 }
+
+- (void)processResponse:(NSHTTPURLResponse *)response withObject:(NSObject *)responseObject {
+	[super processResponse:response withObject:responseObject];
+
+	[self setMessagePendingState:ATPendingMessageStateConfirmed];
+}
+
+- (void)processFailedResponse:(NSHTTPURLResponse *)response withError:(NSError *)error {
+	[super processFailedResponse:response withError:error];
+
+	[self setMessagePendingState:ATPendingMessageStateError];
+}
+
+- (void)setMessagePendingState:(ATPendingMessageState)pendingState {
+	NSManagedObjectContext *context = self.requestInfo.managedObjectContext;
+
+	[context performBlockAndWait:^{
+		NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ATMessage"];
+		fetchRequest.predicate = [NSPredicate predicateWithFormat:@"pendingMessageID = %@", self.messageRequestInfo.identifier];
+
+		NSError *error;
+		NSArray *results = [context executeFetchRequest:fetchRequest error:&error];
+
+		if (results.count == 1) {
+			((ApptentiveMessage *)results.firstObject).pendingState = @(pendingState);
+		} else {
+			ApptentiveLogError(@"Unable to identify sent message: %@", error);
+		}
+
+		if (![context save:&error]) {
+			ApptentiveLogError(@"Unable to save pending state of message: %@", error);
+		}
+	}];
+}
+
 
 @end

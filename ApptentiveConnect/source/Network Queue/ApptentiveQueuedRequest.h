@@ -14,9 +14,10 @@
 
 @property (strong, nonatomic) NSOrderedSet *attachments;
 @property (strong, nonatomic) NSDate *date;
+@property (strong, nonatomic) NSString *identifier;
 @property (strong, nonatomic) NSString *path;
 @property (strong, nonatomic) NSData *payload;
 
-+ (void)enqueueRequestWithPath:(NSString *)path payload:(NSDictionary *)payload attachments:(NSOrderedSet *)attachments inContext:(NSManagedObjectContext *)context;
++ (void)enqueueRequestWithPath:(NSString *)path payload:(NSDictionary *)payload attachments:(NSOrderedSet *)attachments identifier:(NSString *)identifier inContext:(NSManagedObjectContext *)context;
 
 @end

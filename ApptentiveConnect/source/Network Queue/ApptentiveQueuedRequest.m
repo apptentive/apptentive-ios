@@ -14,14 +14,16 @@
 
 @dynamic attachments;
 @dynamic date;
+@dynamic identifier;
 @dynamic path;
 @dynamic payload;
 
-+ (void)enqueueRequestWithPath:(NSString *)path payload:(NSDictionary *)payload attachments:(NSOrderedSet *)attachments inContext:(NSManagedObjectContext *)context {
++ (void)enqueueRequestWithPath:(NSString *)path payload:(NSDictionary *)payload attachments:(NSOrderedSet *)attachments identifier:(NSString *)identifier inContext:(NSManagedObjectContext *)context {
 	ApptentiveQueuedRequest *request = (ApptentiveQueuedRequest *)[[NSManagedObject alloc] initWithEntity:[NSEntityDescription entityForName:@"QueuedRequest" inManagedObjectContext:context] insertIntoManagedObjectContext:context];
 
 	request.date = [NSDate date];
 	request.path = path;
+	request.identifier = identifier;
 
 	NSError *error;
 	request.payload = [NSJSONSerialization dataWithJSONObject:payload options:0 error:&error];
@@ -37,9 +39,13 @@
 	}
 	request.attachments = [NSOrderedSet orderedSetWithArray:attachmentArray];
 
-	if (![context save:&error]) {
-		ApptentiveLogError(@"Error saving request for %@ to queue: %@", path, error);
-	}
+	// Doing this synchronously triggers Core Data's recursive save detection.
+	[context performBlock:^{
+		NSError *saveError;
+		if (![context save:&saveError]) {
+			ApptentiveLogError(@"Error saving request for %@ to queue: %@", path, error);
+		}
+	}];
 }
 
 @end

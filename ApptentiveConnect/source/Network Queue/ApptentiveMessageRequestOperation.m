@@ -10,7 +10,6 @@
 #import "ApptentiveQueuedRequest.h"
 #import "ApptentiveQueuedAttachment.h"
 #import "ApptentiveUtilities.h"
-#import "ApptentiveMessage.h"
 
 
 @implementation ApptentiveMessageRequestOperation
@@ -100,8 +99,14 @@
 	[self setMessagePendingState:ATPendingMessageStateConfirmed];
 }
 
-- (void)processFailedResponse:(NSHTTPURLResponse *)response withError:(NSError *)error {
-	[super processFailedResponse:response withError:error];
+- (void)processNetworkError:(NSError *)error {
+	[super processNetworkError:error];
+
+	[self setMessagePendingState:ATPendingMessageStateError];
+}
+
+- (void)processHTTPError:(NSError *)error withResponse:(NSHTTPURLResponse *)response {
+	[super processHTTPError:error withResponse:response];
 
 	[self setMessagePendingState:ATPendingMessageStateError];
 }

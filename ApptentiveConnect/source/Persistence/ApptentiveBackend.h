@@ -50,12 +50,7 @@ extern NSString *const ATBackendBecameReadyNotification;
 - (void)startup;
 - (void)processQueuedRecords;
 
-/*! Message send progress. */
 @property (weak, nonatomic) id<ATBackendMessageDelegate> messageDelegate;
-- (void)messageTaskDidBegin:(ApptentiveMessageTask *)messageTask;
-- (void)messageTask:(ApptentiveMessageTask *)messageTask didProgress:(float)progress;
-- (void)messageTaskDidFinish:(ApptentiveMessageTask *)messageTask;
-- (void)messageTaskDidFail:(ApptentiveMessageTask *)messageTask;
 
 + (UIImage *)imageNamed:(NSString *)name;
 - (BOOL)presentMessageCenterFromViewController:(UIViewController *)viewController;

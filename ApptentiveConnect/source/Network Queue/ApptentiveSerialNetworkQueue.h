@@ -10,6 +10,12 @@
 #import <CoreData/CoreData.h>
 #import "ApptentiveRecordRequestOperation.h"
 
+typedef NS_ENUM(NSInteger, ApptentiveQueueStatus) {
+	ApptentiveQueueStatusUnknown,
+	ApptentiveQueueStatusError,
+	ApptentiveQueueStatusGroovy
+};
+
 @interface ApptentiveSerialNetworkQueue : ApptentiveNetworkQueue <ApptentiveRequestOperationDelegate, NSURLSessionDelegate, NSURLSessionDataDelegate>
 
 - (instancetype)initWithBaseURL:(NSURL *)baseURL token:(NSString *)token SDKVersion:(NSString *)SDKVersion platform:(NSString *)platform parentManagedObjectContext:(NSManagedObjectContext *)parentManagedObjectContext;
@@ -18,5 +24,6 @@
 
 @property (readonly, nonatomic) NSNumber *messageSendProgress;
 @property (readonly, nonatomic) NSInteger messageTaskCount;
+@property (readonly, nonatomic) ApptentiveQueueStatus status;
 
 @end

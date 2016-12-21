@@ -103,6 +103,10 @@
 
 - (void)requestOperationWillRetry:(ApptentiveRequestOperation *)operation withError:(NSError *)error {
 	if (error) {
+		_status = ApptentiveQueueStatusError;
+
+		[self updateMessageErrorStatus];
+
 		ApptentiveLogError(@"Network request %@ failed with error: %@", operation.request.URL.absoluteString, error);
 	}
 
@@ -112,12 +116,20 @@
 }
 
 - (void)requestOperationDidFinish:(ApptentiveRequestOperation *)operation {
+	_status = ApptentiveQueueStatusGroovy;
+
+	[self updateMessageErrorStatus];
+
 	ApptentiveLogDebug(@"Network request %@ finished successfully.", operation.request.URL.absoluteString);
 
 	[self removeActiveOperation:operation];
 }
 
 - (void)requestOperation:(ApptentiveRequestOperation *)operation didFailWithError:(NSError *)error {
+	_status = ApptentiveQueueStatusError;
+
+	[self updateMessageErrorStatus];
+
 	ApptentiveLogError(@"Network request %@ failed with error: %@. Not retrying.", operation.request.URL.absoluteString, error);
 
 	[self removeActiveOperation:operation];
@@ -156,12 +168,24 @@
 }
 
 - (void)removeActiveOperation:(ApptentiveRequestOperation *)operation {
-	if (self.activeTaskProgress[@(operation.task.taskIdentifier)]) {
+	NSNumber *identifier = @(operation.task.taskIdentifier);
+
+	if (self.activeTaskProgress[identifier]) {
 		dispatch_async(dispatch_get_main_queue(), ^{
 			[self willChangeValueForKey:@"messageTaskCount"];
-			[self.activeTaskProgress removeObjectForKey:@(operation.task.taskIdentifier)];
+			[self.activeTaskProgress removeObjectForKey:identifier];
 			[self didChangeValueForKey:@"messageTaskCount"];
 		});
+	}
+}
+
+- (void)updateMessageErrorStatus {
+	ATPendingMessageState pendingMessageState = (self.status == ApptentiveQueueStatusError) ? ATPendingMessageStateError : ATPendingMessageStateSending;
+
+	for (NSOperation *operation in self.operations) {
+		if ([operation isKindOfClass:[ApptentiveMessageRequestOperation class]]) {
+			[(ApptentiveMessageRequestOperation *)operation setMessagePendingState:pendingMessageState];
+		}
 	}
 }
 

@@ -24,7 +24,8 @@
 @property (readonly, weak, nonatomic) id<ApptentiveRequestOperationDelegate> delegate;
 @property (readonly, weak, nonatomic) id<ApptentiveRequestOperationDataSource> dataSource;
 
-- (void)processFailedResponse:(NSHTTPURLResponse *)response withError:(NSError *)error __attribute__((objc_requires_super));
+- (void)processNetworkError:(NSError *)error __attribute__((objc_requires_super));
+- (void)processHTTPError:(NSError *)error withResponse:(NSHTTPURLResponse *)response __attribute__((objc_requires_super));
 - (void)processResponse:(NSHTTPURLResponse *)response withObject:(NSObject *)responseObject __attribute__((objc_requires_super));
 - (void)retryTaskWithError:(NSError *)error __attribute__((objc_requires_super));
 

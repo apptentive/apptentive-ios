@@ -18,6 +18,27 @@
 
 @implementation ApptentiveRequestOperation
 
++ (NSIndexSet *) okStatusCodes {
+	static NSIndexSet *_okStatusCodes;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		_okStatusCodes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(200, 100)]; // 2xx status codes
+	});
+
+	return _okStatusCodes;
+}
+
++ (NSIndexSet *) clientErrorStatusCodes {
+	static NSIndexSet *_clientErrorStatusCodes;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		_clientErrorStatusCodes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(400, 100)]; // 4xx status codes
+
+	});
+
+	return _clientErrorStatusCodes;
+}
+
 - (instancetype)initWithPath:(NSString *)path method:(NSString *)method payload:(NSDictionary *)payload delegate:(id<ApptentiveRequestOperationDelegate>)delegate dataSource:(id<ApptentiveRequestOperationDataSource>)dataSource {
 	NSData *payloadData = nil;
 
@@ -86,20 +107,26 @@
 	_task = [self.dataSource.URLSession dataTaskWithRequest:self.request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
 		if (self.isCancelled) {
 			return;
-		} else if (data) {
-			if (((NSHTTPURLResponse *)response).statusCode == 204) {
-				[self processResponse:(NSHTTPURLResponse *)response withObject:nil];
-			} else {
-				NSObject *responseObject = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&error];
-
-				if (responseObject != nil) {
-					[self processResponse:(NSHTTPURLResponse *)response withObject:responseObject];
-				} else {
-					[self processFailedResponse:(NSHTTPURLResponse *)response withError:error];
-				}
-			}
+		} else if (!response) {
+			[self processNetworkError:error];
 		} else {
-			[self processFailedResponse:(NSHTTPURLResponse *)response withError:error];
+			NSHTTPURLResponse *URLResponse = (NSHTTPURLResponse *)response;
+
+			if ([[[self class] okStatusCodes] containsIndex:URLResponse.statusCode]) {
+				NSObject *responseObject = nil;
+
+				if (URLResponse.statusCode != 204) { // "No Content"
+					responseObject = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&error];
+
+					if (responseObject == nil) { // Decoding error
+						[self processHTTPError:error withResponse:URLResponse];
+					}
+				}
+
+				[self processResponse:URLResponse withObject:responseObject];
+			} else {
+				[self processHTTPError:error withResponse:URLResponse];
+			}
 		}
 	}];
 
@@ -131,20 +158,13 @@
 	[self completeOperation];
 }
 
-- (void)processFailedResponse:(NSHTTPURLResponse *)response withError:(NSError *)error {
-	NSIndexSet *okStatusCodes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(100, 300)];			// 1xx, 2xx, and 3xx status codes
-	NSIndexSet *clientErrorStatusCodes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(400, 100)]; // 4xx status codes
-	NSIndexSet *serverErrorStatusCodes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(500, 100)]; // 5xx status codes
+- (void)processNetworkError:(NSError *)error {
+	[self retryTaskWithError:error];
+}
 
-	// TODO: Consider localizing error titles
-	if (response == nil) {
-		[self retryTaskWithError:error];
-	} else if ([okStatusCodes containsIndex:response.statusCode]) {
-		[self retryTaskWithError:error];
-	} else if ([clientErrorStatusCodes containsIndex:response.statusCode]) {
+- (void)processHTTPError:(NSError *)error withResponse:(NSHTTPURLResponse *)response {
+	if ([[[self class] clientErrorStatusCodes] containsIndex:response.statusCode]) {
 		[self finishWithError:error];
-	} else if ([serverErrorStatusCodes containsIndex:response.statusCode]) {
-		[self retryTaskWithError:error];
 	} else {
 		[self retryTaskWithError:error];
 	}

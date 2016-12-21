@@ -7,11 +7,12 @@
 //
 
 #import "ApptentiveRecordRequestOperation.h"
-
-@class ApptentiveMessage;
+#import "ApptentiveMessage.h"
 
 @interface ApptentiveMessageRequestOperation : ApptentiveRecordRequestOperation
 
 @property (readonly, nonatomic) ApptentiveQueuedRequest *messageRequestInfo;
+
+- (void)setMessagePendingState:(ATPendingMessageState)pendingState;
 
 @end

@@ -150,7 +150,6 @@
 		016986951DA57965008C4C78 /* ApptentivePersonUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 4961A40A161BBE0800E30037 /* ApptentivePersonUpdater.m */; };
 		016986961DA57965008C4C78 /* ApptentiveDeviceUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 4961A40E161BBE1F00E30037 /* ApptentiveDeviceUpdater.m */; };
 		016986971DA57965008C4C78 /* ApptentiveConversationUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 49AC178116C0987400BE1615 /* ApptentiveConversationUpdater.m */; };
-		016986981DA57965008C4C78 /* ApptentiveMessageTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 4961A401161BBD7000E30037 /* ApptentiveMessageTask.m */; };
 		016986991DA57965008C4C78 /* ApptentiveGetMessagesTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 49E3A26E1628F4FF000675B4 /* ApptentiveGetMessagesTask.m */; };
 		0169869A1DA57965008C4C78 /* ApptentiveWebClient+MessageCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 499912A7161B6AF700FDA15F /* ApptentiveWebClient+MessageCenter.m */; };
 		0169869B1DA57965008C4C78 /* ApptentiveInteraction.m in Sources */ = {isa = PBXBuildFile; fileRef = 58EEBE2217C7E8150039A0F5 /* ApptentiveInteraction.m */; };
@@ -407,8 +406,6 @@
 		495E9C1D16EABD8E00AE3B03 /* ApptentiveLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 495E9C1B16EABD8E00AE3B03 /* ApptentiveLogger.m */; };
 		4960A533171F70530082669B /* ApptentiveNetworkImageView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4960A531171F70530082669B /* ApptentiveNetworkImageView.h */; };
 		4960A534171F70530082669B /* ApptentiveNetworkImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4960A532171F70530082669B /* ApptentiveNetworkImageView.m */; };
-		4961A402161BBD7000E30037 /* ApptentiveMessageTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 4961A400161BBD7000E30037 /* ApptentiveMessageTask.h */; };
-		4961A403161BBD7000E30037 /* ApptentiveMessageTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 4961A401161BBD7000E30037 /* ApptentiveMessageTask.m */; };
 		4961A40B161BBE0800E30037 /* ApptentivePersonUpdater.h in Headers */ = {isa = PBXBuildFile; fileRef = 4961A409161BBE0800E30037 /* ApptentivePersonUpdater.h */; };
 		4961A40C161BBE0800E30037 /* ApptentivePersonUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 4961A40A161BBE0800E30037 /* ApptentivePersonUpdater.m */; };
 		4961A40F161BBE1F00E30037 /* ApptentiveDeviceUpdater.h in Headers */ = {isa = PBXBuildFile; fileRef = 4961A40D161BBE1F00E30037 /* ApptentiveDeviceUpdater.h */; };
@@ -808,8 +805,6 @@
 		495E9C1B16EABD8E00AE3B03 /* ApptentiveLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveLogger.m; sourceTree = "<group>"; };
 		4960A531171F70530082669B /* ApptentiveNetworkImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveNetworkImageView.h; sourceTree = "<group>"; };
 		4960A532171F70530082669B /* ApptentiveNetworkImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveNetworkImageView.m; sourceTree = "<group>"; };
-		4961A400161BBD7000E30037 /* ApptentiveMessageTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveMessageTask.h; sourceTree = "<group>"; };
-		4961A401161BBD7000E30037 /* ApptentiveMessageTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveMessageTask.m; sourceTree = "<group>"; };
 		4961A409161BBE0800E30037 /* ApptentivePersonUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentivePersonUpdater.h; sourceTree = "<group>"; };
 		4961A40A161BBE0800E30037 /* ApptentivePersonUpdater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentivePersonUpdater.m; sourceTree = "<group>"; };
 		4961A40D161BBE1F00E30037 /* ApptentiveDeviceUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveDeviceUpdater.h; sourceTree = "<group>"; };
@@ -1522,8 +1517,6 @@
 		4961A3FF161BBD5200E30037 /* Tasks */ = {
 			isa = PBXGroup;
 			children = (
-				4961A400161BBD7000E30037 /* ApptentiveMessageTask.h */,
-				4961A401161BBD7000E30037 /* ApptentiveMessageTask.m */,
 				49E3A26D1628F4FF000675B4 /* ApptentiveGetMessagesTask.h */,
 				49E3A26E1628F4FF000675B4 /* ApptentiveGetMessagesTask.m */,
 			);
@@ -2028,7 +2021,6 @@
 				498EFB7015BA48B300A1043B /* ApptentiveAppConfigurationUpdateTask.h in Headers */,
 				01382B421CDAB93400D57608 /* ApptentiveSurveyOtherCell.h in Headers */,
 				499912A8161B6AF700FDA15F /* ApptentiveWebClient+MessageCenter.h in Headers */,
-				4961A402161BBD7000E30037 /* ApptentiveMessageTask.h in Headers */,
 				0132F8D11C851C0800A452E3 /* ApptentiveSurveySingleLineCell.h in Headers */,
 				014745BD1C863A0700542951 /* ApptentiveSurveyGreetingView.h in Headers */,
 				4961A40B161BBE0800E30037 /* ApptentivePersonUpdater.h in Headers */,
@@ -2471,7 +2463,6 @@
 				016986951DA57965008C4C78 /* ApptentivePersonUpdater.m in Sources */,
 				016986961DA57965008C4C78 /* ApptentiveDeviceUpdater.m in Sources */,
 				016986971DA57965008C4C78 /* ApptentiveConversationUpdater.m in Sources */,
-				016986981DA57965008C4C78 /* ApptentiveMessageTask.m in Sources */,
 				016986991DA57965008C4C78 /* ApptentiveGetMessagesTask.m in Sources */,
 				0169869A1DA57965008C4C78 /* ApptentiveWebClient+MessageCenter.m in Sources */,
 				0169869B1DA57965008C4C78 /* ApptentiveInteraction.m in Sources */,
@@ -2619,7 +2610,6 @@
 				58E9580B190740BC005063DC /* ApptentiveSurveyQuestionResponse.m in Sources */,
 				0122929F1E04C0BB00282131 /* ApptentiveQueuedRequest.m in Sources */,
 				499912A9161B6AF700FDA15F /* ApptentiveWebClient+MessageCenter.m in Sources */,
-				4961A403161BBD7000E30037 /* ApptentiveMessageTask.m in Sources */,
 				01C30CEC1B0D09F8006BC911 /* ApptentiveMessageCenterGreetingView.m in Sources */,
 				018389061D1A0D6100780B8E /* ApptentiveSurveyQuestionFooterView.m in Sources */,
 				4961A40C161BBE0800E30037 /* ApptentivePersonUpdater.m in Sources */,

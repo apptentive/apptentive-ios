@@ -20,7 +20,6 @@
 #import "ApptentiveWebClient.h"
 #import "ApptentiveGetMessagesTask.h"
 #import "ApptentiveMessageSender.h"
-#import "ApptentiveMessageTask.h"
 #import "ApptentiveLog.h"
 #import "ApptentivePersonUpdater.h"
 #import "ApptentiveEngagementBackend.h"
@@ -100,6 +99,11 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 	[self.messageRetrievalTimer invalidate];
 
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
+
+	@try {
+		[self.serialQueue removeObserver:self forKeyPath:@"messageTaskCount"];
+		[self.serialQueue removeObserver:self forKeyPath:@"messageSendProgress"];
+	} @catch (NSException *_) {}
 }
 
 - (ApptentiveMessage *)automatedMessageWithTitle:(NSString *)title body:(NSString *)body {
@@ -645,48 +649,19 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 
 #pragma mark - Message task delegate
 
-- (void)setMessageDelegate:(id<ATBackendMessageDelegate>)messageDelegate {
-	_messageDelegate = messageDelegate;
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
+	if (object == self.serialQueue && ([keyPath isEqualToString:@"messageSendProgress"] || [keyPath isEqualToString:@"messageTaskCount"])) {
+		NSNumber *numberProgress = change[NSKeyValueChangeNewKey];
+		float progress = [numberProgress isKindOfClass:[NSNumber class]] ? numberProgress.floatValue : 0.0;
 
-	[self updateMessageTaskProgress];
-}
-
-- (void)messageTaskDidBegin:(ApptentiveMessageTask *)messageTask {
-	// Added to activeMessageTasks on message creation
-	[self updateMessageTaskProgress];
-}
-
-- (void)messageTask:(ApptentiveMessageTask *)messageTask didProgress:(float)progress {
-	[self updateMessageTaskProgress];
-}
-
-- (void)messageTaskDidFail:(ApptentiveMessageTask *)messageTask {
-	[self.activeMessageTasks removeObject:messageTask];
-	[self updateMessageTaskProgress];
-}
-
-- (void)messageTaskDidFinish:(ApptentiveMessageTask *)messageTask {
-	[self updateMessageTaskProgress];
-
-	// Give the progress bar time to fill
-	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-		[self.activeMessageTasks removeObject:messageTask];
-		[self updateMessageTaskProgress];
-	});
-}
-
-- (void)updateMessageTaskProgress {
-	float progress = 0;
-
-	if (self.activeMessageTasks.count > 0) {
-		progress = [[self.activeMessageTasks valueForKeyPath:@"@avg.percentComplete"] floatValue];
-
-		if (progress < 0.05) {
+		if (self.serialQueue.messageTaskCount > 0 && numberProgress.floatValue < 0.05) {
 			progress = 0.05;
+		} else if (self.serialQueue.messageTaskCount == 0) {
+			progress = 0;
 		}
-	}
 
-	[self.messageDelegate backend:self messageProgressDidChange:progress];
+		[self.messageDelegate backend:self messageProgressDidChange:progress];
+	}
 }
 
 #pragma mark - Debugging
@@ -755,6 +730,8 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 
 	NSString *token = [ApptentiveConversationUpdater currentConversation].token ?: Apptentive.shared.APIKey;
 	_serialQueue = [[ApptentiveSerialNetworkQueue alloc] initWithBaseURL:Apptentive.shared.baseURL token:token SDKVersion:kApptentiveVersionString platform:@"iOS" parentManagedObjectContext:self.managedObjectContext];
+	[self.serialQueue addObserver:self forKeyPath:@"messageSendProgress" options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew context:nil];
+	[self.serialQueue addObserver:self forKeyPath:@"messageTaskCount" options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew context:nil];
 
 	[ApptentiveMetrics sharedMetrics];
 

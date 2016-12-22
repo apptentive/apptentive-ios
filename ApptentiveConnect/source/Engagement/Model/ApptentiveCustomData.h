@@ -8,11 +8,14 @@
 
 #import "ApptentiveState.h"
 
+@class ApptentiveMutableCustomData;
+
 @interface ApptentiveCustomData : ApptentiveState
 
 @property (readonly, strong, nonatomic) NSDictionary <NSString *, NSObject<NSCoding> *> *customData;
 @property (strong, nonatomic) NSString *identifier;
 
-- (instancetype)initWithCustomData:(NSDictionary *)customData identifier:(NSString *)identifier;
+- (instancetype)initWithMutableCustomData:(ApptentiveMutableCustomData *)mutableCustomDataContainer;
+- (instancetype)initWithCustomData:(NSDictionary *)customData;
 
 @end

@@ -15,7 +15,6 @@
 @property (readonly, strong, nonatomic) NSString *name;
 @property (readonly, strong, nonatomic) NSString *emailAddress;
 
-//- (instancetype)initWithName:(NSString *)name emailAddress:(NSString *)emailAddress customData:(NSDictionary <NSString *, NSObject<NSCoding> *> *)customData;
 - (instancetype)initWithMutablePerson:(ApptentiveMutablePerson *)mutablePerson;
 
 @end

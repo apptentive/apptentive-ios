@@ -25,7 +25,6 @@ extern NSString *const ApptentiveCustomPersonDataPreferenceKey;
 @interface Apptentive ()
 
 + (NSString *)supportDirectoryPath;
-- (NSDictionary *)integrationConfiguration;
 
 @property (readonly, nonatomic) NSURL *baseURL;
 @property (readonly, nonatomic) ApptentiveWebClient *webClient;

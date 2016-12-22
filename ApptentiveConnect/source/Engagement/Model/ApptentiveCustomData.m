@@ -7,6 +7,7 @@
 //
 
 #import "ApptentiveCustomData.h"
+#import "ApptentiveMutableCustomData.h"
 
 static NSString * const CustomDataKey = @"customData";
 static NSString * const IdentifierKey = @"identifier";
@@ -29,12 +30,22 @@ static NSString * const IdentifierKey = @"identifier";
 	return self;
 }
 
-- (instancetype)initWithCustomData:(NSDictionary *)customData identifier:(NSString *)identifier {
+- (instancetype)initWithCustomData:(NSDictionary *)customData {
 	self = [super init];
 
 	if (self) {
 		_mutableCustomData = [customData mutableCopy];
-		_identifier = identifier;
+	}
+
+	return self;
+}
+
+- (instancetype)initWithMutableCustomData:(ApptentiveMutableCustomData *)mutableCustomDataContainer {
+	self = [super init];
+
+	if (self) {
+		_mutableCustomData = [mutableCustomDataContainer.customData mutableCopy];
+		_identifier = mutableCustomDataContainer.identifier;
 	}
 
 	return self;

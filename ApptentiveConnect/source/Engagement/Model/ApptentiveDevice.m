@@ -32,6 +32,16 @@ static NSString * const IntegrationConfigurationKey = @"integrationConfiguration
 
 @implementation ApptentiveDevice
 
+- (instancetype)init {
+	self = [super init];
+
+	if (self) {
+		_integrationConfiguration = @{};
+	}
+
+	return self;
+}
+
 - (instancetype)initWithCurrentDevice {
 	self = [super init];
 
@@ -82,9 +92,8 @@ static NSString * const IntegrationConfigurationKey = @"integrationConfiguration
 
 - (instancetype)initAndMigrate {
 	NSDictionary *device = [[[NSUserDefaults standardUserDefaults] dictionaryForKey:@"ATDeviceLastUpdateValuePreferenceKey"] objectForKey:@"device"];
-	NSString *identifier;
 
-	self = [super initWithCustomData:device[@"custom_data"] identifier:identifier];
+	self = [super initWithCustomData:device[@"custom_data"]];
 
 	if (self) {
 		_UUID = [[NSUUID alloc] initWithUUIDString:device[@"uuid"]];
@@ -105,9 +114,10 @@ static NSString * const IntegrationConfigurationKey = @"integrationConfiguration
 }
 
 - (instancetype)initWithMutableDevice:(ApptentiveMutableDevice *)mutableDevice {
-	self = [self initWithCustomData:mutableDevice.customData identifier:mutableDevice.identifier];
+	self = [self initWithMutableCustomData:mutableDevice];
 
 	if (self) {
+		_integrationConfiguration = mutableDevice.integrationConfiguration;
 		[self updateWithCurrentDeviceValues];
 	}
 
@@ -151,8 +161,6 @@ static NSString * const IntegrationConfigurationKey = @"integrationConfiguration
 	_localeCountryCode = [localeComponents objectForKey:NSLocaleCountryCode];
 	_localeLanguageCode = [NSLocale preferredLanguages].firstObject;
 	_UTCOffset = [NSTimeZone systemTimeZone].secondsFromGMT;
-#warning implement me
-	_integrationConfiguration = @{};
 }
 
 @end

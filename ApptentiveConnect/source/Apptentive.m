@@ -45,11 +45,7 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 @end
 
 
-@implementation Apptentive {
-	NSMutableDictionary *_customPersonData;
-	NSMutableDictionary *_customDeviceData;
-	NSMutableDictionary *_integrationConfiguration;
-}
+@implementation Apptentive
 
 @synthesize styleSheet = _styleSheet;
 
@@ -87,26 +83,14 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 }
 
 - (id)init {
-	if ((self = [super init])) {
-		_customPersonData = [[[NSUserDefaults standardUserDefaults] objectForKey:ApptentiveCustomPersonDataPreferenceKey] mutableCopy] ?: [[NSMutableDictionary alloc] init];
-		_customDeviceData = [[[NSUserDefaults standardUserDefaults] objectForKey:ApptentiveCustomDeviceDataPreferenceKey] mutableCopy] ?: [[NSMutableDictionary alloc] init];
+	self = [super init];
 
-		_integrationConfiguration = [[NSMutableDictionary alloc] init];
+	if (self) {
 		_styleSheet = [[ApptentiveStyleSheet alloc] init];
 
 		ApptentiveLogInfo(@"Apptentive SDK Version %@", kApptentiveVersionString);
 	}
 	return self;
-}
-
-- (void)saveCustomPersonData {
-	[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveCustomPersonDataChangedNotification object:self.customPersonData];
-	[[NSUserDefaults standardUserDefaults] setObject:_customPersonData forKey:ApptentiveCustomPersonDataPreferenceKey];
-}
-
-- (void)saveCustomDeviceData {
-	[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveCustomDeviceDataChangedNotification object:self.customPersonData];
-	[[NSUserDefaults standardUserDefaults] setObject:_customDeviceData forKey:ApptentiveCustomDeviceDataPreferenceKey];
 }
 
 - (void)setAPIKey:(NSString *)APIKey {
@@ -243,16 +227,6 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 	return [self timestampObjectWithNumber:@([date timeIntervalSince1970])];
 }
 
-- (void)addCustomPersonData:(NSObject *)object withKey:(NSString *)key {
-	[self addCustomData:object withKey:key toCustomDataDictionary:_customPersonData];
-	[self saveCustomPersonData];
-}
-
-- (void)addCustomDeviceData:(NSObject *)object withKey:(NSString *)key {
-	[self addCustomData:object withKey:key toCustomDataDictionary:_customDeviceData];
-	[self saveCustomDeviceData];
-}
-
 - (void)addCustomData:(NSObject *)object withKey:(NSString *)key toCustomDataDictionary:(NSMutableDictionary *)customData {
 	BOOL simpleType = ([object isKindOfClass:[NSString class]] ||
 		[object isKindOfClass:[NSNumber class]] ||
@@ -274,13 +248,15 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 }
 
 - (void)removeCustomPersonDataWithKey:(NSString *)key {
-	[_customPersonData removeObjectForKey:key];
-	[self saveCustomPersonData];
+	[self.backend.session updatePerson:^(ApptentiveMutablePerson *person) {
+		[person removeCustomValueWithKey:key];
+	}];
 }
 
 - (void)removeCustomDeviceDataWithKey:(NSString *)key {
-	[_customDeviceData removeObjectForKey:key];
-	[self saveCustomDeviceData];
+	[self.backend.session updateDevice:^(ApptentiveMutableDevice *device) {
+		[device removeCustomValueWithKey:key];
+	}];
 }
 
 - (void)openAppStore {
@@ -303,7 +279,7 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 }
 
 - (NSDictionary *)integrationConfiguration {
-	return _integrationConfiguration;
+	return self.backend.session.device.integrationConfiguration;
 }
 
 - (void)setPushNotificationIntegration:(ApptentivePushProvider)pushProvider withDeviceToken:(NSData *)deviceToken {
@@ -337,9 +313,12 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 }
 
 - (void)addIntegration:(NSString *)integration withConfiguration:(NSDictionary *)configuration {
-	[_integrationConfiguration setObject:configuration forKey:integration];
+	NSMutableDictionary *integrationConfiguration = [self.backend.session.device.integrationConfiguration mutableCopy];
+	[integrationConfiguration setObject:configuration forKey:integration];
 
-	[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveCustomDeviceDataChangedNotification object:self.customDeviceData];
+	[self.backend.session updateDevice:^(ApptentiveMutableDevice *device) {
+		device.integrationConfiguration = integrationConfiguration;
+	}];
 }
 
 - (void)addIntegration:(NSString *)integration withDeviceToken:(NSData *)deviceToken {
@@ -353,9 +332,12 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 }
 
 - (void)removeIntegration:(NSString *)integration {
-	[_integrationConfiguration removeObjectForKey:integration];
+	NSMutableDictionary *integrationConfiguration = [self.backend.session.device.integrationConfiguration mutableCopy];
+	[integrationConfiguration removeObjectForKey:integration];
 
-	[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveCustomDeviceDataChangedNotification object:self.customDeviceData];
+	[self.backend.session updateDevice:^(ApptentiveMutableDevice *device) {
+		device.integrationConfiguration = integrationConfiguration;
+	}];
 }
 
 - (BOOL)canShowInteractionForEvent:(NSString *)event {

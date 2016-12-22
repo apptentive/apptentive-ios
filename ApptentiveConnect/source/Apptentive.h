@@ -427,28 +427,6 @@ Returns a Boolean value indicating whether the given event will cause an Interac
 @property (copy, nonatomic, nullable) NSString *personEmailAddress;
 
 /**
- Adds custom data associated with the current person.
-
- Adds an additional data field to any feedback sent. This will show up in the person data in the
- conversation on your Apptentive dashboard.
-
- @param object Custom data of type `NSDate`, `NSNumber`, or `NSString`.
- @param key A key to associate the data with.
- */
-- (void)addCustomPersonData:(NSObject<NSCoding> *)object withKey:(NSString *)key APPTENTIVE_SWIFT_UNAVAILABLE("Use the string, number, or boolean custom data setter");
-
-/**
- Adds custom data associated with the current device.
-
- Adds an additional data field to any feedback sent. This will show up in the device data in the
- conversation on your Apptentive dashboard.
-
- @param object Custom data of type `NSDate`, `NSNumber`, or `NSString`.
- @param key A key to associate the data with.
- */
-- (void)addCustomDeviceData:(NSObject<NSCoding> *)object withKey:(NSString *)key APPTENTIVE_SWIFT_UNAVAILABLE("Use the string, number, or boolean custom data setter");
-
-/**
  Removes custom data associated with the current person.
 
  Will remove data, if any, associated with the current person with the key `key`.

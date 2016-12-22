@@ -14,17 +14,6 @@ static NSString * const EmailAddressKey = @"emailAddress";
 
 @implementation ApptentivePerson
 
-//- (instancetype)initWithName:(NSString *)name emailAddress:(NSString *)emailAddress customData:(NSDictionary<NSString *,NSObject<NSCoding> *> *)customData {
-//	self = [super init];
-//
-//	if (self) {
-//		_name = name;
-//		_emailAddress = emailAddress;
-//	}
-//
-//	return self;
-//}
-
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
 	self = [super initWithCoder:aDecoder];
 
@@ -47,7 +36,6 @@ static NSString * const EmailAddressKey = @"emailAddress";
 	NSString *name;
 	NSString *emailAddress;
 	NSDictionary *customData;
-	NSString *identifier;
 
 	NSData *data = [[NSUserDefaults standardUserDefaults] dataForKey:@"ATPersonLastUpdateValuePreferenceKey"];
 
@@ -60,7 +48,7 @@ static NSString * const EmailAddressKey = @"emailAddress";
 		}
 	}
 
-	self = [super initWithCustomData:customData identifier:identifier];
+	self = [super initWithCustomData:customData];
 
 	if (self) {
 		_name = name;
@@ -71,7 +59,7 @@ static NSString * const EmailAddressKey = @"emailAddress";
 }
 
 - (instancetype)initWithMutablePerson:(ApptentiveMutablePerson *)mutablePerson {
-	self = [super initWithCustomData:mutablePerson.customData identifier:mutablePerson.identifier];
+	self = [super initWithMutableCustomData:mutablePerson];
 
 	if (self) {
 		_name = mutablePerson.name;

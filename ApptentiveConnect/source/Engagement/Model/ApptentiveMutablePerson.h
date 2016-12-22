@@ -6,11 +6,11 @@
 //  Copyright © 2016 Apptentive. All rights reserved.
 //
 
-#import "ApptentiveMutableDevice.h"
+#import "ApptentiveMutableCustomData.h"
 
 @class ApptentivePerson;
 
-@interface ApptentiveMutablePerson : ApptentiveMutableDevice
+@interface ApptentiveMutablePerson : ApptentiveMutableCustomData
 
 - (instancetype)initWithPerson:(ApptentivePerson *)person;
 

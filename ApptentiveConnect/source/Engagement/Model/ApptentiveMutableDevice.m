@@ -7,59 +7,18 @@
 //
 
 #import "ApptentiveMutableDevice.h"
-#import "ApptentiveCustomData.h"
 #import "ApptentiveDevice.h"
-
-@interface ApptentiveMutableDevice ()
-
-@property (strong, nonatomic) NSMutableDictionary *mutableCustomData;
-
-@end
 
 @implementation ApptentiveMutableDevice
 
 - (instancetype)initWithDevice:(ApptentiveDevice *)device {
-	return [self initWithCustomData:device];
-}
-
-- (instancetype)initWithCustomData:(ApptentiveCustomData *)customData {
-	self = [super init];
+	self = [super initWithCustomData:device];
 
 	if (self) {
-		_mutableCustomData = [customData.customData mutableCopy] ?: [NSMutableDictionary dictionary];
-		_identifier = customData.identifier;
+		_integrationConfiguration = device.integrationConfiguration;
 	}
 
 	return self;
-}
-
-- (instancetype)init
-{
-	self = [super init];
-	if (self) {
-		_mutableCustomData = [NSMutableDictionary dictionary];
-	}
-	return self;
-}
-
-- (void)addCustomString:(NSString *)string withKey:(NSString *)key {
-	[self.mutableCustomData setObject:string forKey:key];
-}
-
-- (void)addCustomNumber:(NSNumber *)number withKey:(NSString *)key {
-	[self.mutableCustomData setObject:number forKey:key];
-}
-
-- (void)addCustomBool:(BOOL)boolValue withKey:(NSString *)key {
-	[self.mutableCustomData setObject:@(boolValue) forKey:key];
-}
-
-- (void)removeCustomValueWithKey:(NSString *)key {
-	[self.mutableCustomData removeObjectForKey:key];
-}
-
-- (NSDictionary *)customData {
-	return [self.mutableCustomData copy];
 }
 
 @end

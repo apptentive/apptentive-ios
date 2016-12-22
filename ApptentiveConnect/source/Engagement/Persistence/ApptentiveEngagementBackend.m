@@ -11,16 +11,7 @@
 #import "ApptentiveInteraction.h"
 #import "ApptentiveInteractionInvocation.h"
 #import "Apptentive_Private.h"
-#import "ApptentiveUtilities.h"
 #import "ApptentiveMetrics.h"
-#import "ApptentiveInteractionUpgradeMessageViewController.h"
-#import "ApptentiveInteractionEnjoymentDialogController.h"
-#import "ApptentiveInteractionRatingDialogController.h"
-#import "ApptentiveInteractionMessageCenterController.h"
-#import "ApptentiveInteractionAppStoreController.h"
-#import "ApptentiveInteractionSurveyController.h"
-#import "ApptentiveInteractionTextModalController.h"
-#import "ApptentiveInteractionNavigateToLink.h"
 #import "ApptentiveInteractionController.h"
 #import "ApptentiveEngagement.h"
 #import "ApptentiveEngagementManifest.h"
@@ -247,21 +238,6 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 }
 
 - (void)resetEngagementData {
-}
-
-#pragma mark Consumer Data Delegate
-
-- (void)consumerDataDeviceDidChange:(ApptentiveConsumerData *)consumerData {
-	// tell backend to update device
-}
-
-- (void)consumerDataConversationDidChange:(ApptentiveConsumerData *)consumerData {
-
-	// tell backend to update conversation
-}
-
-- (void)consumerDataPersonDidChange:(ApptentiveConsumerData *)consumerData {
-
 }
 
 @end

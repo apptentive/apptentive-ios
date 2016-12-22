@@ -122,7 +122,7 @@
 	return criteriaAreMet;
 }
 
-- (BOOL)criteriaAreMetForConsumerData:(ApptentiveConsumerData *)data {
+- (BOOL)criteriaAreMetForConsumerData:(ApptentiveSession *)data {
 	return [self criteriaAreMetForUsageData:[ApptentiveInteractionUsageData usageDataWithConsumerData:data]];
 }
 

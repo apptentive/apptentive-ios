@@ -23,13 +23,13 @@
 
 @implementation ApptentiveInteractionUsageData
 
-+ (ApptentiveInteractionUsageData *)usageDataWithConsumerData:(ApptentiveConsumerData *)data {
++ (ApptentiveInteractionUsageData *)usageDataWithConsumerData:(ApptentiveSession *)data {
 	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] initWithConsumerData:data];
 
 	return usageData;
 }
 
-- (instancetype)initWithConsumerData:(ApptentiveConsumerData *)data {
+- (instancetype)initWithConsumerData:(ApptentiveSession *)data {
 	self = [super init];
 
 	if (self) {

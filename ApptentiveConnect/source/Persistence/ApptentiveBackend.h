@@ -11,7 +11,7 @@
 
 #import "ApptentiveMessage.h"
 #import "ApptentiveSerialNetworkQueue.h"
-#import "ApptentiveConsumerData.h"
+#import "ApptentiveSession.h"
 
 
 extern NSString *const ATBackendBecameReadyNotification;
@@ -22,7 +22,7 @@ extern NSString *const ATConfigurationPreferencesChangedNotification;
 @protocol ATBackendMessageDelegate;
 
 /*! Handles all of the backend activities, such as sending feedback. */
-@interface ApptentiveBackend : NSObject <NSFetchedResultsControllerDelegate, ApptentiveConsumerDataDelegate, ApptentiveRequestOperationDelegate>
+@interface ApptentiveBackend : NSObject <NSFetchedResultsControllerDelegate, ApptentiveSessionDelegate, ApptentiveRequestOperationDelegate>
 
 @property (copy, nonatomic) NSDictionary *currentCustomData;
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
@@ -34,7 +34,7 @@ extern NSString *const ATConfigurationPreferencesChangedNotification;
 
 @property (readonly, strong, nonatomic) ApptentiveAppConfiguration *configuration;
 @property (readonly, strong, nonatomic) ApptentiveEngagementManifest *manifest;
-@property (readonly, strong, nonatomic) ApptentiveConsumerData *session;
+@property (readonly, strong, nonatomic) ApptentiveSession *session;
 
 - (void)startup;
 - (void)processQueuedRecords;

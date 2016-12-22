@@ -1,5 +1,5 @@
 //
-//  ApptentiveConsumerData.h
+//  ApptentiveSession.h
 //  ApptentiveConnect
 //
 //  Created by Frank Schmitt on 11/15/16.
@@ -9,9 +9,9 @@
 #import "ApptentiveState.h"
 
 @class ApptentivePerson, ApptentiveDevice, ApptentiveSDK, ApptentiveAppRelease, ApptentiveEngagement, ApptentiveMutablePerson, ApptentiveMutableDevice;
-@protocol ApptentiveConsumerDataDelegate;
+@protocol ApptentiveSessionDelegate;
 
-@interface ApptentiveConsumerData : ApptentiveState
+@interface ApptentiveSession : ApptentiveState
 
 @property (readonly, nonatomic) ApptentiveAppRelease *appRelease;
 @property (readonly, nonatomic) ApptentiveSDK *SDK;
@@ -22,7 +22,7 @@
 @property (readonly, nonatomic) NSString *token;
 @property (readonly, nonatomic) NSDate *currentTime;
 
-@property (weak, nonatomic) id<ApptentiveConsumerDataDelegate> delegate;
+@property (weak, nonatomic) id<ApptentiveSessionDelegate> delegate;
 
 - (instancetype)initWithAPIKey:(NSString *)APIKey;
 
@@ -46,10 +46,10 @@
 
 @end
 
-@protocol ApptentiveConsumerDataDelegate <NSObject>
+@protocol ApptentiveSessionDelegate <NSObject>
 
-- (void)session:(ApptentiveConsumerData *)session conversationDidChange:(NSDictionary *)payload;
-- (void)session:(ApptentiveConsumerData *)session deviceDidChange:(NSDictionary *)diffs;
-- (void)session:(ApptentiveConsumerData *)session personDidChange:(NSDictionary *)diffs;
+- (void)session:(ApptentiveSession *)session conversationDidChange:(NSDictionary *)payload;
+- (void)session:(ApptentiveSession *)session deviceDidChange:(NSDictionary *)diffs;
+- (void)session:(ApptentiveSession *)session personDidChange:(NSDictionary *)diffs;
 
 @end

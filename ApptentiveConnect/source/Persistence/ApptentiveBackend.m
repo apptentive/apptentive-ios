@@ -100,11 +100,11 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 		if ([[NSFileManager defaultManager] fileExistsAtPath:[self sessionPath]]) {
 			_session = [NSKeyedUnarchiver unarchiveObjectWithFile:[self sessionPath]];
 		} else if ([[NSUserDefaults standardUserDefaults] objectForKey:@"ATEngagementInstallDateKey"]) {
-			_session = [[ApptentiveConsumerData alloc] initAndMigrate];
+			_session = [[ApptentiveSession alloc] initAndMigrate];
 			[self saveSession];
 			// TODO: delete migrated data
 		} else {
-			_session = [[ApptentiveConsumerData alloc] initWithAPIKey:Apptentive.shared.APIKey];
+			_session = [[ApptentiveSession alloc] initWithAPIKey:Apptentive.shared.APIKey];
 		}
 
 		_session.delegate = self;
@@ -637,16 +637,16 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 
 #pragma mark - Session delegate
 
-- (void)session:(ApptentiveConsumerData *)session conversationDidChange:(NSDictionary *)payload {
+- (void)session:(ApptentiveSession *)session conversationDidChange:(NSDictionary *)payload {
 	[ApptentiveQueuedRequest enqueueRequestWithPath:@"conversation" payload:payload attachments:nil identifier:nil inContext:self.managedObjectContext];
 
 }
 
-- (void)session:(ApptentiveConsumerData *)session personDidChange:(NSDictionary *)diffs {
+- (void)session:(ApptentiveSession *)session personDidChange:(NSDictionary *)diffs {
 	[ApptentiveQueuedRequest enqueueRequestWithPath:@"people" payload:diffs attachments:nil identifier:nil inContext:self.managedObjectContext];
 }
 
-- (void)session:(ApptentiveConsumerData *)session deviceDidChange:(NSDictionary *)diffs {
+- (void)session:(ApptentiveSession *)session deviceDidChange:(NSDictionary *)diffs {
 	[ApptentiveQueuedRequest enqueueRequestWithPath:@"devices" payload:diffs attachments:nil identifier:nil inContext:self.managedObjectContext];
 }
 

@@ -9,15 +9,15 @@
 #import <Foundation/Foundation.h>
 #import "ApptentiveInteraction.h"
 
-@class ApptentiveConsumerData;
+@class ApptentiveSession;
 
 @interface ApptentiveInteractionUsageData : NSObject
 
-@property (readonly, strong, nonatomic) ApptentiveConsumerData *data;
+@property (readonly, strong, nonatomic) ApptentiveSession *data;
 
-+ (instancetype)usageDataWithConsumerData:(ApptentiveConsumerData *)data;
++ (instancetype)usageDataWithConsumerData:(ApptentiveSession *)data;
 
-- (instancetype)initWithConsumerData:(ApptentiveConsumerData *)data;
+- (instancetype)initWithConsumerData:(ApptentiveSession *)data;
 
 - (NSDictionary *)predicateEvaluationDictionary;
 

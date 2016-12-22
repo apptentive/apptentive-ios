@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "ApptentiveConsumerData.h"
+#import "ApptentiveSession.h"
 
 extern NSString *const ATEngagementInstallDateKey;
 extern NSString *const ATEngagementUpgradeDateKey;

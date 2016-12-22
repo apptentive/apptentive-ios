@@ -1,12 +1,12 @@
 //
-//  ApptentiveConsumerData.m
+//  ApptentiveSession.m
 //  ApptentiveConnect
 //
 //  Created by Frank Schmitt on 11/15/16.
 //  Copyright © 2016 Apptentive, Inc. All rights reserved.
 //
 
-#import "ApptentiveConsumerData.h"
+#import "ApptentiveSession.h"
 #import "ApptentiveAppRelease.h"
 #import "ApptentiveSDK.h"
 #import "ApptentivePerson.h"
@@ -25,7 +25,7 @@ static NSString * const EngagementKey = @"engagement";
 static NSString * const APIKeyKey = @"APIKey";
 static NSString * const TokenKey = @"token";
 
-@implementation ApptentiveConsumerData
+@implementation ApptentiveSession
 
 @synthesize token = _token;
 

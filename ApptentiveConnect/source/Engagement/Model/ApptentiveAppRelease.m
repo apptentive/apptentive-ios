@@ -50,10 +50,6 @@ static NSString * const TimeAtInstallBuildKey = @"timeAtInstallBuild";
 #ifdef APPTENTIVE_DEBUG
 		_debugBuild = YES;
 #endif
-
-#warning implement me
-		//		_overridingStyles =
-
 	}
 
 	return self;
@@ -134,6 +130,10 @@ static NSString * const TimeAtInstallBuildKey = @"timeAtInstallBuild";
 - (void)resetBuild {
 	_updateBuild = YES;
 	_timeAtInstallBuild = [NSDate date]; // TODO: Inject as dependency?
+}
+
+- (void)setOverridingStyles {
+	_overridingStyles = YES;
 }
 
 @end

@@ -117,7 +117,7 @@ static NSString *ATInteractionAppEventLabelExit = @"exit";
 		}
 	}
 
-	[ApptentiveQueuedRequest enqueueRequestWithPath:@"events" payload:event.apiJSON attachments:nil identifier:nil inContext:Apptentive.shared.backend.managedObjectContext];
+	[ApptentiveQueuedRequest enqueueRequestWithPath:@"events" method:@"POST" payload:event.apiJSON attachments:nil identifier:nil inContext:Apptentive.shared.backend.managedObjectContext];
 
 	[Apptentive.shared.backend processQueuedRecords];
 }

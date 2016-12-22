@@ -13,6 +13,8 @@
 #import "ApptentiveMessageCenterViewController.h"
 #import "ApptentiveDevice.h"
 #import "ApptentivePerson.h"
+#import "ApptentiveSDK.h"
+#import "ApptentiveVersion.h"
 
 @implementation Apptentive (Debugging)
 
@@ -21,7 +23,7 @@
 }
 
 - (NSString *)SDKVersion {
-	return kApptentiveVersionString;
+	return self.backend.session.SDK.version.versionString;
 }
 
 - (void)setLocalInteractionsURL:(NSURL *)localInteractionsURL {
@@ -104,23 +106,8 @@
 }
 
 - (void)resetSDK {
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ApptentiveCustomDeviceDataPreferenceKey];
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ApptentiveCustomPersonDataPreferenceKey];
-
-	[self.engagementBackend resetEngagementData];
-	[self.backend resetBackendData];
-
-	[ApptentiveMessageCenterViewController resetPreferences];
-
-	self.personName = nil;
-	self.personEmailAddress = nil;
-
-	self.APIKey = nil;
-	self.appID = nil;
-
-	[self setValue:nil forKey:@"backend"];
-	[self setValue:nil forKey:@"webClient"];
-	[self setValue:nil forKey:@"engagementBackend"];
+	// TODO: use forthcoming session-clearing system
+	NSAssert(NO, @"This isn't implemented yet");
 }
 
 - (NSDictionary *)customPersonData {

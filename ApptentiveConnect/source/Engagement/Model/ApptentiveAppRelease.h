@@ -29,5 +29,6 @@
 
 - (void)resetBuild;
 - (void)resetVersion;
+- (void)setOverridingStyles;
 
 @end

@@ -58,6 +58,7 @@
     <entity name="QueuedRequest" representedClassName="ApptentiveQueuedRequest" syncable="YES">
         <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="identifier" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="method" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="path" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="payload" optional="YES" attributeType="Binary" syncable="YES"/>
         <relationship name="attachments" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="QueuedAttachment" inverseName="request" inverseEntity="QueuedAttachment" syncable="YES"/>
@@ -70,6 +71,6 @@
         <element name="ATRecord" positionX="0" positionY="0" width="128" height="120"/>
         <element name="ATSurveyResponse" positionX="0" positionY="0" width="128" height="105"/>
         <element name="QueuedAttachment" positionX="72" positionY="162" width="128" height="105"/>
-        <element name="QueuedRequest" positionX="45" positionY="153" width="128" height="120"/>
+        <element name="QueuedRequest" positionX="45" positionY="153" width="128" height="135"/>
     </elements>
 </model>

@@ -29,6 +29,7 @@ extern NSString *const ATConfigurationPreferencesChangedNotification;
 @property (readonly, strong, nonatomic) NSString *supportDirectoryPath;
 @property (strong, nonatomic) UIViewController *presentedMessageCenterViewController;
 
+@property (readonly, strong, nonatomic) NSOperationQueue *queue;
 @property (readonly, strong, nonatomic) ApptentiveNetworkQueue *networkQueue;
 @property (readonly, strong, nonatomic) ApptentiveSerialNetworkQueue *serialQueue;
 
@@ -36,7 +37,7 @@ extern NSString *const ATConfigurationPreferencesChangedNotification;
 @property (readonly, strong, nonatomic) ApptentiveEngagementManifest *manifest;
 @property (readonly, strong, nonatomic) ApptentiveSession *session;
 
-- (void)startup;
+- (instancetype)initWithAPIKey:(NSString *)APIKey baseURL:(NSURL *)baseURL;
 - (void)processQueuedRecords;
 
 @property (weak, nonatomic) id<ATBackendMessageDelegate> messageDelegate;
@@ -90,7 +91,9 @@ extern NSString *const ATConfigurationPreferencesChangedNotification;
 
 @property (readonly, nonatomic) NSURLCache *imageCache;
 
-- (void)resetBackendData;
+// Debugging
+
+@property (strong, nonatomic) NSURL *localEngagementManifestURL;
 
 @end
 

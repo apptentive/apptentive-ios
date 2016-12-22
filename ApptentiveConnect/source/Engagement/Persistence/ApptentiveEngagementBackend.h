@@ -62,7 +62,6 @@ extern NSString *const ApptentiveEngagementMessageCenterEvent;
 @property (strong, nonatomic) NSURL *localEngagementManifestURL;
 @property (copy, nonatomic) NSData *engagementManifestJSON;
 
-- (void)resetEngagementData;
 - (NSArray *)allEngagementInteractions;
 - (NSArray<NSString *> *)targetedLocalEvents;
 

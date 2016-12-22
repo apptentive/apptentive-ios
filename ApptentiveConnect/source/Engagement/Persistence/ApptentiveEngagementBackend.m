@@ -203,38 +203,7 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 }
 
 - (void)setLocalEngagementManifestURL:(NSURL *)localEngagementManifestURL {
-#warning fixme
-	//	if (_localEngagementManifestURL != localEngagementManifestURL) {
-	//		_localEngagementManifestURL = localEngagementManifestURL;
-	//
-	//		if (localEngagementManifestURL == nil) {
-	//			[self loadCachedEngagementManifest];
-	//			[self checkForEngagementManifest];
-	//			[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveInteractionsDidUpdateNotification object:nil];
-	//		} else {
-	//			[[ApptentiveTaskQueue sharedTaskQueue] removeTasksOfClass:[ApptentiveEngagementGetManifestTask class]];
-	//
-	//			NSData *localData = [NSData dataWithContentsOfURL:localEngagementManifestURL];
-	//
-	//			ApptentiveEngagementManifestParser *parser = [[ApptentiveEngagementManifestParser alloc] init];
-	//
-	//			NSDictionary *targetsAndInteractions = [parser targetsAndInteractionsForEngagementManifest:localData];
-	//			NSDictionary *targets = targetsAndInteractions[@"targets"];
-	//			NSDictionary *interactions = targetsAndInteractions[@"interactions"];
-	//
-	//			if (targets && interactions) {
-	//				[self.engagementTargets removeAllObjects];
-	//				[self.engagementTargets addEntriesFromDictionary:targets];
-	//
-	//				[self.engagementInteractions removeAllObjects];
-	//				[self.engagementInteractions addEntriesFromDictionary:interactions];
-	//
-	//				[Apptentive sharedConnection].engagementBackend.engagementManifestJSON = targetsAndInteractions[@"raw"];
-	//			} else {
-	//				ApptentiveLogError(@"An error occurred parsing the engagement manifest: %@", [parser parserError]);
-	//			}
-	//		}
-	//	}
+	Apptentive.shared.backend.localEngagementManifestURL = localEngagementManifestURL;
 }
 
 - (void)resetEngagementData {

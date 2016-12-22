@@ -19,7 +19,7 @@ extern NSString *const ApptentiveConversationCreatedNotification;
 extern NSString *const ApptentiveCustomDeviceDataPreferenceKey;
 extern NSString *const ApptentiveCustomPersonDataPreferenceKey;
 
-@class ApptentiveMessage, ApptentiveWebClient, ApptentiveBackend, ApptentiveEngagementBackend;
+@class ApptentiveMessage, ApptentiveBackend, ApptentiveEngagementBackend;
 
 
 @interface Apptentive ()
@@ -27,7 +27,6 @@ extern NSString *const ApptentiveCustomPersonDataPreferenceKey;
 + (NSString *)supportDirectoryPath;
 
 @property (readonly, nonatomic) NSURL *baseURL;
-@property (readonly, nonatomic) ApptentiveWebClient *webClient;
 @property (readonly, nonatomic) ApptentiveBackend *backend;
 @property (readonly, nonatomic) ApptentiveEngagementBackend *engagementBackend;
 
@@ -35,8 +34,7 @@ extern NSString *const ApptentiveCustomPersonDataPreferenceKey;
 @property (strong, nonatomic) UIViewController *pushViewController;
 
 @property (readonly, nonatomic) BOOL didAccessStyleSheet;
-@property (readonly, nonatomic) NSString *distributionName;
-@property (readonly, nonatomic) NSString *distributionVersion;
+
 
 /*!
  * Returns the NSBundle corresponding to the bundle containing Apptentive's

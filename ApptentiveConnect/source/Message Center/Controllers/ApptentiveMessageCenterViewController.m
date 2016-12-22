@@ -27,6 +27,7 @@
 #import "ApptentiveAttachmentController.h"
 #import "ApptentiveIndexedCollectionView.h"
 #import "ApptentiveAttachmentCell.h"
+#import "ApptentiveMutablePerson.h"
 #import <MobileCoreServices/UTCoreTypes.h>
 
 #define HEADER_LABEL_HEIGHT 64.0
@@ -880,17 +881,18 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[self.interaction engage:ATInteractionMessageCenterEventLabelProfileSubmit fromViewController:self userInfo:userInfo];
 
 	if (self.profileView.nameField.text != [Apptentive sharedConnection].personName) {
-		[Apptentive sharedConnection].personName = self.profileView.nameField.text;
 		[self.interaction engage:ATInteractionMessageCenterEventLabelProfileName fromViewController:self userInfo:@{ @"length": @(self.profileView.nameField.text.length) }];
 	}
 
 	if (self.profileView.emailField.text != [Apptentive sharedConnection].personEmailAddress) {
-		[Apptentive sharedConnection].personEmailAddress = self.profileView.emailField.text;
 		[self.interaction engage:ATInteractionMessageCenterEventLabelProfileEmail fromViewController:self userInfo:@{ @"length": @(self.profileView.emailField.text.length),
 			@"valid": @([ApptentiveUtilities emailAddressIsValid:self.profileView.emailField.text]) }];
 	}
 
-	// TODO: make sure person gets updated
+	[Apptentive.shared.backend.session updatePerson:^(ApptentiveMutablePerson *person) {
+		person.name = self.profileView.nameField.text;
+		person.emailAddress = self.profileView.emailField.text;
+	}];
 
 	self.composeButtonItem.enabled = YES;
 	self.neuMessageButtonItem.enabled = YES;

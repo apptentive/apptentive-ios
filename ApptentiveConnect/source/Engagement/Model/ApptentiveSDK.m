@@ -16,19 +16,70 @@ static NSString * const PlatformKey = @"platform";
 static NSString * const DistributionNameKey = @"distributionName";
 static NSString * const DistributionVersionKey = @"distributionVersion";
 
+static NSString *_distributionName;
+static ApptentiveVersion *_distributionVersion;
+
 @implementation ApptentiveSDK
+
++ (ApptentiveVersion *)SDKVersion {
+	return [[ApptentiveVersion alloc] initWithString:@"3.5.0"];
+}
+
++ (void)setDistributionName:(NSString *)distributionName {
+	_distributionName = [distributionName copy];
+}
+
+#define DO_EXPAND(VAL)  VAL##1
+#define EXPAND(VAL)     DO_EXPAND(VAL)
+
++ (NSString *)distributionName {
+	if (_distributionName) {
+		return _distributionName;
+	}
+
+	NSString *result = @"source";
+
+#if APPTENTIVE_FRAMEWORK
+		result = @"framework";
+#endif
+
+#if APPTENTIVE_BINARY
+		result = @"binary";
+#endif
+
+#if APPTENTIVE_COCOAPODS
+		result = @"CocoaPods-Source";
+#endif
+
+#if defined(CARTHAGE) && (EXPAND(CARTHAGE) != 1)
+		result = @"Carthage-Source";
+#endif
+
+	return result;
+}
+
++ (void)setDistributionVersion:(ApptentiveVersion *)distributionVersion {
+	_distributionVersion = distributionVersion;
+}
+
++ (ApptentiveVersion *)distributionVersion {
+	if (_distributionVersion) {
+		return _distributionVersion;
+	} else {
+		return [self SDKVersion];
+	}
+}
 
 - (instancetype)initWithCurrentSDK {
 	self = [super init];
 
 	if (self) {
-		_version = [[ApptentiveVersion alloc] initWithString:@"3.5.0"];
+		_version = [[self class] SDKVersion];
 		_programmingLanguage = @"Objective-C";
 		_authorName = @"Apptentive, Inc.";
 		_platform = @"iOS";
-#warning figure out a way to inject these
-		_distributionName = @"source";
-		_distributionVersion = [[ApptentiveVersion alloc] initWithString:@"3.5.0"];
+		_distributionName = [[self class] distributionName];
+		_distributionVersion = [[self class] distributionVersion];
 	}
 
 	return self;

@@ -9,7 +9,6 @@
 
 #import <UIKit/UIKit.h>
 
-#define kApptentiveVersionString @"3.4.1"
 #define kApptentivePlatformString @"iOS"
 
 #ifdef __swift_compiler_version_at_least

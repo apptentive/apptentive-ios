@@ -18,7 +18,7 @@
 	NSArray *attachments = requestInfo.attachments.array;
 	NSString *bodyText = [[NSString alloc] initWithData:requestInfo.payload encoding:NSUTF8StringEncoding];
 	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:requestInfo.path relativeToURL:baseURL]];
-	request.HTTPMethod = @"POST";
+	request.HTTPMethod = requestInfo.method;
 
 	NSString *boundary = [ApptentiveUtilities randomStringOfLength:20];
 	NSString *contentType = [NSString stringWithFormat:@"multipart/form-data; boundary=%@", boundary];

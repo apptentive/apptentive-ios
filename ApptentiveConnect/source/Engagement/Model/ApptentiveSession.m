@@ -24,6 +24,7 @@ static NSString * const DeviceKey = @"device";
 static NSString * const EngagementKey = @"engagement";
 static NSString * const APIKeyKey = @"APIKey";
 static NSString * const TokenKey = @"token";
+static NSString * const LastMessageIDKey = @"lastMessageID";
 
 @implementation ApptentiveSession
 
@@ -53,6 +54,7 @@ static NSString * const TokenKey = @"token";
 		_engagement = [coder decodeObjectOfClass:[ApptentiveEngagement class] forKey:EngagementKey];
 		_APIKey = [coder decodeObjectOfClass:[NSString class] forKey:APIKeyKey];
 		_token = [coder decodeObjectOfClass:[NSString class] forKey:TokenKey];
+		_lastMessageID = [coder decodeObjectOfClass:[NSString class] forKey:LastMessageIDKey];
 	}
 	return self;
 }
@@ -67,6 +69,7 @@ static NSString * const TokenKey = @"token";
 	[coder encodeObject:self.engagement forKey:EngagementKey];
 	[coder encodeObject:self.APIKey forKey:APIKeyKey];
 	[coder encodeObject:self.token forKey:TokenKey];
+	[coder encodeObject:self.lastMessageID forKey:LastMessageIDKey];
 }
 
 - (void)setToken:(NSString *)token personID:(NSString *)personID deviceID:(NSString *)deviceID {
@@ -77,6 +80,10 @@ static NSString * const TokenKey = @"token";
 
 - (void)checkForDiffs {
 	ApptentiveAppRelease *currentAppRelease = [[ApptentiveAppRelease alloc] initWithCurrentAppRelease];
+	if (self.appRelease.overridingStyles) {
+		[currentAppRelease setOverridingStyles];
+	}
+
 	ApptentiveSDK *currentSDK = [[ApptentiveSDK alloc] initWithCurrentSDK];
 
 	[self updateDevice:^(ApptentiveMutableDevice *device){}];
@@ -128,9 +135,9 @@ static NSString * const TokenKey = @"token";
 	NSDictionary *personDiffs = [ApptentiveUtilities diffDictionary:newPerson.JSONDictionary againstDictionary:self.person.JSONDictionary];
 
 	if (personDiffs.count > 0) {
-		[self.delegate session:self personDidChange:personDiffs];
-
 		_person = newPerson;
+
+		[self.delegate session:self personDidChange:personDiffs];
 	}
 }
 
@@ -148,10 +155,22 @@ static NSString * const TokenKey = @"token";
 	NSDictionary *deviceDiffs = [ApptentiveUtilities diffDictionary:newDevice.JSONDictionary againstDictionary:self.device.JSONDictionary];
 
 	if (deviceDiffs.count > 0) {
-		[self.delegate session:self deviceDidChange:deviceDiffs];
-
 		_device = newDevice;
+
+		[self.delegate session:self deviceDidChange:deviceDiffs];
 	}
+}
+
+- (void)didOverrideStyles {
+	if (!self.appRelease.overridingStyles) {
+		[self.appRelease setOverridingStyles];
+
+		[self checkForDiffs];
+	}
+}
+
+- (void)didDownloadMessagesUpTo:(NSString *)lastMessageID {
+	_lastMessageID = lastMessageID;
 }
 
 - (NSDate *)currentTime {

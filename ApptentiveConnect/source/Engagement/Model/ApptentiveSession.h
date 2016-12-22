@@ -8,7 +8,7 @@
 
 #import "ApptentiveState.h"
 
-@class ApptentivePerson, ApptentiveDevice, ApptentiveSDK, ApptentiveAppRelease, ApptentiveEngagement, ApptentiveMutablePerson, ApptentiveMutableDevice;
+@class ApptentivePerson, ApptentiveDevice, ApptentiveSDK, ApptentiveAppRelease, ApptentiveEngagement, ApptentiveMutablePerson, ApptentiveMutableDevice, ApptentiveVersion;
 @protocol ApptentiveSessionDelegate;
 
 @interface ApptentiveSession : ApptentiveState
@@ -20,6 +20,7 @@
 @property (readonly, nonatomic) ApptentiveEngagement *engagement;
 @property (readonly, nonatomic) NSString *APIKey;
 @property (readonly, nonatomic) NSString *token;
+@property (readonly, nonatomic) NSString *lastMessageID;
 @property (readonly, nonatomic) NSDate *currentTime;
 
 @property (weak, nonatomic) id<ApptentiveSessionDelegate> delegate;
@@ -32,6 +33,9 @@
 
 - (void)updatePerson:(void(^)(ApptentiveMutablePerson *))personUpdateBlock;
 - (void)updateDevice:(void(^)(ApptentiveMutableDevice *))deviceUpdateBlock;
+
+- (void)didOverrideStyles;
+- (void)didDownloadMessagesUpTo:(NSString *)lastMessageID;
 
 @property (readonly, nonatomic) NSDictionary *conversationCreationJSON;
 @property (readonly, nonatomic) NSDictionary *conversationUpdateJSON;

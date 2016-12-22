@@ -1626,13 +1626,13 @@
 		49F8AFCC16CC4A550070FFEA /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				012B4BE01E0B116300D6229B /* ApptentiveAppConfiguration.h */,
-				012B4BE11E0B116300D6229B /* ApptentiveAppConfiguration.m */,
 				01C7C4D51BEAD0A4005D6EC1 /* ATDataModel.xcdatamodeld */,
 				583E3969188E08DD0030B51E /* ATDataModel v3 to v4.xcmappingmodel */,
 				58CD20131821B78D0071CC72 /* ATDataModel v2 to v3.xcmappingmodel */,
 				49FECBE217D02BAD00069502 /* ATDataModel v1 to v2.xcmappingmodel */,
 				013BB6121BF6A82300BB6C27 /* ATDataModel v4 to v5.xcmappingmodel */,
+				012B4BE01E0B116300D6229B /* ApptentiveAppConfiguration.h */,
+				012B4BE11E0B116300D6229B /* ApptentiveAppConfiguration.m */,
 				49F8AFCF16CC4A550070FFEA /* ApptentiveData.h */,
 				49F8AFD016CC4A550070FFEA /* ApptentiveData.m */,
 				49F8AFFD16CC56570070FFEA /* ApptentiveEvent.h */,

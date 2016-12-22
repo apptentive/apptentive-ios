@@ -23,6 +23,8 @@
 #import "ApptentiveDevice.h"
 #import "ApptentiveMutablePerson.h"
 #import "ApptentiveMutableDevice.h"
+#import "ApptentiveSDK.h"
+#import "ApptentiveVersion.h"
 
 NSString *const ApptentiveMessageCenterUnreadCountChangedNotification = @"ApptentiveMessageCenterUnreadCountChangedNotification";
 
@@ -88,30 +90,28 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 	if (self) {
 		_styleSheet = [[ApptentiveStyleSheet alloc] init];
 
-		ApptentiveLogInfo(@"Apptentive SDK Version %@", kApptentiveVersionString);
+		ApptentiveLogInfo(@"Apptentive SDK Version %@", [ApptentiveSDK SDKVersion].versionString);
 	}
 	return self;
 }
 
 - (void)setAPIKey:(NSString *)APIKey {
-	[self setAPIKey:APIKey distributionName:[[self class] defaultDistribution] distributionVersion:kApptentiveVersionString];
+	[self setAPIKey:APIKey baseURL:[NSURL URLWithString:@"https://api.apptentive.com/"]];
 }
 
-- (void)setAPIKey:(NSString *)APIKey distributionName:(NSString *)distributionName distributionVersion:(NSString *)distributionVersion {
-	[self setAPIKey:APIKey baseURL:[NSURL URLWithString:@"https://api.apptentive.com/"] distributionName:distributionName distributionVersion:distributionVersion];
+- (void)setAPIKey:(NSString *)APIKey distributionName:(NSString *)distributionName distributionVersion:(NSString *)distributionVersionString {
+	[ApptentiveSDK setDistributionName:distributionName];
+	[ApptentiveSDK setDistributionVersion:[[ApptentiveVersion alloc] initWithString:distributionVersionString]];
+
+	self.APIKey = APIKey;
 }
 
-- (void)setAPIKey:(NSString *)APIKey baseURL:(NSURL *)baseURL distributionName:(NSString *)distributionName distributionVersion:(NSString *)distributionVersion {
-	_distributionName = distributionName;
-	_distributionVersion = distributionVersion;
-
+- (void)setAPIKey:(NSString *)APIKey baseURL:(NSURL *)baseURL {
 	if (![self.APIKey isEqualToString:APIKey] || ![baseURL isEqual:self.baseURL]) {
 		_APIKey = APIKey;
 		_baseURL = baseURL;
-		_backend = [[ApptentiveBackend alloc] init];
+		_backend = [[ApptentiveBackend alloc] initWithAPIKey:APIKey baseURL:baseURL];
 		_engagementBackend = [[ApptentiveEngagementBackend alloc] init];
-
-		[self.backend startup];
 	}
 }
 
@@ -124,7 +124,7 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 }
 
 - (id<ApptentiveStyle>)styleSheet {
-	_didAccessStyleSheet = YES;
+	[self.backend.session didOverrideStyles];
 
 	return _styleSheet;
 }
@@ -132,7 +132,7 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 - (void)setStyleSheet:(id<ApptentiveStyle>)styleSheet {
 	_styleSheet = styleSheet;
 
-	_didAccessStyleSheet = YES;
+	[self.backend.session didOverrideStyles];
 }
 
 - (NSString *)personName {
@@ -538,31 +538,6 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 	return resourceBundlePath ? [NSBundle bundleWithPath:resourceBundlePath] : bundleForClass;
 }
 
-#define DO_EXPAND(VAL)  VAL##1
-#define EXPAND(VAL)     DO_EXPAND(VAL)
-
-+ (NSString *)defaultDistribution {
-	NSString *distributionName = @"source";
-
-#if APPTENTIVE_FRAMEWORK
-	distributionName = @"framework";
-#endif
-
-#if APPTENTIVE_BINARY
-	distributionName = @"binary";
-#endif
-
-#if APPTENTIVE_COCOAPODS
-	distributionName = @"CocoaPods-Source";
-#endif
-
-#if defined(CARTHAGE) && (EXPAND(CARTHAGE) != 1)
-	distributionName = @"Carthage-Source";
-#endif
-
-	return distributionName;
-}
-
 #pragma mark - Message notification banner
 
 - (void)showNotificationBannerForMessage:(ApptentiveMessage *)message {
@@ -593,21 +568,6 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 
 + (UIStoryboard *)storyboard {
 	return [UIStoryboard storyboardWithName:@"Apptentive" bundle:[Apptentive resourceBundle]];
-}
-
-#pragma mark - Debugging and diagnostics
-
-- (void)setAPIKey:(NSString *)APIKey baseURL:(NSURL *)baseURL {
-	_distributionName = [[self class] defaultDistribution];
-	_distributionVersion = kApptentiveVersionString;
-	if (![self.APIKey isEqualToString:APIKey] || ![baseURL isEqual:self.baseURL]) {
-		_APIKey = APIKey;
-		_baseURL = baseURL;
-		_backend = [[ApptentiveBackend alloc] init];
-		_engagementBackend = [[ApptentiveEngagementBackend alloc] init];
-
-		[self.backend startup];
-	}
 }
 
 #if APPTENTIVE_DEBUG

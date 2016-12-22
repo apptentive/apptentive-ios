@@ -22,12 +22,13 @@ static NSString * const DistributionVersionKey = @"distributionVersion";
 	self = [super init];
 
 	if (self) {
-		_version = [[ApptentiveVersion alloc] initWithString:@"4.0.0"];
+		_version = [[ApptentiveVersion alloc] initWithString:@"3.5.0"];
 		_programmingLanguage = @"Objective-C";
 		_authorName = @"Apptentive, Inc.";
 		_platform = @"iOS";
-#warning figure out a way to inject this
+#warning figure out a way to inject these
 		_distributionName = @"source";
+		_distributionVersion = [[ApptentiveVersion alloc] initWithString:@"3.5.0"];
 	}
 
 	return self;

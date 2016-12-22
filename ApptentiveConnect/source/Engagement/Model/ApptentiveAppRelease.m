@@ -162,6 +162,7 @@ static NSString * const TimeAtInstallBuildKey = @"timeAtInstallBuild";
 
 + (NSDictionary *)JSONKeyPathMapping {
 	return @{
+		@"type": NSStringFromSelector(@selector(type)),
 		@"cf_bundle_short_version_string": NSStringFromSelector(@selector(versionString)),
 		@"cf_bundle_version": NSStringFromSelector(@selector(buildString)),
 		@"app_store_receipt": NSStringFromSelector(@selector(appStoreReceiptDictionary)),

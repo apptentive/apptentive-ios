@@ -11,7 +11,6 @@
 #import "ApptentiveEngagementBackend.h"
 #import "ApptentiveInteraction.h"
 #import "ApptentiveMessageCenterViewController.h"
-#import "ApptentiveConversation.h"
 #import "ApptentiveDevice.h"
 #import "ApptentivePerson.h"
 

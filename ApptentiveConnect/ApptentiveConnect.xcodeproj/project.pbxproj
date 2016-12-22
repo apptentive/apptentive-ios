@@ -210,7 +210,6 @@
 		016986B11DA57965008C4C78 /* ApptentiveLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 495E9C1B16EABD8E00AE3B03 /* ApptentiveLogger.m */; };
 		016986B21DA57965008C4C78 /* NSDictionary+ApptentiveAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 49E6208616C5E8C2000C9F5A /* NSDictionary+ApptentiveAdditions.m */; };
 		016986B31DA57965008C4C78 /* ApptentiveJSONSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 497A9A0317762512002B6F96 /* ApptentiveJSONSerialization.m */; };
-		016986B41DA57965008C4C78 /* ApptentiveConversation.m in Sources */ = {isa = PBXBuildFile; fileRef = 49F8AFCE16CC4A550070FFEA /* ApptentiveConversation.m */; };
 		016986B51DA57965008C4C78 /* ApptentiveData.m in Sources */ = {isa = PBXBuildFile; fileRef = 49F8AFD016CC4A550070FFEA /* ApptentiveData.m */; };
 		016986B71DA57965008C4C78 /* ApptentiveEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 49F8AFFE16CC56570070FFEA /* ApptentiveEvent.m */; };
 		016986B81DA57965008C4C78 /* ApptentiveFileAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 492B81D916D595A00031BEF6 /* ApptentiveFileAttachment.m */; };
@@ -450,8 +449,6 @@
 		49ED184A1BF98B2300C6D343 /* libApptentiveConnect.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 496DC37F1333D35600743F65 /* libApptentiveConnect.a */; };
 		49EF003318DB8F6E00661F7C /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49EF003118DB8F6700661F7C /* AssetsLibrary.framework */; };
 		49F3404E16BC8B1A008AA02B /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49AAA17A1633716F00B26851 /* StoreKit.framework */; };
-		49F8AFE316CC4A550070FFEA /* ApptentiveConversation.h in Headers */ = {isa = PBXBuildFile; fileRef = 49F8AFCD16CC4A550070FFEA /* ApptentiveConversation.h */; };
-		49F8AFE416CC4A550070FFEA /* ApptentiveConversation.m in Sources */ = {isa = PBXBuildFile; fileRef = 49F8AFCE16CC4A550070FFEA /* ApptentiveConversation.m */; };
 		49F8AFE516CC4A550070FFEA /* ApptentiveData.h in Headers */ = {isa = PBXBuildFile; fileRef = 49F8AFCF16CC4A550070FFEA /* ApptentiveData.h */; };
 		49F8AFE616CC4A550070FFEA /* ApptentiveData.m in Sources */ = {isa = PBXBuildFile; fileRef = 49F8AFD016CC4A550070FFEA /* ApptentiveData.m */; };
 		49F8AFF016CC4A550070FFEA /* ApptentiveMessageSender.h in Headers */ = {isa = PBXBuildFile; fileRef = 49F8AFDB16CC4A550070FFEA /* ApptentiveMessageSender.h */; };
@@ -839,8 +836,6 @@
 		49ED181F1BF988C300C6D343 /* OCMRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCMRecorder.h; sourceTree = "<group>"; };
 		49ED18201BF988C300C6D343 /* OCMStubRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCMStubRecorder.h; sourceTree = "<group>"; };
 		49EF003118DB8F6700661F7C /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
-		49F8AFCD16CC4A550070FFEA /* ApptentiveConversation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveConversation.h; sourceTree = "<group>"; };
-		49F8AFCE16CC4A550070FFEA /* ApptentiveConversation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveConversation.m; sourceTree = "<group>"; };
 		49F8AFCF16CC4A550070FFEA /* ApptentiveData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveData.h; sourceTree = "<group>"; };
 		49F8AFD016CC4A550070FFEA /* ApptentiveData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveData.m; sourceTree = "<group>"; };
 		49F8AFDB16CC4A550070FFEA /* ApptentiveMessageSender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveMessageSender.h; sourceTree = "<group>"; };
@@ -1632,8 +1627,6 @@
 				58CD20131821B78D0071CC72 /* ATDataModel v2 to v3.xcmappingmodel */,
 				49FECBE217D02BAD00069502 /* ATDataModel v1 to v2.xcmappingmodel */,
 				013BB6121BF6A82300BB6C27 /* ATDataModel v4 to v5.xcmappingmodel */,
-				49F8AFCD16CC4A550070FFEA /* ApptentiveConversation.h */,
-				49F8AFCE16CC4A550070FFEA /* ApptentiveConversation.m */,
 				49F8AFCF16CC4A550070FFEA /* ApptentiveData.h */,
 				49F8AFD016CC4A550070FFEA /* ApptentiveData.m */,
 				49F8AFFD16CC56570070FFEA /* ApptentiveEvent.h */,
@@ -1868,7 +1861,6 @@
 				013C1A7B1B713D5C002434B8 /* ApptentiveMessageCenterErrorViewController.h in Headers */,
 				0132F8C31C851C0800A452E3 /* ApptentiveSurveyCollectionView.h in Headers */,
 				01CC8BCA1B1D0598006C4D30 /* ApptentiveNetworkImageIconView.h in Headers */,
-				49F8AFE316CC4A550070FFEA /* ApptentiveConversation.h in Headers */,
 				49F8AFE516CC4A550070FFEA /* ApptentiveData.h in Headers */,
 				0132F8AA1C851BFA00A452E3 /* ApptentiveSurveyCollectionViewLayout.h in Headers */,
 				58D17D4F18C5676F00D123BC /* ApptentiveInteractionMessageCenterController.h in Headers */,
@@ -2315,7 +2307,6 @@
 				016986B11DA57965008C4C78 /* ApptentiveLogger.m in Sources */,
 				016986B21DA57965008C4C78 /* NSDictionary+ApptentiveAdditions.m in Sources */,
 				016986B31DA57965008C4C78 /* ApptentiveJSONSerialization.m in Sources */,
-				016986B41DA57965008C4C78 /* ApptentiveConversation.m in Sources */,
 				016986B51DA57965008C4C78 /* ApptentiveData.m in Sources */,
 				016986B71DA57965008C4C78 /* ApptentiveEvent.m in Sources */,
 				016986B81DA57965008C4C78 /* ApptentiveFileAttachment.m in Sources */,
@@ -2420,7 +2411,6 @@
 				018389061D1A0D6100780B8E /* ApptentiveSurveyQuestionFooterView.m in Sources */,
 				01D0C38D1BF3DC330024BA1A /* ApptentiveAttachmentController.m in Sources */,
 				49E6208816C5E8C2000C9F5A /* NSDictionary+ApptentiveAdditions.m in Sources */,
-				49F8AFE416CC4A550070FFEA /* ApptentiveConversation.m in Sources */,
 				49F8AFE616CC4A550070FFEA /* ApptentiveData.m in Sources */,
 				0132F8D41C851C0800A452E3 /* ApptentiveSurveySubmitButton.m in Sources */,
 				012B4BFA1E0B286A00D6229B /* ApptentiveAppRelease.m in Sources */,

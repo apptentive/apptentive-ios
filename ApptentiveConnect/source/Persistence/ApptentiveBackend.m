@@ -19,7 +19,6 @@
 #import "ApptentiveMessageCenterViewController.h"
 #import "ApptentiveAppConfiguration.h"
 #import "ApptentiveEngagementManifest.h"
-#import "ApptentiveConversation.h"
 #import "ApptentiveQueuedRequest.h"
 #import "ApptentiveFileAttachment.h"
 #import "ApptentiveAppRelease.h"
@@ -487,7 +486,7 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 		return;
 	}
 
-	self.configurationOperation = [[ApptentiveRequestOperation alloc] initWithPath:@"/conversation/configuration" method:@"GET" payload:nil delegate:self dataSource:self.networkQueue];
+	self.configurationOperation = [[ApptentiveRequestOperation alloc] initWithPath:@"conversation/configuration" method:@"GET" payload:nil delegate:self dataSource:self.networkQueue];
 
 	if (!self.session.token && self.conversationOperation) {
 		[self.configurationOperation addDependency:self.conversationOperation];
@@ -501,7 +500,7 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 		return;
 	}
 
-	self.manifestOperation = [[ApptentiveRequestOperation alloc] initWithPath:@"/interactions" method:@"GET" payload:nil delegate:self dataSource:self.networkQueue];
+	self.manifestOperation = [[ApptentiveRequestOperation alloc] initWithPath:@"interactions" method:@"GET" payload:nil delegate:self dataSource:self.networkQueue];
 
 	if (!self.session.token && self.conversationOperation) {
 		[self.manifestOperation addDependency:self.conversationOperation];
@@ -841,18 +840,16 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 	self.state = ATBackendStateReady;
 
 	_serialQueue = [[ApptentiveSerialNetworkQueue alloc] initWithBaseURL:Apptentive.shared.baseURL token:self.networkQueue.token SDKVersion:kApptentiveVersionString platform:@"iOS" parentManagedObjectContext:self.managedObjectContext];
+
 	[self.serialQueue addObserver:self forKeyPath:@"messageSendProgress" options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew context:nil];
 	[self.serialQueue addObserver:self forKeyPath:@"messageTaskCount" options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew context:nil];
 
 	[ApptentiveMetrics sharedMetrics];
-
-	// One-shot actions at startup.
-	[self performSelector:@selector(updateEngagementManifestIfNeeded) withObject:nil afterDelay:3];
-
 	[ApptentiveReachability sharedReachability];
+
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkStatusChanged:) name:ApptentiveReachabilityStatusChanged object:nil];
+
 	[self networkStatusChanged:nil];
-	[self performSelector:@selector(startMonitoringUnreadMessages) withObject:nil afterDelay:0.2];
 
 	[[NSNotificationCenter defaultCenter] postNotificationName:ATBackendBecameReadyNotification object:nil];
 

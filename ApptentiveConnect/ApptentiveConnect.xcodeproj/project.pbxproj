@@ -1646,14 +1646,8 @@
 		584647C917C426ED00BFD6E6 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				012B4C171E0B769B00D6229B /* ApptentiveMutableDevice.h */,
-				012B4C181E0B769B00D6229B /* ApptentiveMutableDevice.m */,
-				012B4C191E0B769B00D6229B /* ApptentiveMutablePerson.h */,
-				012B4C1A1E0B769B00D6229B /* ApptentiveMutablePerson.m */,
 				012B4BE51E0B286A00D6229B /* ApptentiveAppRelease.h */,
 				012B4BE61E0B286A00D6229B /* ApptentiveAppRelease.m */,
-				012B4BE71E0B286A00D6229B /* ApptentiveSession.h */,
-				012B4BE81E0B286A00D6229B /* ApptentiveSession.m */,
 				012B4BE91E0B286A00D6229B /* ApptentiveCount.h */,
 				012B4BEA1E0B286A00D6229B /* ApptentiveCount.m */,
 				012B4BEB1E0B286A00D6229B /* ApptentiveCustomData.h */,
@@ -1662,10 +1656,16 @@
 				012B4BEE1E0B286A00D6229B /* ApptentiveDevice.m */,
 				012B4BEF1E0B286A00D6229B /* ApptentiveEngagement.h */,
 				012B4BF01E0B286A00D6229B /* ApptentiveEngagement.m */,
+				012B4C171E0B769B00D6229B /* ApptentiveMutableDevice.h */,
+				012B4C181E0B769B00D6229B /* ApptentiveMutableDevice.m */,
+				012B4C191E0B769B00D6229B /* ApptentiveMutablePerson.h */,
+				012B4C1A1E0B769B00D6229B /* ApptentiveMutablePerson.m */,
 				012B4BF11E0B286A00D6229B /* ApptentivePerson.h */,
 				012B4BF21E0B286A00D6229B /* ApptentivePerson.m */,
 				012B4BF31E0B286A00D6229B /* ApptentiveSDK.h */,
 				012B4BF41E0B286A00D6229B /* ApptentiveSDK.m */,
+				012B4BE71E0B286A00D6229B /* ApptentiveSession.h */,
+				012B4BE81E0B286A00D6229B /* ApptentiveSession.m */,
 				012B4BF51E0B286A00D6229B /* ApptentiveState.h */,
 				012B4BF61E0B286A00D6229B /* ApptentiveState.m */,
 				012B4BF71E0B286A00D6229B /* ApptentiveVersion.h */,
@@ -1674,12 +1674,12 @@
 				012B4BDC1E0B0ED700D6229B /* ApptentiveEngagementManifest.m */,
 				58EEBE2117C7E8150039A0F5 /* ApptentiveInteraction.h */,
 				58EEBE2217C7E8150039A0F5 /* ApptentiveInteraction.m */,
-				58B703F61B0FAE6D0024478C /* ApptentiveMessageCenterInteraction.h */,
-				58B703F71B0FAE6D0024478C /* ApptentiveMessageCenterInteraction.m */,
 				583DF0651A390DDA00BF0207 /* ApptentiveInteractionInvocation.h */,
 				583DF0661A390DDA00BF0207 /* ApptentiveInteractionInvocation.m */,
 				589274A4180CC33A0029E5CE /* ApptentiveInteractionUsageData.h */,
 				589274A5180CC33A0029E5CE /* ApptentiveInteractionUsageData.m */,
+				58B703F61B0FAE6D0024478C /* ApptentiveMessageCenterInteraction.h */,
+				58B703F71B0FAE6D0024478C /* ApptentiveMessageCenterInteraction.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";

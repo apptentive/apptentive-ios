@@ -1,5 +1,5 @@
 //
-//  ApptentiveQueuedAttachment.h
+//  ApptentiveSerialRequestAttachment.h
 //  ApptentiveConnect
 //
 //  Created by Frank Schmitt on 12/16/16.
@@ -8,14 +8,14 @@
 
 #import <CoreData/CoreData.h>
 
-@class ApptentiveQueuedRequest;
+@class ApptentiveSerialRequest;
 
-@interface ApptentiveQueuedAttachment : NSManagedObject
+@interface ApptentiveSerialRequestAttachment : NSManagedObject
 
 @property (retain, nonatomic) NSString *mimeType;
 @property (retain, nonatomic) NSString *name;
 @property (retain, nonatomic) NSString *path;
-@property (nonatomic, retain) ApptentiveQueuedRequest *request;
+@property (nonatomic, retain) ApptentiveSerialRequest *request;
 @property (readonly, retain, nonatomic) NSData *fileData;
 
 + (instancetype)queuedAttachmentWithName:(NSString *)name path:(NSString *)path MIMEType:(NSString *)mimeType inContext:(NSManagedObjectContext *)context;

@@ -11,10 +11,9 @@
 #import "ApptentiveBackend.h"
 #import "Apptentive_Private.h"
 #import "ApptentiveData.h"
-#import "ApptentiveEvent.h"
 #import "ApptentiveEngagementBackend.h"
 #import "ApptentiveAppConfiguration.h"
-#import "ApptentiveQueuedRequest.h"
+#import "ApptentiveSerialRequest.h"
 
 // Engagement event labels
 
@@ -58,47 +57,29 @@ static NSString *ATInteractionAppEventLabelExit = @"exit";
 }
 
 - (void)addMetricWithName:(NSString *)name fromInteraction:(ApptentiveInteraction *)fromInteraction info:(NSDictionary *)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData {
-	if (metricsEnabled == NO) {
+	if (metricsEnabled == NO || name == nil) {
 		return;
 	}
 
-	if (![[NSThread currentThread] isMainThread]) {
-		dispatch_async(dispatch_get_main_queue(), ^{
-			[self addMetricWithName:name fromInteraction:fromInteraction info:userInfo customData:customData extendedData:extendedData];
-		});
-		return;
-	}
+	NSMutableDictionary *event = [NSMutableDictionary dictionary];
 
-	ApptentiveEvent *event = [ApptentiveEvent newInstanceWithLabel:name];
+	event[@"label"] = name;
+	event[@"client_created_at"] = @([NSDate distantFuture].timeIntervalSince1970);
+	event[@"client_created_at_utc_offset"] = @([[NSTimeZone systemTimeZone] secondsFromGMTForDate:[NSDate date]]);
+	event[@"nonce"] = [NSString stringWithFormat:@"event:%@", [NSUUID UUID].UUIDString];
 
-	if (fromInteraction) {
-		NSString *interactionID = fromInteraction.identifier;
-		if (interactionID) {
-			[event addEntriesFromDictionary:@{ @"interaction_id": interactionID }];
-		}
+	if (fromInteraction.identifier != nil) {
+		event[@"interaction_id"] = fromInteraction.identifier;
 	}
 
 	if (userInfo) {
-		// Surveys and other legacy metrics may pass `interaction_id` as a key in userInfo.
-		// We should pull it out and add it to the top level event, rather than as a child of `data`.
-		// TODO: Surveys should call `engage:` rather than `addMetric...` so this is not needed.
-		NSString *interactionIDFromUserInfo = userInfo[@"interaction_id"];
-		if (interactionIDFromUserInfo) {
-			[event addEntriesFromDictionary:@{ @"interaction_id": interactionIDFromUserInfo }];
-
-			NSMutableDictionary *userInfoMinusInteractionID = [NSMutableDictionary dictionaryWithDictionary:userInfo];
-			[userInfoMinusInteractionID removeObjectForKey:@"interaction_id"];
-
-			[event addEntriesFromDictionary:@{ @"data": userInfoMinusInteractionID }];
-		} else {
-			[event addEntriesFromDictionary:@{ @"data": userInfo }];
-		}
+		event[@"data"] = userInfo;
 	}
 
 	if (customData) {
 		NSDictionary *customDataDictionary = @{ @"custom_data": customData };
 		if ([NSJSONSerialization isValidJSONObject:customDataDictionary]) {
-			[event addEntriesFromDictionary:customDataDictionary];
+			event[@"custom_data"] = customDataDictionary;
 		} else {
 			ApptentiveLogError(@"Event `customData` cannot be transformed into valid JSON and will be ignored.");
 			ApptentiveLogError(@"Please see NSJSONSerialization's `+isValidJSONObject:` for allowed types.");
@@ -117,7 +98,7 @@ static NSString *ATInteractionAppEventLabelExit = @"exit";
 		}
 	}
 
-	[ApptentiveQueuedRequest enqueueRequestWithPath:@"events" method:@"POST" payload:event.apiJSON attachments:nil identifier:nil inContext:Apptentive.shared.backend.managedObjectContext];
+	[ApptentiveSerialRequest enqueueRequestWithPath:@"events" method:@"POST" payload:event attachments:nil identifier:nil inContext:Apptentive.shared.backend.managedObjectContext];
 
 	[Apptentive.shared.backend processQueuedRecords];
 }

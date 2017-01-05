@@ -203,7 +203,7 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 }
 
 - (NSDictionary *)apiJSON {
-	NSDictionary *parentJSON = [super apiJSON];
+	NSDictionary *parentJSON = [super JSONDictionary];
 	NSMutableDictionary *result = [NSMutableDictionary dictionary];
 	if (parentJSON) {
 		[result addEntriesFromDictionary:parentJSON];

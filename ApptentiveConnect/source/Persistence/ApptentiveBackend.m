@@ -19,7 +19,7 @@
 #import "ApptentiveMessageCenterViewController.h"
 #import "ApptentiveAppConfiguration.h"
 #import "ApptentiveEngagementManifest.h"
-#import "ApptentiveQueuedRequest.h"
+#import "ApptentiveSerialRequest.h"
 #import "ApptentiveFileAttachment.h"
 #import "ApptentiveAppRelease.h"
 #import "ApptentiveSDK.h"
@@ -551,7 +551,7 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 	context.parentContext = self.managedObjectContext;
 
 	[context performBlock:^{
-		[ApptentiveQueuedRequest enqueueRequestWithPath:@"conversation" method:@"PUT" payload:payload attachments:nil identifier:nil inContext:context];
+		[ApptentiveSerialRequest enqueueRequestWithPath:@"conversation" method:@"PUT" payload:payload attachments:nil identifier:nil inContext:context];
 	}];
 
 	[self saveSession];
@@ -562,7 +562,7 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 	context.parentContext = self.managedObjectContext;
 
 	[context performBlock:^{
-		[ApptentiveQueuedRequest enqueueRequestWithPath:@"people" method:@"PUT" payload:diffs attachments:nil identifier:nil inContext:context];
+		[ApptentiveSerialRequest enqueueRequestWithPath:@"people" method:@"PUT" payload:diffs attachments:nil identifier:nil inContext:context];
 	}];
 
 	[self saveSession];
@@ -573,7 +573,7 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 	context.parentContext = self.managedObjectContext;
 
 	[context performBlock:^{
-		[ApptentiveQueuedRequest enqueueRequestWithPath:@"devices" method:@"PUT" payload:diffs attachments:nil identifier:nil inContext:context];
+		[ApptentiveSerialRequest enqueueRequestWithPath:@"devices" method:@"PUT" payload:diffs attachments:nil identifier:nil inContext:context];
 	}];
 
 	[self saveSession];
@@ -677,7 +677,7 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 		return NO;
 	}
 
-	[ApptentiveQueuedRequest enqueueRequestWithPath:@"messages" method:@"POST" payload:message.apiJSON attachments:message.attachments identifier:message.pendingMessageID inContext:[self managedObjectContext]];
+	[ApptentiveSerialRequest enqueueRequestWithPath:@"messages" method:@"POST" payload:message.JSONDictionary attachments:message.attachments identifier:message.pendingMessageID inContext:[self managedObjectContext]];
 
 	[self processQueuedRecords];
 

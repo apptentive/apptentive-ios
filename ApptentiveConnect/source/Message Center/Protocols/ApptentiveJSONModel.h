@@ -11,7 +11,5 @@
 @class NSManagedObjectContext;
 
 @protocol ApptentiveJSONModel <NSObject>
-+ (instancetype)newInstanceWithJSON:(NSDictionary *)json inContext:(NSManagedObjectContext *)context;
-- (void)updateWithJSON:(NSDictionary *)json;
-- (NSDictionary *)apiJSON;
+- (NSDictionary *)JSONDictionary;
 @end

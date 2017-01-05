@@ -1,27 +1,27 @@
 //
-//  ApptentiveRecordRequestOperation.m
+//  ApptentiveQueuedRequestOperation.m
 //  ApptentiveConnect
 //
 //  Created by Frank Schmitt on 12/14/16.
 //  Copyright © 2016 Apptentive, Inc. All rights reserved.
 //
 
-#import "ApptentiveRecordRequestOperation.h"
-#import "ApptentiveQueuedRequest.h"
+#import "ApptentiveSerialRequestOperation.h"
+#import "ApptentiveSerialRequest.h"
 #import "ApptentiveSerialNetworkQueue.h"
 #import "ApptentiveMessageRequestOperation.h"
 
-@implementation ApptentiveRecordRequestOperation
+@implementation ApptentiveSerialRequestOperation
 
-+ (instancetype)operationWithRequestInfo:(ApptentiveQueuedRequest *)requestInfo delegate:(id<ApptentiveRequestOperationDelegate,ApptentiveRequestOperationDataSource>)delegate  {
++ (instancetype)operationWithRequestInfo:(ApptentiveSerialRequest *)requestInfo delegate:(id<ApptentiveRequestOperationDelegate,ApptentiveRequestOperationDataSource>)delegate  {
 	if ([requestInfo.path isEqualToString:@"messages"]) {
 		return [[ApptentiveMessageRequestOperation alloc] initWithRequestInfo:requestInfo delegate:delegate];
 	} else {
-		return [[ApptentiveRecordRequestOperation alloc] initWithRequestInfo:requestInfo delegate:delegate];
+		return [[ApptentiveSerialRequestOperation alloc] initWithRequestInfo:requestInfo delegate:delegate];
 	}
 }
 
-- (instancetype)initWithRequestInfo:(ApptentiveQueuedRequest *)requestInfo delegate:(id<ApptentiveRequestOperationDelegate,ApptentiveRequestOperationDataSource>)delegate {
+- (instancetype)initWithRequestInfo:(ApptentiveSerialRequest *)requestInfo delegate:(id<ApptentiveRequestOperationDelegate,ApptentiveRequestOperationDataSource>)delegate {
 	self = [super initWithPath:requestInfo.path method:requestInfo.method payloadData:requestInfo.payload delegate:delegate dataSource:delegate];
 
 	if (self) {

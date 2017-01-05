@@ -11,7 +11,7 @@
 #import <QuickLook/QuickLook.h>
 
 #import "ApptentiveJSONModel.h"
-#import "ApptentiveRecord.h"
+#import "ApptentiveLegacyRecord.h"
 
 typedef NS_ENUM(NSInteger, ATPendingMessageState) {
 	ATPendingMessageStateNone = -1,
@@ -24,7 +24,7 @@ typedef NS_ENUM(NSInteger, ATPendingMessageState) {
 @class ATMessageDisplayType, ApptentiveMessageSender;
 
 
-@interface ApptentiveMessage : ApptentiveRecord <ApptentiveJSONModel>
+@interface ApptentiveMessage : ApptentiveLegacyRecord <ApptentiveJSONModel>
 
 @property (copy, nonatomic) NSString *pendingMessageID;
 @property (strong, nonatomic) NSNumber *pendingState;

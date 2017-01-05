@@ -6,12 +6,12 @@
 //  Copyright © 2016 Apptentive, Inc. All rights reserved.
 //
 
-#import "ApptentiveRecordRequestOperation.h"
+#import "ApptentiveSerialRequestOperation.h"
 #import "ApptentiveMessage.h"
 
-@interface ApptentiveMessageRequestOperation : ApptentiveRecordRequestOperation
+@interface ApptentiveMessageRequestOperation : ApptentiveSerialRequestOperation
 
-@property (readonly, nonatomic) ApptentiveQueuedRequest *messageRequestInfo;
+@property (readonly, nonatomic) ApptentiveSerialRequest *messageRequestInfo;
 
 - (void)setMessagePendingState:(ATPendingMessageState)pendingState;
 

@@ -1,16 +1,16 @@
 //
-//  ApptentiveQueuedRequest.m
+//  ApptentiveSerialRequest.m
 //  ApptentiveConnect
 //
 //  Created by Frank Schmitt on 12/16/16.
 //  Copyright © 2016 Apptentive, Inc. All rights reserved.
 //
 
-#import "ApptentiveQueuedRequest.h"
+#import "ApptentiveSerialRequest.h"
 #import "ApptentiveFileAttachment.h"
-#import "ApptentiveQueuedAttachment.h"
+#import "ApptentiveSerialRequestAttachment.h"
 
-@implementation ApptentiveQueuedRequest
+@implementation ApptentiveSerialRequest
 
 @dynamic attachments;
 @dynamic date;
@@ -20,7 +20,7 @@
 @dynamic payload;
 
 + (void)enqueueRequestWithPath:(NSString *)path method:(NSString *)method payload:(NSDictionary *)payload attachments:(NSOrderedSet *)attachments identifier:(NSString *)identifier inContext:(NSManagedObjectContext *)context {
-	ApptentiveQueuedRequest *request = (ApptentiveQueuedRequest *)[[NSManagedObject alloc] initWithEntity:[NSEntityDescription entityForName:@"QueuedRequest" inManagedObjectContext:context] insertIntoManagedObjectContext:context];
+	ApptentiveSerialRequest *request = (ApptentiveSerialRequest *)[[NSManagedObject alloc] initWithEntity:[NSEntityDescription entityForName:@"QueuedRequest" inManagedObjectContext:context] insertIntoManagedObjectContext:context];
 
 	request.date = [NSDate date];
 	request.path = path;
@@ -37,7 +37,7 @@
 
 	NSMutableArray *attachmentArray = [NSMutableArray arrayWithCapacity:attachments.count];
 	for (ApptentiveFileAttachment *attachment in attachments) {
-		[attachmentArray addObject:[ApptentiveQueuedAttachment queuedAttachmentWithName:attachment.name path:attachment.fullLocalPath MIMEType:attachment.mimeType inContext:context]];
+		[attachmentArray addObject:[ApptentiveSerialRequestAttachment queuedAttachmentWithName:attachment.name path:attachment.fullLocalPath MIMEType:attachment.mimeType inContext:context]];
 	}
 	request.attachments = [NSOrderedSet orderedSetWithArray:attachmentArray];
 

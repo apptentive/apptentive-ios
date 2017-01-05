@@ -1,14 +1,14 @@
 //
-//  ApptentiveQueuedAttachment.m
+//  ApptentiveSerialRequestAttachment.m
 //  ApptentiveConnect
 //
 //  Created by Frank Schmitt on 12/16/16.
 //  Copyright © 2016 Apptentive, Inc. All rights reserved.
 //
 
-#import "ApptentiveQueuedAttachment.h"
+#import "ApptentiveSerialRequestAttachment.h"
 
-@implementation ApptentiveQueuedAttachment
+@implementation ApptentiveSerialRequestAttachment
 
 @dynamic mimeType;
 @dynamic name;
@@ -16,7 +16,7 @@
 @dynamic request;
 
 + (instancetype)queuedAttachmentWithName:(NSString *)name path:(NSString *)path MIMEType:(NSString *)mimeType inContext:(NSManagedObjectContext *)context {
-	ApptentiveQueuedAttachment *attachment = (ApptentiveQueuedAttachment *)[[NSManagedObject alloc] initWithEntity:[NSEntityDescription entityForName:@"QueuedAttachment" inManagedObjectContext:context] insertIntoManagedObjectContext:context];
+	ApptentiveSerialRequestAttachment *attachment = (ApptentiveSerialRequestAttachment *)[[NSManagedObject alloc] initWithEntity:[NSEntityDescription entityForName:@"QueuedAttachment" inManagedObjectContext:context] insertIntoManagedObjectContext:context];
 
 	attachment.mimeType = mimeType;
 	attachment.name = name ?: path.lastPathComponent;

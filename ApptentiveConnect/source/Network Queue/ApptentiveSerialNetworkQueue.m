@@ -7,8 +7,8 @@
 //
 
 #import "ApptentiveSerialNetworkQueue.h"
-#import "ApptentiveQueuedRequest.h"
-#import "ApptentiveRecordRequestOperation.h"
+#import "ApptentiveSerialRequest.h"
+#import "ApptentiveSerialRequestOperation.h"
 #import "ApptentiveMessageRequestOperation.h"
 
 @interface ApptentiveSerialNetworkQueue ()
@@ -60,8 +60,8 @@
 			ApptentiveLogDebug(@"Adding %d record operations", queuedRequests.count);
 
 			// Add an operation for every record in the queue
-			for (ApptentiveQueuedRequest *requestInfo in [queuedRequests copy]) {
-				ApptentiveRecordRequestOperation *operation = [ApptentiveRecordRequestOperation operationWithRequestInfo:requestInfo delegate:self];
+			for (ApptentiveSerialRequest *requestInfo in [queuedRequests copy]) {
+				ApptentiveSerialRequestOperation *operation = [ApptentiveSerialRequestOperation operationWithRequestInfo:requestInfo delegate:self];
 				[self addOperation:operation];
 			}
 		}];

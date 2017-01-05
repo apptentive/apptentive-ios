@@ -1,5 +1,5 @@
 //
-//  ApptentiveQueuedRequest.h
+//  ApptentiveSerialRequest.h
 //  ApptentiveConnect
 //
 //  Created by Frank Schmitt on 12/16/16.
@@ -10,7 +10,7 @@
 
 @class ApptentiveFileAttachment;
 
-@interface ApptentiveQueuedRequest : NSManagedObject
+@interface ApptentiveSerialRequest : NSManagedObject
 
 @property (strong, nonatomic) NSOrderedSet *attachments;
 @property (strong, nonatomic) NSDate *date;

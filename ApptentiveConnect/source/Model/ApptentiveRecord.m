@@ -2,94 +2,46 @@
 //  ApptentiveRecord.m
 //  ApptentiveConnect
 //
-//  Created by Andrew Wooster on 2/13/13.
-//  Copyright (c) 2013 Apptentive, Inc. All rights reserved.
+//  Created by Frank Schmitt on 1/3/17.
+//  Copyright © 2017 Apptentive, Inc. All rights reserved.
 //
 
 #import "ApptentiveRecord.h"
 
-#import "NSDictionary+Apptentive.h"
-
-
 @implementation ApptentiveRecord
 
-@dynamic apptentiveID;
-@dynamic creationTime;
-@dynamic clientCreationTime;
-@dynamic clientCreationTimezone;
-@dynamic clientCreationUTCOffset;
+- (instancetype)initWithNoncePrefix:(NSString *)noncePrefix payload:(NSDictionary *)payload {
+	self = [super init];
 
-+ (instancetype)newInstanceWithJSON:(NSDictionary *)json inContext:(NSManagedObjectContext *)context {
-	NSAssert(NO, @"Abstract method called.");
-	return nil;
+	if (self) {
+		_nonce = [NSString stringWithFormat:@"%@:%@", noncePrefix, [NSUUID UUID].UUIDString];
+		_clientCreatedAt = [NSDate date];
+		_clientCreatedAtUTCOffset = [[NSTimeZone systemTimeZone] secondsFromGMTForDate:[NSDate date]];
+	}
+
+	return self;
 }
 
-- (void)updateWithJSON:(NSDictionary *)json {
-	NSString *tmpID = [json at_safeObjectForKey:@"id"];
-	if (tmpID != nil) {
-		self.apptentiveID = tmpID;
-	}
-
-	NSObject *createdAt = [json at_safeObjectForKey:@"created_at"];
-	if ([createdAt isKindOfClass:[NSNumber class]]) {
-		self.creationTime = (NSNumber *)createdAt;
-	} else if ([createdAt isKindOfClass:[NSDate class]]) {
-		NSDate *creationDate = (NSDate *)createdAt;
-		NSTimeInterval t = [creationDate timeIntervalSince1970];
-		NSNumber *creationTimestamp = [NSNumber numberWithFloat:t];
-		self.creationTime = creationTimestamp;
-	}
-	if ([self isClientCreationTimeEmpty] && self.creationTime != nil) {
-		self.clientCreationTime = self.creationTime;
-	}
+- (NSDictionary *)JSONDictionary {
+	return @{
+		@"client_created_at": @(self.clientCreatedAt.timeIntervalSince1970),
+		@"client_created_at_utc_offset": @(self.clientCreatedAtUTCOffset),
+		@"nonce": self.nonce
+	};
 }
 
-- (NSDictionary *)apiJSON {
-	NSMutableDictionary *result = [NSMutableDictionary dictionary];
-	if (self.clientCreationTime != nil) {
-		result[@"client_created_at"] = self.clientCreationTime;
-	}
-	if (self.clientCreationTimezone != nil) {
-		result[@"client_created_at_timezone"] = self.clientCreationTimezone;
-	}
-	if (self.clientCreationUTCOffset != nil) {
-		result[@"client_created_at_utc_offset"] = self.clientCreationUTCOffset;
-	}
-	return result;
-}
+/* 
+ survey[@"client_created_at"] = @([NSDate distantFuture].timeIntervalSince1970);
+	survey[@"client_created_at_utc_offset"] = @([[NSTimeZone systemTimeZone] secondsFromGMTForDate:[NSDate date]]);
 
-- (void)setup {
-	if ([self isClientCreationTimeEmpty]) {
-		[self updateClientCreationTime];
-	}
-	if ([self isCreationTimeEmpty]) {
-		self.creationTime = self.clientCreationTime;
-	}
-}
+	survey[@"id"] = self.interaction.identifier;
+	survey[@"nonce"] = [NSString stringWithFormat:@"pending-survey-response:%@", [NSUUID UUID].UUIDString];
+	survey[@"answers"] = self.answers;
 
-- (void)updateClientCreationTime {
-	NSDate *d = [NSDate date];
-	NSNumber *newCreationTime = @([d timeIntervalSince1970]);
+	NSString *path = [NSString stringWithFormat:@"/surveys/%@/respond", self.interaction.identifier];
 
-	if ([self isCreationTimeEmpty]) {
-		self.creationTime = @([[NSDate distantFuture] timeIntervalSince1970]);
-	}
+	[ApptentiveSerialRequest enqueueRequestWithPath:path method:@"POST" payload:@{ @"survey": survey } attachments:nil identifier:nil inContext:Apptentive.shared.backend.managedObjectContext];
+*/
 
-	self.clientCreationTime = newCreationTime;
-	self.clientCreationUTCOffset = @([[NSTimeZone systemTimeZone] secondsFromGMTForDate:d]);
-}
 
-- (BOOL)isClientCreationTimeEmpty {
-	if (self.clientCreationTime == nil || [self.clientCreationTime doubleValue] == 0) {
-		return YES;
-	}
-	return NO;
-}
-
-- (BOOL)isCreationTimeEmpty {
-	if (self.creationTime == nil || [self.creationTime doubleValue] == 0) {
-		return YES;
-	}
-	return NO;
-}
 @end

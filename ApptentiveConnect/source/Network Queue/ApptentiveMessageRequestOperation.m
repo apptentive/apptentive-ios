@@ -7,14 +7,14 @@
 //
 
 #import "ApptentiveMessageRequestOperation.h"
-#import "ApptentiveQueuedRequest.h"
-#import "ApptentiveQueuedAttachment.h"
+#import "ApptentiveSerialRequest.h"
+#import "ApptentiveSerialRequestAttachment.h"
 #import "ApptentiveUtilities.h"
 
 
 @implementation ApptentiveMessageRequestOperation
 
-+ (NSURLRequest *)requestForSendingRequestInfo:(ApptentiveQueuedRequest *)requestInfo baseURL:(NSURL *)baseURL {
++ (NSURLRequest *)requestForSendingRequestInfo:(ApptentiveSerialRequest *)requestInfo baseURL:(NSURL *)baseURL {
 	NSArray *attachments = requestInfo.attachments.array;
 	NSString *bodyText = [[NSString alloc] initWithData:requestInfo.payload encoding:NSUTF8StringEncoding];
 	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:requestInfo.path relativeToURL:baseURL]];
@@ -44,7 +44,7 @@
 		[debugString appendString:bodyText];
 	}
 
-	for (ApptentiveQueuedAttachment *attachment in attachments) {
+	for (ApptentiveSerialRequestAttachment *attachment in attachments) {
 		NSString *boundaryString = [NSString stringWithFormat:@"\r\n--%@\r\n", boundary];
 		[multipartEncodedData appendData:[boundaryString dataUsingEncoding:NSUTF8StringEncoding]];
 		[debugString appendString:boundaryString];
@@ -77,7 +77,7 @@
 	return request;
 }
 
-- (instancetype)initWithRequestInfo:(ApptentiveQueuedRequest *)requestInfo delegate:(id<ApptentiveRequestOperationDelegate,ApptentiveRequestOperationDataSource>)delegate {
+- (instancetype)initWithRequestInfo:(ApptentiveSerialRequest *)requestInfo delegate:(id<ApptentiveRequestOperationDelegate,ApptentiveRequestOperationDataSource>)delegate {
 	NSURLRequest *request = [[self class] requestForSendingRequestInfo:requestInfo baseURL:delegate.baseURL];
 
 	self = [super initWithURLRequest:request delegate:delegate dataSource:delegate];
@@ -89,7 +89,7 @@
 	return self;
 }
 
-- (ApptentiveQueuedRequest *)requestInfo {
+- (ApptentiveSerialRequest *)requestInfo {
 	return self.messageRequestInfo;
 }
 

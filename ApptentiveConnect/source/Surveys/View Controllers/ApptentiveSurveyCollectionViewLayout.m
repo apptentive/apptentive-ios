@@ -87,7 +87,7 @@
 }
 
 - (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath {
-	UICollectionViewLayoutAttributes *result = [super layoutAttributesForItemAtIndexPath:indexPath];
+	UICollectionViewLayoutAttributes *result = [[super layoutAttributesForItemAtIndexPath:indexPath] copy];
 
 	result.frame = CGRectOffset(result.frame, 0, [self headerHeight]);
 

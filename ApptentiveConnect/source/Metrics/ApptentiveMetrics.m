@@ -13,7 +13,7 @@
 #import "ApptentiveData.h"
 #import "ApptentiveEngagementBackend.h"
 #import "ApptentiveAppConfiguration.h"
-#import "ApptentiveSerialRequest.h"
+#import "ApptentiveSerialRequest+Record.h"
 
 // Engagement event labels
 
@@ -61,44 +61,7 @@ static NSString *ATInteractionAppEventLabelExit = @"exit";
 		return;
 	}
 
-	NSMutableDictionary *event = [NSMutableDictionary dictionary];
-
-	event[@"label"] = name;
-	event[@"client_created_at"] = @([NSDate distantFuture].timeIntervalSince1970);
-	event[@"client_created_at_utc_offset"] = @([[NSTimeZone systemTimeZone] secondsFromGMTForDate:[NSDate date]]);
-	event[@"nonce"] = [NSString stringWithFormat:@"event:%@", [NSUUID UUID].UUIDString];
-
-	if (fromInteraction.identifier != nil) {
-		event[@"interaction_id"] = fromInteraction.identifier;
-	}
-
-	if (userInfo) {
-		event[@"data"] = userInfo;
-	}
-
-	if (customData) {
-		NSDictionary *customDataDictionary = @{ @"custom_data": customData };
-		if ([NSJSONSerialization isValidJSONObject:customDataDictionary]) {
-			event[@"custom_data"] = customDataDictionary;
-		} else {
-			ApptentiveLogError(@"Event `customData` cannot be transformed into valid JSON and will be ignored.");
-			ApptentiveLogError(@"Please see NSJSONSerialization's `+isValidJSONObject:` for allowed types.");
-		}
-	}
-
-	if (extendedData) {
-		for (NSDictionary *data in extendedData) {
-			if ([NSJSONSerialization isValidJSONObject:data]) {
-				// Extended data items are not added for key "extended_data", but rather for key of extended data type: "time", "location", etc.
-				[event addEntriesFromDictionary:data];
-			} else {
-				ApptentiveLogError(@"Event `extendedData` cannot be transformed into valid JSON and will be ignored.");
-				ApptentiveLogError(@"Please see NSJSONSerialization's `+isValidJSONObject:` for allowed types.");
-			}
-		}
-	}
-
-	[ApptentiveSerialRequest enqueueRequestWithPath:@"events" method:@"POST" payload:event attachments:nil identifier:nil inContext:Apptentive.shared.backend.managedObjectContext];
+	[ApptentiveSerialRequest enqueueEventWithLabel:name interactionIdentifier:fromInteraction.identifier userInfo:userInfo customData:customData extendedData:extendedData inContext:Apptentive.shared.backend.managedObjectContext];
 
 	[Apptentive.shared.backend processQueuedRecords];
 }

@@ -14,7 +14,7 @@
 #import "Apptentive_Private.h"
 #import "ApptentiveInteraction.h"
 #import "ApptentiveBackend.h"
-#import "ApptentiveSerialRequest.h"
+#import "ApptentiveSerialRequest+Record.h"
 
 NSString *const ApptentiveInteractionSurveyEventLabelQuestionResponse = @"question_response";
 NSString *const ApptentiveInteractionSurveyEventLabelSubmit = @"submit";
@@ -234,18 +234,7 @@ NSString *const ApptentiveInteractionSurveyEventLabelCancel = @"cancel";
 }
 
 - (void)submit {
-	NSMutableDictionary *survey = [[NSMutableDictionary alloc] init];
-
-	survey[@"client_created_at"] = @([NSDate distantFuture].timeIntervalSince1970);
-	survey[@"client_created_at_utc_offset"] = @([[NSTimeZone systemTimeZone] secondsFromGMTForDate:[NSDate date]]);
-
-	survey[@"id"] = self.interaction.identifier;
-	survey[@"nonce"] = [NSString stringWithFormat:@"pending-survey-response:%@", [NSUUID UUID].UUIDString];
-	survey[@"answers"] = self.answers;
-
-	NSString *path = [NSString stringWithFormat:@"/surveys/%@/respond", self.interaction.identifier];
-
-	[ApptentiveSerialRequest enqueueRequestWithPath:path method:@"POST" payload:@{ @"survey": survey } attachments:nil identifier:nil inContext:Apptentive.shared.backend.managedObjectContext];
+	[ApptentiveSerialRequest enqueueSurveyResponseWithAnswers:self.answers identifier:self.interaction.identifier inContext:Apptentive.shared.backend.managedObjectContext];
 
 	[Apptentive.shared.backend processQueuedRecords];
 }

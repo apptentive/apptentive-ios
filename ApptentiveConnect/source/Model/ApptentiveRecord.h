@@ -2,19 +2,27 @@
 //  ApptentiveRecord.h
 //  ApptentiveConnect
 //
-//  Created by Frank Schmitt on 1/3/17.
-//  Copyright © 2017 Apptentive, Inc. All rights reserved.
+//  Created by Andrew Wooster on 2/13/13.
+//  Copyright (c) 2013 Apptentive, Inc. All rights reserved.
 //
+
+#import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
 
 #import "ApptentiveJSONModel.h"
 
-@interface ApptentiveRecord : NSObject <ApptentiveJSONModel>
 
-@property (readonly, nonatomic) NSDate *clientCreatedAt;
-@property (readonly, nonatomic) NSTimeInterval clientCreatedAtUTCOffset;
-@property (readonly, nonatomic) NSString *identifier;
-@property (readonly, nonatomic) NSString *nonce;
+@interface ApptentiveRecord : NSManagedObject <ApptentiveJSONModel>
 
-- (instancetype)initWithNoncePrefix:(NSString *)noncePrefix payload:(NSDictionary *)payload;
+@property (copy, nonatomic) NSString *apptentiveID;
+@property (strong, nonatomic) NSNumber *creationTime;
+@property (strong, nonatomic) NSNumber *clientCreationTime;
+@property (copy, nonatomic) NSString *clientCreationTimezone;
+@property (strong, nonatomic) NSNumber *clientCreationUTCOffset;
+
+- (void)setup;
+- (void)updateClientCreationTime;
+- (BOOL)isClientCreationTimeEmpty;
+- (BOOL)isCreationTimeEmpty;
 
 @end

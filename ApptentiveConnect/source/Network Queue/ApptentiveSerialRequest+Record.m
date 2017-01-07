@@ -10,14 +10,14 @@
 
 @implementation ApptentiveSerialRequest (Record)
 
-+ (void)enqueueRequestWithPath:(NSString *)path noncePrefix:(NSString *)noncePrefix payload:(NSDictionary *)payload inContext:(NSManagedObjectContext *)context {
++ (void)enqueueRequestWithPath:(NSString *)path containerName:(NSString *)containerName noncePrefix:(NSString *)noncePrefix payload:(NSDictionary *)payload inContext:(NSManagedObjectContext *)context {
 	NSMutableDictionary *fullPayload = [payload mutableCopy];
 
 	fullPayload[@"nonce"] = [NSString stringWithFormat:@"%@:%@", noncePrefix, [NSUUID UUID].UUIDString];
 	fullPayload[@"client_created_at"] = @([NSDate date].timeIntervalSince1970);
 	fullPayload[@"client_created_at_utc_offset"] = @([[NSTimeZone systemTimeZone] secondsFromGMTForDate:[NSDate date]]);
 
-	[self enqueueRequestWithPath:path method:@"POST" payload:fullPayload attachments:nil identifier:nil inContext:context];
+	[self enqueueRequestWithPath:path method:@"POST" payload:@{ containerName: fullPayload } attachments:nil identifier:nil inContext:context];
 }
 
 + (void)enqueueSurveyResponseWithAnswers:(NSDictionary *)answers identifier:(NSString *)identifier inContext:(NSManagedObjectContext *)context {
@@ -26,7 +26,7 @@
 	payload[@"id"] = identifier;
 	payload[@"answers"] = answers;
 
-	[self enqueueRequestWithPath:[NSString stringWithFormat:@"surveys/%@/respond", identifier] noncePrefix:@"pending-survey-response" payload:payload inContext:context];
+	[self enqueueRequestWithPath:[NSString stringWithFormat:@"surveys/%@/respond", identifier] containerName:@"survey" noncePrefix:@"pending-survey-response" payload:payload inContext:context];
 }
 
 + (void)enqueueEventWithLabel:(NSString *)label interactionIdentifier:(NSString *)interactionIdenfier userInfo:(id)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData inContext:(NSManagedObjectContext *)context {
@@ -64,7 +64,7 @@
 		}
 	}
 
-	[self enqueueRequestWithPath:@"events" noncePrefix:@"event" payload:payload inContext:context];
+	[self enqueueRequestWithPath:@"events" containerName:@"event" noncePrefix:@"event" payload:payload inContext:context];
 }
 
 @end

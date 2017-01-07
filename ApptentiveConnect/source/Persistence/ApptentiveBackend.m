@@ -162,9 +162,6 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 			[self updateConfigurationIfNeeded];
 			[self updateEngagementManifestIfNeeded];
 
-			// Append extensions to attachments that are missing them
-			[ApptentiveFileAttachment addMissingExtensions];
-
 			dispatch_sync(dispatch_get_main_queue(), ^{
 				ApptentiveLogDebug(@"Setting up data manager");
 				self.dataManager = [[ApptentiveDataManager alloc] initWithModelName:@"ATDataModel" inBundle:[Apptentive resourceBundle] storagePath:[self supportDirectoryPath]];
@@ -197,6 +194,9 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 				[self networkStatusChanged:nil];
 
 				[self processQueuedRecords];
+
+				// Append extensions to attachments that are missing them
+				[ApptentiveFileAttachment addMissingExtensions];
 			}];
 
 			if (self.conversationOperation) {

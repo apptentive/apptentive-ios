@@ -223,6 +223,7 @@ static NSString * const LastMessageIDKey = @"lastMessageID";
 
 + (void)load {
 	[NSKeyedUnarchiver setClass:self forClassName:@"ATConversation"];
+	[NSKeyedUnarchiver setClass:self forClassName:@"ApptentiveConversation"];
 }
 
 - (id)initWithCoder:(NSCoder *)coder {

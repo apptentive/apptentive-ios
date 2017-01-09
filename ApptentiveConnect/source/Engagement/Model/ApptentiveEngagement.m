@@ -63,8 +63,8 @@ static NSString * const CodePointsKey = @"codePoints";
 
 		NSDictionary *interactionsInvokesTotal = [[NSUserDefaults standardUserDefaults] dictionaryForKey:@"ATEngagementInteractionsInvokesTotalKey"];
 		NSDictionary *interactionsInvokesVersion = [[NSUserDefaults standardUserDefaults] dictionaryForKey:@"ATEngagementInteractionsInvokesVersionKey"];
-		NSDictionary *interactionsInvokesBuild = [[NSUserDefaults standardUserDefaults] dictionaryForKey:@"ATEngagementInteractionsInvokesLastDateKey"];
-		NSDictionary *interactionsInvokesLastDate = [[NSUserDefaults standardUserDefaults] dictionaryForKey:@"ATEngagementInteractionsInvokesBuildKey"];
+		NSDictionary *interactionsInvokesBuild = [[NSUserDefaults standardUserDefaults] dictionaryForKey:@"ATEngagementInteractionsInvokesBuildKey"];
+		NSDictionary *interactionsInvokesLastDate = [[NSUserDefaults standardUserDefaults] dictionaryForKey:@"ATEngagementInteractionsInvokesLastDateKey"];
 
 		for (NSString *key in interactionsInvokesTotal) {
 			_mutableInteractions[key] = [[ApptentiveCount alloc] initWithTotalCount:[interactionsInvokesTotal[key] integerValue] versionCount:[interactionsInvokesVersion[key] integerValue] buildCount:[interactionsInvokesBuild[key] integerValue] lastInvoked:interactionsInvokesLastDate[key]];

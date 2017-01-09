@@ -40,7 +40,7 @@ static NSString * const EmailAddressKey = @"emailAddress";
 	NSData *data = [[NSUserDefaults standardUserDefaults] dataForKey:@"ATPersonLastUpdateValuePreferenceKey"];
 
 	if (data) {
-		NSDictionary *person = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+		NSDictionary *person = [[NSKeyedUnarchiver unarchiveObjectWithData:data] valueForKey:@"person"];
 		if ([person isKindOfClass:[NSDictionary class]]) {
 			name = person[@"name"];
 			emailAddress = person[@"email"];

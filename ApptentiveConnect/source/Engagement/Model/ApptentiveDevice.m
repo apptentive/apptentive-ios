@@ -91,7 +91,7 @@ static NSString * const IntegrationConfigurationKey = @"integrationConfiguration
 }
 
 - (instancetype)initAndMigrate {
-	NSDictionary *device = [[[NSUserDefaults standardUserDefaults] dictionaryForKey:@"ATDeviceLastUpdateValuePreferenceKey"] objectForKey:@"device"];
+	NSDictionary *device = [[[NSUserDefaults standardUserDefaults] dictionaryForKey:@"ATDeviceLastUpdateValuePreferenceKey"] valueForKey:@"device"];
 
 	self = [super initWithCustomData:device[@"custom_data"]];
 

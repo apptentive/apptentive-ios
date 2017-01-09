@@ -369,14 +369,6 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 	return [self.dataManager managedObjectContext];
 }
 
-- (NSManagedObjectModel *)managedObjectModel {
-	return [self.dataManager managedObjectModel];
-}
-
-- (NSPersistentStoreCoordinator *)persistentStoreCoordinator {
-	return [self.dataManager persistentStoreCoordinator];
-}
-
 #pragma mark -
 
 - (void)createConversation {

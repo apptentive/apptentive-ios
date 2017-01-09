@@ -19,13 +19,16 @@
 #import "ApptentiveMessageCenterViewController.h"
 #import "ApptentiveAppConfiguration.h"
 #import "ApptentiveEngagementManifest.h"
-#import "ApptentiveSerialRequest.h"
+#import "ApptentiveSerialRequest+Record.h"
 #import "ApptentiveFileAttachment.h"
 #import "ApptentiveAppRelease.h"
 #import "ApptentiveSDK.h"
 #import "ApptentivePerson.h"
 #import "ApptentiveDevice.h"
 #import "ApptentiveVersion.h"
+
+#import "ApptentiveLegacyEvent.h"
+#import "ApptentiveLegacySurveyResponse.h"
 
 typedef NS_ENUM(NSInteger, ATBackendState) {
 	ATBackendStateStarting,
@@ -193,10 +196,21 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 
 				[self networkStatusChanged:nil];
 
-				[self processQueuedRecords];
-
 				// Append extensions to attachments that are missing them
 				[ApptentiveFileAttachment addMissingExtensions];
+
+				// Enqueue any unsent messages, events, or survey responses from <= v3.4
+				NSManagedObjectContext *migrationContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+				migrationContext.parentContext = self.managedObjectContext;
+
+				[migrationContext performBlock:^{
+					[ApptentiveMessage enqueueUnsentMessagesInContext:migrationContext];
+					[ApptentiveLegacyEvent enqueueUnsentEventsInContext:migrationContext];
+					[ApptentiveLegacySurveyResponse enqueueUnsentSurveyResponsesInContext:migrationContext];
+				}];
+
+				[self processQueuedRecords];
+
 			}];
 
 			if (self.conversationOperation) {
@@ -669,7 +683,7 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 		return NO;
 	}
 
-	[ApptentiveSerialRequest enqueueRequestWithPath:@"messages" method:@"POST" payload:message.apiJSON attachments:message.attachments identifier:message.pendingMessageID inContext:[self managedObjectContext]];
+	[ApptentiveSerialRequest enqueueMessage:message inContext:[self managedObjectContext]];
 
 	[self processQueuedRecords];
 

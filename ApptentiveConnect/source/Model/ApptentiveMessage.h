@@ -41,6 +41,8 @@ typedef NS_ENUM(NSInteger, ATPendingMessageState) {
 @property (copy, nonatomic) NSString *title;
 @property (strong, nonatomic) NSOrderedSet *attachments;
 
++ (void)enqueueUnsentMessagesInContext:(NSManagedObjectContext *)context;
+
 + (instancetype)newInstanceWithBody:(NSString *)body attachments:(NSArray *)attachments;
 + (void)clearComposingMessages;
 + (instancetype)findMessageWithID:(NSString *)apptentiveID inContext:(NSManagedObjectContext *)context;

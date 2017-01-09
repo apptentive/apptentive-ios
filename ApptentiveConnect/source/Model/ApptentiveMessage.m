@@ -14,6 +14,7 @@
 #import "NSDictionary+Apptentive.h"
 #import "ApptentiveMessageCenterInteraction.h"
 #import "ApptentiveFileAttachment.h"
+#import "ApptentiveSerialRequest+Record.h"
 
 
 NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
@@ -35,6 +36,23 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 @dynamic title;
 @dynamic body;
 @dynamic attachments;
+
++ (void)enqueueUnsentMessagesInContext:(NSManagedObjectContext *)context {
+	NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"ATMessage"];
+	request.predicate = [NSPredicate predicateWithFormat:@"(pendingState == %d) || (pendingState == %d)", ATPendingMessageStateSending, ATPendingMessageStateError];
+
+	NSError *error;
+	NSArray *unsentMessages = [context executeFetchRequest:request error:&error];
+
+	if (unsentMessages == nil) {
+		ApptentiveLogError(@"Unable to retrieve unsent messages: %@", error);
+		return;
+	}
+
+	for (ApptentiveMessage *message in unsentMessages) {
+		[ApptentiveSerialRequest enqueueMessage:message inContext:context];
+	}
+}
 
 + (void)clearComposingMessages {
 	@synchronized(self) {

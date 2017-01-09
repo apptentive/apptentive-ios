@@ -7,6 +7,7 @@
 //
 
 #import "ApptentiveSerialRequest+Record.h"
+#import "ApptentiveMessage.h"
 
 @implementation ApptentiveSerialRequest (Record)
 
@@ -65,6 +66,10 @@
 	}
 
 	[self enqueueRequestWithPath:@"events" containerName:@"event" noncePrefix:@"event" payload:payload inContext:context];
+}
+
++ (void)enqueueMessage:(ApptentiveMessage *)message inContext:(NSManagedObjectContext *)context {
+	[self enqueueRequestWithPath:@"messages" method:@"POST" payload:message.apiJSON attachments:message.attachments identifier:message.pendingMessageID inContext:context];
 }
 
 @end

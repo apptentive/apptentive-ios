@@ -15,6 +15,8 @@
 		011AD9231E209AB00079A49D /* ApptentiveRecord.h in Headers */ = {isa = PBXBuildFile; fileRef = 011AD9201E209AB00079A49D /* ApptentiveRecord.h */; };
 		011AD9241E209AB00079A49D /* ApptentiveRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = 011AD9211E209AB00079A49D /* ApptentiveRecord.m */; };
 		011AD9251E209AB00079A49D /* ApptentiveRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = 011AD9211E209AB00079A49D /* ApptentiveRecord.m */; };
+		011AD9291E23FB590079A49D /* ATDataModel v5 to v6.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 011AD9281E23FB590079A49D /* ATDataModel v5 to v6.xcmappingmodel */; };
+		011AD92B1E240EEB0079A49D /* ATDataModel v5 to v6.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 011AD9281E23FB590079A49D /* ATDataModel v5 to v6.xcmappingmodel */; };
 		011B08CE1C0D0CCC004F4F5D /* ApptentiveUtilitiesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 49509DFA13583FB800793EEC /* ApptentiveUtilitiesTests.m */; };
 		011B08CF1C0D0CCC004F4F5D /* ApptentiveMigrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 49129ED3174068730026C2E1 /* ApptentiveMigrationTests.m */; };
 		011B08D01C0D0CCC004F4F5D /* ApptentiveInteractionInvocationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 49358DBB1BF3336700516F1E /* ApptentiveInteractionInvocationTests.m */; };
@@ -539,6 +541,7 @@
 		011AD91B1E2099EB0079A49D /* ApptentiveSerialRequest+Record.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ApptentiveSerialRequest+Record.m"; sourceTree = "<group>"; };
 		011AD9201E209AB00079A49D /* ApptentiveRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveRecord.h; sourceTree = "<group>"; };
 		011AD9211E209AB00079A49D /* ApptentiveRecord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveRecord.m; sourceTree = "<group>"; };
+		011AD9281E23FB590079A49D /* ATDataModel v5 to v6.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = "ATDataModel v5 to v6.xcmappingmodel"; sourceTree = "<group>"; };
 		011B08D11C0D0E09004F4F5D /* ATDataModelv5.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = ATDataModelv5.sqlite; sourceTree = "<group>"; };
 		011B08D51C0D19AF004F4F5D /* CodePointAndInteractionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CodePointAndInteractionTests.m; sourceTree = "<group>"; };
 		012292961E04BFA000282131 /* ATDataModel 6.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "ATDataModel 6.xcdatamodel"; sourceTree = "<group>"; };
@@ -1636,6 +1639,7 @@
 				58CD20131821B78D0071CC72 /* ATDataModel v2 to v3.xcmappingmodel */,
 				49FECBE217D02BAD00069502 /* ATDataModel v1 to v2.xcmappingmodel */,
 				013BB6121BF6A82300BB6C27 /* ATDataModel v4 to v5.xcmappingmodel */,
+				011AD9281E23FB590079A49D /* ATDataModel v5 to v6.xcmappingmodel */,
 				012B4BE01E0B116300D6229B /* ApptentiveAppConfiguration.h */,
 				012B4BE11E0B116300D6229B /* ApptentiveAppConfiguration.m */,
 				49F8AFCF16CC4A550070FFEA /* ApptentiveData.h */,
@@ -2284,6 +2288,7 @@
 				016986861DA57965008C4C78 /* ApptentiveAttachmentController.m in Sources */,
 				016986871DA57965008C4C78 /* ApptentiveAttachButton.m in Sources */,
 				016986881DA57965008C4C78 /* ApptentiveMessageCenterGreetingView.m in Sources */,
+				011AD92B1E240EEB0079A49D /* ATDataModel v5 to v6.xcmappingmodel in Sources */,
 				016986891DA57965008C4C78 /* ApptentiveMessageCenterStatusView.m in Sources */,
 				0169868A1DA57965008C4C78 /* ApptentiveMessageCenterMessageCell.m in Sources */,
 				0169868B1DA57965008C4C78 /* ApptentiveMessageCenterReplyCell.m in Sources */,
@@ -2425,6 +2430,7 @@
 				58E9580B190740BC005063DC /* ApptentiveSurveyQuestionResponse.m in Sources */,
 				0122929F1E04C0BB00282131 /* ApptentiveSerialRequest.m in Sources */,
 				01C30CEC1B0D09F8006BC911 /* ApptentiveMessageCenterGreetingView.m in Sources */,
+				011AD9291E23FB590079A49D /* ATDataModel v5 to v6.xcmappingmodel in Sources */,
 				018389061D1A0D6100780B8E /* ApptentiveSurveyQuestionFooterView.m in Sources */,
 				01D0C38D1BF3DC330024BA1A /* ApptentiveAttachmentController.m in Sources */,
 				49E6208816C5E8C2000C9F5A /* NSDictionary+ApptentiveAdditions.m in Sources */,

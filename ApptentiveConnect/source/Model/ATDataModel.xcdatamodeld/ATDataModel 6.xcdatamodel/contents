@@ -38,12 +38,6 @@
         <attribute name="clientCreationUTCOffset" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="creationTime" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
     </entity>
-    <entity name="ATSurveyResponse" representedClassName="ApptentiveSurveyResponse" parentEntity="ATRecord" syncable="YES">
-        <attribute name="answersData" optional="YES" attributeType="Binary" syncable="YES"/>
-        <attribute name="pendingState" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="pendingSurveyResponseID" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
-        <attribute name="surveyID" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
-    </entity>
     <entity name="QueuedAttachment" representedClassName="ApptentiveSerialRequestAttachment" syncable="YES">
         <attribute name="mimeType" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
@@ -63,7 +57,6 @@
         <element name="ATMessage" positionX="0" positionY="0" width="128" height="255"/>
         <element name="ATMessageSender" positionX="0" positionY="0" width="128" height="120"/>
         <element name="ATRecord" positionX="0" positionY="0" width="128" height="120"/>
-        <element name="ATSurveyResponse" positionX="0" positionY="0" width="128" height="105"/>
         <element name="QueuedAttachment" positionX="72" positionY="162" width="128" height="105"/>
         <element name="QueuedRequest" positionX="45" positionY="153" width="128" height="135"/>
     </elements>

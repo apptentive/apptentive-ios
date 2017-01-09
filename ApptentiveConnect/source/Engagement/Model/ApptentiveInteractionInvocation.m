@@ -123,7 +123,7 @@
 }
 
 - (BOOL)criteriaAreMetForConsumerData:(ApptentiveSession *)data {
-	return [self criteriaAreMetForUsageData:[ApptentiveInteractionUsageData usageDataWithConsumerData:data]];
+	return [self criteriaAreMetForUsageData:[ApptentiveInteractionUsageData usageDataWithSession:data]];
 }
 
 - (NSPredicate *)criteriaPredicate {

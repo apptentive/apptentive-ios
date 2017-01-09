@@ -11,6 +11,11 @@
 #import "ApptentiveInteraction.h"
 #import "ApptentiveStyleSheet.h"
 #import "ApptentiveInteractionUsageData.h"
+#import "ApptentiveSession.h"
+#import "Apptentive_Private.h"
+#import "ApptentiveBackend.h"
+#import "ApptentiveEngagement.h"
+#import "ApptentiveCount.h"
 
 
 @interface ApptentiveSurveyTests : XCTestCase <ATSurveyViewModelDelegate>
@@ -182,10 +187,11 @@
 }
 
 - (void)testMetrics {
-	[Apptentive sharedConnection].APIKey = @"bogus_api_key"; // trigger creation of engagement backend
+	Apptentive.shared.APIKey = @"foo";
+	[Apptentive.shared.backend setValue:[[ApptentiveSession alloc] init] forKey:@"session"];
+	[Apptentive.shared.backend setValue:@(2) forKey:@"state"];
 
-	ApptentiveInteractionUsageData *usageData = [ApptentiveInteractionUsageData usageData];
-	NSInteger preCount = [(NSNumber *)usageData.predicateEvaluationDictionary[@"code_point/com.apptentive#Survey#question_response/invokes/total"] integerValue];
+	NSInteger preCount = Apptentive.shared.backend.session.engagement.codePoints[@"com.apptentive#Survey#question_response"].totalCount;
 
 	[self.viewModel selectAnswerAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:1]];
 	[self.viewModel selectAnswerAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:3]];
@@ -194,8 +200,7 @@
 	[self.viewModel commitChangeAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:7]];
 	[self.viewModel commitChangeAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:9]];
 
-	usageData = [ApptentiveInteractionUsageData usageData];
-	NSInteger postCount = [(NSNumber *)usageData.predicateEvaluationDictionary[@"code_point/com.apptentive#Survey#question_response/invokes/total"] integerValue];
+	NSInteger postCount = Apptentive.shared.backend.session.engagement.codePoints[@"com.apptentive#Survey#question_response"].totalCount;
 
 	XCTAssertEqual(postCount - preCount, 5);
 }

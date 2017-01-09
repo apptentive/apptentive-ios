@@ -51,26 +51,6 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 
 @synthesize styleSheet = _styleSheet;
 
-+ (NSString *)supportDirectoryPath {
-	NSString *appSupportDirectoryPath = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES).firstObject;
-	NSString *apptentiveDirectoryPath = [appSupportDirectoryPath stringByAppendingPathComponent:@"com.apptentive.feedback"];
-	NSFileManager *fm = [NSFileManager defaultManager];
-	NSError *error = nil;
-
-	if (![fm createDirectoryAtPath:apptentiveDirectoryPath withIntermediateDirectories:YES attributes:nil error:&error]) {
-		ApptentiveLogError(@"Failed to create support directory: %@", apptentiveDirectoryPath);
-		ApptentiveLogError(@"Error was: %@", error);
-		return nil;
-	}
-
-	if (![fm setAttributes:@{ NSFileProtectionKey: NSFileProtectionCompleteUntilFirstUserAuthentication } ofItemAtPath:apptentiveDirectoryPath error:&error]) {
-		ApptentiveLogError(@"Failed to set file protection level: %@", apptentiveDirectoryPath);
-		ApptentiveLogError(@"Error was: %@", error);
-	}
-
-	return apptentiveDirectoryPath;
-}
-
 + (instancetype)sharedConnection {
 	static Apptentive *sharedConnection = nil;
 	static dispatch_once_t onceToken;
@@ -110,7 +90,7 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 	if (![self.APIKey isEqualToString:APIKey] || ![baseURL isEqual:self.baseURL]) {
 		_APIKey = APIKey;
 		_baseURL = baseURL;
-		_backend = [[ApptentiveBackend alloc] initWithAPIKey:APIKey baseURL:baseURL];
+		_backend = [[ApptentiveBackend alloc] initWithAPIKey:APIKey baseURL:baseURL storagePath:@"com.apptentive.feedback"];
 		_engagementBackend = [[ApptentiveEngagementBackend alloc] init];
 	}
 }
@@ -530,14 +510,6 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 	}
 }
 
-+ (NSBundle *)resourceBundle {
-	NSBundle *bundleForClass = [NSBundle bundleForClass:[self class]];
-	NSString *resourceBundlePath = [bundleForClass pathForResource:@"ApptentiveResources" ofType:@"bundle"];
-
-	// Resources may sit alongside this class in a framework or may be nested in resource bundle.
-	return resourceBundlePath ? [NSBundle bundleWithPath:resourceBundlePath] : bundleForClass;
-}
-
 #pragma mark - Message notification banner
 
 - (void)showNotificationBannerForMessage:(ApptentiveMessage *)message {
@@ -566,9 +538,6 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 	}
 }
 
-+ (UIStoryboard *)storyboard {
-	return [UIStoryboard storyboardWithName:@"Apptentive" bundle:[Apptentive resourceBundle]];
-}
 
 #if APPTENTIVE_DEBUG
 - (void)checkSDKConfiguration {
@@ -584,7 +553,7 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 		ApptentiveLogError(@"No App ID set. This may keep the ratings prompt from directing users to your app in the App Store.");
 	}
 
-	BOOL hasResources = [Apptentive resourceBundle] != nil;
+	BOOL hasResources = [ApptentiveUtilities resourceBundle] != nil;
 
 	if (!hasResources) {
 		ApptentiveLogError(@"Missing resources.");
@@ -614,7 +583,7 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 }
 
 - (void)pushAboutApptentiveViewController {
-	UIViewController *aboutViewController = [[Apptentive storyboard] instantiateViewControllerWithIdentifier:@"About"];
+	UIViewController *aboutViewController = [[ApptentiveUtilities storyboard] instantiateViewControllerWithIdentifier:@"About"];
 	[self pushViewController:aboutViewController animated:YES];
 }
 
@@ -623,7 +592,7 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 NSString *ApptentiveLocalizedString(NSString *key, NSString *comment) {
 	static NSBundle *bundle = nil;
 	if (!bundle) {
-		bundle = [Apptentive resourceBundle];
+		bundle = [ApptentiveUtilities resourceBundle];
 	}
 	NSString *result = [bundle localizedStringForKey:key value:key table:nil];
 	return result;

@@ -20,9 +20,9 @@
 #import "ApptentiveSurveySubmitButton.h"
 #import "ApptentiveSurveyGreetingView.h"
 
-#import "ApptentiveBackend.h"
 #import "ApptentiveHUDViewController.h"
 #import "Apptentive_Private.h"
+#import "ApptentiveUtilities.h"
 
 // These need to match the values from the storyboard
 #define QUESTION_HORIZONTAL_MARGIN 52.0
@@ -67,7 +67,7 @@
 	self.title = self.viewModel.title;
 
 	self.headerView.greetingLabel.text = self.viewModel.greeting;
-	[self.headerView.infoButton setImage:[ApptentiveBackend imageNamed:@"at_info"] forState:UIControlStateNormal];
+	[self.headerView.infoButton setImage:[ApptentiveUtilities imageNamed:@"at_info"] forState:UIControlStateNormal];
 	self.headerView.infoButton.accessibilityLabel = ApptentiveLocalizedString(@"About Apptentive", @"Accessibility label for 'show about' button");
 
 	((ApptentiveSurveyCollectionView *)self.collectionView).collectionHeaderView = self.headerView;
@@ -148,7 +148,7 @@
 			ApptentiveHUDViewController *HUD = [[ApptentiveHUDViewController alloc] init];
 			[HUD showInAlertWindow];
 			HUD.textLabel.text = self.viewModel.thankYouText;
-			HUD.imageView.image = [ApptentiveBackend imageNamed:@"at_thanks"];
+			HUD.imageView.image = [ApptentiveUtilities imageNamed:@"at_thanks"];
 		}
 	}
 }
@@ -250,8 +250,8 @@
 					break;
 			}
 
-			UIImage *buttonImage = [[ApptentiveBackend imageNamed:buttonImageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-			UIImage *highlightedButtonImage = [[ApptentiveBackend imageNamed:[buttonImageName stringByAppendingString:@"_highlighted"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+			UIImage *buttonImage = [[ApptentiveUtilities imageNamed:buttonImageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+			UIImage *highlightedButtonImage = [[ApptentiveUtilities imageNamed:[buttonImageName stringByAppendingString:@"_highlighted"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 
 			if ([self.viewModel typeOfAnswerAtIndexPath:indexPath] == ApptentiveSurveyAnswerTypeOther) {
 				reuseIdentifier = [reuseIdentifier stringByAppendingString:@"Other"];

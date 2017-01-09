@@ -33,6 +33,76 @@ UIViewController *topChildViewController(UIViewController *viewController) {
 
 @implementation ApptentiveUtilities
 
++ (NSString *)applicationSupportPath {
+	static NSString *_applicationSupportPath;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		_applicationSupportPath = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES).firstObject;
+
+		NSError *error;
+
+		if (![[NSFileManager defaultManager] createDirectoryAtPath:_applicationSupportPath withIntermediateDirectories:YES attributes:nil error:&error]) {
+			ApptentiveLogError(@"Failed to create Application Support directory: %@", _applicationSupportPath);
+			ApptentiveLogError(@"Error was: %@", error);
+			_applicationSupportPath = nil;
+		}
+
+
+		if (![[NSFileManager defaultManager] setAttributes:@{ NSFileProtectionKey: NSFileProtectionCompleteUntilFirstUserAuthentication } ofItemAtPath:_applicationSupportPath error:&error]) {
+			ApptentiveLogError(@"Failed to set file protection level: %@", _applicationSupportPath);
+			ApptentiveLogError(@"Error was: %@", error);
+		}
+	});
+
+	return _applicationSupportPath;
+}
+
+
++ (NSBundle *)resourceBundle {
+	NSBundle *bundleForClass = [NSBundle bundleForClass:[self class]];
+	NSString *resourceBundlePath = [bundleForClass pathForResource:@"ApptentiveResources" ofType:@"bundle"];
+
+	// Resources may sit alongside this class in a framework or may be nested in resource bundle.
+	return resourceBundlePath ? [NSBundle bundleWithPath:resourceBundlePath] : bundleForClass;
+}
+
++ (UIStoryboard *)storyboard {
+	return [UIStoryboard storyboardWithName:@"Apptentive" bundle:[self resourceBundle]];
+}
+
++ (UIImage *)imageNamed:(NSString *)name {
+	return [UIImage imageNamed:name inBundle:[self resourceBundle] compatibleWithTraitCollection:nil];
+}
+
++ (NSURL *)apptentiveHomepageURL {
+	return [NSURL URLWithString:@"http://www.apptentive.com/"];
+}
+
++ (NSString *)appName {
+	NSString *displayName = nil;
+
+	NSArray *appNameKeys = [NSArray arrayWithObjects:@"CFBundleDisplayName", (NSString *)kCFBundleNameKey, nil];
+	NSMutableArray *infoDictionaries = [NSMutableArray array];
+	if ([[NSBundle mainBundle] localizedInfoDictionary]) {
+		[infoDictionaries addObject:[[NSBundle mainBundle] localizedInfoDictionary]];
+	}
+	if ([[NSBundle mainBundle] infoDictionary]) {
+		[infoDictionaries addObject:[[NSBundle mainBundle] infoDictionary]];
+	}
+	for (NSDictionary *infoDictionary in infoDictionaries) {
+		if (displayName != nil) {
+			break;
+		}
+		for (NSString *appNameKey in appNameKeys) {
+			displayName = [infoDictionary objectForKey:appNameKey];
+			if (displayName != nil) {
+				break;
+			}
+		}
+	}
+	return displayName;
+}
+
 + (UIViewController *)rootViewControllerForCurrentWindow {
 	UIWindow *window = nil;
 	for (UIWindow *tmpWindow in [[UIApplication sharedApplication] windows]) {
@@ -79,44 +149,6 @@ UIViewController *topChildViewController(UIViewController *viewController) {
 		iconFile = maxImage;
 	});
 	return iconFile;
-}
-
-+ (NSString *)currentMachineName {
-	struct utsname systemInfo;
-	uname(&systemInfo);
-	return [NSString stringWithCString:systemInfo.machine encoding:NSUTF8StringEncoding];
-}
-
-+ (NSString *)currentSystemName {
-	return [[UIDevice currentDevice] systemName];
-}
-
-+ (NSString *)currentSystemVersion {
-	return [[UIDevice currentDevice] systemVersion];
-}
-
-+ (NSString *)currentSystemBuild {
-	int mib[2] = {CTL_KERN, KERN_OSVERSION};
-	size_t size = 0;
-
-	sysctl(mib, 2, NULL, &size, NULL, 0);
-
-	char *answer = malloc(size);
-	int result = sysctl(mib, 2, answer, &size, NULL, 0);
-
-	NSString *results = nil;
-	if (result >= 0) {
-		results = [NSString stringWithCString:answer encoding:NSUTF8StringEncoding];
-	}
-	free(answer);
-
-	return results;
-}
-
-+ (NSString *)stringByEscapingForURLArguments:(NSString *)string {
-	CFStringRef result = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)string, NULL, (CFStringRef) @"%:/?#[]@!$&'()*+,;=", kCFStringEncodingUTF8);
-
-	return CFBridgingRelease(result);
 }
 
 + (NSString *)stringByEscapingForPredicate:(NSString *)string {
@@ -226,158 +258,6 @@ UIViewController *topChildViewController(UIViewController *viewController) {
 	return (comparisonResult == NSOrderedSame);
 }
 
-+ (NSArray *)availableAppLocalizations {
-	static NSArray *localAppLocalizations = nil;
-	@synchronized(self) {
-		if (localAppLocalizations == nil) {
-			NSArray *rawLocalizations = [[NSBundle mainBundle] localizations];
-			NSMutableArray *localizations = [[NSMutableArray alloc] init];
-			for (NSString *loc in rawLocalizations) {
-				NSString *s = [NSLocale canonicalLocaleIdentifierFromString:loc];
-				if (![localizations containsObject:s]) {
-					[localizations addObject:s];
-				}
-			}
-			localAppLocalizations = [NSArray arrayWithArray:localizations];
-		}
-	}
-	return localAppLocalizations;
-}
-
-+ (NSString *)appBundleVersionString {
-	return [[NSBundle mainBundle].infoDictionary objectForKey:(NSString *)kCFBundleVersionKey];
-}
-
-+ (NSString *)appBundleShortVersionString {
-	return [[NSBundle mainBundle].infoDictionary objectForKey:@"CFBundleShortVersionString"];
-}
-
-+ (NSString *)appVersionString {
-	static NSString *_appVersionString = nil;
-
-	static dispatch_once_t onceToken;
-	dispatch_once(&onceToken, ^{
-		_appVersionString = [self appBundleShortVersionString] ?: [self appBundleVersionString];
-	});
-
-	return _appVersionString;
-}
-
-+ (NSString *)buildNumberString {
-	static NSString *_buildNumberString = nil;
-
-	static dispatch_once_t onceToken;
-	dispatch_once(&onceToken, ^{
-		_buildNumberString = [self appBundleVersionString];
-	});
-
-	return _buildNumberString;
-}
-
-+ (BOOL)appStoreReceiptExists {
-	return ([NSData dataWithContentsOfURL:[NSBundle mainBundle].appStoreReceiptURL] != nil);
-}
-
-+ (NSString *)appStoreReceiptFileName {
-	return [[NSBundle mainBundle].appStoreReceiptURL lastPathComponent];
-}
-
-+ (NSTimeInterval)maxAgeFromCacheControlHeader:(NSString *)cacheControl {
-	if (cacheControl == nil || [cacheControl rangeOfString:@"max-age"].location == NSNotFound) {
-		return 0;
-	}
-	NSTimeInterval maxAge = 0;
-	NSScanner *scanner = [[NSScanner alloc] initWithString:[cacheControl lowercaseString]];
-	[scanner scanUpToString:@"max-age" intoString:NULL];
-	if ([scanner scanString:@"max-age" intoString:NULL] && [scanner scanString:@"=" intoString:NULL]) {
-		if (![scanner scanDouble:&maxAge]) {
-			maxAge = 0;
-		}
-	}
-	scanner = nil;
-	return maxAge;
-}
-
-+ (BOOL)dictionary:(NSDictionary *)a isEqualToDictionary:(NSDictionary *)b {
-	BOOL isEqual = NO;
-
-	do { // once
-		if (a == b) {
-			isEqual = YES;
-			break;
-		}
-		if ((a == nil && b != nil) || (a != nil && b == nil)) {
-			break;
-		}
-		if ([a count] != [b count]) {
-			break;
-		}
-		for (NSObject *keyA in a) {
-			NSObject *valueB = [b objectForKey:keyA];
-			if (valueB == nil) {
-				goto done;
-			}
-			NSObject *valueA = [a objectForKey:keyA];
-			if ([valueA isKindOfClass:[NSDictionary class]] && [valueB isKindOfClass:[NSDictionary class]]) {
-				BOOL deepEquals = [ApptentiveUtilities dictionary:(NSDictionary *)valueA isEqualToDictionary:(NSDictionary *)valueB];
-				if (!deepEquals) {
-					goto done;
-				}
-			} else if ([valueA isKindOfClass:[NSArray class]] && [valueB isKindOfClass:[NSArray class]]) {
-				BOOL deepEquals = [ApptentiveUtilities array:(NSArray *)valueA isEqualToArray:(NSArray *)valueB];
-				if (!deepEquals) {
-					goto done;
-				}
-			} else if (![valueA isEqual:valueB]) {
-				goto done;
-			}
-		}
-		isEqual = YES;
-	} while (NO);
-
-done:
-	return isEqual;
-}
-
-+ (BOOL)array:(NSArray *)a isEqualToArray:(NSArray *)b {
-	BOOL isEqual = NO;
-
-	do { // once
-		if (a == b) {
-			isEqual = YES;
-			break;
-		}
-		if ((a == nil && b != nil) || (a != nil && b == nil)) {
-			break;
-		}
-		if ([a count] != [b count]) {
-			break;
-		}
-		NSUInteger index = 0;
-		for (NSObject *valueA in a) {
-			NSObject *valueB = [b objectAtIndex:index];
-			if ([valueA isKindOfClass:[NSDictionary class]] && [valueB isKindOfClass:[NSDictionary class]]) {
-				BOOL deepEquals = [ApptentiveUtilities dictionary:(NSDictionary *)valueA isEqualToDictionary:(NSDictionary *)valueB];
-				if (!deepEquals) {
-					goto done;
-				}
-			} else if ([valueA isKindOfClass:[NSArray class]] && [valueB isKindOfClass:[NSArray class]]) {
-				BOOL deepEquals = [ApptentiveUtilities array:(NSArray *)valueA isEqualToArray:(NSArray *)valueB];
-				if (!deepEquals) {
-					goto done;
-				}
-			} else if (![valueA isEqual:valueB]) {
-				goto done;
-			}
-			index++;
-		}
-		isEqual = YES;
-	} while (NO);
-
-done:
-	return isEqual;
-}
-
 // Returns a dictionary consisting of:
 //
 // 1. Any key-value pairs that appear in new but not old
@@ -465,46 +345,3 @@ done:
 }
 
 @end
-
-extern CGRect ATCGRectOfEvenSize(CGRect inRect) {
-	CGRect result = CGRectMake(floor(inRect.origin.x), floor(inRect.origin.y), ceil(inRect.size.width), ceil(inRect.size.height));
-
-	if (fmod(result.size.width, 2.0) != 0.0) {
-		result.size.width += 1.0;
-	}
-	if (fmod(result.size.height, 2.0) != 0.0) {
-		result.size.height += 1.0;
-	}
-
-	return result;
-}
-
-CGSize ATThumbnailSizeOfMaxSize(CGSize imageSize, CGSize maxSize) {
-	CGFloat ratio = MIN(maxSize.width / imageSize.width, maxSize.height / imageSize.height);
-	if (ratio < 1.0) {
-		return CGSizeMake(floor(ratio * imageSize.width), floor(ratio * imageSize.height));
-	} else {
-		return imageSize;
-	}
-}
-
-CGRect ATThumbnailCropRectForThumbnailSize(CGSize imageSize, CGSize thumbnailSize) {
-	CGFloat cropRatio = thumbnailSize.width / thumbnailSize.height;
-	CGFloat sizeRatio = imageSize.width / imageSize.height;
-
-	if (cropRatio < sizeRatio) {
-		// Shrink width. eg. 100:100 < 1600:1200
-		CGFloat croppedWidth = imageSize.width * (1.0 / sizeRatio);
-		CGFloat originX = floor((imageSize.width - croppedWidth) / 2.0);
-
-		return CGRectMake(originX, 0, croppedWidth, imageSize.height);
-	} else if (cropRatio > sizeRatio) {
-		// Shrink height. eg. 100:100 > 1200:1600
-		CGFloat croppedHeight = floor(imageSize.height * sizeRatio);
-		CGFloat originY = floor((imageSize.height - croppedHeight) / 2.0);
-
-		return CGRectMake(0, originY, imageSize.width, croppedHeight);
-	} else {
-		return CGRectMake(0, 0, imageSize.width, imageSize.height);
-	}
-}

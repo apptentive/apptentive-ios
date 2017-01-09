@@ -85,16 +85,13 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 
 @synthesize supportDirectoryPath = _supportDirectoryPath;
 
-+ (UIImage *)imageNamed:(NSString *)name {
-	return [UIImage imageNamed:name inBundle:[Apptentive resourceBundle] compatibleWithTraitCollection:nil];
-}
-
-- (instancetype)initWithAPIKey:(NSString *)APIKey baseURL:(NSURL *)baseURL {
+- (instancetype)initWithAPIKey:(NSString *)APIKey baseURL:(NSURL *)baseURL storagePath:(NSString *)storagePath {
 	self = [super init];
 
 	if (self) {
 		_state = ATBackendStateStarting;
 		_queue = [[NSOperationQueue alloc] init];
+		_supportDirectoryPath = [[ApptentiveUtilities applicationSupportPath] stringByAppendingPathComponent:storagePath];
 
 		if ([UIApplication sharedApplication] != nil && ![UIApplication sharedApplication].isProtectedDataAvailable) {
 			_queue.suspended = YES;
@@ -120,6 +117,13 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkStatusChanged:) name:ApptentiveReachabilityStatusChanged object:nil];
 
 		NSBlockOperation *startupOperation = [NSBlockOperation blockOperationWithBlock:^{
+			if ([[NSFileManager defaultManager] fileExistsAtPath:storagePath]) {
+				NSError *error;
+				if (![[NSFileManager defaultManager] createDirectoryAtPath:storagePath withIntermediateDirectories:YES attributes:nil error:&error]) {
+					ApptentiveLogError(@"Unable to create storage path “%@”: %@", storagePath, error);
+				}
+			}
+
 			// Session
 			if ([[NSFileManager defaultManager] fileExistsAtPath:[self sessionPath]]) {
 				self->_session = [NSKeyedUnarchiver unarchiveObjectWithFile:[self sessionPath]];
@@ -167,7 +171,7 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 
 			dispatch_sync(dispatch_get_main_queue(), ^{
 				ApptentiveLogDebug(@"Setting up data manager");
-				self.dataManager = [[ApptentiveDataManager alloc] initWithModelName:@"ATDataModel" inBundle:[Apptentive resourceBundle] storagePath:[self supportDirectoryPath]];
+				self.dataManager = [[ApptentiveDataManager alloc] initWithModelName:@"ATDataModel" inBundle:[ApptentiveUtilities resourceBundle] storagePath:[self supportDirectoryPath]];
 				if (![self.dataManager setupAndVerify]) {
 					ApptentiveLogError(@"Unable to setup and verify data manager.");
 				} else if (![self.dataManager persistentStoreCoordinator]) {
@@ -203,14 +207,18 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 				NSManagedObjectContext *migrationContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
 				migrationContext.parentContext = self.managedObjectContext;
 
-				[migrationContext performBlock:^{
+				[migrationContext performBlockAndWait:^{
 					[ApptentiveMessage enqueueUnsentMessagesInContext:migrationContext];
 					[ApptentiveLegacyEvent enqueueUnsentEventsInContext:migrationContext];
 					[ApptentiveLegacySurveyResponse enqueueUnsentSurveyResponsesInContext:migrationContext];
+
+					NSError *error;
+					if (![migrationContext save:&error]) {
+						ApptentiveLogError(@"Unable to save migration context: %@", error);
+					}
 				}];
 
 				[self processQueuedRecords];
-
 			}];
 
 			if (self.conversationOperation) {
@@ -338,39 +346,6 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 
 		[self updateMessageCheckingTimer];
 	}
-}
-
-- (NSURL *)apptentiveHomepageURL {
-	return [NSURL URLWithString:@"http://www.apptentive.com/"];
-}
-
-- (NSString *)deviceUUID {
-	return [UIDevice currentDevice].identifierForVendor.UUIDString;
-}
-
-- (NSString *)appName {
-	NSString *displayName = nil;
-
-	NSArray *appNameKeys = [NSArray arrayWithObjects:@"CFBundleDisplayName", (NSString *)kCFBundleNameKey, nil];
-	NSMutableArray *infoDictionaries = [NSMutableArray array];
-	if ([[NSBundle mainBundle] localizedInfoDictionary]) {
-		[infoDictionaries addObject:[[NSBundle mainBundle] localizedInfoDictionary]];
-	}
-	if ([[NSBundle mainBundle] infoDictionary]) {
-		[infoDictionaries addObject:[[NSBundle mainBundle] infoDictionary]];
-	}
-	for (NSDictionary *infoDictionary in infoDictionaries) {
-		if (displayName != nil) {
-			break;
-		}
-		for (NSString *appNameKey in appNameKeys) {
-			displayName = [infoDictionary objectForKey:appNameKey];
-			if (displayName != nil) {
-				break;
-			}
-		}
-	}
-	return displayName;
 }
 
 - (BOOL)isReady {
@@ -721,7 +696,7 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 	BOOL didShowMessageCenter = [[ApptentiveInteraction apptentiveAppInteraction] engage:ApptentiveEngagementMessageCenterEvent fromViewController:viewController];
 
 	if (!didShowMessageCenter) {
-		UINavigationController *navigationController = [[Apptentive storyboard] instantiateViewControllerWithIdentifier:@"NoPayloadNavigation"];
+		UINavigationController *navigationController = [[ApptentiveUtilities storyboard] instantiateViewControllerWithIdentifier:@"NoPayloadNavigation"];
 
 		[viewController presentViewController:navigationController animated:YES completion:nil];
 	}
@@ -902,36 +877,11 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 
 #pragma mark - Paths
 
-- (NSString *)supportDirectoryPath {
-	if (!_supportDirectoryPath) {
-		NSString *appSupportDirectoryPath = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES).firstObject;
-		NSString *apptentiveDirectoryPath = [appSupportDirectoryPath stringByAppendingPathComponent:@"com.apptentive.feedback"];
-		NSFileManager *fm = [NSFileManager defaultManager];
-		NSError *error = nil;
-
-		if (![fm createDirectoryAtPath:apptentiveDirectoryPath withIntermediateDirectories:YES attributes:nil error:&error]) {
-			ApptentiveLogError(@"Failed to create support directory: %@", apptentiveDirectoryPath);
-			ApptentiveLogError(@"Error was: %@", error);
-			return nil;
-		}
-
-		if (![fm setAttributes:@{ NSFileProtectionKey: NSFileProtectionCompleteUntilFirstUserAuthentication } ofItemAtPath:apptentiveDirectoryPath error:&error]) {
-			ApptentiveLogError(@"Failed to set file protection level: %@", apptentiveDirectoryPath);
-			ApptentiveLogError(@"Error was: %@", error);
-		}
-
-		_supportDirectoryPath = apptentiveDirectoryPath;
-	}
-
-	return _supportDirectoryPath;
-}
-
 - (NSString *)attachmentDirectoryPath {
-	NSString *supportPath = [self supportDirectoryPath];
-	if (!supportPath) {
+	if (!self.supportDirectoryPath) {
 		return nil;
 	}
-	NSString *newPath = [supportPath stringByAppendingPathComponent:@"attachments"];
+	NSString *newPath = [self.supportDirectoryPath stringByAppendingPathComponent:@"attachments"];
 	NSFileManager *fm = [NSFileManager defaultManager];
 	NSError *error = nil;
 	BOOL result = [fm createDirectoryAtPath:newPath withIntermediateDirectories:YES attributes:nil error:&error];
@@ -969,19 +919,15 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 }
 
 - (NSString *)sessionPath {
-	return [[self supportDirectoryPath] stringByAppendingPathComponent:@"session"];
-}
-
-- (NSString *)conversationPath {
-	return [[self supportDirectoryPath] stringByAppendingPathComponent:@"conversation"];
+	return [self.supportDirectoryPath stringByAppendingPathComponent:@"session"];
 }
 
 - (NSString *)configurationPath {
-	return [[self supportDirectoryPath] stringByAppendingPathComponent:@"configuration"];
+	return [self.supportDirectoryPath stringByAppendingPathComponent:@"configuration"];
 }
 
 - (NSString *)manifestPath {
-	return [[self supportDirectoryPath] stringByAppendingPathComponent:@"interactions"];
+	return [self.supportDirectoryPath stringByAppendingPathComponent:@"interactions"];
 }
 
 #pragma mark - Debugging
@@ -1008,6 +954,16 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 
 			[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveInteractionsDidUpdateNotification object:self.manifest];
 		}
+	}
+}
+
+- (void)resetBackend {
+	[self stopWorking:nil];
+
+	NSError *error;
+
+	if (![[NSFileManager defaultManager] removeItemAtPath:self.supportDirectoryPath error:&error]) {
+		ApptentiveLogError(@"Unable to delete backend data");
 	}
 }
 

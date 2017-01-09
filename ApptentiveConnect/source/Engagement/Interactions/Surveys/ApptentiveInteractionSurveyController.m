@@ -15,6 +15,7 @@
 
 #import "ApptentiveSurvey.h"
 #import "ApptentiveSurveyViewModel.h"
+#import "ApptentiveUtilities.h"
 
 NSString *const ATInteractionSurveyEventLabelLaunch = @"launch";
 
@@ -26,7 +27,7 @@ NSString *const ATInteractionSurveyEventLabelLaunch = @"launch";
 }
 
 - (void)presentInteractionFromViewController:(UIViewController *)viewController {
-	UINavigationController *navigationController = [[Apptentive storyboard] instantiateViewControllerWithIdentifier:@"SurveyNavigation"];
+	UINavigationController *navigationController = [[ApptentiveUtilities storyboard] instantiateViewControllerWithIdentifier:@"SurveyNavigation"];
 	ApptentiveSurveyViewModel *viewModel = [[ApptentiveSurveyViewModel alloc] initWithInteraction:self.interaction];
 	if (viewModel) {
 		ApptentiveSurveyViewController *surveyViewController = navigationController.viewControllers.firstObject;

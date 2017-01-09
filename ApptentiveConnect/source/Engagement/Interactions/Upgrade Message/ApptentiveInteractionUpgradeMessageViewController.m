@@ -58,7 +58,7 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 		[self.appIconView setImage:[ApptentiveUtilities appIcon]];
 
 		// Rounded corners
-		UIImage *maskImage = [ApptentiveBackend imageNamed:@"at_update_icon_mask"];
+		UIImage *maskImage = [ApptentiveUtilities imageNamed:@"at_update_icon_mask"];
 		CALayer *maskLayer = [[CALayer alloc] init];
 		maskLayer.contents = (id)maskImage.CGImage;
 		maskLayer.frame = self.appIconView.bounds;
@@ -71,7 +71,7 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 	// Powered by Apptentive logo
 	if ([[self.upgradeMessageInteraction.configuration objectForKey:@"show_powered_by"] boolValue] && !Apptentive.shared.backend.configuration.hideBranding) {
 		self.poweredByApptentiveLogo.text = ApptentiveLocalizedString(@"Powered by", @"Powered by followed by Apptentive logo.");
-		UIImage *poweredByApptentiveIcon = [ApptentiveBackend imageNamed:@"at_update_logo"];
+		UIImage *poweredByApptentiveIcon = [ApptentiveUtilities imageNamed:@"at_update_logo"];
 		[self.poweredByApptentiveIconView setImage:poweredByApptentiveIcon];
 	} else {
 		self.OKButtonBottomSpace.constant = 0.0;

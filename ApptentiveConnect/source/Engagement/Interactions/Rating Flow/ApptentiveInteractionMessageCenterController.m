@@ -12,6 +12,7 @@
 #import "Apptentive_Private.h"
 #import "ApptentiveMessageCenterViewController.h"
 #import "ApptentiveInteraction.h"
+#import "ApptentiveUtilities.h"
 
 
 @implementation ApptentiveInteractionMessageCenterController
@@ -27,7 +28,7 @@
 }
 
 - (void)presentInteractionFromViewController:(UIViewController *)viewController {
-	UINavigationController *navigationController = [[Apptentive storyboard] instantiateViewControllerWithIdentifier:@"MessageCenterNavigation"];
+	UINavigationController *navigationController = [[ApptentiveUtilities storyboard] instantiateViewControllerWithIdentifier:@"MessageCenterNavigation"];
 
 	ApptentiveMessageCenterViewController *messageCenter = navigationController.viewControllers.firstObject;
 	messageCenter.interaction = (ApptentiveMessageCenterInteraction *)self.interaction;

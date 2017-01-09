@@ -7,7 +7,7 @@
 //
 
 #import "ApptentiveBannerViewController.h"
-#import "Apptentive_Private.h"
+#import "ApptentiveUtilities.h"
 
 #define DISPLAY_DURATION 3.0
 #define ANIMATION_DURATION 0.33
@@ -38,7 +38,7 @@
 		[_currentBanner hide:self];
 	}
 
-	ApptentiveBannerViewController *banner = [[Apptentive storyboard] instantiateViewControllerWithIdentifier:@"Banner"];
+	ApptentiveBannerViewController *banner = [[ApptentiveUtilities storyboard] instantiateViewControllerWithIdentifier:@"Banner"];
 
 	banner.imageURL = imageURL;
 	banner.titleText = title;

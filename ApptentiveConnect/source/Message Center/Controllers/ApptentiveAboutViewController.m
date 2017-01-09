@@ -7,9 +7,9 @@
 //
 
 #import "ApptentiveAboutViewController.h"
-#import "ApptentiveBackend.h"
 #import "Apptentive_Private.h"
 #import "ApptentiveEngagementBackend.h"
+#import "ApptentiveUtilities.h"
 
 NSString *const ATInteractionAboutViewInteractionKey = @"About";
 NSString *const ATInteractionAboutViewEventLabelLaunch = @"launch";
@@ -46,7 +46,7 @@ NSString *const ATInteractionAboutViewEventLabelClose = @"close";
 
 	[[Apptentive sharedConnection].engagementBackend engageCodePoint:[self codePointForEvent:ATInteractionAboutViewEventLabelLaunch] fromInteraction:nil userInfo:nil customData:nil extendedData:nil fromViewController:self];
 
-	self.imageView.image = [ApptentiveBackend imageNamed:@"at_apptentive_logo"];
+	self.imageView.image = [ApptentiveUtilities imageNamed:@"at_apptentive_logo"];
 	// TODO: Look into localizing the storyboard instead
 	self.aboutLabel.text = ApptentiveLocalizedString(@"Apptentive is a service that allows you to have a conversation with the makers of this app. Your input and feedback can help to provide you with a better overall experience.\n\nYour feedback is hosted by Apptentive and is subject to both Apptentive’s privacy policy and the privacy policy of this app’s developer.", @"About apptentive introductory message");
 	[self.aboutButton setTitle:ApptentiveLocalizedString(@"Learn about Apptentive", @"About apptentive link button label") forState:UIControlStateNormal];

@@ -310,7 +310,6 @@
 		016987631DA5C5AB008C4C78 /* Apptentive+Debugging.m in Sources */ = {isa = PBXBuildFile; fileRef = 019A63CA1C4DA5BE00DD5EBF /* Apptentive+Debugging.m */; };
 		016987661DA5C60F008C4C78 /* Apptentive.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 016986721DA57944008C4C78 /* Apptentive.framework */; };
 		016987701DA5D678008C4C78 /* Apptentive_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 4967278116B9D9CB00C679B8 /* Apptentive_Private.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		016A4E191CAF312900AD22A9 /* ApptentiveAPIRequestTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 016A4E171CAF30F900AD22A9 /* ApptentiveAPIRequestTests.m */; };
 		016E4A361DB9982900E45EE4 /* testV7Criteria.json in Resources */ = {isa = PBXBuildFile; fileRef = 016E4A2D1DB9659000E45EE4 /* testV7Criteria.json */; };
 		0171DFED1BF2D019006F8BEA /* ApptentiveCompoundReplyCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 0171DFEB1BF2D019006F8BEA /* ApptentiveCompoundReplyCell.h */; };
 		0171DFEE1BF2D019006F8BEA /* ApptentiveCompoundReplyCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0171DFEC1BF2D019006F8BEA /* ApptentiveCompoundReplyCell.m */; };
@@ -682,7 +681,6 @@
 		0169874F1DA5C422008C4C78 /* ApptentiveDebugging.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ApptentiveDebugging.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		016987511DA5C422008C4C78 /* ApptentiveDebugging.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ApptentiveDebugging.h; sourceTree = "<group>"; };
 		016987521DA5C422008C4C78 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		016A4E171CAF30F900AD22A9 /* ApptentiveAPIRequestTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveAPIRequestTests.m; sourceTree = "<group>"; };
 		016E4A271DB9659000E45EE4 /* testOperatorAfter.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testOperatorAfter.json; sourceTree = "<group>"; };
 		016E4A281DB9659000E45EE4 /* testOperatorBefore.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testOperatorBefore.json; sourceTree = "<group>"; };
 		016E4A291DB9659000E45EE4 /* testOperatorGreaterThan.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testOperatorGreaterThan.json; sourceTree = "<group>"; };
@@ -1558,7 +1556,6 @@
 				01F6FD8F1BFAA512004513C2 /* CriteriaTests.m */,
 				01F6FD911BFAA52A004513C2 /* CriteriaTests.h */,
 				01E25CE41C88B1EE005BF2D2 /* ApptentiveSurveyTests.m */,
-				016A4E171CAF30F900AD22A9 /* ApptentiveAPIRequestTests.m */,
 				014A16DC1C9C75DE00B0B199 /* ApptentiveStyleSheetTests.m */,
 			);
 			path = tests;
@@ -2521,7 +2518,6 @@
 				01E25CE51C88B1EE005BF2D2 /* ApptentiveSurveyTests.m in Sources */,
 				011B08CE1C0D0CCC004F4F5D /* ApptentiveUtilitiesTests.m in Sources */,
 				011B08D01C0D0CCC004F4F5D /* ApptentiveInteractionInvocationTests.m in Sources */,
-				016A4E191CAF312900AD22A9 /* ApptentiveAPIRequestTests.m in Sources */,
 				011B08CF1C0D0CCC004F4F5D /* ApptentiveMigrationTests.m in Sources */,
 				011B08D71C0D19B6004F4F5D /* CodePointAndInteractionTests.m in Sources */,
 				01F6FD971BFBCDC3004513C2 /* ApptentiveMetricsTests.m in Sources */,

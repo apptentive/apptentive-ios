@@ -7,7 +7,7 @@
 //
 
 #import "ApptentiveMessageCenterStatusView.h"
-#import "ApptentiveBackend.h"
+#import "ApptentiveUtilities.h"
 
 
 @interface ApptentiveMessageCenterStatusView ()
@@ -27,11 +27,11 @@
 
 		switch (mode) {
 			case ATMessageCenterStatusModeNetworkError:
-				statusImage = [[ApptentiveBackend imageNamed:@"at_network_error"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+				statusImage = [[ApptentiveUtilities imageNamed:@"at_network_error"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 				break;
 
 			case ATMessageCenterStatusModeHTTPError:
-				statusImage = [[ApptentiveBackend imageNamed:@"at_error_wait"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+				statusImage = [[ApptentiveUtilities imageNamed:@"at_error_wait"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 				break;
 
 			default:

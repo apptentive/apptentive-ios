@@ -17,18 +17,6 @@
 
 @implementation ApptentiveUtilitiesTests
 
-- (void)testEvenRect {
-	CGRect testRect1 = CGRectMake(0.0, 0.0, 17.0, 21.0);
-	CGRect result1 = ATCGRectOfEvenSize(testRect1);
-	XCTAssertEqual(result1.size.width, (CGFloat)18.0, @"");
-	XCTAssertEqual(result1.size.height, (CGFloat)22.0, @"");
-
-	CGRect testRect2 = CGRectMake(0.0, 0.0, 18.0, 22.0);
-	CGRect result2 = ATCGRectOfEvenSize(testRect2);
-	XCTAssertEqual(result2.size.width, (CGFloat)18.0, @"");
-	XCTAssertEqual(result2.size.height, (CGFloat)22.0, @"");
-}
-
 - (void)testVersionComparisons {
 	XCTAssertTrue([ApptentiveUtilities versionString:@"6.0" isEqualToVersionString:@"6.0"], @"Should be same");
 	XCTAssertTrue([ApptentiveUtilities versionString:@"0.0" isEqualToVersionString:@"0.0"], @"Should be same");
@@ -95,49 +83,6 @@
 	}
 }
 
-- (void)testCacheControlParsing {
-	XCTAssertEqual(0., [ApptentiveUtilities maxAgeFromCacheControlHeader:nil], @"Should be same");
-	XCTAssertEqual(0., [ApptentiveUtilities maxAgeFromCacheControlHeader:@""], @"Should be same");
-	XCTAssertEqual(86400., [ApptentiveUtilities maxAgeFromCacheControlHeader:@"Cache-Control: max-age=86400, private"], @"Should be same");
-	XCTAssertEqual(86400., [ApptentiveUtilities maxAgeFromCacheControlHeader:@"max-age=86400, private"], @"Should be same");
-	XCTAssertEqual(47.47, [ApptentiveUtilities maxAgeFromCacheControlHeader:@"max-age=47.47, private"], @"Should be same");
-	XCTAssertEqual(0., [ApptentiveUtilities maxAgeFromCacheControlHeader:@"max-age=0, private"], @"Should be same");
-}
-
-- (void)testDictionaryEquality {
-	NSDictionary *a = nil;
-	NSDictionary *b = nil;
-
-	XCTAssertTrue([ApptentiveUtilities dictionary:a isEqualToDictionary:b], @"Dictionaries should be equal: %@ v %@", a, b);
-
-	a = @{};
-	XCTAssertFalse([ApptentiveUtilities dictionary:a isEqualToDictionary:b], @"Dictionaries should not be equal: %@ v %@", a, b);
-
-	a = nil;
-	b = @{};
-	XCTAssertFalse([ApptentiveUtilities dictionary:a isEqualToDictionary:b], @"Dictionaries should not be equal: %@ v %@", a, b);
-
-	a = @{};
-	b = @{};
-	XCTAssertTrue([ApptentiveUtilities dictionary:a isEqualToDictionary:b], @"Dictionaries should be equal: %@ v %@", a, b);
-
-	a = @{ @"foo": @"bar" };
-	b = @{ @"foo": @"bar" };
-	XCTAssertTrue([ApptentiveUtilities dictionary:a isEqualToDictionary:b], @"Dictionaries should be equal: %@ v %@", a, b);
-
-	a = @{ @"foo": @[@1, @2, @3] };
-	b = @{ @"foo": @[@1, @2, @4] };
-	XCTAssertFalse([ApptentiveUtilities dictionary:a isEqualToDictionary:b], @"Dictionaries should not be equal: %@ v %@", a, b);
-
-	a = @{ @"foo": @[@1, @2, @{@"bar": @"yarg"}] };
-	b = @{ @"foo": @[@1, @2, @{@"narf": @"fran"}] };
-	XCTAssertFalse([ApptentiveUtilities dictionary:a isEqualToDictionary:b], @"Dictionaries should not be equal: %@ v %@", a, b);
-
-	a = @{ @"foo": @[@1, @2, @{@"bar": @"yarg"}] };
-	b = @{ @"foo": @[@1, @2, @{@"bar": @"yarg"}] };
-	XCTAssertTrue([ApptentiveUtilities dictionary:a isEqualToDictionary:b], @"Dictionaries should be equal: %@ v %@", a, b);
-}
-
 - (void)testEmailValidation {
 	XCTAssertTrue([ApptentiveUtilities emailAddressIsValid:@"andrew@example.com"], @"Should be valid");
 	XCTAssertTrue([ApptentiveUtilities emailAddressIsValid:@" andrew+spam@foo.md "], @"Should be valid");
@@ -159,12 +104,6 @@
 	//	XCTAssertFalse([ApptentiveUtilities emailAddressIsValid:@"foo@yarg"], @"Shouldn't be valid");
 	XCTAssertFalse([ApptentiveUtilities emailAddressIsValid:@""], @"empty string email shouldn't be valid");
 	XCTAssertFalse([ApptentiveUtilities emailAddressIsValid:nil], @"nil email shouldn't be valid");
-}
-
-- (void)testStringEscaping {
-	NSString *aString = @"foo% bar/#haha";
-	NSString *result = [ApptentiveUtilities stringByEscapingForURLArguments:aString];
-	XCTAssertEqualObjects(@"foo%25%20bar%2F%23haha", result, @"Unexpected result: %@", result);
 }
 
 // The JSON blobs loaded here should be identical to those for the Android SDK.

@@ -170,7 +170,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 	[self updateHeaderFooterTextSize:nil];
 
-	[self.greetingView.aboutButton setImage:[[ApptentiveBackend imageNamed:@"at_info"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+	[self.greetingView.aboutButton setImage:[[ApptentiveUtilities imageNamed:@"at_info"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
 	self.greetingView.aboutButton.accessibilityLabel = ApptentiveLocalizedString(@"About Apptentive", @"Accessibility label for 'show about' button");
 	self.greetingView.aboutButton.accessibilityHint = ApptentiveLocalizedString(@"Displays information about this feature.", @"Accessibilty hint for 'show about' button");
 
@@ -178,7 +178,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 	self.messageInputView.messageView.text = self.draftMessage ?: @"";
 	self.messageInputView.messageView.textContainerInset = UIEdgeInsetsMake(TEXT_VIEW_VERTICAL_INSET, TEXT_VIEW_VERTICAL_INSET, TEXT_VIEW_VERTICAL_INSET, TEXT_VIEW_VERTICAL_INSET);
-	[self.messageInputView.clearButton setImage:[[ApptentiveBackend imageNamed:@"at_close"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+	[self.messageInputView.clearButton setImage:[[ApptentiveUtilities imageNamed:@"at_close"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
 
 	self.messageInputView.placeholderLabel.text = self.interaction.composerPlaceholderText;
 	self.messageInputView.placeholderLabel.textColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveColorTextInputPlaceholder];
@@ -194,7 +194,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.messageInputView.clearButton.accessibilityLabel = ApptentiveLocalizedString(@"Discard", @"Accessibility label for 'discard' button");
 	self.messageInputView.clearButton.accessibilityHint = ApptentiveLocalizedString(@"Discards the message.", @"Accessibility hint for 'discard' button");
 
-	[self.messageInputView.attachButton setImage:[ApptentiveBackend imageNamed:@"at_attach"] forState:UIControlStateNormal];
+	[self.messageInputView.attachButton setImage:[ApptentiveUtilities imageNamed:@"at_attach"] forState:UIControlStateNormal];
 	[self.messageInputView.attachButton setTitleColor:[[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveColorBackground] forState:UIControlStateNormal];
 
 	self.messageInputView.attachButton.accessibilityLabel = ApptentiveLocalizedString(@"Attach", @"Accessibility label for 'attach' button");
@@ -210,7 +210,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.statusView.imageView.tintColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveTextStyleMessageCenterStatus];
 
 	if (self.interaction.profileRequested) {
-		UIBarButtonItem *profileButtonItem = [[UIBarButtonItem alloc] initWithImage:[ApptentiveBackend imageNamed:@"at_account"] landscapeImagePhone:[ApptentiveBackend imageNamed:@"at_account"] style:UIBarButtonItemStylePlain target:self action:@selector(showWho:)];
+		UIBarButtonItem *profileButtonItem = [[UIBarButtonItem alloc] initWithImage:[ApptentiveUtilities imageNamed:@"at_account"] landscapeImagePhone:[ApptentiveUtilities imageNamed:@"at_account"] style:UIBarButtonItemStylePlain target:self action:@selector(showWho:)];
 		profileButtonItem.accessibilityLabel = ApptentiveLocalizedString(@"Profile", @"Accessibility label for 'edit profile' button");
 		profileButtonItem.accessibilityHint = ApptentiveLocalizedString(@"Displays name and email editor.", @"Accessibility hint for 'edit profile' button");
 		self.navigationItem.leftBarButtonItem = profileButtonItem;

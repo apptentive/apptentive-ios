@@ -37,12 +37,11 @@ extern NSString *const ATConfigurationPreferencesChangedNotification;
 @property (readonly, strong, nonatomic) ApptentiveEngagementManifest *manifest;
 @property (readonly, strong, nonatomic) ApptentiveSession *session;
 
-- (instancetype)initWithAPIKey:(NSString *)APIKey baseURL:(NSURL *)baseURL;
+- (instancetype)initWithAPIKey:(NSString *)APIKey baseURL:(NSURL *)baseURL storagePath:(NSString *)storagePath;
 - (void)processQueuedRecords;
 
 @property (weak, nonatomic) id<ATBackendMessageDelegate> messageDelegate;
 
-+ (UIImage *)imageNamed:(NSString *)name;
 - (BOOL)presentMessageCenterFromViewController:(UIViewController *)viewController;
 - (BOOL)presentMessageCenterFromViewController:(UIViewController *)viewController withCustomData:(NSDictionary *)customData;
 - (void)messageCenterWillDismiss:(ApptentiveMessageCenterViewController *)messageCenter;
@@ -70,17 +69,11 @@ extern NSString *const ATConfigurationPreferencesChangedNotification;
 
 /*! Path to directory for storing attachments. */
 - (NSString *)attachmentDirectoryPath;
-- (NSString *)deviceUUID;
-
-- (NSURL *)apptentiveHomepageURL;
-- (NSURL *)apptentivePrivacyPolicyURL;
 
 - (NSUInteger)unreadMessageCount;
 
 - (void)messageCenterEnteredForeground;
 - (void)messageCenterLeftForeground;
-
-- (NSString *)appName;
 
 - (BOOL)isReady;
 
@@ -88,6 +81,8 @@ extern NSString *const ATConfigurationPreferencesChangedNotification;
 
 - (void)fetchMessagesInBackground:(void (^)(UIBackgroundFetchResult))completionHandler;
 - (void)completeMessageFetchWithResult:(UIBackgroundFetchResult)fetchResult;
+
+- (void)resetBackend;
 
 @property (readonly, nonatomic) NSURLCache *imageCache;
 

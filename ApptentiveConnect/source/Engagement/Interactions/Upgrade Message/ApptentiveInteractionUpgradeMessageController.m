@@ -8,8 +8,8 @@
 
 #import "ApptentiveInteractionUpgradeMessageController.h"
 #import "ApptentiveInteractionUpgradeMessageViewController.h"
-#import "Apptentive_Private.h"
 #import "ApptentiveInteraction.h"
+#import "ApptentiveUtilities.h"
 
 NSString *const ATInteractionUpgradeMessageEventLabelLaunch = @"launch";
 
@@ -21,7 +21,7 @@ NSString *const ATInteractionUpgradeMessageEventLabelLaunch = @"launch";
 }
 
 - (void)presentInteractionFromViewController:(UIViewController *)viewController {
-	UINavigationController *navigationController = [[Apptentive storyboard] instantiateViewControllerWithIdentifier:@"UpgradeMessageNavigation"];
+	UINavigationController *navigationController = [[ApptentiveUtilities storyboard] instantiateViewControllerWithIdentifier:@"UpgradeMessageNavigation"];
 	ApptentiveInteractionUpgradeMessageViewController *result = (ApptentiveInteractionUpgradeMessageViewController *)navigationController.viewControllers.firstObject;
 
 	result.upgradeMessageInteraction = self.interaction;

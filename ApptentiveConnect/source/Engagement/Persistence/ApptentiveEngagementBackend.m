@@ -78,10 +78,6 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 	return interaction;
 }
 
-+ (NSString *)consumerDataStoragePath {
-	return [[Apptentive supportDirectoryPath] stringByAppendingPathComponent:@"consumerData"];
-}
-
 + (NSString *)stringByEscapingCodePointSeparatorCharactersInString:(NSString *)string {
 	// Only escape "%", "/", and "#".
 	// Do not change unless the server spec changes.
@@ -204,9 +200,6 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 
 - (void)setLocalEngagementManifestURL:(NSURL *)localEngagementManifestURL {
 	Apptentive.shared.backend.localEngagementManifestURL = localEngagementManifestURL;
-}
-
-- (void)resetEngagementData {
 }
 
 @end

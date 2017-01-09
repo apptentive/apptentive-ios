@@ -35,7 +35,7 @@
 }
 
 - (NSString *)storagePath {
-	return [self class].supportDirectoryPath;
+	return self.backend.supportDirectoryPath;
 }
 
 - (UIView *)unreadAccessoryView {

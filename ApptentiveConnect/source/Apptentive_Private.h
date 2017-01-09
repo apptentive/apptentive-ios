@@ -24,8 +24,6 @@ extern NSString *const ApptentiveCustomPersonDataPreferenceKey;
 
 @interface Apptentive ()
 
-+ (NSString *)supportDirectoryPath;
-
 @property (readonly, nonatomic) NSURL *baseURL;
 @property (readonly, nonatomic) ApptentiveBackend *backend;
 @property (readonly, nonatomic) ApptentiveEngagementBackend *engagementBackend;
@@ -40,8 +38,6 @@ extern NSString *const ApptentiveCustomPersonDataPreferenceKey;
  * Returns the NSBundle corresponding to the bundle containing Apptentive's
  * images, xibs, strings files, etc.
  */
-+ (NSBundle *)resourceBundle;
-+ (UIStoryboard *)storyboard;
 
 - (void)showNotificationBannerForMessage:(ApptentiveMessage *)message;
 

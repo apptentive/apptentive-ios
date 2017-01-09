@@ -45,7 +45,7 @@
 
 		case ATImageViewMaskTypeAppIcon: {
 			CALayer *maskLayer = [CALayer layer];
-			maskLayer.contents = (id)[ApptentiveBackend imageNamed:@"at_update_icon_mask"].CGImage;
+			maskLayer.contents = (id)[ApptentiveUtilities imageNamed:@"at_update_icon_mask"].CGImage;
 			maskLayer.frame = self.bounds;
 
 			self.layer.cornerRadius = 0.0;

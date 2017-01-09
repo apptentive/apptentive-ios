@@ -13,11 +13,11 @@
 
 @interface ApptentiveInteractionUsageData : NSObject
 
-@property (readonly, strong, nonatomic) ApptentiveSession *data;
+@property (readonly, strong, nonatomic) ApptentiveSession *session;
 
-+ (instancetype)usageDataWithConsumerData:(ApptentiveSession *)data;
++ (instancetype)usageDataWithSession:(ApptentiveSession *)session;
 
-- (instancetype)initWithConsumerData:(ApptentiveSession *)data;
+- (instancetype)initWithSession:(ApptentiveSession *)session;
 
 - (NSDictionary *)predicateEvaluationDictionary;
 

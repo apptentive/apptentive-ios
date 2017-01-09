@@ -46,7 +46,7 @@ NSString *const ATInteractionEnjoymentDialogEventLabelNo = @"no";
 }
 
 - (NSString *)title {
-	NSString *title = self.interaction.configuration[@"title"] ?: [NSString stringWithFormat:ApptentiveLocalizedString(@"Do you love %@?", @"Title for enjoyment alert view. Parameter is app name."), [[Apptentive sharedConnection].backend appName]];
+	NSString *title = self.interaction.configuration[@"title"] ?: [NSString stringWithFormat:ApptentiveLocalizedString(@"Do you love %@?", @"Title for enjoyment alert view. Parameter is app name."), [ApptentiveUtilities appName]];
 
 	return title;
 }

@@ -15,6 +15,7 @@
 #import "ApptentiveMessageSender.h"
 #import "ApptentiveAttachmentCell.h"
 #import "ApptentiveFileAttachment.h"
+#import "ApptentiveUtilities.h"
 
 NSString *const ATMessageCenterServerErrorDomain = @"com.apptentive.MessageCenterServerError";
 NSString *const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenterErrorMessages";
@@ -242,7 +243,7 @@ NSString *const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenter
 	}
 
 	// return generic image attachment icon
-	return [[ApptentiveBackend imageNamed:@"at_document"] resizableImageWithCapInsets:UIEdgeInsetsMake(9.0, 2.0, 2.0, 9.0)];
+	return [[ApptentiveUtilities imageNamed:@"at_document"] resizableImageWithCapInsets:UIEdgeInsetsMake(9.0, 2.0, 2.0, 9.0)];
 }
 
 - (NSString *)extensionForAttachmentAtIndexPath:(NSIndexPath *)indexPath {

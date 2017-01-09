@@ -332,7 +332,6 @@
 		019D32801D2C6C6000EE3861 /* at_checkmark_highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 019D32761D2C6B4900EE3861 /* at_checkmark_highlighted.png */; };
 		019D32811D2C6C6000EE3861 /* at_checkmark_highlighted@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 019D32771D2C6B4900EE3861 /* at_checkmark_highlighted@2x.png */; };
 		019D32821D2C6C6000EE3861 /* at_checkmark_highlighted@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 019D32781D2C6B4900EE3861 /* at_checkmark_highlighted@3x.png */; };
-		01A1A5E31E241B5600F2FCD8 /* ATDataModel v5 to v6.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 01A1A5E21E241B5600F2FCD8 /* ATDataModel v5 to v6.xcmappingmodel */; };
 		01A1A5E81E24273B00F2FCD8 /* ApptentiveLegacySurveyResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A1A5E61E24273B00F2FCD8 /* ApptentiveLegacySurveyResponse.h */; };
 		01A1A5E91E24273B00F2FCD8 /* ApptentiveLegacySurveyResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A1A5E61E24273B00F2FCD8 /* ApptentiveLegacySurveyResponse.h */; };
 		01A1A5EA1E24273B00F2FCD8 /* ApptentiveLegacySurveyResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A1A5E71E24273B00F2FCD8 /* ApptentiveLegacySurveyResponse.m */; };
@@ -341,6 +340,8 @@
 		01A1A5EF1E24274600F2FCD8 /* ApptentiveLegacyEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A1A5EC1E24274600F2FCD8 /* ApptentiveLegacyEvent.h */; };
 		01A1A5F01E24274600F2FCD8 /* ApptentiveLegacyEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A1A5ED1E24274600F2FCD8 /* ApptentiveLegacyEvent.m */; };
 		01A1A5F11E24274600F2FCD8 /* ApptentiveLegacyEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A1A5ED1E24274600F2FCD8 /* ApptentiveLegacyEvent.m */; };
+		01A1A5F31E244B8C00F2FCD8 /* ATDataModel v5 to v6.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 01A1A5F21E244B8C00F2FCD8 /* ATDataModel v5 to v6.xcmappingmodel */; };
+		01A1A5F41E244B8C00F2FCD8 /* ATDataModel v5 to v6.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 01A1A5F21E244B8C00F2FCD8 /* ATDataModel v5 to v6.xcmappingmodel */; };
 		01A88FF81AFBFFAE002C49E7 /* testJsonDiffing.1.expected.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A88FF31AFBFDB6002C49E7 /* testJsonDiffing.1.expected.json */; };
 		01A88FF91AFBFFAE002C49E7 /* testJsonDiffing.1.new.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A88FF41AFBFDB6002C49E7 /* testJsonDiffing.1.new.json */; };
 		01A88FFA1AFBFFAE002C49E7 /* testJsonDiffing.1.old.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A88FF51AFBFDB6002C49E7 /* testJsonDiffing.1.old.json */; };
@@ -716,11 +717,11 @@
 		019D327A1D2C6B4900EE3861 /* at_circle_highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = at_circle_highlighted.png; sourceTree = "<group>"; };
 		019D327B1D2C6B4900EE3861 /* at_circle_highlighted@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_circle_highlighted@2x.png"; sourceTree = "<group>"; };
 		019D327C1D2C6B4900EE3861 /* at_circle_highlighted@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_circle_highlighted@3x.png"; sourceTree = "<group>"; };
-		01A1A5E21E241B5600F2FCD8 /* ATDataModel v5 to v6.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = "ATDataModel v5 to v6.xcmappingmodel"; sourceTree = "<group>"; };
 		01A1A5E61E24273B00F2FCD8 /* ApptentiveLegacySurveyResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveLegacySurveyResponse.h; sourceTree = "<group>"; };
 		01A1A5E71E24273B00F2FCD8 /* ApptentiveLegacySurveyResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveLegacySurveyResponse.m; sourceTree = "<group>"; };
 		01A1A5EC1E24274600F2FCD8 /* ApptentiveLegacyEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveLegacyEvent.h; sourceTree = "<group>"; };
 		01A1A5ED1E24274600F2FCD8 /* ApptentiveLegacyEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveLegacyEvent.m; sourceTree = "<group>"; };
+		01A1A5F21E244B8C00F2FCD8 /* ATDataModel v5 to v6.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = "ATDataModel v5 to v6.xcmappingmodel"; sourceTree = "<group>"; };
 		01A88FF31AFBFDB6002C49E7 /* testJsonDiffing.1.expected.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testJsonDiffing.1.expected.json; sourceTree = "<group>"; };
 		01A88FF41AFBFDB6002C49E7 /* testJsonDiffing.1.new.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testJsonDiffing.1.new.json; sourceTree = "<group>"; };
 		01A88FF51AFBFDB6002C49E7 /* testJsonDiffing.1.old.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testJsonDiffing.1.old.json; sourceTree = "<group>"; };
@@ -1650,7 +1651,7 @@
 				58CD20131821B78D0071CC72 /* ATDataModel v2 to v3.xcmappingmodel */,
 				583E3969188E08DD0030B51E /* ATDataModel v3 to v4.xcmappingmodel */,
 				013BB6121BF6A82300BB6C27 /* ATDataModel v4 to v5.xcmappingmodel */,
-				01A1A5E21E241B5600F2FCD8 /* ATDataModel v5 to v6.xcmappingmodel */,
+				01A1A5F21E244B8C00F2FCD8 /* ATDataModel v5 to v6.xcmappingmodel */,
 				012B4BE01E0B116300D6229B /* ApptentiveAppConfiguration.h */,
 				012B4BE11E0B116300D6229B /* ApptentiveAppConfiguration.m */,
 				49F8AFCF16CC4A550070FFEA /* ApptentiveData.h */,
@@ -2291,6 +2292,7 @@
 				0169867A1DA57965008C4C78 /* Apptentive.m in Sources */,
 				0169867C1DA57965008C4C78 /* ApptentiveStyleSheet.m in Sources */,
 				0169867D1DA57965008C4C78 /* ApptentiveHUDViewController.m in Sources */,
+				01A1A5F41E244B8C00F2FCD8 /* ATDataModel v5 to v6.xcmappingmodel in Sources */,
 				0169867E1DA57965008C4C78 /* ApptentivePassThroughWindow.m in Sources */,
 				012B4C131E0B287F00D6229B /* ApptentivePerson.m in Sources */,
 				012B4C0E1E0B287F00D6229B /* ApptentiveSession.m in Sources */,
@@ -2432,6 +2434,7 @@
 				012292B11E04C0FA00282131 /* ApptentiveSerialRequestOperation.m in Sources */,
 				0132F8AD1C851BFA00A452E3 /* ApptentiveSurveyLayoutAttributes.m in Sources */,
 				0132F8C61C851C0800A452E3 /* ApptentiveSurveyAnswerCell.m in Sources */,
+				01A1A5F31E244B8C00F2FCD8 /* ATDataModel v5 to v6.xcmappingmodel in Sources */,
 				012B4BE31E0B116300D6229B /* ApptentiveAppConfiguration.m in Sources */,
 				49735D631832DF1F00D48DE7 /* ApptentiveMessageCenterDataSource.m in Sources */,
 				0132F8CE1C851C0800A452E3 /* ApptentiveSurveyQuestionBackgroundView.m in Sources */,
@@ -2452,7 +2455,6 @@
 				58E9580B190740BC005063DC /* ApptentiveSurveyQuestionResponse.m in Sources */,
 				0122929F1E04C0BB00282131 /* ApptentiveSerialRequest.m in Sources */,
 				01C30CEC1B0D09F8006BC911 /* ApptentiveMessageCenterGreetingView.m in Sources */,
-				01A1A5E31E241B5600F2FCD8 /* ATDataModel v5 to v6.xcmappingmodel in Sources */,
 				018389061D1A0D6100780B8E /* ApptentiveSurveyQuestionFooterView.m in Sources */,
 				01D0C38D1BF3DC330024BA1A /* ApptentiveAttachmentController.m in Sources */,
 				49E6208816C5E8C2000C9F5A /* NSDictionary+ApptentiveAdditions.m in Sources */,

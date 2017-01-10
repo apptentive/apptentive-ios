@@ -350,6 +350,10 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 
 			[self.networkQueue cancelAllOperations];
 			[self.serialQueue cancelAllOperations];
+
+			self.serialQueue.backgroundTaskIdentifier = [[UIApplication sharedApplication] beginBackgroundTaskWithName:@"SaveContext" expirationHandler:^{
+				ApptentiveLogWarning(@"Background task expired");
+			}];
 		}
 
 		[self updateMessageCheckingTimer];

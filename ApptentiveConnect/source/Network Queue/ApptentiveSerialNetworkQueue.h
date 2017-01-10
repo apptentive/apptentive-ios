@@ -9,6 +9,7 @@
 #import "ApptentiveNetworkQueue.h"
 #import <CoreData/CoreData.h>
 #import "ApptentiveSerialRequestOperation.h"
+#import <UIKit/UIKit.h>
 
 typedef NS_ENUM(NSInteger, ApptentiveQueueStatus) {
 	ApptentiveQueueStatusUnknown,
@@ -25,5 +26,6 @@ typedef NS_ENUM(NSInteger, ApptentiveQueueStatus) {
 @property (readonly, nonatomic) NSNumber *messageSendProgress;
 @property (readonly, nonatomic) NSInteger messageTaskCount;
 @property (readonly, nonatomic) ApptentiveQueueStatus status;
+@property (assign, nonatomic) UIBackgroundTaskIdentifier backgroundTaskIdentifier;
 
 @end

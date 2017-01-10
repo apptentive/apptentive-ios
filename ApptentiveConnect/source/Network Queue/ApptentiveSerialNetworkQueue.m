@@ -29,6 +29,7 @@
 		_activeTaskProgress = [NSMutableDictionary dictionary];
 
 		self.maxConcurrentOperationCount = 1;
+		_backgroundTaskIdentifier = UIBackgroundTaskInvalid;
 	}
 
 	return self;
@@ -80,6 +81,11 @@
 					NSError *parentSaveError;
 					if (![moc.parentContext save:&parentSaveError]) {
 						ApptentiveLogError(@"Unable to save parent managed object context: %@", parentSaveError);
+					}
+
+					if (self.backgroundTaskIdentifier != UIBackgroundTaskInvalid) {
+						[[UIApplication sharedApplication] endBackgroundTask:self.backgroundTaskIdentifier];
+						self.backgroundTaskIdentifier = UIBackgroundTaskInvalid;
 					}
 				});
 			}];

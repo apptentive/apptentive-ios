@@ -120,11 +120,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 @implementation ApptentiveMessageCenterViewController
 
-+ (void)resetPreferences {
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATMessageCenterDraftMessageKey];
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATMessageCenterDidSkipProfileKey];
-}
-
 - (void)viewDidLoad {
 	// TODO: Figure out a way to avoid tightly coupling this
 	[Apptentive sharedConnection].backend.presentedMessageCenterViewController = self;
@@ -915,7 +910,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	}
 	[self.interaction engage:ATInteractionMessageCenterEventLabelProfileClose fromViewController:sender userInfo:userInfo];
 
-	[[NSUserDefaults standardUserDefaults] setBool:YES forKey:ATMessageCenterDidSkipProfileKey];
+	[Apptentive.shared.backend.session.userInfo setObject:@(YES) forKey:ATMessageCenterDidSkipProfileKey];
 	[self updateState];
 	[self.view endEditing:YES];
 	[self resizeFooterView:nil];
@@ -976,9 +971,9 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 - (void)saveDraft {
 	if (self.messageComposerHasText) {
-		[[NSUserDefaults standardUserDefaults] setObject:self.trimmedMessage forKey:ATMessageCenterDraftMessageKey];
+		[Apptentive.shared.backend.session.userInfo setObject:self.trimmedMessage forKey:ATMessageCenterDraftMessageKey];
 	} else {
-		[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATMessageCenterDraftMessageKey];
+		[Apptentive.shared.backend.session.userInfo removeObjectForKey:ATMessageCenterDraftMessageKey];
 	}
 
 	[self.attachmentController saveDraft];
@@ -1240,7 +1235,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (NSString *)draftMessage {
-	return [[NSUserDefaults standardUserDefaults] stringForKey:ATMessageCenterDraftMessageKey] ?: @"";
+	return [Apptentive.shared.backend.session.userInfo objectForKey:ATMessageCenterDraftMessageKey] ?: @"";
 }
 
 - (void)scrollToLastMessageAnimated:(BOOL)animated {
@@ -1265,7 +1260,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	} else if (self.interaction.profileRequired) {
 		return YES;
 	} else if (self.interaction.profileRequested && !beforeComposing) {
-		return ![[NSUserDefaults standardUserDefaults] boolForKey:ATMessageCenterDidSkipProfileKey];
+		return ![[Apptentive.shared.backend.session.userInfo objectForKey:ATMessageCenterDidSkipProfileKey] boolValue];
 	} else {
 		return NO;
 	}

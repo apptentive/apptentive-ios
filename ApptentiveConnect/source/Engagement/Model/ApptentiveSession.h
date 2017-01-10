@@ -22,6 +22,7 @@
 @property (readonly, nonatomic) NSString *token;
 @property (readonly, nonatomic) NSString *lastMessageID;
 @property (readonly, nonatomic) NSDate *currentTime;
+@property (readonly, nonatomic) NSMutableDictionary *userInfo;
 
 @property (weak, nonatomic) id<ApptentiveSessionDelegate> delegate;
 

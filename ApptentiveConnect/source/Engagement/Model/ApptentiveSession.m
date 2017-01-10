@@ -25,6 +25,7 @@ static NSString * const EngagementKey = @"engagement";
 static NSString * const APIKeyKey = @"APIKey";
 static NSString * const TokenKey = @"token";
 static NSString * const LastMessageIDKey = @"lastMessageID";
+static NSString * const UserInfoKey = @"userInfo";
 
 @implementation ApptentiveSession
 
@@ -43,6 +44,7 @@ static NSString * const LastMessageIDKey = @"lastMessageID";
 		_person = [[ApptentivePerson alloc] init];
 		_device = [[ApptentiveDevice alloc] initWithCurrentDevice];
 		_engagement = [[ApptentiveEngagement alloc] init];
+		_userInfo = [[NSMutableDictionary alloc] init];
 		_APIKey = APIKey;
 	}
 	return self;
@@ -60,6 +62,7 @@ static NSString * const LastMessageIDKey = @"lastMessageID";
 		_APIKey = [coder decodeObjectOfClass:[NSString class] forKey:APIKeyKey];
 		_token = [coder decodeObjectOfClass:[NSString class] forKey:TokenKey];
 		_lastMessageID = [coder decodeObjectOfClass:[NSString class] forKey:LastMessageIDKey];
+		_userInfo = [coder decodeObjectOfClass:[NSMutableDictionary class] forKey:UserInfoKey];
 	}
 	return self;
 }
@@ -75,6 +78,7 @@ static NSString * const LastMessageIDKey = @"lastMessageID";
 	[coder encodeObject:self.APIKey forKey:APIKeyKey];
 	[coder encodeObject:self.token forKey:TokenKey];
 	[coder encodeObject:self.lastMessageID forKey:LastMessageIDKey];
+	[coder encodeObject:self.userInfo forKey:UserInfoKey];
 }
 
 - (void)setToken:(NSString *)token personID:(NSString *)personID deviceID:(NSString *)deviceID {
@@ -217,6 +221,12 @@ static NSString * const LastMessageIDKey = @"lastMessageID";
 		_token = legacyConversation.token;
 		_person.identifier = legacyConversation.personID;
 		_device.identifier = legacyConversation.deviceID;
+
+		NSString *ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKey";
+		NSString *ATMessageCenterDidSkipProfileKey = @"ATMessageCenterDidSkipProfileKey";
+
+		[_userInfo setObject:[[NSUserDefaults standardUserDefaults] stringForKey:ATMessageCenterDraftMessageKey] forKey:ATMessageCenterDraftMessageKey];
+		[_userInfo setObject:@([[NSUserDefaults standardUserDefaults] boolForKey:ATMessageCenterDidSkipProfileKey]) forKey:ATMessageCenterDidSkipProfileKey];
 	}
 
 	return self;

@@ -132,7 +132,6 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 				if ([self saveSession]) {
 					[ApptentiveSession deleteMigratedData];
 				}
-				// TODO: delete migrated data
 			} else {
 				self->_session = [[ApptentiveSession alloc] initWithAPIKey:APIKey];
 			}
@@ -206,6 +205,12 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 
 				[self networkStatusChanged:nil];
 
+				NSString *legacyTaskPath = [self.supportDirectoryPath stringByAppendingPathComponent:@"tasks.objects"];
+				NSError *error;
+				if ([[NSFileManager defaultManager] fileExistsAtPath:legacyTaskPath] && ![[NSFileManager defaultManager] removeItemAtPath:legacyTaskPath error:&error]) {
+					ApptentiveLogError(@"Unable to delete migrated tasks: %@", error);
+				}
+
 				// Enqueue any unsent messages, events, or survey responses from <= v3.4
 				NSManagedObjectContext *migrationContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
 				migrationContext.parentContext = self.managedObjectContext;
@@ -215,9 +220,9 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 					[ApptentiveLegacyEvent enqueueUnsentEventsInContext:migrationContext];
 					[ApptentiveLegacySurveyResponse enqueueUnsentSurveyResponsesInContext:migrationContext];
 
-					NSError *error;
-					if (![migrationContext save:&error]) {
-						ApptentiveLogError(@"Unable to save migration context: %@", error);
+					NSError *coreDataError;
+					if (![migrationContext save:&coreDataError]) {
+						ApptentiveLogError(@"Unable to save migration context: %@", coreDataError);
 					}
 				}];
 

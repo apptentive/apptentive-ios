@@ -137,9 +137,6 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 
 		[self interactionWasEngaged:interaction];
 		didEngageInteraction = YES;
-
-		// Sync defaults so user doesn't see interaction more than once.
-		[[NSUserDefaults standardUserDefaults] synchronize];
 	}
 
 	return didEngageInteraction;

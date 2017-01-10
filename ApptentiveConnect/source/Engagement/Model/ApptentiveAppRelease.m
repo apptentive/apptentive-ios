@@ -122,6 +122,15 @@ static NSString * const TimeAtInstallBuildKey = @"timeAtInstallBuild";
 	return self;
 }
 
++ (void)deleteMigratedData {
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ATConversationLastUpdateValuePreferenceKey"];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ATEngagementInstallDateKey"];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ATEngagementUpgradeDateKey"];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ATEngagementLastUsedVersionKey"];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ATEngagementIsUpdateVersionKey"];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ATEngagementIsUpdateBuildKey"];
+}
+
 - (void)resetVersion {
 	_updateVersion = YES;
 	_timeAtInstallVersion = [NSDate date]; // TODO: Inject as dependency?

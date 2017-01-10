@@ -113,6 +113,12 @@ static NSString * const IntegrationConfigurationKey = @"integrationConfiguration
 	return self;
 }
 
++ (void)deleteMigratedData {
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ATDeviceLastUpdateValuePreferenceKey"];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ATDeviceLastUpdatePreferenceKey"];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ApptentiveCustomDeviceDataPreferenceKey"];
+}
+
 - (instancetype)initWithMutableDevice:(ApptentiveMutableDevice *)mutableDevice {
 	self = [self initWithMutableCustomData:mutableDevice];
 

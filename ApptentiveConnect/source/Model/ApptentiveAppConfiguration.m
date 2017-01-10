@@ -81,6 +81,14 @@ static NSString * const NotificationPopupEnabledKey = @"notificationPopupEnabled
 	return self;
 }
 
++ (void)deleteMigratedData {
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ATAppConfigurationExpirationPreferenceKey"];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ATAppConfigurationMetricsEnabledPreferenceKey"];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ATAppConfigurationHideBrandingKey"];
+
+	[ApptentiveMessageCenterConfiguration deleteMigratedData];
+}
+
 - (instancetype)initWithCoder:(NSCoder *)coder
 {
 	self = [super init];

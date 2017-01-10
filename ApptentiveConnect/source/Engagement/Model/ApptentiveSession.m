@@ -222,6 +222,16 @@ static NSString * const LastMessageIDKey = @"lastMessageID";
 	return self;
 }
 
++ (void)deleteMigratedData {
+	[ApptentiveAppRelease deleteMigratedData];
+	[ApptentiveSDK deleteMigratedData];
+	[ApptentivePerson deleteMigratedData];
+	[ApptentiveDevice deleteMigratedData];
+	[ApptentiveEngagement deleteMigratedData];
+
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ATCurrentConversationPreferenceKey"];
+}
+
 @end
 
 @implementation ApptentiveLegacyConversation

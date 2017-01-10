@@ -19,6 +19,8 @@
 - (instancetype)initWithJSONDictionary:(NSDictionary *)JSONDictionary;
 - (instancetype)initWithUserDefaults:(NSUserDefaults *)userDefaults;
 
++ (void)deleteMigratedData;
+
 @end
 
 @interface ApptentiveAppConfiguration : NSObject <NSSecureCoding>
@@ -37,5 +39,7 @@
 
 - (instancetype)initWithJSONDictionary:(NSDictionary *)JSONDictionary cacheLifetime:(NSTimeInterval)cacheLifetime;
 - (instancetype)initWithUserDefaults:(NSUserDefaults *)userDefaults;
+
++ (void)deleteMigratedData;
 
 @end

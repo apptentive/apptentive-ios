@@ -28,4 +28,6 @@
 - (instancetype)initWithCurrentDevice;
 - (instancetype)initWithMutableDevice:(ApptentiveMutableDevice *)mutableDevice;
 
++ (void)deleteMigratedData;
+
 @end

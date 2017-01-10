@@ -74,6 +74,17 @@ static NSString * const CodePointsKey = @"codePoints";
 	return self;
 }
 
++ (void)deleteMigratedData {
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ATEngagementCodePointsInvokesTotalKey"];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ATEngagementCodePointsInvokesVersionKey"];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ATEngagementCodePointsInvokesBuildKey"];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ATEngagementCodePointsInvokesLastDateKey"];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ATEngagementInteractionsInvokesTotalKey"];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ATEngagementInteractionsInvokesVersionKey"];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ATEngagementInteractionsInvokesBuildKey"];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ATEngagementInteractionsInvokesLastDateKey"];
+}
+
 - (NSDictionary<NSString *,ApptentiveCount *> *)interactions {
 	return [NSDictionary dictionaryWithDictionary:self.mutableInteractions];
 }

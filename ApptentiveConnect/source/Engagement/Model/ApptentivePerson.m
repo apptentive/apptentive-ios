@@ -58,6 +58,12 @@ static NSString * const EmailAddressKey = @"emailAddress";
 	return self;
 }
 
++ (void)deleteMigratedData {
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ATPersonLastUpdateValuePreferenceKey"];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ATCurrentPersonPreferenceKey"];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ApptentiveCustomPersonDataPreferenceKey"];
+}
+
 - (instancetype)initWithMutablePerson:(ApptentiveMutablePerson *)mutablePerson {
 	self = [super initWithMutableCustomData:mutablePerson];
 

@@ -85,6 +85,23 @@ static NSString * const ExpiryKey = @"expiry";
 	return self;
 }
 
++ (void)deleteMigratedDataFromCachePath:(NSString *)cachePath {
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ATEngagementInteractionsSDKVersionKey"];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ATEngagementInteractionsAppBuildNumberKey"];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ATEngagementCachedInteractionsExpirationPreferenceKey"];
+
+	NSError *error;
+	NSString *targetsCachePath = [cachePath stringByAppendingPathComponent:@"cachedtargets.objects"];
+	if (![[NSFileManager defaultManager] removeItemAtPath:targetsCachePath error:&error]) {
+		ApptentiveLogError(@"Unable to remove migrated target data: %@", error);
+	}
+
+	NSString *cachedInteractionsPath = [cachePath stringByAppendingPathComponent:@"cachedinteractionsV2.objects"];
+	if (![[NSFileManager defaultManager] removeItemAtPath:cachedInteractionsPath error:&error]) {
+		ApptentiveLogError(@"Unable to remove migrated interactions data: %@", error);
+	}
+}
+
 - (instancetype)initWithCoder:(NSCoder *)coder {
 	self = [super init];
 

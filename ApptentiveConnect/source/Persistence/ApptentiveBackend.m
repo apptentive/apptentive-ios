@@ -129,7 +129,9 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 				self->_session = [NSKeyedUnarchiver unarchiveObjectWithFile:[self sessionPath]];
 			} else if ([[NSUserDefaults standardUserDefaults] objectForKey:@"ATEngagementInstallDateKey"]) {
 				self->_session = [[ApptentiveSession alloc] initAndMigrate];
-				[self saveSession];
+				if ([self saveSession]) {
+					[ApptentiveSession deleteMigratedData];
+				}
 				// TODO: delete migrated data
 			} else {
 				self->_session = [[ApptentiveSession alloc] initWithAPIKey:APIKey];
@@ -142,8 +144,9 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 				self->_configuration = [NSKeyedUnarchiver unarchiveObjectWithFile:[self configurationPath]];
 			} else if ([[NSUserDefaults standardUserDefaults] objectForKey:@"ATConfigurationSDKVersionKey"]) {
 				self->_configuration = [[ApptentiveAppConfiguration alloc] initWithUserDefaults:[NSUserDefaults standardUserDefaults]];
-				[self saveConfiguration];
-				// TODO: delete migrated data
+				if ([self saveConfiguration]) {
+					[ApptentiveAppConfiguration deleteMigratedData];
+				}
 			} else {
 				self->_configuration = [[ApptentiveAppConfiguration alloc] init];
 			}
@@ -153,8 +156,9 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 				self->_manifest = [NSKeyedUnarchiver unarchiveObjectWithFile:[self manifestPath]];
 			} else if ([[NSUserDefaults standardUserDefaults] objectForKey:@"ATEngagementInteractionsSDKVersionKey"]) {
 				self->_manifest = [[ApptentiveEngagementManifest alloc] initWithCachePath:[self supportDirectoryPath] userDefaults:[NSUserDefaults standardUserDefaults]];
-				[self saveManifest];
-				// TODO: delete migrated data
+				if ([self saveManifest]) {
+					[ApptentiveEngagementManifest deleteMigratedDataFromCachePath:[self supportDirectoryPath]];
+				}
 			} else {
 				self->_manifest = [[ApptentiveEngagementManifest alloc] init];
 			}

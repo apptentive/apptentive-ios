@@ -131,6 +131,12 @@ static ApptentiveVersion *_distributionVersion;
 	return self;
 }
 
++ (void)deleteMigratedData {
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ATConversationLastUpdateValuePreferenceKey"];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ATConversationLastUpdatePreferenceKey"];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ATCurrentConversationPreferenceKey"];
+}
+
 @end
 
 @implementation ApptentiveSDK (JSON)

@@ -26,6 +26,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initAndMigrate;
 
++ (void) deleteMigratedData;
+
 @end
 
 NS_ASSUME_NONNULL_END

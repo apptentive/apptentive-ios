@@ -49,9 +49,9 @@
 	XCTAssertEqualObjects(versionValue[@"_type"], @"version");
 	XCTAssertEqualObjects(versionValue[@"version"], @"2");
 
-	XCTAssertFalse([invocation criteriaAreMetForConsumerData:self.usage.session], @"4.0.0 is not 2");
+	XCTAssertFalse([invocation criteriaAreMetForSession:self.usage.session], @"4.0.0 is not 2");
 	[self.usage.session.appRelease setValue:[[ApptentiveVersion alloc] initWithString:@"4.0"] forKey:@"version"];
-	XCTAssertTrue([invocation criteriaAreMetForConsumerData:self.usage.session], @"4.0 is like 4.0.0");
+	XCTAssertTrue([invocation criteriaAreMetForSession:self.usage.session], @"4.0 is like 4.0.0");
 }
 
 - (void)testDefaultApplicationVersion {

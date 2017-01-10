@@ -54,49 +54,49 @@
 }
 
 - (void)testGt {
-	XCTAssertFalse([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertFalse([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertFalse([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertFalse([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertTrue([self.interaction criteriaAreMetForSession:self.usageData.session]);
 }
 
 - (void)testGte {
 	[self incrementCodePoint:@"switch.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertFalse([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertFalse([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertTrue([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertTrue([self.interaction criteriaAreMetForSession:self.usageData.session]);
 }
 
 - (void)testNe {
 	[self incrementCodePoint:@"switch.code.point"];
 	[self incrementCodePoint:@"switch.code.point"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertTrue([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertTrue([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertFalse([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertTrue([self.interaction criteriaAreMetForSession:self.usageData.session]);
 }
 
 - (void)testEq {
 	[self incrementCodePoint:@"switch.code.point"];
 	[self incrementCodePoint:@"switch.code.point"];
 	[self incrementCodePoint:@"switch.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertFalse([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertFalse([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertTrue([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertFalse([self.interaction criteriaAreMetForSession:self.usageData.session]);
 }
 
 - (void)testColon {
@@ -104,13 +104,13 @@
 	[self incrementCodePoint:@"switch.code.point"];
 	[self incrementCodePoint:@"switch.code.point"];
 	[self incrementCodePoint:@"switch.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertFalse([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertFalse([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertTrue([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertFalse([self.interaction criteriaAreMetForSession:self.usageData.session]);
 }
 
 - (void)testLte {
@@ -119,13 +119,13 @@
 	[self incrementCodePoint:@"switch.code.point"];
 	[self incrementCodePoint:@"switch.code.point"];
 	[self incrementCodePoint:@"switch.code.point"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertTrue([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertTrue([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertTrue([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertFalse([self.interaction criteriaAreMetForSession:self.usageData.session]);
 }
 
 - (void)testLt {
@@ -135,13 +135,13 @@
 	[self incrementCodePoint:@"switch.code.point"];
 	[self incrementCodePoint:@"switch.code.point"];
 	[self incrementCodePoint:@"switch.code.point"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertTrue([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertTrue([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertFalse([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertFalse([self.interaction criteriaAreMetForSession:self.usageData.session]);
 }
 
 @end
@@ -165,49 +165,49 @@
 }
 
 - (void)testGt {
-	XCTAssertFalse([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertFalse([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertFalse([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertFalse([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertTrue([self.interaction criteriaAreMetForSession:self.usageData.session]);
 }
 
 - (void)testGte {
 	[self incrementCodePoint:@"switch.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertFalse([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertFalse([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertTrue([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertTrue([self.interaction criteriaAreMetForSession:self.usageData.session]);
 }
 
 - (void)testNe {
 	[self incrementCodePoint:@"switch.code.point"];
 	[self incrementCodePoint:@"switch.code.point"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertTrue([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertTrue([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertFalse([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertTrue([self.interaction criteriaAreMetForSession:self.usageData.session]);
 }
 
 - (void)testEq {
 	[self incrementCodePoint:@"switch.code.point"];
 	[self incrementCodePoint:@"switch.code.point"];
 	[self incrementCodePoint:@"switch.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertFalse([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertFalse([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertTrue([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertFalse([self.interaction criteriaAreMetForSession:self.usageData.session]);
 }
 
 - (void)testColon {
@@ -215,13 +215,13 @@
 	[self incrementCodePoint:@"switch.code.point"];
 	[self incrementCodePoint:@"switch.code.point"];
 	[self incrementCodePoint:@"switch.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertFalse([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertFalse([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertTrue([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertFalse([self.interaction criteriaAreMetForSession:self.usageData.session]);
 }
 
 - (void)testLte {
@@ -230,13 +230,13 @@
 	[self incrementCodePoint:@"switch.code.point"];
 	[self incrementCodePoint:@"switch.code.point"];
 	[self incrementCodePoint:@"switch.code.point"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertTrue([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertTrue([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertTrue([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertFalse([self.interaction criteriaAreMetForSession:self.usageData.session]);
 }
 
 - (void)testLt {
@@ -246,13 +246,13 @@
 	[self incrementCodePoint:@"switch.code.point"];
 	[self incrementCodePoint:@"switch.code.point"];
 	[self incrementCodePoint:@"switch.code.point"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertTrue([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertTrue([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertFalse([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertFalse([self.interaction criteriaAreMetForSession:self.usageData.session]);
 }
 
 @end
@@ -280,18 +280,18 @@
 - (void)testAfter {
 	[self.usageData.session.engagement.codePoints[@"test.code.point"] setValue:[NSDate distantPast] forKey:@"lastInvoked"];
 
-	XCTAssertFalse([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertFalse([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	NSLog(@"%@", [self.usageData predicateEvaluationDictionary][@"code_point/test.code.point/last_invoked_at/total"]);
 	[self incrementTimeAgoCodePoint:@"test.code.point"];
 	NSLog(@"%@", [self.usageData predicateEvaluationDictionary][@"code_point/test.code.point/last_invoked_at/total"]);
-	XCTAssertTrue([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertTrue([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementTimeAgoCodePoint:@"test.code.point"];
 	usleep(300000);
 	NSLog(@"%@", [self.usageData predicateEvaluationDictionary][@"code_point/test.code.point/last_invoked_at/total"]);
-	XCTAssertTrue([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertTrue([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	usleep(300000);
 	NSLog(@"%@", [self.usageData predicateEvaluationDictionary][@"code_point/test.code.point/last_invoked_at/total"]);
-	XCTAssertFalse([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertFalse([self.interaction criteriaAreMetForSession:self.usageData.session]);
 }
 
 - (void)testNe {
@@ -299,24 +299,24 @@
 
 	[self incrementCodePoint:@"switch.code.point"];
 	// There is always going to be a few microseconds of time offset here, so I can't really run this test.
-	//XCTAssertFalse([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	//XCTAssertFalse([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementTimeAgoCodePoint:@"test.code.point"];
 	usleep(300000);
-	XCTAssertTrue([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertTrue([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	usleep(300000);
-	XCTAssertTrue([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertTrue([self.interaction criteriaAreMetForSession:self.usageData.session]);
 }
 
 - (void)testEq {
 	// 2 - $eq // There's no easy way to test this unless we contrive the times.
 	[self incrementCodePoint:@"switch.code.point"];
 	[self incrementCodePoint:@"switch.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertFalse([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementTimeAgoCodePoint:@"test.code.point"];
 	usleep(300000);
-	XCTAssertFalse([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertFalse([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	usleep(300000);
-	XCTAssertFalse([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertFalse([self.interaction criteriaAreMetForSession:self.usageData.session]);
 }
 
 - (void)testColon {
@@ -324,12 +324,12 @@
 	[self incrementCodePoint:@"switch.code.point"];
 	[self incrementCodePoint:@"switch.code.point"];
 	[self incrementCodePoint:@"switch.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertFalse([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementTimeAgoCodePoint:@"test.code.point"];
 	usleep(300000);
-	XCTAssertFalse([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertFalse([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	usleep(300000);
-	XCTAssertFalse([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertFalse([self.interaction criteriaAreMetForSession:self.usageData.session]);
 }
 
 - (void)testBefore {
@@ -337,12 +337,12 @@
 	[self incrementCodePoint:@"switch.code.point"];
 	[self incrementCodePoint:@"switch.code.point"];
 	[self incrementCodePoint:@"switch.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertFalse([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementTimeAgoCodePoint:@"test.code.point"];
 	usleep(300000);
-	XCTAssertFalse([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertFalse([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	usleep(300000);
-	XCTAssertTrue([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertTrue([self.interaction criteriaAreMetForSession:self.usageData.session]);
 }
 
 @end
@@ -362,49 +362,49 @@
 }
 
 - (void)testInteractionInvokesTotalGt {
-	XCTAssertFalse([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertFalse([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementInteraction:@"test.interaction"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertFalse([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementInteraction:@"test.interaction"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertFalse([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementInteraction:@"test.interaction"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertTrue([self.interaction criteriaAreMetForSession:self.usageData.session]);
 }
 
 - (void)testInteractionInvokesTotalGte {
 	[self incrementCodePoint:@"switch.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertFalse([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementInteraction:@"test.interaction"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertFalse([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementInteraction:@"test.interaction"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertTrue([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementInteraction:@"test.interaction"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertTrue([self.interaction criteriaAreMetForSession:self.usageData.session]);
 }
 
 - (void)testInteractionInvokesTotalNe {
 	[self incrementCodePoint:@"switch.code.point"];
 	[self incrementCodePoint:@"switch.code.point"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertTrue([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementInteraction:@"test.interaction"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertTrue([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementInteraction:@"test.interaction"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertFalse([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementInteraction:@"test.interaction"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertTrue([self.interaction criteriaAreMetForSession:self.usageData.session]);
 }
 
 - (void)testInteractionInvokesTotalEq {
 	[self incrementCodePoint:@"switch.code.point"];
 	[self incrementCodePoint:@"switch.code.point"];
 	[self incrementCodePoint:@"switch.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertFalse([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementInteraction:@"test.interaction"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertFalse([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementInteraction:@"test.interaction"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertTrue([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementInteraction:@"test.interaction"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertFalse([self.interaction criteriaAreMetForSession:self.usageData.session]);
 }
 
 - (void)testInteractionInvokesTotalColon {
@@ -412,13 +412,13 @@
 	[self incrementCodePoint:@"switch.code.point"];
 	[self incrementCodePoint:@"switch.code.point"];
 	[self incrementCodePoint:@"switch.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertFalse([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementInteraction:@"test.interaction"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertFalse([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementInteraction:@"test.interaction"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertTrue([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementInteraction:@"test.interaction"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertFalse([self.interaction criteriaAreMetForSession:self.usageData.session]);
 }
 
 - (void)testInteractionInvokesTotalLte {
@@ -427,13 +427,13 @@
 	[self incrementCodePoint:@"switch.code.point"];
 	[self incrementCodePoint:@"switch.code.point"];
 	[self incrementCodePoint:@"switch.code.point"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertTrue([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementInteraction:@"test.interaction"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertTrue([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementInteraction:@"test.interaction"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertTrue([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementInteraction:@"test.interaction"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertFalse([self.interaction criteriaAreMetForSession:self.usageData.session]);
 }
 
 - (void)testInteractionInvokesTotalLt {
@@ -443,13 +443,13 @@
 	[self incrementCodePoint:@"switch.code.point"];
 	[self incrementCodePoint:@"switch.code.point"];
 	[self incrementCodePoint:@"switch.code.point"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertTrue([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementInteraction:@"test.interaction"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertTrue([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementInteraction:@"test.interaction"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertFalse([self.interaction criteriaAreMetForSession:self.usageData.session]);
 	[self incrementInteraction:@"test.interaction"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConsumerData:self.usageData.session]);
+	XCTAssertFalse([self.interaction criteriaAreMetForSession:self.usageData.session]);
 }
 
 @end

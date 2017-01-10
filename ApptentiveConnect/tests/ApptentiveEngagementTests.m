@@ -104,7 +104,7 @@
 	[session.appRelease setValue:[[ApptentiveVersion alloc] initWithString:@"1.8.9"] forKey:@"version"];
 	[session.appRelease setValue:[[ApptentiveVersion alloc] initWithString:@"39"] forKey:@"build"];
 	
-	XCTAssertTrue([invocation criteriaAreMetForConsumerData:session], @"Install date");
+	XCTAssertTrue([invocation criteriaAreMetForSession:session], @"Install date");
 }
 
 - (void)testUnknownKeyInCriteria {
@@ -122,14 +122,14 @@
 	[session.appRelease setValue:[[ApptentiveVersion alloc] initWithString:@"1.8.9"] forKey:@"version"];
 	[session.appRelease setValue:[[ApptentiveVersion alloc] initWithString:@"39"] forKey:@"build"];
 
-	XCTAssertTrue([invocation criteriaAreMetForConsumerData:session], @"All keys are known, thus the criteria is met.");
+	XCTAssertTrue([invocation criteriaAreMetForSession:session], @"All keys are known, thus the criteria is met.");
 
 	invocation.criteria = @{ @"time_since_install/total": @6,
 							 @"unknown_key": @"criteria_should_not_be_met" };
-	XCTAssertFalse([invocation criteriaAreMetForConsumerData:session], @"Criteria should not be met if the criteria includes a key that the client does not recognize.");
+	XCTAssertFalse([invocation criteriaAreMetForSession:session], @"Criteria should not be met if the criteria includes a key that the client does not recognize.");
 
 	invocation.criteria = @{ @6: @"this is weird" };
-	XCTAssertFalse([invocation criteriaAreMetForConsumerData:session], @"Criteria should not be met if the criteria includes a key that the client does not recognize.");
+	XCTAssertFalse([invocation criteriaAreMetForSession:session], @"Criteria should not be met if the criteria includes a key that the client does not recognize.");
 }
 
 - (void)testEmptyCriteria {
@@ -137,16 +137,16 @@
 	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] init];
 
 	invocation.criteria = nil;
-	XCTAssertFalse([invocation criteriaAreMetForConsumerData:usageData.session], @"Dictionary with nil criteria should evaluate to False.");
+	XCTAssertFalse([invocation criteriaAreMetForSession:usageData.session], @"Dictionary with nil criteria should evaluate to False.");
 
 	invocation.criteria = @{[NSNull null]: [NSNull null]};
-	XCTAssertFalse([invocation criteriaAreMetForConsumerData:usageData.session], @"Dictionary with Null criteria should evaluate to False.");
+	XCTAssertFalse([invocation criteriaAreMetForSession:usageData.session], @"Dictionary with Null criteria should evaluate to False.");
 
 	invocation.criteria = @{};
-	XCTAssertTrue([invocation criteriaAreMetForConsumerData:usageData.session], @"Empty criteria dictionary with no keys should evaluate to True.");
+	XCTAssertTrue([invocation criteriaAreMetForSession:usageData.session], @"Empty criteria dictionary with no keys should evaluate to True.");
 
 	invocation.criteria = @{ @"": @6 };
-	XCTAssertFalse([invocation criteriaAreMetForConsumerData:usageData.session], @"Criteria with a key that is an empty string should fail (if usage data does not match).");
+	XCTAssertFalse([invocation criteriaAreMetForSession:usageData.session], @"Criteria with a key that is an empty string should fail (if usage data does not match).");
 }
 
 - (void)testInteractionCriteriaDaysSnceInstall {
@@ -158,17 +158,17 @@
 
 	invocation.criteria = @{ @"time_at_install/total": @{ @"$before": @(-6 * dayTimeInterval) } };
 	[session.appRelease setValue:[NSDate dateWithTimeIntervalSinceNow: -7 * dayTimeInterval] forKey:@"timeAtInstallTotal"];
-	XCTAssertTrue([invocation criteriaAreMetForConsumerData:session], @"Install date");
+	XCTAssertTrue([invocation criteriaAreMetForSession:session], @"Install date");
 	[session.appRelease setValue:[NSDate dateWithTimeIntervalSinceNow: -5 * dayTimeInterval] forKey:@"timeAtInstallTotal"];
-	XCTAssertFalse([invocation criteriaAreMetForConsumerData:session], @"Install date");
+	XCTAssertFalse([invocation criteriaAreMetForSession:session], @"Install date");
 
 	invocation.criteria = @{ @"time_at_install/total": @{@"$before": @(-5 * dayTimeInterval), @"$after": @(-7 * dayTimeInterval)} };
 	[session.appRelease setValue:[NSDate dateWithTimeIntervalSinceNow: -6 * dayTimeInterval] forKey:@"timeAtInstallTotal"];
-	XCTAssertTrue([invocation criteriaAreMetForConsumerData:session], @"Install date");
+	XCTAssertTrue([invocation criteriaAreMetForSession:session], @"Install date");
 	[session.appRelease setValue:[NSDate dateWithTimeIntervalSinceNow: -4.999 * dayTimeInterval] forKey:@"timeAtInstallTotal"];
-	XCTAssertFalse([invocation criteriaAreMetForConsumerData:session], @"Install date");
+	XCTAssertFalse([invocation criteriaAreMetForSession:session], @"Install date");
 	[session.appRelease setValue:[NSDate dateWithTimeIntervalSinceNow: -7 * dayTimeInterval] forKey:@"timeAtInstallTotal"];
-	XCTAssertFalse([invocation criteriaAreMetForConsumerData:session], @"Install date");
+	XCTAssertFalse([invocation criteriaAreMetForSession:session], @"Install date");
 }
 
 - (void)testInteractionCriteriaDebug {
@@ -182,7 +182,7 @@
 	invocation.criteria = @{ @"application/debug": @NO };
 #endif
 
-	XCTAssertTrue([invocation criteriaAreMetForConsumerData:session], @"Debug boolean");
+	XCTAssertTrue([invocation criteriaAreMetForSession:session], @"Debug boolean");
 
 #if APPTENTIVE_DEBUG
 	invocation.criteria = @{ @"application/debug": @NO };
@@ -190,7 +190,7 @@
 	invocation.criteria = @{ @"application/debug": @YES };
 #endif
 
-	XCTAssertFalse([invocation criteriaAreMetForConsumerData:session], @"Debug boolean");
+	XCTAssertFalse([invocation criteriaAreMetForSession:session], @"Debug boolean");
 }
 
 - (void)testInteractionCriteriaVersion {
@@ -199,15 +199,15 @@
 
 	invocation.criteria = @{ @"application/cf_bundle_short_version_string": [Apptentive versionObjectWithVersion:@"1.2.8"] };
 	[usageData.session.appRelease setValue:[[ApptentiveVersion alloc] initWithString:@"1.2.8"] forKey:@"version"];
-	XCTAssertTrue([invocation criteriaAreMetForConsumerData:usageData.session], @"Version number");
+	XCTAssertTrue([invocation criteriaAreMetForSession:usageData.session], @"Version number");
 	[usageData.session.appRelease setValue:[[ApptentiveVersion alloc] initWithString:@"v1.2.8"] forKey:@"version"];
-	XCTAssertFalse([invocation criteriaAreMetForConsumerData:usageData.session], @"Version number must not have a 'v' in front!");
+	XCTAssertFalse([invocation criteriaAreMetForSession:usageData.session], @"Version number must not have a 'v' in front!");
 
 	invocation.criteria = @{ @"application/version": [Apptentive versionObjectWithVersion:@"1.2.8"] };
-	XCTAssertFalse([invocation criteriaAreMetForConsumerData:usageData.session], @"application/version not a valid key");
+	XCTAssertFalse([invocation criteriaAreMetForSession:usageData.session], @"application/version not a valid key");
 
 	invocation.criteria = @{ @"application/version_code": [Apptentive versionObjectWithVersion:@"1.2.8"] };
-	XCTAssertFalse([invocation criteriaAreMetForConsumerData:usageData.session], @"application/version not a valid key");
+	XCTAssertFalse([invocation criteriaAreMetForSession:usageData.session], @"application/version not a valid key");
 }
 
 - (void)testInteractionCriteriaBuild {
@@ -217,27 +217,27 @@
 	invocation.criteria = @{ @"application/cf_bundle_version": [Apptentive versionObjectWithVersion:@"39"] };
 	[usageData.session.appRelease setValue:[[ApptentiveVersion alloc] initWithString:@"39"] forKey:@"build"];
 
-	XCTAssertTrue([invocation criteriaAreMetForConsumerData:usageData.session], @"Build number");
+	XCTAssertTrue([invocation criteriaAreMetForSession:usageData.session], @"Build number");
 
 	[usageData.session.appRelease setValue:[[ApptentiveVersion alloc] initWithString:@"v39"] forKey:@"build"];
-	XCTAssertFalse([invocation criteriaAreMetForConsumerData:usageData.session], @"Build number must not have a 'v' in front!");
+	XCTAssertFalse([invocation criteriaAreMetForSession:usageData.session], @"Build number must not have a 'v' in front!");
 
 	[usageData.session.appRelease setValue:[[ApptentiveVersion alloc] initWithString:@"3.0"] forKey:@"build"];
-	XCTAssertFalse([invocation criteriaAreMetForConsumerData:usageData.session], @"Build number must not have a 'v' in front!");
+	XCTAssertFalse([invocation criteriaAreMetForSession:usageData.session], @"Build number must not have a 'v' in front!");
 
 	invocation.criteria = @{ @"application/cf_bundle_version": [Apptentive versionObjectWithVersion:@"3.0"] };
 	[usageData.session.appRelease setValue:[[ApptentiveVersion alloc] initWithString:@"3.0"] forKey:@"build"];
-	XCTAssertTrue([invocation criteriaAreMetForConsumerData:usageData.session], @"Build number");
+	XCTAssertTrue([invocation criteriaAreMetForSession:usageData.session], @"Build number");
 
 	[usageData.session.appRelease setValue:[[ApptentiveVersion alloc] initWithString:@"v3.0"] forKey:@"build"];
-	XCTAssertFalse([invocation criteriaAreMetForConsumerData:usageData.session], @"Build number must not have a 'v' in front!");
+	XCTAssertFalse([invocation criteriaAreMetForSession:usageData.session], @"Build number must not have a 'v' in front!");
 
 	invocation.criteria = @{ @"application/cf_bundle_version": @{@"$contains": @3.0} };
-	XCTAssertFalse([invocation criteriaAreMetForConsumerData:usageData.session], @"Should fail with invalid types.");
+	XCTAssertFalse([invocation criteriaAreMetForSession:usageData.session], @"Should fail with invalid types.");
 
 	[usageData.session.appRelease setValue:[[ApptentiveVersion alloc] initWithString:@"3.0"] forKey:@"build"];
 	invocation.criteria = @{ @"application/build": [Apptentive versionObjectWithVersion:@"3.0.0"] };
-	XCTAssertFalse([invocation criteriaAreMetForConsumerData:usageData.session], @"application/build not a valid key");
+	XCTAssertFalse([invocation criteriaAreMetForSession:usageData.session], @"application/build not a valid key");
 }
 
 - (void)testInteractionCriteriaSDK {
@@ -246,16 +246,16 @@
 
 	invocation.criteria = @{ @"sdk/version": [Apptentive versionObjectWithVersion:@"1.4.2"] };
 	[usageData.session.SDK setValue:[[ApptentiveVersion alloc] initWithString:@"1.4.2"] forKey:@"version"];
-	XCTAssertTrue([invocation criteriaAreMetForConsumerData:usageData.session], @"SDK Version should be 1.4.2");
+	XCTAssertTrue([invocation criteriaAreMetForSession:usageData.session], @"SDK Version should be 1.4.2");
 
 	[usageData.session.SDK setValue:[[ApptentiveVersion alloc] initWithString:@"1.4"] forKey:@"version"];
-	XCTAssertFalse([invocation criteriaAreMetForConsumerData:usageData.session], @"SDK Version isn't 1.4");
+	XCTAssertFalse([invocation criteriaAreMetForSession:usageData.session], @"SDK Version isn't 1.4");
 
 	[usageData.session.SDK setValue:[[ApptentiveVersion alloc] initWithString:@"1.5.0"] forKey:@"version"];
-	XCTAssertFalse([invocation criteriaAreMetForConsumerData:usageData.session], @"SDK Version isn't 1.5.0");
+	XCTAssertFalse([invocation criteriaAreMetForSession:usageData.session], @"SDK Version isn't 1.5.0");
 
 	invocation.criteria = @{ @"sdk/version": @{@"$contains": @3.0} };
-	XCTAssertFalse([invocation criteriaAreMetForConsumerData:usageData.session], @"Should fail with invalid types.");
+	XCTAssertFalse([invocation criteriaAreMetForSession:usageData.session], @"Should fail with invalid types.");
 }
 
 - (void)testInteractionCriteriaCurrentTime {
@@ -263,23 +263,23 @@
 	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] initWithSession:[[ApptentiveSession alloc] initWithAPIKey:@"foo"]];
 
 	invocation.criteria = @{ @"current_time": @{@"$exists": @YES} };
-	XCTAssertTrue([invocation criteriaAreMetForConsumerData:usageData.session], @"Must have default current time.");
+	XCTAssertTrue([invocation criteriaAreMetForSession:usageData.session], @"Must have default current time.");
 	// Make sure it's actually a reasonable value…
 	NSTimeInterval currentTimestamp = [[NSDate date] timeIntervalSince1970];
 	NSTimeInterval timestamp = [usageData.session.currentTime timeIntervalSince1970];
 	XCTAssertTrue(timestamp < (currentTimestamp + 0.5) && timestamp > (currentTimestamp - 0.5), @"Current time not a believable value.");
 
 	invocation.criteria = @{ @"current_time": @{@"$gt": [Apptentive timestampObjectWithDate:[NSDate dateWithTimeIntervalSinceNow:-5]]} };
-	XCTAssertTrue([invocation criteriaAreMetForConsumerData:usageData.session], @"Current time criteria not met.");
+	XCTAssertTrue([invocation criteriaAreMetForSession:usageData.session], @"Current time criteria not met.");
 
 	invocation.criteria = @{ @"current_time": @{@"$lt": [Apptentive timestampObjectWithDate:[NSDate dateWithTimeIntervalSinceNow:0.5]], @"$gt": [Apptentive timestampObjectWithDate:[NSDate dateWithTimeIntervalSinceNow:-0.5]]} };
-	XCTAssertTrue([invocation criteriaAreMetForConsumerData:usageData.session], @"Current time criteria not met.");
+	XCTAssertTrue([invocation criteriaAreMetForSession:usageData.session], @"Current time criteria not met.");
 
 	invocation.criteria = @{ @"current_time": @{@"$gt": @"1183135260"} };
-	XCTAssertFalse([invocation criteriaAreMetForConsumerData:usageData.session], @"Should fail because of type but not crash.");
+	XCTAssertFalse([invocation criteriaAreMetForSession:usageData.session], @"Should fail because of type but not crash.");
 
 	invocation.criteria = @{ @"current_time": @"1397598109" };
-	XCTAssertFalse([invocation criteriaAreMetForConsumerData:usageData.session], @"Should fail with invalid types.");
+	XCTAssertFalse([invocation criteriaAreMetForSession:usageData.session], @"Should fail with invalid types.");
 }
 
 - (void)testCodePointInvokesVersion {
@@ -289,19 +289,19 @@
 	[usageData.session.engagement warmCodePoint:@"app.launch"];
 	invocation.criteria = @{ @"code_point/app.launch/invokes/cf_bundle_short_version_string": @1 };
 	[usageData.session.engagement engageCodePoint:@"app.launch"];
-	XCTAssertTrue([invocation criteriaAreMetForConsumerData:usageData.session], @"This version has been invoked 1 time.");
+	XCTAssertTrue([invocation criteriaAreMetForSession:usageData.session], @"This version has been invoked 1 time.");
 	[usageData.session.engagement resetBuild];
-	XCTAssertTrue([invocation criteriaAreMetForConsumerData:usageData.session], @"Reset build should not affect version");
+	XCTAssertTrue([invocation criteriaAreMetForSession:usageData.session], @"Reset build should not affect version");
 
 	[usageData.session.engagement resetVersion];
-	XCTAssertFalse([invocation criteriaAreMetForConsumerData:usageData.session], @"Codepoint version invokes.");
+	XCTAssertFalse([invocation criteriaAreMetForSession:usageData.session], @"Codepoint version invokes.");
 	[usageData.session.engagement engageCodePoint:@"app.launch"];
 	[usageData.session.engagement engageCodePoint:@"app.launch"];
-	XCTAssertFalse([invocation criteriaAreMetForConsumerData:usageData.session], @"Codepoint version invokes.");
+	XCTAssertFalse([invocation criteriaAreMetForSession:usageData.session], @"Codepoint version invokes.");
 
 	// "version" has been replaced with "cf_bundle_short_version_string"
 	invocation.criteria = @{ @"interactions/big.win/invokes/version": @1 };
-	XCTAssertFalse([invocation criteriaAreMetForConsumerData:usageData.session], @"Should fail with invalid key.");
+	XCTAssertFalse([invocation criteriaAreMetForSession:usageData.session], @"Should fail with invalid key.");
 }
 
 - (void)testCodePointInvokesBuild {
@@ -311,19 +311,19 @@
 	[usageData.session.engagement warmCodePoint:@"app.launch"];
 	invocation.criteria = @{ @"code_point/app.launch/invokes/cf_bundle_version": @1 };
 	[usageData.session.engagement engageCodePoint:@"app.launch"];
-	XCTAssertTrue([invocation criteriaAreMetForConsumerData:usageData.session], @"This build has been invoked 1 time.");
+	XCTAssertTrue([invocation criteriaAreMetForSession:usageData.session], @"This build has been invoked 1 time.");
 	[usageData.session.engagement resetVersion];
-	XCTAssertTrue([invocation criteriaAreMetForConsumerData:usageData.session], @"Reset version should not affect version");
+	XCTAssertTrue([invocation criteriaAreMetForSession:usageData.session], @"Reset version should not affect version");
 
 	[usageData.session.engagement resetBuild];
-	XCTAssertFalse([invocation criteriaAreMetForConsumerData:usageData.session], @"Codepoint build invokes.");
+	XCTAssertFalse([invocation criteriaAreMetForSession:usageData.session], @"Codepoint build invokes.");
 	[usageData.session.engagement engageCodePoint:@"app.launch"];
 	[usageData.session.engagement engageCodePoint:@"app.launch"];
-	XCTAssertFalse([invocation criteriaAreMetForConsumerData:usageData.session], @"Codepoint build invokes.");
+	XCTAssertFalse([invocation criteriaAreMetForSession:usageData.session], @"Codepoint build invokes.");
 
 	// "build" has been replaced with "cf_bundle_version"
 	invocation.criteria = @{ @"interactions/big.win/invokes/build": @1 };
-	XCTAssertFalse([invocation criteriaAreMetForConsumerData:usageData.session], @"Should fail with invalid key.");
+	XCTAssertFalse([invocation criteriaAreMetForSession:usageData.session], @"Should fail with invalid key.");
 }
 
 - (void)testInteractionInvokesVersion {
@@ -333,19 +333,19 @@
 	[usageData.session.engagement warmInteraction:@"526fe2836dd8bf546a00000b"];
 	invocation.criteria = @{ @"interactions/526fe2836dd8bf546a00000b/invokes/cf_bundle_short_version_string": @(1) };
 	[usageData.session.engagement engageInteraction:@"526fe2836dd8bf546a00000b"];
-	XCTAssertTrue([invocation criteriaAreMetForConsumerData:usageData.session], @"This version has been invoked 1 time.");
+	XCTAssertTrue([invocation criteriaAreMetForSession:usageData.session], @"This version has been invoked 1 time.");
 	[usageData.session.engagement resetBuild];
-	XCTAssertTrue([invocation criteriaAreMetForConsumerData:usageData.session], @"Reset build should not affect version");
+	XCTAssertTrue([invocation criteriaAreMetForSession:usageData.session], @"Reset build should not affect version");
 
 	[usageData.session.engagement resetVersion];
-	XCTAssertFalse([invocation criteriaAreMetForConsumerData:usageData.session], @"Interaction version invokes.");
+	XCTAssertFalse([invocation criteriaAreMetForSession:usageData.session], @"Interaction version invokes.");
 	[usageData.session.engagement engageInteraction:@"526fe2836dd8bf546a00000b"];
 	[usageData.session.engagement engageInteraction:@"526fe2836dd8bf546a00000b"];
-	XCTAssertFalse([invocation criteriaAreMetForConsumerData:usageData.session], @"Interaction version invokes.");
+	XCTAssertFalse([invocation criteriaAreMetForSession:usageData.session], @"Interaction version invokes.");
 
 	// "version" has been replaced with "cf_bundle_short_version_string"
 	invocation.criteria = @{ @"interactions/526fe2836dd8bf546a00000b/invokes/version": @1 };
-	XCTAssertFalse([invocation criteriaAreMetForConsumerData:usageData.session], @"Should fail with invalid key.");
+	XCTAssertFalse([invocation criteriaAreMetForSession:usageData.session], @"Should fail with invalid key.");
 }
 
 - (void)testInteractionInvokesBuild {
@@ -355,19 +355,19 @@
 	[usageData.session.engagement warmInteraction:@"526fe2836dd8bf546a00000b"];
 	invocation.criteria = @{ @"interactions/526fe2836dd8bf546a00000b/invokes/cf_bundle_version": @(1) };
 	[usageData.session.engagement engageInteraction:@"526fe2836dd8bf546a00000b"];
-	XCTAssertTrue([invocation criteriaAreMetForConsumerData:usageData.session], @"This version has been invoked 1 time.");
+	XCTAssertTrue([invocation criteriaAreMetForSession:usageData.session], @"This version has been invoked 1 time.");
 	[usageData.session.engagement resetVersion];
-	XCTAssertTrue([invocation criteriaAreMetForConsumerData:usageData.session], @"Reset build should not affect version");
+	XCTAssertTrue([invocation criteriaAreMetForSession:usageData.session], @"Reset build should not affect version");
 
 	[usageData.session.engagement resetBuild];
-	XCTAssertFalse([invocation criteriaAreMetForConsumerData:usageData.session], @"Interaction build invokes.");
+	XCTAssertFalse([invocation criteriaAreMetForSession:usageData.session], @"Interaction build invokes.");
 	[usageData.session.engagement engageInteraction:@"526fe2836dd8bf546a00000b"];
 	[usageData.session.engagement engageInteraction:@"526fe2836dd8bf546a00000b"];
-	XCTAssertFalse([invocation criteriaAreMetForConsumerData:usageData.session], @"Interaction build invokes.");
+	XCTAssertFalse([invocation criteriaAreMetForSession:usageData.session], @"Interaction build invokes.");
 
 	// "build" has been replaced with "cf_bundle_version"
 	invocation.criteria = @{ @"interactions/526fe2836dd8bf546a00000b/invokes/build": @1 };
-	XCTAssertFalse([invocation criteriaAreMetForConsumerData:usageData.session], @"Should fail with invalid key.");
+	XCTAssertFalse([invocation criteriaAreMetForSession:usageData.session], @"Should fail with invalid key.");
 }
 
 - (void)testUpgradeMessageCriteria {
@@ -381,33 +381,33 @@
 	[usageData.session.engagement engageCodePoint:@"app.launch"];
 
 	[usageData.session.appRelease setValue:[[ApptentiveVersion alloc] initWithString:@"1.3.0"] forKey:@"version"];
-	XCTAssertFalse([invocation criteriaAreMetForConsumerData:usageData.session], @"Test Upgrade Message without build number.");
+	XCTAssertFalse([invocation criteriaAreMetForSession:usageData.session], @"Test Upgrade Message without build number.");
 	[usageData.session.appRelease setValue:[[ApptentiveVersion alloc] initWithString:@"39"] forKey:@"build"];
-	XCTAssertTrue([invocation criteriaAreMetForConsumerData:usageData.session], @"Test Upgrade Message.");
+	XCTAssertTrue([invocation criteriaAreMetForSession:usageData.session], @"Test Upgrade Message.");
 
 	[usageData.session.appRelease setValue:[[ApptentiveVersion alloc] initWithString:@"1.3.1"] forKey:@"version"];
-	XCTAssertFalse([invocation criteriaAreMetForConsumerData:usageData.session], @"Test Upgrade Message.");
+	XCTAssertFalse([invocation criteriaAreMetForSession:usageData.session], @"Test Upgrade Message.");
 
 	invocation.criteria = @{ @"application/cf_bundle_short_version_string": [Apptentive versionObjectWithVersion:@"1.3.1"],
 							 @"code_point/app.launch/invokes/cf_bundle_short_version_string": @{@"$gte": @1} };
 
-	XCTAssertTrue([invocation criteriaAreMetForConsumerData:usageData.session], @"Test Upgrade Message.");
+	XCTAssertTrue([invocation criteriaAreMetForSession:usageData.session], @"Test Upgrade Message.");
 	[usageData.session.engagement engageCodePoint:@"app.launch"];
-	XCTAssertTrue([invocation criteriaAreMetForConsumerData:usageData.session], @"Test Upgrade Message.");
+	XCTAssertTrue([invocation criteriaAreMetForSession:usageData.session], @"Test Upgrade Message.");
 
 	invocation.criteria = @{ @"application/cf_bundle_short_version_string": [Apptentive versionObjectWithVersion:@"1.3.1"],
 							 @"code_point/app.launch/invokes/cf_bundle_short_version_string": @{@"$lte": @3} };
 	[usageData.session.engagement engageCodePoint:@"app.launch"];
-	XCTAssertTrue([invocation criteriaAreMetForConsumerData:usageData.session], @"Test Upgrade Message.");
+	XCTAssertTrue([invocation criteriaAreMetForSession:usageData.session], @"Test Upgrade Message.");
 	[usageData.session.engagement engageCodePoint:@"app.launch"];
-	XCTAssertFalse([invocation criteriaAreMetForConsumerData:usageData.session], @"Test Upgrade Message.");
+	XCTAssertFalse([invocation criteriaAreMetForSession:usageData.session], @"Test Upgrade Message.");
 
 		invocation.criteria = @{ @"code_point/app.launch/invokes/cf_bundle_short_version_string": @[@1],
 							 @"application_version": @"1.3.1",
 							 @"application_build": @"39" };
 
 	[Apptentive.shared.backend.session.engagement resetVersion];
-	XCTAssertFalse([invocation criteriaAreMetForConsumerData:usageData.session], @"Should fail with invalid types.");
+	XCTAssertFalse([invocation criteriaAreMetForSession:usageData.session], @"Should fail with invalid types.");
 }
 
 - (void)testIsUpdateVersionsAndBuilds {
@@ -417,53 +417,53 @@
 	//Version
 	invocation.criteria = @{ @"is_update/cf_bundle_short_version_string": @YES };
 	[usageData.session.appRelease setValue:@YES forKey:@"updateVersion"];
-	XCTAssertTrue([invocation criteriaAreMetForConsumerData:usageData.session], @"Test isUpdate");
+	XCTAssertTrue([invocation criteriaAreMetForSession:usageData.session], @"Test isUpdate");
 
 	invocation.criteria = @{ @"is_update/cf_bundle_short_version_string": @NO };
 	[usageData.session.appRelease setValue:@NO forKey:@"updateVersion"];
-	XCTAssertTrue([invocation criteriaAreMetForConsumerData:usageData.session], @"Test isUpdate");
+	XCTAssertTrue([invocation criteriaAreMetForSession:usageData.session], @"Test isUpdate");
 
 	invocation.criteria = @{ @"is_update/cf_bundle_short_version_string": @YES };
-	XCTAssertFalse([invocation criteriaAreMetForConsumerData:usageData.session], @"Test isUpdate");
+	XCTAssertFalse([invocation criteriaAreMetForSession:usageData.session], @"Test isUpdate");
 
 	invocation.criteria = @{ @"is_update/cf_bundle_short_version_string": @NO };
 	[usageData.session.appRelease setValue:@YES forKey:@"updateVersion"];
-	XCTAssertFalse([invocation criteriaAreMetForConsumerData:usageData.session], @"Test isUpdate");
+	XCTAssertFalse([invocation criteriaAreMetForSession:usageData.session], @"Test isUpdate");
 
 	//Build
 	invocation.criteria = @{ @"is_update/cf_bundle_version": @YES };
 	[usageData.session.appRelease setValue:@YES forKey:@"updateBuild"];
-	XCTAssertTrue([invocation criteriaAreMetForConsumerData:usageData.session], @"Test isUpdate");
+	XCTAssertTrue([invocation criteriaAreMetForSession:usageData.session], @"Test isUpdate");
 
 	invocation.criteria = @{ @"is_update/cf_bundle_version": @NO };
 	[usageData.session.appRelease setValue:@NO forKey:@"updateBuild"];
-	XCTAssertTrue([invocation criteriaAreMetForConsumerData:usageData.session], @"Test isUpdate");
+	XCTAssertTrue([invocation criteriaAreMetForSession:usageData.session], @"Test isUpdate");
 
 	invocation.criteria = @{ @"is_update/cf_bundle_version": @YES };
-	XCTAssertFalse([invocation criteriaAreMetForConsumerData:usageData.session], @"Test isUpdate");
+	XCTAssertFalse([invocation criteriaAreMetForSession:usageData.session], @"Test isUpdate");
 
 	invocation.criteria = @{ @"is_update/cf_bundle_version": @NO };
 	[usageData.session.appRelease setValue:@YES forKey:@"updateBuild"];
-	XCTAssertFalse([invocation criteriaAreMetForConsumerData:usageData.session], @"Test isUpdate");
+	XCTAssertFalse([invocation criteriaAreMetForSession:usageData.session], @"Test isUpdate");
 
 
 	invocation.criteria = @{ @"is_update/cf_bundle_version": @[[NSNull null]] };
 	[usageData.session.appRelease setValue:@NO forKey:@"updateBuild"];
-	XCTAssertFalse([invocation criteriaAreMetForConsumerData:usageData.session], @"Should fail with invalid types.");
+	XCTAssertFalse([invocation criteriaAreMetForSession:usageData.session], @"Should fail with invalid types.");
 	invocation.criteria = @{ @"is_update/cf_bundle_version": @{@"$gt": @"lajd;fl ajsd;flj"} };
 	[usageData.session.appRelease setValue:@NO forKey:@"updateBuild"];
-	XCTAssertFalse([invocation criteriaAreMetForConsumerData:usageData.session], @"Should fail with invalid types.");
+	XCTAssertFalse([invocation criteriaAreMetForSession:usageData.session], @"Should fail with invalid types.");
 
 	[usageData.session.appRelease setValue:@NO forKey:@"updateVersion"];
 	[usageData.session.appRelease setValue:@NO forKey:@"updateBuild"];
 	invocation.criteria = @{ @"is_update/version_code": @NO };
-	XCTAssertFalse([invocation criteriaAreMetForConsumerData:usageData.session], @"Should fail with invalid key.");
+	XCTAssertFalse([invocation criteriaAreMetForSession:usageData.session], @"Should fail with invalid key.");
 
 	invocation.criteria = @{ @"is_update/version": @NO };
-	XCTAssertFalse([invocation criteriaAreMetForConsumerData:usageData.session], @"Should fail with invalid key.");
+	XCTAssertFalse([invocation criteriaAreMetForSession:usageData.session], @"Should fail with invalid key.");
 
 	invocation.criteria = @{ @"is_update/build": @NO };
-	XCTAssertFalse([invocation criteriaAreMetForConsumerData:usageData.session], @"Should fail with invalid key.");
+	XCTAssertFalse([invocation criteriaAreMetForSession:usageData.session], @"Should fail with invalid key.");
 }
 
 - (void)testEnjoymentDialogCriteria {

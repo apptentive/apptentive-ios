@@ -66,7 +66,7 @@
 @implementation CornerCasesThatShouldBeFalse
 
 - (void)testCornerCasesThatShouldBeFalse {
-	XCTAssertTrue([self.interaction criteriaAreMetForConsumerData:self.data]);
+	XCTAssertTrue([self.interaction criteriaAreMetForSession:self.data]);
 }
 
 @end
@@ -79,7 +79,7 @@
 @implementation CornerCasesThatShouldBeTrue
 
 - (void)testCornerCasesThatShouldBeTrue {
-	XCTAssertTrue([self.interaction criteriaAreMetForConsumerData:self.data]);
+	XCTAssertTrue([self.interaction criteriaAreMetForSession:self.data]);
 }
 
 @end
@@ -98,7 +98,7 @@
 	[Apptentive sharedConnection].personName = nil;
 	[Apptentive sharedConnection].personEmailAddress = nil;
 
-	XCTAssertTrue([self.interaction criteriaAreMetForConsumerData:self.data]);
+	XCTAssertTrue([self.interaction criteriaAreMetForSession:self.data]);
 }
 
 @end
@@ -128,7 +128,7 @@
 		person.emailAddress = @"test@example.com";
 	}];
 
-	XCTAssertTrue([self.interaction criteriaAreMetForConsumerData:self.data]);
+	XCTAssertTrue([self.interaction criteriaAreMetForSession:self.data]);
 }
 
 @end
@@ -141,7 +141,7 @@
 @implementation OperatorStartsWith
 
 - (void)testOperatorStartsWith {
-	XCTAssertTrue([self.interaction criteriaAreMetForConsumerData:self.data]);
+	XCTAssertTrue([self.interaction criteriaAreMetForSession:self.data]);
 }
 
 @end
@@ -154,7 +154,7 @@
 @implementation OperatorEndsWith
 
 - (void)testOperatorEndsWith {
-	XCTAssertTrue([self.interaction criteriaAreMetForConsumerData:self.data]);
+	XCTAssertTrue([self.interaction criteriaAreMetForSession:self.data]);
 }
 
 @end
@@ -167,7 +167,7 @@
 @implementation OperatorNot
 
 - (void)testOperatorNot {
-	XCTAssertTrue([self.interaction criteriaAreMetForConsumerData:self.data]);
+	XCTAssertTrue([self.interaction criteriaAreMetForSession:self.data]);
 }
 
 @end
@@ -180,7 +180,7 @@
 @implementation OperatorExists
 
 - (void)testOperatorExists {
-	XCTAssertTrue([self.interaction criteriaAreMetForConsumerData:self.data]);
+	XCTAssertTrue([self.interaction criteriaAreMetForSession:self.data]);
 }
 
 @end
@@ -193,7 +193,7 @@
 @implementation WhitespaceTrimming
 
 - (void)testWhitespaceTrimming {
-	XCTAssertTrue([self.interaction criteriaAreMetForConsumerData:self.data]);
+	XCTAssertTrue([self.interaction criteriaAreMetForSession:self.data]);
 }
 
 @end

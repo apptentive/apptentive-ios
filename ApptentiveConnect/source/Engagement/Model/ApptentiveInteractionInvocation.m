@@ -122,8 +122,8 @@
 	return criteriaAreMet;
 }
 
-- (BOOL)criteriaAreMetForConsumerData:(ApptentiveSession *)data {
-	return [self criteriaAreMetForUsageData:[ApptentiveInteractionUsageData usageDataWithSession:data]];
+- (BOOL)criteriaAreMetForSession:(ApptentiveSession *)session {
+	return [self criteriaAreMetForUsageData:[ApptentiveInteractionUsageData usageDataWithSession:session]];
 }
 
 - (NSPredicate *)criteriaPredicate {

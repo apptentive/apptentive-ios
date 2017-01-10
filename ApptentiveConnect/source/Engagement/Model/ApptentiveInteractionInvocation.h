@@ -20,8 +20,7 @@
 + (ApptentiveInteractionInvocation *)invocationWithJSONDictionary:(NSDictionary *)jsonDictionary;
 + (NSArray *)invocationsWithJSONArray:(NSArray *)jsonArray;
 
-- (BOOL)criteriaAreMetForConsumerData:(ApptentiveSession *)data;
-
+- (BOOL)criteriaAreMetForSession:(ApptentiveSession *)data;
 
 - (NSPredicate *)criteriaPredicate;
 

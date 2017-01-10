@@ -168,6 +168,12 @@ static NSString * const NotificationPopupEnabledKey = @"notificationPopupEnabled
 	return self;
 }
 
++ (void)deleteMigratedData {
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ATAppConfigurationNotificationPopupsEnabledKey"];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ATAppConfigurationMessageCenterForegroundRefreshIntervalKey"];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey"];
+}
+
 - (instancetype)initWithCoder:(NSCoder *)coder {
 	self = [super init];
 

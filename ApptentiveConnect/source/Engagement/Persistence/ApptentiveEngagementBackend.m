@@ -56,7 +56,7 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 		}
 
 		if (invocation && [invocation isKindOfClass:[ApptentiveInteractionInvocation class]]) {
-			if ([invocation criteriaAreMetForConsumerData:Apptentive.shared.backend.session]) {
+			if ([invocation criteriaAreMetForSession:Apptentive.shared.backend.session]) {
 				interactionID = invocation.interactionID;
 				break;
 			}

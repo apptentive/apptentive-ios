@@ -115,6 +115,7 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 
 	[[ApptentiveMetrics sharedMetrics] addMetricWithName:codePoint fromInteraction:fromInteraction info:userInfo customData:customData extendedData:extendedData];
 
+	[self codePointWasSeen:codePoint];
 	[self codePointWasEngaged:codePoint];
 
 	BOOL didEngageInteraction = NO;
@@ -181,25 +182,6 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 	ApptentiveInteractionController *controller = [ApptentiveInteractionController interactionControllerWithInteraction:interaction];
 
 	[controller presentInteractionFromViewController:viewController];
-}
-
-- (NSArray *)allEngagementInteractions {
-	return Apptentive.shared.backend.manifest.interactions.allValues;
-}
-
-- (NSArray *)targetedLocalEvents {
-	NSDictionary *targets = Apptentive.shared.backend.manifest.targets;
-	NSArray *localCodePoints = [targets.allKeys filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF BEGINSWITH[c] %@", @"local#app#"]];
-	NSMutableArray *eventNames = [NSMutableArray array];
-	for (NSString *codePoint in localCodePoints) {
-		[eventNames addObject:[codePoint substringFromIndex:10]];
-	}
-
-	return eventNames;
-}
-
-- (void)setLocalEngagementManifestURL:(NSURL *)localEngagementManifestURL {
-	Apptentive.shared.backend.localEngagementManifestURL = localEngagementManifestURL;
 }
 
 @end

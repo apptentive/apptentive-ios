@@ -147,14 +147,6 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 	[self.backend sendFileMessageWithFileData:fileData andMimeType:mimeType hiddenOnClient:YES];
 }
 
-- (NSDictionary *)customPersonData {
-	return self.backend.session.person.customData;
-}
-
-- (NSDictionary *)customDeviceData {
-	return self.backend.session.device.customData;
-}
-
 - (void)addCustomDeviceDataString:(NSString *)string withKey:(NSString *)key {
 	[self.backend.session updateDevice:^(ApptentiveMutableDevice *device) {
 		[device addCustomString:string withKey:key];

@@ -15,6 +15,7 @@
 #import "ApptentivePerson.h"
 #import "ApptentiveSDK.h"
 #import "ApptentiveVersion.h"
+#import "ApptentiveEngagementManifest.h"
 
 @implementation Apptentive (Debugging)
 
@@ -27,11 +28,11 @@
 }
 
 - (void)setLocalInteractionsURL:(NSURL *)localInteractionsURL {
-	self.engagementBackend.localEngagementManifestURL = localInteractionsURL;
+	self.backend.localEngagementManifestURL = localInteractionsURL;
 }
 
 - (NSURL *)localInteractionsURL {
-	return self.engagementBackend.localEngagementManifestURL;
+	return self.backend.localEngagementManifestURL;
 }
 
 - (NSString *)storagePath {
@@ -43,21 +44,10 @@
 }
 
 - (NSString *)manifestJSON {
-	NSData *rawJSONData = self.engagementBackend.engagementManifestJSON;
+	NSDictionary *JSONDictionary = self.backend.manifest.JSONDictionary;
 
-	if (rawJSONData != nil) {
-		NSData *outputJSONData = nil;
-
-		// try to pretty-print by round-tripping through NSJSONSerialization
-		id JSONObject = [NSJSONSerialization JSONObjectWithData:rawJSONData options:0 error:NULL];
-		if (JSONObject) {
-			outputJSONData = [NSJSONSerialization dataWithJSONObject:JSONObject options:NSJSONWritingPrettyPrinted error:NULL];
-		}
-
-		// fall back to ugly JSON
-		if (!outputJSONData) {
-			outputJSONData = rawJSONData;
-		}
+	if (JSONDictionary != nil) {
+		NSData *outputJSONData = [NSJSONSerialization dataWithJSONObject:JSONDictionary options:NSJSONWritingPrettyPrinted error:NULL];
 
 		return [[NSString alloc] initWithData:outputJSONData encoding:NSUTF8StringEncoding];
 	} else {
@@ -70,11 +60,18 @@
 }
 
 - (NSArray *)engagementEvents {
-	return [self.engagementBackend targetedLocalEvents];
+	NSDictionary *targets = Apptentive.shared.backend.manifest.targets;
+	NSArray *localCodePoints = [targets.allKeys filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF BEGINSWITH[c] %@", @"local#app#"]];
+	NSMutableArray *eventNames = [NSMutableArray array];
+	for (NSString *codePoint in localCodePoints) {
+		[eventNames addObject:[codePoint substringFromIndex:10]];
+	}
+
+	return eventNames;
 }
 
 - (NSArray *)engagementInteractions {
-	return [self.engagementBackend allEngagementInteractions];
+	return self.backend.manifest.interactions.allValues;
 }
 
 - (NSInteger)numberOfEngagementInteractions {
@@ -106,8 +103,9 @@
 }
 
 - (void)resetSDK {
-	// TODO: use forthcoming session-clearing system
-	NSAssert(NO, @"This isn't implemented yet");
+	[self.backend resetBackend];
+
+	[self setValue:nil forKey:@"backend"];
 }
 
 - (NSDictionary *)customPersonData {

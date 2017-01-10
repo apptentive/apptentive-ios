@@ -38,6 +38,7 @@ static NSString * const ExpiryKey = @"expiry";
 
 	if (self) {
 		_expiry = [NSDate dateWithTimeIntervalSinceNow:cacheLifetime];
+		_JSONDictionary = JSONDictionary;
 
 		// Targets
 		NSMutableDictionary *targets = [NSMutableDictionary dictionary];

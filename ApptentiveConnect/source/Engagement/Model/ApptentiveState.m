@@ -15,7 +15,7 @@
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
-	return [self init];
+	return [super init];
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {

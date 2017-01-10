@@ -128,19 +128,4 @@
 	XCTAssertNil([ApptentiveInteractionInvocation compoundPredicateWithType:NSAndPredicateType criteriaArray:@[@{ @"foo": [NSDate date] }]]);
 }
 
-- (void)testFailingInteractionUsageData {
-	ApptentiveInteractionInvocation *invocation = [ApptentiveInteractionInvocation invocationWithJSONDictionary:@{ @"criteria": @{@"foo": @"bar"} }];
-
-#warning fixme
-//	XCTAssertFalse([invocation criteriaAreMetForUsageData:[[ATFailingUsageData alloc] init]]);
-}
-
-- (void)testFailingCompoundPredicateForKeyPath {
-	ApptentiveInteractionInvocation *invocation = [ApptentiveInteractionInvocation invocationWithJSONDictionary:@{ @"criteria": @{@"$and": @{@"foo": [NSDate date]}} }];
-
-#warning fixme
-//	XCTAssertFalse([invocation criteriaAreMetForUsageData:[[ATFailingUsageData alloc] init]]);
-}
-
-
 @end

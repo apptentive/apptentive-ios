@@ -117,10 +117,10 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkStatusChanged:) name:ApptentiveReachabilityStatusChanged object:nil];
 
 		NSBlockOperation *startupOperation = [NSBlockOperation blockOperationWithBlock:^{
-			if ([[NSFileManager defaultManager] fileExistsAtPath:storagePath]) {
+			if (![[NSFileManager defaultManager] fileExistsAtPath:self->_supportDirectoryPath]) {
 				NSError *error;
-				if (![[NSFileManager defaultManager] createDirectoryAtPath:storagePath withIntermediateDirectories:YES attributes:nil error:&error]) {
-					ApptentiveLogError(@"Unable to create storage path “%@”: %@", storagePath, error);
+				if (![[NSFileManager defaultManager] createDirectoryAtPath:self->_supportDirectoryPath withIntermediateDirectories:YES attributes:nil error:&error]) {
+					ApptentiveLogError(@"Unable to create storage path “%@”: %@", self->_supportDirectoryPath, error);
 				}
 			}
 
@@ -196,12 +196,11 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 				self.state = ATBackendStateReady;
 				dispatch_async(dispatch_get_main_queue(), ^{
 					[[NSNotificationCenter defaultCenter] postNotificationName:ATBackendBecameReadyNotification object:nil];
+
+					[ApptentiveFileAttachment addMissingExtensions];
 				});
 
 				[self networkStatusChanged:nil];
-
-				// Append extensions to attachments that are missing them
-				[ApptentiveFileAttachment addMissingExtensions];
 
 				// Enqueue any unsent messages, events, or survey responses from <= v3.4
 				NSManagedObjectContext *migrationContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];

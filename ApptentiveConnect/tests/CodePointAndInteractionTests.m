@@ -26,7 +26,7 @@
 - (void)setUp {
 	[super setUp];
 
-	self.usageData = [ApptentiveInteractionUsageData usageDataWithSession:[[ApptentiveSession alloc] init]];
+	self.usageData = [ApptentiveInteractionUsageData usageDataWithSession:[[ApptentiveSession alloc] initWithAPIKey:@"foo"]];
 }
 
 - (void)incrementCodePoint:(NSString *)codePoint {

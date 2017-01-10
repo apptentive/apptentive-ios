@@ -20,4 +20,6 @@
 - (instancetype)initWithCachePath:(NSString *)cachePath userDefaults:(NSUserDefaults *)userDefaults;
 - (instancetype)initWithJSONDictionary:(NSDictionary *)JSONDictionary cacheLifetime:(NSTimeInterval)cacheLifetime;
 
+@property (readonly, nonatomic) NSDictionary *JSONDictionary;
+
 @end

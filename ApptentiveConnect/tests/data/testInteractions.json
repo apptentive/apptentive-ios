@@ -1,0 +1,41 @@
+{
+	"interactions": [
+					 {
+      "id": "example_interaction_ID"
+					 },
+					 {
+					 "id": "enjoyment_dialog"
+					 }
+					 ],
+	"targets": {
+		"local#app#canShow": [
+							 {
+        "interaction_id": "example_interaction_ID",
+        "criteria": {}
+							 }
+							 ],
+		"local#app#wontShow": [
+					 {
+					 "interaction_id": "example_interaction_ID",
+					 "criteria": { "cannot_parse_criteria": "cannot_parse_criteria" }
+					 }
+		],
+		"local#app#maybeShowUpgrade":
+		[{
+			"interaction_id": "upgrade_message",
+			"criteria": { "code_point/app.launch/invokes/cf_bundle_short_version_string": 1,
+			"application/cf_bundle_short_version_string": "1.3.0",
+			"application/cf_bundle_version": "39" }
+		}],
+		"local#app#testRatingFlow": [ {
+			"interaction_id": "enjoyment_dialog",
+								  "criteria":
+								  { "$or": [ { "code_point/local#app#init/invokes/cf_bundle_short_version_string": { "$gte": 10}},
+											  {"time_at_install/total": {"$before": -864000}},
+											  {"code_point/local#app#testRatingFlow/invokes/total": {"$gt": 10}}],
+								  "interactions/533ed97a7724c5457e00003f/invokes/cf_bundle_short_version_string": 0 }
+									 }
+		]
+
+	}
+}

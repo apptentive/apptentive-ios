@@ -36,7 +36,7 @@
 }
 
 - (void)testCurrentDatabaseVersion {
-	ApptentiveDataManager *dataManager = [self dataManagerWithStoreName:@"ATDataModelv5"];
+	ApptentiveDataManager *dataManager = [self dataManagerWithStoreName:@"ATDataModelv6"];
 
 	XCTAssertTrue([dataManager setupAndVerify], @"Should be able to setup database.");
 	XCTAssertNotNil([dataManager persistentStoreCoordinator], @"Shouldn't be nil");

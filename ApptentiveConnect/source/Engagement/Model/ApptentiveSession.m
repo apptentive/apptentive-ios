@@ -30,6 +30,11 @@ static NSString * const LastMessageIDKey = @"lastMessageID";
 
 @synthesize token = _token;
 
+- (instancetype)init {
+	NSAssert(NO, @"Must call -initWithAPIKey:");
+	return nil;
+}
+
 - (instancetype)initWithAPIKey:(NSString *)APIKey {
 	self = [super init];
 	if (self) {

@@ -339,8 +339,11 @@
 		01A1A5EF1E24274600F2FCD8 /* ApptentiveLegacyEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A1A5EC1E24274600F2FCD8 /* ApptentiveLegacyEvent.h */; };
 		01A1A5F01E24274600F2FCD8 /* ApptentiveLegacyEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A1A5ED1E24274600F2FCD8 /* ApptentiveLegacyEvent.m */; };
 		01A1A5F11E24274600F2FCD8 /* ApptentiveLegacyEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A1A5ED1E24274600F2FCD8 /* ApptentiveLegacyEvent.m */; };
-		01A1A5F31E244B8C00F2FCD8 /* ATDataModel v5 to v6.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 01A1A5F21E244B8C00F2FCD8 /* ATDataModel v5 to v6.xcmappingmodel */; };
 		01A1A5F41E244B8C00F2FCD8 /* ATDataModel v5 to v6.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 01A1A5F21E244B8C00F2FCD8 /* ATDataModel v5 to v6.xcmappingmodel */; };
+		01A1A5F81E25456100F2FCD8 /* ATDataModel v5 to v6.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 01A1A5F21E244B8C00F2FCD8 /* ATDataModel v5 to v6.xcmappingmodel */; };
+		01A1A5F91E25456200F2FCD8 /* ATDataModel v5 to v6.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 01A1A5F21E244B8C00F2FCD8 /* ATDataModel v5 to v6.xcmappingmodel */; };
+		01A1A5FB1E254C9800F2FCD8 /* ATDataModelv6.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 01A1A5FA1E254C9800F2FCD8 /* ATDataModelv6.sqlite */; };
+		01A1A5FD1E25610600F2FCD8 /* testInteractions.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A1A5FC1E25610600F2FCD8 /* testInteractions.json */; };
 		01A88FF81AFBFFAE002C49E7 /* testJsonDiffing.1.expected.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A88FF31AFBFDB6002C49E7 /* testJsonDiffing.1.expected.json */; };
 		01A88FF91AFBFFAE002C49E7 /* testJsonDiffing.1.new.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A88FF41AFBFDB6002C49E7 /* testJsonDiffing.1.new.json */; };
 		01A88FFA1AFBFFAE002C49E7 /* testJsonDiffing.1.old.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A88FF51AFBFDB6002C49E7 /* testJsonDiffing.1.old.json */; };
@@ -720,6 +723,8 @@
 		01A1A5EC1E24274600F2FCD8 /* ApptentiveLegacyEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveLegacyEvent.h; sourceTree = "<group>"; };
 		01A1A5ED1E24274600F2FCD8 /* ApptentiveLegacyEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveLegacyEvent.m; sourceTree = "<group>"; };
 		01A1A5F21E244B8C00F2FCD8 /* ATDataModel v5 to v6.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = "ATDataModel v5 to v6.xcmappingmodel"; sourceTree = "<group>"; };
+		01A1A5FA1E254C9800F2FCD8 /* ATDataModelv6.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; name = ATDataModelv6.sqlite; path = ../ATDataModelv6.sqlite; sourceTree = "<group>"; };
+		01A1A5FC1E25610600F2FCD8 /* testInteractions.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testInteractions.json; sourceTree = "<group>"; };
 		01A88FF31AFBFDB6002C49E7 /* testJsonDiffing.1.expected.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testJsonDiffing.1.expected.json; sourceTree = "<group>"; };
 		01A88FF41AFBFDB6002C49E7 /* testJsonDiffing.1.new.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testJsonDiffing.1.new.json; sourceTree = "<group>"; };
 		01A88FF51AFBFDB6002C49E7 /* testJsonDiffing.1.old.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testJsonDiffing.1.old.json; sourceTree = "<group>"; };
@@ -1601,6 +1606,8 @@
 				49E740901840498100413697 /* ATDataModelv3.sqlite */,
 				5843F81D188778B000C9D096 /* ATDataModelv4.sqlite */,
 				011B08D11C0D0E09004F4F5D /* ATDataModelv5.sqlite */,
+				01A1A5FA1E254C9800F2FCD8 /* ATDataModelv6.sqlite */,
+				01A1A5FC1E25610600F2FCD8 /* testInteractions.json */,
 			);
 			path = data;
 			sourceTree = "<group>";
@@ -2171,6 +2178,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				01A1A5FB1E254C9800F2FCD8 /* ATDataModelv6.sqlite in Resources */,
 				5843F81E188778B000C9D096 /* ATDataModelv4.sqlite in Resources */,
 				01F6FDA71BFBF3E2004513C2 /* testOperatorExists.json in Resources */,
 				49C0028F1334137E0071F088 /* InfoPlist.strings in Resources */,
@@ -2188,6 +2196,7 @@
 				01A88FFB1AFBFFAE002C49E7 /* testJsonDiffing.2.new.json in Resources */,
 				01F6FDA31BFBF3E2004513C2 /* testCodePointLastInvokedAt.json in Resources */,
 				01F6FDA41BFBF3E2004513C2 /* testInteractionInvokesTotal.json in Resources */,
+				01A1A5FD1E25610600F2FCD8 /* testInteractions.json in Resources */,
 				01F6FDA21BFBF3E2004513C2 /* testCodePointInvokesVersion.json in Resources */,
 				01A88FF91AFBFFAE002C49E7 /* testJsonDiffing.1.new.json in Resources */,
 				011B08D21C0D0E0C004F4F5D /* ATDataModelv5.sqlite in Resources */,
@@ -2431,7 +2440,6 @@
 				012292B11E04C0FA00282131 /* ApptentiveSerialRequestOperation.m in Sources */,
 				0132F8AD1C851BFA00A452E3 /* ApptentiveSurveyLayoutAttributes.m in Sources */,
 				0132F8C61C851C0800A452E3 /* ApptentiveSurveyAnswerCell.m in Sources */,
-				01A1A5F31E244B8C00F2FCD8 /* ATDataModel v5 to v6.xcmappingmodel in Sources */,
 				012B4BE31E0B116300D6229B /* ApptentiveAppConfiguration.m in Sources */,
 				49735D631832DF1F00D48DE7 /* ApptentiveMessageCenterDataSource.m in Sources */,
 				0132F8CE1C851C0800A452E3 /* ApptentiveSurveyQuestionBackgroundView.m in Sources */,
@@ -2518,6 +2526,7 @@
 				01E25CE51C88B1EE005BF2D2 /* ApptentiveSurveyTests.m in Sources */,
 				011B08CE1C0D0CCC004F4F5D /* ApptentiveUtilitiesTests.m in Sources */,
 				011B08D01C0D0CCC004F4F5D /* ApptentiveInteractionInvocationTests.m in Sources */,
+				01A1A5F81E25456100F2FCD8 /* ATDataModel v5 to v6.xcmappingmodel in Sources */,
 				011B08CF1C0D0CCC004F4F5D /* ApptentiveMigrationTests.m in Sources */,
 				011B08D71C0D19B6004F4F5D /* CodePointAndInteractionTests.m in Sources */,
 				01F6FD971BFBCDC3004513C2 /* ApptentiveMetricsTests.m in Sources */,
@@ -2535,6 +2544,7 @@
 				01C7C4DD1BEAD0BC005D6EC1 /* ATDataModel.xcdatamodeld in Sources */,
 				49FECBE417D02BAD00069502 /* ATDataModel v1 to v2.xcmappingmodel in Sources */,
 				58CD20161821B7A80071CC72 /* ATDataModel v2 to v3.xcmappingmodel in Sources */,
+				01A1A5F91E25456200F2FCD8 /* ATDataModel v5 to v6.xcmappingmodel in Sources */,
 				583E396B188E08EB0030B51E /* ATDataModel v3 to v4.xcmappingmodel in Sources */,
 				013BB6171BF6ABB500BB6C27 /* ATDataModel v4 to v5.xcmappingmodel in Sources */,
 			);

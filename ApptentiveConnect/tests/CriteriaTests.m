@@ -13,6 +13,7 @@
 #import "ApptentiveEngagement.h"
 #import "ApptentiveDevice.h"
 #import "ApptentiveMutableDevice.h"
+#import "ApptentiveMutablePerson.h"
 
 @interface CriteriaTest ()
 
@@ -45,7 +46,7 @@
 		self.interaction = [ApptentiveInteractionInvocation invocationWithJSONDictionary:invocationDictionary];
 	}
 
-	self.data = [[ApptentiveSession alloc] init];
+	self.data = [[ApptentiveSession alloc] initWithAPIKey:@"foo"];
 
 	[self.data updateDevice:^(ApptentiveMutableDevice *device) {
 		[device addCustomNumber:@5 withKey:@"number_5"];
@@ -123,7 +124,10 @@
 @implementation OperatorContains
 
 - (void)testOperatorContains {
-	[Apptentive sharedConnection].personEmailAddress = @"test@example.com";
+	[self.data updatePerson:^(ApptentiveMutablePerson *person) {
+		person.emailAddress = @"test@example.com";
+	}];
+
 	XCTAssertTrue([self.interaction criteriaAreMetForConsumerData:self.data]);
 }
 

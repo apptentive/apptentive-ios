@@ -187,9 +187,10 @@
 }
 
 - (void)testMetrics {
+	// Stand up a fake backend, give it time to create a session, and make it pretend that it's ready.
 	Apptentive.shared.APIKey = @"foo";
-	[Apptentive.shared.backend setValue:[[ApptentiveSession alloc] init] forKey:@"session"];
-	[Apptentive.shared.backend setValue:@(2) forKey:@"state"];
+	sleep(1);
+	[Apptentive.shared.backend setValue:@(2) forKey:@"state"]; // 2 = ATBackendStateReady
 
 	NSInteger preCount = Apptentive.shared.backend.session.engagement.codePoints[@"com.apptentive#Survey#question_response"].totalCount;
 

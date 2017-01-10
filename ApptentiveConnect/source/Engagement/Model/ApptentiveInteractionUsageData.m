@@ -90,7 +90,7 @@
 
 	result[@"sdk/version"] = [self versionObjectWithVersion:self.session.SDK.version];
 	result[@"sdk/distribution"] = self.session.SDK.distributionName;
-	result[@"sdk/distribution_version"] = self.session.SDK.distributionVersion;
+	result[@"sdk/distribution_version"] = [self versionObjectWithVersion:self.session.SDK.distributionVersion];
 
 	result[@"current_time"] = [Apptentive timestampObjectWithDate:self.session.currentTime];
 

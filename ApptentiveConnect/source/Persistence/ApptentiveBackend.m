@@ -345,6 +345,8 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 			[self updateConfigurationIfNeeded];
 			[self updateEngagementManifestIfNeeded];
 			[self checkForMessages];
+
+			[self processQueuedRecords];
 		} else {
 			[self saveSession];
 
@@ -373,7 +375,7 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 #pragma mark -
 
 - (void)createConversation {
-	if (self.conversationOperation != nil || self.session.token != nil) {
+	if (self.conversationOperation != nil || self.session.token != nil || !self.working) {
 		return;
 	}
 
@@ -383,7 +385,7 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 }
 
 - (void)updateConfigurationIfNeeded {
-	if (self.configurationOperation != nil) {
+	if (self.configurationOperation != nil || !self.working) {
 		return;
 	}
 
@@ -397,7 +399,7 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 }
 
 - (void)updateEngagementManifestIfNeeded {
-	if (self.manifestOperation != nil || self.localEngagementManifestURL != nil) {
+	if (self.manifestOperation != nil || self.localEngagementManifestURL != nil || !self.working) {
 		return;
 	}
 
@@ -413,7 +415,7 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 #pragma mark -
 
 - (void)processQueuedRecords {
-	if (self.isReady) {
+	if (self.isReady && self.working) {
 		[self.serialQueue resumeWithDependency:self.conversationOperation];
 	}
 }
@@ -795,7 +797,7 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 }
 
 - (void)checkForMessages {
-	if (!self.isReady || self.messageOperation != nil) {
+	if (!self.isReady || self.messageOperation != nil || !self.working) {
 		return;
 	}
 

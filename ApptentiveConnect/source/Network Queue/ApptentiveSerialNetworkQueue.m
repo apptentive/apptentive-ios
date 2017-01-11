@@ -103,6 +103,12 @@
 	[self addOperation:resumeBlock];
 }
 
+- (void)cancelAllOperations {
+	[super cancelAllOperations];
+
+	self.isResuming = NO;
+}
+
 - (void)requestOperationDidStart:(ApptentiveRequestOperation *)operation {
 	[self addActiveOperation:operation];
 }

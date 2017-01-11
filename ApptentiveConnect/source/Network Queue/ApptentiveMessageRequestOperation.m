@@ -105,8 +105,8 @@
 	[self setMessagePendingState:ATPendingMessageStateError];
 }
 
-- (void)processHTTPError:(NSError *)error withResponse:(NSHTTPURLResponse *)response {
-	[super processHTTPError:error withResponse:response];
+- (void)processHTTPError:(NSError *)error withResponse:(NSHTTPURLResponse *)response responseData:(NSData *)responseData {
+	[super processHTTPError:error withResponse:response responseData:responseData];
 
 	[self setMessagePendingState:ATPendingMessageStateError];
 }

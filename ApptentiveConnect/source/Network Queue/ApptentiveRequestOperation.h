@@ -10,6 +10,8 @@
 
 @protocol ApptentiveRequestOperationDelegate, ApptentiveRequestOperationDataSource;
 
+extern NSErrorDomain const ApptentiveHTTPErrorDomain;
+
 @interface ApptentiveRequestOperation : NSOperation
 
 @property (readonly, nonatomic) NSURLRequest *request;
@@ -25,7 +27,7 @@
 @property (readonly, weak, nonatomic) id<ApptentiveRequestOperationDataSource> dataSource;
 
 - (void)processNetworkError:(NSError *)error __attribute__((objc_requires_super));
-- (void)processHTTPError:(NSError *)error withResponse:(NSHTTPURLResponse *)response __attribute__((objc_requires_super));
+- (void)processHTTPError:(NSError *)error withResponse:(NSHTTPURLResponse *)response responseData:(NSData *)responseData __attribute__((objc_requires_super));
 - (void)processResponse:(NSHTTPURLResponse *)response withObject:(NSObject *)responseObject __attribute__((objc_requires_super));
 - (void)retryTaskWithError:(NSError *)error __attribute__((objc_requires_super));
 

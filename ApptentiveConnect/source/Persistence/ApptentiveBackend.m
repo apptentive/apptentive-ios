@@ -378,7 +378,7 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 #pragma mark -
 
 - (void)createConversation {
-	if (self.conversationOperation != nil || self.session.token != nil || !self.working) {
+	if (self.conversationOperation != nil || self.session.token != nil) {
 		return;
 	}
 

@@ -15,6 +15,7 @@
 
 @end
 
+NSErrorDomain const ApptentiveHTTPErrorDomain;
 
 @implementation ApptentiveRequestOperation
 
@@ -37,6 +38,17 @@
 	});
 
 	return _clientErrorStatusCodes;
+}
+
++ (NSIndexSet *) serverErrorStatusCodes {
+	static NSIndexSet *_serverErrorStatusCodes;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		_serverErrorStatusCodes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(500, 100)]; // 5xx status codes
+
+	});
+
+	return _serverErrorStatusCodes;
 }
 
 - (instancetype)initWithPath:(NSString *)path method:(NSString *)method payload:(NSDictionary *)payload delegate:(id<ApptentiveRequestOperationDelegate>)delegate dataSource:(id<ApptentiveRequestOperationDataSource>)dataSource {
@@ -119,13 +131,13 @@
 					responseObject = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&error];
 
 					if (responseObject == nil) { // Decoding error
-						[self processHTTPError:error withResponse:URLResponse];
+						[self processHTTPError:error withResponse:URLResponse responseData:data];
 					}
 				}
 
 				[self processResponse:URLResponse withObject:responseObject];
 			} else {
-				[self processHTTPError:error withResponse:URLResponse];
+				[self processHTTPError:error withResponse:URLResponse responseData:data];
 			}
 		}
 	}];
@@ -139,12 +151,17 @@
 }
 
 - (void)cancel {
+	BOOL shouldFinish = self.isExecuting;
+
 	[self willChangeValueForKey:@"isCancelled"];
-	[self willChangeValueForKey:@"isFinished"];
 	[self.task cancel];
-	self.wasCancelled = YES;
-	[self didChangeValueForKey:@"isFinished"];
 	[self didChangeValueForKey:@"isCancelled"];
+
+	if (shouldFinish) {
+		[self willChangeValueForKey:@"isFinished"];
+		_wasCompleted = YES;
+		[self didChangeValueForKey:@"isFinished"];
+	}
 }
 
 - (void)processResponse:(NSHTTPURLResponse *)response withObject:(NSObject *)responseObject {
@@ -164,11 +181,31 @@
 	[self retryTaskWithError:error];
 }
 
-- (void)processHTTPError:(NSError *)error withResponse:(NSHTTPURLResponse *)response {
-	if ([[[self class] clientErrorStatusCodes] containsIndex:response.statusCode]) {
-		[self finishWithError:error];
-	} else {
+- (void)processHTTPError:(NSError *)error withResponse:(NSHTTPURLResponse *)response responseData:(NSData *)responseData {
+	BOOL shouldRetry = YES;
+	NSString *HTTPErrorTitle;
+	NSString *HTTPErrorMessage = responseData == nil ? @"" : [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
+
+	if ([[[self class] serverErrorStatusCodes] containsIndex:response.statusCode]) {
+		HTTPErrorTitle = @"Server error";
+	} else if ([[[self class] clientErrorStatusCodes] containsIndex:response.statusCode]) {
+		HTTPErrorTitle = @"Client error";
+		shouldRetry = NO;
+	}
+
+	if (error == nil && HTTPErrorTitle != nil) {
+		NSDictionary *userInfo = @{
+			NSLocalizedDescriptionKey : HTTPErrorTitle,
+			NSLocalizedFailureReasonErrorKey: HTTPErrorMessage,
+			NSURLErrorFailingURLErrorKey: self.request.URL
+		};
+		error = [NSError errorWithDomain:ApptentiveHTTPErrorDomain code:response.statusCode userInfo:userInfo];
+	}
+
+	if (shouldRetry) {
 		[self retryTaskWithError:error];
+	} else {
+		[self finishWithError:error];
 	}
 }
 

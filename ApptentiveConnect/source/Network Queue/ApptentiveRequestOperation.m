@@ -87,7 +87,7 @@
 }
 
 - (BOOL)isFinished {
-	return self.wasCompleted;
+	return self.wasCompleted || self.wasCancelled;
 }
 
 - (BOOL)isCancelled {
@@ -140,8 +140,10 @@
 
 - (void)cancel {
 	[self willChangeValueForKey:@"isCancelled"];
+	[self willChangeValueForKey:@"isFinished"];
 	[self.task cancel];
 	self.wasCancelled = YES;
+	[self didChangeValueForKey:@"isFinished"];
 	[self didChangeValueForKey:@"isCancelled"];
 }
 

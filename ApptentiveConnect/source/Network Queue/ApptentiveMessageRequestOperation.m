@@ -124,7 +124,7 @@
 		if (results.count == 1) {
 			((ApptentiveMessage *)results.firstObject).pendingState = @(pendingState);
 		} else {
-			ApptentiveLogError(@"Unable to identify sent message: %@", error);
+			ApptentiveLogError(@"Unable to identify message with ID “%@”. (error: %@)", self.messageRequestInfo.identifier, error);
 		}
 
 		if (![context save:&error]) {

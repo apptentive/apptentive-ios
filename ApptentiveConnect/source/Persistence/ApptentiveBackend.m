@@ -444,7 +444,7 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 
 - (void)requestOperationWillRetry:(ApptentiveRequestOperation *)operation withError:(NSError *)error {
 	if (error) {
-		ApptentiveLogError(@"@% %@ failed with error: %@", operation.request.HTTPMethod, operation.request.URL.absoluteString, error);
+		ApptentiveLogError(@"%@ %@ failed with error: %@", operation.request.HTTPMethod, operation.request.URL.absoluteString, error);
 	}
 
 	ApptentiveLogInfo(@"%@ %@ will retry in %f seconds.",  operation.request.HTTPMethod, operation.request.URL.absoluteString, self.networkQueue.backoffDelay);
@@ -750,9 +750,9 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 - (void)updateMessageCheckingTimer {
 	if (self.working) {
 		if (self.messageCenterInForeground) {
-			[self checkForMessagesAtRefreshInterval:self.configuration.messageCenter.backgroundPollingInterval];
-		} else {
 			[self checkForMessagesAtRefreshInterval:self.configuration.messageCenter.foregroundPollingInterval];
+		} else {
+			[self checkForMessagesAtRefreshInterval:self.configuration.messageCenter.backgroundPollingInterval];
 		}
 	} else {
 		[self stopMessageCheckingTimer];

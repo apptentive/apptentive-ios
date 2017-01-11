@@ -113,7 +113,7 @@
 
 		[self updateMessageErrorStatus];
 
-		ApptentiveLogError(@"@% %@ failed with error: %@", operation.request.HTTPMethod, operation.request.URL.absoluteString, error);
+		ApptentiveLogError(@"%@ %@ failed with error: %@", operation.request.HTTPMethod, operation.request.URL.absoluteString, error);
 	}
 
 	ApptentiveLogInfo(@"%@ %@ will retry in %f seconds.",  operation.request.HTTPMethod, operation.request.URL.absoluteString, self.backoffDelay);

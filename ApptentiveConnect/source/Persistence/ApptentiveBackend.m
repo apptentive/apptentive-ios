@@ -340,6 +340,9 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 			self.configuration.expiry = [NSDate distantPast];
 			self.manifest.expiry = [NSDate distantPast];
 #endif
+			[self.networkQueue resetBackoffDelay];
+			[self.serialQueue resetBackoffDelay];
+
 			[self.session checkForDiffs];
 
 			[self updateConfigurationIfNeeded];

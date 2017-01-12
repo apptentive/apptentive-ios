@@ -255,18 +255,24 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 }
 
 - (void)setPushNotificationIntegration:(ApptentivePushProvider)pushProvider withDeviceToken:(NSData *)deviceToken {
-	[self removeAllPushIntegrations];
+	const unsigned *tokenBytes = [deviceToken bytes];
+	NSString *token = [NSString stringWithFormat:@"%08x%08x%08x%08x%08x%08x%08x%08x",
+								ntohl(tokenBytes[0]), ntohl(tokenBytes[1]), ntohl(tokenBytes[2]),
+								ntohl(tokenBytes[3]), ntohl(tokenBytes[4]), ntohl(tokenBytes[5]),
+								ntohl(tokenBytes[6]), ntohl(tokenBytes[7])];
 
-	NSString *integrationKey = [self integrationKeyForPushProvider:pushProvider];
+	[self.backend.session updateDevice:^(ApptentiveMutableDevice *device) {
+		NSMutableDictionary *integrationConfiguration = [device.integrationConfiguration mutableCopy];
 
-	[self addIntegration:integrationKey withDeviceToken:deviceToken];
-}
+		[integrationConfiguration removeObjectForKey:[self integrationKeyForPushProvider:ApptentivePushProviderApptentive]];
+		[integrationConfiguration removeObjectForKey:[self integrationKeyForPushProvider:ApptentivePushProviderUrbanAirship]];
+		[integrationConfiguration removeObjectForKey:[self integrationKeyForPushProvider:ApptentivePushProviderAmazonSNS]];
+		[integrationConfiguration removeObjectForKey:[self integrationKeyForPushProvider:ApptentivePushProviderParse]];
 
-- (void)removeAllPushIntegrations {
-	[self removeIntegration:[self integrationKeyForPushProvider:ApptentivePushProviderApptentive]];
-	[self removeIntegration:[self integrationKeyForPushProvider:ApptentivePushProviderUrbanAirship]];
-	[self removeIntegration:[self integrationKeyForPushProvider:ApptentivePushProviderAmazonSNS]];
-	[self removeIntegration:[self integrationKeyForPushProvider:ApptentivePushProviderParse]];
+		[integrationConfiguration setObject:@{ @"token": token } forKey:[self integrationKeyForPushProvider:pushProvider]];
+
+		device.integrationConfiguration = integrationConfiguration;
+	}];
 }
 
 - (NSString *)integrationKeyForPushProvider:(ApptentivePushProvider)pushProvider {
@@ -285,29 +291,17 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 }
 
 - (void)addIntegration:(NSString *)integration withConfiguration:(NSDictionary *)configuration {
-	NSMutableDictionary *integrationConfiguration = [self.backend.session.device.integrationConfiguration mutableCopy];
-	[integrationConfiguration setObject:configuration forKey:integration];
-
 	[self.backend.session updateDevice:^(ApptentiveMutableDevice *device) {
+		NSMutableDictionary *integrationConfiguration = [device.integrationConfiguration mutableCopy];
+		[integrationConfiguration setObject:configuration forKey:integration];
 		device.integrationConfiguration = integrationConfiguration;
 	}];
 }
 
-- (void)addIntegration:(NSString *)integration withDeviceToken:(NSData *)deviceToken {
-	const unsigned *tokenBytes = [deviceToken bytes];
-	NSString *token = [NSString stringWithFormat:@"%08x%08x%08x%08x%08x%08x%08x%08x",
-								ntohl(tokenBytes[0]), ntohl(tokenBytes[1]), ntohl(tokenBytes[2]),
-								ntohl(tokenBytes[3]), ntohl(tokenBytes[4]), ntohl(tokenBytes[5]),
-								ntohl(tokenBytes[6]), ntohl(tokenBytes[7])];
-
-	[self addIntegration:integration withConfiguration:@{ @"token": token }];
-}
-
 - (void)removeIntegration:(NSString *)integration {
-	NSMutableDictionary *integrationConfiguration = [self.backend.session.device.integrationConfiguration mutableCopy];
-	[integrationConfiguration removeObjectForKey:integration];
-
 	[self.backend.session updateDevice:^(ApptentiveMutableDevice *device) {
+		NSMutableDictionary *integrationConfiguration = [device.integrationConfiguration mutableCopy];
+		[integrationConfiguration removeObjectForKey:integration];
 		device.integrationConfiguration = integrationConfiguration;
 	}];
 }

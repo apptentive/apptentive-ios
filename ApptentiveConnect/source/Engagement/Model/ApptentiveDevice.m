@@ -43,7 +43,7 @@ static NSString * const IntegrationConfigurationKey = @"integrationConfiguration
 }
 
 - (instancetype)initWithCurrentDevice {
-	self = [super init];
+	self = [self init];
 
 	if (self) {
 		[self updateWithCurrentDeviceValues];

@@ -91,6 +91,7 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 	if (self) {
 		_state = ATBackendStateStarting;
 		_queue = [[NSOperationQueue alloc] init];
+		_queue.maxConcurrentOperationCount = 1;
 		_supportDirectoryPath = [[ApptentiveUtilities applicationSupportPath] stringByAppendingPathComponent:storagePath];
 
 		if ([UIApplication sharedApplication] != nil && ![UIApplication sharedApplication].isProtectedDataAvailable) {
@@ -545,36 +546,48 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 #pragma mark - Session delegate
 
 - (void)session:(ApptentiveSession *)session conversationDidChange:(NSDictionary *)payload {
-	NSManagedObjectContext *context = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-	context.parentContext = self.managedObjectContext;
+	NSBlockOperation *conversationDidChangeOperation = [NSBlockOperation blockOperationWithBlock:^{
+		NSManagedObjectContext *context = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+		context.parentContext = self.managedObjectContext;
 
-	[context performBlock:^{
-		[ApptentiveSerialRequest enqueueRequestWithPath:@"conversation" method:@"PUT" payload:payload attachments:nil identifier:nil inContext:context];
+		[context performBlock:^{
+			[ApptentiveSerialRequest enqueueRequestWithPath:@"conversation" method:@"PUT" payload:payload attachments:nil identifier:nil inContext:context];
+		}];
+
+		[self saveSession];
 	}];
 
-	[self saveSession];
+	[self.queue addOperation:conversationDidChangeOperation];
 }
 
 - (void)session:(ApptentiveSession *)session personDidChange:(NSDictionary *)diffs {
-	NSManagedObjectContext *context = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-	context.parentContext = self.managedObjectContext;
+	NSBlockOperation *personDidChangeOperation = [NSBlockOperation blockOperationWithBlock:^{
+		NSManagedObjectContext *context = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+		context.parentContext = self.managedObjectContext;
 
-	[context performBlock:^{
-		[ApptentiveSerialRequest enqueueRequestWithPath:@"people" method:@"PUT" payload:diffs attachments:nil identifier:nil inContext:context];
+		[context performBlock:^{
+			[ApptentiveSerialRequest enqueueRequestWithPath:@"people" method:@"PUT" payload:diffs attachments:nil identifier:nil inContext:context];
+		}];
+
+		[self saveSession];
 	}];
 
-	[self saveSession];
+	[self.queue addOperation:personDidChangeOperation];
 }
 
 - (void)session:(ApptentiveSession *)session deviceDidChange:(NSDictionary *)diffs {
-	NSManagedObjectContext *context = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-	context.parentContext = self.managedObjectContext;
+	NSBlockOperation *deviceDidChangeOperation = [NSBlockOperation blockOperationWithBlock:^{
+		NSManagedObjectContext *context = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+		context.parentContext = self.managedObjectContext;
 
-	[context performBlock:^{
-		[ApptentiveSerialRequest enqueueRequestWithPath:@"devices" method:@"PUT" payload:diffs attachments:nil identifier:nil inContext:context];
+		[context performBlock:^{
+			[ApptentiveSerialRequest enqueueRequestWithPath:@"devices" method:@"PUT" payload:diffs attachments:nil identifier:nil inContext:context];
+		}];
+
+		[self saveSession];
 	}];
 
-	[self saveSession];
+	[self.queue addOperation:deviceDidChangeOperation];
 }
 
 #pragma mark -

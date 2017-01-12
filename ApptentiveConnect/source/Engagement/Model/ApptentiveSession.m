@@ -146,7 +146,7 @@ static NSString * const UserInfoKey = @"userInfo";
 	if (personDiffs.count > 0) {
 		_person = newPerson;
 
-		[self.delegate session:self personDidChange:personDiffs];
+		[self.delegate session:self personDidChange:@{ @"person": personDiffs }];
 	}
 }
 
@@ -166,7 +166,7 @@ static NSString * const UserInfoKey = @"userInfo";
 	if (deviceDiffs.count > 0) {
 		_device = newDevice;
 
-		[self.delegate session:self deviceDidChange:deviceDiffs];
+		[self.delegate session:self deviceDidChange:@{ @"device": deviceDiffs }];
 	}
 }
 

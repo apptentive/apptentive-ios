@@ -15,7 +15,7 @@
 
 @end
 
-NSErrorDomain const ApptentiveHTTPErrorDomain;
+NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 
 @implementation ApptentiveRequestOperation
 

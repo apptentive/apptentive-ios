@@ -420,7 +420,7 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 
 - (void)processQueuedRecords {
 	if (self.isReady && self.working) {
-		[self.serialQueue resumeWithDependency:self.conversationOperation];
+		[self.serialQueue resume];
 	}
 }
 

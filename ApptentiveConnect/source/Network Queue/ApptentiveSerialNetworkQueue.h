@@ -21,7 +21,7 @@ typedef NS_ENUM(NSInteger, ApptentiveQueueStatus) {
 
 - (instancetype)initWithBaseURL:(NSURL *)baseURL token:(NSString *)token SDKVersion:(NSString *)SDKVersion platform:(NSString *)platform parentManagedObjectContext:(NSManagedObjectContext *)parentManagedObjectContext;
 
-- (void)resumeWithDependency:(NSOperation *)dependency;
+- (void)resume;
 
 @property (readonly, nonatomic) NSNumber *messageSendProgress;
 @property (readonly, nonatomic) NSInteger messageTaskCount;

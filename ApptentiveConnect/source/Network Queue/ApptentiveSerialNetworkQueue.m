@@ -35,7 +35,7 @@
 	return self;
 }
 
-- (void)resumeWithDependency:(NSOperation *)dependency {
+- (void)resume {
 	if (self.isResuming) {
 		return;
 	}
@@ -95,10 +95,6 @@
 		
 		self.isResuming = NO;
 	}];
-
-	if (dependency) {
-		[resumeBlock addDependency:dependency];
-	}
 
 	[self addOperation:resumeBlock];
 }

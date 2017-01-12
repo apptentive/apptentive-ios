@@ -53,10 +53,12 @@ static NSString * const LastInvokedKey = @"lastInvoked";
 }
 
 - (void)resetAll {
-	_totalCount = 0;
-	_versionCount = 0;
-	_buildCount = 0;
-	_lastInvoked = nil;
+	@synchronized (self) {
+		_totalCount = 0;
+		_versionCount = 0;
+		_buildCount = 0;
+		_lastInvoked = nil;
+	}
 }
 
 - (void)resetVersion {
@@ -68,10 +70,12 @@ static NSString * const LastInvokedKey = @"lastInvoked";
 }
 
 - (void)invoke {
-	_versionCount ++;
-	_buildCount ++;
-	_totalCount ++;
-	_lastInvoked = [NSDate date]; // TODO: inject as dependency?
+	@synchronized (self) {
+		_versionCount ++;
+		_buildCount ++;
+		_totalCount ++;
+		_lastInvoked = [NSDate date]; // TODO: inject as dependency?
+	}
 }
 
 @end

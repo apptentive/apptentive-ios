@@ -910,7 +910,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	}
 	[self.interaction engage:ATInteractionMessageCenterEventLabelProfileClose fromViewController:sender userInfo:userInfo];
 
-	[Apptentive.shared.backend.session.userInfo setObject:@(YES) forKey:ATMessageCenterDidSkipProfileKey];
+	[Apptentive.shared.backend.session setUserInfo:@(YES) forKey:ATMessageCenterDidSkipProfileKey];
 	[self updateState];
 	[self.view endEditing:YES];
 	[self resizeFooterView:nil];
@@ -971,9 +971,9 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 - (void)saveDraft {
 	if (self.messageComposerHasText) {
-		[Apptentive.shared.backend.session.userInfo setObject:self.trimmedMessage forKey:ATMessageCenterDraftMessageKey];
+		[Apptentive.shared.backend.session setUserInfo:self.trimmedMessage forKey:ATMessageCenterDraftMessageKey];
 	} else {
-		[Apptentive.shared.backend.session.userInfo removeObjectForKey:ATMessageCenterDraftMessageKey];
+		[Apptentive.shared.backend.session removeUserInfoForKey:ATMessageCenterDraftMessageKey];
 	}
 
 	[self.attachmentController saveDraft];

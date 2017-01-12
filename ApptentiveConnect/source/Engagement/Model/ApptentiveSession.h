@@ -22,7 +22,7 @@
 @property (readonly, nonatomic) NSString *token;
 @property (readonly, nonatomic) NSString *lastMessageID;
 @property (readonly, nonatomic) NSDate *currentTime;
-@property (readonly, nonatomic) NSMutableDictionary *userInfo;
+@property (readonly, nonatomic) NSDictionary *userInfo;
 
 @property (weak, nonatomic) id<ApptentiveSessionDelegate> delegate;
 
@@ -41,6 +41,9 @@
 @property (readonly, nonatomic) NSDictionary *conversationCreationJSON;
 @property (readonly, nonatomic) NSDictionary *conversationUpdateJSON;
 
+- (void)setUserInfo:(NSObject *)object forKey:(NSString *)key;
+- (void)removeUserInfoForKey:(NSString *)key;
+
 @end
 
 @interface ApptentiveLegacyConversation : NSObject <NSCoding>
@@ -56,5 +59,6 @@
 - (void)session:(ApptentiveSession *)session conversationDidChange:(NSDictionary *)payload;
 - (void)session:(ApptentiveSession *)session deviceDidChange:(NSDictionary *)diffs;
 - (void)session:(ApptentiveSession *)session personDidChange:(NSDictionary *)diffs;
+- (void)sessionUserInfoDidChange:(ApptentiveSession *)session;
 
 @end

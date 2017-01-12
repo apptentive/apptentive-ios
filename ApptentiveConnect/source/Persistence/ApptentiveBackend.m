@@ -509,15 +509,21 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 }
 
 - (BOOL)saveSession {
-	return [NSKeyedArchiver archiveRootObject:self.session toFile:[self sessionPath]];
+	@synchronized (self.session) {
+		return [NSKeyedArchiver archiveRootObject:self.session toFile:[self sessionPath]];
+	}
 }
 
 - (BOOL)saveConfiguration {
-	return [NSKeyedArchiver archiveRootObject:self.configuration toFile:[self configurationPath]];
+	@synchronized (self.configuration) {
+		return [NSKeyedArchiver archiveRootObject:self.configuration toFile:[self configurationPath]];
+	}
 }
 
 - (BOOL)saveManifest {
-	return [NSKeyedArchiver archiveRootObject:_manifest toFile:[self manifestPath]];
+	@synchronized (self.manifest) {
+		return [NSKeyedArchiver archiveRootObject:_manifest toFile:[self manifestPath]];
+	}
 }
 
 #pragma mark NSFetchedResultsControllerDelegate
@@ -588,6 +594,14 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 	}];
 
 	[self.queue addOperation:deviceDidChangeOperation];
+}
+
+- (void)sessionUserInfoDidChange:(ApptentiveSession *)session {
+	NSBlockOperation *sessionSaveOperation = [NSBlockOperation blockOperationWithBlock:^{
+		[self saveSession];
+	}];
+
+	[self.queue addOperation:sessionSaveOperation];
 }
 
 #pragma mark -

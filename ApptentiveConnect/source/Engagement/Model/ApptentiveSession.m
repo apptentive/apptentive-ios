@@ -25,7 +25,13 @@ static NSString * const EngagementKey = @"engagement";
 static NSString * const APIKeyKey = @"APIKey";
 static NSString * const TokenKey = @"token";
 static NSString * const LastMessageIDKey = @"lastMessageID";
-static NSString * const UserInfoKey = @"userInfo";
+static NSString * const MutableUserInfoKey = @"mutableUserInfo";
+
+@interface ApptentiveSession ()
+
+@property (readonly, nonatomic) NSMutableDictionary *mutableUserInfo;
+
+@end
 
 @implementation ApptentiveSession
 
@@ -44,7 +50,7 @@ static NSString * const UserInfoKey = @"userInfo";
 		_person = [[ApptentivePerson alloc] init];
 		_device = [[ApptentiveDevice alloc] initWithCurrentDevice];
 		_engagement = [[ApptentiveEngagement alloc] init];
-		_userInfo = [[NSMutableDictionary alloc] init];
+		_mutableUserInfo = [[NSMutableDictionary alloc] init];
 		_APIKey = APIKey;
 	}
 	return self;
@@ -62,7 +68,7 @@ static NSString * const UserInfoKey = @"userInfo";
 		_APIKey = [coder decodeObjectOfClass:[NSString class] forKey:APIKeyKey];
 		_token = [coder decodeObjectOfClass:[NSString class] forKey:TokenKey];
 		_lastMessageID = [coder decodeObjectOfClass:[NSString class] forKey:LastMessageIDKey];
-		_userInfo = [coder decodeObjectOfClass:[NSMutableDictionary class] forKey:UserInfoKey];
+		_mutableUserInfo = [coder decodeObjectOfClass:[NSMutableDictionary class] forKey:MutableUserInfoKey];
 	}
 	return self;
 }
@@ -78,7 +84,7 @@ static NSString * const UserInfoKey = @"userInfo";
 	[coder encodeObject:self.APIKey forKey:APIKeyKey];
 	[coder encodeObject:self.token forKey:TokenKey];
 	[coder encodeObject:self.lastMessageID forKey:LastMessageIDKey];
-	[coder encodeObject:self.userInfo forKey:UserInfoKey];
+	[coder encodeObject:self.mutableUserInfo forKey:MutableUserInfoKey];
 }
 
 - (void)setToken:(NSString *)token personID:(NSString *)personID deviceID:(NSString *)deviceID {
@@ -88,45 +94,47 @@ static NSString * const UserInfoKey = @"userInfo";
 }
 
 - (void)checkForDiffs {
-	ApptentiveAppRelease *currentAppRelease = [[ApptentiveAppRelease alloc] initWithCurrentAppRelease];
-	if (self.appRelease.overridingStyles) {
-		[currentAppRelease setOverridingStyles];
-	}
-
-	ApptentiveSDK *currentSDK = [[ApptentiveSDK alloc] initWithCurrentSDK];
-
-	[self updateDevice:^(ApptentiveMutableDevice *device){}];
-
-	BOOL conversationNeedsUpdate = NO;
-
-	NSDictionary *appReleaseDiffs = [ApptentiveUtilities diffDictionary:currentAppRelease.JSONDictionary againstDictionary:self.appRelease.JSONDictionary];
-
-	if (appReleaseDiffs.count > 0) {
-		conversationNeedsUpdate = YES;
-
-		if (![currentAppRelease.version isEqualToVersion:self.appRelease.version]) {
-			[self.appRelease resetVersion];
-			[self.engagement resetVersion];
+	@synchronized (self) {
+		ApptentiveAppRelease *currentAppRelease = [[ApptentiveAppRelease alloc] initWithCurrentAppRelease];
+		if (self.appRelease.overridingStyles) {
+			[currentAppRelease setOverridingStyles];
 		}
 
-		if (![currentAppRelease.build isEqualToVersion:self.appRelease.build]) {
-			[self.appRelease resetBuild];
-			[self.engagement resetBuild];
+		ApptentiveSDK *currentSDK = [[ApptentiveSDK alloc] initWithCurrentSDK];
+
+		[self updateDevice:^(ApptentiveMutableDevice *device){}];
+
+		BOOL conversationNeedsUpdate = NO;
+
+		NSDictionary *appReleaseDiffs = [ApptentiveUtilities diffDictionary:currentAppRelease.JSONDictionary againstDictionary:self.appRelease.JSONDictionary];
+
+		if (appReleaseDiffs.count > 0) {
+			conversationNeedsUpdate = YES;
+
+			if (![currentAppRelease.version isEqualToVersion:self.appRelease.version]) {
+				[self.appRelease resetVersion];
+				[self.engagement resetVersion];
+			}
+
+			if (![currentAppRelease.build isEqualToVersion:self.appRelease.build]) {
+				[self.appRelease resetBuild];
+				[self.engagement resetBuild];
+			}
+
+			_appRelease = currentAppRelease;
 		}
 
-		_appRelease = currentAppRelease;
-	}
+		NSDictionary *SDKDiffs = [ApptentiveUtilities diffDictionary:currentSDK.JSONDictionary againstDictionary:self.SDK.JSONDictionary];
 
-	NSDictionary *SDKDiffs = [ApptentiveUtilities diffDictionary:currentSDK.JSONDictionary againstDictionary:self.SDK.JSONDictionary];
+		if (SDKDiffs.count > 0) {
+			conversationNeedsUpdate = YES;
 
-	if (SDKDiffs.count > 0) {
-		conversationNeedsUpdate = YES;
+			_SDK = currentSDK;
+		}
 
-		_SDK = currentSDK;
-	}
-
-	if (conversationNeedsUpdate) {
-		[self.delegate session:self conversationDidChange:self.conversationUpdateJSON];
+		if (conversationNeedsUpdate) {
+			[self.delegate session:self conversationDidChange:self.conversationUpdateJSON];
+		}
 	}
 }
 
@@ -135,18 +143,20 @@ static NSString * const UserInfoKey = @"userInfo";
 		return;
 	}
 
-	ApptentiveMutablePerson *mutablePerson = [[ApptentiveMutablePerson alloc] initWithPerson:self.person];
+	@synchronized (self) {
+		ApptentiveMutablePerson *mutablePerson = [[ApptentiveMutablePerson alloc] initWithPerson:self.person];
 
-	personUpdateBlock(mutablePerson);
+		personUpdateBlock(mutablePerson);
 
-	ApptentivePerson *newPerson = [[ApptentivePerson alloc] initWithMutablePerson:mutablePerson];
+		ApptentivePerson *newPerson = [[ApptentivePerson alloc] initWithMutablePerson:mutablePerson];
 
-	NSDictionary *personDiffs = [ApptentiveUtilities diffDictionary:newPerson.JSONDictionary againstDictionary:self.person.JSONDictionary];
+		NSDictionary *personDiffs = [ApptentiveUtilities diffDictionary:newPerson.JSONDictionary againstDictionary:self.person.JSONDictionary];
 
-	if (personDiffs.count > 0) {
-		_person = newPerson;
+		if (personDiffs.count > 0) {
+			_person = newPerson;
 
-		[self.delegate session:self personDidChange:@{ @"person": personDiffs }];
+			[self.delegate session:self personDidChange:@{ @"person": personDiffs }];
+		}
 	}
 }
 
@@ -155,18 +165,20 @@ static NSString * const UserInfoKey = @"userInfo";
 		return;
 	}
 
-	ApptentiveMutableDevice *mutableDevice = [[ApptentiveMutableDevice alloc] initWithDevice:self.device];
+	@synchronized (self) {
+		ApptentiveMutableDevice *mutableDevice = [[ApptentiveMutableDevice alloc] initWithDevice:self.device];
 
-	deviceUpdateBlock(mutableDevice);
+		deviceUpdateBlock(mutableDevice);
 
-	ApptentiveDevice *newDevice = [[ApptentiveDevice alloc] initWithMutableDevice:mutableDevice];
+		ApptentiveDevice *newDevice = [[ApptentiveDevice alloc] initWithMutableDevice:mutableDevice];
 
-	NSDictionary *deviceDiffs = [ApptentiveUtilities diffDictionary:newDevice.JSONDictionary againstDictionary:self.device.JSONDictionary];
+		NSDictionary *deviceDiffs = [ApptentiveUtilities diffDictionary:newDevice.JSONDictionary againstDictionary:self.device.JSONDictionary];
 
-	if (deviceDiffs.count > 0) {
-		_device = newDevice;
+		if (deviceDiffs.count > 0) {
+			_device = newDevice;
 
-		[self.delegate session:self deviceDidChange:@{ @"device": deviceDiffs }];
+			[self.delegate session:self deviceDidChange:@{ @"device": deviceDiffs }];
+		}
 	}
 }
 
@@ -225,8 +237,10 @@ static NSString * const UserInfoKey = @"userInfo";
 		NSString *ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKey";
 		NSString *ATMessageCenterDidSkipProfileKey = @"ATMessageCenterDidSkipProfileKey";
 
-		[_userInfo setObject:[[NSUserDefaults standardUserDefaults] stringForKey:ATMessageCenterDraftMessageKey] forKey:ATMessageCenterDraftMessageKey];
-		[_userInfo setObject:@([[NSUserDefaults standardUserDefaults] boolForKey:ATMessageCenterDidSkipProfileKey]) forKey:ATMessageCenterDidSkipProfileKey];
+		_mutableUserInfo = [NSMutableDictionary dictionary];
+
+		[_mutableUserInfo setObject:[[NSUserDefaults standardUserDefaults] stringForKey:ATMessageCenterDraftMessageKey] forKey:ATMessageCenterDraftMessageKey];
+		[_mutableUserInfo setObject:@([[NSUserDefaults standardUserDefaults] boolForKey:ATMessageCenterDidSkipProfileKey]) forKey:ATMessageCenterDidSkipProfileKey];
 	}
 
 	return self;
@@ -240,6 +254,20 @@ static NSString * const UserInfoKey = @"userInfo";
 	[ApptentiveEngagement deleteMigratedData];
 
 	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ATCurrentConversationPreferenceKey"];
+}
+
+- (NSDictionary *)userInfo {
+	return [NSDictionary dictionaryWithDictionary:self.mutableUserInfo];
+}
+
+- (void)setUserInfo:(NSDictionary *)userInfo forKey:(NSString *)key {
+	[self.mutableUserInfo setObject:userInfo forKey:key];
+
+	[self.delegate sessionUserInfoDidChange:self];
+}
+
+- (void)removeUserInfoForKey:(NSString *)key {
+	[self.mutableUserInfo removeObjectForKey:key];
 }
 
 @end

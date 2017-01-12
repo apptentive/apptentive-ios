@@ -114,12 +114,14 @@ static NSString * const CodePointsKey = @"codePoints";
 }
 
 - (void)resetVersion {
-	for (ApptentiveCount *count in self.codePoints.allValues) {
-		[count resetVersion];
-	}
+	@synchronized (self) {
+		for (ApptentiveCount *count in self.codePoints.allValues) {
+			[count resetVersion];
+		}
 
-	for (ApptentiveCount *count in self.interactions.allValues) {
-		[count resetVersion];
+		for (ApptentiveCount *count in self.interactions.allValues) {
+			[count resetVersion];
+		}
 	}
 }
 

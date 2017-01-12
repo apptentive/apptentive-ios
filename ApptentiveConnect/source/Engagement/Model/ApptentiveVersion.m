@@ -8,11 +8,16 @@
 
 #import "ApptentiveVersion.h"
 
+static NSString * const VersionStringKey = @"versionString";
+static NSString * const MajorKey = @"major";
+static NSString * const MinorKey = @"minor";
+static NSString * const PatchKey = @"patch";
+
 @implementation ApptentiveVersion
 
-- (instancetype)initWithString:(NSString *)versionString
-{
+- (instancetype)initWithString:(NSString *)versionString {
 	self = [super init];
+
 	if (self) {
 		_versionString = versionString;
 
@@ -35,7 +40,30 @@
 			_patch = -1;
 		}
 	}
+
 	return self;
+}
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+	self = [super initWithCoder:aDecoder];
+
+	if (self) {
+		_versionString = [aDecoder decodeObjectOfClass:[NSString class] forKey:VersionStringKey];
+		_major = [aDecoder decodeIntegerForKey:MajorKey];
+		_minor = [aDecoder decodeIntegerForKey:MinorKey];
+		_patch = [aDecoder decodeIntegerForKey:PatchKey];
+	}
+
+	return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[super encodeWithCoder:aCoder];
+
+	[aCoder encodeObject:self.versionString forKey:VersionStringKey];
+	[aCoder encodeInteger:self.major forKey:MajorKey];
+	[aCoder encodeInteger:self.minor forKey:MinorKey];
+	[aCoder encodeInteger:self.patch forKey:PatchKey];
 }
 
 - (BOOL)isEqual:(id)object {

@@ -193,7 +193,6 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 				[self.session checkForDiffs];
 
 				[ApptentiveMetrics sharedMetrics];
-				[ApptentiveReachability sharedReachability];
 
 				[self startMonitoringUnreadMessages];
 

@@ -12,7 +12,7 @@
 
 #import "Apptentive_Private.h"
 #import "Apptentive+Debugging.h"
-#import "ApptentiveEngagementBackend.h"
+#import "ApptentiveBackend+Engagement.h"
 #import "ApptentiveInteractionInvocation.h"
 #import "ApptentiveInteractionUsageData.h"
 #import "ApptentiveSession.h"

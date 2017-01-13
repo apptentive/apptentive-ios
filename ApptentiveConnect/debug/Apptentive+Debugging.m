@@ -8,7 +8,7 @@
 
 #import "Apptentive+Debugging.h"
 #import "ApptentiveBackend.h"
-#import "ApptentiveEngagementBackend.h"
+#import "ApptentiveBackend+Engagement.h"
 #import "ApptentiveInteraction.h"
 #import "ApptentiveMessageCenterViewController.h"
 #import "ApptentiveDevice.h"
@@ -91,11 +91,11 @@
 }
 
 - (void)presentInteractionAtIndex:(NSInteger)index fromViewController:(UIViewController *)viewController {
-	[self.engagementBackend presentInteraction:[self.engagementInteractions objectAtIndex:index] fromViewController:viewController];
+	[self.backend presentInteraction:[self.engagementInteractions objectAtIndex:index] fromViewController:viewController];
 }
 
 - (void)presentInteractionWithJSON:(NSDictionary *)JSON fromViewController:(UIViewController *)viewController {
-	[self.engagementBackend presentInteraction:[ApptentiveInteraction interactionWithJSONDictionary:JSON] fromViewController:viewController];
+	[self.backend presentInteraction:[ApptentiveInteraction interactionWithJSONDictionary:JSON] fromViewController:viewController];
 }
 
 - (NSString *)conversationToken {

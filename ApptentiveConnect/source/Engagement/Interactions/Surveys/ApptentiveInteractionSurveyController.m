@@ -11,7 +11,7 @@
 #import "ApptentiveInteraction.h"
 #import "ApptentiveBackend.h"
 #import "ApptentiveSurveyViewController.h"
-#import "ApptentiveEngagementBackend.h"
+#import "ApptentiveBackend+Engagement.h"
 
 #import "ApptentiveSurvey.h"
 #import "ApptentiveSurveyViewModel.h"

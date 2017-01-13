@@ -11,7 +11,7 @@
 #import "ApptentiveInteraction.h"
 #import "ApptentiveInteractionInvocation.h"
 #import "ApptentiveInteractionUsageData.h"
-#import "ApptentiveEngagementBackend.h"
+#import "ApptentiveBackend+Engagement.h"
 #import "Apptentive+Debugging.h"
 #import "ApptentiveSession.h"
 #import "ApptentiveAppRelease.h"

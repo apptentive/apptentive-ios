@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "ApptentiveSession.h"
+#import "ApptentiveBackend.h"
+//#import "ApptentiveSession.h"
 
 extern NSString *const ATEngagementInstallDateKey;
 extern NSString *const ATEngagementUpgradeDateKey;
@@ -34,7 +35,7 @@ extern NSString *const ApptentiveEngagementMessageCenterEvent;
 @class ApptentiveInteraction;
 
 
-@interface ApptentiveEngagementBackend : NSObject
+@interface ApptentiveBackend (Engagement)
 
 - (ApptentiveInteraction *)interactionForEvent:(NSString *)event;
 

@@ -216,7 +216,7 @@
 		016986A71DA57965008C4C78 /* ApptentiveInteractionUpgradeMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 58DCC0D3180F445700A3A7AE /* ApptentiveInteractionUpgradeMessageViewController.m */; };
 		016986A81DA57965008C4C78 /* ApptentiveInteractionUpgradeMessageController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01D334361D3DAA460065A03A /* ApptentiveInteractionUpgradeMessageController.m */; };
 		016986A91DA57965008C4C78 /* ApptentiveInteractionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01D334321D3DA6020065A03A /* ApptentiveInteractionController.m */; };
-		016986AA1DA57965008C4C78 /* ApptentiveEngagementBackend.m in Sources */ = {isa = PBXBuildFile; fileRef = 58C5922017C55ADD000FA428 /* ApptentiveEngagementBackend.m */; };
+		016986AA1DA57965008C4C78 /* ApptentiveBackend+Engagement.m in Sources */ = {isa = PBXBuildFile; fileRef = 58C5922017C55ADD000FA428 /* ApptentiveBackend+Engagement.m */; };
 		016986AD1DA57965008C4C78 /* ApptentiveMetrics.m in Sources */ = {isa = PBXBuildFile; fileRef = 4987FA96157AE53500AF2078 /* ApptentiveMetrics.m */; };
 		016986B01DA57965008C4C78 /* ApptentiveUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 4936AE761379DEBB00A4B17F /* ApptentiveUtilities.m */; };
 		016986B11DA57965008C4C78 /* ApptentiveLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 495E9C1B16EABD8E00AE3B03 /* ApptentiveLogger.m */; };
@@ -506,8 +506,8 @@
 		58B703EE1B0EB6DB0024478C /* ApptentiveMessageCenterViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 585A8E5D1B0D609A00BDF4CC /* ApptentiveMessageCenterViewController.h */; };
 		58B703F81B0FAE6D0024478C /* ApptentiveMessageCenterInteraction.h in Headers */ = {isa = PBXBuildFile; fileRef = 58B703F61B0FAE6D0024478C /* ApptentiveMessageCenterInteraction.h */; };
 		58B703F91B0FAE6D0024478C /* ApptentiveMessageCenterInteraction.m in Sources */ = {isa = PBXBuildFile; fileRef = 58B703F71B0FAE6D0024478C /* ApptentiveMessageCenterInteraction.m */; };
-		58C5922117C55ADD000FA428 /* ApptentiveEngagementBackend.h in Headers */ = {isa = PBXBuildFile; fileRef = 58C5921F17C55ADD000FA428 /* ApptentiveEngagementBackend.h */; };
-		58C5922217C55ADD000FA428 /* ApptentiveEngagementBackend.m in Sources */ = {isa = PBXBuildFile; fileRef = 58C5922017C55ADD000FA428 /* ApptentiveEngagementBackend.m */; };
+		58C5922117C55ADD000FA428 /* ApptentiveBackend+Engagement.h in Headers */ = {isa = PBXBuildFile; fileRef = 58C5921F17C55ADD000FA428 /* ApptentiveBackend+Engagement.h */; };
+		58C5922217C55ADD000FA428 /* ApptentiveBackend+Engagement.m in Sources */ = {isa = PBXBuildFile; fileRef = 58C5922017C55ADD000FA428 /* ApptentiveBackend+Engagement.m */; };
 		58CD20151821B7A70071CC72 /* ATDataModel v2 to v3.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 58CD20131821B78D0071CC72 /* ATDataModel v2 to v3.xcmappingmodel */; };
 		58CD20161821B7A80071CC72 /* ATDataModel v2 to v3.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 58CD20131821B78D0071CC72 /* ATDataModel v2 to v3.xcmappingmodel */; };
 		58D17D4718C5674000D123BC /* ApptentiveInteractionRatingDialogController.h in Headers */ = {isa = PBXBuildFile; fileRef = 58D17D4518C5674000D123BC /* ApptentiveInteractionRatingDialogController.h */; };
@@ -918,8 +918,8 @@
 		58AB416618F608500034FAA5 /* ApptentiveInteractionSurveyController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveInteractionSurveyController.m; sourceTree = "<group>"; };
 		58B703F61B0FAE6D0024478C /* ApptentiveMessageCenterInteraction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveMessageCenterInteraction.h; sourceTree = "<group>"; };
 		58B703F71B0FAE6D0024478C /* ApptentiveMessageCenterInteraction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveMessageCenterInteraction.m; sourceTree = "<group>"; };
-		58C5921F17C55ADD000FA428 /* ApptentiveEngagementBackend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveEngagementBackend.h; sourceTree = "<group>"; };
-		58C5922017C55ADD000FA428 /* ApptentiveEngagementBackend.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveEngagementBackend.m; sourceTree = "<group>"; };
+		58C5921F17C55ADD000FA428 /* ApptentiveBackend+Engagement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ApptentiveBackend+Engagement.h"; sourceTree = "<group>"; };
+		58C5922017C55ADD000FA428 /* ApptentiveBackend+Engagement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ApptentiveBackend+Engagement.m"; sourceTree = "<group>"; };
 		58CD20131821B78D0071CC72 /* ATDataModel v2 to v3.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = "ATDataModel v2 to v3.xcmappingmodel"; sourceTree = "<group>"; };
 		58D17D4518C5674000D123BC /* ApptentiveInteractionRatingDialogController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveInteractionRatingDialogController.h; sourceTree = "<group>"; };
 		58D17D4618C5674000D123BC /* ApptentiveInteractionRatingDialogController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveInteractionRatingDialogController.m; sourceTree = "<group>"; };
@@ -1753,8 +1753,8 @@
 		58C5921E17C55A83000FA428 /* Persistence */ = {
 			isa = PBXGroup;
 			children = (
-				58C5921F17C55ADD000FA428 /* ApptentiveEngagementBackend.h */,
-				58C5922017C55ADD000FA428 /* ApptentiveEngagementBackend.m */,
+				58C5921F17C55ADD000FA428 /* ApptentiveBackend+Engagement.h */,
+				58C5922017C55ADD000FA428 /* ApptentiveBackend+Engagement.m */,
 			);
 			path = Persistence;
 			sourceTree = "<group>";
@@ -1932,7 +1932,7 @@
 				497A9A0417762512002B6F96 /* ApptentiveJSONSerialization.h in Headers */,
 				589274A6180CC33A0029E5CE /* ApptentiveInteractionUsageData.h in Headers */,
 				01D0C38C1BF3DC330024BA1A /* ApptentiveAttachmentController.h in Headers */,
-				58C5922117C55ADD000FA428 /* ApptentiveEngagementBackend.h in Headers */,
+				58C5922117C55ADD000FA428 /* ApptentiveBackend+Engagement.h in Headers */,
 				012292B21E04C0FA00282131 /* ApptentiveRequestOperation.h in Headers */,
 				017D97461B0E5795004E045C /* ApptentiveMessageCenterMessageCell.h in Headers */,
 				58EEBE2317C7E8150039A0F5 /* ApptentiveInteraction.h in Headers */,
@@ -2351,7 +2351,7 @@
 				016986A71DA57965008C4C78 /* ApptentiveInteractionUpgradeMessageViewController.m in Sources */,
 				016986A81DA57965008C4C78 /* ApptentiveInteractionUpgradeMessageController.m in Sources */,
 				016986A91DA57965008C4C78 /* ApptentiveInteractionController.m in Sources */,
-				016986AA1DA57965008C4C78 /* ApptentiveEngagementBackend.m in Sources */,
+				016986AA1DA57965008C4C78 /* ApptentiveBackend+Engagement.m in Sources */,
 				016986AD1DA57965008C4C78 /* ApptentiveMetrics.m in Sources */,
 				016986B01DA57965008C4C78 /* ApptentiveUtilities.m in Sources */,
 				016986B11DA57965008C4C78 /* ApptentiveLogger.m in Sources */,
@@ -2501,7 +2501,7 @@
 				497A9A0517762512002B6F96 /* ApptentiveJSONSerialization.m in Sources */,
 				01CC8BCB1B1D0598006C4D30 /* ApptentiveNetworkImageIconView.m in Sources */,
 				0132F8AB1C851BFA00A452E3 /* ApptentiveSurveyCollectionViewLayout.m in Sources */,
-				58C5922217C55ADD000FA428 /* ApptentiveEngagementBackend.m in Sources */,
+				58C5922217C55ADD000FA428 /* ApptentiveBackend+Engagement.m in Sources */,
 				011AD91E1E2099EB0079A49D /* ApptentiveSerialRequest+Record.m in Sources */,
 				58EEBE2417C7E8150039A0F5 /* ApptentiveInteraction.m in Sources */,
 				017932DC1E1DB4E8006A7155 /* ApptentiveSurveyResponse.m in Sources */,

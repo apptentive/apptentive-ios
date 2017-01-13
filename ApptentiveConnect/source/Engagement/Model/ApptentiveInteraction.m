@@ -7,7 +7,7 @@
 //
 
 #import "ApptentiveInteraction.h"
-#import "ApptentiveEngagementBackend.h"
+#import "ApptentiveBackend+Engagement.h"
 #import "ApptentiveInteractionUsageData.h"
 #import "ApptentiveUtilities.h"
 #import "Apptentive_Private.h"
@@ -97,7 +97,7 @@
 }
 
 - (NSString *)codePointForEvent:(NSString *)event {
-	return [ApptentiveEngagementBackend codePointForVendor:self.vendor interactionType:self.type event:event];
+	return [ApptentiveBackend codePointForVendor:self.vendor interactionType:self.type event:event];
 }
 
 - (BOOL)engage:(NSString *)event fromViewController:(UIViewController *)viewController {
@@ -111,7 +111,7 @@
 - (BOOL)engage:(NSString *)event fromViewController:(UIViewController *)viewController userInfo:(NSDictionary *)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData {
 	NSString *codePoint = [self codePointForEvent:event];
 
-	return [[Apptentive sharedConnection].engagementBackend engageCodePoint:codePoint fromInteraction:self userInfo:userInfo customData:customData extendedData:extendedData fromViewController:viewController];
+	return [Apptentive.shared.backend engageCodePoint:codePoint fromInteraction:self userInfo:userInfo customData:customData extendedData:extendedData fromViewController:viewController];
 }
 
 @end

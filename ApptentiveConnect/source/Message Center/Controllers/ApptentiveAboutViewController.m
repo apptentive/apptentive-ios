@@ -8,7 +8,7 @@
 
 #import "ApptentiveAboutViewController.h"
 #import "Apptentive_Private.h"
-#import "ApptentiveEngagementBackend.h"
+#import "ApptentiveBackend+Engagement.h"
 #import "ApptentiveUtilities.h"
 
 NSString *const ATInteractionAboutViewInteractionKey = @"About";
@@ -38,13 +38,13 @@ NSString *const ATInteractionAboutViewEventLabelClose = @"close";
 @implementation ApptentiveAboutViewController
 
 - (NSString *)codePointForEvent:(NSString *)event {
-	return [ApptentiveEngagementBackend codePointForVendor:ATEngagementCodePointApptentiveVendorKey interactionType:ATInteractionAboutViewInteractionKey event:event];
+	return [ApptentiveBackend codePointForVendor:ATEngagementCodePointApptentiveVendorKey interactionType:ATInteractionAboutViewInteractionKey event:event];
 }
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
 
-	[[Apptentive sharedConnection].engagementBackend engageCodePoint:[self codePointForEvent:ATInteractionAboutViewEventLabelLaunch] fromInteraction:nil userInfo:nil customData:nil extendedData:nil fromViewController:self];
+	[Apptentive.shared.backend engageCodePoint:[self codePointForEvent:ATInteractionAboutViewEventLabelLaunch] fromInteraction:nil userInfo:nil customData:nil extendedData:nil fromViewController:self];
 
 	self.imageView.image = [ApptentiveUtilities imageNamed:@"at_apptentive_logo"];
 	// TODO: Look into localizing the storyboard instead
@@ -61,7 +61,7 @@ NSString *const ATInteractionAboutViewEventLabelClose = @"close";
 - (void)viewWillDisappear:(BOOL)animated {
 	[super viewWillDisappear:animated];
 
-	[[Apptentive sharedConnection].engagementBackend engageCodePoint:[self codePointForEvent:ATInteractionAboutViewEventLabelClose] fromInteraction:nil userInfo:nil customData:nil extendedData:nil fromViewController:self];
+	[Apptentive.shared.backend engageCodePoint:[self codePointForEvent:ATInteractionAboutViewEventLabelClose] fromInteraction:nil userInfo:nil customData:nil extendedData:nil fromViewController:self];
 }
 
 - (IBAction)learnMore:(id)sender {

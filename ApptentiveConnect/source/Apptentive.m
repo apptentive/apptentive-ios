@@ -9,7 +9,7 @@
 #import "Apptentive.h"
 #import "Apptentive_Private.h"
 #import "ApptentiveBackend.h"
-#import "ApptentiveEngagementBackend.h"
+#import "ApptentiveBackend+Engagement.h"
 #import "ApptentiveInteraction.h"
 #import "ApptentiveUtilities.h"
 #import "ApptentiveMessageSender.h"
@@ -91,7 +91,6 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 		_APIKey = APIKey;
 		_baseURL = baseURL;
 		_backend = [[ApptentiveBackend alloc] initWithAPIKey:APIKey baseURL:baseURL storagePath:@"com.apptentive.feedback"];
-		_engagementBackend = [[ApptentiveEngagementBackend alloc] init];
 	}
 }
 
@@ -237,7 +236,7 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 		return;
 	}
 
-	[self.engagementBackend engageApptentiveAppEvent:@"open_app_store_manually"];
+	[self.backend engageApptentiveAppEvent:@"open_app_store_manually"];
 
 	ApptentiveInteraction *appStoreInteraction = [[ApptentiveInteraction alloc] init];
 	appStoreInteraction.type = @"AppStoreRating";
@@ -247,7 +246,7 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 	appStoreInteraction.configuration = @{ @"store_id": self.appID,
 		@"method": @"app_store" };
 
-	[self.engagementBackend presentInteraction:appStoreInteraction fromViewController:nil];
+	[self.backend presentInteraction:appStoreInteraction fromViewController:nil];
 }
 
 - (NSDictionary *)integrationConfiguration {
@@ -307,7 +306,7 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 }
 
 - (BOOL)canShowInteractionForEvent:(NSString *)event {
-	return [self.engagementBackend canShowInteractionForLocalEvent:event];
+	return [self.backend canShowInteractionForLocalEvent:event];
 }
 
 - (BOOL)engage:(NSString *)event fromViewController:(UIViewController *)viewController {
@@ -319,7 +318,7 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 }
 
 - (BOOL)engage:(NSString *)event withCustomData:(NSDictionary *)customData withExtendedData:(NSArray *)extendedData fromViewController:(UIViewController *)viewController {
-	return [self.engagementBackend engageLocalEvent:event userInfo:nil customData:customData extendedData:extendedData fromViewController:viewController];
+	return [self.backend engageLocalEvent:event userInfo:nil customData:customData extendedData:extendedData fromViewController:viewController];
 }
 
 + (NSDictionary *)extendedDataDate:(NSDate *)date {
@@ -418,7 +417,7 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 
 - (BOOL)canShowMessageCenter {
 	NSString *messageCenterCodePoint = [[ApptentiveInteraction apptentiveAppInteraction] codePointForEvent:ApptentiveEngagementMessageCenterEvent];
-	return [self.engagementBackend canShowInteractionForCodePoint:messageCenterCodePoint];
+	return [self.backend canShowInteractionForCodePoint:messageCenterCodePoint];
 }
 
 - (BOOL)presentMessageCenterFromViewController:(UIViewController *)viewController {

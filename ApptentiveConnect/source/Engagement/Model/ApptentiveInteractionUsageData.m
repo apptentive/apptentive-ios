@@ -10,7 +10,7 @@
 #import "ApptentiveBackend.h"
 #import "Apptentive.h"
 #import "Apptentive_Private.h"
-#import "ApptentiveEngagementBackend.h"
+#import "ApptentiveBackend+Engagement.h"
 #import "ApptentiveUtilities.h"
 #import "ApptentiveVersion.h"
 #import "ApptentiveAppRelease.h"
@@ -48,13 +48,13 @@
 		NSArray *components = [keyPath componentsSeparatedByString:@"/"];
 		if (components.count > 1) {
 			NSString *codePoint = [components objectAtIndex:1];
-			[[Apptentive sharedConnection].engagementBackend codePointWasSeen:[codePoint stringByRemovingPercentEncoding]];
+			[Apptentive.shared.backend codePointWasSeen:[codePoint stringByRemovingPercentEncoding]];
 		}
 	} else if ([keyPath hasPrefix:@"interactions/"]) {
 		NSArray *components = [keyPath componentsSeparatedByString:@"/"];
 		if (components.count > 1) {
 			NSString *interactionID = [components objectAtIndex:1];
-			[[Apptentive sharedConnection].engagementBackend interactionWasSeen:interactionID];
+			[Apptentive.shared.backend interactionWasSeen:interactionID];
 		}
 	}
 }

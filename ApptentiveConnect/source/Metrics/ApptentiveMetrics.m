@@ -11,7 +11,7 @@
 #import "ApptentiveBackend.h"
 #import "Apptentive_Private.h"
 #import "ApptentiveData.h"
-#import "ApptentiveEngagementBackend.h"
+#import "ApptentiveBackend+Engagement.h"
 #import "ApptentiveAppConfiguration.h"
 #import "ApptentiveSerialRequest+Record.h"
 
@@ -102,20 +102,20 @@ static NSString *ATInteractionAppEventLabelExit = @"exit";
 
 - (void)addLaunchMetric {
 	@autoreleasepool {
-		[[Apptentive sharedConnection].engagementBackend engageApptentiveAppEvent:ATInteractionAppEventLabelLaunch];
+		[Apptentive.shared.backend engageApptentiveAppEvent:ATInteractionAppEventLabelLaunch];
 	}
 }
 
 - (void)appWillTerminate:(NSNotification *)notification {
-	[[Apptentive sharedConnection].engagementBackend engageApptentiveAppEvent:ATInteractionAppEventLabelExit];
+	[Apptentive.shared.backend engageApptentiveAppEvent:ATInteractionAppEventLabelExit];
 }
 
 - (void)appDidEnterBackground:(NSNotification *)notification {
-	[[Apptentive sharedConnection].engagementBackend engageApptentiveAppEvent:ATInteractionAppEventLabelExit];
+	[Apptentive.shared.backend engageApptentiveAppEvent:ATInteractionAppEventLabelExit];
 }
 
 - (void)appWillEnterForeground:(NSNotification *)notification {
-	[[Apptentive sharedConnection].engagementBackend engageApptentiveAppEvent:ATInteractionAppEventLabelLaunch];
+	[Apptentive.shared.backend engageApptentiveAppEvent:ATInteractionAppEventLabelLaunch];
 }
 
 - (void)preferencesChanged:(NSNotification *)notification {

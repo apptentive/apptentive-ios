@@ -19,14 +19,13 @@ extern NSString *const ApptentiveConversationCreatedNotification;
 extern NSString *const ApptentiveCustomDeviceDataPreferenceKey;
 extern NSString *const ApptentiveCustomPersonDataPreferenceKey;
 
-@class ApptentiveMessage, ApptentiveBackend, ApptentiveEngagementBackend;
+@class ApptentiveMessage, ApptentiveBackend;
 
 
 @interface Apptentive ()
 
 @property (readonly, nonatomic) NSURL *baseURL;
 @property (readonly, nonatomic) ApptentiveBackend *backend;
-@property (readonly, nonatomic) ApptentiveEngagementBackend *engagementBackend;
 
 @property (copy, nonatomic) NSDictionary *pushUserInfo;
 @property (strong, nonatomic) UIViewController *pushViewController;

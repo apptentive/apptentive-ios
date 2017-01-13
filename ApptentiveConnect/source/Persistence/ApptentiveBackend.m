@@ -15,7 +15,7 @@
 #import "ApptentiveUtilities.h"
 #import "ApptentiveMessageSender.h"
 #import "ApptentiveLog.h"
-#import "ApptentiveEngagementBackend.h"
+#import "ApptentiveBackend+Engagement.h"
 #import "ApptentiveMessageCenterViewController.h"
 #import "ApptentiveAppConfiguration.h"
 #import "ApptentiveEngagementManifest.h"

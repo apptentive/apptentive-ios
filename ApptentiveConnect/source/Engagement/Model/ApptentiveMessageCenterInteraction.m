@@ -7,7 +7,7 @@
 //
 
 #import "ApptentiveMessageCenterInteraction.h"
-#import "ApptentiveEngagementBackend.h"
+#import "ApptentiveBackend+Engagement.h"
 #import "Apptentive_Private.h"
 #import "ApptentiveMessageCenterViewController.h"
 

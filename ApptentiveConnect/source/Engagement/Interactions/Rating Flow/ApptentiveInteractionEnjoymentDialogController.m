@@ -9,7 +9,7 @@
 #import "ApptentiveInteractionEnjoymentDialogController.h"
 #import "ApptentiveUtilities.h"
 #import "ApptentiveInteractionInvocation.h"
-#import "ApptentiveEngagementBackend.h"
+#import "ApptentiveBackend+Engagement.h"
 #import "Apptentive_Private.h"
 #import "ApptentiveBackend.h"
 #import "ApptentiveInteraction.h"

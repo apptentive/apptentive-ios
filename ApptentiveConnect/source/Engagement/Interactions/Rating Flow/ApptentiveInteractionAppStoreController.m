@@ -10,7 +10,7 @@
 #import "Apptentive_Private.h"
 #import "ApptentiveUtilities.h"
 #import "ApptentiveInteraction.h"
-#import "ApptentiveEngagementBackend.h"
+#import "ApptentiveBackend+Engagement.h"
 
 NSString *const ATInteractionAppStoreRatingEventLabelLaunch = @"launch";
 NSString *const ATInteractionAppStoreRatingEventLabelOpenAppStoreURL = @"open_app_store_url";

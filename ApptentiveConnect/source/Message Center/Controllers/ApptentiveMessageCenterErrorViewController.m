@@ -9,7 +9,7 @@
 #import "ApptentiveMessageCenterErrorViewController.h"
 #import "ApptentiveReachability.h"
 #import "Apptentive_Private.h"
-#import "ApptentiveEngagementBackend.h"
+#import "ApptentiveBackend+Engagement.h"
 #import "ApptentiveUtilities.h"
 
 NSString *const ATInteractionMessageCenterErrorViewInteractionKey = @"MessageCenter";
@@ -29,7 +29,7 @@ NSString *const ATInteractionMessageCenterEventLabelNoInteractionClose = @"no_in
 @implementation ApptentiveMessageCenterErrorViewController
 
 - (NSString *)codePointForEvent:(NSString *)event {
-	return [ApptentiveEngagementBackend codePointForVendor:ATEngagementCodePointApptentiveVendorKey interactionType:ATInteractionMessageCenterErrorViewInteractionKey event:event];
+	return [ApptentiveBackend codePointForVendor:ATEngagementCodePointApptentiveVendorKey interactionType:ATInteractionMessageCenterErrorViewInteractionKey event:event];
 }
 
 - (void)viewDidLoad {
@@ -41,12 +41,12 @@ NSString *const ATInteractionMessageCenterEventLabelNoInteractionClose = @"no_in
 		self.imageView.image = [[ApptentiveUtilities imageNamed:@"at_network_error"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 		self.textLabel.text = ApptentiveLocalizedString(@"You must connect to the internet before you can send feedback.", @"Message Center configuration hasn't downloaded due to connection problem.");
 
-		[[Apptentive sharedConnection].engagementBackend engageCodePoint:[self codePointForEvent:ATInteractionMessageCenterEventLabelNoInteractionNoInternet] fromInteraction:nil userInfo:nil customData:nil extendedData:nil fromViewController:self];
+		[Apptentive.shared.backend engageCodePoint:[self codePointForEvent:ATInteractionMessageCenterEventLabelNoInteractionNoInternet] fromInteraction:nil userInfo:nil customData:nil extendedData:nil fromViewController:self];
 	} else {
 		self.imageView.image = [[ApptentiveUtilities imageNamed:@"at_error_wait"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 		self.textLabel.text = ApptentiveLocalizedString(@"We’re attempting to connect. Thanks for your patience!", @"Message Center configuration is waiting to be downloaded or encountered a server error.");
 
-		[[Apptentive sharedConnection].engagementBackend engageCodePoint:[self codePointForEvent:ATInteractionMessageCenterEventLabelNoInteractionAttempting] fromInteraction:nil userInfo:nil customData:nil extendedData:nil fromViewController:self];
+		[Apptentive.shared.backend engageCodePoint:[self codePointForEvent:ATInteractionMessageCenterEventLabelNoInteractionAttempting] fromInteraction:nil userInfo:nil customData:nil extendedData:nil fromViewController:self];
 	}
 
 	self.imageView.tintColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveTextStyleMessageCenterStatus];
@@ -55,7 +55,7 @@ NSString *const ATInteractionMessageCenterEventLabelNoInteractionClose = @"no_in
 }
 
 - (IBAction)dismiss:(id)sender {
-	[[Apptentive sharedConnection].engagementBackend engageCodePoint:[self codePointForEvent:ATInteractionMessageCenterEventLabelNoInteractionClose] fromInteraction:nil userInfo:nil customData:nil extendedData:nil fromViewController:self];
+	[Apptentive.shared.backend engageCodePoint:[self codePointForEvent:ATInteractionMessageCenterEventLabelNoInteractionClose] fromInteraction:nil userInfo:nil customData:nil extendedData:nil fromViewController:self];
 
 	[self dismissViewControllerAnimated:YES completion:nil];
 }

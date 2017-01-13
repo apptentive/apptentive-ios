@@ -8,7 +8,7 @@
 
 #import "ApptentiveInteractionInvocation.h"
 
-#import "ApptentiveEngagementBackend.h"
+#import "ApptentiveBackend+Engagement.h"
 #import "ApptentiveInteractionUsageData.h"
 #import "ApptentiveUtilities.h"
 

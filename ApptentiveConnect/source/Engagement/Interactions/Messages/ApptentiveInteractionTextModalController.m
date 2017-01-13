@@ -9,7 +9,7 @@
 #import "ApptentiveInteractionTextModalController.h"
 #import "ApptentiveUtilities.h"
 #import "ApptentiveInteractionInvocation.h"
-#import "ApptentiveEngagementBackend.h"
+#import "ApptentiveBackend+Engagement.h"
 #import "Apptentive_Private.h"
 #import "ApptentiveInteraction.h"
 
@@ -172,7 +172,7 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 	ApptentiveInteraction *interaction = nil;
 	NSArray *invocations = actionConfig[@"invokes"];
 	if (invocations) {
-		interaction = [[Apptentive sharedConnection].engagementBackend interactionForInvocations:invocations];
+		interaction = [Apptentive.shared.backend interactionForInvocations:invocations];
 	}
 
 	NSDictionary *userInfo = @{ @"label": (actionConfig[@"label"] ?: [NSNull null]),
@@ -184,7 +184,7 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 	[self.interaction engage:ATInteractionTextModalEventLabelInteraction fromViewController:self.viewController userInfo:userInfo];
 
 	if (interaction) {
-		[[Apptentive sharedConnection].engagementBackend presentInteraction:interaction fromViewController:self.viewController];
+		[Apptentive.shared.backend presentInteraction:interaction fromViewController:self.viewController];
 	}
 }
 

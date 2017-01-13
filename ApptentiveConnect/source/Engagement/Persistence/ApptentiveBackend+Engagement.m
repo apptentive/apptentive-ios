@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Apptentive, Inc. All rights reserved.
 //
 
-#import "ApptentiveEngagementBackend.h"
+#import "ApptentiveBackend+Engagement.h"
 #import "ApptentiveBackend.h"
 #import "ApptentiveInteraction.h"
 #import "ApptentiveInteractionInvocation.h"
@@ -26,7 +26,7 @@ NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 
 
-@implementation ApptentiveEngagementBackend
+@implementation ApptentiveBackend (Engagement)
 
 - (BOOL)canShowInteractionForLocalEvent:(NSString *)event {
 	NSString *codePoint = [[ApptentiveInteraction localAppInteraction] codePointForEvent:event];
@@ -56,7 +56,7 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 		}
 
 		if (invocation && [invocation isKindOfClass:[ApptentiveInteractionInvocation class]]) {
-			if ([invocation criteriaAreMetForSession:Apptentive.shared.backend.session]) {
+			if ([invocation criteriaAreMetForSession:self.session]) {
 				interactionID = invocation.interactionID;
 				break;
 			}
@@ -65,14 +65,14 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 
 	ApptentiveInteraction *interaction = nil;
 	if (interactionID) {
-		interaction = Apptentive.shared.backend.manifest.interactions[interactionID];
+		interaction = self.manifest.interactions[interactionID];
 	}
 
 	return interaction;
 }
 
 - (ApptentiveInteraction *)interactionForEvent:(NSString *)event {
-	NSArray *invocations = Apptentive.shared.backend.manifest.targets[event];
+	NSArray *invocations = self.manifest.targets[event];
 	ApptentiveInteraction *interaction = [self interactionForInvocations:invocations];
 
 	return interaction;
@@ -90,9 +90,9 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 }
 
 + (NSString *)codePointForVendor:(NSString *)vendor interactionType:(NSString *)interactionType event:(NSString *)event {
-	NSString *encodedVendor = [ApptentiveEngagementBackend stringByEscapingCodePointSeparatorCharactersInString:vendor];
-	NSString *encodedInteractionType = [ApptentiveEngagementBackend stringByEscapingCodePointSeparatorCharactersInString:interactionType];
-	NSString *encodedEvent = [ApptentiveEngagementBackend stringByEscapingCodePointSeparatorCharactersInString:event];
+	NSString *encodedVendor = [[self class] stringByEscapingCodePointSeparatorCharactersInString:vendor];
+	NSString *encodedInteractionType = [[self class] stringByEscapingCodePointSeparatorCharactersInString:interactionType];
+	NSString *encodedEvent = [[self class] stringByEscapingCodePointSeparatorCharactersInString:event];
 
 	NSString *codePoint = [NSString stringWithFormat:@"%@#%@#%@", encodedVendor, encodedInteractionType, encodedEvent];
 
@@ -109,7 +109,7 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 
 - (BOOL)engageCodePoint:(NSString *)codePoint fromInteraction:(ApptentiveInteraction *)fromInteraction userInfo:(NSDictionary *)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData fromViewController:(UIViewController *)viewController {
 	ApptentiveLogInfo(@"Engage Apptentive event: %@", codePoint);
-	if (![[Apptentive sharedConnection].backend isReady]) {
+	if (![self isReady]) {
 		return NO;
 	}
 
@@ -125,7 +125,7 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 		ApptentiveLogInfo(@"--Running valid %@ interaction.", interaction.type);
 
 		if (viewController == nil) {
-			viewController = [[Apptentive sharedConnection] viewControllerForInteractions];
+			viewController = [Apptentive.shared viewControllerForInteractions];
 		}
 
 		if (viewController == nil || !viewController.isViewLoaded || viewController.view.window == nil) {
@@ -143,19 +143,19 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 }
 
 - (void)codePointWasSeen:(NSString *)codePoint {
-	[Apptentive.shared.backend.session.engagement warmCodePoint:codePoint];
+	[self.session.engagement warmCodePoint:codePoint];
 }
 
 - (void)codePointWasEngaged:(NSString *)codePoint {
-	[Apptentive.shared.backend.session.engagement engageCodePoint:codePoint];
+	[self.session.engagement engageCodePoint:codePoint];
 }
 
 - (void)interactionWasSeen:(NSString *)interactionID {
-	[Apptentive.shared.backend.session.engagement warmInteraction:interactionID];
+	[self.session.engagement warmInteraction:interactionID];
 }
 
 - (void)interactionWasEngaged:(ApptentiveInteraction *)interaction {
-	[Apptentive.shared.backend.session.engagement engageInteraction:interaction.identifier];
+	[self.session.engagement engageInteraction:interaction.identifier];
 }
 
 - (void)presentInteraction:(ApptentiveInteraction *)interaction fromViewController:(UIViewController *)viewController {

@@ -216,9 +216,9 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 
 	[self.dataSource increaseBackoffDelay];
 
-	sleep(self.dataSource.backoffDelay);
-
-	[self startTask];
+	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(self.dataSource.backoffDelay * NSEC_PER_SEC)), dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0), ^{
+		[self startTask];
+	});
 }
 
 - (void)completeOperation {

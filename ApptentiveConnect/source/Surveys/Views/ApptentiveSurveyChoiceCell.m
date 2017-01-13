@@ -31,7 +31,7 @@
 - (void)setHighlighted:(BOOL)highlighted {
 	[super setHighlighted:highlighted];
 
-	[self.button setHighlighted:highlighted];
+	[self.button setHighlighted:highlighted || self.selected];
 }
 
 - (void)layoutSubviews {

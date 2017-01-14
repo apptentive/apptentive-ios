@@ -56,6 +56,7 @@
         <relationship name="request" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="QueuedRequest" inverseName="attachments" inverseEntity="QueuedRequest" syncable="YES"/>
     </entity>
     <entity name="QueuedRequest" representedClassName="ApptentiveSerialRequest" syncable="YES">
+        <attribute name="apiVersion" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="identifier" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="method" optional="YES" attributeType="String" syncable="YES"/>
@@ -71,6 +72,6 @@
         <element name="ATRecord" positionX="0" positionY="0" width="128" height="120"/>
         <element name="ATSurveyResponse" positionX="36" positionY="126" width="128" height="105"/>
         <element name="QueuedAttachment" positionX="72" positionY="162" width="128" height="105"/>
-        <element name="QueuedRequest" positionX="45" positionY="153" width="128" height="135"/>
+        <element name="QueuedRequest" positionX="45" positionY="153" width="128" height="150"/>
     </elements>
 </model>

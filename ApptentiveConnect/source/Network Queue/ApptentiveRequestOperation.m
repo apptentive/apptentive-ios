@@ -19,6 +19,10 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 
 @implementation ApptentiveRequestOperation
 
++ (NSString *)APIVersion {
+	return @"7";
+}
+
 + (NSIndexSet *) okStatusCodes {
 	static NSIndexSet *_okStatusCodes;
 	static dispatch_once_t onceToken;
@@ -64,16 +68,17 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 		}
 	}
 
-	return [self initWithPath:path method:method payloadData:payloadData delegate:delegate dataSource:dataSource];
+	return [self initWithPath:path method:method payloadData:payloadData APIVersion:[[self class] APIVersion] delegate:delegate dataSource:dataSource];
 }
 
-- (instancetype)initWithPath:(NSString *)path method:(NSString *)method payloadData:(NSData *)payloadData delegate:(id<ApptentiveRequestOperationDelegate>)delegate dataSource:(id<ApptentiveRequestOperationDataSource>)dataSource {
+- (instancetype)initWithPath:(NSString *)path method:(NSString *)method payloadData:(NSData *)payloadData APIVersion:(NSString *)APIVersion delegate:(id<ApptentiveRequestOperationDelegate>)delegate dataSource:(id<ApptentiveRequestOperationDataSource>)dataSource {
 	NSURL *URL = [NSURL URLWithString:path relativeToURL:dataSource.baseURL];
 
 	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:URL];
 	request.HTTPBody = payloadData;
 	request.HTTPMethod = method;
 	[request addValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+	[request addValue:APIVersion forHTTPHeaderField:@"X-API-Version"];
 
 	return [self initWithURLRequest:request delegate:delegate dataSource:dataSource];
 }

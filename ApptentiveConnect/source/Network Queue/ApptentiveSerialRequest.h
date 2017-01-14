@@ -12,6 +12,7 @@
 
 @interface ApptentiveSerialRequest : NSManagedObject
 
+@property (strong, nonatomic) NSString *apiVersion;
 @property (strong, nonatomic) NSOrderedSet *attachments;
 @property (strong, nonatomic) NSDate *date;
 @property (strong, nonatomic) NSString *identifier;

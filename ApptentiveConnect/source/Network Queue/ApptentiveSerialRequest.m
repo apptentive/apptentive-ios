@@ -8,10 +8,12 @@
 
 #import "ApptentiveSerialRequest.h"
 #import "ApptentiveFileAttachment.h"
+#import "ApptentiveRequestOperation.h"
 #import "ApptentiveSerialRequestAttachment.h"
 
 @implementation ApptentiveSerialRequest
 
+@dynamic apiVersion;
 @dynamic attachments;
 @dynamic date;
 @dynamic identifier;
@@ -26,6 +28,7 @@
 	request.path = path;
 	request.method = method;
 	request.identifier = identifier;
+	request.apiVersion = [ApptentiveRequestOperation APIVersion];
 
 	NSError *error;
 	request.payload = [NSJSONSerialization dataWithJSONObject:payload options:0 error:&error];

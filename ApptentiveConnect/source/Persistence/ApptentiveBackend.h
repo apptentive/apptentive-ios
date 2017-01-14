@@ -49,16 +49,14 @@ extern NSString *const ATConfigurationPreferencesChangedNotification;
 - (void)attachCustomDataToMessage:(ApptentiveMessage *)message;
 - (void)dismissMessageCenterAnimated:(BOOL)animated completion:(void (^)(void))completion;
 
-/*! ATAutomatedMessage messages. */
 - (ApptentiveMessage *)automatedMessageWithTitle:(NSString *)title body:(NSString *)body;
 - (BOOL)sendAutomatedMessage:(ApptentiveMessage *)message;
 
-/*! Send ATTextMessage messages. */
 - (ApptentiveMessage *)createTextMessageWithBody:(NSString *)body hiddenOnClient:(BOOL)hidden;
 - (BOOL)sendTextMessageWithBody:(NSString *)body;
 - (BOOL)sendTextMessageWithBody:(NSString *)body hiddenOnClient:(BOOL)hidden;
 - (BOOL)sendTextMessage:(ApptentiveMessage *)message;
-/*! Send ATFileMessage messages. */
+
 - (BOOL)sendImageMessageWithImage:(UIImage *)image;
 - (BOOL)sendImageMessageWithImage:(UIImage *)image hiddenOnClient:(BOOL)hidden;
 

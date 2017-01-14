@@ -19,9 +19,11 @@ extern NSErrorDomain const ApptentiveHTTPErrorDomain;
 @property (readonly, nonatomic) NSTimeInterval cacheLifetime;
 @property (readonly, nonatomic) NSObject *responseObject;
 
++ (NSString *)APIVersion;
+
 - (instancetype)initWithURLRequest:(NSURLRequest *)request delegate:(id<ApptentiveRequestOperationDelegate>)delegate dataSource:(id<ApptentiveRequestOperationDataSource>)dataSource;
 - (instancetype)initWithPath:(NSString *)path method:(NSString *)method payload:(NSDictionary *)payload delegate:(id<ApptentiveRequestOperationDelegate>)delegate dataSource:(id<ApptentiveRequestOperationDataSource>)dataSource;
-- (instancetype)initWithPath:(NSString *)path method:(NSString *)method payloadData:(NSData *)payloadData delegate:(id<ApptentiveRequestOperationDelegate>)delegate dataSource:(id<ApptentiveRequestOperationDataSource>)dataSource;
+- (instancetype)initWithPath:(NSString *)path method:(NSString *)method payloadData:(NSData *)payloadData APIVersion:(NSString *)APIVersion delegate:(id<ApptentiveRequestOperationDelegate>)delegate dataSource:(id<ApptentiveRequestOperationDataSource>)dataSource;
 
 @property (readonly, weak, nonatomic) id<ApptentiveRequestOperationDelegate> delegate;
 @property (readonly, weak, nonatomic) id<ApptentiveRequestOperationDataSource> dataSource;

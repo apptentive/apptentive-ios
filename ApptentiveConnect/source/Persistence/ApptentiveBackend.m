@@ -559,6 +559,8 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 		}];
 
 		[self saveSession];
+
+		self.manifest.expiry = [NSDate distantPast];
 	}];
 
 	[self.queue addOperation:conversationDidChangeOperation];
@@ -589,6 +591,8 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 		}];
 
 		[self saveSession];
+
+		self.manifest.expiry = [NSDate distantPast];
 	}];
 
 	[self.queue addOperation:deviceDidChangeOperation];

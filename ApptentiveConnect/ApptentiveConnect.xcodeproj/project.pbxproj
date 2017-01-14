@@ -217,7 +217,7 @@
 		016986A81DA57965008C4C78 /* ApptentiveInteractionUpgradeMessageController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01D334361D3DAA460065A03A /* ApptentiveInteractionUpgradeMessageController.m */; };
 		016986A91DA57965008C4C78 /* ApptentiveInteractionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01D334321D3DA6020065A03A /* ApptentiveInteractionController.m */; };
 		016986AA1DA57965008C4C78 /* ApptentiveBackend+Engagement.m in Sources */ = {isa = PBXBuildFile; fileRef = 58C5922017C55ADD000FA428 /* ApptentiveBackend+Engagement.m */; };
-		016986AD1DA57965008C4C78 /* ApptentiveMetrics.m in Sources */ = {isa = PBXBuildFile; fileRef = 4987FA96157AE53500AF2078 /* ApptentiveMetrics.m */; };
+		016986AD1DA57965008C4C78 /* ApptentiveBackend+Metrics.m in Sources */ = {isa = PBXBuildFile; fileRef = 4987FA96157AE53500AF2078 /* ApptentiveBackend+Metrics.m */; };
 		016986B01DA57965008C4C78 /* ApptentiveUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 4936AE761379DEBB00A4B17F /* ApptentiveUtilities.m */; };
 		016986B11DA57965008C4C78 /* ApptentiveLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 495E9C1B16EABD8E00AE3B03 /* ApptentiveLogger.m */; };
 		016986B21DA57965008C4C78 /* NSDictionary+ApptentiveAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 49E6208616C5E8C2000C9F5A /* NSDictionary+ApptentiveAdditions.m */; };
@@ -443,8 +443,8 @@
 		497A9A0417762512002B6F96 /* ApptentiveJSONSerialization.h in Headers */ = {isa = PBXBuildFile; fileRef = 497A9A0217762512002B6F96 /* ApptentiveJSONSerialization.h */; };
 		497A9A0517762512002B6F96 /* ApptentiveJSONSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 497A9A0317762512002B6F96 /* ApptentiveJSONSerialization.m */; };
 		497FDD9E187DEC5B00DE8F89 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 497FDD9D187DEC5B00DE8F89 /* XCTest.framework */; };
-		4987FA9C157AE53700AF2078 /* ApptentiveMetrics.h in Headers */ = {isa = PBXBuildFile; fileRef = 4987FA95157AE53500AF2078 /* ApptentiveMetrics.h */; };
-		4987FA9D157AE53700AF2078 /* ApptentiveMetrics.m in Sources */ = {isa = PBXBuildFile; fileRef = 4987FA96157AE53500AF2078 /* ApptentiveMetrics.m */; };
+		4987FA9C157AE53700AF2078 /* ApptentiveBackend+Metrics.h in Headers */ = {isa = PBXBuildFile; fileRef = 4987FA95157AE53500AF2078 /* ApptentiveBackend+Metrics.h */; };
+		4987FA9D157AE53700AF2078 /* ApptentiveBackend+Metrics.m in Sources */ = {isa = PBXBuildFile; fileRef = 4987FA96157AE53500AF2078 /* ApptentiveBackend+Metrics.m */; };
 		4988FB5416212BD4000A7CB7 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4988FB5316212BD4000A7CB7 /* CoreData.framework */; };
 		49AAA17B1633716F00B26851 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49AAA17A1633716F00B26851 /* StoreKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		49AC178D16C0A0BC00BE1615 /* ApptentiveJSONModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 49AC178C16C0A0BC00BE1615 /* ApptentiveJSONModel.h */; };
@@ -825,8 +825,8 @@
 		497A9A0217762512002B6F96 /* ApptentiveJSONSerialization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveJSONSerialization.h; sourceTree = "<group>"; };
 		497A9A0317762512002B6F96 /* ApptentiveJSONSerialization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveJSONSerialization.m; sourceTree = "<group>"; };
 		497FDD9D187DEC5B00DE8F89 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		4987FA95157AE53500AF2078 /* ApptentiveMetrics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveMetrics.h; sourceTree = "<group>"; };
-		4987FA96157AE53500AF2078 /* ApptentiveMetrics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveMetrics.m; sourceTree = "<group>"; };
+		4987FA95157AE53500AF2078 /* ApptentiveBackend+Metrics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ApptentiveBackend+Metrics.h"; sourceTree = "<group>"; };
+		4987FA96157AE53500AF2078 /* ApptentiveBackend+Metrics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ApptentiveBackend+Metrics.m"; sourceTree = "<group>"; };
 		4987FAA6157AE59D00AF2078 /* ApptentiveMetricsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveMetricsTests.m; sourceTree = "<group>"; };
 		4988FB5316212BD4000A7CB7 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		4995EDC3175959EC00AF7268 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -1499,8 +1499,8 @@
 		4987FA7C157ACA8C00AF2078 /* Metrics */ = {
 			isa = PBXGroup;
 			children = (
-				4987FA95157AE53500AF2078 /* ApptentiveMetrics.h */,
-				4987FA96157AE53500AF2078 /* ApptentiveMetrics.m */,
+				4987FA95157AE53500AF2078 /* ApptentiveBackend+Metrics.h */,
+				4987FA96157AE53500AF2078 /* ApptentiveBackend+Metrics.m */,
 			);
 			path = Metrics;
 			sourceTree = "<group>";
@@ -1882,7 +1882,7 @@
 				01C85EE61CADBB8800743DA0 /* ApptentiveStyleSheet.h in Headers */,
 				01D334371D3DAA460065A03A /* ApptentiveInteractionUpgradeMessageController.h in Headers */,
 				58B703EE1B0EB6DB0024478C /* ApptentiveMessageCenterViewController.h in Headers */,
-				4987FA9C157AE53700AF2078 /* ApptentiveMetrics.h in Headers */,
+				4987FA9C157AE53700AF2078 /* ApptentiveBackend+Metrics.h in Headers */,
 				0127EA0E1BF1271C0005481A /* ApptentiveAttachmentCell.h in Headers */,
 				493AEB2D15990A4D00DFD4C7 /* ApptentiveSurvey.h in Headers */,
 				493AEB3315990A4D00DFD4C7 /* ApptentiveSurveyQuestion.h in Headers */,
@@ -2352,7 +2352,7 @@
 				016986A81DA57965008C4C78 /* ApptentiveInteractionUpgradeMessageController.m in Sources */,
 				016986A91DA57965008C4C78 /* ApptentiveInteractionController.m in Sources */,
 				016986AA1DA57965008C4C78 /* ApptentiveBackend+Engagement.m in Sources */,
-				016986AD1DA57965008C4C78 /* ApptentiveMetrics.m in Sources */,
+				016986AD1DA57965008C4C78 /* ApptentiveBackend+Metrics.m in Sources */,
 				016986B01DA57965008C4C78 /* ApptentiveUtilities.m in Sources */,
 				016986B11DA57965008C4C78 /* ApptentiveLogger.m in Sources */,
 				016986B21DA57965008C4C78 /* NSDictionary+ApptentiveAdditions.m in Sources */,
@@ -2445,7 +2445,7 @@
 				0132F8CE1C851C0800A452E3 /* ApptentiveSurveyQuestionBackgroundView.m in Sources */,
 				012B4C1E1E0B769B00D6229B /* ApptentiveMutablePerson.m in Sources */,
 				01D334341D3DA6020065A03A /* ApptentiveInteractionController.m in Sources */,
-				4987FA9D157AE53700AF2078 /* ApptentiveMetrics.m in Sources */,
+				4987FA9D157AE53700AF2078 /* ApptentiveBackend+Metrics.m in Sources */,
 				0132F8C41C851C0800A452E3 /* ApptentiveSurveyCollectionView.m in Sources */,
 				012292AF1E04C0FA00282131 /* ApptentiveMessageRequestOperation.m in Sources */,
 				01AE42081B38E38D006B9191 /* ApptentiveBannerViewController.m in Sources */,

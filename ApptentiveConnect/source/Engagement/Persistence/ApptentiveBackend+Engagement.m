@@ -11,7 +11,7 @@
 #import "ApptentiveInteraction.h"
 #import "ApptentiveInteractionInvocation.h"
 #import "Apptentive_Private.h"
-#import "ApptentiveMetrics.h"
+#import "ApptentiveBackend+Metrics.h"
 #import "ApptentiveInteractionController.h"
 #import "ApptentiveEngagement.h"
 #import "ApptentiveEngagementManifest.h"
@@ -113,7 +113,7 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 		return NO;
 	}
 
-	[[ApptentiveMetrics sharedMetrics] addMetricWithName:codePoint fromInteraction:fromInteraction info:userInfo customData:customData extendedData:extendedData];
+	[self addMetricWithName:codePoint fromInteraction:fromInteraction info:userInfo customData:customData extendedData:extendedData];
 
 	[self codePointWasSeen:codePoint];
 	[self codePointWasEngaged:codePoint];

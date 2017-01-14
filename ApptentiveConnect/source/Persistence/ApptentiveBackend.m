@@ -10,7 +10,7 @@
 #import "Apptentive.h"
 #import "Apptentive_Private.h"
 #import "ApptentiveDataManager.h"
-#import "ApptentiveMetrics.h"
+#import "ApptentiveBackend+Metrics.h"
 #import "ApptentiveReachability.h"
 #import "ApptentiveUtilities.h"
 #import "ApptentiveMessageSender.h"
@@ -192,8 +192,7 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 
 				[self.session checkForDiffs];
 
-				[ApptentiveMetrics sharedMetrics];
-
+				[self startMonitoringAppLifecycleMetrics];
 				[self startMonitoringUnreadMessages];
 
 				self.state = ATBackendStateReady;

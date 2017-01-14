@@ -6,17 +6,15 @@
 //  Copyright (c) 2011 Apptentive. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "ApptentiveBackend.h"
 #import "ApptentiveInteraction.h"
 
 @class ApptentiveMetric;
 
 
-@interface ApptentiveMetrics : NSObject
-+ (ApptentiveMetrics *)sharedMetrics;
+@interface ApptentiveBackend (Metrics)
 
-- (void)addMetricWithName:(NSString *)name info:(NSDictionary *)userInfo;
-- (void)addMetricWithName:(NSString *)name info:(NSDictionary *)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData;
+- (void)startMonitoringAppLifecycleMetrics;
 - (void)addMetricWithName:(NSString *)name fromInteraction:(ApptentiveInteraction *)fromInteraction info:(NSDictionary *)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData;
 
 @end

@@ -26,6 +26,7 @@ static NSString * const APIKeyKey = @"APIKey";
 static NSString * const TokenKey = @"token";
 static NSString * const LastMessageIDKey = @"lastMessageID";
 static NSString * const MutableUserInfoKey = @"mutableUserInfo";
+static NSString * const ArchiveVersionKey = @"archiveVersion";
 
 @interface ApptentiveSession ()
 
@@ -85,6 +86,7 @@ static NSString * const MutableUserInfoKey = @"mutableUserInfo";
 	[coder encodeObject:self.token forKey:TokenKey];
 	[coder encodeObject:self.lastMessageID forKey:LastMessageIDKey];
 	[coder encodeObject:self.mutableUserInfo forKey:MutableUserInfoKey];
+	[coder encodeObject:@1 forKey:ArchiveVersionKey];
 }
 
 - (void)setToken:(NSString *)token personID:(NSString *)personID deviceID:(NSString *)deviceID {

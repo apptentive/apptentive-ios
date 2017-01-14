@@ -606,12 +606,6 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 	[self.queue addOperation:sessionSaveOperation];
 }
 
-#pragma mark -
-
-- (NSURL *)apptentivePrivacyPolicyURL {
-	return [NSURL URLWithString:@"http://www.apptentive.com/privacy"];
-}
-
 #pragma mark - Messages
 
 - (ApptentiveMessage *)automatedMessageWithTitle:(NSString *)title body:(NSString *)body {

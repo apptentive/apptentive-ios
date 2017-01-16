@@ -7,15 +7,14 @@
 //
 
 #import "ApptentiveBackend.h"
-#import "Apptentive.h"
+#import "ApptentiveBackend+Engagement.h"
+#import "ApptentiveBackend+Metrics.h"
 #import "Apptentive_Private.h"
 #import "ApptentiveDataManager.h"
-#import "ApptentiveBackend+Metrics.h"
 #import "ApptentiveReachability.h"
 #import "ApptentiveUtilities.h"
 #import "ApptentiveMessageSender.h"
 #import "ApptentiveLog.h"
-#import "ApptentiveBackend+Engagement.h"
 #import "ApptentiveMessageCenterViewController.h"
 #import "ApptentiveAppConfiguration.h"
 #import "ApptentiveEngagementManifest.h"
@@ -36,47 +35,30 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	ATBackendStateReady
 };
 
-NSString *const ATBackendBecameReadyNotification = @"ATBackendBecameReadyNotification";
-NSString *const ATConfigurationPreferencesChangedNotification = @"ATConfigurationPreferencesChangedNotification";
-
-NSString *const ATUUIDPreferenceKey = @"ATUUIDPreferenceKey";
-NSString *const ATLegacyUUIDPreferenceKey = @"ATLegacyUUIDPreferenceKey";
-NSString *const ATInfoDistributionKey = @"ATInfoDistributionKey";
-NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
-
-
 @interface ApptentiveBackend ()
-- (void)updateConfigurationIfNeeded;
 
-@property (readonly, nonatomic, getter=isMessageCenterInForeground) BOOL messageCenterInForeground;
-
-@property (copy, nonatomic) void (^backgroundFetchBlock)(UIBackgroundFetchResult);
-
-@end
-
-
-@interface ApptentiveBackend ()
-- (void)updateWorking;
-- (void)networkStatusChanged:(NSNotification *)notification;
-- (void)stopWorking:(NSNotification *)notification;
-- (void)startWorking:(NSNotification *)notification;
-- (void)startMonitoringUnreadMessages;
-
-@property (strong, nonatomic) UIViewController *presentingViewController;
-@property (assign, nonatomic) BOOL working;
-@property (strong, nonatomic) NSTimer *messageRetrievalTimer;
-@property (copy, nonatomic) NSString *cachedDeviceUUID;
-@property (assign, nonatomic) ATBackendState state;
-@property (strong, nonatomic) ApptentiveDataManager *dataManager;
-@property (strong, nonatomic) NSFetchedResultsController *unreadCountController;
-@property (assign, nonatomic) NSUInteger previousUnreadCount;
-@property (assign, nonatomic) BOOL shouldStopWorking;
-@property (assign, nonatomic) BOOL networkAvailable;
+@property (readonly, strong, nonatomic) NSOperationQueue *queue;
+@property (readonly, strong, nonatomic) ApptentiveNetworkQueue *networkQueue;
+@property (readonly, strong, nonatomic) ApptentiveSerialNetworkQueue *serialNetworkQueue;
 
 @property (strong, nonatomic) ApptentiveRequestOperation *conversationOperation;
 @property (strong, nonatomic) ApptentiveRequestOperation *configurationOperation;
 @property (strong, nonatomic) ApptentiveRequestOperation *messageOperation;
 @property (strong, nonatomic) ApptentiveRequestOperation *manifestOperation;
+
+@property (assign, nonatomic) ATBackendState state;
+@property (assign, nonatomic) BOOL working;
+@property (assign, nonatomic) BOOL shouldStopWorking;
+@property (assign, nonatomic) BOOL networkAvailable;
+
+@property (copy, nonatomic) NSDictionary *currentCustomData;
+@property (strong, nonatomic) NSTimer *messageRetrievalTimer;
+@property (strong, nonatomic) ApptentiveDataManager *dataManager;
+@property (strong, nonatomic) NSFetchedResultsController *unreadCountController;
+@property (assign, nonatomic) NSUInteger previousUnreadCount;
+
+@property (readonly, nonatomic, getter=isMessageCenterInForeground) BOOL messageCenterInForeground;
+@property (copy, nonatomic) void (^backgroundFetchBlock)(UIBackgroundFetchResult);
 
 @end
 
@@ -185,10 +167,10 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 
 			// Run this once we have a token and core data
 			NSBlockOperation *becomeReadyOperation = [NSBlockOperation blockOperationWithBlock:^{
-				self->_serialQueue = [[ApptentiveSerialNetworkQueue alloc] initWithBaseURL:baseURL token:self.session.token SDKVersion:self.session.SDK.version.versionString platform:@"iOS" parentManagedObjectContext:self.managedObjectContext];
+				self->_serialNetworkQueue = [[ApptentiveSerialNetworkQueue alloc] initWithBaseURL:baseURL token:self.session.token SDKVersion:self.session.SDK.version.versionString platform:@"iOS" parentManagedObjectContext:self.managedObjectContext];
 
-				[self.serialQueue addObserver:self forKeyPath:@"messageSendProgress" options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew context:nil];
-				[self.serialQueue addObserver:self forKeyPath:@"messageTaskCount" options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew context:nil];
+				[self.serialNetworkQueue addObserver:self forKeyPath:@"messageSendProgress" options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew context:nil];
+				[self.serialNetworkQueue addObserver:self forKeyPath:@"messageTaskCount" options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew context:nil];
 
 				[self.session checkForDiffs];
 
@@ -197,8 +179,6 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 
 				self.state = ATBackendStateReady;
 				dispatch_async(dispatch_get_main_queue(), ^{
-					[[NSNotificationCenter defaultCenter] postNotificationName:ATBackendBecameReadyNotification object:nil];
-
 					[ApptentiveFileAttachment addMissingExtensions];
 				});
 
@@ -247,8 +227,8 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 
 	@try {
-		[self.serialQueue removeObserver:self forKeyPath:@"messageTaskCount"];
-		[self.serialQueue removeObserver:self forKeyPath:@"messageSendProgress"];
+		[self.serialNetworkQueue removeObserver:self forKeyPath:@"messageTaskCount"];
+		[self.serialNetworkQueue removeObserver:self forKeyPath:@"messageSendProgress"];
 	} @catch (NSException *_) {}
 }
 
@@ -340,7 +320,7 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 			self.manifest.expiry = [NSDate distantPast];
 #endif
 			[self.networkQueue resetBackoffDelay];
-			[self.serialQueue resetBackoffDelay];
+			[self.serialNetworkQueue resetBackoffDelay];
 
 			[self.session checkForDiffs];
 
@@ -353,9 +333,9 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 			[self saveSession];
 
 			[self.networkQueue cancelAllOperations];
-			[self.serialQueue cancelAllOperations];
+			[self.serialNetworkQueue cancelAllOperations];
 
-			self.serialQueue.backgroundTaskIdentifier = [[UIApplication sharedApplication] beginBackgroundTaskWithName:@"SaveContext" expirationHandler:^{
+			self.serialNetworkQueue.backgroundTaskIdentifier = [[UIApplication sharedApplication] beginBackgroundTaskWithName:@"SaveContext" expirationHandler:^{
 				ApptentiveLogWarning(@"Background task expired");
 			}];
 		}
@@ -418,7 +398,7 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 
 - (void)processQueuedRecords {
 	if (self.isReady && self.working) {
-		[self.serialQueue resume];
+		[self.serialNetworkQueue resume];
 	}
 }
 
@@ -479,7 +459,7 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 		[self saveSession];
 
 		self.networkQueue.token = token;
-		self.serialQueue.token = token;
+		self.serialNetworkQueue.token = token;
 
 		[self processQueuedRecords];
 	}
@@ -489,10 +469,6 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 	_configuration = [[ApptentiveAppConfiguration alloc] initWithJSONDictionary:configurationResponse cacheLifetime:cacheLifetime];
 
 	[self saveConfiguration];
-
-	dispatch_async(dispatch_get_main_queue(), ^{
-		[[NSNotificationCenter defaultCenter] postNotificationName:ATConfigurationPreferencesChangedNotification object:self.configuration];
-	});
 }
 
 - (void)processManifestResponse:(NSDictionary *)manifestResponse cacheLifetime:(NSTimeInterval)cacheLifetime {
@@ -901,13 +877,13 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 #pragma mark Message send progress
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
-	if (object == self.serialQueue && ([keyPath isEqualToString:@"messageSendProgress"] || [keyPath isEqualToString:@"messageTaskCount"])) {
+	if (object == self.serialNetworkQueue && ([keyPath isEqualToString:@"messageSendProgress"] || [keyPath isEqualToString:@"messageTaskCount"])) {
 		NSNumber *numberProgress = change[NSKeyValueChangeNewKey];
 		float progress = [numberProgress isKindOfClass:[NSNumber class]] ? numberProgress.floatValue : 0.0;
 
-		if (self.serialQueue.messageTaskCount > 0 && numberProgress.floatValue < 0.05) {
+		if (self.serialNetworkQueue.messageTaskCount > 0 && numberProgress.floatValue < 0.05) {
 			progress = 0.05;
-		} else if (self.serialQueue.messageTaskCount == 0) {
+		} else if (self.serialNetworkQueue.messageTaskCount == 0) {
 			progress = 0;
 		}
 

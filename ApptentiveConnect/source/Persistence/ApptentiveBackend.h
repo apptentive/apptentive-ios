@@ -14,9 +14,6 @@
 #import "ApptentiveSession.h"
 
 
-extern NSString *const ATBackendBecameReadyNotification;
-extern NSString *const ATConfigurationPreferencesChangedNotification;
-
 @class ApptentiveConversation, ApptentiveEngagementManifest, ApptentiveAppConfiguration, ApptentiveMessageCenterViewController;
 
 @protocol ATBackendMessageDelegate;
@@ -24,18 +21,13 @@ extern NSString *const ATConfigurationPreferencesChangedNotification;
 /*! Handles all of the backend activities, such as sending feedback. */
 @interface ApptentiveBackend : NSObject <NSFetchedResultsControllerDelegate, ApptentiveSessionDelegate, ApptentiveRequestOperationDelegate>
 
-@property (copy, nonatomic) NSDictionary *currentCustomData;
+@property (readonly, strong, nonatomic) ApptentiveSession *session;
+@property (readonly, strong, nonatomic) ApptentiveAppConfiguration *configuration;
+@property (readonly, strong, nonatomic) ApptentiveEngagementManifest *manifest;
+
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (readonly, strong, nonatomic) NSString *supportDirectoryPath;
 @property (strong, nonatomic) UIViewController *presentedMessageCenterViewController;
-
-@property (readonly, strong, nonatomic) NSOperationQueue *queue;
-@property (readonly, strong, nonatomic) ApptentiveNetworkQueue *networkQueue;
-@property (readonly, strong, nonatomic) ApptentiveSerialNetworkQueue *serialQueue;
-
-@property (readonly, strong, nonatomic) ApptentiveAppConfiguration *configuration;
-@property (readonly, strong, nonatomic) ApptentiveEngagementManifest *manifest;
-@property (readonly, strong, nonatomic) ApptentiveSession *session;
 
 - (instancetype)initWithAPIKey:(NSString *)APIKey baseURL:(NSURL *)baseURL storagePath:(NSString *)storagePath;
 - (void)processQueuedRecords;

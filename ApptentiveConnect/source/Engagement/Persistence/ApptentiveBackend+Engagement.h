@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import "ApptentiveBackend.h"
-//#import "ApptentiveSession.h"
 
 extern NSString *const ATEngagementInstallDateKey;
 extern NSString *const ATEngagementUpgradeDateKey;

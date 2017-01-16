@@ -150,6 +150,7 @@
 		014745C41C8652D900542951 /* at_thanks@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 014745C11C8652CF00542951 /* at_thanks@2x.png */; };
 		014745C51C8652D900542951 /* at_thanks@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 014745C21C8652CF00542951 /* at_thanks@3x.png */; };
 		014A16DD1C9C75DE00B0B199 /* ApptentiveStyleSheetTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 014A16DC1C9C75DE00B0B199 /* ApptentiveStyleSheetTests.m */; };
+		015FFF181E2D797400F4C0CB /* ATDataModel v5 to v6.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 015FFF171E2D797400F4C0CB /* ATDataModel v5 to v6.xcmappingmodel */; };
 		0160854D1BA77B1D00050FDB /* at_account.png in Resources */ = {isa = PBXBuildFile; fileRef = 0160852A1BA77B0500050FDB /* at_account.png */; };
 		0160854E1BA77B1D00050FDB /* at_account@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0160852B1BA77B0500050FDB /* at_account@2x.png */; };
 		0160854F1BA77B1D00050FDB /* at_account@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0160852C1BA77B0500050FDB /* at_account@3x.png */; };
@@ -331,9 +332,6 @@
 		019D32801D2C6C6000EE3861 /* at_checkmark_highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 019D32761D2C6B4900EE3861 /* at_checkmark_highlighted.png */; };
 		019D32811D2C6C6000EE3861 /* at_checkmark_highlighted@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 019D32771D2C6B4900EE3861 /* at_checkmark_highlighted@2x.png */; };
 		019D32821D2C6C6000EE3861 /* at_checkmark_highlighted@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 019D32781D2C6B4900EE3861 /* at_checkmark_highlighted@3x.png */; };
-		01A034F61E29AB0100867AB2 /* ATDataModel v5 to v6.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 01A034F51E29AB0100867AB2 /* ATDataModel v5 to v6.xcmappingmodel */; };
-		01A034F71E29AB0100867AB2 /* ATDataModel v5 to v6.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 01A034F51E29AB0100867AB2 /* ATDataModel v5 to v6.xcmappingmodel */; };
-		01A034F81E29AB0100867AB2 /* ATDataModel v5 to v6.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 01A034F51E29AB0100867AB2 /* ATDataModel v5 to v6.xcmappingmodel */; };
 		01A1A5E81E24273B00F2FCD8 /* ApptentiveLegacySurveyResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A1A5E61E24273B00F2FCD8 /* ApptentiveLegacySurveyResponse.h */; };
 		01A1A5E91E24273B00F2FCD8 /* ApptentiveLegacySurveyResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A1A5E61E24273B00F2FCD8 /* ApptentiveLegacySurveyResponse.h */; };
 		01A1A5EA1E24273B00F2FCD8 /* ApptentiveLegacySurveyResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A1A5E71E24273B00F2FCD8 /* ApptentiveLegacySurveyResponse.m */; };
@@ -653,6 +651,7 @@
 		014745C11C8652CF00542951 /* at_thanks@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_thanks@2x.png"; sourceTree = "<group>"; };
 		014745C21C8652CF00542951 /* at_thanks@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_thanks@3x.png"; sourceTree = "<group>"; };
 		014A16DC1C9C75DE00B0B199 /* ApptentiveStyleSheetTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveStyleSheetTests.m; sourceTree = "<group>"; };
+		015FFF171E2D797400F4C0CB /* ATDataModel v5 to v6.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = "ATDataModel v5 to v6.xcmappingmodel"; sourceTree = "<group>"; };
 		0160852A1BA77B0500050FDB /* at_account.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = at_account.png; sourceTree = "<group>"; };
 		0160852B1BA77B0500050FDB /* at_account@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_account@2x.png"; sourceTree = "<group>"; };
 		0160852C1BA77B0500050FDB /* at_account@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_account@3x.png"; sourceTree = "<group>"; };
@@ -718,7 +717,6 @@
 		019D327A1D2C6B4900EE3861 /* at_circle_highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = at_circle_highlighted.png; sourceTree = "<group>"; };
 		019D327B1D2C6B4900EE3861 /* at_circle_highlighted@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_circle_highlighted@2x.png"; sourceTree = "<group>"; };
 		019D327C1D2C6B4900EE3861 /* at_circle_highlighted@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_circle_highlighted@3x.png"; sourceTree = "<group>"; };
-		01A034F51E29AB0100867AB2 /* ATDataModel v5 to v6.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = "ATDataModel v5 to v6.xcmappingmodel"; sourceTree = "<group>"; };
 		01A1A5E61E24273B00F2FCD8 /* ApptentiveLegacySurveyResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveLegacySurveyResponse.h; sourceTree = "<group>"; };
 		01A1A5E71E24273B00F2FCD8 /* ApptentiveLegacySurveyResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveLegacySurveyResponse.m; sourceTree = "<group>"; };
 		01A1A5EC1E24274600F2FCD8 /* ApptentiveLegacyEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveLegacyEvent.h; sourceTree = "<group>"; };
@@ -1655,7 +1653,7 @@
 				58CD20131821B78D0071CC72 /* ATDataModel v2 to v3.xcmappingmodel */,
 				583E3969188E08DD0030B51E /* ATDataModel v3 to v4.xcmappingmodel */,
 				013BB6121BF6A82300BB6C27 /* ATDataModel v4 to v5.xcmappingmodel */,
-				01A034F51E29AB0100867AB2 /* ATDataModel v5 to v6.xcmappingmodel */,
+				015FFF171E2D797400F4C0CB /* ATDataModel v5 to v6.xcmappingmodel */,
 				012B4BE01E0B116300D6229B /* ApptentiveAppConfiguration.h */,
 				012B4BE11E0B116300D6229B /* ApptentiveAppConfiguration.m */,
 				49F8AFCF16CC4A550070FFEA /* ApptentiveData.h */,
@@ -2358,7 +2356,6 @@
 				016986B31DA57965008C4C78 /* ApptentiveJSONSerialization.m in Sources */,
 				011AD9251E209AB00079A49D /* ApptentiveRecord.m in Sources */,
 				016986B51DA57965008C4C78 /* ApptentiveData.m in Sources */,
-				01A034F81E29AB0100867AB2 /* ATDataModel v5 to v6.xcmappingmodel in Sources */,
 				016986B81DA57965008C4C78 /* ApptentiveFileAttachment.m in Sources */,
 				016986B91DA57965008C4C78 /* ApptentiveMessageSender.m in Sources */,
 				016986BA1DA57965008C4C78 /* ApptentiveMessage.m in Sources */,
@@ -2441,6 +2438,7 @@
 				0132F8AD1C851BFA00A452E3 /* ApptentiveSurveyLayoutAttributes.m in Sources */,
 				0132F8C61C851C0800A452E3 /* ApptentiveSurveyAnswerCell.m in Sources */,
 				012B4BE31E0B116300D6229B /* ApptentiveAppConfiguration.m in Sources */,
+				015FFF181E2D797400F4C0CB /* ATDataModel v5 to v6.xcmappingmodel in Sources */,
 				49735D631832DF1F00D48DE7 /* ApptentiveMessageCenterDataSource.m in Sources */,
 				0132F8CE1C851C0800A452E3 /* ApptentiveSurveyQuestionBackgroundView.m in Sources */,
 				012B4C1E1E0B769B00D6229B /* ApptentiveMutablePerson.m in Sources */,
@@ -2526,7 +2524,6 @@
 				01E25CE51C88B1EE005BF2D2 /* ApptentiveSurveyTests.m in Sources */,
 				011B08CE1C0D0CCC004F4F5D /* ApptentiveUtilitiesTests.m in Sources */,
 				011B08D01C0D0CCC004F4F5D /* ApptentiveInteractionInvocationTests.m in Sources */,
-				01A034F61E29AB0100867AB2 /* ATDataModel v5 to v6.xcmappingmodel in Sources */,
 				011B08CF1C0D0CCC004F4F5D /* ApptentiveMigrationTests.m in Sources */,
 				011B08D71C0D19B6004F4F5D /* CodePointAndInteractionTests.m in Sources */,
 				01F6FD971BFBCDC3004513C2 /* ApptentiveMetricsTests.m in Sources */,
@@ -2544,7 +2541,6 @@
 				01C7C4DD1BEAD0BC005D6EC1 /* ATDataModel.xcdatamodeld in Sources */,
 				49FECBE417D02BAD00069502 /* ATDataModel v1 to v2.xcmappingmodel in Sources */,
 				58CD20161821B7A80071CC72 /* ATDataModel v2 to v3.xcmappingmodel in Sources */,
-				01A034F71E29AB0100867AB2 /* ATDataModel v5 to v6.xcmappingmodel in Sources */,
 				583E396B188E08EB0030B51E /* ATDataModel v3 to v4.xcmappingmodel in Sources */,
 				013BB6171BF6ABB500BB6C27 /* ATDataModel v4 to v5.xcmappingmodel in Sources */,
 			);

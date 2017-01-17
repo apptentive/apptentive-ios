@@ -145,6 +145,10 @@ static NSString * const NotificationPopupEnabledKey = @"notificationPopupEnabled
 - (instancetype)initWithJSONDictionary:(NSDictionary *)JSONDictionary {
 	self = [self init];
 
+	if (![JSONDictionary isKindOfClass:[NSDictionary class]]) {
+		return nil;
+	}
+
 	if (self) {
 		_title = JSONDictionary[@"title"];
 		_foregroundPollingInterval = [JSONDictionary[@"fg_poll"] doubleValue];

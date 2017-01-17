@@ -187,7 +187,9 @@ NSString *const ApptentiveInteractionSurveyEventLabelCancel = @"cancel";
 #pragma mark - Mutation
 
 - (void)setText:(NSString *)text forAnswerAtIndexPath:(NSIndexPath *)indexPath {
-	[self.textAtIndexPath setObject:text forKey:indexPath];
+	if (text) {
+		[self.textAtIndexPath setObject:text forKey:indexPath];
+	}
 
 	if (self.invalidQuestionIndexes) {
 		[self validate:NO];

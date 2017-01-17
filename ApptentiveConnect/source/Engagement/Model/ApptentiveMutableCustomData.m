@@ -38,19 +38,35 @@
 }
 
 - (void)addCustomString:(NSString *)string withKey:(NSString *)key {
-	[self.mutableCustomData setObject:string forKey:key];
+	if (string != nil && key != nil) {
+		[self.mutableCustomData setObject:string forKey:key];
+	} else {
+		ApptentiveLogError(@"Attempting to add custom data string with nil key and/or value");
+	}
 }
 
 - (void)addCustomNumber:(NSNumber *)number withKey:(NSString *)key {
-	[self.mutableCustomData setObject:number forKey:key];
+	if (number != nil && key != nil) {
+		[self.mutableCustomData setObject:number forKey:key];
+	} else {
+		ApptentiveLogError(@"Attempting to add custom data number with nil key and/or value");
+	}
 }
 
 - (void)addCustomBool:(BOOL)boolValue withKey:(NSString *)key {
-	[self.mutableCustomData setObject:@(boolValue) forKey:key];
+	if (key != nil) {
+		[self.mutableCustomData setObject:@(boolValue) forKey:key];
+	} else {
+		ApptentiveLogError(@"Attempting to add custom data boolean with nil key");
+	}
 }
 
 - (void)removeCustomValueWithKey:(NSString *)key {
-	[self.mutableCustomData removeObjectForKey:key];
+	if (key != nil) {
+		[self.mutableCustomData removeObjectForKey:key];
+	} else {
+		ApptentiveLogError(@"Attempting to remove custom data with nil key");
+	}
 }
 
 - (NSDictionary *)customData {

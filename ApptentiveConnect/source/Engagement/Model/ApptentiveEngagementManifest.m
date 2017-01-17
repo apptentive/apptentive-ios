@@ -34,32 +34,39 @@ static NSString * const ExpiryKey = @"expiry";
 }
 
 - (instancetype)initWithJSONDictionary:(NSDictionary *)JSONDictionary cacheLifetime:(NSTimeInterval)cacheLifetime {
-	self = [super init];
+	self = [self init];
 
 	if (self) {
 		_expiry = [NSDate dateWithTimeIntervalSinceNow:cacheLifetime];
 		_JSONDictionary = JSONDictionary;
 
 		// Targets
-		NSMutableDictionary *targets = [NSMutableDictionary dictionary];
 		NSDictionary *targetsDictionary = JSONDictionary[@"targets"];
-		for (NSString *event in [targetsDictionary allKeys]) {
-			NSArray *invocationsJSONArray = targetsDictionary[event];
-			NSArray *invocationsArray = [ApptentiveInteractionInvocation invocationsWithJSONArray:invocationsJSONArray];
-			[targets setObject:invocationsArray forKey:event];
-		}
+		if ([targetsDictionary isKindOfClass:[NSDictionary class]]) {
+			NSMutableDictionary *targets = [NSMutableDictionary dictionary];
 
-		_targets = [NSDictionary dictionaryWithDictionary:targets];
+			for (NSString *event in [targetsDictionary allKeys]) {
+				NSArray *invocationsJSONArray = targetsDictionary[event];
+				NSArray *invocationsArray = [ApptentiveInteractionInvocation invocationsWithJSONArray:invocationsJSONArray];
+				[targets setObject:invocationsArray forKey:event];
+			}
+
+			_targets = [NSDictionary dictionaryWithDictionary:targets];
+		}
 
 		// Interactions
-		NSMutableDictionary *interactions = [NSMutableDictionary dictionary];
 		NSArray *interactionsArray = JSONDictionary[@"interactions"];
-		for (NSDictionary *interactionDictionary in interactionsArray) {
-			ApptentiveInteraction *interactionObject = [ApptentiveInteraction interactionWithJSONDictionary:interactionDictionary];
-			[interactions setObject:interactionObject forKey:interactionObject.identifier];
-		}
 
-		_interactions = [NSDictionary dictionaryWithDictionary:interactions];
+		if ([interactionsArray isKindOfClass:[NSArray class]]) {
+			NSMutableDictionary *interactions = [NSMutableDictionary dictionary];
+
+			for (NSDictionary *interactionDictionary in interactionsArray) {
+				ApptentiveInteraction *interactionObject = [ApptentiveInteraction interactionWithJSONDictionary:interactionDictionary];
+				[interactions setObject:interactionObject forKey:interactionObject.identifier];
+			}
+
+			_interactions = [NSDictionary dictionaryWithDictionary:interactions];
+		}
 	}
 
 	return self;
@@ -71,14 +78,22 @@ static NSString * const ExpiryKey = @"expiry";
 	if (self) {
 		_expiry = [userDefaults objectForKey:@"ATEngagementCachedInteractionsExpirationPreferenceKey"];
 
-		NSString *targetsCachePath = [cachePath stringByAppendingPathComponent:@"cachedtargets.objects"];
-		if ([[NSFileManager defaultManager] fileExistsAtPath:targetsCachePath]) {
-			_targets = [NSKeyedUnarchiver unarchiveObjectWithFile:targetsCachePath];
+		NSString *cachedTargetsPath = [cachePath stringByAppendingPathComponent:@"cachedtargets.objects"];
+		if ([[NSFileManager defaultManager] fileExistsAtPath:cachedTargetsPath]) {
+			@try {
+				_targets = [NSKeyedUnarchiver unarchiveObjectWithFile:cachedTargetsPath];
+			} @catch (NSException *exception) {
+				ApptentiveLogError(@"Unable to unarchive cached targets at path %@ (%@)", cachedTargetsPath, exception);
+			}
 		}
 
 		NSString *cachedInteractionsPath = [cachePath stringByAppendingPathComponent:@"cachedinteractionsV2.objects"];
 		if ([[NSFileManager defaultManager] fileExistsAtPath:cachedInteractionsPath]) {
-			_interactions = [NSKeyedUnarchiver unarchiveObjectWithFile:cachedInteractionsPath];
+			@try {
+				_interactions = [NSKeyedUnarchiver unarchiveObjectWithFile:cachedInteractionsPath];
+			} @catch (NSException *exception) {
+				ApptentiveLogError(@"Unable to unarchive cached interactions at path %@ (%@)", cachedInteractionsPath, exception);
+			}
 		}
 	}
 

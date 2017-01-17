@@ -18,7 +18,21 @@
 
 @protocol ATBackendMessageDelegate;
 
-/*! Handles all of the backend activities, such as sending feedback. */
+/**
+ `ApptentiveBackend` contains the internals of the Apptentive SDK.
+ Only a single backend object will be created by the Apptentive singleton
+ at the time that the API key is set.
+ 
+ It comprises a session object, containing all of the data collected
+ about the user, device, app, SDK, and events and interactions that have 
+ been engaged. 
+ 
+ Additionally it manages a concurrent and a serial network queue. The
+ former is used for GET requests (incoming messages, configuration, etc.)
+ as well as for the initial conversation creation request. The latter is
+ used for PUT and POST requests (person/device updates, events, messages,
+ and survey responses).
+ */
 @interface ApptentiveBackend : NSObject <NSFetchedResultsControllerDelegate, ApptentiveSessionDelegate, ApptentiveRequestOperationDelegate>
 
 @property (readonly, strong, nonatomic) ApptentiveSession *session;
@@ -29,11 +43,34 @@
 @property (readonly, strong, nonatomic) NSString *supportDirectoryPath;
 @property (strong, nonatomic) UIViewController *presentedMessageCenterViewController;
 
-- (instancetype)initWithAPIKey:(NSString *)APIKey baseURL:(NSURL *)baseURL storagePath:(NSString *)storagePath;
-- (void)processQueuedRecords;
-
 @property (weak, nonatomic) id<ATBackendMessageDelegate> messageDelegate;
 
+@property (readonly, nonatomic) NSURLCache *imageCache;
+
+
+/**
+ Initializes a new backend object.
+
+ @param APIKey The Apptentive API key for the application.
+ @param baseURL The base URL of the server with which the SDK communicates.
+ @param storagePath The path (relative to the App's Application Support directory) to use for storage.
+ @return The newly-initialized backend.
+ */
+- (instancetype)initWithAPIKey:(NSString *)APIKey baseURL:(NSURL *)baseURL storagePath:(NSString *)storagePath;
+
+
+/**
+ Instructs the serial network queue to add network operations for the currently-queued network payloads.
+ */
+- (void)processQueuedRecords;
+
+
+/**
+ Presents Message Center using the modal presentation style from the specified view controller.
+
+ @param viewController The view controller from which to present message center
+ @return <#return value description#>
+ */
 - (BOOL)presentMessageCenterFromViewController:(UIViewController *)viewController;
 - (BOOL)presentMessageCenterFromViewController:(UIViewController *)viewController withCustomData:(NSDictionary *)customData;
 - (void)messageCenterWillDismiss:(ApptentiveMessageCenterViewController *)messageCenter;
@@ -57,7 +94,6 @@
 
 - (BOOL)sendCompoundMessageWithText:(NSString *)text attachments:(NSArray *)attachments hiddenOnClient:(BOOL)hidden;
 
-/*! Path to directory for storing attachments. */
 - (NSString *)attachmentDirectoryPath;
 
 - (NSUInteger)unreadMessageCount;
@@ -73,8 +109,6 @@
 - (void)completeMessageFetchWithResult:(UIBackgroundFetchResult)fetchResult;
 
 - (void)resetBackend;
-
-@property (readonly, nonatomic) NSURLCache *imageCache;
 
 // Debugging
 

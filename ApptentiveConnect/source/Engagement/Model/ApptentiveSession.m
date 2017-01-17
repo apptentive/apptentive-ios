@@ -241,7 +241,12 @@ static NSString * const ArchiveVersionKey = @"archiveVersion";
 
 		_mutableUserInfo = [NSMutableDictionary dictionary];
 
-		[_mutableUserInfo setObject:[[NSUserDefaults standardUserDefaults] stringForKey:ATMessageCenterDraftMessageKey] forKey:ATMessageCenterDraftMessageKey];
+		NSString *draftMessage = [[NSUserDefaults standardUserDefaults] stringForKey:ATMessageCenterDraftMessageKey];
+
+		if (draftMessage) {
+			[_mutableUserInfo setObject:draftMessage forKey:ATMessageCenterDraftMessageKey];
+		}
+
 		[_mutableUserInfo setObject:@([[NSUserDefaults standardUserDefaults] boolForKey:ATMessageCenterDidSkipProfileKey]) forKey:ATMessageCenterDidSkipProfileKey];
 	}
 
@@ -262,14 +267,22 @@ static NSString * const ArchiveVersionKey = @"archiveVersion";
 	return [NSDictionary dictionaryWithDictionary:self.mutableUserInfo];
 }
 
-- (void)setUserInfo:(NSDictionary *)userInfo forKey:(NSString *)key {
-	[self.mutableUserInfo setObject:userInfo forKey:key];
+- (void)setUserInfo:(NSObject *)object forKey:(NSString *)key {
+	if (object != nil && key != nil) {
+		[self.mutableUserInfo setObject:object forKey:key];
 
-	[self.delegate sessionUserInfoDidChange:self];
+		[self.delegate sessionUserInfoDidChange:self];
+	} else {
+		ApptentiveLogError(@"Attempting to set user info with nil key and/or value");
+	}
 }
 
 - (void)removeUserInfoForKey:(NSString *)key {
-	[self.mutableUserInfo removeObjectForKey:key];
+	if (key != nil) {
+		[self.mutableUserInfo removeObjectForKey:key];
+	} else {
+		ApptentiveLogError(@"Attempting to set user info with nil key and/or value");
+	}
 }
 
 @end

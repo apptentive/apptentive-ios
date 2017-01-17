@@ -35,6 +35,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	ATBackendStateReady
 };
 
+
 @interface ApptentiveBackend ()
 
 @property (readonly, strong, nonatomic) NSOperationQueue *queue;

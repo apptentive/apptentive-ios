@@ -10,6 +10,14 @@
 
 @class ApptentiveSerialRequest;
 
+/**
+ `ApptentiveSerialRequestOperation` is an `ApptentiveRequestOperation`
+ subclass that manages deleting the `ApptentiveSerialRequest` objects
+ corresponding to completed (or permanently failed) network requests.
+
+ It also adds a convenience method for constructing a request operation based
+ on the information in an `ApptentiveSerialRequest` object.
+ */
 @interface ApptentiveSerialRequestOperation : ApptentiveRequestOperation
 
 + (instancetype)operationWithRequestInfo:(ApptentiveSerialRequest *)requestInfo delegate:(id<ApptentiveRequestOperationDelegate, ApptentiveRequestOperationDataSource>)delegate;

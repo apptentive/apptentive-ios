@@ -12,6 +12,27 @@
 
 extern NSErrorDomain const ApptentiveHTTPErrorDomain;
 
+
+/**
+ The `ApptentiveRequestOperaion` class is an `NSOperation` subclass that
+ performs a network request. The operation will continue to retry until it
+ completes, is cancelled, or encounters an unrecoverable error (basically, any
+ HTTP error in the 400-499 range).
+
+ `ApptentiveRequestOperation` instances can be initialized with an
+ `NSURLRequest` object, or with a convenience initializer that constructs the
+ request based on values from the data source along with a path, method and
+ payload dictionary that will be encoded as JSON.
+
+ Finally there is a convenience initializer intended for use with
+ `ApptentiveSerialRequest` objects, whose payload is already encoded and whose
+ API version may differ from the current one (when migrating an app from an SDK
+ that uses an older API version).
+
+ Delegate methods (in the `ApptentiveRequestOperationDelegate` protocol) are
+ called when the request operation starts, when it retries, when it finishes, 
+ and when an unrecoverable error is encountered.
+ */
 @interface ApptentiveRequestOperation : NSOperation
 
 @property (readonly, nonatomic) NSURLRequest *request;

@@ -10,6 +10,11 @@
 
 @class ApptentiveMessage;
 
+
+/**
+ This category on `ApptentiveSerialRequest` adds convenience methods for
+ queueing events, survey responses, and messages.
+ */
 @interface ApptentiveSerialRequest (Record)
 
 + (void)enqueueRequestWithPath:(NSString *)path containerName:(NSString *)containerName noncePrefix:(NSString *)noncePrefix payload:(NSDictionary *)payload inContext:(NSManagedObjectContext *)context;

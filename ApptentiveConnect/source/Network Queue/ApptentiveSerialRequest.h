@@ -10,6 +10,18 @@
 
 @class ApptentiveFileAttachment;
 
+
+/**
+ An `ApptentiveSerialRequest` instance encapsulates the data used to make a
+ network request in an `ApptentiveSerialNetworkQueue`. Instance are created
+ using the
+ `+enqueueRequestWithPath:method:payload:attachments:identifier:inContext:`
+ method.
+
+ The API version is included because the payload encoding may change, so any
+ migrated requests (encoded to the previous version's specifications) should
+ be sent with the matching API version.
+ */
 @interface ApptentiveSerialRequest : NSManagedObject
 
 @property (strong, nonatomic) NSString *apiVersion;

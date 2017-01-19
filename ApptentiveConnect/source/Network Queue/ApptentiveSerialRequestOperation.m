@@ -31,12 +31,12 @@
 	return self;
 }
 
-- (void)processResponse:(NSHTTPURLResponse *)response withObject:(NSObject *)responseObject {
-	[super processResponse:response withObject:responseObject];
-
+- (void)completeOperation {
 	[self.requestInfo.managedObjectContext performBlockAndWait:^{
 		[self.requestInfo.managedObjectContext deleteObject:self.requestInfo];
 	}];
+
+	[super completeOperation];
 }
 
 @end

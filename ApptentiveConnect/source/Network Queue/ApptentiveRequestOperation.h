@@ -54,6 +54,8 @@ extern NSErrorDomain const ApptentiveHTTPErrorDomain;
 - (void)processResponse:(NSHTTPURLResponse *)response withObject:(NSObject *)responseObject __attribute__((objc_requires_super));
 - (void)retryTaskWithError:(NSError *)error __attribute__((objc_requires_super));
 
+- (void)completeOperation __attribute__((objc_requires_super));
+
 @end
 
 @protocol ApptentiveRequestOperationDelegate <NSObject>

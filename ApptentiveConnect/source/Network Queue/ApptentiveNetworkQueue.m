@@ -14,6 +14,10 @@
 
 @implementation ApptentiveNetworkQueue
 
+@synthesize baseURL = _baseURL;
+@synthesize URLSession = _URLSession;
+@synthesize backoffDelay = _backoffDelay;
+
 - (instancetype)initWithBaseURL:(NSURL *)baseURL token:(NSString *)token SDKVersion:(NSString *)SDKVersion platform:(NSString *)platform {
 	self = [super init];
 

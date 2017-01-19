@@ -31,11 +31,4 @@
 @property (readonly, nonatomic) NSString *SDKVersion;
 @property (readonly, nonatomic) NSString *platform;
 
-@property (readonly, nonatomic) NSURL *baseURL;
-@property (readonly, nonatomic) NSURLSession *URLSession;
-@property (readonly, nonatomic) NSTimeInterval backoffDelay;
-
-- (void)increaseBackoffDelay;
-- (void)resetBackoffDelay;
-
 @end

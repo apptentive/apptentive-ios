@@ -25,10 +25,34 @@
  */
 @interface ApptentiveNetworkQueue : NSOperationQueue <ApptentiveRequestOperationDataSource, NSURLSessionDataDelegate>
 
+
+/**
+ Initializes a new network queu with the specified parameters.
+
+ @param baseURL The URL on which to base request URLs.
+ @param token The API authorization token to use when making requests.
+ @param SDKVersion The current SDK version (used to generate the user agent
+ header).
+ @param platform The current platform (used to generate the user agent header).
+ @return The newly-initialized network queue.
+ */
 - (instancetype)initWithBaseURL:(NSURL *)baseURL token:(NSString *)token SDKVersion:(NSString *)SDKVersion platform:(NSString *)platform;
 
+/**
+ The OAuth token to use when making requests. For the initial request, this is
+ set to the API key for the app. On subsequent requests this is set to the
+ OAuth token returned from the initial request.
+ */
 @property (copy, nonatomic) NSString *token;
+
+/**
+ The SDK version used to initialize the queue.
+ */
 @property (readonly, nonatomic) NSString *SDKVersion;
+
+/**
+ The platform string used to initialize the queue.
+ */
 @property (readonly, nonatomic) NSString *platform;
 
 @end

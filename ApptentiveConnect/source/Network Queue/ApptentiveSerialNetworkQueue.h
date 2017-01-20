@@ -51,13 +51,49 @@ typedef NS_ENUM(NSInteger, ApptentiveQueueStatus) {
  */
 @interface ApptentiveSerialNetworkQueue : ApptentiveNetworkQueue <ApptentiveRequestOperationDelegate, NSURLSessionDelegate, NSURLSessionDataDelegate>
 
+/**
+ Initializes a new serial network queue with the specified parameters.
+
+ @param baseURL The URL on which to base HTTP requests.
+ @param token The authorization token to use for requests.
+ @param SDKVersion The SDK version (used to generate the user agent header).
+ @param platform The platform string (used to generate the user agent header).
+ @param parentManagedObjectContext The managed object context to use as a parent
+ when creating a private managed object context for reading new request
+ information from Core Data.
+ @return The newly-initialzed serial queue.
+ */
 - (instancetype)initWithBaseURL:(NSURL *)baseURL token:(NSString *)token SDKVersion:(NSString *)SDKVersion platform:(NSString *)platform parentManagedObjectContext:(NSManagedObjectContext *)parentManagedObjectContext;
 
+/**
+ Instructs the queue to read any pending request information from Core Data and
+ create an `ApptentiveSerialRequestOperation` instance for each of them. These
+ operations are then enqueued, followed by an operation that saves the private
+ context to its parent, and saves the parent context to disk.
+ */
 - (void)resume;
 
+
+/**
+ A number representing the average progress across all message operations in the
+ queue.
+ */
 @property (readonly, nonatomic) NSNumber *messageSendProgress;
+
+/**
+ A count representing the number of message operations in the queue.
+ */
 @property (readonly, nonatomic) NSInteger messageTaskCount;
+
+/**
+ The status (success or failure) of the most recently-sent request in the queue.
+ */
 @property (readonly, nonatomic) ApptentiveQueueStatus status;
+
+/**
+ A background task identifier, used on iOS to complete the parent context save
+ operation when an app is closed.
+ */
 @property (assign, nonatomic) UIBackgroundTaskIdentifier backgroundTaskIdentifier;
 
 @end

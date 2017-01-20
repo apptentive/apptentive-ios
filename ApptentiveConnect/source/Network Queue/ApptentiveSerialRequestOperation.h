@@ -20,10 +20,20 @@
  */
 @interface ApptentiveSerialRequestOperation : ApptentiveRequestOperation
 
+/**
+ Creates a serial request operation with the specified request info and
+ delegate.
+
+ @param requestInfo The request info to use when creating the operation.
+ @param delegate The delegate with which the operation should communicate.
+ @return The newly-created operation.
+ */
 + (instancetype)operationWithRequestInfo:(ApptentiveSerialRequest *)requestInfo delegate:(id<ApptentiveRequestOperationDelegate, ApptentiveRequestOperationDataSource>)delegate;
 
-- (instancetype)initWithRequestInfo:(ApptentiveSerialRequest *)requestInfo delegate:(id<ApptentiveRequestOperationDelegate, ApptentiveRequestOperationDataSource>)delegate;
-
+/**
+ The request info object associated with the operation. Primarily used to 
+ delete the request information when the operation completes.
+ */
 @property (readonly, nonatomic) ApptentiveSerialRequest *requestInfo;
 
 @end

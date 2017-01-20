@@ -314,10 +314,6 @@
 		016E4A361DB9982900E45EE4 /* testV7Criteria.json in Resources */ = {isa = PBXBuildFile; fileRef = 016E4A2D1DB9659000E45EE4 /* testV7Criteria.json */; };
 		0171DFED1BF2D019006F8BEA /* ApptentiveCompoundReplyCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 0171DFEB1BF2D019006F8BEA /* ApptentiveCompoundReplyCell.h */; };
 		0171DFEE1BF2D019006F8BEA /* ApptentiveCompoundReplyCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0171DFEC1BF2D019006F8BEA /* ApptentiveCompoundReplyCell.m */; };
-		017932DA1E1DB4E8006A7155 /* ApptentiveSurveyResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = 017932D81E1DB4E8006A7155 /* ApptentiveSurveyResponse.h */; };
-		017932DB1E1DB4E8006A7155 /* ApptentiveSurveyResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = 017932D81E1DB4E8006A7155 /* ApptentiveSurveyResponse.h */; };
-		017932DC1E1DB4E8006A7155 /* ApptentiveSurveyResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 017932D91E1DB4E8006A7155 /* ApptentiveSurveyResponse.m */; };
-		017932DD1E1DB4E8006A7155 /* ApptentiveSurveyResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 017932D91E1DB4E8006A7155 /* ApptentiveSurveyResponse.m */; };
 		017D97421B0E3770004E045C /* ApptentiveMessageCenterStatusView.h in Headers */ = {isa = PBXBuildFile; fileRef = 017D97401B0E3770004E045C /* ApptentiveMessageCenterStatusView.h */; };
 		017D97431B0E3770004E045C /* ApptentiveMessageCenterStatusView.m in Sources */ = {isa = PBXBuildFile; fileRef = 017D97411B0E3770004E045C /* ApptentiveMessageCenterStatusView.m */; };
 		017D97461B0E5795004E045C /* ApptentiveMessageCenterMessageCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 017D97441B0E5795004E045C /* ApptentiveMessageCenterMessageCell.h */; };
@@ -693,8 +689,6 @@
 		0171DFEB1BF2D019006F8BEA /* ApptentiveCompoundReplyCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveCompoundReplyCell.h; sourceTree = "<group>"; };
 		0171DFEC1BF2D019006F8BEA /* ApptentiveCompoundReplyCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveCompoundReplyCell.m; sourceTree = "<group>"; };
 		0171DFEF1BF2D1F1006F8BEA /* ApptentiveMessageCenterCellProtocols.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ApptentiveMessageCenterCellProtocols.h; sourceTree = "<group>"; };
-		017932D81E1DB4E8006A7155 /* ApptentiveSurveyResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveSurveyResponse.h; sourceTree = "<group>"; };
-		017932D91E1DB4E8006A7155 /* ApptentiveSurveyResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveSurveyResponse.m; sourceTree = "<group>"; };
 		017D97401B0E3770004E045C /* ApptentiveMessageCenterStatusView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveMessageCenterStatusView.h; sourceTree = "<group>"; };
 		017D97411B0E3770004E045C /* ApptentiveMessageCenterStatusView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveMessageCenterStatusView.m; sourceTree = "<group>"; };
 		017D97441B0E5795004E045C /* ApptentiveMessageCenterMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveMessageCenterMessageCell.h; sourceTree = "<group>"; };
@@ -1414,8 +1408,6 @@
 				493AEB1E15990A4D00DFD4C7 /* ApptentiveSurveyQuestion.m */,
 				58E95808190740BC005063DC /* ApptentiveSurveyQuestionResponse.h */,
 				58E95809190740BC005063DC /* ApptentiveSurveyQuestionResponse.m */,
-				017932D81E1DB4E8006A7155 /* ApptentiveSurveyResponse.h */,
-				017932D91E1DB4E8006A7155 /* ApptentiveSurveyResponse.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1816,7 +1808,6 @@
 				012292BC1E088CB100282131 /* ApptentiveNetworkQueue.h in Headers */,
 				016986761DA57944008C4C78 /* Apptentive-Umbrella.h in Headers */,
 				012292B81E088CB100282131 /* ApptentiveSerialRequestOperation.h in Headers */,
-				017932DB1E1DB4E8006A7155 /* ApptentiveSurveyResponse.h in Headers */,
 				011AD91D1E2099EB0079A49D /* ApptentiveSerialRequest+Record.h in Headers */,
 				012292C01E088CB100282131 /* ApptentiveSerialRequestAttachment.h in Headers */,
 				012B4C231E0B76EF00D6229B /* ApptentiveMutableDevice.h in Headers */,
@@ -1871,7 +1862,6 @@
 				0132F8D31C851C0800A452E3 /* ApptentiveSurveySubmitButton.h in Headers */,
 				012B4BF91E0B286A00D6229B /* ApptentiveAppRelease.h in Headers */,
 				012292AE1E04C0FA00282131 /* ApptentiveMessageRequestOperation.h in Headers */,
-				017932DA1E1DB4E8006A7155 /* ApptentiveSurveyResponse.h in Headers */,
 				012B4C1D1E0B769B00D6229B /* ApptentiveMutablePerson.h in Headers */,
 				01D3128E1B69349900B369E1 /* ApptentiveProgressNavigationBar.h in Headers */,
 				0122929C1E04C0BB00282131 /* ApptentiveSerialRequestAttachment.h in Headers */,
@@ -2372,7 +2362,6 @@
 				016986C61DA57965008C4C78 /* ApptentiveSurveyQuestionBackgroundView.m in Sources */,
 				016986C71DA57965008C4C78 /* ApptentiveSurveyQuestionView.m in Sources */,
 				012292B91E088CB100282131 /* ApptentiveSerialRequestOperation.m in Sources */,
-				017932DD1E1DB4E8006A7155 /* ApptentiveSurveyResponse.m in Sources */,
 				012B4BE41E0B119000D6229B /* ApptentiveAppConfiguration.m in Sources */,
 				016986C81DA57965008C4C78 /* ApptentiveSurveySingleLineCell.m in Sources */,
 				016986C91DA57965008C4C78 /* ApptentiveSurveySubmitButton.m in Sources */,
@@ -2502,7 +2491,6 @@
 				58C5922217C55ADD000FA428 /* ApptentiveBackend+Engagement.m in Sources */,
 				011AD91E1E2099EB0079A49D /* ApptentiveSerialRequest+Record.m in Sources */,
 				58EEBE2417C7E8150039A0F5 /* ApptentiveInteraction.m in Sources */,
-				017932DC1E1DB4E8006A7155 /* ApptentiveSurveyResponse.m in Sources */,
 				58D17D4818C5674000D123BC /* ApptentiveInteractionRatingDialogController.m in Sources */,
 				012B4C0C1E0B286A00D6229B /* ApptentiveVersion.m in Sources */,
 				012292A51E04C0EB00282131 /* ApptentiveNetworkQueue.m in Sources */,

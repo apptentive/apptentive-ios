@@ -23,6 +23,14 @@ static NSString *const BackgroundPollingIntervalKey = @"backgroundPollingInterva
 static NSString *const EmailRequiredKey = @"emailRequired";
 static NSString *const NotificationPopupEnabledKey = @"notificationPopupEnabled";
 
+// Legacy keys
+static NSString *const ATAppConfigurationMetricsEnabledPreferenceKey = @"ATAppConfigurationMetricsEnabledPreferenceKey";
+static NSString *const ATAppConfigurationHideBrandingKey = @"ATAppConfigurationHideBrandingKey";
+static NSString *const ATAppConfigurationExpirationPreferenceKey = @"ATAppConfigurationExpirationPreferenceKey";
+static NSString *const ATAppConfigurationNotificationPopupsEnabledKey = @"ATAppConfigurationNotificationPopupsEnabledKey";
+static NSString *const ATAppConfigurationMessageCenterForegroundRefreshIntervalKey = @"ATAppConfigurationMessageCenterForegroundRefreshIntervalKey";
+static NSString *const ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey = @"ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey";
+
 
 @implementation ApptentiveAppConfiguration
 
@@ -71,21 +79,21 @@ static NSString *const NotificationPopupEnabledKey = @"notificationPopupEnabled"
 	self = [self init];
 
 	if (self) {
-		_metricsEnabled = [userDefaults boolForKey:@"ATAppConfigurationMetricsEnabledPreferenceKey"];
-		_hideBranding = [userDefaults boolForKey:@"ATAppConfigurationHideBrandingKey"];
+		_metricsEnabled = [userDefaults boolForKey:ATAppConfigurationMetricsEnabledPreferenceKey];
+		_hideBranding = [userDefaults boolForKey:ATAppConfigurationHideBrandingKey];
 
 		_messageCenter = [[ApptentiveMessageCenterConfiguration alloc] initWithUserDefaults:userDefaults];
 
-		_expiry = [userDefaults objectForKey:@"ATAppConfigurationExpirationPreferenceKey"];
+		_expiry = [userDefaults objectForKey:ATAppConfigurationExpirationPreferenceKey];
 	}
 
 	return self;
 }
 
 + (void)deleteMigratedData {
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ATAppConfigurationExpirationPreferenceKey"];
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ATAppConfigurationMetricsEnabledPreferenceKey"];
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ATAppConfigurationHideBrandingKey"];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATAppConfigurationExpirationPreferenceKey];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATAppConfigurationMetricsEnabledPreferenceKey];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATAppConfigurationHideBrandingKey];
 
 	[ApptentiveMessageCenterConfiguration deleteMigratedData];
 }
@@ -164,18 +172,18 @@ static NSString *const NotificationPopupEnabledKey = @"notificationPopupEnabled"
 	self = [self init];
 
 	if (self) {
-		_notificationPopupEnabled = [userDefaults boolForKey:@"ATAppConfigurationNotificationPopupsEnabledKey"];
-		_foregroundPollingInterval = [[userDefaults objectForKey:@"ATAppConfigurationMessageCenterForegroundRefreshIntervalKey"] doubleValue];
-		_backgroundPollingInterval = [[userDefaults objectForKey:@"ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey"] doubleValue];
+		_notificationPopupEnabled = [userDefaults boolForKey:ATAppConfigurationNotificationPopupsEnabledKey];
+		_foregroundPollingInterval = [[userDefaults objectForKey:ATAppConfigurationMessageCenterForegroundRefreshIntervalKey] doubleValue];
+		_backgroundPollingInterval = [[userDefaults objectForKey:ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey] doubleValue];
 	}
 
 	return self;
 }
 
 + (void)deleteMigratedData {
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ATAppConfigurationNotificationPopupsEnabledKey"];
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ATAppConfigurationMessageCenterForegroundRefreshIntervalKey"];
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey"];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATAppConfigurationNotificationPopupsEnabledKey];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATAppConfigurationMessageCenterForegroundRefreshIntervalKey];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey];
 }
 
 - (instancetype)initWithCoder:(NSCoder *)coder {

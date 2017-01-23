@@ -21,6 +21,14 @@ static NSString *const TimeAtInstallTotalKey = @"timeAtInstallTotal";
 static NSString *const TimeAtInstallVersionKey = @"timeAtInstallVersion";
 static NSString *const TimeAtInstallBuildKey = @"timeAtInstallBuild";
 
+// Legacy keys
+static NSString *const ATConversationLastUpdateValuePreferenceKey = @"ATConversationLastUpdateValuePreferenceKey";
+static NSString *const ATEngagementInstallDateKey = @"ATEngagementInstallDateKey";
+static NSString *const ATEngagementUpgradeDateKey = @"ATEngagementUpgradeDateKey";
+static NSString *const ATEngagementLastUsedVersionKey = @"ATEngagementLastUsedVersionKey";
+static NSString *const ATEngagementIsUpdateVersionKey = @"ATEngagementIsUpdateVersionKey";
+static NSString *const ATEngagementIsUpdateBuildKey = @"ATEngagementIsUpdateBuildKey";
+
 
 @implementation ApptentiveAppRelease
 
@@ -100,8 +108,6 @@ static NSString *const TimeAtInstallBuildKey = @"timeAtInstallBuild";
 	self = [super init];
 
 	if (self) {
-		NSString *const ATConversationLastUpdateValuePreferenceKey = @"ATConversationLastUpdateValuePreferenceKey";
-
 		NSDictionary *lastConversationUpdate = [[NSUserDefaults standardUserDefaults] objectForKey:ATConversationLastUpdateValuePreferenceKey];
 		NSDictionary *appRelease = lastConversationUpdate[@"app_release"];
 
@@ -115,21 +121,21 @@ static NSString *const TimeAtInstallBuildKey = @"timeAtInstallBuild";
 		_updateVersion = YES;
 		_updateBuild = YES;
 
-		_timeAtInstallTotal = [[NSUserDefaults standardUserDefaults] objectForKey:@"ATEngagementInstallDateKey"];
-		_timeAtInstallVersion = [[NSUserDefaults standardUserDefaults] objectForKey:@"ATEngagementUpgradeDateKey"];
-		_timeAtInstallBuild = [[NSUserDefaults standardUserDefaults] objectForKey:@"ATEngagementUpgradeDateKey"];
+		_timeAtInstallTotal = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementInstallDateKey];
+		_timeAtInstallVersion = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementUpgradeDateKey];
+		_timeAtInstallBuild = [[NSUserDefaults standardUserDefaults] objectForKey:ATEngagementUpgradeDateKey];
 	}
 
 	return self;
 }
 
 + (void)deleteMigratedData {
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ATConversationLastUpdateValuePreferenceKey"];
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ATEngagementInstallDateKey"];
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ATEngagementUpgradeDateKey"];
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ATEngagementLastUsedVersionKey"];
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ATEngagementIsUpdateVersionKey"];
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ATEngagementIsUpdateBuildKey"];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATConversationLastUpdateValuePreferenceKey];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATEngagementInstallDateKey];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATEngagementUpgradeDateKey];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATEngagementLastUsedVersionKey];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATEngagementIsUpdateVersionKey];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATEngagementIsUpdateBuildKey];
 }
 
 - (void)resetVersion {

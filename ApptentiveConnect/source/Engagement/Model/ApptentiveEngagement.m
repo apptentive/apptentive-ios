@@ -12,6 +12,16 @@
 static NSString *const InteractionsKey = @"interactions";
 static NSString *const CodePointsKey = @"codePoints";
 
+// Legacy keys
+static NSString *const ATEngagementCodePointsInvokesTotalKey = @"ATEngagementCodePointsInvokesTotalKey";
+static NSString *const ATEngagementCodePointsInvokesVersionKey = @"ATEngagementCodePointsInvokesVersionKey";
+static NSString *const ATEngagementCodePointsInvokesBuildKey = @"ATEngagementCodePointsInvokesBuildKey";
+static NSString *const ATEngagementCodePointsInvokesLastDateKey = @"ATEngagementCodePointsInvokesLastDateKey";
+static NSString *const ATEngagementInteractionsInvokesTotalKey = @"ATEngagementInteractionsInvokesTotalKey";
+static NSString *const ATEngagementInteractionsInvokesVersionKey = @"ATEngagementInteractionsInvokesVersionKey";
+static NSString *const ATEngagementInteractionsInvokesBuildKey = @"ATEngagementInteractionsInvokesBuildKey";
+static NSString *const ATEngagementInteractionsInvokesLastDateKey = @"ATEngagementInteractionsInvokesLastDateKey";
+
 
 @interface ApptentiveEngagement ()
 
@@ -51,19 +61,19 @@ static NSString *const CodePointsKey = @"codePoints";
 	self = [self init];
 
 	if (self) {
-		NSDictionary *codePointsInvokesTotal = [[NSUserDefaults standardUserDefaults] dictionaryForKey:@"ATEngagementCodePointsInvokesTotalKey"];
-		NSDictionary *codePointsInvokesVersion = [[NSUserDefaults standardUserDefaults] dictionaryForKey:@"ATEngagementCodePointsInvokesVersionKey"];
-		NSDictionary *codePointsInvokesBuild = [[NSUserDefaults standardUserDefaults] dictionaryForKey:@"ATEngagementCodePointsInvokesBuildKey"];
-		NSDictionary *codePointsInvokesLastDate = [[NSUserDefaults standardUserDefaults] dictionaryForKey:@"ATEngagementCodePointsInvokesLastDateKey"];
+		NSDictionary *codePointsInvokesTotal = [[NSUserDefaults standardUserDefaults] dictionaryForKey:ATEngagementCodePointsInvokesTotalKey];
+		NSDictionary *codePointsInvokesVersion = [[NSUserDefaults standardUserDefaults] dictionaryForKey:ATEngagementCodePointsInvokesVersionKey];
+		NSDictionary *codePointsInvokesBuild = [[NSUserDefaults standardUserDefaults] dictionaryForKey:ATEngagementCodePointsInvokesBuildKey];
+		NSDictionary *codePointsInvokesLastDate = [[NSUserDefaults standardUserDefaults] dictionaryForKey:ATEngagementCodePointsInvokesLastDateKey];
 
 		for (NSString *key in codePointsInvokesTotal) {
 			_mutableCodePoints[key] = [[ApptentiveCount alloc] initWithTotalCount:[codePointsInvokesTotal[key] integerValue] versionCount:[codePointsInvokesVersion[key] integerValue] buildCount:[codePointsInvokesBuild[key] integerValue] lastInvoked:codePointsInvokesLastDate[key]];
 		}
 
-		NSDictionary *interactionsInvokesTotal = [[NSUserDefaults standardUserDefaults] dictionaryForKey:@"ATEngagementInteractionsInvokesTotalKey"];
-		NSDictionary *interactionsInvokesVersion = [[NSUserDefaults standardUserDefaults] dictionaryForKey:@"ATEngagementInteractionsInvokesVersionKey"];
-		NSDictionary *interactionsInvokesBuild = [[NSUserDefaults standardUserDefaults] dictionaryForKey:@"ATEngagementInteractionsInvokesBuildKey"];
-		NSDictionary *interactionsInvokesLastDate = [[NSUserDefaults standardUserDefaults] dictionaryForKey:@"ATEngagementInteractionsInvokesLastDateKey"];
+		NSDictionary *interactionsInvokesTotal = [[NSUserDefaults standardUserDefaults] dictionaryForKey:ATEngagementInteractionsInvokesTotalKey];
+		NSDictionary *interactionsInvokesVersion = [[NSUserDefaults standardUserDefaults] dictionaryForKey:ATEngagementInteractionsInvokesVersionKey];
+		NSDictionary *interactionsInvokesBuild = [[NSUserDefaults standardUserDefaults] dictionaryForKey:ATEngagementInteractionsInvokesBuildKey];
+		NSDictionary *interactionsInvokesLastDate = [[NSUserDefaults standardUserDefaults] dictionaryForKey:ATEngagementInteractionsInvokesLastDateKey];
 
 		for (NSString *key in interactionsInvokesTotal) {
 			_mutableInteractions[key] = [[ApptentiveCount alloc] initWithTotalCount:[interactionsInvokesTotal[key] integerValue] versionCount:[interactionsInvokesVersion[key] integerValue] buildCount:[interactionsInvokesBuild[key] integerValue] lastInvoked:interactionsInvokesLastDate[key]];
@@ -74,14 +84,14 @@ static NSString *const CodePointsKey = @"codePoints";
 }
 
 + (void)deleteMigratedData {
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ATEngagementCodePointsInvokesTotalKey"];
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ATEngagementCodePointsInvokesVersionKey"];
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ATEngagementCodePointsInvokesBuildKey"];
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ATEngagementCodePointsInvokesLastDateKey"];
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ATEngagementInteractionsInvokesTotalKey"];
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ATEngagementInteractionsInvokesVersionKey"];
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ATEngagementInteractionsInvokesBuildKey"];
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ATEngagementInteractionsInvokesLastDateKey"];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATEngagementCodePointsInvokesTotalKey];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATEngagementCodePointsInvokesVersionKey];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATEngagementCodePointsInvokesBuildKey];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATEngagementCodePointsInvokesLastDateKey];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATEngagementInteractionsInvokesTotalKey];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATEngagementInteractionsInvokesVersionKey];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATEngagementInteractionsInvokesBuildKey];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATEngagementInteractionsInvokesLastDateKey];
 }
 
 - (NSDictionary<NSString *, ApptentiveCount *> *)interactions {

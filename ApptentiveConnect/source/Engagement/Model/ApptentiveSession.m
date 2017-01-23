@@ -28,6 +28,11 @@ static NSString *const LastMessageIDKey = @"lastMessageID";
 static NSString *const MutableUserInfoKey = @"mutableUserInfo";
 static NSString *const ArchiveVersionKey = @"archiveVersion";
 
+// Legacy keys
+static NSString *const ATCurrentConversationPreferenceKey = @"ATCurrentConversationPreferenceKey";
+static NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKey";
+static NSString *const ATMessageCenterDidSkipProfileKey = @"ATMessageCenterDidSkipProfileKey";
+
 
 @interface ApptentiveSession ()
 
@@ -231,14 +236,11 @@ static NSString *const ArchiveVersionKey = @"archiveVersion";
 		_device = [[ApptentiveDevice alloc] initAndMigrate];
 		_engagement = [[ApptentiveEngagement alloc] initAndMigrate];
 
-		NSData *legacyConversationData = [[NSUserDefaults standardUserDefaults] dataForKey:@"ATCurrentConversationPreferenceKey"];
+		NSData *legacyConversationData = [[NSUserDefaults standardUserDefaults] dataForKey:ATCurrentConversationPreferenceKey];
 		ApptentiveLegacyConversation *legacyConversation = (ApptentiveLegacyConversation *)[NSKeyedUnarchiver unarchiveObjectWithData:legacyConversationData];
 		_token = legacyConversation.token;
 		_person.identifier = legacyConversation.personID;
 		_device.identifier = legacyConversation.deviceID;
-
-		NSString *ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKey";
-		NSString *ATMessageCenterDidSkipProfileKey = @"ATMessageCenterDidSkipProfileKey";
 
 		_mutableUserInfo = [NSMutableDictionary dictionary];
 
@@ -261,7 +263,7 @@ static NSString *const ArchiveVersionKey = @"archiveVersion";
 	[ApptentiveDevice deleteMigratedData];
 	[ApptentiveEngagement deleteMigratedData];
 
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ATCurrentConversationPreferenceKey"];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATCurrentConversationPreferenceKey];
 }
 
 - (NSDictionary *)userInfo {

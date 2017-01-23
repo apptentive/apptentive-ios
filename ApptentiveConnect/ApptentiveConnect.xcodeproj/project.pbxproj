@@ -243,7 +243,6 @@
 		016986CD1DA57965008C4C78 /* ApptentiveSurveyAnswer.m in Sources */ = {isa = PBXBuildFile; fileRef = 0132F8D61C851C2300A452E3 /* ApptentiveSurveyAnswer.m */; };
 		016986CE1DA57965008C4C78 /* ApptentiveSurvey.m in Sources */ = {isa = PBXBuildFile; fileRef = 493AEB1A15990A4D00DFD4C7 /* ApptentiveSurvey.m */; };
 		016986CF1DA57965008C4C78 /* ApptentiveSurveyQuestion.m in Sources */ = {isa = PBXBuildFile; fileRef = 493AEB1E15990A4D00DFD4C7 /* ApptentiveSurveyQuestion.m */; };
-		016986D11DA57965008C4C78 /* ApptentiveSurveyQuestionResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 58E95809190740BC005063DC /* ApptentiveSurveyQuestionResponse.m */; };
 		016986D31DA57965008C4C78 /* ApptentiveSurveyCollectionViewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 0132F8A51C851BFA00A452E3 /* ApptentiveSurveyCollectionViewLayout.m */; };
 		016986D41DA57965008C4C78 /* ApptentiveSurveyLayoutAttributes.m in Sources */ = {isa = PBXBuildFile; fileRef = 0132F8A71C851BFA00A452E3 /* ApptentiveSurveyLayoutAttributes.m */; };
 		016986D51DA57965008C4C78 /* ApptentiveSurveyViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0132F8A91C851BFA00A452E3 /* ApptentiveSurveyViewModel.m */; };
@@ -512,8 +511,6 @@
 		58D17D5018C5676F00D123BC /* ApptentiveInteractionMessageCenterController.m in Sources */ = {isa = PBXBuildFile; fileRef = 58D17D4E18C5676F00D123BC /* ApptentiveInteractionMessageCenterController.m */; };
 		58DCC0D5180F445700A3A7AE /* ApptentiveInteractionUpgradeMessageViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 58DCC0D2180F445700A3A7AE /* ApptentiveInteractionUpgradeMessageViewController.h */; };
 		58DCC0D6180F445700A3A7AE /* ApptentiveInteractionUpgradeMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 58DCC0D3180F445700A3A7AE /* ApptentiveInteractionUpgradeMessageViewController.m */; };
-		58E9580A190740BC005063DC /* ApptentiveSurveyQuestionResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = 58E95808190740BC005063DC /* ApptentiveSurveyQuestionResponse.h */; };
-		58E9580B190740BC005063DC /* ApptentiveSurveyQuestionResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 58E95809190740BC005063DC /* ApptentiveSurveyQuestionResponse.m */; };
 		58EEBE2317C7E8150039A0F5 /* ApptentiveInteraction.h in Headers */ = {isa = PBXBuildFile; fileRef = 58EEBE2117C7E8150039A0F5 /* ApptentiveInteraction.h */; };
 		58EEBE2417C7E8150039A0F5 /* ApptentiveInteraction.m in Sources */ = {isa = PBXBuildFile; fileRef = 58EEBE2217C7E8150039A0F5 /* ApptentiveInteraction.m */; };
 /* End PBXBuildFile section */
@@ -925,8 +922,6 @@
 		58DD74FB1B8FA6A500F2804A /* en */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		58DD74FC1B8FA6B200F2804A /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		58DD74FD1B8FA6B300F2804A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		58E95808190740BC005063DC /* ApptentiveSurveyQuestionResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveSurveyQuestionResponse.h; sourceTree = "<group>"; };
-		58E95809190740BC005063DC /* ApptentiveSurveyQuestionResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveSurveyQuestionResponse.m; sourceTree = "<group>"; };
 		58EA5B3617B4781600ECEB4B /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		58EA5B3B17B479A500ECEB4B /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
 		58EA5B4117B47AAC00ECEB4B /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -1408,8 +1403,6 @@
 				493AEB1A15990A4D00DFD4C7 /* ApptentiveSurvey.m */,
 				493AEB1D15990A4D00DFD4C7 /* ApptentiveSurveyQuestion.h */,
 				493AEB1E15990A4D00DFD4C7 /* ApptentiveSurveyQuestion.m */,
-				58E95808190740BC005063DC /* ApptentiveSurveyQuestionResponse.h */,
-				58E95809190740BC005063DC /* ApptentiveSurveyQuestionResponse.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1902,7 +1895,6 @@
 				58D17D4F18C5676F00D123BC /* ApptentiveInteractionMessageCenterController.h in Headers */,
 				583DF0671A390DDA00BF0207 /* ApptentiveInteractionInvocation.h in Headers */,
 				012B4C011E0B286A00D6229B /* ApptentiveDevice.h in Headers */,
-				58E9580A190740BC005063DC /* ApptentiveSurveyQuestionResponse.h in Headers */,
 				0171DFED1BF2D019006F8BEA /* ApptentiveCompoundReplyCell.h in Headers */,
 				0127EA121BF1271C0005481A /* ApptentiveIndexedCollectionView.h in Headers */,
 				49F8AFF016CC4A550070FFEA /* ApptentiveMessageSender.h in Headers */,
@@ -2376,7 +2368,6 @@
 				016986CE1DA57965008C4C78 /* ApptentiveSurvey.m in Sources */,
 				012B4C241E0B777200D6229B /* ApptentiveMutablePerson.m in Sources */,
 				016986CF1DA57965008C4C78 /* ApptentiveSurveyQuestion.m in Sources */,
-				016986D11DA57965008C4C78 /* ApptentiveSurveyQuestionResponse.m in Sources */,
 				016986D31DA57965008C4C78 /* ApptentiveSurveyCollectionViewLayout.m in Sources */,
 				012292C11E088CB100282131 /* ApptentiveSerialRequestAttachment.m in Sources */,
 				016986D41DA57965008C4C78 /* ApptentiveSurveyLayoutAttributes.m in Sources */,
@@ -2446,7 +2437,6 @@
 				0132F8C81C851C0800A452E3 /* ApptentiveSurveyChoiceCell.m in Sources */,
 				012B4C0A1E0B286A00D6229B /* ApptentiveState.m in Sources */,
 				584EAC6F1A786E4500AC7F05 /* ApptentiveInteractionTextModalController.m in Sources */,
-				58E9580B190740BC005063DC /* ApptentiveSurveyQuestionResponse.m in Sources */,
 				0122929F1E04C0BB00282131 /* ApptentiveSerialRequest.m in Sources */,
 				01C30CEC1B0D09F8006BC911 /* ApptentiveMessageCenterGreetingView.m in Sources */,
 				018389061D1A0D6100780B8E /* ApptentiveSurveyQuestionFooterView.m in Sources */,

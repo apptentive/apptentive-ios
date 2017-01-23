@@ -16,6 +16,11 @@ static NSString *const PlatformKey = @"platform";
 static NSString *const DistributionNameKey = @"distributionName";
 static NSString *const DistributionVersionKey = @"distributionVersion";
 
+// Legacy keys
+static NSString *const ATConversationLastUpdateValuePreferenceKey = @"ATConversationLastUpdateValuePreferenceKey";
+static NSString *const ATConversationLastUpdatePreferenceKey = @"ATConversationLastUpdatePreferenceKey";
+static NSString *const ATCurrentConversationPreferenceKey = @"ATCurrentConversationPreferenceKey";
+
 static NSString *_distributionName;
 static ApptentiveVersion *_distributionVersion;
 
@@ -116,8 +121,6 @@ static ApptentiveVersion *_distributionVersion;
 	self = [super init];
 
 	if (self) {
-		NSString *const ATConversationLastUpdateValuePreferenceKey = @"ATConversationLastUpdateValuePreferenceKey";
-
 		NSDictionary *lastConversationUpdate = [[NSUserDefaults standardUserDefaults] objectForKey:ATConversationLastUpdateValuePreferenceKey];
 		NSDictionary *SDK = lastConversationUpdate[@"sdk"];
 
@@ -133,9 +136,9 @@ static ApptentiveVersion *_distributionVersion;
 }
 
 + (void)deleteMigratedData {
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ATConversationLastUpdateValuePreferenceKey"];
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ATConversationLastUpdatePreferenceKey"];
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ATCurrentConversationPreferenceKey"];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATConversationLastUpdateValuePreferenceKey];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATConversationLastUpdatePreferenceKey];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATCurrentConversationPreferenceKey];
 }
 
 @end

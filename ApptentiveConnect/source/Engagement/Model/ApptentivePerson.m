@@ -12,6 +12,11 @@
 static NSString *const NameKey = @"name";
 static NSString *const EmailAddressKey = @"emailAddress";
 
+// Legacy keys
+static NSString *const ATPersonLastUpdateValuePreferenceKey = @"ATPersonLastUpdateValuePreferenceKey";
+static NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
+static NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPersonDataPreferenceKey";
+
 
 @implementation ApptentivePerson
 
@@ -38,7 +43,7 @@ static NSString *const EmailAddressKey = @"emailAddress";
 	NSString *emailAddress;
 	NSDictionary *customData;
 
-	NSData *data = [[NSUserDefaults standardUserDefaults] dataForKey:@"ATPersonLastUpdateValuePreferenceKey"];
+	NSData *data = [[NSUserDefaults standardUserDefaults] dataForKey:ATPersonLastUpdateValuePreferenceKey];
 
 	if (data) {
 		NSDictionary *person = [[NSKeyedUnarchiver unarchiveObjectWithData:data] valueForKey:@"person"];
@@ -60,9 +65,9 @@ static NSString *const EmailAddressKey = @"emailAddress";
 }
 
 + (void)deleteMigratedData {
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ATPersonLastUpdateValuePreferenceKey"];
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ATCurrentPersonPreferenceKey"];
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ApptentiveCustomPersonDataPreferenceKey"];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATPersonLastUpdateValuePreferenceKey];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATCurrentPersonPreferenceKey];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ApptentiveCustomPersonDataPreferenceKey];
 }
 
 - (instancetype)initWithMutablePerson:(ApptentiveMutablePerson *)mutablePerson {

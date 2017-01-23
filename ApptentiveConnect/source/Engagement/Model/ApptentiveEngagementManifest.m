@@ -14,6 +14,11 @@ static NSString *const TargetsKey = @"targets";
 static NSString *const InteractionsKey = @"interactions";
 static NSString *const ExpiryKey = @"expiry";
 
+// Legacy keys
+static NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEngagementCachedInteractionsExpirationPreferenceKey";
+static NSString *const ATEngagementInteractionsSDKVersionKey = @"ATEngagementInteractionsSDKVersionKey";
+static NSString *const ATEngagementInteractionsAppBuildNumberKey = @"ATEngagementInteractionsAppBuildNumberKey";
+
 
 @implementation ApptentiveEngagementManifest
 
@@ -77,7 +82,7 @@ static NSString *const ExpiryKey = @"expiry";
 	self = [super init];
 
 	if (self) {
-		_expiry = [userDefaults objectForKey:@"ATEngagementCachedInteractionsExpirationPreferenceKey"];
+		_expiry = [userDefaults objectForKey:ATEngagementCachedInteractionsExpirationPreferenceKey];
 
 		NSString *cachedTargetsPath = [cachePath stringByAppendingPathComponent:@"cachedtargets.objects"];
 		if ([[NSFileManager defaultManager] fileExistsAtPath:cachedTargetsPath]) {
@@ -102,9 +107,9 @@ static NSString *const ExpiryKey = @"expiry";
 }
 
 + (void)deleteMigratedDataFromCachePath:(NSString *)cachePath {
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ATEngagementInteractionsSDKVersionKey"];
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ATEngagementInteractionsAppBuildNumberKey"];
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ATEngagementCachedInteractionsExpirationPreferenceKey"];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATEngagementInteractionsSDKVersionKey];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATEngagementInteractionsAppBuildNumberKey];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATEngagementCachedInteractionsExpirationPreferenceKey];
 
 	NSError *error;
 	NSString *targetsCachePath = [cachePath stringByAppendingPathComponent:@"cachedtargets.objects"];

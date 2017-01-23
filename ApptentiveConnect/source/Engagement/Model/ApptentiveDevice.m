@@ -30,6 +30,11 @@ static NSString *const LocaleLanguageCodeKey = @"localeLanguageCode";
 static NSString *const UTCOffsetKey = @"UTCOffset";
 static NSString *const IntegrationConfigurationKey = @"integrationConfiguration";
 
+// Legacy keys
+static NSString *const ATDeviceLastUpdateValuePreferenceKey = @"ATDeviceLastUpdateValuePreferenceKey";
+static NSString *const ATDeviceLastUpdatePreferenceKey = @"ATDeviceLastUpdatePreferenceKey";
+static NSString *const ApptentiveCustomDeviceDataPreferenceKey = @"ApptentiveCustomDeviceDataPreferenceKey";
+
 
 @implementation ApptentiveDevice
 
@@ -92,7 +97,7 @@ static NSString *const IntegrationConfigurationKey = @"integrationConfiguration"
 }
 
 - (instancetype)initAndMigrate {
-	NSDictionary *device = [[[NSUserDefaults standardUserDefaults] dictionaryForKey:@"ATDeviceLastUpdateValuePreferenceKey"] valueForKey:@"device"];
+	NSDictionary *device = [[[NSUserDefaults standardUserDefaults] dictionaryForKey:ATDeviceLastUpdateValuePreferenceKey] valueForKey:@"device"];
 
 	self = [super initWithCustomData:device[@"custom_data"]];
 
@@ -115,9 +120,9 @@ static NSString *const IntegrationConfigurationKey = @"integrationConfiguration"
 }
 
 + (void)deleteMigratedData {
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ATDeviceLastUpdateValuePreferenceKey"];
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ATDeviceLastUpdatePreferenceKey"];
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ApptentiveCustomDeviceDataPreferenceKey"];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATDeviceLastUpdateValuePreferenceKey];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATDeviceLastUpdatePreferenceKey];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ApptentiveCustomDeviceDataPreferenceKey];
 }
 
 - (instancetype)initWithMutableDevice:(ApptentiveMutableDevice *)mutableDevice {

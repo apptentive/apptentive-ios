@@ -106,10 +106,12 @@ static NSString * const CodePointsKey = @"codePoints";
 }
 
 - (void)engageCodePoint:(NSString *)codePoint {
+	[self warmCodePoint:codePoint];
 	[self.mutableCodePoints[codePoint] invoke];
 }
 
 - (void)engageInteraction:(NSString *)interaction {
+	[self warmInteraction:interaction];
 	[self.mutableInteractions[interaction] invoke];
 }
 

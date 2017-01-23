@@ -238,6 +238,11 @@
 			predicate = [NSPredicate predicateWithBlock:^BOOL(id _Nonnull evaluatedObject, NSDictionary<NSString *, id> *_Nullable bindings) {
 				NSDictionary *complexValue = [evaluatedObject valueForKeyPath:keyPath];
 
+				// Time comparison with "never" always returns false.
+				if (complexValue == nil || [complexValue isKindOfClass:[NSNull class]]) {
+					return NO;
+				}
+
 				// $before and $after work with datetimes only.
 				if ([complexValue[@"_type"] isEqualToString:@"datetime"]) {
 					NSNumber *fieldValue = (NSNumber *)[complexValue valueForKey:@"sec"];

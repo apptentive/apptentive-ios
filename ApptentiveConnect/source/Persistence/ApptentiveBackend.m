@@ -173,17 +173,15 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 				[self.serialNetworkQueue addObserver:self forKeyPath:@"messageSendProgress" options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew context:nil];
 				[self.serialNetworkQueue addObserver:self forKeyPath:@"messageTaskCount" options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew context:nil];
 
-				[self.session checkForDiffs];
-
-				[self startMonitoringAppLifecycleMetrics];
-				[self startMonitoringUnreadMessages];
-
 				self.state = ATBackendStateReady;
 				dispatch_async(dispatch_get_main_queue(), ^{
 					[ApptentiveFileAttachment addMissingExtensions];
 				});
 
 				[self networkStatusChanged:nil];
+				[self startMonitoringAppLifecycleMetrics];
+				[self startMonitoringUnreadMessages];
+				[self.session checkForDiffs];
 
 				NSString *legacyTaskPath = [self.supportDirectoryPath stringByAppendingPathComponent:@"tasks.objects"];
 				NSError *error;

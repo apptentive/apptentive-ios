@@ -9,6 +9,7 @@
 #import "ApptentiveMutablePerson.h"
 #import "ApptentivePerson.h"
 
+
 @implementation ApptentiveMutablePerson
 
 - (instancetype)initWithPerson:(ApptentivePerson *)person {

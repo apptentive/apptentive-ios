@@ -8,6 +8,7 @@
 
 #import "ApptentiveSerialRequestAttachment.h"
 
+
 @implementation ApptentiveSerialRequestAttachment
 
 @dynamic mimeType;

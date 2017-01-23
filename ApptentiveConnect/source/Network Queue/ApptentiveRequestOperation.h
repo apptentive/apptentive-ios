@@ -8,7 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
-@protocol ApptentiveRequestOperationDelegate, ApptentiveRequestOperationDataSource;
+@protocol ApptentiveRequestOperationDelegate
+, ApptentiveRequestOperationDataSource;
 
 extern NSErrorDomain const ApptentiveHTTPErrorDomain;
 

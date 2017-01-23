@@ -8,8 +8,8 @@
 
 #import "ApptentiveNetworkQueue.h"
 
-#define APPTENTIVE_MIN_BACKOFF_DELAY	1.0
-#define APPTENTIVE_BACKOFF_MULTIPLIER	2.0
+#define APPTENTIVE_MIN_BACKOFF_DELAY 1.0
+#define APPTENTIVE_BACKOFF_MULTIPLIER 2.0
 
 
 @implementation ApptentiveNetworkQueue
@@ -52,13 +52,13 @@
 }
 
 - (void)increaseBackoffDelay {
-	@synchronized (self) {
+	@synchronized(self) {
 		_backoffDelay *= APPTENTIVE_BACKOFF_MULTIPLIER;
 	}
 }
 
 - (void)resetBackoffDelay {
-	@synchronized (self) {
+	@synchronized(self) {
 		_backoffDelay = APPTENTIVE_MIN_BACKOFF_DELAY;
 	}
 }

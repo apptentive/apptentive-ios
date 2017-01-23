@@ -8,20 +8,21 @@
 
 #import "ApptentiveAppConfiguration.h"
 
-static NSString * const SupportDisplayNameKey = @"supportDisplayName";
-static NSString * const SupportDisplayEmailKey = @"supportDisplayEmail";
-static NSString * const SupportImageURLKey = @"supportImageURL";
-static NSString * const HideBrandingKey = @"hideBranding";
-static NSString * const MessageCenterEnabledKey = @"messageCenterEnabled";
-static NSString * const MetricsEnabledKey = @"metricsEnabled";
-static NSString * const MessageCenterKey = @"messageCenter";
-static NSString * const ExpiryKey = @"expiry";
+static NSString *const SupportDisplayNameKey = @"supportDisplayName";
+static NSString *const SupportDisplayEmailKey = @"supportDisplayEmail";
+static NSString *const SupportImageURLKey = @"supportImageURL";
+static NSString *const HideBrandingKey = @"hideBranding";
+static NSString *const MessageCenterEnabledKey = @"messageCenterEnabled";
+static NSString *const MetricsEnabledKey = @"metricsEnabled";
+static NSString *const MessageCenterKey = @"messageCenter";
+static NSString *const ExpiryKey = @"expiry";
 
-static NSString * const TitleKey = @"title";
-static NSString * const ForegroundPollingIntervalKey = @"foregroundPollingInterval";
-static NSString * const BackgroundPollingIntervalKey = @"backgroundPollingInterval";
-static NSString * const EmailRequiredKey = @"emailRequired";
-static NSString * const NotificationPopupEnabledKey = @"notificationPopupEnabled";
+static NSString *const TitleKey = @"title";
+static NSString *const ForegroundPollingIntervalKey = @"foregroundPollingInterval";
+static NSString *const BackgroundPollingIntervalKey = @"backgroundPollingInterval";
+static NSString *const EmailRequiredKey = @"emailRequired";
+static NSString *const NotificationPopupEnabledKey = @"notificationPopupEnabled";
+
 
 @implementation ApptentiveAppConfiguration
 
@@ -89,8 +90,7 @@ static NSString * const NotificationPopupEnabledKey = @"notificationPopupEnabled
 	[ApptentiveMessageCenterConfiguration deleteMigratedData];
 }
 
-- (instancetype)initWithCoder:(NSCoder *)coder
-{
+- (instancetype)initWithCoder:(NSCoder *)coder {
 	self = [super init];
 
 	if (self) {
@@ -107,8 +107,7 @@ static NSString * const NotificationPopupEnabledKey = @"notificationPopupEnabled
 	return self;
 }
 
-- (void)encodeWithCoder:(NSCoder *)coder
-{
+- (void)encodeWithCoder:(NSCoder *)coder {
 	[coder encodeObject:self.supportDisplayName forKey:SupportDisplayNameKey];
 	[coder encodeObject:self.supportDisplayEmail forKey:SupportDisplayEmailKey];
 	[coder encodeObject:self.supportImageURL forKey:SupportImageURLKey];
@@ -120,6 +119,7 @@ static NSString * const NotificationPopupEnabledKey = @"notificationPopupEnabled
 }
 
 @end
+
 
 @implementation ApptentiveMessageCenterConfiguration
 
@@ -192,8 +192,7 @@ static NSString * const NotificationPopupEnabledKey = @"notificationPopupEnabled
 	return self;
 }
 
-- (void)encodeWithCoder:(NSCoder *)coder
-{
+- (void)encodeWithCoder:(NSCoder *)coder {
 	[coder encodeObject:self.title forKey:TitleKey];
 	[coder encodeDouble:self.foregroundPollingInterval forKey:ForegroundPollingIntervalKey];
 	[coder encodeDouble:self.backgroundPollingInterval forKey:BackgroundPollingIntervalKey];

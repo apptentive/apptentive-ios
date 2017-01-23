@@ -17,18 +17,19 @@
 #import <sys/utsname.h>
 #import <sys/sysctl.h>
 
-static NSString * const UUIDKey =	@"UUID";
-static NSString * const OSNameKey = @"OSName";
-static NSString * const OSVersionKey = @"OSVersion";
-static NSString * const OSBuildKey = @"OSBuild";
-static NSString * const HardwareKey = @"hardware";
-static NSString * const CarrierKey = @"carrier";
-static NSString * const ContentSizeCategoryKey = @"contentSizeCategory";
-static NSString * const LocaleRawKey = @"localeRaw";
-static NSString * const LocaleCountryCodeKey = @"localeCountryCode";
-static NSString * const LocaleLanguageCodeKey = @"localeLanguageCode";
-static NSString * const UTCOffsetKey = @"UTCOffset";
-static NSString * const IntegrationConfigurationKey = @"integrationConfiguration";
+static NSString *const UUIDKey = @"UUID";
+static NSString *const OSNameKey = @"OSName";
+static NSString *const OSVersionKey = @"OSVersion";
+static NSString *const OSBuildKey = @"OSBuild";
+static NSString *const HardwareKey = @"hardware";
+static NSString *const CarrierKey = @"carrier";
+static NSString *const ContentSizeCategoryKey = @"contentSizeCategory";
+static NSString *const LocaleRawKey = @"localeRaw";
+static NSString *const LocaleCountryCodeKey = @"localeCountryCode";
+static NSString *const LocaleLanguageCodeKey = @"localeLanguageCode";
+static NSString *const UTCOffsetKey = @"UTCOffset";
+static NSString *const IntegrationConfigurationKey = @"integrationConfiguration";
+
 
 @implementation ApptentiveDevice
 
@@ -171,6 +172,7 @@ static NSString * const IntegrationConfigurationKey = @"integrationConfiguration
 
 @end
 
+
 @implementation ApptentiveDevice (JSON)
 
 - (NSNumber *)boxedUTCOffset {
@@ -187,20 +189,20 @@ static NSString * const IntegrationConfigurationKey = @"integrationConfiguration
 
 + (NSDictionary *)JSONKeyPathMapping {
 	return @{
-			 @"custom_data": NSStringFromSelector(@selector(customData)),
-			 @"uuid": NSStringFromSelector(@selector(UUIDString)),
-			 @"os_name": NSStringFromSelector(@selector(OSName)),
-			 @"os_version": NSStringFromSelector(@selector(OSVersionString)),
-			 @"os_build": NSStringFromSelector(@selector(OSBuild)),
-			 @"hardware": NSStringFromSelector(@selector(hardware)),
-			 @"carrier": NSStringFromSelector(@selector(carrier)),
-			 @"content_size_category": NSStringFromSelector(@selector(contentSizeCategory)),
-			 @"locale_raw": NSStringFromSelector(@selector(localeRaw)),
-			 @"locale_country_code": NSStringFromSelector(@selector(localeCountryCode)),
-			 @"locale_language_code": NSStringFromSelector(@selector(localeLanguageCode)),
-			 @"utc_offset": NSStringFromSelector(@selector(boxedUTCOffset)),
-			 @"integration_config": NSStringFromSelector(@selector(integrationConfiguration))
-			 };
+		@"custom_data": NSStringFromSelector(@selector(customData)),
+		@"uuid": NSStringFromSelector(@selector(UUIDString)),
+		@"os_name": NSStringFromSelector(@selector(OSName)),
+		@"os_version": NSStringFromSelector(@selector(OSVersionString)),
+		@"os_build": NSStringFromSelector(@selector(OSBuild)),
+		@"hardware": NSStringFromSelector(@selector(hardware)),
+		@"carrier": NSStringFromSelector(@selector(carrier)),
+		@"content_size_category": NSStringFromSelector(@selector(contentSizeCategory)),
+		@"locale_raw": NSStringFromSelector(@selector(localeRaw)),
+		@"locale_country_code": NSStringFromSelector(@selector(localeCountryCode)),
+		@"locale_language_code": NSStringFromSelector(@selector(localeLanguageCode)),
+		@"utc_offset": NSStringFromSelector(@selector(boxedUTCOffset)),
+		@"integration_config": NSStringFromSelector(@selector(integrationConfiguration))
+	};
 }
 
 @end

@@ -9,16 +9,17 @@
 #import "ApptentiveMutableCustomData.h"
 #import "ApptentiveCustomData.h"
 
+
 @interface ApptentiveMutableCustomData ()
 
 @property (strong, nonatomic) NSMutableDictionary *mutableCustomData;
 
 @end
 
+
 @implementation ApptentiveMutableCustomData
 
-- (instancetype)init
-{
+- (instancetype)init {
 	self = [super init];
 	if (self) {
 		_mutableCustomData = [NSMutableDictionary dictionary];

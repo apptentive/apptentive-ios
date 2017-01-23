@@ -11,6 +11,7 @@
 
 @class ApptentiveSession;
 
+
 @interface ApptentiveInteractionUsageData : NSObject
 
 @property (readonly, strong, nonatomic) ApptentiveSession *session;

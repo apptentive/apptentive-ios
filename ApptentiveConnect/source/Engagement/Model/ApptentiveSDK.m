@@ -9,15 +9,16 @@
 #import "ApptentiveSDK.h"
 #import "ApptentiveVersion.h"
 
-static NSString * const VersionKey = @"version";
-static NSString * const ProgrammingLanguageKey = @"programmingLanguage";
-static NSString * const AuthorNameKey = @"authorName";
-static NSString * const PlatformKey = @"platform";
-static NSString * const DistributionNameKey = @"distributionName";
-static NSString * const DistributionVersionKey = @"distributionVersion";
+static NSString *const VersionKey = @"version";
+static NSString *const ProgrammingLanguageKey = @"programmingLanguage";
+static NSString *const AuthorNameKey = @"authorName";
+static NSString *const PlatformKey = @"platform";
+static NSString *const DistributionNameKey = @"distributionName";
+static NSString *const DistributionVersionKey = @"distributionVersion";
 
 static NSString *_distributionName;
 static ApptentiveVersion *_distributionVersion;
+
 
 @implementation ApptentiveSDK
 
@@ -29,8 +30,8 @@ static ApptentiveVersion *_distributionVersion;
 	_distributionName = [distributionName copy];
 }
 
-#define DO_EXPAND(VAL)  VAL##1
-#define EXPAND(VAL)     DO_EXPAND(VAL)
+#define DO_EXPAND(VAL) VAL##1
+#define EXPAND(VAL) DO_EXPAND(VAL)
 
 + (NSString *)distributionName {
 	if (_distributionName) {
@@ -40,19 +41,19 @@ static ApptentiveVersion *_distributionVersion;
 	NSString *result = @"source";
 
 #if APPTENTIVE_FRAMEWORK
-		result = @"framework";
+	result = @"framework";
 #endif
 
 #if APPTENTIVE_BINARY
-		result = @"binary";
+	result = @"binary";
 #endif
 
 #if APPTENTIVE_COCOAPODS
-		result = @"CocoaPods-Source";
+	result = @"CocoaPods-Source";
 #endif
 
 #if defined(CARTHAGE) && (EXPAND(CARTHAGE) != 1)
-		result = @"Carthage-Source";
+	result = @"Carthage-Source";
 #endif
 
 	return result;
@@ -115,7 +116,7 @@ static ApptentiveVersion *_distributionVersion;
 	self = [super init];
 
 	if (self) {
-		NSString * const ATConversationLastUpdateValuePreferenceKey = @"ATConversationLastUpdateValuePreferenceKey";
+		NSString *const ATConversationLastUpdateValuePreferenceKey = @"ATConversationLastUpdateValuePreferenceKey";
 
 		NSDictionary *lastConversationUpdate = [[NSUserDefaults standardUserDefaults] objectForKey:ATConversationLastUpdateValuePreferenceKey];
 		NSDictionary *SDK = lastConversationUpdate[@"sdk"];
@@ -125,7 +126,7 @@ static ApptentiveVersion *_distributionVersion;
 		_authorName = SDK[@"author_name"];
 		_platform = SDK[@"platform"];
 		_distributionName = SDK[@"distribution"];
-		_distributionVersion =  [[ApptentiveVersion alloc] initWithString:SDK[@"distribution_version"]];
+		_distributionVersion = [[ApptentiveVersion alloc] initWithString:SDK[@"distribution_version"]];
 	}
 
 	return self;
@@ -139,6 +140,7 @@ static ApptentiveVersion *_distributionVersion;
 
 @end
 
+
 @implementation ApptentiveSDK (JSON)
 
 - (NSString *)versionString {
@@ -151,13 +153,13 @@ static ApptentiveVersion *_distributionVersion;
 
 + (NSDictionary *)JSONKeyPathMapping {
 	return @{
-			 @"version": NSStringFromSelector(@selector(versionString)),
-			 @"programming_language": NSStringFromSelector(@selector(programmingLanguage)),
-			 @"author_name": NSStringFromSelector(@selector(authorName)),
-			 @"platform": NSStringFromSelector(@selector(platform)),
-			 @"distribution": NSStringFromSelector(@selector(distributionName)),
-			 @"distribution_version": NSStringFromSelector(@selector(distributionVersionString))
-			 };
+		@"version": NSStringFromSelector(@selector(versionString)),
+		@"programming_language": NSStringFromSelector(@selector(programmingLanguage)),
+		@"author_name": NSStringFromSelector(@selector(authorName)),
+		@"platform": NSStringFromSelector(@selector(platform)),
+		@"distribution": NSStringFromSelector(@selector(distributionName)),
+		@"distribution_version": NSStringFromSelector(@selector(distributionVersionString))
+	};
 }
 
 @end

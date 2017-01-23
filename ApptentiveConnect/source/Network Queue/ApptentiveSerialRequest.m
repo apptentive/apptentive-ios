@@ -11,6 +11,7 @@
 #import "ApptentiveRequestOperation.h"
 #import "ApptentiveSerialRequestAttachment.h"
 
+
 @implementation ApptentiveSerialRequest
 
 @dynamic apiVersion;

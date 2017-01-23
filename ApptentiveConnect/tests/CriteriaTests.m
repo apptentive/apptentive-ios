@@ -15,6 +15,7 @@
 #import "ApptentiveMutableDevice.h"
 #import "ApptentiveMutablePerson.h"
 
+
 @interface CriteriaTest ()
 
 @property (strong, nonatomic) ApptentiveSession *data;

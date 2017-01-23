@@ -11,9 +11,10 @@
 #import "ApptentiveSerialNetworkQueue.h"
 #import "ApptentiveMessageRequestOperation.h"
 
+
 @implementation ApptentiveSerialRequestOperation
 
-+ (instancetype)operationWithRequestInfo:(ApptentiveSerialRequest *)requestInfo delegate:(id<ApptentiveRequestOperationDelegate,ApptentiveRequestOperationDataSource>)delegate  {
++ (instancetype)operationWithRequestInfo:(ApptentiveSerialRequest *)requestInfo delegate:(id<ApptentiveRequestOperationDelegate, ApptentiveRequestOperationDataSource>)delegate {
 	if ([requestInfo.path isEqualToString:@"messages"]) {
 		return [[ApptentiveMessageRequestOperation alloc] initWithRequestInfo:requestInfo delegate:delegate];
 	} else {
@@ -21,7 +22,7 @@
 	}
 }
 
-- (instancetype)initWithRequestInfo:(ApptentiveSerialRequest *)requestInfo delegate:(id<ApptentiveRequestOperationDelegate,ApptentiveRequestOperationDataSource>)delegate {
+- (instancetype)initWithRequestInfo:(ApptentiveSerialRequest *)requestInfo delegate:(id<ApptentiveRequestOperationDelegate, ApptentiveRequestOperationDataSource>)delegate {
 	self = [super initWithPath:requestInfo.path method:requestInfo.method payloadData:requestInfo.payload APIVersion:requestInfo.apiVersion delegate:delegate dataSource:delegate];
 
 	if (self) {

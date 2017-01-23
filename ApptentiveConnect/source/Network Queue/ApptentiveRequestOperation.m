@@ -8,6 +8,7 @@
 
 #import "ApptentiveRequestOperation.h"
 
+
 @interface ApptentiveRequestOperation ()
 
 @property (assign, nonatomic) BOOL wasCompleted;
@@ -17,13 +18,14 @@
 
 NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 
+
 @implementation ApptentiveRequestOperation
 
 + (NSString *)APIVersion {
 	return @"7";
 }
 
-+ (NSIndexSet *) okStatusCodes {
++ (NSIndexSet *)okStatusCodes {
 	static NSIndexSet *_okStatusCodes;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
@@ -33,7 +35,7 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 	return _okStatusCodes;
 }
 
-+ (NSIndexSet *) clientErrorStatusCodes {
++ (NSIndexSet *)clientErrorStatusCodes {
 	static NSIndexSet *_clientErrorStatusCodes;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
@@ -44,7 +46,7 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 	return _clientErrorStatusCodes;
 }
 
-+ (NSIndexSet *) serverErrorStatusCodes {
++ (NSIndexSet *)serverErrorStatusCodes {
 	static NSIndexSet *_serverErrorStatusCodes;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
@@ -121,7 +123,7 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 	}
 
 	[self willChangeValueForKey:@"isExecuting"];
-	_task = [self.dataSource.URLSession dataTaskWithRequest:self.request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+	_task = [self.dataSource.URLSession dataTaskWithRequest:self.request completionHandler:^(NSData *_Nullable data, NSURLResponse *_Nullable response, NSError *_Nullable error) {
 		if (self.isCancelled) {
 			return;
 		} else if (!response) {
@@ -176,7 +178,7 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 	if ([self.delegate respondsToSelector:@selector(requestOperationDidFinish:)]) {
 		[self.delegate requestOperationDidFinish:self];
 	}
-	
+
 	[self.dataSource resetBackoffDelay];
 
 	[self completeOperation];
@@ -200,7 +202,7 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 
 	if (error == nil && HTTPErrorTitle != nil) {
 		NSDictionary *userInfo = @{
-			NSLocalizedDescriptionKey : HTTPErrorTitle,
+			NSLocalizedDescriptionKey: HTTPErrorTitle,
 			NSLocalizedFailureReasonErrorKey: HTTPErrorMessage,
 			NSURLErrorFailingURLErrorKey: self.request.URL
 		};

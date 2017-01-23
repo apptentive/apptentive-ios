@@ -9,6 +9,7 @@
 #import "ApptentiveMutablePersonState.h"
 #import "ApptentivePersonState.h"
 
+
 @implementation ApptentiveMutablePersonState
 
 - (instancetype)initWithPersonState:(ApptentivePersonState *)state {

@@ -81,7 +81,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 			_queue.suspended = YES;
 			_state = ATBackendStateWaitingForDataProtectionUnlock;
 
-			[[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationProtectedDataDidBecomeAvailable object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+			[[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationProtectedDataDidBecomeAvailable object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *_Nonnull note) {
 				self.queue.suspended = NO;
 				self.state = ATBackendStateStarting;
 			}];
@@ -228,7 +228,8 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	@try {
 		[self.serialNetworkQueue removeObserver:self forKeyPath:@"messageTaskCount"];
 		[self.serialNetworkQueue removeObserver:self forKeyPath:@"messageSendProgress"];
-	} @catch (NSException *_) {}
+	} @catch (NSException *_) {
+	}
 }
 
 - (void)updateWorking {
@@ -302,7 +303,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 		} else {
 			[self controllerDidChangeContent:self.unreadCountController];
 		}
-		
+
 		request = nil;
 	}
 }
@@ -430,7 +431,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 		ApptentiveLogError(@"%@ %@ failed with error: %@", operation.request.HTTPMethod, operation.request.URL.absoluteString, error);
 	}
 
-	ApptentiveLogInfo(@"%@ %@ will retry in %f seconds.",  operation.request.HTTPMethod, operation.request.URL.absoluteString, self.networkQueue.backoffDelay);
+	ApptentiveLogInfo(@"%@ %@ will retry in %f seconds.", operation.request.HTTPMethod, operation.request.URL.absoluteString, self.networkQueue.backoffDelay);
 }
 
 - (void)requestOperation:(ApptentiveRequestOperation *)operation didFailWithError:(NSError *)error {
@@ -482,19 +483,19 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 }
 
 - (BOOL)saveSession {
-	@synchronized (self.session) {
+	@synchronized(self.session) {
 		return [NSKeyedArchiver archiveRootObject:self.session toFile:[self sessionPath]];
 	}
 }
 
 - (BOOL)saveConfiguration {
-	@synchronized (self.configuration) {
+	@synchronized(self.configuration) {
 		return [NSKeyedArchiver archiveRootObject:self.configuration toFile:[self configurationPath]];
 	}
 }
 
 - (BOOL)saveManifest {
-	@synchronized (self.manifest) {
+	@synchronized(self.manifest) {
 		return [NSKeyedArchiver archiveRootObject:_manifest toFile:[self manifestPath]];
 	}
 }
@@ -875,7 +876,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 
 #pragma mark Message send progress
 
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey, id> *)change context:(void *)context {
 	if (object == self.serialNetworkQueue && ([keyPath isEqualToString:@"messageSendProgress"] || [keyPath isEqualToString:@"messageTaskCount"])) {
 		NSNumber *numberProgress = change[NSKeyValueChangeNewKey];
 		float progress = [numberProgress isKindOfClass:[NSNumber class]] ? numberProgress.floatValue : 0.0;

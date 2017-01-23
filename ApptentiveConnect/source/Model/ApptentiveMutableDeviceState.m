@@ -9,11 +9,13 @@
 #import "ApptentiveMutableDeviceState.h"
 #import "ApptentiveCustomDataState.h"
 
+
 @interface ApptentiveMutableDeviceState ()
 
 @property (strong, nonatomic) NSMutableDictionary *mutableCustomData;
 
 @end
+
 
 @implementation ApptentiveMutableDeviceState
 
@@ -27,8 +29,7 @@
 	return self;
 }
 
-- (instancetype)init
-{
+- (instancetype)init {
 	self = [super init];
 	if (self) {
 		_mutableCustomData = [NSMutableDictionary dictionary];

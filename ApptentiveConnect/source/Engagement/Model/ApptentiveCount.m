@@ -8,15 +8,15 @@
 
 #import "ApptentiveCount.h"
 
-static NSString * const TotalCountKey = @"totalCount";
-static NSString * const VersionCountKey = @"versionCount";
-static NSString * const BuildCountKey = @"buildCount";
-static NSString * const LastInvokedKey = @"lastInvoked";
+static NSString *const TotalCountKey = @"totalCount";
+static NSString *const VersionCountKey = @"versionCount";
+static NSString *const BuildCountKey = @"buildCount";
+static NSString *const LastInvokedKey = @"lastInvoked";
+
 
 @implementation ApptentiveCount
 
-- (instancetype)init
-{
+- (instancetype)init {
 	return [self initWithTotalCount:0 versionCount:0 buildCount:0 lastInvoked:nil];
 }
 
@@ -31,8 +31,7 @@ static NSString * const LastInvokedKey = @"lastInvoked";
 	return self;
 }
 
-- (instancetype)initWithCoder:(NSCoder *)coder
-{
+- (instancetype)initWithCoder:(NSCoder *)coder {
 	self = [super initWithCoder:coder];
 	if (self) {
 		_totalCount = [coder decodeIntegerForKey:TotalCountKey];
@@ -43,8 +42,7 @@ static NSString * const LastInvokedKey = @"lastInvoked";
 	return self;
 }
 
-- (void)encodeWithCoder:(NSCoder *)coder
-{
+- (void)encodeWithCoder:(NSCoder *)coder {
 	[super encodeWithCoder:coder];
 	[coder encodeInteger:self.totalCount forKey:TotalCountKey];
 	[coder encodeInteger:self.versionCount forKey:VersionCountKey];
@@ -53,7 +51,7 @@ static NSString * const LastInvokedKey = @"lastInvoked";
 }
 
 - (void)resetAll {
-	@synchronized (self) {
+	@synchronized(self) {
 		_totalCount = 0;
 		_versionCount = 0;
 		_buildCount = 0;
@@ -70,15 +68,16 @@ static NSString * const LastInvokedKey = @"lastInvoked";
 }
 
 - (void)invoke {
-	@synchronized (self) {
-		_versionCount ++;
-		_buildCount ++;
-		_totalCount ++;
+	@synchronized(self) {
+		_versionCount++;
+		_buildCount++;
+		_totalCount++;
 		_lastInvoked = [NSDate date]; // TODO: inject as dependency?
 	}
 }
 
 @end
+
 
 @implementation ApptentiveCount (JSON)
 
@@ -100,10 +99,10 @@ static NSString * const LastInvokedKey = @"lastInvoked";
 
 + (NSDictionary *)JSONKeyPathMapping {
 	return @{
-		 @"totalCount": NSStringFromSelector(@selector(boxedTotalCount)),
-		 @"versionCount": NSStringFromSelector(@selector(boxedVersionCount)),
-		 @"buildCount": NSStringFromSelector(@selector(boxedBuildCount)),
-		 @"lastInvoked": NSStringFromSelector(@selector(lastInvokedTimestamp))
+		@"totalCount": NSStringFromSelector(@selector(boxedTotalCount)),
+		@"versionCount": NSStringFromSelector(@selector(boxedVersionCount)),
+		@"buildCount": NSStringFromSelector(@selector(boxedBuildCount)),
+		@"lastInvoked": NSStringFromSelector(@selector(lastInvokedTimestamp))
 	};
 }
 

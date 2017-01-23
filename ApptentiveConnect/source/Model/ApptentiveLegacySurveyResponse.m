@@ -9,6 +9,7 @@
 #import "ApptentiveLegacySurveyResponse.h"
 #import "ApptentiveSerialRequest+Record.h"
 
+
 @implementation ApptentiveLegacySurveyResponse
 
 @dynamic pendingSurveyResponseID;

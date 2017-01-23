@@ -10,9 +10,10 @@
 #import "ApptentiveInteraction.h"
 #import "ApptentiveInteractionInvocation.h"
 
-static NSString * const TargetsKey = @"targets";
-static NSString * const InteractionsKey = @"interactions";
-static NSString * const ExpiryKey = @"expiry";
+static NSString *const TargetsKey = @"targets";
+static NSString *const InteractionsKey = @"interactions";
+static NSString *const ExpiryKey = @"expiry";
+
 
 @implementation ApptentiveEngagementManifest
 

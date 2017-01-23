@@ -10,6 +10,7 @@
 
 @class ApptentivePersonState;
 
+
 @interface ApptentiveMutablePersonState : ApptentiveMutableDeviceState
 
 - (instancetype)initWithPersonState:(ApptentivePersonState *)state;

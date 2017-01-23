@@ -123,7 +123,7 @@
  @param personUpdateBlock A block accepting a `ApptentiveMutablePerson`
  parameter which it modifies before returning.
  */
-- (void)updatePerson:(void(^)(ApptentiveMutablePerson *))personUpdateBlock;
+- (void)updatePerson:(void (^)(ApptentiveMutablePerson *))personUpdateBlock;
 
 
 /**
@@ -134,7 +134,7 @@
  @param deviceUpdateBlock A block accepting a `ApptentiveMutableDevice`
  parameter which it modifies before returning.
  */
-- (void)updateDevice:(void(^)(ApptentiveMutableDevice *))deviceUpdateBlock;
+- (void)updateDevice:(void (^)(ApptentiveMutableDevice *))deviceUpdateBlock;
 
 
 /**

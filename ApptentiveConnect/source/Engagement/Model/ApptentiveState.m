@@ -8,9 +8,9 @@
 
 #import "ApptentiveState.h"
 
+
 @implementation ApptentiveState
 + (BOOL)supportsSecureCoding {
-
 	return YES;
 }
 
@@ -22,6 +22,7 @@
 }
 
 @end
+
 
 @implementation ApptentiveState (JSON)
 

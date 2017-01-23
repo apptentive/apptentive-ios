@@ -9,6 +9,7 @@
 #import "ApptentiveLegacyEvent.h"
 #import "ApptentiveSerialRequest+Record.h"
 
+
 @implementation ApptentiveLegacyEvent
 
 @dynamic pendingEventID;

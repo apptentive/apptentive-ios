@@ -45,7 +45,6 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 
-
 /**
  The `Migration` category on `ApptentiveState` defines a method to migrate
  data from versions 3.4 and prior to the current data format, as well as a
@@ -70,7 +69,7 @@ NS_ASSUME_NONNULL_BEGIN
  Subclasses should implement this in such a way that data stored in older
  (<= 3.4.x) versions of the SDK is removed.
  */
-+ (void) deleteMigratedData;
++ (void)deleteMigratedData;
 
 @end
 

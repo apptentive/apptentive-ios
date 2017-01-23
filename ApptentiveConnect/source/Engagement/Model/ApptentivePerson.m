@@ -9,8 +9,9 @@
 #import "ApptentivePerson.h"
 #import "ApptentiveMutablePerson.h"
 
-static NSString * const NameKey = @"name";
-static NSString * const EmailAddressKey = @"emailAddress";
+static NSString *const NameKey = @"name";
+static NSString *const EmailAddressKey = @"emailAddress";
+
 
 @implementation ApptentivePerson
 
@@ -77,14 +78,15 @@ static NSString * const EmailAddressKey = @"emailAddress";
 
 @end
 
+
 @implementation ApptentivePerson (JSON)
 
 + (NSDictionary *)JSONKeyPathMapping {
 	return @{
-			 @"custom_data": NSStringFromSelector(@selector(customData)),
-			 @"email": NSStringFromSelector(@selector(emailAddress)),
-			 @"name": NSStringFromSelector(@selector(name))
-			 };
+		@"custom_data": NSStringFromSelector(@selector(customData)),
+		@"email": NSStringFromSelector(@selector(emailAddress)),
+		@"name": NSStringFromSelector(@selector(name))
+	};
 }
 
 @end

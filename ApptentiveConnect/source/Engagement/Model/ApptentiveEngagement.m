@@ -9,8 +9,9 @@
 #import "ApptentiveEngagement.h"
 #import "ApptentiveCount.h"
 
-static NSString * const InteractionsKey = @"interactions";
-static NSString * const CodePointsKey = @"codePoints";
+static NSString *const InteractionsKey = @"interactions";
+static NSString *const CodePointsKey = @"codePoints";
+
 
 @interface ApptentiveEngagement ()
 
@@ -19,10 +20,10 @@ static NSString * const CodePointsKey = @"codePoints";
 
 @end
 
+
 @implementation ApptentiveEngagement
 
-- (instancetype)init
-{
+- (instancetype)init {
 	self = [super init];
 	if (self) {
 		_mutableInteractions = [NSMutableDictionary dictionary];
@@ -31,8 +32,7 @@ static NSString * const CodePointsKey = @"codePoints";
 	return self;
 }
 
-- (instancetype)initWithCoder:(NSCoder *)coder
-{
+- (instancetype)initWithCoder:(NSCoder *)coder {
 	self = [super initWithCoder:coder];
 	if (self) {
 		_mutableInteractions = [coder decodeObjectOfClass:[NSMutableDictionary class] forKey:InteractionsKey];
@@ -41,8 +41,7 @@ static NSString * const CodePointsKey = @"codePoints";
 	return self;
 }
 
-- (void)encodeWithCoder:(NSCoder *)coder
-{
+- (void)encodeWithCoder:(NSCoder *)coder {
 	[super encodeWithCoder:coder];
 	[coder encodeObject:self.mutableInteractions forKey:InteractionsKey];
 	[coder encodeObject:self.mutableCodePoints forKey:CodePointsKey];
@@ -85,11 +84,11 @@ static NSString * const CodePointsKey = @"codePoints";
 	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ATEngagementInteractionsInvokesLastDateKey"];
 }
 
-- (NSDictionary<NSString *,ApptentiveCount *> *)interactions {
+- (NSDictionary<NSString *, ApptentiveCount *> *)interactions {
 	return [NSDictionary dictionaryWithDictionary:self.mutableInteractions];
 }
 
-- (NSDictionary<NSString *,ApptentiveCount *> *)codePoints {
+- (NSDictionary<NSString *, ApptentiveCount *> *)codePoints {
 	return [NSDictionary dictionaryWithDictionary:self.mutableCodePoints];
 }
 
@@ -116,7 +115,7 @@ static NSString * const CodePointsKey = @"codePoints";
 }
 
 - (void)resetVersion {
-	@synchronized (self) {
+	@synchronized(self) {
 		for (ApptentiveCount *count in self.codePoints.allValues) {
 			[count resetVersion];
 		}
@@ -139,13 +138,14 @@ static NSString * const CodePointsKey = @"codePoints";
 
 @end
 
+
 @implementation ApptentiveEngagement (JSON)
 
 + (NSDictionary *)JSONKeyPathMapping {
 	return @{
-			 @"interactions": NSStringFromSelector(@selector(interactions)),
-			 @"code_points": NSStringFromSelector(@selector(codePoints))
-			 };
+		@"interactions": NSStringFromSelector(@selector(interactions)),
+		@"code_points": NSStringFromSelector(@selector(codePoints))
+	};
 }
 
 @end

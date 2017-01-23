@@ -9,6 +9,7 @@
 #import "ApptentiveSerialRequest+Record.h"
 #import "ApptentiveMessage.h"
 
+
 @implementation ApptentiveSerialRequest (Record)
 
 + (void)enqueueRequestWithPath:(NSString *)path containerName:(NSString *)containerName noncePrefix:(NSString *)noncePrefix payload:(NSDictionary *)payload inContext:(NSManagedObjectContext *)context {

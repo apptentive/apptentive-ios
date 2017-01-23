@@ -8,7 +8,8 @@
 
 #import "ApptentiveCustomDataState.h"
 
-NSString * const CustomDataKey = @"customData";
+NSString *const CustomDataKey = @"customData";
+
 
 @implementation ApptentiveCustomDataState
 
@@ -18,7 +19,7 @@ NSString * const CustomDataKey = @"customData";
 	if (self) {
 		_customData = [[NSDictionary alloc] init];
 	}
-	
+
 	return self;
 }
 
@@ -47,6 +48,7 @@ NSString * const CustomDataKey = @"customData";
 }
 
 @end
+
 
 @implementation ApptentiveCustomDataState (JSON)
 

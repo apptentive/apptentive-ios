@@ -17,6 +17,7 @@
 #import "ApptentiveVersion.h"
 #import "ApptentiveEngagementManifest.h"
 
+
 @implementation Apptentive (Debugging)
 
 - (ApptentiveDebuggingOptions)debuggingOptions {

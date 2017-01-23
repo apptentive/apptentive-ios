@@ -77,7 +77,7 @@
 	return request;
 }
 
-- (instancetype)initWithRequestInfo:(ApptentiveSerialRequest *)requestInfo delegate:(id<ApptentiveRequestOperationDelegate,ApptentiveRequestOperationDataSource>)delegate {
+- (instancetype)initWithRequestInfo:(ApptentiveSerialRequest *)requestInfo delegate:(id<ApptentiveRequestOperationDelegate, ApptentiveRequestOperationDataSource>)delegate {
 	NSURLRequest *request = [[self class] requestForSendingRequestInfo:requestInfo baseURL:delegate.baseURL];
 
 	self = [super initWithURLRequest:request delegate:delegate dataSource:delegate];

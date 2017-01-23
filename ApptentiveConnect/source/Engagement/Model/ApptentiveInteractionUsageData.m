@@ -60,7 +60,8 @@
 }
 
 - (NSDictionary *)versionObjectWithVersion:(ApptentiveVersion *)version {
-	return @{ @"_type": @"version", @"version": version.versionString ?: @"0.0.0" };
+	return @{ @"_type": @"version",
+		@"version": version.versionString ?: @"0.0.0" };
 }
 
 - (NSDictionary *)countDictionaryForCount:(ApptentiveCount *)count withPrefix:(NSString *)prefix {

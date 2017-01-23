@@ -8,13 +8,15 @@
 
 #import "ApptentiveState.h"
 
+
 @interface ApptentiveCustomDataState : ApptentiveState
 
-@property (readonly, strong, nonatomic) NSDictionary <NSString *, NSObject<NSCoding> *> *customData;
+@property (readonly, strong, nonatomic) NSDictionary<NSString *, NSObject<NSCoding> *> *customData;
 
 - (instancetype)initWithCustomData:(NSDictionary *)customData;
 
 @end
+
 
 @interface ApptentiveCustomDataState (JSON)
 

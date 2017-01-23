@@ -10,6 +10,7 @@
 #import "ApptentiveSurveyCollectionView.h"
 #import "ApptentiveSurveyLayoutAttributes.h"
 
+
 @interface ApptentiveSurveyCollectionViewLayout ()
 
 @property (assign, nonatomic) CGFloat headerHeight;

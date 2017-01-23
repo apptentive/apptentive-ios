@@ -11,6 +11,7 @@
 #import "ApptentiveSerialRequestOperation.h"
 #import "ApptentiveMessageRequestOperation.h"
 
+
 @interface ApptentiveSerialNetworkQueue ()
 
 @property (strong, readonly, nonatomic) NSManagedObjectContext *parentManagedObjectContext;
@@ -18,6 +19,7 @@
 @property (strong, nonatomic) NSMutableDictionary *activeTaskProgress;
 
 @end
+
 
 @implementation ApptentiveSerialNetworkQueue
 
@@ -118,7 +120,7 @@
 		ApptentiveLogError(@"%@ %@ failed with error: %@", operation.request.HTTPMethod, operation.request.URL.absoluteString, error);
 	}
 
-	ApptentiveLogInfo(@"%@ %@ will retry in %f seconds.",  operation.request.HTTPMethod, operation.request.URL.absoluteString, self.backoffDelay);
+	ApptentiveLogInfo(@"%@ %@ will retry in %f seconds.", operation.request.HTTPMethod, operation.request.URL.absoluteString, self.backoffDelay);
 
 	[self removeActiveOperation:operation];
 }

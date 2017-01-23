@@ -17,6 +17,7 @@
 static NSString *ATInteractionAppEventLabelLaunch = @"launch";
 static NSString *ATInteractionAppEventLabelExit = @"exit";
 
+
 @implementation ApptentiveBackend (Metrics)
 
 - (void)addMetricWithName:(NSString *)name fromInteraction:(ApptentiveInteraction *)fromInteraction info:(NSDictionary *)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData {

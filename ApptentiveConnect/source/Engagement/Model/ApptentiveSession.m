@@ -17,22 +17,24 @@
 #import "ApptentiveMutablePerson.h"
 #import "ApptentiveMutableDevice.h"
 
-static NSString * const AppReleaseKey = @"appRelease";
-static NSString * const SDKKey = @"SDK";
-static NSString * const PersonKey = @"person";
-static NSString * const DeviceKey = @"device";
-static NSString * const EngagementKey = @"engagement";
-static NSString * const APIKeyKey = @"APIKey";
-static NSString * const TokenKey = @"token";
-static NSString * const LastMessageIDKey = @"lastMessageID";
-static NSString * const MutableUserInfoKey = @"mutableUserInfo";
-static NSString * const ArchiveVersionKey = @"archiveVersion";
+static NSString *const AppReleaseKey = @"appRelease";
+static NSString *const SDKKey = @"SDK";
+static NSString *const PersonKey = @"person";
+static NSString *const DeviceKey = @"device";
+static NSString *const EngagementKey = @"engagement";
+static NSString *const APIKeyKey = @"APIKey";
+static NSString *const TokenKey = @"token";
+static NSString *const LastMessageIDKey = @"lastMessageID";
+static NSString *const MutableUserInfoKey = @"mutableUserInfo";
+static NSString *const ArchiveVersionKey = @"archiveVersion";
+
 
 @interface ApptentiveSession ()
 
 @property (readonly, nonatomic) NSMutableDictionary *mutableUserInfo;
 
 @end
+
 
 @implementation ApptentiveSession
 
@@ -57,8 +59,7 @@ static NSString * const ArchiveVersionKey = @"archiveVersion";
 	return self;
 }
 
-- (instancetype)initWithCoder:(NSCoder *)coder
-{
+- (instancetype)initWithCoder:(NSCoder *)coder {
 	self = [super initWithCoder:coder];
 	if (self) {
 		_appRelease = [coder decodeObjectOfClass:[ApptentiveAppRelease class] forKey:AppReleaseKey];
@@ -74,8 +75,7 @@ static NSString * const ArchiveVersionKey = @"archiveVersion";
 	return self;
 }
 
-- (void)encodeWithCoder:(NSCoder *)coder
-{
+- (void)encodeWithCoder:(NSCoder *)coder {
 	[super encodeWithCoder:coder];
 	[coder encodeObject:self.appRelease forKey:AppReleaseKey];
 	[coder encodeObject:self.SDK forKey:SDKKey];
@@ -96,7 +96,7 @@ static NSString * const ArchiveVersionKey = @"archiveVersion";
 }
 
 - (void)checkForDiffs {
-	@synchronized (self) {
+	@synchronized(self) {
 		ApptentiveAppRelease *currentAppRelease = [[ApptentiveAppRelease alloc] initWithCurrentAppRelease];
 		if (self.appRelease.overridingStyles) {
 			[currentAppRelease setOverridingStyles];
@@ -104,7 +104,8 @@ static NSString * const ArchiveVersionKey = @"archiveVersion";
 
 		ApptentiveSDK *currentSDK = [[ApptentiveSDK alloc] initWithCurrentSDK];
 
-		[self updateDevice:^(ApptentiveMutableDevice *device){}];
+		[self updateDevice:^(ApptentiveMutableDevice *device){
+		}];
 
 		BOOL conversationNeedsUpdate = NO;
 
@@ -145,7 +146,7 @@ static NSString * const ArchiveVersionKey = @"archiveVersion";
 		return;
 	}
 
-	@synchronized (self) {
+	@synchronized(self) {
 		ApptentiveMutablePerson *mutablePerson = [[ApptentiveMutablePerson alloc] initWithPerson:self.person];
 
 		personUpdateBlock(mutablePerson);
@@ -167,7 +168,7 @@ static NSString * const ArchiveVersionKey = @"archiveVersion";
 		return;
 	}
 
-	@synchronized (self) {
+	@synchronized(self) {
 		ApptentiveMutableDevice *mutableDevice = [[ApptentiveMutableDevice alloc] initWithDevice:self.device];
 
 		deviceUpdateBlock(mutableDevice);
@@ -286,6 +287,7 @@ static NSString * const ArchiveVersionKey = @"archiveVersion";
 }
 
 @end
+
 
 @implementation ApptentiveLegacyConversation
 

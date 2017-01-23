@@ -9,17 +9,18 @@
 #import "ApptentiveAppRelease.h"
 #import "ApptentiveVersion.h"
 
-static NSString * const TypeKey = @"type";
-static NSString * const VersionKey = @"version";
-static NSString * const BuildKey = @"build";
-static NSString * const HasAppStoreReceiptKey = @"hasAppStoreReceipt";
-static NSString * const DebugBuildKey = @"debugBuild";
-static NSString * const OverridingStylesKey = @"overridingStyles";
-static NSString * const UpdateVersionKey = @"updateVersion";
-static NSString * const UpdateBuildKey = @"updateBuild";
-static NSString * const TimeAtInstallTotalKey = @"timeAtInstallTotal";
-static NSString * const TimeAtInstallVersionKey = @"timeAtInstallVersion";
-static NSString * const TimeAtInstallBuildKey = @"timeAtInstallBuild";
+static NSString *const TypeKey = @"type";
+static NSString *const VersionKey = @"version";
+static NSString *const BuildKey = @"build";
+static NSString *const HasAppStoreReceiptKey = @"hasAppStoreReceipt";
+static NSString *const DebugBuildKey = @"debugBuild";
+static NSString *const OverridingStylesKey = @"overridingStyles";
+static NSString *const UpdateVersionKey = @"updateVersion";
+static NSString *const UpdateBuildKey = @"updateBuild";
+static NSString *const TimeAtInstallTotalKey = @"timeAtInstallTotal";
+static NSString *const TimeAtInstallVersionKey = @"timeAtInstallVersion";
+static NSString *const TimeAtInstallBuildKey = @"timeAtInstallBuild";
+
 
 @implementation ApptentiveAppRelease
 
@@ -30,9 +31,9 @@ static NSString * const TimeAtInstallBuildKey = @"timeAtInstallBuild";
 		_updateVersion = NO;
 		_updateBuild = NO;
 
-		_timeAtInstallTotal = [NSDate date]; // TODO: Inject as dependency?
+		_timeAtInstallTotal = [NSDate date];   // TODO: Inject as dependency?
 		_timeAtInstallVersion = [NSDate date]; // TODO: Inject as dependency?
-		_timeAtInstallBuild = [NSDate date]; // TODO: Inject as dependency?
+		_timeAtInstallBuild = [NSDate date];   // TODO: Inject as dependency?
 	}
 
 	return self;
@@ -65,7 +66,7 @@ static NSString * const TimeAtInstallBuildKey = @"timeAtInstallBuild";
 		_hasAppStoreReceipt = [coder decodeBoolForKey:HasAppStoreReceiptKey];
 		_debugBuild = [coder decodeBoolForKey:DebugBuildKey];
 		_overridingStyles = [coder decodeBoolForKey:OverridingStylesKey];
-		
+
 		_updateVersion = [coder decodeBoolForKey:UpdateVersionKey];
 		_updateBuild = [coder decodeBoolForKey:UpdateBuildKey];
 
@@ -99,7 +100,7 @@ static NSString * const TimeAtInstallBuildKey = @"timeAtInstallBuild";
 	self = [super init];
 
 	if (self) {
-		NSString * const ATConversationLastUpdateValuePreferenceKey = @"ATConversationLastUpdateValuePreferenceKey";
+		NSString *const ATConversationLastUpdateValuePreferenceKey = @"ATConversationLastUpdateValuePreferenceKey";
 
 		NSDictionary *lastConversationUpdate = [[NSUserDefaults standardUserDefaults] objectForKey:ATConversationLastUpdateValuePreferenceKey];
 		NSDictionary *appRelease = lastConversationUpdate[@"app_release"];
@@ -146,6 +147,7 @@ static NSString * const TimeAtInstallBuildKey = @"timeAtInstallBuild";
 }
 
 @end
+
 
 @implementation ApptentiveAppRelease (JSON)
 

@@ -9,14 +9,16 @@
 #import "ApptentiveCustomData.h"
 #import "ApptentiveMutableCustomData.h"
 
-static NSString * const CustomDataKey = @"customData";
-static NSString * const IdentifierKey = @"identifier";
+static NSString *const CustomDataKey = @"customData";
+static NSString *const IdentifierKey = @"identifier";
+
 
 @interface ApptentiveCustomData ()
 
-@property (strong, nonatomic) NSMutableDictionary<NSString *,NSObject<NSCoding> *> *mutableCustomData;
+@property (strong, nonatomic) NSMutableDictionary<NSString *, NSObject<NSCoding> *> *mutableCustomData;
 
 @end
+
 
 @implementation ApptentiveCustomData
 
@@ -67,11 +69,12 @@ static NSString * const IdentifierKey = @"identifier";
 	[aCoder encodeObject:self.identifier forKey:IdentifierKey];
 }
 
-- (NSDictionary<NSString *,NSObject<NSCoding> *> *)customData {
+- (NSDictionary<NSString *, NSObject<NSCoding> *> *)customData {
 	return [self.mutableCustomData copy];
 }
 
 @end
+
 
 @implementation ApptentiveCustomData (JSON)
 

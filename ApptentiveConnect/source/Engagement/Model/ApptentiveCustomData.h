@@ -20,7 +20,7 @@
 /**
  The custom data dictionary.
  */
-@property (readonly, strong, nonatomic) NSDictionary <NSString *, NSObject<NSCoding> *> *customData;
+@property (readonly, strong, nonatomic) NSDictionary<NSString *, NSObject<NSCoding> *> *customData;
 
 /**
  An identifier used to identify the person or device.

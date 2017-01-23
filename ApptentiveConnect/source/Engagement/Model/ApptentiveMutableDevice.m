@@ -9,6 +9,7 @@
 #import "ApptentiveMutableDevice.h"
 #import "ApptentiveDevice.h"
 
+
 @implementation ApptentiveMutableDevice
 
 - (instancetype)initWithDevice:(ApptentiveDevice *)device {

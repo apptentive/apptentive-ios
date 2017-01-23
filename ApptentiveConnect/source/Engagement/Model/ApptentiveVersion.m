@@ -8,10 +8,11 @@
 
 #import "ApptentiveVersion.h"
 
-static NSString * const VersionStringKey = @"versionString";
-static NSString * const MajorKey = @"major";
-static NSString * const MinorKey = @"minor";
-static NSString * const PatchKey = @"patch";
+static NSString *const VersionStringKey = @"versionString";
+static NSString *const MajorKey = @"major";
+static NSString *const MinorKey = @"minor";
+static NSString *const PatchKey = @"patch";
+
 
 @implementation ApptentiveVersion
 
@@ -86,10 +87,12 @@ static NSString * const PatchKey = @"patch";
 
 @end
 
+
 @implementation ApptentiveVersion (JSON)
 
 - (NSDictionary *)JSONDictionary {
-	return @{ @"_type": @"version", @"version": self.versionString };
+	return @{ @"_type": @"version",
+		@"version": self.versionString };
 }
 
 @end

@@ -92,30 +92,30 @@
 
 - (void)testInteractionCriteria {
 	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
-	invocation.criteria = @{ @"time_at_install/total": @{ @"$before": @(-5 * 60 * 60 * 24), @"$after": @(-7 * 60 * 60 * 24) } };
+	invocation.criteria = @{ @"time_at_install/total": @{@"$before": @(-5 * 60 * 60 * 24), @"$after": @(-7 * 60 * 60 * 24)} };
 
 	ApptentiveSession *session = [[ApptentiveSession alloc] initWithAPIKey:@"foo"];
 
-	[session.appRelease setValue:[NSDate dateWithTimeIntervalSinceNow: -6 * 60 * 60 * 24] forKey:@"timeAtInstallTotal"];
-	[session.appRelease setValue:[NSDate dateWithTimeIntervalSinceNow: -6 * 60 * 60 * 24] forKey:@"timeAtInstallVersion"];
+	[session.appRelease setValue:[NSDate dateWithTimeIntervalSinceNow:-6 * 60 * 60 * 24] forKey:@"timeAtInstallTotal"];
+	[session.appRelease setValue:[NSDate dateWithTimeIntervalSinceNow:-6 * 60 * 60 * 24] forKey:@"timeAtInstallVersion"];
 	[session.appRelease setValue:@NO forKey:@"updateVersion"];
 	[session.appRelease setValue:@NO forKey:@"updateBuild"];
 
 	[session.appRelease setValue:[[ApptentiveVersion alloc] initWithString:@"1.8.9"] forKey:@"version"];
 	[session.appRelease setValue:[[ApptentiveVersion alloc] initWithString:@"39"] forKey:@"build"];
-	
+
 	XCTAssertTrue([invocation criteriaAreMetForSession:session], @"Install date");
 }
 
 - (void)testUnknownKeyInCriteria {
 	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
-	invocation.criteria = @{ @"time_at_install/total": @{ @"$before": @(6 * 60 * 60 * 24) },
-							 @"time_at_install/cf_bundle_short_version_string": @{ @"$before": @(6 * 60 * 60 * 24) } };
+	invocation.criteria = @{ @"time_at_install/total": @{@"$before": @(6 * 60 * 60 * 24)},
+		@"time_at_install/cf_bundle_short_version_string": @{@"$before": @(6 * 60 * 60 * 24)} };
 
 	ApptentiveSession *session = [[ApptentiveSession alloc] initWithAPIKey:@"foo"];
 
-	[session.appRelease setValue:[NSDate dateWithTimeIntervalSinceNow: -6 * 60 * 60 * 24] forKey:@"timeAtInstallTotal"];
-	[session.appRelease setValue:[NSDate dateWithTimeIntervalSinceNow: -6 * 60 * 60 * 24] forKey:@"timeAtInstallVersion"];
+	[session.appRelease setValue:[NSDate dateWithTimeIntervalSinceNow:-6 * 60 * 60 * 24] forKey:@"timeAtInstallTotal"];
+	[session.appRelease setValue:[NSDate dateWithTimeIntervalSinceNow:-6 * 60 * 60 * 24] forKey:@"timeAtInstallVersion"];
 	[session.appRelease setValue:@NO forKey:@"updateVersion"];
 	[session.appRelease setValue:@NO forKey:@"updateBuild"];
 
@@ -125,7 +125,7 @@
 	XCTAssertTrue([invocation criteriaAreMetForSession:session], @"All keys are known, thus the criteria is met.");
 
 	invocation.criteria = @{ @"time_since_install/total": @6,
-							 @"unknown_key": @"criteria_should_not_be_met" };
+		@"unknown_key": @"criteria_should_not_be_met" };
 	XCTAssertFalse([invocation criteriaAreMetForSession:session], @"Criteria should not be met if the criteria includes a key that the client does not recognize.");
 
 	invocation.criteria = @{ @6: @"this is weird" };
@@ -156,18 +156,18 @@
 
 	NSTimeInterval dayTimeInterval = 60 * 60 * 24;
 
-	invocation.criteria = @{ @"time_at_install/total": @{ @"$before": @(-6 * dayTimeInterval) } };
-	[session.appRelease setValue:[NSDate dateWithTimeIntervalSinceNow: -7 * dayTimeInterval] forKey:@"timeAtInstallTotal"];
+	invocation.criteria = @{ @"time_at_install/total": @{@"$before": @(-6 * dayTimeInterval)} };
+	[session.appRelease setValue:[NSDate dateWithTimeIntervalSinceNow:-7 * dayTimeInterval] forKey:@"timeAtInstallTotal"];
 	XCTAssertTrue([invocation criteriaAreMetForSession:session], @"Install date");
-	[session.appRelease setValue:[NSDate dateWithTimeIntervalSinceNow: -5 * dayTimeInterval] forKey:@"timeAtInstallTotal"];
+	[session.appRelease setValue:[NSDate dateWithTimeIntervalSinceNow:-5 * dayTimeInterval] forKey:@"timeAtInstallTotal"];
 	XCTAssertFalse([invocation criteriaAreMetForSession:session], @"Install date");
 
 	invocation.criteria = @{ @"time_at_install/total": @{@"$before": @(-5 * dayTimeInterval), @"$after": @(-7 * dayTimeInterval)} };
-	[session.appRelease setValue:[NSDate dateWithTimeIntervalSinceNow: -6 * dayTimeInterval] forKey:@"timeAtInstallTotal"];
+	[session.appRelease setValue:[NSDate dateWithTimeIntervalSinceNow:-6 * dayTimeInterval] forKey:@"timeAtInstallTotal"];
 	XCTAssertTrue([invocation criteriaAreMetForSession:session], @"Install date");
-	[session.appRelease setValue:[NSDate dateWithTimeIntervalSinceNow: -4.999 * dayTimeInterval] forKey:@"timeAtInstallTotal"];
+	[session.appRelease setValue:[NSDate dateWithTimeIntervalSinceNow:-4.999 * dayTimeInterval] forKey:@"timeAtInstallTotal"];
 	XCTAssertFalse([invocation criteriaAreMetForSession:session], @"Install date");
-	[session.appRelease setValue:[NSDate dateWithTimeIntervalSinceNow: -7 * dayTimeInterval] forKey:@"timeAtInstallTotal"];
+	[session.appRelease setValue:[NSDate dateWithTimeIntervalSinceNow:-7 * dayTimeInterval] forKey:@"timeAtInstallTotal"];
 	XCTAssertFalse([invocation criteriaAreMetForSession:session], @"Install date");
 }
 
@@ -175,7 +175,7 @@
 	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
 	ApptentiveSession *session = [[ApptentiveSession alloc] initWithAPIKey:@"foo"];
 
-	// Debug default to false
+// Debug default to false
 #if APPTENTIVE_DEBUG
 	invocation.criteria = @{ @"application/debug": @YES };
 #else
@@ -375,8 +375,8 @@
 	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] initWithSession:[[ApptentiveSession alloc] initWithAPIKey:@"foo"]];
 
 	invocation.criteria = @{ @"code_point/app.launch/invokes/cf_bundle_short_version_string": @1,
-							 @"application/cf_bundle_short_version_string": [Apptentive versionObjectWithVersion:@"1.3.0"],
-							 @"application/cf_bundle_version": [Apptentive versionObjectWithVersion:@"39"] };
+		@"application/cf_bundle_short_version_string": [Apptentive versionObjectWithVersion:@"1.3.0"],
+		@"application/cf_bundle_version": [Apptentive versionObjectWithVersion:@"39"] };
 	[usageData.session.engagement warmCodePoint:@"app.launch"];
 	[usageData.session.engagement engageCodePoint:@"app.launch"];
 
@@ -389,22 +389,22 @@
 	XCTAssertFalse([invocation criteriaAreMetForSession:usageData.session], @"Test Upgrade Message.");
 
 	invocation.criteria = @{ @"application/cf_bundle_short_version_string": [Apptentive versionObjectWithVersion:@"1.3.1"],
-							 @"code_point/app.launch/invokes/cf_bundle_short_version_string": @{@"$gte": @1} };
+		@"code_point/app.launch/invokes/cf_bundle_short_version_string": @{@"$gte": @1} };
 
 	XCTAssertTrue([invocation criteriaAreMetForSession:usageData.session], @"Test Upgrade Message.");
 	[usageData.session.engagement engageCodePoint:@"app.launch"];
 	XCTAssertTrue([invocation criteriaAreMetForSession:usageData.session], @"Test Upgrade Message.");
 
 	invocation.criteria = @{ @"application/cf_bundle_short_version_string": [Apptentive versionObjectWithVersion:@"1.3.1"],
-							 @"code_point/app.launch/invokes/cf_bundle_short_version_string": @{@"$lte": @3} };
+		@"code_point/app.launch/invokes/cf_bundle_short_version_string": @{@"$lte": @3} };
 	[usageData.session.engagement engageCodePoint:@"app.launch"];
 	XCTAssertTrue([invocation criteriaAreMetForSession:usageData.session], @"Test Upgrade Message.");
 	[usageData.session.engagement engageCodePoint:@"app.launch"];
 	XCTAssertFalse([invocation criteriaAreMetForSession:usageData.session], @"Test Upgrade Message.");
 
-		invocation.criteria = @{ @"code_point/app.launch/invokes/cf_bundle_short_version_string": @[@1],
-							 @"application_version": @"1.3.1",
-							 @"application_build": @"39" };
+	invocation.criteria = @{ @"code_point/app.launch/invokes/cf_bundle_short_version_string": @[@1],
+		@"application_version": @"1.3.1",
+		@"application_build": @"39" };
 
 	[Apptentive.shared.backend.session.engagement resetVersion];
 	XCTAssertFalse([invocation criteriaAreMetForSession:usageData.session], @"Should fail with invalid types.");

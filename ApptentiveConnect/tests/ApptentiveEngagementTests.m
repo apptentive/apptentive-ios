@@ -18,7 +18,7 @@
 #import "ApptentiveSDK.h"
 #import "ApptentiveVersion.h"
 #import "ApptentiveEngagement.h"
-#import "ApptentiveBackend.h"
+#import "ApptentiveBackend+Engagement.h"
 
 
 @interface ApptentiveEngagementTests : XCTestCase
@@ -59,35 +59,35 @@
 	NSString *i, *o;
 	i = @"testEventLabelSeparators";
 	o = @"testEventLabelSeparators";
-	XCTAssertTrue([[ApptentiveEngagementBackend stringByEscapingCodePointSeparatorCharactersInString:i] isEqualToString:o], @"Test escaping code point separator characters from event labels.");
+	XCTAssertTrue([[ApptentiveBackend stringByEscapingCodePointSeparatorCharactersInString:i] isEqualToString:o], @"Test escaping code point separator characters from event labels.");
 
 	i = @"test#Event#Label#Separators";
 	o = @"test%23Event%23Label%23Separators";
-	XCTAssertTrue([[ApptentiveEngagementBackend stringByEscapingCodePointSeparatorCharactersInString:i] isEqualToString:o], @"Test escaping code point separator characters from event labels.");
+	XCTAssertTrue([[ApptentiveBackend stringByEscapingCodePointSeparatorCharactersInString:i] isEqualToString:o], @"Test escaping code point separator characters from event labels.");
 
 	i = @"test/Event/Label/Separators";
 	o = @"test%2FEvent%2FLabel%2FSeparators";
-	XCTAssertTrue([[ApptentiveEngagementBackend stringByEscapingCodePointSeparatorCharactersInString:i] isEqualToString:o], @"Test escaping code point separator characters from event labels.");
+	XCTAssertTrue([[ApptentiveBackend stringByEscapingCodePointSeparatorCharactersInString:i] isEqualToString:o], @"Test escaping code point separator characters from event labels.");
 
 	i = @"test%Event/Label#Separators";
 	o = @"test%25Event%2FLabel%23Separators";
-	XCTAssertTrue([[ApptentiveEngagementBackend stringByEscapingCodePointSeparatorCharactersInString:i] isEqualToString:o], @"Test escaping code point separator characters from event labels.");
+	XCTAssertTrue([[ApptentiveBackend stringByEscapingCodePointSeparatorCharactersInString:i] isEqualToString:o], @"Test escaping code point separator characters from event labels.");
 
 	i = @"test#Event/Label%Separators";
 	o = @"test%23Event%2FLabel%25Separators";
-	XCTAssertTrue([[ApptentiveEngagementBackend stringByEscapingCodePointSeparatorCharactersInString:i] isEqualToString:o], @"Test escaping code point separator characters from event labels.");
+	XCTAssertTrue([[ApptentiveBackend stringByEscapingCodePointSeparatorCharactersInString:i] isEqualToString:o], @"Test escaping code point separator characters from event labels.");
 
 	i = @"test###Event///Label%%%Separators";
 	o = @"test%23%23%23Event%2F%2F%2FLabel%25%25%25Separators";
-	XCTAssertTrue([[ApptentiveEngagementBackend stringByEscapingCodePointSeparatorCharactersInString:i] isEqualToString:o], @"Test escaping code point separator characters from event labels.");
+	XCTAssertTrue([[ApptentiveBackend stringByEscapingCodePointSeparatorCharactersInString:i] isEqualToString:o], @"Test escaping code point separator characters from event labels.");
 
 	i = @"test#%///#%//%%/#Event_!@#$%^&*(){}Label1234567890[]`~Separators";
 	o = @"test%23%25%2F%2F%2F%23%25%2F%2F%25%25%2F%23Event_!@%23$%25^&*(){}Label1234567890[]`~Separators";
-	XCTAssertTrue([[ApptentiveEngagementBackend stringByEscapingCodePointSeparatorCharactersInString:i] isEqualToString:o], @"Test escaping code point separator characters from event labels.");
+	XCTAssertTrue([[ApptentiveBackend stringByEscapingCodePointSeparatorCharactersInString:i] isEqualToString:o], @"Test escaping code point separator characters from event labels.");
 
 	i = @"test%/#";
 	o = @"test%25%2F%23";
-	XCTAssertTrue([[ApptentiveEngagementBackend stringByEscapingCodePointSeparatorCharactersInString:i] isEqualToString:o], @"Test escaping code point separator characters from event labels.");
+	XCTAssertTrue([[ApptentiveBackend stringByEscapingCodePointSeparatorCharactersInString:i] isEqualToString:o], @"Test escaping code point separator characters from event labels.");
 }
 
 - (void)testInteractionCriteria {

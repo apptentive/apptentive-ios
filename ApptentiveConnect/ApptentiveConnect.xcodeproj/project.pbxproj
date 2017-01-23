@@ -310,6 +310,8 @@
 		016987661DA5C60F008C4C78 /* Apptentive.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 016986721DA57944008C4C78 /* Apptentive.framework */; };
 		016987701DA5D678008C4C78 /* Apptentive_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 4967278116B9D9CB00C679B8 /* Apptentive_Private.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		016E4A361DB9982900E45EE4 /* testV7Criteria.json in Resources */ = {isa = PBXBuildFile; fileRef = 016E4A2D1DB9659000E45EE4 /* testV7Criteria.json */; };
+		016E88B01E36520100EE369A /* ApptentiveSessionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 016E88AF1E36520100EE369A /* ApptentiveSessionTests.m */; };
+		016E88B21E36583000EE369A /* ATDataModelv6.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 016E88B11E36582A00EE369A /* ATDataModelv6.sqlite */; };
 		0171DFED1BF2D019006F8BEA /* ApptentiveCompoundReplyCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 0171DFEB1BF2D019006F8BEA /* ApptentiveCompoundReplyCell.h */; };
 		0171DFEE1BF2D019006F8BEA /* ApptentiveCompoundReplyCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0171DFEC1BF2D019006F8BEA /* ApptentiveCompoundReplyCell.m */; };
 		017D97421B0E3770004E045C /* ApptentiveMessageCenterStatusView.h in Headers */ = {isa = PBXBuildFile; fileRef = 017D97401B0E3770004E045C /* ApptentiveMessageCenterStatusView.h */; };
@@ -334,7 +336,6 @@
 		01A1A5EF1E24274600F2FCD8 /* ApptentiveLegacyEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A1A5EC1E24274600F2FCD8 /* ApptentiveLegacyEvent.h */; };
 		01A1A5F01E24274600F2FCD8 /* ApptentiveLegacyEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A1A5ED1E24274600F2FCD8 /* ApptentiveLegacyEvent.m */; };
 		01A1A5F11E24274600F2FCD8 /* ApptentiveLegacyEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A1A5ED1E24274600F2FCD8 /* ApptentiveLegacyEvent.m */; };
-		01A1A5FB1E254C9800F2FCD8 /* ATDataModelv6.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 01A1A5FA1E254C9800F2FCD8 /* ATDataModelv6.sqlite */; };
 		01A1A5FD1E25610600F2FCD8 /* testInteractions.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A1A5FC1E25610600F2FCD8 /* testInteractions.json */; };
 		01A88FF81AFBFFAE002C49E7 /* testJsonDiffing.1.expected.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A88FF31AFBFDB6002C49E7 /* testJsonDiffing.1.expected.json */; };
 		01A88FF91AFBFFAE002C49E7 /* testJsonDiffing.1.new.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A88FF41AFBFDB6002C49E7 /* testJsonDiffing.1.new.json */; };
@@ -684,6 +685,8 @@
 		016E4A2B1DB9659000E45EE4 /* testOperatorLessThan.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testOperatorLessThan.json; sourceTree = "<group>"; };
 		016E4A2C1DB9659000E45EE4 /* testOperatorLessThanOrEqual.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testOperatorLessThanOrEqual.json; sourceTree = "<group>"; };
 		016E4A2D1DB9659000E45EE4 /* testV7Criteria.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testV7Criteria.json; sourceTree = "<group>"; };
+		016E88AF1E36520100EE369A /* ApptentiveSessionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveSessionTests.m; sourceTree = "<group>"; };
+		016E88B11E36582A00EE369A /* ATDataModelv6.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = ATDataModelv6.sqlite; sourceTree = "<group>"; };
 		0171DFEB1BF2D019006F8BEA /* ApptentiveCompoundReplyCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveCompoundReplyCell.h; sourceTree = "<group>"; };
 		0171DFEC1BF2D019006F8BEA /* ApptentiveCompoundReplyCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveCompoundReplyCell.m; sourceTree = "<group>"; };
 		0171DFEF1BF2D1F1006F8BEA /* ApptentiveMessageCenterCellProtocols.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ApptentiveMessageCenterCellProtocols.h; sourceTree = "<group>"; };
@@ -713,7 +716,6 @@
 		01A1A5E71E24273B00F2FCD8 /* ApptentiveLegacySurveyResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveLegacySurveyResponse.m; sourceTree = "<group>"; };
 		01A1A5EC1E24274600F2FCD8 /* ApptentiveLegacyEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveLegacyEvent.h; sourceTree = "<group>"; };
 		01A1A5ED1E24274600F2FCD8 /* ApptentiveLegacyEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveLegacyEvent.m; sourceTree = "<group>"; };
-		01A1A5FA1E254C9800F2FCD8 /* ATDataModelv6.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; name = ATDataModelv6.sqlite; path = ../ATDataModelv6.sqlite; sourceTree = "<group>"; };
 		01A1A5FC1E25610600F2FCD8 /* testInteractions.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testInteractions.json; sourceTree = "<group>"; };
 		01A88FF31AFBFDB6002C49E7 /* testJsonDiffing.1.expected.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testJsonDiffing.1.expected.json; sourceTree = "<group>"; };
 		01A88FF41AFBFDB6002C49E7 /* testJsonDiffing.1.new.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testJsonDiffing.1.new.json; sourceTree = "<group>"; };
@@ -1547,6 +1549,7 @@
 				01F6FD911BFAA52A004513C2 /* CriteriaTests.h */,
 				01E25CE41C88B1EE005BF2D2 /* ApptentiveSurveyTests.m */,
 				014A16DC1C9C75DE00B0B199 /* ApptentiveStyleSheetTests.m */,
+				016E88AF1E36520100EE369A /* ApptentiveSessionTests.m */,
 			);
 			path = tests;
 			sourceTree = "<group>";
@@ -1591,7 +1594,7 @@
 				49E740901840498100413697 /* ATDataModelv3.sqlite */,
 				5843F81D188778B000C9D096 /* ATDataModelv4.sqlite */,
 				011B08D11C0D0E09004F4F5D /* ATDataModelv5.sqlite */,
-				01A1A5FA1E254C9800F2FCD8 /* ATDataModelv6.sqlite */,
+				016E88B11E36582A00EE369A /* ATDataModelv6.sqlite */,
 				01A1A5FC1E25610600F2FCD8 /* testInteractions.json */,
 			);
 			path = data;
@@ -2160,7 +2163,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				01A1A5FB1E254C9800F2FCD8 /* ATDataModelv6.sqlite in Resources */,
+				016E88B21E36583000EE369A /* ATDataModelv6.sqlite in Resources */,
 				5843F81E188778B000C9D096 /* ATDataModelv4.sqlite in Resources */,
 				01F6FDA71BFBF3E2004513C2 /* testOperatorExists.json in Resources */,
 				49C0028F1334137E0071F088 /* InfoPlist.strings in Resources */,
@@ -2497,6 +2500,7 @@
 			files = (
 				01AF1BF61C0F9C0D00CB4821 /* ATDataModel v3 to v4.xcmappingmodel in Sources */,
 				49C0028E1334137E0071F088 /* ApptentiveConnectTests.m in Sources */,
+				016E88B01E36520100EE369A /* ApptentiveSessionTests.m in Sources */,
 				58CD20151821B7A70071CC72 /* ATDataModel v2 to v3.xcmappingmodel in Sources */,
 				014A16DD1C9C75DE00B0B199 /* ApptentiveStyleSheetTests.m in Sources */,
 				01C7C4DE1BEAD0BE005D6EC1 /* ATDataModel.xcdatamodeld in Sources */,

@@ -663,6 +663,8 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 }
 
 - (BOOL)sendMessage:(ApptentiveMessage *)message {
+	NSAssert([NSThread isMainThread], @"-sendMessage: should only be called on main thread");
+
 	ApptentiveMessageSender *sender = [ApptentiveMessageSender findSenderWithID:self.session.person.identifier inContext:self.managedObjectContext];
 	if (sender) {
 		message.sender = sender;

@@ -25,7 +25,9 @@ static NSString *ATInteractionAppEventLabelExit = @"exit";
 		return;
 	}
 
-	[ApptentiveSerialRequest enqueueEventWithLabel:name interactionIdentifier:fromInteraction.identifier userInfo:userInfo customData:customData extendedData:extendedData inContext:Apptentive.shared.backend.managedObjectContext];
+	dispatch_async(dispatch_get_main_queue(), ^{
+		[ApptentiveSerialRequest enqueueEventWithLabel:name interactionIdentifier:fromInteraction.identifier userInfo:userInfo customData:customData extendedData:extendedData inContext:Apptentive.shared.backend.managedObjectContext];
+	});
 
 	[self processQueuedRecords];
 }

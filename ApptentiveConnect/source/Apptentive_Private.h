@@ -30,8 +30,8 @@ extern NSString *const ApptentiveCustomPersonDataPreferenceKey;
 @property (copy, nonatomic) NSDictionary *pushUserInfo;
 @property (strong, nonatomic) UIViewController *pushViewController;
 
+@property (readonly, nonatomic) id<ApptentiveStyle> style;
 @property (readonly, nonatomic) BOOL didAccessStyleSheet;
-
 
 /*!
  * Returns the NSBundle corresponding to the bundle containing Apptentive's

@@ -155,7 +155,7 @@ Before calling any other methods on the shared `Apptentive` instance, set the AP
 
 @discussion See the [Apptentive Styling Guide for iOS](https://docs.apptentive.com/ios/customization/) for information on configuring this property.
  */
-@property (strong, nonatomic) id<ApptentiveStyle> style;
+@property (strong, nonatomic) id<ApptentiveStyle> styleSheet;
 
 ///--------------------
 /// @name Presenting UI

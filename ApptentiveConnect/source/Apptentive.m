@@ -102,13 +102,13 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 	self.APIKey = apiKey;
 }
 
-- (id<ApptentiveStyle>)style {
+- (id<ApptentiveStyle>)styleSheet {
 	[self.backend.session didOverrideStyles];
 
 	return _style;
 }
 
-- (void)setStyle:(id<ApptentiveStyle>)style {
+- (void)setStyleSheet:(id<ApptentiveStyle>)style {
 	_style = style;
 
 	[self.backend.session didOverrideStyles];

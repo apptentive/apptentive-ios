@@ -53,7 +53,7 @@ NSString *const ApptentiveInteractionSurveyEventLabelCancel = @"cancel";
 }
 
 - (id<ApptentiveStyle>)styleSheet {
-	return [Apptentive sharedConnection].styleSheet;
+	return [Apptentive sharedConnection].style;
 }
 
 - (NSString *)title {

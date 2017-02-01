@@ -49,7 +49,7 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 
 @implementation Apptentive
 
-@synthesize styleSheet = _styleSheet;
+@synthesize style = _style;
 
 + (instancetype)sharedConnection {
 	static Apptentive *sharedConnection = nil;
@@ -68,7 +68,7 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 	self = [super init];
 
 	if (self) {
-		_styleSheet = [[ApptentiveStyleSheet alloc] init];
+		_style = [[ApptentiveStyleSheet alloc] init];
 
 		ApptentiveLogInfo(@"Apptentive SDK Version %@", [ApptentiveSDK SDKVersion].versionString);
 	}
@@ -105,11 +105,11 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 - (id<ApptentiveStyle>)styleSheet {
 	[self.backend.session didOverrideStyles];
 
-	return _styleSheet;
+	return _style;
 }
 
-- (void)setStyleSheet:(id<ApptentiveStyle>)styleSheet {
-	_styleSheet = styleSheet;
+- (void)setStyleSheet:(id<ApptentiveStyle>)style {
+	_style = style;
 
 	[self.backend.session didOverrideStyles];
 }

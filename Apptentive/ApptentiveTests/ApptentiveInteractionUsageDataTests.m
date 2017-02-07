@@ -62,6 +62,7 @@
 
 - (void)testSDKVersion {
 	Apptentive.shared.APIKey = @"foo";
+	sleep(1);
 	ApptentiveInteractionUsageData *usage = [[ApptentiveInteractionUsageData alloc] initWithSession:[[ApptentiveSession alloc] initWithAPIKey:@"foo"]];
 
 	NSDictionary *evaluationDictionary = [usage predicateEvaluationDictionary];

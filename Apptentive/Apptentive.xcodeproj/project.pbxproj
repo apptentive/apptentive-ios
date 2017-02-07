@@ -669,8 +669,8 @@
 		01A2D27C1E49609100C2103A /* ApptentiveDebugging.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ApptentiveDebugging.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		01A2D27E1E49609100C2103A /* ApptentiveDebugging.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ApptentiveDebugging.h; sourceTree = "<group>"; };
 		01A2D27F1E49609100C2103A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		01A2D2931E4960E100C2103A /* Apptentive+Debugging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Apptentive+Debugging.h"; path = "../../ApptentiveDebugging/Apptentive+Debugging.h"; sourceTree = "<group>"; };
-		01A2D2941E4960E100C2103A /* Apptentive+Debugging.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "Apptentive+Debugging.m"; path = "../../ApptentiveDebugging/Apptentive+Debugging.m"; sourceTree = "<group>"; };
+		01A2D2931E4960E100C2103A /* Apptentive+Debugging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Apptentive+Debugging.h"; sourceTree = "<group>"; };
+		01A2D2941E4960E100C2103A /* Apptentive+Debugging.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Apptentive+Debugging.m"; sourceTree = "<group>"; };
 		01A2D29E1E4963F700C2103A /* v2CorruptDatabase */ = {isa = PBXFileReference; lastKnownFileType = folder; path = v2CorruptDatabase; sourceTree = "<group>"; };
 		01A2D29F1E4963F700C2103A /* v2WALDatabase */ = {isa = PBXFileReference; lastKnownFileType = folder; path = v2WALDatabase; sourceTree = "<group>"; };
 		01A2D2A01E4963F700C2103A /* v3WALDatabase */ = {isa = PBXFileReference; lastKnownFileType = folder; path = v3WALDatabase; sourceTree = "<group>"; };
@@ -2171,6 +2171,7 @@
 				01A2D28F1E49609100C2103A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 

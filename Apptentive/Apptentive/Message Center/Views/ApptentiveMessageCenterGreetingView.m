@@ -1,6 +1,6 @@
 //
 //  ApptentiveMessageCenterGreetingView.m
-//  ApptentiveConnect
+//  Apptentive
 //
 //  Created by Frank Schmitt on 5/20/15.
 //  Copyright (c) 2015 Apptentive, Inc. All rights reserved.

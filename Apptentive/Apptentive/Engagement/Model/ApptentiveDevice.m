@@ -1,6 +1,6 @@
 //
 //  ApptentiveDevice.m
-//  ApptentiveConnect
+//  Apptentive
 //
 //  Created by Frank Schmitt on 11/15/16.
 //  Copyright © 2016 Apptentive, Inc. All rights reserved.

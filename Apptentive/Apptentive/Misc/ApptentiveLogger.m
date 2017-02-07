@@ -1,6 +1,6 @@
 //
 //  ApptentiveLogger.m
-//  ApptentiveConnect
+//  Apptentive
 //
 //  Created by Andrew Wooster on 3/8/13.
 //  Copyright (c) 2013 Apptentive, Inc. All rights reserved.

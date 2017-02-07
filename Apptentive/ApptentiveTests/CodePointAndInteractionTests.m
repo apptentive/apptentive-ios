@@ -1,6 +1,6 @@
 //
 //  CodePointAndInteractionTests.m
-//  ApptentiveConnect
+//  Apptentive
 //
 //  Created by Frank Schmitt on 11/20/15.
 //  Copyright © 2015 Apptentive, Inc. All rights reserved.

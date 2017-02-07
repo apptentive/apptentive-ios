@@ -1,6 +1,6 @@
 //
 //  ApptentiveSurveyQuestionFooterView.m
-//  ApptentiveConnect
+//  Apptentive
 //
 //  Created by Frank Schmitt on 6/21/16.
 //  Copyright © 2016 Apptentive, Inc. All rights reserved.

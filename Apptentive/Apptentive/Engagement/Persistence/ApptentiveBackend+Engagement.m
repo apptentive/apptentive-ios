@@ -1,6 +1,6 @@
 //
 //  ApptentiveEngagementBackend.m
-//  ApptentiveConnect
+//  Apptentive
 //
 //  Created by Peter Kamb on 8/21/13.
 //  Copyright (c) 2013 Apptentive, Inc. All rights reserved.

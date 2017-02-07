@@ -1,6 +1,6 @@
 //
 //  ApptentiveMessageCenterInteraction.h
-//  ApptentiveConnect
+//  Apptentive
 //
 //  Created by Peter Kamb on 5/22/15.
 //  Copyright (c) 2015 Apptentive, Inc. All rights reserved.

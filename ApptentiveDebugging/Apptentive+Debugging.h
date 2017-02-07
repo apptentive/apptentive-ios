@@ -1,6 +1,6 @@
 //
 //  Apptentive+Debugging.h
-//  ApptentiveConnect
+//  Apptentive
 //
 //  Created by Andrew Wooster on 4/23/14.
 //  Copyright (c) 2014 Apptentive, Inc. All rights reserved.

@@ -1,6 +1,6 @@
 //
 //  ApptentiveInteraction.h
-//  ApptentiveConnect
+//  Apptentive
 //
 //  Created by Peter Kamb on 8/23/13.
 //  Copyright (c) 2013 Apptentive, Inc. All rights reserved.

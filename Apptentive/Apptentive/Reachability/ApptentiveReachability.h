@@ -1,6 +1,6 @@
 //
 //  ApptentiveReachability.h
-//  ApptentiveConnect
+//  Apptentive
 //
 //  Created by Andrew Wooster on 4/13/11.
 //  Copyright 2011 Apptentive, Inc.. All rights reserved.

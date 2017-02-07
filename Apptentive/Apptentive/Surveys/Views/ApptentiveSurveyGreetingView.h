@@ -1,6 +1,6 @@
 //
 //  ApptentiveSurveyGreetingView.h
-//  ApptentiveConnect
+//  Apptentive
 //
 //  Created by Frank Schmitt on 3/1/16.
 //  Copyright © 2016 Apptentive, Inc. All rights reserved.

@@ -1,6 +1,6 @@
 //
 //  ApptentiveUtilitiesTests.m
-//  ApptentiveConnect
+//  Apptentive
 //
 //  Created by Andrew Wooster on 4/15/11.
 //  Copyright 2011 Apptentive, Inc.. All rights reserved.

@@ -1,6 +1,6 @@
 //
 //  ApptentiveSessionTests.m
-//  ApptentiveConnect
+//  Apptentive
 //
 //  Created by Frank Schmitt on 1/23/17.
 //  Copyright © 2017 Apptentive, Inc. All rights reserved.

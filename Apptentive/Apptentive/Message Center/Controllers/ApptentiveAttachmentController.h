@@ -1,6 +1,6 @@
 //
 //  ApptentiveAttachmentController.h
-//  ApptentiveConnect
+//  Apptentive
 //
 //  Created by Frank Schmitt on 10/9/15.
 //  Copyright © 2015 Apptentive, Inc. All rights reserved.

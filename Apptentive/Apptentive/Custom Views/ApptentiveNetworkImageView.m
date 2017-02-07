@@ -1,6 +1,6 @@
 //
 //  ApptentiveNetworkImageView.m
-//  ApptentiveConnect
+//  Apptentive
 //
 //  Created by Andrew Wooster on 4/17/13.
 //  Copyright (c) 2013 Apptentive, Inc. All rights reserved.

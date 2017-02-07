@@ -1,6 +1,6 @@
 //
 //  ApptentiveInteractionAppStoreController.m
-//  ApptentiveConnect
+//  Apptentive
 //
 //  Created by Peter Kamb on 3/26/14.
 //  Copyright (c) 2014 Apptentive, Inc. All rights reserved.

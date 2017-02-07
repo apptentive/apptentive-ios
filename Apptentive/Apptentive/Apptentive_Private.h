@@ -1,6 +1,6 @@
 //
 //  Apptentive_Private.h
-//  ApptentiveConnect
+//  Apptentive
 //
 //  Created by Andrew Wooster on 1/20/13.
 //  Copyright (c) 2013 Apptentive, Inc. All rights reserved.

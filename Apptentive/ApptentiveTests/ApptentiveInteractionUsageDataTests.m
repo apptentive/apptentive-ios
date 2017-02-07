@@ -1,6 +1,6 @@
 //
 //  ApptentiveInteractionUsageDataTests.m
-//  ApptentiveConnect
+//  Apptentive
 //
 //  Created by Andrew Wooster on 11/15/15.
 //  Copyright © 2015 Apptentive, Inc. All rights reserved.

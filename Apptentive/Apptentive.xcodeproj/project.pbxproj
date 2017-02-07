@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		01A2CF9B1E49062800C2103A /* Apptentive.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01A2CF911E49062700C2103A /* Apptentive.framework */; };
-		01A2CFA01E49062800C2103A /* ApptentiveTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2CF9F1E49062800C2103A /* ApptentiveTests.m */; };
 		01A2CFA21E49062800C2103A /* Apptentive.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2CF941E49062700C2103A /* Apptentive.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		01A2D0F81E490A9700C2103A /* Apptentive_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2CFAB1E490A9600C2103A /* Apptentive_Private.h */; };
 		01A2D0F91E490A9700C2103A /* Apptentive.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2CFAC1E490A9700C2103A /* Apptentive.m */; };
@@ -264,6 +263,65 @@
 		01A2D1FD1E490A9700C2103A /* ApptentiveSurveySingleLineCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0F51E490A9700C2103A /* ApptentiveSurveySingleLineCell.m */; };
 		01A2D1FE1E490A9700C2103A /* ApptentiveSurveySubmitButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0F61E490A9700C2103A /* ApptentiveSurveySubmitButton.h */; };
 		01A2D1FF1E490A9700C2103A /* ApptentiveSurveySubmitButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0F71E490A9700C2103A /* ApptentiveSurveySubmitButton.m */; };
+		01A2D2401E4946D600C2103A /* ApptentiveConnectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D2021E4946D500C2103A /* ApptentiveConnectTests.m */; };
+		01A2D2411E4946D600C2103A /* ApptentiveEngagementTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D2031E4946D500C2103A /* ApptentiveEngagementTests.m */; };
+		01A2D2421E4946D600C2103A /* ApptentiveInteractionInvocationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D2041E4946D500C2103A /* ApptentiveInteractionInvocationTests.m */; };
+		01A2D2431E4946D600C2103A /* ApptentiveInteractionUsageDataTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D2051E4946D500C2103A /* ApptentiveInteractionUsageDataTests.m */; };
+		01A2D2441E4946D600C2103A /* ApptentiveMetricsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D2061E4946D500C2103A /* ApptentiveMetricsTests.m */; };
+		01A2D2451E4946D600C2103A /* ApptentiveMigrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D2071E4946D500C2103A /* ApptentiveMigrationTests.m */; };
+		01A2D2461E4946D600C2103A /* ApptentiveSessionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D2081E4946D500C2103A /* ApptentiveSessionTests.m */; };
+		01A2D2471E4946D600C2103A /* ApptentiveStyleSheetTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D2091E4946D500C2103A /* ApptentiveStyleSheetTests.m */; };
+		01A2D2481E4946D600C2103A /* ApptentiveSurveyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D20A1E4946D500C2103A /* ApptentiveSurveyTests.m */; };
+		01A2D2491E4946D600C2103A /* ApptentiveUtilitiesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D20B1E4946D500C2103A /* ApptentiveUtilitiesTests.m */; };
+		01A2D24A1E4946D600C2103A /* CodePointAndInteractionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D20C1E4946D500C2103A /* CodePointAndInteractionTests.m */; };
+		01A2D24B1E4946D600C2103A /* CriteriaTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D20E1E4946D500C2103A /* CriteriaTests.m */; };
+		01A2D24C1E4946D600C2103A /* ATDataModelv1.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D2101E4946D500C2103A /* ATDataModelv1.sqlite */; };
+		01A2D24D1E4946D600C2103A /* ATDataModelv2.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D2111E4946D500C2103A /* ATDataModelv2.sqlite */; };
+		01A2D24E1E4946D600C2103A /* ATDataModelv3.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D2121E4946D500C2103A /* ATDataModelv3.sqlite */; };
+		01A2D24F1E4946D600C2103A /* ATDataModelv4.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D2131E4946D500C2103A /* ATDataModelv4.sqlite */; };
+		01A2D2501E4946D600C2103A /* ATDataModelv5.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D2141E4946D500C2103A /* ATDataModelv5.sqlite */; };
+		01A2D2511E4946D600C2103A /* ATDataModelv6.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D2151E4946D500C2103A /* ATDataModelv6.sqlite */; };
+		01A2D2521E4946D600C2103A /* testCodePointInvokesTotal.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D2171E4946D500C2103A /* testCodePointInvokesTotal.json */; };
+		01A2D2531E4946D600C2103A /* testCodePointInvokesVersion.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D2181E4946D500C2103A /* testCodePointInvokesVersion.json */; };
+		01A2D2541E4946D600C2103A /* testCodePointLastInvokedAt.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D2191E4946D500C2103A /* testCodePointLastInvokedAt.json */; };
+		01A2D2551E4946D600C2103A /* testCornerCasesThatShouldBeFalse.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D21A1E4946D500C2103A /* testCornerCasesThatShouldBeFalse.json */; };
+		01A2D2561E4946D600C2103A /* testCornerCasesThatShouldBeTrue.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D21B1E4946D600C2103A /* testCornerCasesThatShouldBeTrue.json */; };
+		01A2D2571E4946D600C2103A /* testDefaultValues.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D21C1E4946D600C2103A /* testDefaultValues.json */; };
+		01A2D2581E4946D600C2103A /* testInteractionInvokesTotal.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D21D1E4946D600C2103A /* testInteractionInvokesTotal.json */; };
+		01A2D2591E4946D600C2103A /* testOperatorAfter.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D21E1E4946D600C2103A /* testOperatorAfter.json */; };
+		01A2D25A1E4946D600C2103A /* testOperatorBefore.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D21F1E4946D600C2103A /* testOperatorBefore.json */; };
+		01A2D25B1E4946D600C2103A /* testOperatorContains.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D2201E4946D600C2103A /* testOperatorContains.json */; };
+		01A2D25C1E4946D600C2103A /* testOperatorEndsWith.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D2211E4946D600C2103A /* testOperatorEndsWith.json */; };
+		01A2D25D1E4946D600C2103A /* testOperatorExists.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D2221E4946D600C2103A /* testOperatorExists.json */; };
+		01A2D25E1E4946D600C2103A /* testOperatorGreaterThan.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D2231E4946D600C2103A /* testOperatorGreaterThan.json */; };
+		01A2D25F1E4946D600C2103A /* testOperatorGreaterThanOrEqual.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D2241E4946D600C2103A /* testOperatorGreaterThanOrEqual.json */; };
+		01A2D2601E4946D600C2103A /* testOperatorLessThan.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D2251E4946D600C2103A /* testOperatorLessThan.json */; };
+		01A2D2611E4946D600C2103A /* testOperatorLessThanOrEqual.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D2261E4946D600C2103A /* testOperatorLessThanOrEqual.json */; };
+		01A2D2621E4946D600C2103A /* testOperatorNot.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D2271E4946D600C2103A /* testOperatorNot.json */; };
+		01A2D2631E4946D600C2103A /* testOperatorStartsWith.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D2281E4946D600C2103A /* testOperatorStartsWith.json */; };
+		01A2D2641E4946D600C2103A /* testPredicateParsing.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D2291E4946D600C2103A /* testPredicateParsing.json */; };
+		01A2D2651E4946D600C2103A /* testV7Criteria.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D22A1E4946D600C2103A /* testV7Criteria.json */; };
+		01A2D2661E4946D600C2103A /* testWhitespaceTrimming.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D22B1E4946D600C2103A /* testWhitespaceTrimming.json */; };
+		01A2D2671E4946D600C2103A /* Survey.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D22C1E4946D600C2103A /* Survey.json */; };
+		01A2D2681E4946D600C2103A /* testInteractions.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D22D1E4946D600C2103A /* testInteractions.json */; };
+		01A2D2691E4946D600C2103A /* testJsonDiffing.1.expected.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D22E1E4946D600C2103A /* testJsonDiffing.1.expected.json */; };
+		01A2D26A1E4946D600C2103A /* testJsonDiffing.1.new.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D22F1E4946D600C2103A /* testJsonDiffing.1.new.json */; };
+		01A2D26B1E4946D600C2103A /* testJsonDiffing.1.old.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D2301E4946D600C2103A /* testJsonDiffing.1.old.json */; };
+		01A2D26C1E4946D600C2103A /* testJsonDiffing.2.new.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D2311E4946D600C2103A /* testJsonDiffing.2.new.json */; };
+		01A2D26D1E4946D600C2103A /* testJsonDiffing.2.old.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D2321E4946D600C2103A /* testJsonDiffing.2.old.json */; };
+		01A2D28C1E49609100C2103A /* ApptentiveDebugging.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D27E1E49609100C2103A /* ApptentiveDebugging.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		01A2D2951E4960E100C2103A /* Apptentive+Debugging.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D2931E4960E100C2103A /* Apptentive+Debugging.h */; };
+		01A2D2961E4960E100C2103A /* Apptentive+Debugging.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D2941E4960E100C2103A /* Apptentive+Debugging.m */; };
+		01A2D2971E49614A00C2103A /* Apptentive+Debugging.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D2941E4960E100C2103A /* Apptentive+Debugging.m */; };
+		01A2D2981E49638A00C2103A /* ATDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0B01E490A9700C2103A /* ATDataModel.xcdatamodeld */; };
+		01A2D2991E4963A500C2103A /* ATDataModel v1 to v2.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0AB1E490A9700C2103A /* ATDataModel v1 to v2.xcmappingmodel */; };
+		01A2D29A1E4963A500C2103A /* ATDataModel v2 to v3.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0AC1E490A9700C2103A /* ATDataModel v2 to v3.xcmappingmodel */; };
+		01A2D29B1E4963A500C2103A /* ATDataModel v3 to v4.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0AD1E490A9700C2103A /* ATDataModel v3 to v4.xcmappingmodel */; };
+		01A2D29C1E4963A500C2103A /* ATDataModel v4 to v5.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0AE1E490A9700C2103A /* ATDataModel v4 to v5.xcmappingmodel */; };
+		01A2D29D1E4963A500C2103A /* ATDataModel v5 to v6.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0AF1E490A9700C2103A /* ATDataModel v5 to v6.xcmappingmodel */; };
+		01A2D2A11E4963F700C2103A /* v2CorruptDatabase in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D29E1E4963F700C2103A /* v2CorruptDatabase */; };
+		01A2D2A21E4963F700C2103A /* v2WALDatabase in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D29F1E4963F700C2103A /* v2WALDatabase */; };
+		01A2D2A31E4963F700C2103A /* v3WALDatabase in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D2A01E4963F700C2103A /* v3WALDatabase */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -281,7 +339,6 @@
 		01A2CF941E49062700C2103A /* Apptentive.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Apptentive.h; sourceTree = "<group>"; };
 		01A2CF951E49062700C2103A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		01A2CF9A1E49062800C2103A /* ApptentiveTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ApptentiveTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		01A2CF9F1E49062800C2103A /* ApptentiveTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ApptentiveTests.m; sourceTree = "<group>"; };
 		01A2CFA11E49062800C2103A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		01A2CFAB1E490A9600C2103A /* Apptentive_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Apptentive_Private.h; sourceTree = "<group>"; };
 		01A2CFAC1E490A9700C2103A /* Apptentive.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Apptentive.m; sourceTree = "<group>"; };
@@ -561,6 +618,62 @@
 		01A2D0F51E490A9700C2103A /* ApptentiveSurveySingleLineCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveSurveySingleLineCell.m; sourceTree = "<group>"; };
 		01A2D0F61E490A9700C2103A /* ApptentiveSurveySubmitButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveSurveySubmitButton.h; sourceTree = "<group>"; };
 		01A2D0F71E490A9700C2103A /* ApptentiveSurveySubmitButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveSurveySubmitButton.m; sourceTree = "<group>"; };
+		01A2D2011E4946D500C2103A /* ApptentiveConnectTests-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ApptentiveConnectTests-Prefix.pch"; sourceTree = "<group>"; };
+		01A2D2021E4946D500C2103A /* ApptentiveConnectTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveConnectTests.m; sourceTree = "<group>"; };
+		01A2D2031E4946D500C2103A /* ApptentiveEngagementTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveEngagementTests.m; sourceTree = "<group>"; };
+		01A2D2041E4946D500C2103A /* ApptentiveInteractionInvocationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveInteractionInvocationTests.m; sourceTree = "<group>"; };
+		01A2D2051E4946D500C2103A /* ApptentiveInteractionUsageDataTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveInteractionUsageDataTests.m; sourceTree = "<group>"; };
+		01A2D2061E4946D500C2103A /* ApptentiveMetricsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveMetricsTests.m; sourceTree = "<group>"; };
+		01A2D2071E4946D500C2103A /* ApptentiveMigrationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveMigrationTests.m; sourceTree = "<group>"; };
+		01A2D2081E4946D500C2103A /* ApptentiveSessionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveSessionTests.m; sourceTree = "<group>"; };
+		01A2D2091E4946D500C2103A /* ApptentiveStyleSheetTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveStyleSheetTests.m; sourceTree = "<group>"; };
+		01A2D20A1E4946D500C2103A /* ApptentiveSurveyTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveSurveyTests.m; sourceTree = "<group>"; };
+		01A2D20B1E4946D500C2103A /* ApptentiveUtilitiesTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveUtilitiesTests.m; sourceTree = "<group>"; };
+		01A2D20C1E4946D500C2103A /* CodePointAndInteractionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CodePointAndInteractionTests.m; sourceTree = "<group>"; };
+		01A2D20D1E4946D500C2103A /* CriteriaTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CriteriaTests.h; sourceTree = "<group>"; };
+		01A2D20E1E4946D500C2103A /* CriteriaTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CriteriaTests.m; sourceTree = "<group>"; };
+		01A2D2101E4946D500C2103A /* ATDataModelv1.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = ATDataModelv1.sqlite; sourceTree = "<group>"; };
+		01A2D2111E4946D500C2103A /* ATDataModelv2.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = ATDataModelv2.sqlite; sourceTree = "<group>"; };
+		01A2D2121E4946D500C2103A /* ATDataModelv3.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = ATDataModelv3.sqlite; sourceTree = "<group>"; };
+		01A2D2131E4946D500C2103A /* ATDataModelv4.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = ATDataModelv4.sqlite; sourceTree = "<group>"; };
+		01A2D2141E4946D500C2103A /* ATDataModelv5.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = ATDataModelv5.sqlite; sourceTree = "<group>"; };
+		01A2D2151E4946D500C2103A /* ATDataModelv6.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = ATDataModelv6.sqlite; sourceTree = "<group>"; };
+		01A2D2171E4946D500C2103A /* testCodePointInvokesTotal.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testCodePointInvokesTotal.json; sourceTree = "<group>"; };
+		01A2D2181E4946D500C2103A /* testCodePointInvokesVersion.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testCodePointInvokesVersion.json; sourceTree = "<group>"; };
+		01A2D2191E4946D500C2103A /* testCodePointLastInvokedAt.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testCodePointLastInvokedAt.json; sourceTree = "<group>"; };
+		01A2D21A1E4946D500C2103A /* testCornerCasesThatShouldBeFalse.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testCornerCasesThatShouldBeFalse.json; sourceTree = "<group>"; };
+		01A2D21B1E4946D600C2103A /* testCornerCasesThatShouldBeTrue.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testCornerCasesThatShouldBeTrue.json; sourceTree = "<group>"; };
+		01A2D21C1E4946D600C2103A /* testDefaultValues.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testDefaultValues.json; sourceTree = "<group>"; };
+		01A2D21D1E4946D600C2103A /* testInteractionInvokesTotal.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testInteractionInvokesTotal.json; sourceTree = "<group>"; };
+		01A2D21E1E4946D600C2103A /* testOperatorAfter.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testOperatorAfter.json; sourceTree = "<group>"; };
+		01A2D21F1E4946D600C2103A /* testOperatorBefore.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testOperatorBefore.json; sourceTree = "<group>"; };
+		01A2D2201E4946D600C2103A /* testOperatorContains.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testOperatorContains.json; sourceTree = "<group>"; };
+		01A2D2211E4946D600C2103A /* testOperatorEndsWith.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testOperatorEndsWith.json; sourceTree = "<group>"; };
+		01A2D2221E4946D600C2103A /* testOperatorExists.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testOperatorExists.json; sourceTree = "<group>"; };
+		01A2D2231E4946D600C2103A /* testOperatorGreaterThan.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testOperatorGreaterThan.json; sourceTree = "<group>"; };
+		01A2D2241E4946D600C2103A /* testOperatorGreaterThanOrEqual.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testOperatorGreaterThanOrEqual.json; sourceTree = "<group>"; };
+		01A2D2251E4946D600C2103A /* testOperatorLessThan.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testOperatorLessThan.json; sourceTree = "<group>"; };
+		01A2D2261E4946D600C2103A /* testOperatorLessThanOrEqual.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testOperatorLessThanOrEqual.json; sourceTree = "<group>"; };
+		01A2D2271E4946D600C2103A /* testOperatorNot.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testOperatorNot.json; sourceTree = "<group>"; };
+		01A2D2281E4946D600C2103A /* testOperatorStartsWith.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testOperatorStartsWith.json; sourceTree = "<group>"; };
+		01A2D2291E4946D600C2103A /* testPredicateParsing.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testPredicateParsing.json; sourceTree = "<group>"; };
+		01A2D22A1E4946D600C2103A /* testV7Criteria.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testV7Criteria.json; sourceTree = "<group>"; };
+		01A2D22B1E4946D600C2103A /* testWhitespaceTrimming.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testWhitespaceTrimming.json; sourceTree = "<group>"; };
+		01A2D22C1E4946D600C2103A /* Survey.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Survey.json; sourceTree = "<group>"; };
+		01A2D22D1E4946D600C2103A /* testInteractions.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testInteractions.json; sourceTree = "<group>"; };
+		01A2D22E1E4946D600C2103A /* testJsonDiffing.1.expected.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testJsonDiffing.1.expected.json; sourceTree = "<group>"; };
+		01A2D22F1E4946D600C2103A /* testJsonDiffing.1.new.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testJsonDiffing.1.new.json; sourceTree = "<group>"; };
+		01A2D2301E4946D600C2103A /* testJsonDiffing.1.old.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testJsonDiffing.1.old.json; sourceTree = "<group>"; };
+		01A2D2311E4946D600C2103A /* testJsonDiffing.2.new.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testJsonDiffing.2.new.json; sourceTree = "<group>"; };
+		01A2D2321E4946D600C2103A /* testJsonDiffing.2.old.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testJsonDiffing.2.old.json; sourceTree = "<group>"; };
+		01A2D27C1E49609100C2103A /* ApptentiveDebugging.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ApptentiveDebugging.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		01A2D27E1E49609100C2103A /* ApptentiveDebugging.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ApptentiveDebugging.h; sourceTree = "<group>"; };
+		01A2D27F1E49609100C2103A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		01A2D2931E4960E100C2103A /* Apptentive+Debugging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Apptentive+Debugging.h"; path = "../../ApptentiveDebugging/Apptentive+Debugging.h"; sourceTree = "<group>"; };
+		01A2D2941E4960E100C2103A /* Apptentive+Debugging.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "Apptentive+Debugging.m"; path = "../../ApptentiveDebugging/Apptentive+Debugging.m"; sourceTree = "<group>"; };
+		01A2D29E1E4963F700C2103A /* v2CorruptDatabase */ = {isa = PBXFileReference; lastKnownFileType = folder; path = v2CorruptDatabase; sourceTree = "<group>"; };
+		01A2D29F1E4963F700C2103A /* v2WALDatabase */ = {isa = PBXFileReference; lastKnownFileType = folder; path = v2WALDatabase; sourceTree = "<group>"; };
+		01A2D2A01E4963F700C2103A /* v3WALDatabase */ = {isa = PBXFileReference; lastKnownFileType = folder; path = v3WALDatabase; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -579,6 +692,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		01A2D2781E49609100C2103A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -587,6 +707,7 @@
 			children = (
 				01A2CF931E49062700C2103A /* Apptentive */,
 				01A2CF9E1E49062800C2103A /* ApptentiveTests */,
+				01A2D27D1E49609100C2103A /* ApptentiveDebugging */,
 				01A2CF921E49062700C2103A /* Products */,
 			);
 			sourceTree = "<group>";
@@ -596,6 +717,7 @@
 			children = (
 				01A2CF911E49062700C2103A /* Apptentive.framework */,
 				01A2CF9A1E49062800C2103A /* ApptentiveTests.xctest */,
+				01A2D27C1E49609100C2103A /* ApptentiveDebugging.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -629,7 +751,21 @@
 		01A2CF9E1E49062800C2103A /* ApptentiveTests */ = {
 			isa = PBXGroup;
 			children = (
-				01A2CF9F1E49062800C2103A /* ApptentiveTests.m */,
+				01A2D2011E4946D500C2103A /* ApptentiveConnectTests-Prefix.pch */,
+				01A2D2021E4946D500C2103A /* ApptentiveConnectTests.m */,
+				01A2D2031E4946D500C2103A /* ApptentiveEngagementTests.m */,
+				01A2D2041E4946D500C2103A /* ApptentiveInteractionInvocationTests.m */,
+				01A2D2051E4946D500C2103A /* ApptentiveInteractionUsageDataTests.m */,
+				01A2D2061E4946D500C2103A /* ApptentiveMetricsTests.m */,
+				01A2D2071E4946D500C2103A /* ApptentiveMigrationTests.m */,
+				01A2D2081E4946D500C2103A /* ApptentiveSessionTests.m */,
+				01A2D2091E4946D500C2103A /* ApptentiveStyleSheetTests.m */,
+				01A2D20A1E4946D500C2103A /* ApptentiveSurveyTests.m */,
+				01A2D20B1E4946D500C2103A /* ApptentiveUtilitiesTests.m */,
+				01A2D20C1E4946D500C2103A /* CodePointAndInteractionTests.m */,
+				01A2D20D1E4946D500C2103A /* CriteriaTests.h */,
+				01A2D20E1E4946D500C2103A /* CriteriaTests.m */,
+				01A2D20F1E4946D500C2103A /* data */,
 				01A2CFA11E49062800C2103A /* Info.plist */,
 			);
 			path = ApptentiveTests;
@@ -667,20 +803,12 @@
 			children = (
 				01A2CFBD1E490A9700C2103A /* ApptentiveInteractionController.h */,
 				01A2CFBE1E490A9700C2103A /* ApptentiveInteractionController.m */,
-				01A2CFBF1E490A9700C2103A /* Messages */,
 				01A2CFC41E490A9700C2103A /* Notes */,
 				01A2CFC91E490A9700C2103A /* Rating Flow */,
 				01A2CFD21E490A9700C2103A /* Surveys */,
 				01A2CFD51E490A9700C2103A /* Upgrade Message */,
 			);
 			path = Interactions;
-			sourceTree = "<group>";
-		};
-		01A2CFBF1E490A9700C2103A /* Messages */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Messages;
 			sourceTree = "<group>";
 		};
 		01A2CFC41E490A9700C2103A /* Notes */ = {
@@ -797,7 +925,6 @@
 				01A2D02B1E490A9700C2103A /* at_info */,
 				01A2D02F1E490A9700C2103A /* at_network_error */,
 				01A2D0331E490A9700C2103A /* at_remove */,
-				01A2D0371E490A9700C2103A /* at_select_higlighted */,
 				01A2D0381E490A9700C2103A /* at_thanks */,
 				01A2D03C1E490A9700C2103A /* at_update_icon_mask */,
 				01A2D0401E490A9700C2103A /* at_update_logo */,
@@ -933,13 +1060,6 @@
 				01A2D0361E490A9700C2103A /* at_remove@3x.png */,
 			);
 			path = at_remove;
-			sourceTree = "<group>";
-		};
-		01A2D0371E490A9700C2103A /* at_select_higlighted */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = at_select_higlighted;
 			sourceTree = "<group>";
 		};
 		01A2D0381E490A9700C2103A /* at_thanks */ = {
@@ -1216,6 +1336,69 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		01A2D20F1E4946D500C2103A /* data */ = {
+			isa = PBXGroup;
+			children = (
+				01A2D2101E4946D500C2103A /* ATDataModelv1.sqlite */,
+				01A2D2111E4946D500C2103A /* ATDataModelv2.sqlite */,
+				01A2D2121E4946D500C2103A /* ATDataModelv3.sqlite */,
+				01A2D2131E4946D500C2103A /* ATDataModelv4.sqlite */,
+				01A2D2141E4946D500C2103A /* ATDataModelv5.sqlite */,
+				01A2D2151E4946D500C2103A /* ATDataModelv6.sqlite */,
+				01A2D2161E4946D500C2103A /* criteria */,
+				01A2D22C1E4946D600C2103A /* Survey.json */,
+				01A2D22D1E4946D600C2103A /* testInteractions.json */,
+				01A2D22E1E4946D600C2103A /* testJsonDiffing.1.expected.json */,
+				01A2D22F1E4946D600C2103A /* testJsonDiffing.1.new.json */,
+				01A2D2301E4946D600C2103A /* testJsonDiffing.1.old.json */,
+				01A2D2311E4946D600C2103A /* testJsonDiffing.2.new.json */,
+				01A2D2321E4946D600C2103A /* testJsonDiffing.2.old.json */,
+				01A2D29E1E4963F700C2103A /* v2CorruptDatabase */,
+				01A2D29F1E4963F700C2103A /* v2WALDatabase */,
+				01A2D2A01E4963F700C2103A /* v3WALDatabase */,
+			);
+			path = data;
+			sourceTree = "<group>";
+		};
+		01A2D2161E4946D500C2103A /* criteria */ = {
+			isa = PBXGroup;
+			children = (
+				01A2D2171E4946D500C2103A /* testCodePointInvokesTotal.json */,
+				01A2D2181E4946D500C2103A /* testCodePointInvokesVersion.json */,
+				01A2D2191E4946D500C2103A /* testCodePointLastInvokedAt.json */,
+				01A2D21A1E4946D500C2103A /* testCornerCasesThatShouldBeFalse.json */,
+				01A2D21B1E4946D600C2103A /* testCornerCasesThatShouldBeTrue.json */,
+				01A2D21C1E4946D600C2103A /* testDefaultValues.json */,
+				01A2D21D1E4946D600C2103A /* testInteractionInvokesTotal.json */,
+				01A2D21E1E4946D600C2103A /* testOperatorAfter.json */,
+				01A2D21F1E4946D600C2103A /* testOperatorBefore.json */,
+				01A2D2201E4946D600C2103A /* testOperatorContains.json */,
+				01A2D2211E4946D600C2103A /* testOperatorEndsWith.json */,
+				01A2D2221E4946D600C2103A /* testOperatorExists.json */,
+				01A2D2231E4946D600C2103A /* testOperatorGreaterThan.json */,
+				01A2D2241E4946D600C2103A /* testOperatorGreaterThanOrEqual.json */,
+				01A2D2251E4946D600C2103A /* testOperatorLessThan.json */,
+				01A2D2261E4946D600C2103A /* testOperatorLessThanOrEqual.json */,
+				01A2D2271E4946D600C2103A /* testOperatorNot.json */,
+				01A2D2281E4946D600C2103A /* testOperatorStartsWith.json */,
+				01A2D2291E4946D600C2103A /* testPredicateParsing.json */,
+				01A2D22A1E4946D600C2103A /* testV7Criteria.json */,
+				01A2D22B1E4946D600C2103A /* testWhitespaceTrimming.json */,
+			);
+			path = criteria;
+			sourceTree = "<group>";
+		};
+		01A2D27D1E49609100C2103A /* ApptentiveDebugging */ = {
+			isa = PBXGroup;
+			children = (
+				01A2D27E1E49609100C2103A /* ApptentiveDebugging.h */,
+				01A2D2931E4960E100C2103A /* Apptentive+Debugging.h */,
+				01A2D2941E4960E100C2103A /* Apptentive+Debugging.m */,
+				01A2D27F1E49609100C2103A /* Info.plist */,
+			);
+			path = ApptentiveDebugging;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -1328,6 +1511,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		01A2D2791E49609100C2103A /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				01A2D28C1E49609100C2103A /* ApptentiveDebugging.h in Headers */,
+				01A2D2951E4960E100C2103A /* Apptentive+Debugging.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
@@ -1367,6 +1559,24 @@
 			productReference = 01A2CF9A1E49062800C2103A /* ApptentiveTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		01A2D27B1E49609100C2103A /* ApptentiveDebugging */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 01A2D28D1E49609100C2103A /* Build configuration list for PBXNativeTarget "ApptentiveDebugging" */;
+			buildPhases = (
+				01A2D2771E49609100C2103A /* Sources */,
+				01A2D2781E49609100C2103A /* Frameworks */,
+				01A2D2791E49609100C2103A /* Headers */,
+				01A2D27A1E49609100C2103A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ApptentiveDebugging;
+			productName = ApptentiveDebugging;
+			productReference = 01A2D27C1E49609100C2103A /* ApptentiveDebugging.framework */;
+			productType = "com.apple.product-type.framework";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -1382,6 +1592,11 @@
 						ProvisioningStyle = Automatic;
 					};
 					01A2CF991E49062800C2103A = {
+						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = 86WML2UN43;
+						ProvisioningStyle = Automatic;
+					};
+					01A2D27B1E49609100C2103A = {
 						CreatedOnToolsVersion = 8.2.1;
 						DevelopmentTeam = 86WML2UN43;
 						ProvisioningStyle = Automatic;
@@ -1421,6 +1636,7 @@
 			targets = (
 				01A2CF901E49062700C2103A /* Apptentive */,
 				01A2CF991E49062800C2103A /* ApptentiveTests */,
+				01A2D27B1E49609100C2103A /* ApptentiveDebugging */,
 			);
 		};
 /* End PBXProject section */
@@ -1484,6 +1700,50 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		01A2CF981E49062800C2103A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				01A2D26B1E4946D600C2103A /* testJsonDiffing.1.old.json in Resources */,
+				01A2D24D1E4946D600C2103A /* ATDataModelv2.sqlite in Resources */,
+				01A2D2591E4946D600C2103A /* testOperatorAfter.json in Resources */,
+				01A2D2541E4946D600C2103A /* testCodePointLastInvokedAt.json in Resources */,
+				01A2D2691E4946D600C2103A /* testJsonDiffing.1.expected.json in Resources */,
+				01A2D24F1E4946D600C2103A /* ATDataModelv4.sqlite in Resources */,
+				01A2D2A21E4963F700C2103A /* v2WALDatabase in Resources */,
+				01A2D2A11E4963F700C2103A /* v2CorruptDatabase in Resources */,
+				01A2D2551E4946D600C2103A /* testCornerCasesThatShouldBeFalse.json in Resources */,
+				01A2D2531E4946D600C2103A /* testCodePointInvokesVersion.json in Resources */,
+				01A2D25F1E4946D600C2103A /* testOperatorGreaterThanOrEqual.json in Resources */,
+				01A2D25B1E4946D600C2103A /* testOperatorContains.json in Resources */,
+				01A2D24E1E4946D600C2103A /* ATDataModelv3.sqlite in Resources */,
+				01A2D26A1E4946D600C2103A /* testJsonDiffing.1.new.json in Resources */,
+				01A2D2621E4946D600C2103A /* testOperatorNot.json in Resources */,
+				01A2D2601E4946D600C2103A /* testOperatorLessThan.json in Resources */,
+				01A2D2581E4946D600C2103A /* testInteractionInvokesTotal.json in Resources */,
+				01A2D2511E4946D600C2103A /* ATDataModelv6.sqlite in Resources */,
+				01A2D25D1E4946D600C2103A /* testOperatorExists.json in Resources */,
+				01A2D2561E4946D600C2103A /* testCornerCasesThatShouldBeTrue.json in Resources */,
+				01A2D2661E4946D600C2103A /* testWhitespaceTrimming.json in Resources */,
+				01A2D2651E4946D600C2103A /* testV7Criteria.json in Resources */,
+				01A2D2611E4946D600C2103A /* testOperatorLessThanOrEqual.json in Resources */,
+				01A2D2571E4946D600C2103A /* testDefaultValues.json in Resources */,
+				01A2D2631E4946D600C2103A /* testOperatorStartsWith.json in Resources */,
+				01A2D25C1E4946D600C2103A /* testOperatorEndsWith.json in Resources */,
+				01A2D26C1E4946D600C2103A /* testJsonDiffing.2.new.json in Resources */,
+				01A2D24C1E4946D600C2103A /* ATDataModelv1.sqlite in Resources */,
+				01A2D2521E4946D600C2103A /* testCodePointInvokesTotal.json in Resources */,
+				01A2D2A31E4963F700C2103A /* v3WALDatabase in Resources */,
+				01A2D2681E4946D600C2103A /* testInteractions.json in Resources */,
+				01A2D25E1E4946D600C2103A /* testOperatorGreaterThan.json in Resources */,
+				01A2D25A1E4946D600C2103A /* testOperatorBefore.json in Resources */,
+				01A2D2641E4946D600C2103A /* testPredicateParsing.json in Resources */,
+				01A2D2671E4946D600C2103A /* Survey.json in Resources */,
+				01A2D26D1E4946D600C2103A /* testJsonDiffing.2.old.json in Resources */,
+				01A2D2501E4946D600C2103A /* ATDataModelv5.sqlite in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		01A2D27A1E49609100C2103A /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1607,7 +1867,33 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				01A2CFA01E49062800C2103A /* ApptentiveTests.m in Sources */,
+				01A2D2411E4946D600C2103A /* ApptentiveEngagementTests.m in Sources */,
+				01A2D2421E4946D600C2103A /* ApptentiveInteractionInvocationTests.m in Sources */,
+				01A2D29D1E4963A500C2103A /* ATDataModel v5 to v6.xcmappingmodel in Sources */,
+				01A2D24A1E4946D600C2103A /* CodePointAndInteractionTests.m in Sources */,
+				01A2D2481E4946D600C2103A /* ApptentiveSurveyTests.m in Sources */,
+				01A2D29B1E4963A500C2103A /* ATDataModel v3 to v4.xcmappingmodel in Sources */,
+				01A2D2451E4946D600C2103A /* ApptentiveMigrationTests.m in Sources */,
+				01A2D29A1E4963A500C2103A /* ATDataModel v2 to v3.xcmappingmodel in Sources */,
+				01A2D2491E4946D600C2103A /* ApptentiveUtilitiesTests.m in Sources */,
+				01A2D2471E4946D600C2103A /* ApptentiveStyleSheetTests.m in Sources */,
+				01A2D29C1E4963A500C2103A /* ATDataModel v4 to v5.xcmappingmodel in Sources */,
+				01A2D2431E4946D600C2103A /* ApptentiveInteractionUsageDataTests.m in Sources */,
+				01A2D24B1E4946D600C2103A /* CriteriaTests.m in Sources */,
+				01A2D2461E4946D600C2103A /* ApptentiveSessionTests.m in Sources */,
+				01A2D2981E49638A00C2103A /* ATDataModel.xcdatamodeld in Sources */,
+				01A2D2971E49614A00C2103A /* Apptentive+Debugging.m in Sources */,
+				01A2D2401E4946D600C2103A /* ApptentiveConnectTests.m in Sources */,
+				01A2D2991E4963A500C2103A /* ATDataModel v1 to v2.xcmappingmodel in Sources */,
+				01A2D2441E4946D600C2103A /* ApptentiveMetricsTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		01A2D2771E49609100C2103A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				01A2D2961E4960E100C2103A /* Apptentive+Debugging.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1696,6 +1982,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "-ObjC";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -1740,6 +2027,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = "-ObjC";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -1810,6 +2098,42 @@
 			};
 			name = Release;
 		};
+		01A2D28E1E49609100C2103A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 86WML2UN43;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = ApptentiveDebugging/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.apptentive.ApptentiveDebugging;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		01A2D28F1E49609100C2103A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 86WML2UN43;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = ApptentiveDebugging/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.apptentive.ApptentiveDebugging;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1839,6 +2163,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		01A2D28D1E49609100C2103A /* Build configuration list for PBXNativeTarget "ApptentiveDebugging" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				01A2D28E1E49609100C2103A /* Debug */,
+				01A2D28F1E49609100C2103A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 

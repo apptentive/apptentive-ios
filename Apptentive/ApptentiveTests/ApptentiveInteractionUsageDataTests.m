@@ -8,8 +8,6 @@
 
 #import <XCTest/XCTest.h>
 
-#import <OCMock/OCMock.h>
-
 #import "Apptentive_Private.h"
 #import "Apptentive+Debugging.h"
 #import "ApptentiveBackend+Engagement.h"

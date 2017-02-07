@@ -6,6 +6,8 @@
 //  Copyright 2011 Apptentive, Inc.. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
+
 //! Project version number for Apptentive.
 FOUNDATION_EXPORT double ApptentiveVersionNumber;
 

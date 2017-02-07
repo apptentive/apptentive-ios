@@ -68,11 +68,17 @@
 
 	[self.session checkForDiffs];
 
+#if APPTENTIVE_DEBUG
+	NSNumber *isDebug = @YES;
+#else
+	NSNumber *isDebug = @NO;
+#endif
+
 	XCTAssertNotNil(self.conversationPayload);
 	NSDictionary *appRelease = self.conversationPayload[@"app_release"];
 	XCTAssertNotNil(appRelease);
 	XCTAssertEqualObjects(appRelease[@"app_store_receipt"][@"has_receipt"], @NO);
-	XCTAssertEqualObjects(appRelease[@"debug"], @YES);
+	XCTAssertEqualObjects(appRelease[@"debug"], isDebug);
 	XCTAssertEqualObjects(appRelease[@"overriding_styles"], @NO);
 	XCTAssertEqualObjects(appRelease[@"type"], @"ios");
 
@@ -89,7 +95,12 @@
 - (void)testAppRelease {
 	XCTAssertEqualObjects(self.session.appRelease.type, @"ios");
 	XCTAssertFalse(self.session.appRelease.hasAppStoreReceipt);
+#if APPTENTIVE_DEBUG
 	XCTAssertTrue(self.session.appRelease.debugBuild);
+#else
+	XCTAssertFalse(self.session.appRelease.debugBuild);
+#endif
+
 	XCTAssertFalse(self.session.appRelease.isUpdateBuild);
 	XCTAssertFalse(self.session.appRelease.isUpdateVersion);
 	XCTAssertFalse(self.session.appRelease.isOverridingStyles);

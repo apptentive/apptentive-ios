@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		012285481E4A81AD00DD2F58 /* Apptentive_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2CFAB1E490A9600C2103A /* Apptentive_Private.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		012285491E4A831500DD2F58 /* Apptentive.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01A2CF911E49062700C2103A /* Apptentive.framework */; };
 		01A2CF9B1E49062800C2103A /* Apptentive.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01A2CF911E49062700C2103A /* Apptentive.framework */; };
 		01A2CFA21E49062800C2103A /* Apptentive.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2CF941E49062700C2103A /* Apptentive.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		01A2D0F81E490A9700C2103A /* Apptentive_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2CFAB1E490A9600C2103A /* Apptentive_Private.h */; };
@@ -310,7 +312,7 @@
 		01A2D26C1E4946D600C2103A /* testJsonDiffing.2.new.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D2311E4946D600C2103A /* testJsonDiffing.2.new.json */; };
 		01A2D26D1E4946D600C2103A /* testJsonDiffing.2.old.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D2321E4946D600C2103A /* testJsonDiffing.2.old.json */; };
 		01A2D28C1E49609100C2103A /* ApptentiveDebugging.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D27E1E49609100C2103A /* ApptentiveDebugging.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		01A2D2951E4960E100C2103A /* Apptentive+Debugging.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D2931E4960E100C2103A /* Apptentive+Debugging.h */; };
+		01A2D2951E4960E100C2103A /* Apptentive+Debugging.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D2931E4960E100C2103A /* Apptentive+Debugging.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		01A2D2961E4960E100C2103A /* Apptentive+Debugging.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D2941E4960E100C2103A /* Apptentive+Debugging.m */; };
 		01A2D2971E49614A00C2103A /* Apptentive+Debugging.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D2941E4960E100C2103A /* Apptentive+Debugging.m */; };
 		01A2D2981E49638A00C2103A /* ATDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0B01E490A9700C2103A /* ATDataModel.xcdatamodeld */; };
@@ -325,6 +327,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		012285461E4A814300DD2F58 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 01A2CF881E49062700C2103A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 01A2CF901E49062700C2103A;
+			remoteInfo = Apptentive;
+		};
 		01A2CF9C1E49062800C2103A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 01A2CF881E49062700C2103A /* Project object */;
@@ -696,6 +705,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				012285491E4A831500DD2F58 /* Apptentive.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1516,6 +1526,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				01A2D28C1E49609100C2103A /* ApptentiveDebugging.h in Headers */,
+				012285481E4A81AD00DD2F58 /* Apptentive_Private.h in Headers */,
 				01A2D2951E4960E100C2103A /* Apptentive+Debugging.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1571,6 +1582,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				012285471E4A814300DD2F58 /* PBXTargetDependency */,
 			);
 			name = ApptentiveDebugging;
 			productName = ApptentiveDebugging;
@@ -1900,6 +1912,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		012285471E4A814300DD2F58 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 01A2CF901E49062700C2103A /* Apptentive */;
+			targetProxy = 012285461E4A814300DD2F58 /* PBXContainerItemProxy */;
+		};
 		01A2CF9D1E49062800C2103A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 01A2CF901E49062700C2103A /* Apptentive */;

@@ -6,6 +6,7 @@
 //  Copyright © 2016 Apptentive, Inc. All rights reserved.
 //
 
+#import "Apptentive.h"
 #import "ApptentiveSDK.h"
 #import "ApptentiveVersion.h"
 
@@ -28,7 +29,7 @@ static ApptentiveVersion *_distributionVersion;
 @implementation ApptentiveSDK
 
 + (ApptentiveVersion *)SDKVersion {
-	return [[ApptentiveVersion alloc] initWithString:@"3.5.0"];
+	return [[ApptentiveVersion alloc] initWithString:kApptentiveVersionString];
 }
 
 + (void)setDistributionName:(NSString *)distributionName {

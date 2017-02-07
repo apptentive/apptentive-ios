@@ -14,6 +14,7 @@ FOUNDATION_EXPORT double ApptentiveVersionNumber;
 //! Project version string for Apptentive.
 FOUNDATION_EXPORT const unsigned char ApptentiveVersionString[];
 
+#define kApptentiveVersionString @"3.5.0"
 #define kApptentivePlatformString @"iOS"
 
 #ifdef __swift_compiler_version_at_least

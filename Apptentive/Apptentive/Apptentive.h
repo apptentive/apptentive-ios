@@ -6,16 +6,13 @@
 //  Copyright 2011 Apptentive, Inc.. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 //! Project version number for Apptentive.
 FOUNDATION_EXPORT double ApptentiveVersionNumber;
 
 //! Project version string for Apptentive.
 FOUNDATION_EXPORT const unsigned char ApptentiveVersionString[];
-
-
-#import <UIKit/UIKit.h>
 
 #define kApptentivePlatformString @"iOS"
 

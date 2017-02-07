@@ -110,11 +110,11 @@
 }
 
 - (NSDictionary *)customPersonData {
-	return self.backend.session.person.customData;
+	return self.backend.session.person.customData ?: @{};
 }
 
 - (NSDictionary *)customDeviceData {
-	return self.backend.session.device.customData;
+	return self.backend.session.device.customData ?: @{};
 }
 
 @end

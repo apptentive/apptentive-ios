@@ -6,6 +6,12 @@
 //  Copyright 2011 Apptentive, Inc.. All rights reserved.
 //
 
+//! Project version number for Apptentive.
+FOUNDATION_EXPORT double ApptentiveVersionNumber;
+
+//! Project version string for Apptentive.
+FOUNDATION_EXPORT const unsigned char ApptentiveVersionString[];
+
 
 #import <UIKit/UIKit.h>
 

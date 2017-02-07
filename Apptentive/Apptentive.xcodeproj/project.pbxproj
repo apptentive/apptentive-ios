@@ -1,0 +1,1864 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		01A2CF9B1E49062800C2103A /* Apptentive.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01A2CF911E49062700C2103A /* Apptentive.framework */; };
+		01A2CFA01E49062800C2103A /* ApptentiveTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2CF9F1E49062800C2103A /* ApptentiveTests.m */; };
+		01A2CFA21E49062800C2103A /* Apptentive.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2CF941E49062700C2103A /* Apptentive.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		01A2D0F81E490A9700C2103A /* Apptentive_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2CFAB1E490A9600C2103A /* Apptentive_Private.h */; };
+		01A2D0F91E490A9700C2103A /* Apptentive.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2CFAC1E490A9700C2103A /* Apptentive.m */; };
+		01A2D0FA1E490A9700C2103A /* Apptentive.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 01A2CFAD1E490A9700C2103A /* Apptentive.storyboard */; };
+		01A2D0FB1E490A9700C2103A /* ApptentiveStyleSheet.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2CFAE1E490A9700C2103A /* ApptentiveStyleSheet.h */; };
+		01A2D0FC1E490A9700C2103A /* ApptentiveStyleSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2CFAF1E490A9700C2103A /* ApptentiveStyleSheet.m */; };
+		01A2D0FD1E490A9700C2103A /* ApptentiveHUDViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2CFB11E490A9700C2103A /* ApptentiveHUDViewController.h */; };
+		01A2D0FE1E490A9700C2103A /* ApptentiveHUDViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2CFB21E490A9700C2103A /* ApptentiveHUDViewController.m */; };
+		01A2D0FF1E490A9700C2103A /* ApptentiveNetworkImageIconView.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2CFB31E490A9700C2103A /* ApptentiveNetworkImageIconView.h */; };
+		01A2D1001E490A9700C2103A /* ApptentiveNetworkImageIconView.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2CFB41E490A9700C2103A /* ApptentiveNetworkImageIconView.m */; };
+		01A2D1011E490A9700C2103A /* ApptentiveNetworkImageView.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2CFB51E490A9700C2103A /* ApptentiveNetworkImageView.h */; };
+		01A2D1021E490A9700C2103A /* ApptentiveNetworkImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2CFB61E490A9700C2103A /* ApptentiveNetworkImageView.m */; };
+		01A2D1031E490A9700C2103A /* ApptentivePassThroughWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2CFB71E490A9700C2103A /* ApptentivePassThroughWindow.h */; };
+		01A2D1041E490A9700C2103A /* ApptentivePassThroughWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2CFB81E490A9700C2103A /* ApptentivePassThroughWindow.m */; };
+		01A2D1051E490A9700C2103A /* ApptentiveUnreadMessagesBadgeView.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2CFB91E490A9700C2103A /* ApptentiveUnreadMessagesBadgeView.h */; };
+		01A2D1061E490A9700C2103A /* ApptentiveUnreadMessagesBadgeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2CFBA1E490A9700C2103A /* ApptentiveUnreadMessagesBadgeView.m */; };
+		01A2D1071E490A9700C2103A /* ApptentiveInteractionController.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2CFBD1E490A9700C2103A /* ApptentiveInteractionController.h */; };
+		01A2D1081E490A9700C2103A /* ApptentiveInteractionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2CFBE1E490A9700C2103A /* ApptentiveInteractionController.m */; };
+		01A2D10D1E490A9700C2103A /* ApptentiveInteractionNavigateToLink.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2CFC51E490A9700C2103A /* ApptentiveInteractionNavigateToLink.h */; };
+		01A2D10E1E490A9700C2103A /* ApptentiveInteractionNavigateToLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2CFC61E490A9700C2103A /* ApptentiveInteractionNavigateToLink.m */; };
+		01A2D10F1E490A9700C2103A /* ApptentiveInteractionTextModalController.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2CFC71E490A9700C2103A /* ApptentiveInteractionTextModalController.h */; };
+		01A2D1101E490A9700C2103A /* ApptentiveInteractionTextModalController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2CFC81E490A9700C2103A /* ApptentiveInteractionTextModalController.m */; };
+		01A2D1111E490A9700C2103A /* ApptentiveInteractionAppStoreController.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2CFCA1E490A9700C2103A /* ApptentiveInteractionAppStoreController.h */; };
+		01A2D1121E490A9700C2103A /* ApptentiveInteractionAppStoreController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2CFCB1E490A9700C2103A /* ApptentiveInteractionAppStoreController.m */; };
+		01A2D1131E490A9700C2103A /* ApptentiveInteractionEnjoymentDialogController.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2CFCC1E490A9700C2103A /* ApptentiveInteractionEnjoymentDialogController.h */; };
+		01A2D1141E490A9700C2103A /* ApptentiveInteractionEnjoymentDialogController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2CFCD1E490A9700C2103A /* ApptentiveInteractionEnjoymentDialogController.m */; };
+		01A2D1151E490A9700C2103A /* ApptentiveInteractionMessageCenterController.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2CFCE1E490A9700C2103A /* ApptentiveInteractionMessageCenterController.h */; };
+		01A2D1161E490A9700C2103A /* ApptentiveInteractionMessageCenterController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2CFCF1E490A9700C2103A /* ApptentiveInteractionMessageCenterController.m */; };
+		01A2D1171E490A9700C2103A /* ApptentiveInteractionRatingDialogController.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2CFD01E490A9700C2103A /* ApptentiveInteractionRatingDialogController.h */; };
+		01A2D1181E490A9700C2103A /* ApptentiveInteractionRatingDialogController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2CFD11E490A9700C2103A /* ApptentiveInteractionRatingDialogController.m */; };
+		01A2D1191E490A9700C2103A /* ApptentiveInteractionSurveyController.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2CFD31E490A9700C2103A /* ApptentiveInteractionSurveyController.h */; };
+		01A2D11A1E490A9700C2103A /* ApptentiveInteractionSurveyController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2CFD41E490A9700C2103A /* ApptentiveInteractionSurveyController.m */; };
+		01A2D11B1E490A9700C2103A /* ApptentiveInteractionUpgradeMessageController.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2CFD61E490A9700C2103A /* ApptentiveInteractionUpgradeMessageController.h */; };
+		01A2D11C1E490A9700C2103A /* ApptentiveInteractionUpgradeMessageController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2CFD71E490A9700C2103A /* ApptentiveInteractionUpgradeMessageController.m */; };
+		01A2D11D1E490A9700C2103A /* ApptentiveInteractionUpgradeMessageViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2CFD81E490A9700C2103A /* ApptentiveInteractionUpgradeMessageViewController.h */; };
+		01A2D11E1E490A9700C2103A /* ApptentiveInteractionUpgradeMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2CFD91E490A9700C2103A /* ApptentiveInteractionUpgradeMessageViewController.m */; };
+		01A2D11F1E490A9700C2103A /* ApptentiveAppRelease.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2CFDB1E490A9700C2103A /* ApptentiveAppRelease.h */; };
+		01A2D1201E490A9700C2103A /* ApptentiveAppRelease.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2CFDC1E490A9700C2103A /* ApptentiveAppRelease.m */; };
+		01A2D1211E490A9700C2103A /* ApptentiveCount.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2CFDD1E490A9700C2103A /* ApptentiveCount.h */; };
+		01A2D1221E490A9700C2103A /* ApptentiveCount.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2CFDE1E490A9700C2103A /* ApptentiveCount.m */; };
+		01A2D1231E490A9700C2103A /* ApptentiveCustomData.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2CFDF1E490A9700C2103A /* ApptentiveCustomData.h */; };
+		01A2D1241E490A9700C2103A /* ApptentiveCustomData.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2CFE01E490A9700C2103A /* ApptentiveCustomData.m */; };
+		01A2D1251E490A9700C2103A /* ApptentiveDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2CFE11E490A9700C2103A /* ApptentiveDevice.h */; };
+		01A2D1261E490A9700C2103A /* ApptentiveDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2CFE21E490A9700C2103A /* ApptentiveDevice.m */; };
+		01A2D1271E490A9700C2103A /* ApptentiveEngagement.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2CFE31E490A9700C2103A /* ApptentiveEngagement.h */; };
+		01A2D1281E490A9700C2103A /* ApptentiveEngagement.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2CFE41E490A9700C2103A /* ApptentiveEngagement.m */; };
+		01A2D1291E490A9700C2103A /* ApptentiveEngagementManifest.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2CFE51E490A9700C2103A /* ApptentiveEngagementManifest.h */; };
+		01A2D12A1E490A9700C2103A /* ApptentiveEngagementManifest.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2CFE61E490A9700C2103A /* ApptentiveEngagementManifest.m */; };
+		01A2D12B1E490A9700C2103A /* ApptentiveInteraction.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2CFE71E490A9700C2103A /* ApptentiveInteraction.h */; };
+		01A2D12C1E490A9700C2103A /* ApptentiveInteraction.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2CFE81E490A9700C2103A /* ApptentiveInteraction.m */; };
+		01A2D12D1E490A9700C2103A /* ApptentiveInteractionInvocation.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2CFE91E490A9700C2103A /* ApptentiveInteractionInvocation.h */; };
+		01A2D12E1E490A9700C2103A /* ApptentiveInteractionInvocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2CFEA1E490A9700C2103A /* ApptentiveInteractionInvocation.m */; };
+		01A2D12F1E490A9700C2103A /* ApptentiveInteractionUsageData.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2CFEB1E490A9700C2103A /* ApptentiveInteractionUsageData.h */; };
+		01A2D1301E490A9700C2103A /* ApptentiveInteractionUsageData.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2CFEC1E490A9700C2103A /* ApptentiveInteractionUsageData.m */; };
+		01A2D1311E490A9700C2103A /* ApptentiveMessageCenterInteraction.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2CFED1E490A9700C2103A /* ApptentiveMessageCenterInteraction.h */; };
+		01A2D1321E490A9700C2103A /* ApptentiveMessageCenterInteraction.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2CFEE1E490A9700C2103A /* ApptentiveMessageCenterInteraction.m */; };
+		01A2D1331E490A9700C2103A /* ApptentiveMutableCustomData.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2CFEF1E490A9700C2103A /* ApptentiveMutableCustomData.h */; };
+		01A2D1341E490A9700C2103A /* ApptentiveMutableCustomData.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2CFF01E490A9700C2103A /* ApptentiveMutableCustomData.m */; };
+		01A2D1351E490A9700C2103A /* ApptentiveMutableDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2CFF11E490A9700C2103A /* ApptentiveMutableDevice.h */; };
+		01A2D1361E490A9700C2103A /* ApptentiveMutableDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2CFF21E490A9700C2103A /* ApptentiveMutableDevice.m */; };
+		01A2D1371E490A9700C2103A /* ApptentiveMutablePerson.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2CFF31E490A9700C2103A /* ApptentiveMutablePerson.h */; };
+		01A2D1381E490A9700C2103A /* ApptentiveMutablePerson.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2CFF41E490A9700C2103A /* ApptentiveMutablePerson.m */; };
+		01A2D1391E490A9700C2103A /* ApptentivePerson.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2CFF51E490A9700C2103A /* ApptentivePerson.h */; };
+		01A2D13A1E490A9700C2103A /* ApptentivePerson.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2CFF61E490A9700C2103A /* ApptentivePerson.m */; };
+		01A2D13B1E490A9700C2103A /* ApptentiveSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2CFF71E490A9700C2103A /* ApptentiveSDK.h */; };
+		01A2D13C1E490A9700C2103A /* ApptentiveSDK.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2CFF81E490A9700C2103A /* ApptentiveSDK.m */; };
+		01A2D13D1E490A9700C2103A /* ApptentiveSession.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2CFF91E490A9700C2103A /* ApptentiveSession.h */; };
+		01A2D13E1E490A9700C2103A /* ApptentiveSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2CFFA1E490A9700C2103A /* ApptentiveSession.m */; };
+		01A2D13F1E490A9700C2103A /* ApptentiveState.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2CFFB1E490A9700C2103A /* ApptentiveState.h */; };
+		01A2D1401E490A9700C2103A /* ApptentiveState.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2CFFC1E490A9700C2103A /* ApptentiveState.m */; };
+		01A2D1411E490A9700C2103A /* ApptentiveVersion.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2CFFD1E490A9700C2103A /* ApptentiveVersion.h */; };
+		01A2D1421E490A9700C2103A /* ApptentiveVersion.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2CFFE1E490A9700C2103A /* ApptentiveVersion.m */; };
+		01A2D1431E490A9700C2103A /* ApptentiveBackend+Engagement.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0001E490A9700C2103A /* ApptentiveBackend+Engagement.h */; };
+		01A2D1441E490A9700C2103A /* ApptentiveBackend+Engagement.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0011E490A9700C2103A /* ApptentiveBackend+Engagement.m */; };
+		01A2D1451E490A9700C2103A /* at_account.png in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D0041E490A9700C2103A /* at_account.png */; };
+		01A2D1461E490A9700C2103A /* at_account@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D0051E490A9700C2103A /* at_account@2x.png */; };
+		01A2D1471E490A9700C2103A /* at_account@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D0061E490A9700C2103A /* at_account@3x.png */; };
+		01A2D1481E490A9700C2103A /* at_apptentive_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D0081E490A9700C2103A /* at_apptentive_logo.png */; };
+		01A2D1491E490A9700C2103A /* at_apptentive_logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D0091E490A9700C2103A /* at_apptentive_logo@2x.png */; };
+		01A2D14A1E490A9700C2103A /* at_apptentive_logo@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D00A1E490A9700C2103A /* at_apptentive_logo@3x.png */; };
+		01A2D14B1E490A9700C2103A /* at_attach.png in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D00C1E490A9700C2103A /* at_attach.png */; };
+		01A2D14C1E490A9700C2103A /* at_attach@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D00D1E490A9700C2103A /* at_attach@2x.png */; };
+		01A2D14D1E490A9700C2103A /* at_attach@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D00E1E490A9700C2103A /* at_attach@3x.png */; };
+		01A2D14E1E490A9700C2103A /* at_checkmark.png in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D0101E490A9700C2103A /* at_checkmark.png */; };
+		01A2D14F1E490A9700C2103A /* at_checkmark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D0111E490A9700C2103A /* at_checkmark@2x.png */; };
+		01A2D1501E490A9700C2103A /* at_checkmark@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D0121E490A9700C2103A /* at_checkmark@3x.png */; };
+		01A2D1511E490A9700C2103A /* at_checkmark_highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D0141E490A9700C2103A /* at_checkmark_highlighted.png */; };
+		01A2D1521E490A9700C2103A /* at_checkmark_highlighted@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D0151E490A9700C2103A /* at_checkmark_highlighted@2x.png */; };
+		01A2D1531E490A9700C2103A /* at_checkmark_highlighted@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D0161E490A9700C2103A /* at_checkmark_highlighted@3x.png */; };
+		01A2D1541E490A9700C2103A /* at_circle.png in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D0181E490A9700C2103A /* at_circle.png */; };
+		01A2D1551E490A9700C2103A /* at_circle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D0191E490A9700C2103A /* at_circle@2x.png */; };
+		01A2D1561E490A9700C2103A /* at_circle@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D01A1E490A9700C2103A /* at_circle@3x.png */; };
+		01A2D1571E490A9700C2103A /* at_circle_highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D01C1E490A9700C2103A /* at_circle_highlighted.png */; };
+		01A2D1581E490A9700C2103A /* at_circle_highlighted@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D01D1E490A9700C2103A /* at_circle_highlighted@2x.png */; };
+		01A2D1591E490A9700C2103A /* at_circle_highlighted@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D01E1E490A9700C2103A /* at_circle_highlighted@3x.png */; };
+		01A2D15A1E490A9700C2103A /* at_close.png in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D0201E490A9700C2103A /* at_close.png */; };
+		01A2D15B1E490A9700C2103A /* at_close@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D0211E490A9700C2103A /* at_close@2x.png */; };
+		01A2D15C1E490A9700C2103A /* at_close@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D0221E490A9700C2103A /* at_close@3x.png */; };
+		01A2D15D1E490A9700C2103A /* at_document.png in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D0241E490A9700C2103A /* at_document.png */; };
+		01A2D15E1E490A9700C2103A /* at_document@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D0251E490A9700C2103A /* at_document@2x.png */; };
+		01A2D15F1E490A9700C2103A /* at_document@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D0261E490A9700C2103A /* at_document@3x.png */; };
+		01A2D1601E490A9700C2103A /* at_error_wait.png in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D0281E490A9700C2103A /* at_error_wait.png */; };
+		01A2D1611E490A9700C2103A /* at_error_wait@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D0291E490A9700C2103A /* at_error_wait@2x.png */; };
+		01A2D1621E490A9700C2103A /* at_error_wait@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D02A1E490A9700C2103A /* at_error_wait@3x.png */; };
+		01A2D1631E490A9700C2103A /* at_info.png in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D02C1E490A9700C2103A /* at_info.png */; };
+		01A2D1641E490A9700C2103A /* at_info@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D02D1E490A9700C2103A /* at_info@2x.png */; };
+		01A2D1651E490A9700C2103A /* at_info@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D02E1E490A9700C2103A /* at_info@3x.png */; };
+		01A2D1661E490A9700C2103A /* at_network_error.png in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D0301E490A9700C2103A /* at_network_error.png */; };
+		01A2D1671E490A9700C2103A /* at_network_error@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D0311E490A9700C2103A /* at_network_error@2x.png */; };
+		01A2D1681E490A9700C2103A /* at_network_error@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D0321E490A9700C2103A /* at_network_error@3x.png */; };
+		01A2D1691E490A9700C2103A /* at_remove.png in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D0341E490A9700C2103A /* at_remove.png */; };
+		01A2D16A1E490A9700C2103A /* at_remove@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D0351E490A9700C2103A /* at_remove@2x.png */; };
+		01A2D16B1E490A9700C2103A /* at_remove@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D0361E490A9700C2103A /* at_remove@3x.png */; };
+		01A2D16C1E490A9700C2103A /* at_thanks.png in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D0391E490A9700C2103A /* at_thanks.png */; };
+		01A2D16D1E490A9700C2103A /* at_thanks@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D03A1E490A9700C2103A /* at_thanks@2x.png */; };
+		01A2D16E1E490A9700C2103A /* at_thanks@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D03B1E490A9700C2103A /* at_thanks@3x.png */; };
+		01A2D16F1E490A9700C2103A /* at_update_icon_mask.png in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D03D1E490A9700C2103A /* at_update_icon_mask.png */; };
+		01A2D1701E490A9700C2103A /* at_update_icon_mask@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D03E1E490A9700C2103A /* at_update_icon_mask@2x.png */; };
+		01A2D1711E490A9700C2103A /* at_update_icon_mask@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D03F1E490A9700C2103A /* at_update_icon_mask@3x.png */; };
+		01A2D1721E490A9700C2103A /* at_update_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D0411E490A9700C2103A /* at_update_logo.png */; };
+		01A2D1731E490A9700C2103A /* at_update_logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D0421E490A9700C2103A /* at_update_logo@2x.png */; };
+		01A2D1741E490A9700C2103A /* at_update_logo@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D0431E490A9700C2103A /* at_update_logo@3x.png */; };
+		01A2D1751E490A9700C2103A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D0451E490A9700C2103A /* Localizable.strings */; };
+		01A2D1761E490A9700C2103A /* ApptentiveMessageCenterDataSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D05B1E490A9700C2103A /* ApptentiveMessageCenterDataSource.h */; };
+		01A2D1771E490A9700C2103A /* ApptentiveMessageCenterDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D05C1E490A9700C2103A /* ApptentiveMessageCenterDataSource.m */; };
+		01A2D1781E490A9700C2103A /* ApptentiveAboutViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D05E1E490A9700C2103A /* ApptentiveAboutViewController.h */; };
+		01A2D1791E490A9700C2103A /* ApptentiveAboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D05F1E490A9700C2103A /* ApptentiveAboutViewController.m */; };
+		01A2D17A1E490A9700C2103A /* ApptentiveAttachmentController.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0601E490A9700C2103A /* ApptentiveAttachmentController.h */; };
+		01A2D17B1E490A9700C2103A /* ApptentiveAttachmentController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0611E490A9700C2103A /* ApptentiveAttachmentController.m */; };
+		01A2D17C1E490A9700C2103A /* ApptentiveBannerViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0621E490A9700C2103A /* ApptentiveBannerViewController.h */; };
+		01A2D17D1E490A9700C2103A /* ApptentiveBannerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0631E490A9700C2103A /* ApptentiveBannerViewController.m */; };
+		01A2D17E1E490A9700C2103A /* ApptentiveMessageCenterErrorViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0641E490A9700C2103A /* ApptentiveMessageCenterErrorViewController.h */; };
+		01A2D17F1E490A9700C2103A /* ApptentiveMessageCenterErrorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0651E490A9700C2103A /* ApptentiveMessageCenterErrorViewController.m */; };
+		01A2D1801E490A9700C2103A /* ApptentiveMessageCenterViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0661E490A9700C2103A /* ApptentiveMessageCenterViewController.h */; };
+		01A2D1811E490A9700C2103A /* ApptentiveMessageCenterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0671E490A9700C2103A /* ApptentiveMessageCenterViewController.m */; };
+		01A2D1821E490A9700C2103A /* ApptentiveJSONModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0691E490A9700C2103A /* ApptentiveJSONModel.h */; };
+		01A2D1831E490A9700C2103A /* ApptentiveAttachButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D06B1E490A9700C2103A /* ApptentiveAttachButton.h */; };
+		01A2D1841E490A9700C2103A /* ApptentiveAttachButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D06C1E490A9700C2103A /* ApptentiveAttachButton.m */; };
+		01A2D1851E490A9700C2103A /* ApptentiveAttachmentCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D06D1E490A9700C2103A /* ApptentiveAttachmentCell.h */; };
+		01A2D1861E490A9700C2103A /* ApptentiveAttachmentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D06E1E490A9700C2103A /* ApptentiveAttachmentCell.m */; };
+		01A2D1871E490A9700C2103A /* ApptentiveCompoundMessageCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D06F1E490A9700C2103A /* ApptentiveCompoundMessageCell.h */; };
+		01A2D1881E490A9700C2103A /* ApptentiveCompoundMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0701E490A9700C2103A /* ApptentiveCompoundMessageCell.m */; };
+		01A2D1891E490A9700C2103A /* ApptentiveCompoundReplyCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0711E490A9700C2103A /* ApptentiveCompoundReplyCell.h */; };
+		01A2D18A1E490A9700C2103A /* ApptentiveCompoundReplyCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0721E490A9700C2103A /* ApptentiveCompoundReplyCell.m */; };
+		01A2D18B1E490A9700C2103A /* ApptentiveIndexedCollectionView.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0731E490A9700C2103A /* ApptentiveIndexedCollectionView.h */; };
+		01A2D18C1E490A9700C2103A /* ApptentiveIndexedCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0741E490A9700C2103A /* ApptentiveIndexedCollectionView.m */; };
+		01A2D18D1E490A9700C2103A /* ApptentiveMessageCenterCellProtocols.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0751E490A9700C2103A /* ApptentiveMessageCenterCellProtocols.h */; };
+		01A2D18E1E490A9700C2103A /* ApptentiveMessageCenterContextMessageCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0761E490A9700C2103A /* ApptentiveMessageCenterContextMessageCell.h */; };
+		01A2D18F1E490A9700C2103A /* ApptentiveMessageCenterContextMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0771E490A9700C2103A /* ApptentiveMessageCenterContextMessageCell.m */; };
+		01A2D1901E490A9700C2103A /* ApptentiveMessageCenterGreetingView.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0781E490A9700C2103A /* ApptentiveMessageCenterGreetingView.h */; };
+		01A2D1911E490A9700C2103A /* ApptentiveMessageCenterGreetingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0791E490A9700C2103A /* ApptentiveMessageCenterGreetingView.m */; };
+		01A2D1921E490A9700C2103A /* ApptentiveMessageCenterInputView.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D07A1E490A9700C2103A /* ApptentiveMessageCenterInputView.h */; };
+		01A2D1931E490A9700C2103A /* ApptentiveMessageCenterInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D07B1E490A9700C2103A /* ApptentiveMessageCenterInputView.m */; };
+		01A2D1941E490A9700C2103A /* ApptentiveMessageCenterMessageCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D07C1E490A9700C2103A /* ApptentiveMessageCenterMessageCell.h */; };
+		01A2D1951E490A9700C2103A /* ApptentiveMessageCenterMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D07D1E490A9700C2103A /* ApptentiveMessageCenterMessageCell.m */; };
+		01A2D1961E490A9700C2103A /* ApptentiveMessageCenterProfileView.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D07E1E490A9700C2103A /* ApptentiveMessageCenterProfileView.h */; };
+		01A2D1971E490A9700C2103A /* ApptentiveMessageCenterProfileView.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D07F1E490A9700C2103A /* ApptentiveMessageCenterProfileView.m */; };
+		01A2D1981E490A9700C2103A /* ApptentiveMessageCenterReplyCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0801E490A9700C2103A /* ApptentiveMessageCenterReplyCell.h */; };
+		01A2D1991E490A9700C2103A /* ApptentiveMessageCenterReplyCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0811E490A9700C2103A /* ApptentiveMessageCenterReplyCell.m */; };
+		01A2D19A1E490A9700C2103A /* ApptentiveMessageCenterStatusView.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0821E490A9700C2103A /* ApptentiveMessageCenterStatusView.h */; };
+		01A2D19B1E490A9700C2103A /* ApptentiveMessageCenterStatusView.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0831E490A9700C2103A /* ApptentiveMessageCenterStatusView.m */; };
+		01A2D19C1E490A9700C2103A /* ApptentiveProgressNavigationBar.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0841E490A9700C2103A /* ApptentiveProgressNavigationBar.h */; };
+		01A2D19D1E490A9700C2103A /* ApptentiveProgressNavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0851E490A9700C2103A /* ApptentiveProgressNavigationBar.m */; };
+		01A2D19E1E490A9700C2103A /* ApptentiveBackend+Metrics.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0871E490A9700C2103A /* ApptentiveBackend+Metrics.h */; };
+		01A2D19F1E490A9700C2103A /* ApptentiveBackend+Metrics.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0881E490A9700C2103A /* ApptentiveBackend+Metrics.m */; };
+		01A2D1A01E490A9700C2103A /* ApptentiveConnect-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D08A1E490A9700C2103A /* ApptentiveConnect-Prefix.pch */; };
+		01A2D1A11E490A9700C2103A /* ApptentiveJSONSerialization.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D08B1E490A9700C2103A /* ApptentiveJSONSerialization.h */; };
+		01A2D1A21E490A9700C2103A /* ApptentiveJSONSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D08C1E490A9700C2103A /* ApptentiveJSONSerialization.m */; };
+		01A2D1A31E490A9700C2103A /* ApptentiveLog.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D08D1E490A9700C2103A /* ApptentiveLog.h */; };
+		01A2D1A41E490A9700C2103A /* ApptentiveLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D08E1E490A9700C2103A /* ApptentiveLogger.h */; };
+		01A2D1A51E490A9700C2103A /* ApptentiveLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D08F1E490A9700C2103A /* ApptentiveLogger.m */; };
+		01A2D1A61E490A9700C2103A /* ApptentiveUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0901E490A9700C2103A /* ApptentiveUtilities.h */; };
+		01A2D1A71E490A9700C2103A /* ApptentiveUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0911E490A9700C2103A /* ApptentiveUtilities.m */; };
+		01A2D1A81E490A9700C2103A /* NSDictionary+Apptentive.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0921E490A9700C2103A /* NSDictionary+Apptentive.h */; };
+		01A2D1A91E490A9700C2103A /* NSDictionary+ApptentiveAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0931E490A9700C2103A /* NSDictionary+ApptentiveAdditions.m */; };
+		01A2D1AA1E490A9700C2103A /* ApptentiveAppConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0951E490A9700C2103A /* ApptentiveAppConfiguration.h */; };
+		01A2D1AB1E490A9700C2103A /* ApptentiveAppConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0961E490A9700C2103A /* ApptentiveAppConfiguration.m */; };
+		01A2D1AE1E490A9700C2103A /* ApptentiveData.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0991E490A9700C2103A /* ApptentiveData.h */; };
+		01A2D1AF1E490A9700C2103A /* ApptentiveData.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D09A1E490A9700C2103A /* ApptentiveData.m */; };
+		01A2D1B01E490A9700C2103A /* ApptentiveFileAttachment.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D09B1E490A9700C2103A /* ApptentiveFileAttachment.h */; };
+		01A2D1B11E490A9700C2103A /* ApptentiveFileAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D09C1E490A9700C2103A /* ApptentiveFileAttachment.m */; };
+		01A2D1B21E490A9700C2103A /* ApptentiveLegacyEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D09D1E490A9700C2103A /* ApptentiveLegacyEvent.h */; };
+		01A2D1B31E490A9700C2103A /* ApptentiveLegacyEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D09E1E490A9700C2103A /* ApptentiveLegacyEvent.m */; };
+		01A2D1B41E490A9700C2103A /* ApptentiveLegacySurveyResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D09F1E490A9700C2103A /* ApptentiveLegacySurveyResponse.h */; };
+		01A2D1B51E490A9700C2103A /* ApptentiveLegacySurveyResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0A01E490A9700C2103A /* ApptentiveLegacySurveyResponse.m */; };
+		01A2D1B61E490A9700C2103A /* ApptentiveMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0A11E490A9700C2103A /* ApptentiveMessage.h */; };
+		01A2D1B71E490A9700C2103A /* ApptentiveMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0A21E490A9700C2103A /* ApptentiveMessage.m */; };
+		01A2D1B81E490A9700C2103A /* ApptentiveMessageSender.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0A31E490A9700C2103A /* ApptentiveMessageSender.h */; };
+		01A2D1B91E490A9700C2103A /* ApptentiveMessageSender.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0A41E490A9700C2103A /* ApptentiveMessageSender.m */; };
+		01A2D1BE1E490A9700C2103A /* ApptentiveRecord.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0A91E490A9700C2103A /* ApptentiveRecord.h */; };
+		01A2D1BF1E490A9700C2103A /* ApptentiveRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0AA1E490A9700C2103A /* ApptentiveRecord.m */; };
+		01A2D1C01E490A9700C2103A /* ATDataModel v1 to v2.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0AB1E490A9700C2103A /* ATDataModel v1 to v2.xcmappingmodel */; };
+		01A2D1C11E490A9700C2103A /* ATDataModel v2 to v3.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0AC1E490A9700C2103A /* ATDataModel v2 to v3.xcmappingmodel */; };
+		01A2D1C21E490A9700C2103A /* ATDataModel v3 to v4.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0AD1E490A9700C2103A /* ATDataModel v3 to v4.xcmappingmodel */; };
+		01A2D1C31E490A9700C2103A /* ATDataModel v4 to v5.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0AE1E490A9700C2103A /* ATDataModel v4 to v5.xcmappingmodel */; };
+		01A2D1C41E490A9700C2103A /* ATDataModel v5 to v6.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0AF1E490A9700C2103A /* ATDataModel v5 to v6.xcmappingmodel */; };
+		01A2D1C51E490A9700C2103A /* ATDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0B01E490A9700C2103A /* ATDataModel.xcdatamodeld */; };
+		01A2D1C61E490A9700C2103A /* ApptentiveMessageRequestOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0B81E490A9700C2103A /* ApptentiveMessageRequestOperation.h */; };
+		01A2D1C71E490A9700C2103A /* ApptentiveMessageRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0B91E490A9700C2103A /* ApptentiveMessageRequestOperation.m */; };
+		01A2D1C81E490A9700C2103A /* ApptentiveNetworkQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0BA1E490A9700C2103A /* ApptentiveNetworkQueue.h */; };
+		01A2D1C91E490A9700C2103A /* ApptentiveNetworkQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0BB1E490A9700C2103A /* ApptentiveNetworkQueue.m */; };
+		01A2D1CA1E490A9700C2103A /* ApptentiveRequestOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0BC1E490A9700C2103A /* ApptentiveRequestOperation.h */; };
+		01A2D1CB1E490A9700C2103A /* ApptentiveRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0BD1E490A9700C2103A /* ApptentiveRequestOperation.m */; };
+		01A2D1CC1E490A9700C2103A /* ApptentiveSerialNetworkQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0BE1E490A9700C2103A /* ApptentiveSerialNetworkQueue.h */; };
+		01A2D1CD1E490A9700C2103A /* ApptentiveSerialNetworkQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0BF1E490A9700C2103A /* ApptentiveSerialNetworkQueue.m */; };
+		01A2D1CE1E490A9700C2103A /* ApptentiveSerialRequest+Record.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0C01E490A9700C2103A /* ApptentiveSerialRequest+Record.h */; };
+		01A2D1CF1E490A9700C2103A /* ApptentiveSerialRequest+Record.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0C11E490A9700C2103A /* ApptentiveSerialRequest+Record.m */; };
+		01A2D1D01E490A9700C2103A /* ApptentiveSerialRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0C21E490A9700C2103A /* ApptentiveSerialRequest.h */; };
+		01A2D1D11E490A9700C2103A /* ApptentiveSerialRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0C31E490A9700C2103A /* ApptentiveSerialRequest.m */; };
+		01A2D1D21E490A9700C2103A /* ApptentiveSerialRequestAttachment.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0C41E490A9700C2103A /* ApptentiveSerialRequestAttachment.h */; };
+		01A2D1D31E490A9700C2103A /* ApptentiveSerialRequestAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0C51E490A9700C2103A /* ApptentiveSerialRequestAttachment.m */; };
+		01A2D1D41E490A9700C2103A /* ApptentiveSerialRequestOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0C61E490A9700C2103A /* ApptentiveSerialRequestOperation.h */; };
+		01A2D1D51E490A9700C2103A /* ApptentiveSerialRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0C71E490A9700C2103A /* ApptentiveSerialRequestOperation.m */; };
+		01A2D1D61E490A9700C2103A /* ApptentiveBackend.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0C91E490A9700C2103A /* ApptentiveBackend.h */; };
+		01A2D1D71E490A9700C2103A /* ApptentiveBackend.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0CA1E490A9700C2103A /* ApptentiveBackend.m */; };
+		01A2D1D81E490A9700C2103A /* ApptentiveDataManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0CB1E490A9700C2103A /* ApptentiveDataManager.h */; };
+		01A2D1D91E490A9700C2103A /* ApptentiveDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0CC1E490A9700C2103A /* ApptentiveDataManager.m */; };
+		01A2D1DA1E490A9700C2103A /* ApptentiveReachability.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0CE1E490A9700C2103A /* ApptentiveReachability.h */; };
+		01A2D1DB1E490A9700C2103A /* ApptentiveReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0CF1E490A9700C2103A /* ApptentiveReachability.m */; };
+		01A2D1DC1E490A9700C2103A /* ApptentiveSurvey.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0D21E490A9700C2103A /* ApptentiveSurvey.h */; };
+		01A2D1DD1E490A9700C2103A /* ApptentiveSurvey.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0D31E490A9700C2103A /* ApptentiveSurvey.m */; };
+		01A2D1DE1E490A9700C2103A /* ApptentiveSurveyAnswer.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0D41E490A9700C2103A /* ApptentiveSurveyAnswer.h */; };
+		01A2D1DF1E490A9700C2103A /* ApptentiveSurveyAnswer.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0D51E490A9700C2103A /* ApptentiveSurveyAnswer.m */; };
+		01A2D1E01E490A9700C2103A /* ApptentiveSurveyQuestion.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0D61E490A9700C2103A /* ApptentiveSurveyQuestion.h */; };
+		01A2D1E11E490A9700C2103A /* ApptentiveSurveyQuestion.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0D71E490A9700C2103A /* ApptentiveSurveyQuestion.m */; };
+		01A2D1E21E490A9700C2103A /* ApptentiveSurveyCollectionViewLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0D91E490A9700C2103A /* ApptentiveSurveyCollectionViewLayout.h */; };
+		01A2D1E31E490A9700C2103A /* ApptentiveSurveyCollectionViewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0DA1E490A9700C2103A /* ApptentiveSurveyCollectionViewLayout.m */; };
+		01A2D1E41E490A9700C2103A /* ApptentiveSurveyLayoutAttributes.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0DB1E490A9700C2103A /* ApptentiveSurveyLayoutAttributes.h */; };
+		01A2D1E51E490A9700C2103A /* ApptentiveSurveyLayoutAttributes.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0DC1E490A9700C2103A /* ApptentiveSurveyLayoutAttributes.m */; };
+		01A2D1E61E490A9700C2103A /* ApptentiveSurveyViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0DD1E490A9700C2103A /* ApptentiveSurveyViewController.h */; };
+		01A2D1E71E490A9700C2103A /* ApptentiveSurveyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0DE1E490A9700C2103A /* ApptentiveSurveyViewController.m */; };
+		01A2D1E81E490A9700C2103A /* ApptentiveSurveyViewModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0DF1E490A9700C2103A /* ApptentiveSurveyViewModel.h */; };
+		01A2D1E91E490A9700C2103A /* ApptentiveSurveyViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0E01E490A9700C2103A /* ApptentiveSurveyViewModel.m */; };
+		01A2D1EA1E490A9700C2103A /* ApptentiveSurveyAnswerCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0E21E490A9700C2103A /* ApptentiveSurveyAnswerCell.h */; };
+		01A2D1EB1E490A9700C2103A /* ApptentiveSurveyAnswerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0E31E490A9700C2103A /* ApptentiveSurveyAnswerCell.m */; };
+		01A2D1EC1E490A9700C2103A /* ApptentiveSurveyChoiceCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0E41E490A9700C2103A /* ApptentiveSurveyChoiceCell.h */; };
+		01A2D1ED1E490A9700C2103A /* ApptentiveSurveyChoiceCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0E51E490A9700C2103A /* ApptentiveSurveyChoiceCell.m */; };
+		01A2D1EE1E490A9700C2103A /* ApptentiveSurveyCollectionView.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0E61E490A9700C2103A /* ApptentiveSurveyCollectionView.h */; };
+		01A2D1EF1E490A9700C2103A /* ApptentiveSurveyCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0E71E490A9700C2103A /* ApptentiveSurveyCollectionView.m */; };
+		01A2D1F01E490A9700C2103A /* ApptentiveSurveyGreetingView.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0E81E490A9700C2103A /* ApptentiveSurveyGreetingView.h */; };
+		01A2D1F11E490A9700C2103A /* ApptentiveSurveyGreetingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0E91E490A9700C2103A /* ApptentiveSurveyGreetingView.m */; };
+		01A2D1F21E490A9700C2103A /* ApptentiveSurveyMultilineCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0EA1E490A9700C2103A /* ApptentiveSurveyMultilineCell.h */; };
+		01A2D1F31E490A9700C2103A /* ApptentiveSurveyMultilineCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0EB1E490A9700C2103A /* ApptentiveSurveyMultilineCell.m */; };
+		01A2D1F41E490A9700C2103A /* ApptentiveSurveyOtherCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0EC1E490A9700C2103A /* ApptentiveSurveyOtherCell.h */; };
+		01A2D1F51E490A9700C2103A /* ApptentiveSurveyOtherCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0ED1E490A9700C2103A /* ApptentiveSurveyOtherCell.m */; };
+		01A2D1F61E490A9700C2103A /* ApptentiveSurveyQuestionBackgroundView.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0EE1E490A9700C2103A /* ApptentiveSurveyQuestionBackgroundView.h */; };
+		01A2D1F71E490A9700C2103A /* ApptentiveSurveyQuestionBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0EF1E490A9700C2103A /* ApptentiveSurveyQuestionBackgroundView.m */; };
+		01A2D1F81E490A9700C2103A /* ApptentiveSurveyQuestionFooterView.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0F01E490A9700C2103A /* ApptentiveSurveyQuestionFooterView.h */; };
+		01A2D1F91E490A9700C2103A /* ApptentiveSurveyQuestionFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0F11E490A9700C2103A /* ApptentiveSurveyQuestionFooterView.m */; };
+		01A2D1FA1E490A9700C2103A /* ApptentiveSurveyQuestionView.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0F21E490A9700C2103A /* ApptentiveSurveyQuestionView.h */; };
+		01A2D1FB1E490A9700C2103A /* ApptentiveSurveyQuestionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0F31E490A9700C2103A /* ApptentiveSurveyQuestionView.m */; };
+		01A2D1FC1E490A9700C2103A /* ApptentiveSurveySingleLineCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0F41E490A9700C2103A /* ApptentiveSurveySingleLineCell.h */; };
+		01A2D1FD1E490A9700C2103A /* ApptentiveSurveySingleLineCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0F51E490A9700C2103A /* ApptentiveSurveySingleLineCell.m */; };
+		01A2D1FE1E490A9700C2103A /* ApptentiveSurveySubmitButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0F61E490A9700C2103A /* ApptentiveSurveySubmitButton.h */; };
+		01A2D1FF1E490A9700C2103A /* ApptentiveSurveySubmitButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0F71E490A9700C2103A /* ApptentiveSurveySubmitButton.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		01A2CF9C1E49062800C2103A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 01A2CF881E49062700C2103A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 01A2CF901E49062700C2103A;
+			remoteInfo = Apptentive;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		01A2CF911E49062700C2103A /* Apptentive.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Apptentive.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		01A2CF941E49062700C2103A /* Apptentive.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Apptentive.h; sourceTree = "<group>"; };
+		01A2CF951E49062700C2103A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		01A2CF9A1E49062800C2103A /* ApptentiveTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ApptentiveTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		01A2CF9F1E49062800C2103A /* ApptentiveTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ApptentiveTests.m; sourceTree = "<group>"; };
+		01A2CFA11E49062800C2103A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		01A2CFAB1E490A9600C2103A /* Apptentive_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Apptentive_Private.h; sourceTree = "<group>"; };
+		01A2CFAC1E490A9700C2103A /* Apptentive.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Apptentive.m; sourceTree = "<group>"; };
+		01A2CFAD1E490A9700C2103A /* Apptentive.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Apptentive.storyboard; sourceTree = "<group>"; };
+		01A2CFAE1E490A9700C2103A /* ApptentiveStyleSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveStyleSheet.h; sourceTree = "<group>"; };
+		01A2CFAF1E490A9700C2103A /* ApptentiveStyleSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveStyleSheet.m; sourceTree = "<group>"; };
+		01A2CFB11E490A9700C2103A /* ApptentiveHUDViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveHUDViewController.h; sourceTree = "<group>"; };
+		01A2CFB21E490A9700C2103A /* ApptentiveHUDViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveHUDViewController.m; sourceTree = "<group>"; };
+		01A2CFB31E490A9700C2103A /* ApptentiveNetworkImageIconView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveNetworkImageIconView.h; sourceTree = "<group>"; };
+		01A2CFB41E490A9700C2103A /* ApptentiveNetworkImageIconView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveNetworkImageIconView.m; sourceTree = "<group>"; };
+		01A2CFB51E490A9700C2103A /* ApptentiveNetworkImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveNetworkImageView.h; sourceTree = "<group>"; };
+		01A2CFB61E490A9700C2103A /* ApptentiveNetworkImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveNetworkImageView.m; sourceTree = "<group>"; };
+		01A2CFB71E490A9700C2103A /* ApptentivePassThroughWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentivePassThroughWindow.h; sourceTree = "<group>"; };
+		01A2CFB81E490A9700C2103A /* ApptentivePassThroughWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentivePassThroughWindow.m; sourceTree = "<group>"; };
+		01A2CFB91E490A9700C2103A /* ApptentiveUnreadMessagesBadgeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveUnreadMessagesBadgeView.h; sourceTree = "<group>"; };
+		01A2CFBA1E490A9700C2103A /* ApptentiveUnreadMessagesBadgeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveUnreadMessagesBadgeView.m; sourceTree = "<group>"; };
+		01A2CFBD1E490A9700C2103A /* ApptentiveInteractionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveInteractionController.h; sourceTree = "<group>"; };
+		01A2CFBE1E490A9700C2103A /* ApptentiveInteractionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveInteractionController.m; sourceTree = "<group>"; };
+		01A2CFC51E490A9700C2103A /* ApptentiveInteractionNavigateToLink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveInteractionNavigateToLink.h; sourceTree = "<group>"; };
+		01A2CFC61E490A9700C2103A /* ApptentiveInteractionNavigateToLink.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveInteractionNavigateToLink.m; sourceTree = "<group>"; };
+		01A2CFC71E490A9700C2103A /* ApptentiveInteractionTextModalController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveInteractionTextModalController.h; sourceTree = "<group>"; };
+		01A2CFC81E490A9700C2103A /* ApptentiveInteractionTextModalController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveInteractionTextModalController.m; sourceTree = "<group>"; };
+		01A2CFCA1E490A9700C2103A /* ApptentiveInteractionAppStoreController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveInteractionAppStoreController.h; sourceTree = "<group>"; };
+		01A2CFCB1E490A9700C2103A /* ApptentiveInteractionAppStoreController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveInteractionAppStoreController.m; sourceTree = "<group>"; };
+		01A2CFCC1E490A9700C2103A /* ApptentiveInteractionEnjoymentDialogController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveInteractionEnjoymentDialogController.h; sourceTree = "<group>"; };
+		01A2CFCD1E490A9700C2103A /* ApptentiveInteractionEnjoymentDialogController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveInteractionEnjoymentDialogController.m; sourceTree = "<group>"; };
+		01A2CFCE1E490A9700C2103A /* ApptentiveInteractionMessageCenterController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveInteractionMessageCenterController.h; sourceTree = "<group>"; };
+		01A2CFCF1E490A9700C2103A /* ApptentiveInteractionMessageCenterController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveInteractionMessageCenterController.m; sourceTree = "<group>"; };
+		01A2CFD01E490A9700C2103A /* ApptentiveInteractionRatingDialogController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveInteractionRatingDialogController.h; sourceTree = "<group>"; };
+		01A2CFD11E490A9700C2103A /* ApptentiveInteractionRatingDialogController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveInteractionRatingDialogController.m; sourceTree = "<group>"; };
+		01A2CFD31E490A9700C2103A /* ApptentiveInteractionSurveyController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveInteractionSurveyController.h; sourceTree = "<group>"; };
+		01A2CFD41E490A9700C2103A /* ApptentiveInteractionSurveyController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveInteractionSurveyController.m; sourceTree = "<group>"; };
+		01A2CFD61E490A9700C2103A /* ApptentiveInteractionUpgradeMessageController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveInteractionUpgradeMessageController.h; sourceTree = "<group>"; };
+		01A2CFD71E490A9700C2103A /* ApptentiveInteractionUpgradeMessageController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveInteractionUpgradeMessageController.m; sourceTree = "<group>"; };
+		01A2CFD81E490A9700C2103A /* ApptentiveInteractionUpgradeMessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveInteractionUpgradeMessageViewController.h; sourceTree = "<group>"; };
+		01A2CFD91E490A9700C2103A /* ApptentiveInteractionUpgradeMessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveInteractionUpgradeMessageViewController.m; sourceTree = "<group>"; };
+		01A2CFDB1E490A9700C2103A /* ApptentiveAppRelease.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveAppRelease.h; sourceTree = "<group>"; };
+		01A2CFDC1E490A9700C2103A /* ApptentiveAppRelease.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveAppRelease.m; sourceTree = "<group>"; };
+		01A2CFDD1E490A9700C2103A /* ApptentiveCount.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveCount.h; sourceTree = "<group>"; };
+		01A2CFDE1E490A9700C2103A /* ApptentiveCount.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveCount.m; sourceTree = "<group>"; };
+		01A2CFDF1E490A9700C2103A /* ApptentiveCustomData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveCustomData.h; sourceTree = "<group>"; };
+		01A2CFE01E490A9700C2103A /* ApptentiveCustomData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveCustomData.m; sourceTree = "<group>"; };
+		01A2CFE11E490A9700C2103A /* ApptentiveDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveDevice.h; sourceTree = "<group>"; };
+		01A2CFE21E490A9700C2103A /* ApptentiveDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveDevice.m; sourceTree = "<group>"; };
+		01A2CFE31E490A9700C2103A /* ApptentiveEngagement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveEngagement.h; sourceTree = "<group>"; };
+		01A2CFE41E490A9700C2103A /* ApptentiveEngagement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveEngagement.m; sourceTree = "<group>"; };
+		01A2CFE51E490A9700C2103A /* ApptentiveEngagementManifest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveEngagementManifest.h; sourceTree = "<group>"; };
+		01A2CFE61E490A9700C2103A /* ApptentiveEngagementManifest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveEngagementManifest.m; sourceTree = "<group>"; };
+		01A2CFE71E490A9700C2103A /* ApptentiveInteraction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveInteraction.h; sourceTree = "<group>"; };
+		01A2CFE81E490A9700C2103A /* ApptentiveInteraction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveInteraction.m; sourceTree = "<group>"; };
+		01A2CFE91E490A9700C2103A /* ApptentiveInteractionInvocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveInteractionInvocation.h; sourceTree = "<group>"; };
+		01A2CFEA1E490A9700C2103A /* ApptentiveInteractionInvocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveInteractionInvocation.m; sourceTree = "<group>"; };
+		01A2CFEB1E490A9700C2103A /* ApptentiveInteractionUsageData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveInteractionUsageData.h; sourceTree = "<group>"; };
+		01A2CFEC1E490A9700C2103A /* ApptentiveInteractionUsageData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveInteractionUsageData.m; sourceTree = "<group>"; };
+		01A2CFED1E490A9700C2103A /* ApptentiveMessageCenterInteraction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveMessageCenterInteraction.h; sourceTree = "<group>"; };
+		01A2CFEE1E490A9700C2103A /* ApptentiveMessageCenterInteraction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveMessageCenterInteraction.m; sourceTree = "<group>"; };
+		01A2CFEF1E490A9700C2103A /* ApptentiveMutableCustomData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveMutableCustomData.h; sourceTree = "<group>"; };
+		01A2CFF01E490A9700C2103A /* ApptentiveMutableCustomData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveMutableCustomData.m; sourceTree = "<group>"; };
+		01A2CFF11E490A9700C2103A /* ApptentiveMutableDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveMutableDevice.h; sourceTree = "<group>"; };
+		01A2CFF21E490A9700C2103A /* ApptentiveMutableDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveMutableDevice.m; sourceTree = "<group>"; };
+		01A2CFF31E490A9700C2103A /* ApptentiveMutablePerson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveMutablePerson.h; sourceTree = "<group>"; };
+		01A2CFF41E490A9700C2103A /* ApptentiveMutablePerson.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveMutablePerson.m; sourceTree = "<group>"; };
+		01A2CFF51E490A9700C2103A /* ApptentivePerson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentivePerson.h; sourceTree = "<group>"; };
+		01A2CFF61E490A9700C2103A /* ApptentivePerson.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentivePerson.m; sourceTree = "<group>"; };
+		01A2CFF71E490A9700C2103A /* ApptentiveSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveSDK.h; sourceTree = "<group>"; };
+		01A2CFF81E490A9700C2103A /* ApptentiveSDK.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveSDK.m; sourceTree = "<group>"; };
+		01A2CFF91E490A9700C2103A /* ApptentiveSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveSession.h; sourceTree = "<group>"; };
+		01A2CFFA1E490A9700C2103A /* ApptentiveSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveSession.m; sourceTree = "<group>"; };
+		01A2CFFB1E490A9700C2103A /* ApptentiveState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveState.h; sourceTree = "<group>"; };
+		01A2CFFC1E490A9700C2103A /* ApptentiveState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveState.m; sourceTree = "<group>"; };
+		01A2CFFD1E490A9700C2103A /* ApptentiveVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveVersion.h; sourceTree = "<group>"; };
+		01A2CFFE1E490A9700C2103A /* ApptentiveVersion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveVersion.m; sourceTree = "<group>"; };
+		01A2D0001E490A9700C2103A /* ApptentiveBackend+Engagement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ApptentiveBackend+Engagement.h"; sourceTree = "<group>"; };
+		01A2D0011E490A9700C2103A /* ApptentiveBackend+Engagement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ApptentiveBackend+Engagement.m"; sourceTree = "<group>"; };
+		01A2D0041E490A9700C2103A /* at_account.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = at_account.png; sourceTree = "<group>"; };
+		01A2D0051E490A9700C2103A /* at_account@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_account@2x.png"; sourceTree = "<group>"; };
+		01A2D0061E490A9700C2103A /* at_account@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_account@3x.png"; sourceTree = "<group>"; };
+		01A2D0081E490A9700C2103A /* at_apptentive_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = at_apptentive_logo.png; sourceTree = "<group>"; };
+		01A2D0091E490A9700C2103A /* at_apptentive_logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_apptentive_logo@2x.png"; sourceTree = "<group>"; };
+		01A2D00A1E490A9700C2103A /* at_apptentive_logo@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_apptentive_logo@3x.png"; sourceTree = "<group>"; };
+		01A2D00C1E490A9700C2103A /* at_attach.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = at_attach.png; sourceTree = "<group>"; };
+		01A2D00D1E490A9700C2103A /* at_attach@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_attach@2x.png"; sourceTree = "<group>"; };
+		01A2D00E1E490A9700C2103A /* at_attach@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_attach@3x.png"; sourceTree = "<group>"; };
+		01A2D0101E490A9700C2103A /* at_checkmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = at_checkmark.png; sourceTree = "<group>"; };
+		01A2D0111E490A9700C2103A /* at_checkmark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_checkmark@2x.png"; sourceTree = "<group>"; };
+		01A2D0121E490A9700C2103A /* at_checkmark@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_checkmark@3x.png"; sourceTree = "<group>"; };
+		01A2D0141E490A9700C2103A /* at_checkmark_highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = at_checkmark_highlighted.png; sourceTree = "<group>"; };
+		01A2D0151E490A9700C2103A /* at_checkmark_highlighted@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_checkmark_highlighted@2x.png"; sourceTree = "<group>"; };
+		01A2D0161E490A9700C2103A /* at_checkmark_highlighted@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_checkmark_highlighted@3x.png"; sourceTree = "<group>"; };
+		01A2D0181E490A9700C2103A /* at_circle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = at_circle.png; sourceTree = "<group>"; };
+		01A2D0191E490A9700C2103A /* at_circle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_circle@2x.png"; sourceTree = "<group>"; };
+		01A2D01A1E490A9700C2103A /* at_circle@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_circle@3x.png"; sourceTree = "<group>"; };
+		01A2D01C1E490A9700C2103A /* at_circle_highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = at_circle_highlighted.png; sourceTree = "<group>"; };
+		01A2D01D1E490A9700C2103A /* at_circle_highlighted@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_circle_highlighted@2x.png"; sourceTree = "<group>"; };
+		01A2D01E1E490A9700C2103A /* at_circle_highlighted@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_circle_highlighted@3x.png"; sourceTree = "<group>"; };
+		01A2D0201E490A9700C2103A /* at_close.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = at_close.png; sourceTree = "<group>"; };
+		01A2D0211E490A9700C2103A /* at_close@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_close@2x.png"; sourceTree = "<group>"; };
+		01A2D0221E490A9700C2103A /* at_close@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_close@3x.png"; sourceTree = "<group>"; };
+		01A2D0241E490A9700C2103A /* at_document.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = at_document.png; sourceTree = "<group>"; };
+		01A2D0251E490A9700C2103A /* at_document@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_document@2x.png"; sourceTree = "<group>"; };
+		01A2D0261E490A9700C2103A /* at_document@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_document@3x.png"; sourceTree = "<group>"; };
+		01A2D0281E490A9700C2103A /* at_error_wait.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = at_error_wait.png; sourceTree = "<group>"; };
+		01A2D0291E490A9700C2103A /* at_error_wait@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_error_wait@2x.png"; sourceTree = "<group>"; };
+		01A2D02A1E490A9700C2103A /* at_error_wait@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_error_wait@3x.png"; sourceTree = "<group>"; };
+		01A2D02C1E490A9700C2103A /* at_info.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = at_info.png; sourceTree = "<group>"; };
+		01A2D02D1E490A9700C2103A /* at_info@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_info@2x.png"; sourceTree = "<group>"; };
+		01A2D02E1E490A9700C2103A /* at_info@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_info@3x.png"; sourceTree = "<group>"; };
+		01A2D0301E490A9700C2103A /* at_network_error.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = at_network_error.png; sourceTree = "<group>"; };
+		01A2D0311E490A9700C2103A /* at_network_error@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_network_error@2x.png"; sourceTree = "<group>"; };
+		01A2D0321E490A9700C2103A /* at_network_error@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_network_error@3x.png"; sourceTree = "<group>"; };
+		01A2D0341E490A9700C2103A /* at_remove.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = at_remove.png; sourceTree = "<group>"; };
+		01A2D0351E490A9700C2103A /* at_remove@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_remove@2x.png"; sourceTree = "<group>"; };
+		01A2D0361E490A9700C2103A /* at_remove@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_remove@3x.png"; sourceTree = "<group>"; };
+		01A2D0391E490A9700C2103A /* at_thanks.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = at_thanks.png; sourceTree = "<group>"; };
+		01A2D03A1E490A9700C2103A /* at_thanks@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_thanks@2x.png"; sourceTree = "<group>"; };
+		01A2D03B1E490A9700C2103A /* at_thanks@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_thanks@3x.png"; sourceTree = "<group>"; };
+		01A2D03D1E490A9700C2103A /* at_update_icon_mask.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = at_update_icon_mask.png; sourceTree = "<group>"; };
+		01A2D03E1E490A9700C2103A /* at_update_icon_mask@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_update_icon_mask@2x.png"; sourceTree = "<group>"; };
+		01A2D03F1E490A9700C2103A /* at_update_icon_mask@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_update_icon_mask@3x.png"; sourceTree = "<group>"; };
+		01A2D0411E490A9700C2103A /* at_update_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = at_update_logo.png; sourceTree = "<group>"; };
+		01A2D0421E490A9700C2103A /* at_update_logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_update_logo@2x.png"; sourceTree = "<group>"; };
+		01A2D0431E490A9700C2103A /* at_update_logo@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "at_update_logo@3x.png"; sourceTree = "<group>"; };
+		01A2D0461E490A9700C2103A /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Localizable.strings; sourceTree = "<group>"; };
+		01A2D0471E490A9700C2103A /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Localizable.strings; sourceTree = "<group>"; };
+		01A2D0481E490A9700C2103A /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
+		01A2D0491E490A9700C2103A /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/Localizable.strings; sourceTree = "<group>"; };
+		01A2D04A1E490A9700C2103A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		01A2D04B1E490A9700C2103A /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
+		01A2D04C1E490A9700C2103A /* fr-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "fr-CA"; path = "fr-CA.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		01A2D04D1E490A9700C2103A /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		01A2D04E1E490A9700C2103A /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
+		01A2D04F1E490A9700C2103A /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
+		01A2D0501E490A9700C2103A /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Localizable.strings; sourceTree = "<group>"; };
+		01A2D0511E490A9700C2103A /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
+		01A2D0521E490A9700C2103A /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/Localizable.strings; sourceTree = "<group>"; };
+		01A2D0531E490A9700C2103A /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		01A2D0541E490A9700C2103A /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt; path = pt.lproj/Localizable.strings; sourceTree = "<group>"; };
+		01A2D0551E490A9700C2103A /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		01A2D0561E490A9700C2103A /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Localizable.strings; sourceTree = "<group>"; };
+		01A2D0571E490A9700C2103A /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		01A2D0581E490A9700C2103A /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		01A2D0591E490A9700C2103A /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		01A2D05B1E490A9700C2103A /* ApptentiveMessageCenterDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveMessageCenterDataSource.h; sourceTree = "<group>"; };
+		01A2D05C1E490A9700C2103A /* ApptentiveMessageCenterDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveMessageCenterDataSource.m; sourceTree = "<group>"; };
+		01A2D05E1E490A9700C2103A /* ApptentiveAboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveAboutViewController.h; sourceTree = "<group>"; };
+		01A2D05F1E490A9700C2103A /* ApptentiveAboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveAboutViewController.m; sourceTree = "<group>"; };
+		01A2D0601E490A9700C2103A /* ApptentiveAttachmentController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveAttachmentController.h; sourceTree = "<group>"; };
+		01A2D0611E490A9700C2103A /* ApptentiveAttachmentController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveAttachmentController.m; sourceTree = "<group>"; };
+		01A2D0621E490A9700C2103A /* ApptentiveBannerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveBannerViewController.h; sourceTree = "<group>"; };
+		01A2D0631E490A9700C2103A /* ApptentiveBannerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveBannerViewController.m; sourceTree = "<group>"; };
+		01A2D0641E490A9700C2103A /* ApptentiveMessageCenterErrorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveMessageCenterErrorViewController.h; sourceTree = "<group>"; };
+		01A2D0651E490A9700C2103A /* ApptentiveMessageCenterErrorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveMessageCenterErrorViewController.m; sourceTree = "<group>"; };
+		01A2D0661E490A9700C2103A /* ApptentiveMessageCenterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveMessageCenterViewController.h; sourceTree = "<group>"; };
+		01A2D0671E490A9700C2103A /* ApptentiveMessageCenterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveMessageCenterViewController.m; sourceTree = "<group>"; };
+		01A2D0691E490A9700C2103A /* ApptentiveJSONModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveJSONModel.h; sourceTree = "<group>"; };
+		01A2D06B1E490A9700C2103A /* ApptentiveAttachButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveAttachButton.h; sourceTree = "<group>"; };
+		01A2D06C1E490A9700C2103A /* ApptentiveAttachButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveAttachButton.m; sourceTree = "<group>"; };
+		01A2D06D1E490A9700C2103A /* ApptentiveAttachmentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveAttachmentCell.h; sourceTree = "<group>"; };
+		01A2D06E1E490A9700C2103A /* ApptentiveAttachmentCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveAttachmentCell.m; sourceTree = "<group>"; };
+		01A2D06F1E490A9700C2103A /* ApptentiveCompoundMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveCompoundMessageCell.h; sourceTree = "<group>"; };
+		01A2D0701E490A9700C2103A /* ApptentiveCompoundMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveCompoundMessageCell.m; sourceTree = "<group>"; };
+		01A2D0711E490A9700C2103A /* ApptentiveCompoundReplyCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveCompoundReplyCell.h; sourceTree = "<group>"; };
+		01A2D0721E490A9700C2103A /* ApptentiveCompoundReplyCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveCompoundReplyCell.m; sourceTree = "<group>"; };
+		01A2D0731E490A9700C2103A /* ApptentiveIndexedCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveIndexedCollectionView.h; sourceTree = "<group>"; };
+		01A2D0741E490A9700C2103A /* ApptentiveIndexedCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveIndexedCollectionView.m; sourceTree = "<group>"; };
+		01A2D0751E490A9700C2103A /* ApptentiveMessageCenterCellProtocols.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveMessageCenterCellProtocols.h; sourceTree = "<group>"; };
+		01A2D0761E490A9700C2103A /* ApptentiveMessageCenterContextMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveMessageCenterContextMessageCell.h; sourceTree = "<group>"; };
+		01A2D0771E490A9700C2103A /* ApptentiveMessageCenterContextMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveMessageCenterContextMessageCell.m; sourceTree = "<group>"; };
+		01A2D0781E490A9700C2103A /* ApptentiveMessageCenterGreetingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveMessageCenterGreetingView.h; sourceTree = "<group>"; };
+		01A2D0791E490A9700C2103A /* ApptentiveMessageCenterGreetingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveMessageCenterGreetingView.m; sourceTree = "<group>"; };
+		01A2D07A1E490A9700C2103A /* ApptentiveMessageCenterInputView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveMessageCenterInputView.h; sourceTree = "<group>"; };
+		01A2D07B1E490A9700C2103A /* ApptentiveMessageCenterInputView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveMessageCenterInputView.m; sourceTree = "<group>"; };
+		01A2D07C1E490A9700C2103A /* ApptentiveMessageCenterMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveMessageCenterMessageCell.h; sourceTree = "<group>"; };
+		01A2D07D1E490A9700C2103A /* ApptentiveMessageCenterMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveMessageCenterMessageCell.m; sourceTree = "<group>"; };
+		01A2D07E1E490A9700C2103A /* ApptentiveMessageCenterProfileView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveMessageCenterProfileView.h; sourceTree = "<group>"; };
+		01A2D07F1E490A9700C2103A /* ApptentiveMessageCenterProfileView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveMessageCenterProfileView.m; sourceTree = "<group>"; };
+		01A2D0801E490A9700C2103A /* ApptentiveMessageCenterReplyCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveMessageCenterReplyCell.h; sourceTree = "<group>"; };
+		01A2D0811E490A9700C2103A /* ApptentiveMessageCenterReplyCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveMessageCenterReplyCell.m; sourceTree = "<group>"; };
+		01A2D0821E490A9700C2103A /* ApptentiveMessageCenterStatusView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveMessageCenterStatusView.h; sourceTree = "<group>"; };
+		01A2D0831E490A9700C2103A /* ApptentiveMessageCenterStatusView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveMessageCenterStatusView.m; sourceTree = "<group>"; };
+		01A2D0841E490A9700C2103A /* ApptentiveProgressNavigationBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveProgressNavigationBar.h; sourceTree = "<group>"; };
+		01A2D0851E490A9700C2103A /* ApptentiveProgressNavigationBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveProgressNavigationBar.m; sourceTree = "<group>"; };
+		01A2D0871E490A9700C2103A /* ApptentiveBackend+Metrics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ApptentiveBackend+Metrics.h"; sourceTree = "<group>"; };
+		01A2D0881E490A9700C2103A /* ApptentiveBackend+Metrics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ApptentiveBackend+Metrics.m"; sourceTree = "<group>"; };
+		01A2D08A1E490A9700C2103A /* ApptentiveConnect-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ApptentiveConnect-Prefix.pch"; sourceTree = "<group>"; };
+		01A2D08B1E490A9700C2103A /* ApptentiveJSONSerialization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveJSONSerialization.h; sourceTree = "<group>"; };
+		01A2D08C1E490A9700C2103A /* ApptentiveJSONSerialization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveJSONSerialization.m; sourceTree = "<group>"; };
+		01A2D08D1E490A9700C2103A /* ApptentiveLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveLog.h; sourceTree = "<group>"; };
+		01A2D08E1E490A9700C2103A /* ApptentiveLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveLogger.h; sourceTree = "<group>"; };
+		01A2D08F1E490A9700C2103A /* ApptentiveLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveLogger.m; sourceTree = "<group>"; };
+		01A2D0901E490A9700C2103A /* ApptentiveUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveUtilities.h; sourceTree = "<group>"; };
+		01A2D0911E490A9700C2103A /* ApptentiveUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveUtilities.m; sourceTree = "<group>"; };
+		01A2D0921E490A9700C2103A /* NSDictionary+Apptentive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+Apptentive.h"; sourceTree = "<group>"; };
+		01A2D0931E490A9700C2103A /* NSDictionary+ApptentiveAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+ApptentiveAdditions.m"; sourceTree = "<group>"; };
+		01A2D0951E490A9700C2103A /* ApptentiveAppConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveAppConfiguration.h; sourceTree = "<group>"; };
+		01A2D0961E490A9700C2103A /* ApptentiveAppConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveAppConfiguration.m; sourceTree = "<group>"; };
+		01A2D0991E490A9700C2103A /* ApptentiveData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveData.h; sourceTree = "<group>"; };
+		01A2D09A1E490A9700C2103A /* ApptentiveData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveData.m; sourceTree = "<group>"; };
+		01A2D09B1E490A9700C2103A /* ApptentiveFileAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveFileAttachment.h; sourceTree = "<group>"; };
+		01A2D09C1E490A9700C2103A /* ApptentiveFileAttachment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveFileAttachment.m; sourceTree = "<group>"; };
+		01A2D09D1E490A9700C2103A /* ApptentiveLegacyEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveLegacyEvent.h; sourceTree = "<group>"; };
+		01A2D09E1E490A9700C2103A /* ApptentiveLegacyEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveLegacyEvent.m; sourceTree = "<group>"; };
+		01A2D09F1E490A9700C2103A /* ApptentiveLegacySurveyResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveLegacySurveyResponse.h; sourceTree = "<group>"; };
+		01A2D0A01E490A9700C2103A /* ApptentiveLegacySurveyResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveLegacySurveyResponse.m; sourceTree = "<group>"; };
+		01A2D0A11E490A9700C2103A /* ApptentiveMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveMessage.h; sourceTree = "<group>"; };
+		01A2D0A21E490A9700C2103A /* ApptentiveMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveMessage.m; sourceTree = "<group>"; };
+		01A2D0A31E490A9700C2103A /* ApptentiveMessageSender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveMessageSender.h; sourceTree = "<group>"; };
+		01A2D0A41E490A9700C2103A /* ApptentiveMessageSender.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveMessageSender.m; sourceTree = "<group>"; };
+		01A2D0A91E490A9700C2103A /* ApptentiveRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveRecord.h; sourceTree = "<group>"; };
+		01A2D0AA1E490A9700C2103A /* ApptentiveRecord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveRecord.m; sourceTree = "<group>"; };
+		01A2D0AB1E490A9700C2103A /* ATDataModel v1 to v2.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = "ATDataModel v1 to v2.xcmappingmodel"; sourceTree = "<group>"; };
+		01A2D0AC1E490A9700C2103A /* ATDataModel v2 to v3.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = "ATDataModel v2 to v3.xcmappingmodel"; sourceTree = "<group>"; };
+		01A2D0AD1E490A9700C2103A /* ATDataModel v3 to v4.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = "ATDataModel v3 to v4.xcmappingmodel"; sourceTree = "<group>"; };
+		01A2D0AE1E490A9700C2103A /* ATDataModel v4 to v5.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = "ATDataModel v4 to v5.xcmappingmodel"; sourceTree = "<group>"; };
+		01A2D0AF1E490A9700C2103A /* ATDataModel v5 to v6.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = "ATDataModel v5 to v6.xcmappingmodel"; sourceTree = "<group>"; };
+		01A2D0B11E490A9700C2103A /* ATDataModel 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "ATDataModel 2.xcdatamodel"; sourceTree = "<group>"; };
+		01A2D0B21E490A9700C2103A /* ATDataModel 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "ATDataModel 3.xcdatamodel"; sourceTree = "<group>"; };
+		01A2D0B31E490A9700C2103A /* ATDataModel 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "ATDataModel 4.xcdatamodel"; sourceTree = "<group>"; };
+		01A2D0B41E490A9700C2103A /* ATDataModel 5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "ATDataModel 5.xcdatamodel"; sourceTree = "<group>"; };
+		01A2D0B51E490A9700C2103A /* ATDataModel 6.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "ATDataModel 6.xcdatamodel"; sourceTree = "<group>"; };
+		01A2D0B61E490A9700C2103A /* ATDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ATDataModel.xcdatamodel; sourceTree = "<group>"; };
+		01A2D0B81E490A9700C2103A /* ApptentiveMessageRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveMessageRequestOperation.h; sourceTree = "<group>"; };
+		01A2D0B91E490A9700C2103A /* ApptentiveMessageRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveMessageRequestOperation.m; sourceTree = "<group>"; };
+		01A2D0BA1E490A9700C2103A /* ApptentiveNetworkQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveNetworkQueue.h; sourceTree = "<group>"; };
+		01A2D0BB1E490A9700C2103A /* ApptentiveNetworkQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveNetworkQueue.m; sourceTree = "<group>"; };
+		01A2D0BC1E490A9700C2103A /* ApptentiveRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveRequestOperation.h; sourceTree = "<group>"; };
+		01A2D0BD1E490A9700C2103A /* ApptentiveRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveRequestOperation.m; sourceTree = "<group>"; };
+		01A2D0BE1E490A9700C2103A /* ApptentiveSerialNetworkQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveSerialNetworkQueue.h; sourceTree = "<group>"; };
+		01A2D0BF1E490A9700C2103A /* ApptentiveSerialNetworkQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveSerialNetworkQueue.m; sourceTree = "<group>"; };
+		01A2D0C01E490A9700C2103A /* ApptentiveSerialRequest+Record.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ApptentiveSerialRequest+Record.h"; sourceTree = "<group>"; };
+		01A2D0C11E490A9700C2103A /* ApptentiveSerialRequest+Record.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ApptentiveSerialRequest+Record.m"; sourceTree = "<group>"; };
+		01A2D0C21E490A9700C2103A /* ApptentiveSerialRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveSerialRequest.h; sourceTree = "<group>"; };
+		01A2D0C31E490A9700C2103A /* ApptentiveSerialRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveSerialRequest.m; sourceTree = "<group>"; };
+		01A2D0C41E490A9700C2103A /* ApptentiveSerialRequestAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveSerialRequestAttachment.h; sourceTree = "<group>"; };
+		01A2D0C51E490A9700C2103A /* ApptentiveSerialRequestAttachment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveSerialRequestAttachment.m; sourceTree = "<group>"; };
+		01A2D0C61E490A9700C2103A /* ApptentiveSerialRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveSerialRequestOperation.h; sourceTree = "<group>"; };
+		01A2D0C71E490A9700C2103A /* ApptentiveSerialRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveSerialRequestOperation.m; sourceTree = "<group>"; };
+		01A2D0C91E490A9700C2103A /* ApptentiveBackend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveBackend.h; sourceTree = "<group>"; };
+		01A2D0CA1E490A9700C2103A /* ApptentiveBackend.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveBackend.m; sourceTree = "<group>"; };
+		01A2D0CB1E490A9700C2103A /* ApptentiveDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveDataManager.h; sourceTree = "<group>"; };
+		01A2D0CC1E490A9700C2103A /* ApptentiveDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveDataManager.m; sourceTree = "<group>"; };
+		01A2D0CE1E490A9700C2103A /* ApptentiveReachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveReachability.h; sourceTree = "<group>"; };
+		01A2D0CF1E490A9700C2103A /* ApptentiveReachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveReachability.m; sourceTree = "<group>"; };
+		01A2D0D21E490A9700C2103A /* ApptentiveSurvey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveSurvey.h; sourceTree = "<group>"; };
+		01A2D0D31E490A9700C2103A /* ApptentiveSurvey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveSurvey.m; sourceTree = "<group>"; };
+		01A2D0D41E490A9700C2103A /* ApptentiveSurveyAnswer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveSurveyAnswer.h; sourceTree = "<group>"; };
+		01A2D0D51E490A9700C2103A /* ApptentiveSurveyAnswer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveSurveyAnswer.m; sourceTree = "<group>"; };
+		01A2D0D61E490A9700C2103A /* ApptentiveSurveyQuestion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveSurveyQuestion.h; sourceTree = "<group>"; };
+		01A2D0D71E490A9700C2103A /* ApptentiveSurveyQuestion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveSurveyQuestion.m; sourceTree = "<group>"; };
+		01A2D0D91E490A9700C2103A /* ApptentiveSurveyCollectionViewLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveSurveyCollectionViewLayout.h; sourceTree = "<group>"; };
+		01A2D0DA1E490A9700C2103A /* ApptentiveSurveyCollectionViewLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveSurveyCollectionViewLayout.m; sourceTree = "<group>"; };
+		01A2D0DB1E490A9700C2103A /* ApptentiveSurveyLayoutAttributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveSurveyLayoutAttributes.h; sourceTree = "<group>"; };
+		01A2D0DC1E490A9700C2103A /* ApptentiveSurveyLayoutAttributes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveSurveyLayoutAttributes.m; sourceTree = "<group>"; };
+		01A2D0DD1E490A9700C2103A /* ApptentiveSurveyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveSurveyViewController.h; sourceTree = "<group>"; };
+		01A2D0DE1E490A9700C2103A /* ApptentiveSurveyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveSurveyViewController.m; sourceTree = "<group>"; };
+		01A2D0DF1E490A9700C2103A /* ApptentiveSurveyViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveSurveyViewModel.h; sourceTree = "<group>"; };
+		01A2D0E01E490A9700C2103A /* ApptentiveSurveyViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveSurveyViewModel.m; sourceTree = "<group>"; };
+		01A2D0E21E490A9700C2103A /* ApptentiveSurveyAnswerCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveSurveyAnswerCell.h; sourceTree = "<group>"; };
+		01A2D0E31E490A9700C2103A /* ApptentiveSurveyAnswerCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveSurveyAnswerCell.m; sourceTree = "<group>"; };
+		01A2D0E41E490A9700C2103A /* ApptentiveSurveyChoiceCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveSurveyChoiceCell.h; sourceTree = "<group>"; };
+		01A2D0E51E490A9700C2103A /* ApptentiveSurveyChoiceCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveSurveyChoiceCell.m; sourceTree = "<group>"; };
+		01A2D0E61E490A9700C2103A /* ApptentiveSurveyCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveSurveyCollectionView.h; sourceTree = "<group>"; };
+		01A2D0E71E490A9700C2103A /* ApptentiveSurveyCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveSurveyCollectionView.m; sourceTree = "<group>"; };
+		01A2D0E81E490A9700C2103A /* ApptentiveSurveyGreetingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveSurveyGreetingView.h; sourceTree = "<group>"; };
+		01A2D0E91E490A9700C2103A /* ApptentiveSurveyGreetingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveSurveyGreetingView.m; sourceTree = "<group>"; };
+		01A2D0EA1E490A9700C2103A /* ApptentiveSurveyMultilineCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveSurveyMultilineCell.h; sourceTree = "<group>"; };
+		01A2D0EB1E490A9700C2103A /* ApptentiveSurveyMultilineCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveSurveyMultilineCell.m; sourceTree = "<group>"; };
+		01A2D0EC1E490A9700C2103A /* ApptentiveSurveyOtherCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveSurveyOtherCell.h; sourceTree = "<group>"; };
+		01A2D0ED1E490A9700C2103A /* ApptentiveSurveyOtherCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveSurveyOtherCell.m; sourceTree = "<group>"; };
+		01A2D0EE1E490A9700C2103A /* ApptentiveSurveyQuestionBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveSurveyQuestionBackgroundView.h; sourceTree = "<group>"; };
+		01A2D0EF1E490A9700C2103A /* ApptentiveSurveyQuestionBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveSurveyQuestionBackgroundView.m; sourceTree = "<group>"; };
+		01A2D0F01E490A9700C2103A /* ApptentiveSurveyQuestionFooterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveSurveyQuestionFooterView.h; sourceTree = "<group>"; };
+		01A2D0F11E490A9700C2103A /* ApptentiveSurveyQuestionFooterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveSurveyQuestionFooterView.m; sourceTree = "<group>"; };
+		01A2D0F21E490A9700C2103A /* ApptentiveSurveyQuestionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveSurveyQuestionView.h; sourceTree = "<group>"; };
+		01A2D0F31E490A9700C2103A /* ApptentiveSurveyQuestionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveSurveyQuestionView.m; sourceTree = "<group>"; };
+		01A2D0F41E490A9700C2103A /* ApptentiveSurveySingleLineCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveSurveySingleLineCell.h; sourceTree = "<group>"; };
+		01A2D0F51E490A9700C2103A /* ApptentiveSurveySingleLineCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveSurveySingleLineCell.m; sourceTree = "<group>"; };
+		01A2D0F61E490A9700C2103A /* ApptentiveSurveySubmitButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveSurveySubmitButton.h; sourceTree = "<group>"; };
+		01A2D0F71E490A9700C2103A /* ApptentiveSurveySubmitButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveSurveySubmitButton.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		01A2CF8D1E49062700C2103A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		01A2CF971E49062800C2103A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				01A2CF9B1E49062800C2103A /* Apptentive.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		01A2CF871E49062700C2103A = {
+			isa = PBXGroup;
+			children = (
+				01A2CF931E49062700C2103A /* Apptentive */,
+				01A2CF9E1E49062800C2103A /* ApptentiveTests */,
+				01A2CF921E49062700C2103A /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		01A2CF921E49062700C2103A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				01A2CF911E49062700C2103A /* Apptentive.framework */,
+				01A2CF9A1E49062800C2103A /* ApptentiveTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		01A2CF931E49062700C2103A /* Apptentive */ = {
+			isa = PBXGroup;
+			children = (
+				01A2CF941E49062700C2103A /* Apptentive.h */,
+				01A2CFAC1E490A9700C2103A /* Apptentive.m */,
+				01A2CFAE1E490A9700C2103A /* ApptentiveStyleSheet.h */,
+				01A2CFAF1E490A9700C2103A /* ApptentiveStyleSheet.m */,
+				01A2CF951E49062700C2103A /* Info.plist */,
+				01A2CFAD1E490A9700C2103A /* Apptentive.storyboard */,
+				01A2CFAB1E490A9600C2103A /* Apptentive_Private.h */,
+				01A2CFB01E490A9700C2103A /* Custom Views */,
+				01A2CFBB1E490A9700C2103A /* Engagement */,
+				01A2D0021E490A9700C2103A /* Images */,
+				01A2D0441E490A9700C2103A /* localization */,
+				01A2D05A1E490A9700C2103A /* Message Center */,
+				01A2D0861E490A9700C2103A /* Metrics */,
+				01A2D0891E490A9700C2103A /* Misc */,
+				01A2D0941E490A9700C2103A /* Model */,
+				01A2D0B71E490A9700C2103A /* Network Queue */,
+				01A2D0C81E490A9700C2103A /* Persistence */,
+				01A2D0CD1E490A9700C2103A /* Reachability */,
+				01A2D0D01E490A9700C2103A /* Surveys */,
+			);
+			path = Apptentive;
+			sourceTree = "<group>";
+		};
+		01A2CF9E1E49062800C2103A /* ApptentiveTests */ = {
+			isa = PBXGroup;
+			children = (
+				01A2CF9F1E49062800C2103A /* ApptentiveTests.m */,
+				01A2CFA11E49062800C2103A /* Info.plist */,
+			);
+			path = ApptentiveTests;
+			sourceTree = "<group>";
+		};
+		01A2CFB01E490A9700C2103A /* Custom Views */ = {
+			isa = PBXGroup;
+			children = (
+				01A2CFB11E490A9700C2103A /* ApptentiveHUDViewController.h */,
+				01A2CFB21E490A9700C2103A /* ApptentiveHUDViewController.m */,
+				01A2CFB31E490A9700C2103A /* ApptentiveNetworkImageIconView.h */,
+				01A2CFB41E490A9700C2103A /* ApptentiveNetworkImageIconView.m */,
+				01A2CFB51E490A9700C2103A /* ApptentiveNetworkImageView.h */,
+				01A2CFB61E490A9700C2103A /* ApptentiveNetworkImageView.m */,
+				01A2CFB71E490A9700C2103A /* ApptentivePassThroughWindow.h */,
+				01A2CFB81E490A9700C2103A /* ApptentivePassThroughWindow.m */,
+				01A2CFB91E490A9700C2103A /* ApptentiveUnreadMessagesBadgeView.h */,
+				01A2CFBA1E490A9700C2103A /* ApptentiveUnreadMessagesBadgeView.m */,
+			);
+			path = "Custom Views";
+			sourceTree = "<group>";
+		};
+		01A2CFBB1E490A9700C2103A /* Engagement */ = {
+			isa = PBXGroup;
+			children = (
+				01A2CFBC1E490A9700C2103A /* Interactions */,
+				01A2CFDA1E490A9700C2103A /* Model */,
+				01A2CFFF1E490A9700C2103A /* Persistence */,
+			);
+			path = Engagement;
+			sourceTree = "<group>";
+		};
+		01A2CFBC1E490A9700C2103A /* Interactions */ = {
+			isa = PBXGroup;
+			children = (
+				01A2CFBD1E490A9700C2103A /* ApptentiveInteractionController.h */,
+				01A2CFBE1E490A9700C2103A /* ApptentiveInteractionController.m */,
+				01A2CFBF1E490A9700C2103A /* Messages */,
+				01A2CFC41E490A9700C2103A /* Notes */,
+				01A2CFC91E490A9700C2103A /* Rating Flow */,
+				01A2CFD21E490A9700C2103A /* Surveys */,
+				01A2CFD51E490A9700C2103A /* Upgrade Message */,
+			);
+			path = Interactions;
+			sourceTree = "<group>";
+		};
+		01A2CFBF1E490A9700C2103A /* Messages */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Messages;
+			sourceTree = "<group>";
+		};
+		01A2CFC41E490A9700C2103A /* Notes */ = {
+			isa = PBXGroup;
+			children = (
+				01A2CFC51E490A9700C2103A /* ApptentiveInteractionNavigateToLink.h */,
+				01A2CFC61E490A9700C2103A /* ApptentiveInteractionNavigateToLink.m */,
+				01A2CFC71E490A9700C2103A /* ApptentiveInteractionTextModalController.h */,
+				01A2CFC81E490A9700C2103A /* ApptentiveInteractionTextModalController.m */,
+			);
+			path = Notes;
+			sourceTree = "<group>";
+		};
+		01A2CFC91E490A9700C2103A /* Rating Flow */ = {
+			isa = PBXGroup;
+			children = (
+				01A2CFCA1E490A9700C2103A /* ApptentiveInteractionAppStoreController.h */,
+				01A2CFCB1E490A9700C2103A /* ApptentiveInteractionAppStoreController.m */,
+				01A2CFCC1E490A9700C2103A /* ApptentiveInteractionEnjoymentDialogController.h */,
+				01A2CFCD1E490A9700C2103A /* ApptentiveInteractionEnjoymentDialogController.m */,
+				01A2CFCE1E490A9700C2103A /* ApptentiveInteractionMessageCenterController.h */,
+				01A2CFCF1E490A9700C2103A /* ApptentiveInteractionMessageCenterController.m */,
+				01A2CFD01E490A9700C2103A /* ApptentiveInteractionRatingDialogController.h */,
+				01A2CFD11E490A9700C2103A /* ApptentiveInteractionRatingDialogController.m */,
+			);
+			path = "Rating Flow";
+			sourceTree = "<group>";
+		};
+		01A2CFD21E490A9700C2103A /* Surveys */ = {
+			isa = PBXGroup;
+			children = (
+				01A2CFD31E490A9700C2103A /* ApptentiveInteractionSurveyController.h */,
+				01A2CFD41E490A9700C2103A /* ApptentiveInteractionSurveyController.m */,
+			);
+			path = Surveys;
+			sourceTree = "<group>";
+		};
+		01A2CFD51E490A9700C2103A /* Upgrade Message */ = {
+			isa = PBXGroup;
+			children = (
+				01A2CFD61E490A9700C2103A /* ApptentiveInteractionUpgradeMessageController.h */,
+				01A2CFD71E490A9700C2103A /* ApptentiveInteractionUpgradeMessageController.m */,
+				01A2CFD81E490A9700C2103A /* ApptentiveInteractionUpgradeMessageViewController.h */,
+				01A2CFD91E490A9700C2103A /* ApptentiveInteractionUpgradeMessageViewController.m */,
+			);
+			path = "Upgrade Message";
+			sourceTree = "<group>";
+		};
+		01A2CFDA1E490A9700C2103A /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				01A2CFDB1E490A9700C2103A /* ApptentiveAppRelease.h */,
+				01A2CFDC1E490A9700C2103A /* ApptentiveAppRelease.m */,
+				01A2CFDD1E490A9700C2103A /* ApptentiveCount.h */,
+				01A2CFDE1E490A9700C2103A /* ApptentiveCount.m */,
+				01A2CFDF1E490A9700C2103A /* ApptentiveCustomData.h */,
+				01A2CFE01E490A9700C2103A /* ApptentiveCustomData.m */,
+				01A2CFE11E490A9700C2103A /* ApptentiveDevice.h */,
+				01A2CFE21E490A9700C2103A /* ApptentiveDevice.m */,
+				01A2CFE31E490A9700C2103A /* ApptentiveEngagement.h */,
+				01A2CFE41E490A9700C2103A /* ApptentiveEngagement.m */,
+				01A2CFE51E490A9700C2103A /* ApptentiveEngagementManifest.h */,
+				01A2CFE61E490A9700C2103A /* ApptentiveEngagementManifest.m */,
+				01A2CFE71E490A9700C2103A /* ApptentiveInteraction.h */,
+				01A2CFE81E490A9700C2103A /* ApptentiveInteraction.m */,
+				01A2CFE91E490A9700C2103A /* ApptentiveInteractionInvocation.h */,
+				01A2CFEA1E490A9700C2103A /* ApptentiveInteractionInvocation.m */,
+				01A2CFEB1E490A9700C2103A /* ApptentiveInteractionUsageData.h */,
+				01A2CFEC1E490A9700C2103A /* ApptentiveInteractionUsageData.m */,
+				01A2CFED1E490A9700C2103A /* ApptentiveMessageCenterInteraction.h */,
+				01A2CFEE1E490A9700C2103A /* ApptentiveMessageCenterInteraction.m */,
+				01A2CFEF1E490A9700C2103A /* ApptentiveMutableCustomData.h */,
+				01A2CFF01E490A9700C2103A /* ApptentiveMutableCustomData.m */,
+				01A2CFF11E490A9700C2103A /* ApptentiveMutableDevice.h */,
+				01A2CFF21E490A9700C2103A /* ApptentiveMutableDevice.m */,
+				01A2CFF31E490A9700C2103A /* ApptentiveMutablePerson.h */,
+				01A2CFF41E490A9700C2103A /* ApptentiveMutablePerson.m */,
+				01A2CFF51E490A9700C2103A /* ApptentivePerson.h */,
+				01A2CFF61E490A9700C2103A /* ApptentivePerson.m */,
+				01A2CFF71E490A9700C2103A /* ApptentiveSDK.h */,
+				01A2CFF81E490A9700C2103A /* ApptentiveSDK.m */,
+				01A2CFF91E490A9700C2103A /* ApptentiveSession.h */,
+				01A2CFFA1E490A9700C2103A /* ApptentiveSession.m */,
+				01A2CFFB1E490A9700C2103A /* ApptentiveState.h */,
+				01A2CFFC1E490A9700C2103A /* ApptentiveState.m */,
+				01A2CFFD1E490A9700C2103A /* ApptentiveVersion.h */,
+				01A2CFFE1E490A9700C2103A /* ApptentiveVersion.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		01A2CFFF1E490A9700C2103A /* Persistence */ = {
+			isa = PBXGroup;
+			children = (
+				01A2D0001E490A9700C2103A /* ApptentiveBackend+Engagement.h */,
+				01A2D0011E490A9700C2103A /* ApptentiveBackend+Engagement.m */,
+			);
+			path = Persistence;
+			sourceTree = "<group>";
+		};
+		01A2D0021E490A9700C2103A /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				01A2D0031E490A9700C2103A /* at_account */,
+				01A2D0071E490A9700C2103A /* at_apptentive_logo */,
+				01A2D00B1E490A9700C2103A /* at_attach */,
+				01A2D00F1E490A9700C2103A /* at_checkmark */,
+				01A2D0131E490A9700C2103A /* at_checkmark_highlighted */,
+				01A2D0171E490A9700C2103A /* at_circle */,
+				01A2D01B1E490A9700C2103A /* at_circle_highlighted */,
+				01A2D01F1E490A9700C2103A /* at_close */,
+				01A2D0231E490A9700C2103A /* at_document */,
+				01A2D0271E490A9700C2103A /* at_error_wait */,
+				01A2D02B1E490A9700C2103A /* at_info */,
+				01A2D02F1E490A9700C2103A /* at_network_error */,
+				01A2D0331E490A9700C2103A /* at_remove */,
+				01A2D0371E490A9700C2103A /* at_select_higlighted */,
+				01A2D0381E490A9700C2103A /* at_thanks */,
+				01A2D03C1E490A9700C2103A /* at_update_icon_mask */,
+				01A2D0401E490A9700C2103A /* at_update_logo */,
+			);
+			path = Images;
+			sourceTree = "<group>";
+		};
+		01A2D0031E490A9700C2103A /* at_account */ = {
+			isa = PBXGroup;
+			children = (
+				01A2D0041E490A9700C2103A /* at_account.png */,
+				01A2D0051E490A9700C2103A /* at_account@2x.png */,
+				01A2D0061E490A9700C2103A /* at_account@3x.png */,
+			);
+			path = at_account;
+			sourceTree = "<group>";
+		};
+		01A2D0071E490A9700C2103A /* at_apptentive_logo */ = {
+			isa = PBXGroup;
+			children = (
+				01A2D0081E490A9700C2103A /* at_apptentive_logo.png */,
+				01A2D0091E490A9700C2103A /* at_apptentive_logo@2x.png */,
+				01A2D00A1E490A9700C2103A /* at_apptentive_logo@3x.png */,
+			);
+			path = at_apptentive_logo;
+			sourceTree = "<group>";
+		};
+		01A2D00B1E490A9700C2103A /* at_attach */ = {
+			isa = PBXGroup;
+			children = (
+				01A2D00C1E490A9700C2103A /* at_attach.png */,
+				01A2D00D1E490A9700C2103A /* at_attach@2x.png */,
+				01A2D00E1E490A9700C2103A /* at_attach@3x.png */,
+			);
+			path = at_attach;
+			sourceTree = "<group>";
+		};
+		01A2D00F1E490A9700C2103A /* at_checkmark */ = {
+			isa = PBXGroup;
+			children = (
+				01A2D0101E490A9700C2103A /* at_checkmark.png */,
+				01A2D0111E490A9700C2103A /* at_checkmark@2x.png */,
+				01A2D0121E490A9700C2103A /* at_checkmark@3x.png */,
+			);
+			path = at_checkmark;
+			sourceTree = "<group>";
+		};
+		01A2D0131E490A9700C2103A /* at_checkmark_highlighted */ = {
+			isa = PBXGroup;
+			children = (
+				01A2D0141E490A9700C2103A /* at_checkmark_highlighted.png */,
+				01A2D0151E490A9700C2103A /* at_checkmark_highlighted@2x.png */,
+				01A2D0161E490A9700C2103A /* at_checkmark_highlighted@3x.png */,
+			);
+			path = at_checkmark_highlighted;
+			sourceTree = "<group>";
+		};
+		01A2D0171E490A9700C2103A /* at_circle */ = {
+			isa = PBXGroup;
+			children = (
+				01A2D0181E490A9700C2103A /* at_circle.png */,
+				01A2D0191E490A9700C2103A /* at_circle@2x.png */,
+				01A2D01A1E490A9700C2103A /* at_circle@3x.png */,
+			);
+			path = at_circle;
+			sourceTree = "<group>";
+		};
+		01A2D01B1E490A9700C2103A /* at_circle_highlighted */ = {
+			isa = PBXGroup;
+			children = (
+				01A2D01C1E490A9700C2103A /* at_circle_highlighted.png */,
+				01A2D01D1E490A9700C2103A /* at_circle_highlighted@2x.png */,
+				01A2D01E1E490A9700C2103A /* at_circle_highlighted@3x.png */,
+			);
+			path = at_circle_highlighted;
+			sourceTree = "<group>";
+		};
+		01A2D01F1E490A9700C2103A /* at_close */ = {
+			isa = PBXGroup;
+			children = (
+				01A2D0201E490A9700C2103A /* at_close.png */,
+				01A2D0211E490A9700C2103A /* at_close@2x.png */,
+				01A2D0221E490A9700C2103A /* at_close@3x.png */,
+			);
+			path = at_close;
+			sourceTree = "<group>";
+		};
+		01A2D0231E490A9700C2103A /* at_document */ = {
+			isa = PBXGroup;
+			children = (
+				01A2D0241E490A9700C2103A /* at_document.png */,
+				01A2D0251E490A9700C2103A /* at_document@2x.png */,
+				01A2D0261E490A9700C2103A /* at_document@3x.png */,
+			);
+			path = at_document;
+			sourceTree = "<group>";
+		};
+		01A2D0271E490A9700C2103A /* at_error_wait */ = {
+			isa = PBXGroup;
+			children = (
+				01A2D0281E490A9700C2103A /* at_error_wait.png */,
+				01A2D0291E490A9700C2103A /* at_error_wait@2x.png */,
+				01A2D02A1E490A9700C2103A /* at_error_wait@3x.png */,
+			);
+			path = at_error_wait;
+			sourceTree = "<group>";
+		};
+		01A2D02B1E490A9700C2103A /* at_info */ = {
+			isa = PBXGroup;
+			children = (
+				01A2D02C1E490A9700C2103A /* at_info.png */,
+				01A2D02D1E490A9700C2103A /* at_info@2x.png */,
+				01A2D02E1E490A9700C2103A /* at_info@3x.png */,
+			);
+			path = at_info;
+			sourceTree = "<group>";
+		};
+		01A2D02F1E490A9700C2103A /* at_network_error */ = {
+			isa = PBXGroup;
+			children = (
+				01A2D0301E490A9700C2103A /* at_network_error.png */,
+				01A2D0311E490A9700C2103A /* at_network_error@2x.png */,
+				01A2D0321E490A9700C2103A /* at_network_error@3x.png */,
+			);
+			path = at_network_error;
+			sourceTree = "<group>";
+		};
+		01A2D0331E490A9700C2103A /* at_remove */ = {
+			isa = PBXGroup;
+			children = (
+				01A2D0341E490A9700C2103A /* at_remove.png */,
+				01A2D0351E490A9700C2103A /* at_remove@2x.png */,
+				01A2D0361E490A9700C2103A /* at_remove@3x.png */,
+			);
+			path = at_remove;
+			sourceTree = "<group>";
+		};
+		01A2D0371E490A9700C2103A /* at_select_higlighted */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = at_select_higlighted;
+			sourceTree = "<group>";
+		};
+		01A2D0381E490A9700C2103A /* at_thanks */ = {
+			isa = PBXGroup;
+			children = (
+				01A2D0391E490A9700C2103A /* at_thanks.png */,
+				01A2D03A1E490A9700C2103A /* at_thanks@2x.png */,
+				01A2D03B1E490A9700C2103A /* at_thanks@3x.png */,
+			);
+			path = at_thanks;
+			sourceTree = "<group>";
+		};
+		01A2D03C1E490A9700C2103A /* at_update_icon_mask */ = {
+			isa = PBXGroup;
+			children = (
+				01A2D03D1E490A9700C2103A /* at_update_icon_mask.png */,
+				01A2D03E1E490A9700C2103A /* at_update_icon_mask@2x.png */,
+				01A2D03F1E490A9700C2103A /* at_update_icon_mask@3x.png */,
+			);
+			path = at_update_icon_mask;
+			sourceTree = "<group>";
+		};
+		01A2D0401E490A9700C2103A /* at_update_logo */ = {
+			isa = PBXGroup;
+			children = (
+				01A2D0411E490A9700C2103A /* at_update_logo.png */,
+				01A2D0421E490A9700C2103A /* at_update_logo@2x.png */,
+				01A2D0431E490A9700C2103A /* at_update_logo@3x.png */,
+			);
+			path = at_update_logo;
+			sourceTree = "<group>";
+		};
+		01A2D0441E490A9700C2103A /* localization */ = {
+			isa = PBXGroup;
+			children = (
+				01A2D0451E490A9700C2103A /* Localizable.strings */,
+			);
+			path = localization;
+			sourceTree = "<group>";
+		};
+		01A2D05A1E490A9700C2103A /* Message Center */ = {
+			isa = PBXGroup;
+			children = (
+				01A2D05B1E490A9700C2103A /* ApptentiveMessageCenterDataSource.h */,
+				01A2D05C1E490A9700C2103A /* ApptentiveMessageCenterDataSource.m */,
+				01A2D05D1E490A9700C2103A /* Controllers */,
+				01A2D0681E490A9700C2103A /* Protocols */,
+				01A2D06A1E490A9700C2103A /* Views */,
+			);
+			path = "Message Center";
+			sourceTree = "<group>";
+		};
+		01A2D05D1E490A9700C2103A /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				01A2D05E1E490A9700C2103A /* ApptentiveAboutViewController.h */,
+				01A2D05F1E490A9700C2103A /* ApptentiveAboutViewController.m */,
+				01A2D0601E490A9700C2103A /* ApptentiveAttachmentController.h */,
+				01A2D0611E490A9700C2103A /* ApptentiveAttachmentController.m */,
+				01A2D0621E490A9700C2103A /* ApptentiveBannerViewController.h */,
+				01A2D0631E490A9700C2103A /* ApptentiveBannerViewController.m */,
+				01A2D0641E490A9700C2103A /* ApptentiveMessageCenterErrorViewController.h */,
+				01A2D0651E490A9700C2103A /* ApptentiveMessageCenterErrorViewController.m */,
+				01A2D0661E490A9700C2103A /* ApptentiveMessageCenterViewController.h */,
+				01A2D0671E490A9700C2103A /* ApptentiveMessageCenterViewController.m */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		01A2D0681E490A9700C2103A /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				01A2D0691E490A9700C2103A /* ApptentiveJSONModel.h */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		01A2D06A1E490A9700C2103A /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				01A2D06B1E490A9700C2103A /* ApptentiveAttachButton.h */,
+				01A2D06C1E490A9700C2103A /* ApptentiveAttachButton.m */,
+				01A2D06D1E490A9700C2103A /* ApptentiveAttachmentCell.h */,
+				01A2D06E1E490A9700C2103A /* ApptentiveAttachmentCell.m */,
+				01A2D06F1E490A9700C2103A /* ApptentiveCompoundMessageCell.h */,
+				01A2D0701E490A9700C2103A /* ApptentiveCompoundMessageCell.m */,
+				01A2D0711E490A9700C2103A /* ApptentiveCompoundReplyCell.h */,
+				01A2D0721E490A9700C2103A /* ApptentiveCompoundReplyCell.m */,
+				01A2D0731E490A9700C2103A /* ApptentiveIndexedCollectionView.h */,
+				01A2D0741E490A9700C2103A /* ApptentiveIndexedCollectionView.m */,
+				01A2D0751E490A9700C2103A /* ApptentiveMessageCenterCellProtocols.h */,
+				01A2D0761E490A9700C2103A /* ApptentiveMessageCenterContextMessageCell.h */,
+				01A2D0771E490A9700C2103A /* ApptentiveMessageCenterContextMessageCell.m */,
+				01A2D0781E490A9700C2103A /* ApptentiveMessageCenterGreetingView.h */,
+				01A2D0791E490A9700C2103A /* ApptentiveMessageCenterGreetingView.m */,
+				01A2D07A1E490A9700C2103A /* ApptentiveMessageCenterInputView.h */,
+				01A2D07B1E490A9700C2103A /* ApptentiveMessageCenterInputView.m */,
+				01A2D07C1E490A9700C2103A /* ApptentiveMessageCenterMessageCell.h */,
+				01A2D07D1E490A9700C2103A /* ApptentiveMessageCenterMessageCell.m */,
+				01A2D07E1E490A9700C2103A /* ApptentiveMessageCenterProfileView.h */,
+				01A2D07F1E490A9700C2103A /* ApptentiveMessageCenterProfileView.m */,
+				01A2D0801E490A9700C2103A /* ApptentiveMessageCenterReplyCell.h */,
+				01A2D0811E490A9700C2103A /* ApptentiveMessageCenterReplyCell.m */,
+				01A2D0821E490A9700C2103A /* ApptentiveMessageCenterStatusView.h */,
+				01A2D0831E490A9700C2103A /* ApptentiveMessageCenterStatusView.m */,
+				01A2D0841E490A9700C2103A /* ApptentiveProgressNavigationBar.h */,
+				01A2D0851E490A9700C2103A /* ApptentiveProgressNavigationBar.m */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		01A2D0861E490A9700C2103A /* Metrics */ = {
+			isa = PBXGroup;
+			children = (
+				01A2D0871E490A9700C2103A /* ApptentiveBackend+Metrics.h */,
+				01A2D0881E490A9700C2103A /* ApptentiveBackend+Metrics.m */,
+			);
+			path = Metrics;
+			sourceTree = "<group>";
+		};
+		01A2D0891E490A9700C2103A /* Misc */ = {
+			isa = PBXGroup;
+			children = (
+				01A2D08A1E490A9700C2103A /* ApptentiveConnect-Prefix.pch */,
+				01A2D08B1E490A9700C2103A /* ApptentiveJSONSerialization.h */,
+				01A2D08C1E490A9700C2103A /* ApptentiveJSONSerialization.m */,
+				01A2D08D1E490A9700C2103A /* ApptentiveLog.h */,
+				01A2D08E1E490A9700C2103A /* ApptentiveLogger.h */,
+				01A2D08F1E490A9700C2103A /* ApptentiveLogger.m */,
+				01A2D0901E490A9700C2103A /* ApptentiveUtilities.h */,
+				01A2D0911E490A9700C2103A /* ApptentiveUtilities.m */,
+				01A2D0921E490A9700C2103A /* NSDictionary+Apptentive.h */,
+				01A2D0931E490A9700C2103A /* NSDictionary+ApptentiveAdditions.m */,
+			);
+			path = Misc;
+			sourceTree = "<group>";
+		};
+		01A2D0941E490A9700C2103A /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				01A2D0951E490A9700C2103A /* ApptentiveAppConfiguration.h */,
+				01A2D0961E490A9700C2103A /* ApptentiveAppConfiguration.m */,
+				01A2D0991E490A9700C2103A /* ApptentiveData.h */,
+				01A2D09A1E490A9700C2103A /* ApptentiveData.m */,
+				01A2D09B1E490A9700C2103A /* ApptentiveFileAttachment.h */,
+				01A2D09C1E490A9700C2103A /* ApptentiveFileAttachment.m */,
+				01A2D09D1E490A9700C2103A /* ApptentiveLegacyEvent.h */,
+				01A2D09E1E490A9700C2103A /* ApptentiveLegacyEvent.m */,
+				01A2D09F1E490A9700C2103A /* ApptentiveLegacySurveyResponse.h */,
+				01A2D0A01E490A9700C2103A /* ApptentiveLegacySurveyResponse.m */,
+				01A2D0A11E490A9700C2103A /* ApptentiveMessage.h */,
+				01A2D0A21E490A9700C2103A /* ApptentiveMessage.m */,
+				01A2D0A31E490A9700C2103A /* ApptentiveMessageSender.h */,
+				01A2D0A41E490A9700C2103A /* ApptentiveMessageSender.m */,
+				01A2D0A91E490A9700C2103A /* ApptentiveRecord.h */,
+				01A2D0AA1E490A9700C2103A /* ApptentiveRecord.m */,
+				01A2D0AB1E490A9700C2103A /* ATDataModel v1 to v2.xcmappingmodel */,
+				01A2D0AC1E490A9700C2103A /* ATDataModel v2 to v3.xcmappingmodel */,
+				01A2D0AD1E490A9700C2103A /* ATDataModel v3 to v4.xcmappingmodel */,
+				01A2D0AE1E490A9700C2103A /* ATDataModel v4 to v5.xcmappingmodel */,
+				01A2D0AF1E490A9700C2103A /* ATDataModel v5 to v6.xcmappingmodel */,
+				01A2D0B01E490A9700C2103A /* ATDataModel.xcdatamodeld */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		01A2D0B71E490A9700C2103A /* Network Queue */ = {
+			isa = PBXGroup;
+			children = (
+				01A2D0B81E490A9700C2103A /* ApptentiveMessageRequestOperation.h */,
+				01A2D0B91E490A9700C2103A /* ApptentiveMessageRequestOperation.m */,
+				01A2D0BA1E490A9700C2103A /* ApptentiveNetworkQueue.h */,
+				01A2D0BB1E490A9700C2103A /* ApptentiveNetworkQueue.m */,
+				01A2D0BC1E490A9700C2103A /* ApptentiveRequestOperation.h */,
+				01A2D0BD1E490A9700C2103A /* ApptentiveRequestOperation.m */,
+				01A2D0BE1E490A9700C2103A /* ApptentiveSerialNetworkQueue.h */,
+				01A2D0BF1E490A9700C2103A /* ApptentiveSerialNetworkQueue.m */,
+				01A2D0C01E490A9700C2103A /* ApptentiveSerialRequest+Record.h */,
+				01A2D0C11E490A9700C2103A /* ApptentiveSerialRequest+Record.m */,
+				01A2D0C21E490A9700C2103A /* ApptentiveSerialRequest.h */,
+				01A2D0C31E490A9700C2103A /* ApptentiveSerialRequest.m */,
+				01A2D0C41E490A9700C2103A /* ApptentiveSerialRequestAttachment.h */,
+				01A2D0C51E490A9700C2103A /* ApptentiveSerialRequestAttachment.m */,
+				01A2D0C61E490A9700C2103A /* ApptentiveSerialRequestOperation.h */,
+				01A2D0C71E490A9700C2103A /* ApptentiveSerialRequestOperation.m */,
+			);
+			path = "Network Queue";
+			sourceTree = "<group>";
+		};
+		01A2D0C81E490A9700C2103A /* Persistence */ = {
+			isa = PBXGroup;
+			children = (
+				01A2D0C91E490A9700C2103A /* ApptentiveBackend.h */,
+				01A2D0CA1E490A9700C2103A /* ApptentiveBackend.m */,
+				01A2D0CB1E490A9700C2103A /* ApptentiveDataManager.h */,
+				01A2D0CC1E490A9700C2103A /* ApptentiveDataManager.m */,
+			);
+			path = Persistence;
+			sourceTree = "<group>";
+		};
+		01A2D0CD1E490A9700C2103A /* Reachability */ = {
+			isa = PBXGroup;
+			children = (
+				01A2D0CE1E490A9700C2103A /* ApptentiveReachability.h */,
+				01A2D0CF1E490A9700C2103A /* ApptentiveReachability.m */,
+			);
+			path = Reachability;
+			sourceTree = "<group>";
+		};
+		01A2D0D01E490A9700C2103A /* Surveys */ = {
+			isa = PBXGroup;
+			children = (
+				01A2D0D11E490A9700C2103A /* Model */,
+				01A2D0D81E490A9700C2103A /* View Controllers */,
+				01A2D0E11E490A9700C2103A /* Views */,
+			);
+			path = Surveys;
+			sourceTree = "<group>";
+		};
+		01A2D0D11E490A9700C2103A /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				01A2D0D21E490A9700C2103A /* ApptentiveSurvey.h */,
+				01A2D0D31E490A9700C2103A /* ApptentiveSurvey.m */,
+				01A2D0D41E490A9700C2103A /* ApptentiveSurveyAnswer.h */,
+				01A2D0D51E490A9700C2103A /* ApptentiveSurveyAnswer.m */,
+				01A2D0D61E490A9700C2103A /* ApptentiveSurveyQuestion.h */,
+				01A2D0D71E490A9700C2103A /* ApptentiveSurveyQuestion.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		01A2D0D81E490A9700C2103A /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				01A2D0D91E490A9700C2103A /* ApptentiveSurveyCollectionViewLayout.h */,
+				01A2D0DA1E490A9700C2103A /* ApptentiveSurveyCollectionViewLayout.m */,
+				01A2D0DB1E490A9700C2103A /* ApptentiveSurveyLayoutAttributes.h */,
+				01A2D0DC1E490A9700C2103A /* ApptentiveSurveyLayoutAttributes.m */,
+				01A2D0DD1E490A9700C2103A /* ApptentiveSurveyViewController.h */,
+				01A2D0DE1E490A9700C2103A /* ApptentiveSurveyViewController.m */,
+				01A2D0DF1E490A9700C2103A /* ApptentiveSurveyViewModel.h */,
+				01A2D0E01E490A9700C2103A /* ApptentiveSurveyViewModel.m */,
+			);
+			path = "View Controllers";
+			sourceTree = "<group>";
+		};
+		01A2D0E11E490A9700C2103A /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				01A2D0E21E490A9700C2103A /* ApptentiveSurveyAnswerCell.h */,
+				01A2D0E31E490A9700C2103A /* ApptentiveSurveyAnswerCell.m */,
+				01A2D0E41E490A9700C2103A /* ApptentiveSurveyChoiceCell.h */,
+				01A2D0E51E490A9700C2103A /* ApptentiveSurveyChoiceCell.m */,
+				01A2D0E61E490A9700C2103A /* ApptentiveSurveyCollectionView.h */,
+				01A2D0E71E490A9700C2103A /* ApptentiveSurveyCollectionView.m */,
+				01A2D0E81E490A9700C2103A /* ApptentiveSurveyGreetingView.h */,
+				01A2D0E91E490A9700C2103A /* ApptentiveSurveyGreetingView.m */,
+				01A2D0EA1E490A9700C2103A /* ApptentiveSurveyMultilineCell.h */,
+				01A2D0EB1E490A9700C2103A /* ApptentiveSurveyMultilineCell.m */,
+				01A2D0EC1E490A9700C2103A /* ApptentiveSurveyOtherCell.h */,
+				01A2D0ED1E490A9700C2103A /* ApptentiveSurveyOtherCell.m */,
+				01A2D0EE1E490A9700C2103A /* ApptentiveSurveyQuestionBackgroundView.h */,
+				01A2D0EF1E490A9700C2103A /* ApptentiveSurveyQuestionBackgroundView.m */,
+				01A2D0F01E490A9700C2103A /* ApptentiveSurveyQuestionFooterView.h */,
+				01A2D0F11E490A9700C2103A /* ApptentiveSurveyQuestionFooterView.m */,
+				01A2D0F21E490A9700C2103A /* ApptentiveSurveyQuestionView.h */,
+				01A2D0F31E490A9700C2103A /* ApptentiveSurveyQuestionView.m */,
+				01A2D0F41E490A9700C2103A /* ApptentiveSurveySingleLineCell.h */,
+				01A2D0F51E490A9700C2103A /* ApptentiveSurveySingleLineCell.m */,
+				01A2D0F61E490A9700C2103A /* ApptentiveSurveySubmitButton.h */,
+				01A2D0F71E490A9700C2103A /* ApptentiveSurveySubmitButton.m */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		01A2CF8E1E49062700C2103A /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				01A2D1031E490A9700C2103A /* ApptentivePassThroughWindow.h in Headers */,
+				01A2D1391E490A9700C2103A /* ApptentivePerson.h in Headers */,
+				01A2D1331E490A9700C2103A /* ApptentiveMutableCustomData.h in Headers */,
+				01A2D13F1E490A9700C2103A /* ApptentiveState.h in Headers */,
+				01A2D1781E490A9700C2103A /* ApptentiveAboutViewController.h in Headers */,
+				01A2D17E1E490A9700C2103A /* ApptentiveMessageCenterErrorViewController.h in Headers */,
+				01A2D1981E490A9700C2103A /* ApptentiveMessageCenterReplyCell.h in Headers */,
+				01A2D1431E490A9700C2103A /* ApptentiveBackend+Engagement.h in Headers */,
+				01A2D18D1E490A9700C2103A /* ApptentiveMessageCenterCellProtocols.h in Headers */,
+				01A2D0F81E490A9700C2103A /* Apptentive_Private.h in Headers */,
+				01A2D19E1E490A9700C2103A /* ApptentiveBackend+Metrics.h in Headers */,
+				01A2D1DE1E490A9700C2103A /* ApptentiveSurveyAnswer.h in Headers */,
+				01A2D12F1E490A9700C2103A /* ApptentiveInteractionUsageData.h in Headers */,
+				01A2D1DA1E490A9700C2103A /* ApptentiveReachability.h in Headers */,
+				01A2D1851E490A9700C2103A /* ApptentiveAttachmentCell.h in Headers */,
+				01A2D1191E490A9700C2103A /* ApptentiveInteractionSurveyController.h in Headers */,
+				01A2D1901E490A9700C2103A /* ApptentiveMessageCenterGreetingView.h in Headers */,
+				01A2D10D1E490A9700C2103A /* ApptentiveInteractionNavigateToLink.h in Headers */,
+				01A2D1761E490A9700C2103A /* ApptentiveMessageCenterDataSource.h in Headers */,
+				01A2D1FA1E490A9700C2103A /* ApptentiveSurveyQuestionView.h in Headers */,
+				01A2CFA21E49062800C2103A /* Apptentive.h in Headers */,
+				01A2D18E1E490A9700C2103A /* ApptentiveMessageCenterContextMessageCell.h in Headers */,
+				01A2D1B41E490A9700C2103A /* ApptentiveLegacySurveyResponse.h in Headers */,
+				01A2D1C61E490A9700C2103A /* ApptentiveMessageRequestOperation.h in Headers */,
+				01A2D1921E490A9700C2103A /* ApptentiveMessageCenterInputView.h in Headers */,
+				01A2D1131E490A9700C2103A /* ApptentiveInteractionEnjoymentDialogController.h in Headers */,
+				01A2D1351E490A9700C2103A /* ApptentiveMutableDevice.h in Headers */,
+				01A2D1AA1E490A9700C2103A /* ApptentiveAppConfiguration.h in Headers */,
+				01A2D1D81E490A9700C2103A /* ApptentiveDataManager.h in Headers */,
+				01A2D0FF1E490A9700C2103A /* ApptentiveNetworkImageIconView.h in Headers */,
+				01A2D1F01E490A9700C2103A /* ApptentiveSurveyGreetingView.h in Headers */,
+				01A2D17A1E490A9700C2103A /* ApptentiveAttachmentController.h in Headers */,
+				01A2D1D01E490A9700C2103A /* ApptentiveSerialRequest.h in Headers */,
+				01A2D1D61E490A9700C2103A /* ApptentiveBackend.h in Headers */,
+				01A2D1411E490A9700C2103A /* ApptentiveVersion.h in Headers */,
+				01A2D1271E490A9700C2103A /* ApptentiveEngagement.h in Headers */,
+				01A2D1EC1E490A9700C2103A /* ApptentiveSurveyChoiceCell.h in Headers */,
+				01A2D1F41E490A9700C2103A /* ApptentiveSurveyOtherCell.h in Headers */,
+				01A2D1AE1E490A9700C2103A /* ApptentiveData.h in Headers */,
+				01A2D1FC1E490A9700C2103A /* ApptentiveSurveySingleLineCell.h in Headers */,
+				01A2D1FE1E490A9700C2103A /* ApptentiveSurveySubmitButton.h in Headers */,
+				01A2D1A61E490A9700C2103A /* ApptentiveUtilities.h in Headers */,
+				01A2D1D21E490A9700C2103A /* ApptentiveSerialRequestAttachment.h in Headers */,
+				01A2D1251E490A9700C2103A /* ApptentiveDevice.h in Headers */,
+				01A2D1A01E490A9700C2103A /* ApptentiveConnect-Prefix.pch in Headers */,
+				01A2D1831E490A9700C2103A /* ApptentiveAttachButton.h in Headers */,
+				01A2D1EA1E490A9700C2103A /* ApptentiveSurveyAnswerCell.h in Headers */,
+				01A2D1CA1E490A9700C2103A /* ApptentiveRequestOperation.h in Headers */,
+				01A2D12B1E490A9700C2103A /* ApptentiveInteraction.h in Headers */,
+				01A2D1E81E490A9700C2103A /* ApptentiveSurveyViewModel.h in Headers */,
+				01A2D1821E490A9700C2103A /* ApptentiveJSONModel.h in Headers */,
+				01A2D1A81E490A9700C2103A /* NSDictionary+Apptentive.h in Headers */,
+				01A2D1B21E490A9700C2103A /* ApptentiveLegacyEvent.h in Headers */,
+				01A2D1941E490A9700C2103A /* ApptentiveMessageCenterMessageCell.h in Headers */,
+				01A2D1311E490A9700C2103A /* ApptentiveMessageCenterInteraction.h in Headers */,
+				01A2D11B1E490A9700C2103A /* ApptentiveInteractionUpgradeMessageController.h in Headers */,
+				01A2D0FB1E490A9700C2103A /* ApptentiveStyleSheet.h in Headers */,
+				01A2D18B1E490A9700C2103A /* ApptentiveIndexedCollectionView.h in Headers */,
+				01A2D1B81E490A9700C2103A /* ApptentiveMessageSender.h in Headers */,
+				01A2D1171E490A9700C2103A /* ApptentiveInteractionRatingDialogController.h in Headers */,
+				01A2D1F81E490A9700C2103A /* ApptentiveSurveyQuestionFooterView.h in Headers */,
+				01A2D1CC1E490A9700C2103A /* ApptentiveSerialNetworkQueue.h in Headers */,
+				01A2D1231E490A9700C2103A /* ApptentiveCustomData.h in Headers */,
+				01A2D1A31E490A9700C2103A /* ApptentiveLog.h in Headers */,
+				01A2D1CE1E490A9700C2103A /* ApptentiveSerialRequest+Record.h in Headers */,
+				01A2D1891E490A9700C2103A /* ApptentiveCompoundReplyCell.h in Headers */,
+				01A2D1E01E490A9700C2103A /* ApptentiveSurveyQuestion.h in Headers */,
+				01A2D1801E490A9700C2103A /* ApptentiveMessageCenterViewController.h in Headers */,
+				01A2D1291E490A9700C2103A /* ApptentiveEngagementManifest.h in Headers */,
+				01A2D19A1E490A9700C2103A /* ApptentiveMessageCenterStatusView.h in Headers */,
+				01A2D1B61E490A9700C2103A /* ApptentiveMessage.h in Headers */,
+				01A2D1A41E490A9700C2103A /* ApptentiveLogger.h in Headers */,
+				01A2D1A11E490A9700C2103A /* ApptentiveJSONSerialization.h in Headers */,
+				01A2D1B01E490A9700C2103A /* ApptentiveFileAttachment.h in Headers */,
+				01A2D13B1E490A9700C2103A /* ApptentiveSDK.h in Headers */,
+				01A2D1071E490A9700C2103A /* ApptentiveInteractionController.h in Headers */,
+				01A2D1E41E490A9700C2103A /* ApptentiveSurveyLayoutAttributes.h in Headers */,
+				01A2D1111E490A9700C2103A /* ApptentiveInteractionAppStoreController.h in Headers */,
+				01A2D1211E490A9700C2103A /* ApptentiveCount.h in Headers */,
+				01A2D1E21E490A9700C2103A /* ApptentiveSurveyCollectionViewLayout.h in Headers */,
+				01A2D1D41E490A9700C2103A /* ApptentiveSerialRequestOperation.h in Headers */,
+				01A2D1DC1E490A9700C2103A /* ApptentiveSurvey.h in Headers */,
+				01A2D1C81E490A9700C2103A /* ApptentiveNetworkQueue.h in Headers */,
+				01A2D1011E490A9700C2103A /* ApptentiveNetworkImageView.h in Headers */,
+				01A2D1EE1E490A9700C2103A /* ApptentiveSurveyCollectionView.h in Headers */,
+				01A2D19C1E490A9700C2103A /* ApptentiveProgressNavigationBar.h in Headers */,
+				01A2D1371E490A9700C2103A /* ApptentiveMutablePerson.h in Headers */,
+				01A2D1F61E490A9700C2103A /* ApptentiveSurveyQuestionBackgroundView.h in Headers */,
+				01A2D10F1E490A9700C2103A /* ApptentiveInteractionTextModalController.h in Headers */,
+				01A2D1E61E490A9700C2103A /* ApptentiveSurveyViewController.h in Headers */,
+				01A2D1961E490A9700C2103A /* ApptentiveMessageCenterProfileView.h in Headers */,
+				01A2D1BE1E490A9700C2103A /* ApptentiveRecord.h in Headers */,
+				01A2D13D1E490A9700C2103A /* ApptentiveSession.h in Headers */,
+				01A2D1051E490A9700C2103A /* ApptentiveUnreadMessagesBadgeView.h in Headers */,
+				01A2D11F1E490A9700C2103A /* ApptentiveAppRelease.h in Headers */,
+				01A2D11D1E490A9700C2103A /* ApptentiveInteractionUpgradeMessageViewController.h in Headers */,
+				01A2D1871E490A9700C2103A /* ApptentiveCompoundMessageCell.h in Headers */,
+				01A2D1151E490A9700C2103A /* ApptentiveInteractionMessageCenterController.h in Headers */,
+				01A2D1F21E490A9700C2103A /* ApptentiveSurveyMultilineCell.h in Headers */,
+				01A2D0FD1E490A9700C2103A /* ApptentiveHUDViewController.h in Headers */,
+				01A2D17C1E490A9700C2103A /* ApptentiveBannerViewController.h in Headers */,
+				01A2D12D1E490A9700C2103A /* ApptentiveInteractionInvocation.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		01A2CF901E49062700C2103A /* Apptentive */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 01A2CFA51E49062800C2103A /* Build configuration list for PBXNativeTarget "Apptentive" */;
+			buildPhases = (
+				01A2CF8C1E49062700C2103A /* Sources */,
+				01A2CF8D1E49062700C2103A /* Frameworks */,
+				01A2CF8E1E49062700C2103A /* Headers */,
+				01A2CF8F1E49062700C2103A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Apptentive;
+			productName = Apptentive;
+			productReference = 01A2CF911E49062700C2103A /* Apptentive.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		01A2CF991E49062800C2103A /* ApptentiveTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 01A2CFA81E49062800C2103A /* Build configuration list for PBXNativeTarget "ApptentiveTests" */;
+			buildPhases = (
+				01A2CF961E49062800C2103A /* Sources */,
+				01A2CF971E49062800C2103A /* Frameworks */,
+				01A2CF981E49062800C2103A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				01A2CF9D1E49062800C2103A /* PBXTargetDependency */,
+			);
+			name = ApptentiveTests;
+			productName = ApptentiveTests;
+			productReference = 01A2CF9A1E49062800C2103A /* ApptentiveTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		01A2CF881E49062700C2103A /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0820;
+				ORGANIZATIONNAME = "Apptentive, Inc.";
+				TargetAttributes = {
+					01A2CF901E49062700C2103A = {
+						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = 86WML2UN43;
+						ProvisioningStyle = Automatic;
+					};
+					01A2CF991E49062800C2103A = {
+						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = 86WML2UN43;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 01A2CF8B1E49062700C2103A /* Build configuration list for PBXProject "Apptentive" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				ar,
+				da,
+				de,
+				el,
+				es,
+				"fr-CA",
+				fr,
+				it,
+				ja,
+				ko,
+				nl,
+				pl,
+				"pt-BR",
+				pt,
+				ru,
+				sv,
+				tr,
+				"zh-Hans",
+				"zh-Hant",
+			);
+			mainGroup = 01A2CF871E49062700C2103A;
+			productRefGroup = 01A2CF921E49062700C2103A /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				01A2CF901E49062700C2103A /* Apptentive */,
+				01A2CF991E49062800C2103A /* ApptentiveTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		01A2CF8F1E49062700C2103A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				01A2D1481E490A9700C2103A /* at_apptentive_logo.png in Resources */,
+				01A2D15D1E490A9700C2103A /* at_document.png in Resources */,
+				01A2D1681E490A9700C2103A /* at_network_error@3x.png in Resources */,
+				01A2D14B1E490A9700C2103A /* at_attach.png in Resources */,
+				01A2D1721E490A9700C2103A /* at_update_logo.png in Resources */,
+				01A2D16F1E490A9700C2103A /* at_update_icon_mask.png in Resources */,
+				01A2D1621E490A9700C2103A /* at_error_wait@3x.png in Resources */,
+				01A2D15F1E490A9700C2103A /* at_document@3x.png in Resources */,
+				01A2D1471E490A9700C2103A /* at_account@3x.png in Resources */,
+				01A2D1601E490A9700C2103A /* at_error_wait.png in Resources */,
+				01A2D16E1E490A9700C2103A /* at_thanks@3x.png in Resources */,
+				01A2D16D1E490A9700C2103A /* at_thanks@2x.png in Resources */,
+				01A2D16B1E490A9700C2103A /* at_remove@3x.png in Resources */,
+				01A2D1491E490A9700C2103A /* at_apptentive_logo@2x.png in Resources */,
+				01A2D1511E490A9700C2103A /* at_checkmark_highlighted.png in Resources */,
+				01A2D1711E490A9700C2103A /* at_update_icon_mask@3x.png in Resources */,
+				01A2D16A1E490A9700C2103A /* at_remove@2x.png in Resources */,
+				01A2D1551E490A9700C2103A /* at_circle@2x.png in Resources */,
+				01A2D1661E490A9700C2103A /* at_network_error.png in Resources */,
+				01A2D1671E490A9700C2103A /* at_network_error@2x.png in Resources */,
+				01A2D15C1E490A9700C2103A /* at_close@3x.png in Resources */,
+				01A2D14E1E490A9700C2103A /* at_checkmark.png in Resources */,
+				01A2D14F1E490A9700C2103A /* at_checkmark@2x.png in Resources */,
+				01A2D1591E490A9700C2103A /* at_circle_highlighted@3x.png in Resources */,
+				01A2D1611E490A9700C2103A /* at_error_wait@2x.png in Resources */,
+				01A2D15A1E490A9700C2103A /* at_close.png in Resources */,
+				01A2D1461E490A9700C2103A /* at_account@2x.png in Resources */,
+				01A2D14D1E490A9700C2103A /* at_attach@3x.png in Resources */,
+				01A2D1581E490A9700C2103A /* at_circle_highlighted@2x.png in Resources */,
+				01A2D1571E490A9700C2103A /* at_circle_highlighted.png in Resources */,
+				01A2D15B1E490A9700C2103A /* at_close@2x.png in Resources */,
+				01A2D14C1E490A9700C2103A /* at_attach@2x.png in Resources */,
+				01A2D1531E490A9700C2103A /* at_checkmark_highlighted@3x.png in Resources */,
+				01A2D1451E490A9700C2103A /* at_account.png in Resources */,
+				01A2D15E1E490A9700C2103A /* at_document@2x.png in Resources */,
+				01A2D1751E490A9700C2103A /* Localizable.strings in Resources */,
+				01A2D16C1E490A9700C2103A /* at_thanks.png in Resources */,
+				01A2D0FA1E490A9700C2103A /* Apptentive.storyboard in Resources */,
+				01A2D1541E490A9700C2103A /* at_circle.png in Resources */,
+				01A2D1501E490A9700C2103A /* at_checkmark@3x.png in Resources */,
+				01A2D1651E490A9700C2103A /* at_info@3x.png in Resources */,
+				01A2D1691E490A9700C2103A /* at_remove.png in Resources */,
+				01A2D1731E490A9700C2103A /* at_update_logo@2x.png in Resources */,
+				01A2D14A1E490A9700C2103A /* at_apptentive_logo@3x.png in Resources */,
+				01A2D1561E490A9700C2103A /* at_circle@3x.png in Resources */,
+				01A2D1701E490A9700C2103A /* at_update_icon_mask@2x.png in Resources */,
+				01A2D1631E490A9700C2103A /* at_info.png in Resources */,
+				01A2D1641E490A9700C2103A /* at_info@2x.png in Resources */,
+				01A2D1521E490A9700C2103A /* at_checkmark_highlighted@2x.png in Resources */,
+				01A2D1741E490A9700C2103A /* at_update_logo@3x.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		01A2CF981E49062800C2103A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		01A2CF8C1E49062700C2103A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				01A2D1081E490A9700C2103A /* ApptentiveInteractionController.m in Sources */,
+				01A2D1E51E490A9700C2103A /* ApptentiveSurveyLayoutAttributes.m in Sources */,
+				01A2D1DD1E490A9700C2103A /* ApptentiveSurvey.m in Sources */,
+				01A2D1441E490A9700C2103A /* ApptentiveBackend+Engagement.m in Sources */,
+				01A2D1F51E490A9700C2103A /* ApptentiveSurveyOtherCell.m in Sources */,
+				01A2D1B51E490A9700C2103A /* ApptentiveLegacySurveyResponse.m in Sources */,
+				01A2D1181E490A9700C2103A /* ApptentiveInteractionRatingDialogController.m in Sources */,
+				01A2D1DF1E490A9700C2103A /* ApptentiveSurveyAnswer.m in Sources */,
+				01A2D19B1E490A9700C2103A /* ApptentiveMessageCenterStatusView.m in Sources */,
+				01A2D12A1E490A9700C2103A /* ApptentiveEngagementManifest.m in Sources */,
+				01A2D19D1E490A9700C2103A /* ApptentiveProgressNavigationBar.m in Sources */,
+				01A2D1F11E490A9700C2103A /* ApptentiveSurveyGreetingView.m in Sources */,
+				01A2D1E11E490A9700C2103A /* ApptentiveSurveyQuestion.m in Sources */,
+				01A2D1B31E490A9700C2103A /* ApptentiveLegacyEvent.m in Sources */,
+				01A2D1B91E490A9700C2103A /* ApptentiveMessageSender.m in Sources */,
+				01A2D1791E490A9700C2103A /* ApptentiveAboutViewController.m in Sources */,
+				01A2D1321E490A9700C2103A /* ApptentiveMessageCenterInteraction.m in Sources */,
+				01A2D1D51E490A9700C2103A /* ApptentiveSerialRequestOperation.m in Sources */,
+				01A2D1A21E490A9700C2103A /* ApptentiveJSONSerialization.m in Sources */,
+				01A2D19F1E490A9700C2103A /* ApptentiveBackend+Metrics.m in Sources */,
+				01A2D1B11E490A9700C2103A /* ApptentiveFileAttachment.m in Sources */,
+				01A2D1931E490A9700C2103A /* ApptentiveMessageCenterInputView.m in Sources */,
+				01A2D1771E490A9700C2103A /* ApptentiveMessageCenterDataSource.m in Sources */,
+				01A2D1001E490A9700C2103A /* ApptentiveNetworkImageIconView.m in Sources */,
+				01A2D1201E490A9700C2103A /* ApptentiveAppRelease.m in Sources */,
+				01A2D1281E490A9700C2103A /* ApptentiveEngagement.m in Sources */,
+				01A2D1C91E490A9700C2103A /* ApptentiveNetworkQueue.m in Sources */,
+				01A2D12C1E490A9700C2103A /* ApptentiveInteraction.m in Sources */,
+				01A2D1C11E490A9700C2103A /* ATDataModel v2 to v3.xcmappingmodel in Sources */,
+				01A2D1021E490A9700C2103A /* ApptentiveNetworkImageView.m in Sources */,
+				01A2D1F91E490A9700C2103A /* ApptentiveSurveyQuestionFooterView.m in Sources */,
+				01A2D18C1E490A9700C2103A /* ApptentiveIndexedCollectionView.m in Sources */,
+				01A2D1341E490A9700C2103A /* ApptentiveMutableCustomData.m in Sources */,
+				01A2D1841E490A9700C2103A /* ApptentiveAttachButton.m in Sources */,
+				01A2D1CF1E490A9700C2103A /* ApptentiveSerialRequest+Record.m in Sources */,
+				01A2D1C41E490A9700C2103A /* ATDataModel v5 to v6.xcmappingmodel in Sources */,
+				01A2D1121E490A9700C2103A /* ApptentiveInteractionAppStoreController.m in Sources */,
+				01A2D12E1E490A9700C2103A /* ApptentiveInteractionInvocation.m in Sources */,
+				01A2D1041E490A9700C2103A /* ApptentivePassThroughWindow.m in Sources */,
+				01A2D1EB1E490A9700C2103A /* ApptentiveSurveyAnswerCell.m in Sources */,
+				01A2D1C31E490A9700C2103A /* ATDataModel v4 to v5.xcmappingmodel in Sources */,
+				01A2D1F71E490A9700C2103A /* ApptentiveSurveyQuestionBackgroundView.m in Sources */,
+				01A2D17D1E490A9700C2103A /* ApptentiveBannerViewController.m in Sources */,
+				01A2D1D71E490A9700C2103A /* ApptentiveBackend.m in Sources */,
+				01A2D1A91E490A9700C2103A /* NSDictionary+ApptentiveAdditions.m in Sources */,
+				01A2D1951E490A9700C2103A /* ApptentiveMessageCenterMessageCell.m in Sources */,
+				01A2D0FE1E490A9700C2103A /* ApptentiveHUDViewController.m in Sources */,
+				01A2D18F1E490A9700C2103A /* ApptentiveMessageCenterContextMessageCell.m in Sources */,
+				01A2D1FB1E490A9700C2103A /* ApptentiveSurveyQuestionView.m in Sources */,
+				01A2D1421E490A9700C2103A /* ApptentiveVersion.m in Sources */,
+				01A2D1E71E490A9700C2103A /* ApptentiveSurveyViewController.m in Sources */,
+				01A2D1221E490A9700C2103A /* ApptentiveCount.m in Sources */,
+				01A2D1B71E490A9700C2103A /* ApptentiveMessage.m in Sources */,
+				01A2D1AF1E490A9700C2103A /* ApptentiveData.m in Sources */,
+				01A2D1141E490A9700C2103A /* ApptentiveInteractionEnjoymentDialogController.m in Sources */,
+				01A2D1301E490A9700C2103A /* ApptentiveInteractionUsageData.m in Sources */,
+				01A2D1C21E490A9700C2103A /* ATDataModel v3 to v4.xcmappingmodel in Sources */,
+				01A2D1D31E490A9700C2103A /* ApptentiveSerialRequestAttachment.m in Sources */,
+				01A2D1C51E490A9700C2103A /* ATDataModel.xcdatamodeld in Sources */,
+				01A2D18A1E490A9700C2103A /* ApptentiveCompoundReplyCell.m in Sources */,
+				01A2D17F1E490A9700C2103A /* ApptentiveMessageCenterErrorViewController.m in Sources */,
+				01A2D1D91E490A9700C2103A /* ApptentiveDataManager.m in Sources */,
+				01A2D17B1E490A9700C2103A /* ApptentiveAttachmentController.m in Sources */,
+				01A2D1F31E490A9700C2103A /* ApptentiveSurveyMultilineCell.m in Sources */,
+				01A2D1881E490A9700C2103A /* ApptentiveCompoundMessageCell.m in Sources */,
+				01A2D0F91E490A9700C2103A /* Apptentive.m in Sources */,
+				01A2D1811E490A9700C2103A /* ApptentiveMessageCenterViewController.m in Sources */,
+				01A2D11C1E490A9700C2103A /* ApptentiveInteractionUpgradeMessageController.m in Sources */,
+				01A2D1911E490A9700C2103A /* ApptentiveMessageCenterGreetingView.m in Sources */,
+				01A2D1381E490A9700C2103A /* ApptentiveMutablePerson.m in Sources */,
+				01A2D13A1E490A9700C2103A /* ApptentivePerson.m in Sources */,
+				01A2D13E1E490A9700C2103A /* ApptentiveSession.m in Sources */,
+				01A2D1CB1E490A9700C2103A /* ApptentiveRequestOperation.m in Sources */,
+				01A2D1C01E490A9700C2103A /* ATDataModel v1 to v2.xcmappingmodel in Sources */,
+				01A2D1061E490A9700C2103A /* ApptentiveUnreadMessagesBadgeView.m in Sources */,
+				01A2D11A1E490A9700C2103A /* ApptentiveInteractionSurveyController.m in Sources */,
+				01A2D1241E490A9700C2103A /* ApptentiveCustomData.m in Sources */,
+				01A2D1E31E490A9700C2103A /* ApptentiveSurveyCollectionViewLayout.m in Sources */,
+				01A2D1BF1E490A9700C2103A /* ApptentiveRecord.m in Sources */,
+				01A2D0FC1E490A9700C2103A /* ApptentiveStyleSheet.m in Sources */,
+				01A2D10E1E490A9700C2103A /* ApptentiveInteractionNavigateToLink.m in Sources */,
+				01A2D1A51E490A9700C2103A /* ApptentiveLogger.m in Sources */,
+				01A2D1971E490A9700C2103A /* ApptentiveMessageCenterProfileView.m in Sources */,
+				01A2D1DB1E490A9700C2103A /* ApptentiveReachability.m in Sources */,
+				01A2D1161E490A9700C2103A /* ApptentiveInteractionMessageCenterController.m in Sources */,
+				01A2D1C71E490A9700C2103A /* ApptentiveMessageRequestOperation.m in Sources */,
+				01A2D1261E490A9700C2103A /* ApptentiveDevice.m in Sources */,
+				01A2D1AB1E490A9700C2103A /* ApptentiveAppConfiguration.m in Sources */,
+				01A2D1D11E490A9700C2103A /* ApptentiveSerialRequest.m in Sources */,
+				01A2D1ED1E490A9700C2103A /* ApptentiveSurveyChoiceCell.m in Sources */,
+				01A2D1FF1E490A9700C2103A /* ApptentiveSurveySubmitButton.m in Sources */,
+				01A2D1E91E490A9700C2103A /* ApptentiveSurveyViewModel.m in Sources */,
+				01A2D1CD1E490A9700C2103A /* ApptentiveSerialNetworkQueue.m in Sources */,
+				01A2D1861E490A9700C2103A /* ApptentiveAttachmentCell.m in Sources */,
+				01A2D1FD1E490A9700C2103A /* ApptentiveSurveySingleLineCell.m in Sources */,
+				01A2D1EF1E490A9700C2103A /* ApptentiveSurveyCollectionView.m in Sources */,
+				01A2D1361E490A9700C2103A /* ApptentiveMutableDevice.m in Sources */,
+				01A2D1101E490A9700C2103A /* ApptentiveInteractionTextModalController.m in Sources */,
+				01A2D1401E490A9700C2103A /* ApptentiveState.m in Sources */,
+				01A2D1A71E490A9700C2103A /* ApptentiveUtilities.m in Sources */,
+				01A2D13C1E490A9700C2103A /* ApptentiveSDK.m in Sources */,
+				01A2D11E1E490A9700C2103A /* ApptentiveInteractionUpgradeMessageViewController.m in Sources */,
+				01A2D1991E490A9700C2103A /* ApptentiveMessageCenterReplyCell.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		01A2CF961E49062800C2103A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				01A2CFA01E49062800C2103A /* ApptentiveTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		01A2CF9D1E49062800C2103A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 01A2CF901E49062700C2103A /* Apptentive */;
+			targetProxy = 01A2CF9C1E49062800C2103A /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		01A2D0451E490A9700C2103A /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				01A2D0461E490A9700C2103A /* ar */,
+				01A2D0471E490A9700C2103A /* da */,
+				01A2D0481E490A9700C2103A /* de */,
+				01A2D0491E490A9700C2103A /* el */,
+				01A2D04A1E490A9700C2103A /* en */,
+				01A2D04B1E490A9700C2103A /* es */,
+				01A2D04C1E490A9700C2103A /* fr-CA */,
+				01A2D04D1E490A9700C2103A /* fr */,
+				01A2D04E1E490A9700C2103A /* it */,
+				01A2D04F1E490A9700C2103A /* ja */,
+				01A2D0501E490A9700C2103A /* ko */,
+				01A2D0511E490A9700C2103A /* nl */,
+				01A2D0521E490A9700C2103A /* pl */,
+				01A2D0531E490A9700C2103A /* pt-BR */,
+				01A2D0541E490A9700C2103A /* pt */,
+				01A2D0551E490A9700C2103A /* ru */,
+				01A2D0561E490A9700C2103A /* sv */,
+				01A2D0571E490A9700C2103A /* tr */,
+				01A2D0581E490A9700C2103A /* zh-Hans */,
+				01A2D0591E490A9700C2103A /* zh-Hant */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		01A2CFA31E49062800C2103A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		01A2CFA41E49062800C2103A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		01A2CFA61E49062800C2103A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 86WML2UN43;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Apptentive/Misc/ApptentiveConnect-Prefix.pch";
+				INFOPLIST_FILE = Apptentive/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.apptentive.Apptentive;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		01A2CFA71E49062800C2103A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 86WML2UN43;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Apptentive/Misc/ApptentiveConnect-Prefix.pch";
+				INFOPLIST_FILE = Apptentive/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.apptentive.Apptentive;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		01A2CFA91E49062800C2103A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEVELOPMENT_TEAM = 86WML2UN43;
+				INFOPLIST_FILE = ApptentiveTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.apptentive.ApptentiveTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		01A2CFAA1E49062800C2103A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEVELOPMENT_TEAM = 86WML2UN43;
+				INFOPLIST_FILE = ApptentiveTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.apptentive.ApptentiveTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		01A2CF8B1E49062700C2103A /* Build configuration list for PBXProject "Apptentive" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				01A2CFA31E49062800C2103A /* Debug */,
+				01A2CFA41E49062800C2103A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		01A2CFA51E49062800C2103A /* Build configuration list for PBXNativeTarget "Apptentive" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				01A2CFA61E49062800C2103A /* Debug */,
+				01A2CFA71E49062800C2103A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		01A2CFA81E49062800C2103A /* Build configuration list for PBXNativeTarget "ApptentiveTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				01A2CFA91E49062800C2103A /* Debug */,
+				01A2CFAA1E49062800C2103A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		01A2D0B01E490A9700C2103A /* ATDataModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				01A2D0B11E490A9700C2103A /* ATDataModel 2.xcdatamodel */,
+				01A2D0B21E490A9700C2103A /* ATDataModel 3.xcdatamodel */,
+				01A2D0B31E490A9700C2103A /* ATDataModel 4.xcdatamodel */,
+				01A2D0B41E490A9700C2103A /* ATDataModel 5.xcdatamodel */,
+				01A2D0B51E490A9700C2103A /* ATDataModel 6.xcdatamodel */,
+				01A2D0B61E490A9700C2103A /* ATDataModel.xcdatamodel */,
+			);
+			currentVersion = 01A2D0B51E490A9700C2103A /* ATDataModel 6.xcdatamodel */;
+			path = ATDataModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = 01A2CF881E49062700C2103A /* Project object */;
+}

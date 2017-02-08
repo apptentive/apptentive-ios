@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 #import "ApptentiveMessage.h"
+#import "ApptentiveMessageCenterInteraction.h"
 
 typedef NS_ENUM(NSInteger, ATMessageCenterMessageType) {
 	ATMessageCenterMessageTypeMessage,
@@ -32,6 +33,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterMessageStatus) {
 @property (readonly, strong, nonatomic) NSFetchedResultsController *fetchedMessagesController;
 @property (weak, nonatomic) NSObject<ApptentiveMessageCenterViewModelDelegate> *delegate;
 @property (readonly, nonatomic) NSDateFormatter *dateFormatter;
+@property (strong, nonatomic) ApptentiveMessageCenterInteraction *interaction;
+
 
 - (id)initWithDelegate:(NSObject<ApptentiveMessageCenterViewModelDelegate> *)delegate;
 - (void)start;

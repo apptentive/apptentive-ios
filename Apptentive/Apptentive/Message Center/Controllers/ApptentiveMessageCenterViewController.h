@@ -15,6 +15,6 @@
 
 @interface ApptentiveMessageCenterViewController : UITableViewController <ApptentiveMessageCenterViewModelDelegate, UITextViewDelegate, UITextFieldDelegate, ATBackendMessageDelegate, UIActionSheetDelegate, UICollectionViewDataSource, UICollectionViewDelegate>
 
-@property (strong, nonatomic) ApptentiveMessageCenterInteraction *interaction;
+@property (strong, nonatomic) ApptentiveMessageCenterViewModel *viewModel;
 
 @end

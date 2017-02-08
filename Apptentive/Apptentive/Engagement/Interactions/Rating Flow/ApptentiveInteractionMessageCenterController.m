@@ -24,10 +24,7 @@
 	UINavigationController *navigationController = [[ApptentiveUtilities storyboard] instantiateViewControllerWithIdentifier:@"MessageCenterNavigation"];
 
 	ApptentiveMessageCenterViewController *messageCenter = navigationController.viewControllers.firstObject;
-	ApptentiveMessageCenterViewModel *viewModel = [[ApptentiveMessageCenterViewModel alloc] initWithDelegate:messageCenter];
-	viewModel.interaction = self.interaction;
-
-	messageCenter.viewModel = viewModel;
+	messageCenter.viewModel = [[ApptentiveMessageCenterViewModel alloc] initWithInteraction:self.interaction];
 
 	[viewController presentViewController:navigationController animated:YES completion:nil];
 }

@@ -34,9 +34,9 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 
 @implementation ApptentiveMessageCenterViewModel
 
-- (id)initWithDelegate:(NSObject<ApptentiveMessageCenterViewModelDelegate> *)aDelegate {
+- (instancetype)initWithInteraction:(ApptentiveInteraction *)interaction {
 	if ((self = [super init])) {
-		_delegate = aDelegate;
+		_interaction = interaction;
 		_dateFormatter = [[NSDateFormatter alloc] init];
 
 		_attachmentDownloadSession = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:self delegateQueue:nil];

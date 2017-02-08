@@ -34,7 +34,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterMessageStatus) {
 @property (readonly, strong, nonatomic) NSFetchedResultsController *fetchedMessagesController;
 @property (weak, nonatomic) NSObject<ApptentiveMessageCenterViewModelDelegate> *delegate;
 @property (readonly, nonatomic) NSDateFormatter *dateFormatter;
-@property (strong, nonatomic) ApptentiveInteraction *interaction;
+@property (readonly, nonatomic) ApptentiveInteraction *interaction;
 
 @property (readonly, nonatomic) NSString *title;
 @property (readonly, nonatomic) NSString *branding;
@@ -73,7 +73,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterMessageStatus) {
 @property (readonly, nonatomic) NSString *profileEditSkipButtonTitle;
 @property (readonly, nonatomic) NSString *profileEditSaveButtonTitle;
 
-- (id)initWithDelegate:(NSObject<ApptentiveMessageCenterViewModelDelegate> *)delegate;
+- (instancetype)initWithInteraction:(ApptentiveInteraction *)interaction;
 - (void)start;
 - (void)stop;
 

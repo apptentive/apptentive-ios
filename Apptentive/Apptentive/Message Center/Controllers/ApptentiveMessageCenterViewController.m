@@ -324,6 +324,16 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[[Apptentive sharedConnection].backend messageCenterWillDismiss:self];
 }
 
+#pragma mark - View model
+
+- (void)setViewModel:(ApptentiveMessageCenterViewModel *)viewModel {
+	_viewModel.delegate = nil;
+
+	_viewModel = viewModel;
+
+	viewModel.delegate = self;
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {

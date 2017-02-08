@@ -64,8 +64,6 @@
 		01A2D12E1E490A9700C2103A /* ApptentiveInteractionInvocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2CFEA1E490A9700C2103A /* ApptentiveInteractionInvocation.m */; };
 		01A2D12F1E490A9700C2103A /* ApptentiveInteractionUsageData.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2CFEB1E490A9700C2103A /* ApptentiveInteractionUsageData.h */; };
 		01A2D1301E490A9700C2103A /* ApptentiveInteractionUsageData.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2CFEC1E490A9700C2103A /* ApptentiveInteractionUsageData.m */; };
-		01A2D1311E490A9700C2103A /* ApptentiveMessageCenterInteraction.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2CFED1E490A9700C2103A /* ApptentiveMessageCenterInteraction.h */; };
-		01A2D1321E490A9700C2103A /* ApptentiveMessageCenterInteraction.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2CFEE1E490A9700C2103A /* ApptentiveMessageCenterInteraction.m */; };
 		01A2D1331E490A9700C2103A /* ApptentiveMutableCustomData.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2CFEF1E490A9700C2103A /* ApptentiveMutableCustomData.h */; };
 		01A2D1341E490A9700C2103A /* ApptentiveMutableCustomData.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2CFF01E490A9700C2103A /* ApptentiveMutableCustomData.m */; };
 		01A2D1351E490A9700C2103A /* ApptentiveMutableDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2CFF11E490A9700C2103A /* ApptentiveMutableDevice.h */; };
@@ -402,8 +400,6 @@
 		01A2CFEA1E490A9700C2103A /* ApptentiveInteractionInvocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveInteractionInvocation.m; sourceTree = "<group>"; };
 		01A2CFEB1E490A9700C2103A /* ApptentiveInteractionUsageData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveInteractionUsageData.h; sourceTree = "<group>"; };
 		01A2CFEC1E490A9700C2103A /* ApptentiveInteractionUsageData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveInteractionUsageData.m; sourceTree = "<group>"; };
-		01A2CFED1E490A9700C2103A /* ApptentiveMessageCenterInteraction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveMessageCenterInteraction.h; sourceTree = "<group>"; };
-		01A2CFEE1E490A9700C2103A /* ApptentiveMessageCenterInteraction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveMessageCenterInteraction.m; sourceTree = "<group>"; };
 		01A2CFEF1E490A9700C2103A /* ApptentiveMutableCustomData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveMutableCustomData.h; sourceTree = "<group>"; };
 		01A2CFF01E490A9700C2103A /* ApptentiveMutableCustomData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveMutableCustomData.m; sourceTree = "<group>"; };
 		01A2CFF11E490A9700C2103A /* ApptentiveMutableDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveMutableDevice.h; sourceTree = "<group>"; };
@@ -888,8 +884,6 @@
 				01A2CFEA1E490A9700C2103A /* ApptentiveInteractionInvocation.m */,
 				01A2CFEB1E490A9700C2103A /* ApptentiveInteractionUsageData.h */,
 				01A2CFEC1E490A9700C2103A /* ApptentiveInteractionUsageData.m */,
-				01A2CFED1E490A9700C2103A /* ApptentiveMessageCenterInteraction.h */,
-				01A2CFEE1E490A9700C2103A /* ApptentiveMessageCenterInteraction.m */,
 				01A2CFEF1E490A9700C2103A /* ApptentiveMutableCustomData.h */,
 				01A2CFF01E490A9700C2103A /* ApptentiveMutableCustomData.m */,
 				01A2CFF11E490A9700C2103A /* ApptentiveMutableDevice.h */,
@@ -1470,7 +1464,6 @@
 				01A2D1A81E490A9700C2103A /* NSDictionary+Apptentive.h in Headers */,
 				01A2D1B21E490A9700C2103A /* ApptentiveLegacyEvent.h in Headers */,
 				01A2D1941E490A9700C2103A /* ApptentiveMessageCenterMessageCell.h in Headers */,
-				01A2D1311E490A9700C2103A /* ApptentiveMessageCenterInteraction.h in Headers */,
 				01A2D11B1E490A9700C2103A /* ApptentiveInteractionUpgradeMessageController.h in Headers */,
 				01A2D0FB1E490A9700C2103A /* ApptentiveStyleSheet.h in Headers */,
 				01A2D18B1E490A9700C2103A /* ApptentiveIndexedCollectionView.h in Headers */,
@@ -1785,7 +1778,6 @@
 				01A2D1B31E490A9700C2103A /* ApptentiveLegacyEvent.m in Sources */,
 				01A2D1B91E490A9700C2103A /* ApptentiveMessageSender.m in Sources */,
 				01A2D1791E490A9700C2103A /* ApptentiveAboutViewController.m in Sources */,
-				01A2D1321E490A9700C2103A /* ApptentiveMessageCenterInteraction.m in Sources */,
 				01A2D1D51E490A9700C2103A /* ApptentiveSerialRequestOperation.m in Sources */,
 				01A2D1A21E490A9700C2103A /* ApptentiveJSONSerialization.m in Sources */,
 				01A2D19F1E490A9700C2103A /* ApptentiveBackend+Metrics.m in Sources */,

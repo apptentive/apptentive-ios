@@ -10,7 +10,7 @@
 #import "ApptentiveAttachmentCell.h"
 #import "ApptentiveAttachButton.h"
 #import "ApptentiveMessageCenterViewController.h"
-#import "ApptentiveMessageCenterInteraction.h"
+#import "ApptentiveInteraction.h"
 #import "Apptentive_Private.h"
 #import "ApptentiveFileAttachment.h"
 

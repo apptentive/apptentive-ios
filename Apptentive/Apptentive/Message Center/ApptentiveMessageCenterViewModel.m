@@ -16,10 +16,11 @@
 #import "ApptentiveAttachmentCell.h"
 #import "ApptentiveFileAttachment.h"
 #import "ApptentiveUtilities.h"
+#import "ApptentiveInteraction.h"
 
 NSString *const ATMessageCenterServerErrorDomain = @"com.apptentive.MessageCenterServerError";
 NSString *const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenterErrorMessages";
-
+NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 
 @interface ApptentiveMessageCenterViewModel () <NSFetchedResultsControllerDelegate>
 
@@ -96,6 +97,136 @@ NSString *const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenter
 }
 
 #pragma mark - Message center view controller support
+
+- (NSString *)title {
+	return self.interaction.configuration[@"title"];
+}
+
+- (NSString *)branding {
+	return self.interaction.configuration[@"branding"];
+}
+
+#pragma mark - Composer
+
+- (NSString *)composerTitle {
+	return self.interaction.configuration[@"composer"][@"title"];
+}
+
+- (NSString *)composerPlaceholderText {
+	return self.interaction.configuration[@"composer"][@"hint_text"];
+}
+
+- (NSString *)composerSendButtonTitle {
+	return self.interaction.configuration[@"composer"][@"send_button"];
+}
+
+- (NSString *)composerCloseConfirmBody {
+	return self.interaction.configuration[@"composer"][@"close_confirm_body"];
+}
+
+- (NSString *)composerCloseDiscardButtonTitle {
+	return self.interaction.configuration[@"composer"][@"close_discard_button"];
+}
+
+- (NSString *)composerCloseCancelButtonTitle {
+	return self.interaction.configuration[@"composer"][@"close_cancel_button"];
+}
+
+#pragma mark - Greeting
+
+- (NSString *)greetingTitle {
+	return self.interaction.configuration[@"greeting"][@"title"];
+}
+
+- (NSString *)greetingBody {
+	return self.interaction.configuration[@"greeting"][@"body"];
+}
+
+- (NSURL *)greetingImageURL {
+	NSString *URLString = self.interaction.configuration[@"greeting"][@"image_url"];
+
+	return (URLString.length > 0) ? [NSURL URLWithString:URLString] : nil;
+}
+
+#pragma mark - Status
+
+- (NSString *)statusBody {
+	return self.interaction.configuration[@"status"][@"body"];
+}
+
+#pragma mark - Context / Automated Message
+
+- (NSString *)contextMessageBody {
+	return self.interaction.configuration[@"automated_message"][@"body"];
+}
+
+#pragma mark - Error Messages
+
+- (NSString *)HTTPErrorBody {
+	return self.interaction.configuration[@"error_messages"][@"http_error_body"];
+}
+
+- (NSString *)networkErrorBody {
+	return self.interaction.configuration[@"error_messages"][@"network_error_body"];
+}
+
+#pragma mark - Profile
+
+- (BOOL)profileRequested {
+	return [self.interaction.configuration[@"profile"][@"request"] boolValue];
+}
+
+- (BOOL)profileRequired {
+	return [self.interaction.configuration[@"profile"][@"require"] boolValue];
+}
+
+#pragma mark - Profile (Initial)
+
+- (NSString *)profileInitialTitle {
+	return self.interaction.configuration[@"profile"][@"initial"][@"title"];
+}
+
+- (NSString *)profileInitialNamePlaceholder {
+	return self.interaction.configuration[@"profile"][@"initial"][@"name_hint"];
+}
+
+- (NSString *)profileInitialEmailPlaceholder {
+	return self.interaction.configuration[@"profile"][@"initial"][@"email_hint"];
+}
+
+- (NSString *)profileInitialSkipButtonTitle {
+	return self.interaction.configuration[@"profile"][@"initial"][@"skip_button"];
+}
+
+- (NSString *)profileInitialSaveButtonTitle {
+	return self.interaction.configuration[@"profile"][@"initial"][@"save_button"];
+}
+
+- (NSString *)profileInitialEmailExplanation {
+	return self.interaction.configuration[@"profile"][@"initial"][@"email_explanation"];
+}
+
+#pragma mark - Profile (Edit)
+
+- (NSString *)profileEditTitle {
+	return self.interaction.configuration[@"profile"][@"edit"][@"title"];
+}
+
+- (NSString *)profileEditNamePlaceholder {
+	return self.interaction.configuration[@"profile"][@"edit"][@"name_hint"];
+}
+
+- (NSString *)profileEditEmailPlaceholder {
+	return self.interaction.configuration[@"profile"][@"edit"][@"email_hint"];
+}
+
+- (NSString *)profileEditSkipButtonTitle {
+	return self.interaction.configuration[@"profile"][@"edit"][@"skip_button"];
+}
+
+- (NSString *)profileEditSaveButtonTitle {
+	return self.interaction.configuration[@"profile"][@"edit"][@"save_button"];
+}
 
 - (BOOL)hasNonContextMessages {
 	if (self.numberOfMessageGroups == 0 || [self numberOfMessagesInGroup:0] == 0) {
@@ -197,6 +328,18 @@ NSString *const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenter
 
 - (void)markAsReadMessageAtIndexPath:(NSIndexPath *)indexPath {
 	ApptentiveMessage *message = [self messageAtIndexPath:indexPath];
+
+	if (message.apptentiveID && ![message.sentByUser boolValue]) {
+		NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+
+		if (message.apptentiveID) {
+			[userInfo setObject:message.apptentiveID forKey:@"message_id"];
+		}
+
+		[userInfo setObject:@"CompoundMessage" forKey:@"message_type"];
+
+		[self.interaction engage:ATInteractionMessageCenterEventLabelRead fromViewController:nil userInfo:userInfo];
+	}
 
 	[message markAsRead];
 }

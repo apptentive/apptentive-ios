@@ -15,7 +15,7 @@
 #import "ApptentiveMessageCenterReplyCell.h"
 #import "ApptentiveMessageCenterContextMessageCell.h"
 #import "ApptentiveCompoundMessageCell.h"
-#import "ApptentiveMessageCenterInteraction.h"
+#import "ApptentiveInteraction.h"
 #import "Apptentive_Private.h"
 #import "ApptentiveNetworkImageView.h"
 #import "ApptentiveUtilities.h"
@@ -141,7 +141,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.dateFormatter.timeStyle = NSDateFormatterNoStyle;
 	self.viewModel.dateFormatter.dateFormat = self.dateFormatter.dateFormat; // Used to determine if date changed between messages
 
-	self.navigationItem.title = self.viewModel.interaction.title;
+	self.navigationItem.title = self.viewModel.title;
 
 	self.tableView.separatorColor = [[Apptentive sharedConnection].style colorForStyle:ApptentiveColorSeparator];
 	self.tableView.backgroundColor = [[Apptentive sharedConnection].style colorForStyle:ApptentiveColorCollectionBackground];
@@ -149,15 +149,15 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.greetingView.backgroundColor = [[Apptentive sharedConnection].style colorForStyle:ApptentiveColorHeaderBackground];
 	self.greetingView.borderView.backgroundColor = [[Apptentive sharedConnection].style colorForStyle:ApptentiveColorSeparator];
 
-	self.greetingView.titleLabel.text = self.viewModel.interaction.greetingTitle;
+	self.greetingView.titleLabel.text = self.viewModel.greetingTitle;
 	self.greetingView.titleLabel.textColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveTextStyleHeaderTitle];
 
-	self.greetingView.messageLabel.text = self.viewModel.interaction.greetingBody;
+	self.greetingView.messageLabel.text = self.viewModel.greetingBody;
 	self.greetingView.messageLabel.textColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveTextStyleHeaderMessage];
 
-	self.greetingView.imageView.imageURL = self.viewModel.interaction.greetingImageURL;
+	self.greetingView.imageView.imageURL = self.viewModel.greetingImageURL;
 
-	self.greetingView.aboutButton.hidden = !self.viewModel.interaction.branding;
+	self.greetingView.aboutButton.hidden = !self.viewModel.branding;
 	self.greetingView.aboutButton.tintColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveTextStyleHeaderMessage];
 	self.greetingView.isOnScreen = NO;
 
@@ -173,14 +173,14 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.messageInputView.messageView.textContainerInset = UIEdgeInsetsMake(TEXT_VIEW_VERTICAL_INSET, TEXT_VIEW_VERTICAL_INSET, TEXT_VIEW_VERTICAL_INSET, TEXT_VIEW_VERTICAL_INSET);
 	[self.messageInputView.clearButton setImage:[[ApptentiveUtilities imageNamed:@"at_close"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
 
-	self.messageInputView.placeholderLabel.text = self.viewModel.interaction.composerPlaceholderText;
+	self.messageInputView.placeholderLabel.text = self.viewModel.composerPlaceholderText;
 	self.messageInputView.placeholderLabel.textColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveColorTextInputPlaceholder];
 
 	self.messageInputView.placeholderLabel.hidden = self.messageInputView.messageView.text.length > 0;
 
-	self.messageInputView.titleLabel.text = self.viewModel.interaction.composerTitle;
-	self.neuMessageButtonItem.title = self.viewModel.interaction.composerTitle;
-	[self.messageInputView.sendButton setTitle:self.viewModel.interaction.composerSendButtonTitle forState:UIControlStateNormal];
+	self.messageInputView.titleLabel.text = self.viewModel.composerTitle;
+	self.neuMessageButtonItem.title = self.viewModel.composerTitle;
+	[self.messageInputView.sendButton setTitle:self.viewModel.composerSendButtonTitle forState:UIControlStateNormal];
 
 	self.messageInputView.sendButton.accessibilityHint = ApptentiveLocalizedString(@"Sends the message.", @"Accessibility hint for 'send' button");
 
@@ -202,20 +202,20 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.statusView.statusLabel.textColor = [[Apptentive sharedConnection].style colorForStyle:ApptentiveTextStyleMessageCenterStatus];
 	self.statusView.imageView.tintColor = [[Apptentive sharedConnection].style colorForStyle:ApptentiveTextStyleMessageCenterStatus];
 
-	if (self.viewModel.interaction.profileRequested) {
+	if (self.viewModel.profileRequested) {
 		UIBarButtonItem *profileButtonItem = [[UIBarButtonItem alloc] initWithImage:[ApptentiveUtilities imageNamed:@"at_account"] landscapeImagePhone:[ApptentiveUtilities imageNamed:@"at_account"] style:UIBarButtonItemStylePlain target:self action:@selector(showWho:)];
 		profileButtonItem.accessibilityLabel = ApptentiveLocalizedString(@"Profile", @"Accessibility label for 'edit profile' button");
 		profileButtonItem.accessibilityHint = ApptentiveLocalizedString(@"Displays name and email editor.", @"Accessibility hint for 'edit profile' button");
 		self.navigationItem.leftBarButtonItem = profileButtonItem;
 
 		self.profileView.containerView.backgroundColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveColorBackground];
-		self.profileView.titleLabel.text = self.viewModel.interaction.profileInitialTitle;
+		self.profileView.titleLabel.text = self.viewModel.profileInitialTitle;
 		self.profileView.titleLabel.textColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveTextStyleButton];
-		self.profileView.requiredLabel.text = self.viewModel.interaction.profileInitialEmailExplanation;
+		self.profileView.requiredLabel.text = self.viewModel.profileInitialEmailExplanation;
 		self.profileView.requiredLabel.textColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveTextStyleSurveyInstructions];
-		[self.profileView.saveButton setTitle:self.viewModel.interaction.profileInitialSaveButtonTitle forState:UIControlStateNormal];
-		[self.profileView.skipButton setTitle:self.viewModel.interaction.profileInitialSkipButtonTitle forState:UIControlStateNormal];
-		self.profileView.skipButton.hidden = self.viewModel.interaction.profileRequired;
+		[self.profileView.saveButton setTitle:self.viewModel.profileInitialSaveButtonTitle forState:UIControlStateNormal];
+		[self.profileView.skipButton setTitle:self.viewModel.profileInitialSkipButtonTitle forState:UIControlStateNormal];
+		self.profileView.skipButton.hidden = self.viewModel.profileRequired;
 		[self validateWho:self];
 		self.profileView.borderColor = [[Apptentive sharedConnection].style colorForStyle:ApptentiveColorSeparator];
 
@@ -223,10 +223,10 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		self.profileView.emailField.backgroundColor = [[Apptentive sharedConnection].style colorForStyle:ApptentiveColorTextInputBackground];
 
 		NSDictionary *placeholderAttributes = @{NSForegroundColorAttributeName: [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveColorTextInputPlaceholder]};
-		self.profileView.nameField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:self.viewModel.interaction.profileInitialNamePlaceholder attributes:placeholderAttributes];
-		self.profileView.emailField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:self.viewModel.interaction.profileInitialEmailPlaceholder attributes:placeholderAttributes];
+		self.profileView.nameField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:self.viewModel.profileInitialNamePlaceholder attributes:placeholderAttributes];
+		self.profileView.emailField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:self.viewModel.profileInitialEmailPlaceholder attributes:placeholderAttributes];
 
-		if (self.viewModel.interaction.profileRequired && [self shouldShowProfileViewBeforeComposing:YES]) {
+		if (self.viewModel.profileRequired && [self shouldShowProfileViewBeforeComposing:YES]) {
 			self.profileView.skipButton.hidden = YES;
 			self.profileView.mode = ATMessageCenterProfileModeCompact;
 
@@ -258,8 +258,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 	self.iOSAfter8_0 = [[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){8, 1, 0}];
 
-	if (self.viewModel.interaction.contextMessageBody) {
-		self.contextMessage = [[Apptentive sharedConnection].backend automatedMessageWithTitle:nil body:self.viewModel.interaction.contextMessageBody];
+	if (self.viewModel.contextMessageBody) {
+		self.contextMessage = [[Apptentive sharedConnection].backend automatedMessageWithTitle:nil body:self.viewModel.contextMessageBody];
 	}
 }
 
@@ -779,7 +779,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.attachmentController.active = NO;
 
 	if ([self shouldShowProfileViewBeforeComposing:NO]) {
-		[self.viewModel.interaction engage:ATInteractionMessageCenterEventLabelProfileOpen fromViewController:self userInfo:@{ @"required": @(self.viewModel.interaction.profileRequired),
+		[self.viewModel.interaction engage:ATInteractionMessageCenterEventLabelProfileOpen fromViewController:self userInfo:@{ @"required": @(self.viewModel.profileRequired),
 			@"trigger": @"automatic" }];
 
 		self.state = ATMessageCenterStateWhoCard;
@@ -804,10 +804,10 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	}
 
 	if (NSClassFromString(@"UIAlertController")) {
-		UIAlertController *alertController = [UIAlertController alertControllerWithTitle:self.viewModel.interaction.composerCloseConfirmBody message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+		UIAlertController *alertController = [UIAlertController alertControllerWithTitle:self.viewModel.composerCloseConfirmBody message:nil preferredStyle:UIAlertControllerStyleActionSheet];
 
-		[alertController addAction:[UIAlertAction actionWithTitle:self.viewModel.interaction.composerCloseCancelButtonTitle style:UIAlertActionStyleCancel handler:nil]];
-		[alertController addAction:[UIAlertAction actionWithTitle:self.viewModel.interaction.composerCloseDiscardButtonTitle style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+		[alertController addAction:[UIAlertAction actionWithTitle:self.viewModel.composerCloseCancelButtonTitle style:UIAlertActionStyleCancel handler:nil]];
+		[alertController addAction:[UIAlertAction actionWithTitle:self.viewModel.composerCloseDiscardButtonTitle style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
 			[self discardDraft];
 		}]];
 
@@ -815,7 +815,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		alertController.popoverPresentationController.sourceView = sender.superview;
 		alertController.popoverPresentationController.sourceRect = sender.frame;
 	} else {
-		UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:self.viewModel.interaction.composerCloseConfirmBody delegate:self cancelButtonTitle:self.viewModel.interaction.composerCloseCancelButtonTitle destructiveButtonTitle:self.viewModel.interaction.composerCloseDiscardButtonTitle otherButtonTitles:nil];
+		UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:self.viewModel.composerCloseConfirmBody delegate:self cancelButtonTitle:self.viewModel.composerCloseCancelButtonTitle destructiveButtonTitle:self.viewModel.composerCloseDiscardButtonTitle otherButtonTitles:nil];
 
 		if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
 			[actionSheet showFromRect:sender.frame inView:sender.superview animated:YES];
@@ -831,16 +831,16 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.profileView.mode = ATMessageCenterProfileModeFull;
 
 	self.profileView.skipButton.hidden = NO;
-	self.profileView.titleLabel.text = self.viewModel.interaction.profileEditTitle;
+	self.profileView.titleLabel.text = self.viewModel.profileEditTitle;
 
 	NSDictionary *placeholderAttributes = @{NSForegroundColorAttributeName: [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveColorTextInputPlaceholder]};
-	self.profileView.nameField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:self.viewModel.interaction.profileEditNamePlaceholder attributes:placeholderAttributes];
-	self.profileView.emailField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:self.viewModel.interaction.profileEditEmailPlaceholder attributes:placeholderAttributes];
+	self.profileView.nameField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:self.viewModel.profileEditNamePlaceholder attributes:placeholderAttributes];
+	self.profileView.emailField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:self.viewModel.profileEditEmailPlaceholder attributes:placeholderAttributes];
 
-	[self.profileView.saveButton setTitle:self.viewModel.interaction.profileEditSaveButtonTitle forState:UIControlStateNormal];
-	[self.profileView.skipButton setTitle:self.viewModel.interaction.profileEditSkipButtonTitle forState:UIControlStateNormal];
+	[self.profileView.saveButton setTitle:self.viewModel.profileEditSaveButtonTitle forState:UIControlStateNormal];
+	[self.profileView.skipButton setTitle:self.viewModel.profileEditSkipButtonTitle forState:UIControlStateNormal];
 
-	[self.viewModel.interaction engage:ATInteractionMessageCenterEventLabelProfileOpen fromViewController:self userInfo:@{ @"required": @(self.viewModel.interaction.profileRequired),
+	[self.viewModel.interaction engage:ATInteractionMessageCenterEventLabelProfileOpen fromViewController:self userInfo:@{ @"required": @(self.viewModel.profileRequired),
 		@"trigger": @"button" }];
 
 	self.state = ATMessageCenterStateWhoCard;
@@ -866,7 +866,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	}
 
 	NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
-	[userInfo setObject:@(self.viewModel.interaction.profileRequired) forKey:@"required"];
+	[userInfo setObject:@(self.viewModel.profileRequired) forKey:@"required"];
 	if (buttonLabel) {
 		[userInfo setObject:buttonLabel forKey:@"button_label"];
 	}
@@ -900,9 +900,9 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (IBAction)skipWho:(id)sender {
-	NSDictionary *userInfo = @{ @"required": @(self.viewModel.interaction.profileRequired) };
+	NSDictionary *userInfo = @{ @"required": @(self.viewModel.profileRequired) };
 	if ([sender isKindOfClass:[UIButton class]]) {
-		userInfo = @{ @"required": @(self.viewModel.interaction.profileRequired),
+		userInfo = @{ @"required": @(self.viewModel.profileRequired),
 			@"method": @"button",
 			@"button_label": ((UIButton *)sender).titleLabel.text };
 	}
@@ -981,7 +981,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	BOOL emailIsValid = [ApptentiveUtilities emailAddressIsValid:self.profileView.emailField.text];
 	BOOL emailIsBlank = self.profileView.emailField.text.length == 0;
 
-	if (self.viewModel.interaction.profileRequired) {
+	if (self.viewModel.profileRequired) {
 		return emailIsValid;
 	} else {
 		return emailIsValid || emailIsBlank;
@@ -990,7 +990,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 - (void)updateState {
 	if ([self shouldShowProfileViewBeforeComposing:YES]) {
-		[self.viewModel.interaction engage:ATInteractionMessageCenterEventLabelProfileOpen fromViewController:self userInfo:@{ @"required": @(self.viewModel.interaction.profileRequired),
+		[self.viewModel.interaction engage:ATInteractionMessageCenterEventLabelProfileOpen fromViewController:self userInfo:@{ @"required": @(self.viewModel.profileRequired),
 			@"trigger": @"automatic" }];
 
 		self.state = ATMessageCenterStateWhoCard;
@@ -1049,7 +1049,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 					[self.attachmentController resignFirstResponder];
 					[self.profileView becomeFirstResponder];
 				}
-				if (!self.viewModel.interaction.profileRequired) {
+				if (!self.viewModel.profileRequired) {
 					[self.profileView becomeFirstResponder];
 				}
 				self.navigationItem.leftBarButtonItem.enabled = NO;
@@ -1068,7 +1068,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 			case ATMessageCenterStateConfirmed:
 				newFooter = self.statusView;
 				self.statusView.mode = ATMessageCenterStatusModeEmpty;
-				self.statusView.statusLabel.text = self.viewModel.interaction.statusBody;
+				self.statusView.statusLabel.text = self.viewModel.statusBody;
 
 				[self.viewModel.interaction engage:ATInteractionMessageCenterEventLabelStatus fromViewController:self];
 				break;
@@ -1076,7 +1076,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 			case ATMessageCenterStateNetworkError:
 				newFooter = self.statusView;
 				self.statusView.mode = ATMessageCenterStatusModeNetworkError;
-				self.statusView.statusLabel.text = self.viewModel.interaction.networkErrorBody;
+				self.statusView.statusLabel.text = self.viewModel.networkErrorBody;
 
 				[self.viewModel.interaction engage:ATInteractionMessageCenterEventLabelNetworkError fromViewController:self];
 
@@ -1086,7 +1086,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 			case ATMessageCenterStateHTTPError:
 				newFooter = self.statusView;
 				self.statusView.mode = ATMessageCenterStatusModeHTTPError;
-				self.statusView.statusLabel.text = self.viewModel.interaction.HTTPErrorBody;
+				self.statusView.statusLabel.text = self.viewModel.HTTPErrorBody;
 
 				[self.viewModel.interaction engage:ATInteractionMessageCenterEventLabelHTTPError fromViewController:self];
 
@@ -1237,7 +1237,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (void)scrollToLastMessageAnimated:(BOOL)animated {
-	if (self.state != ATMessageCenterStateEmpty && !(self.state == ATMessageCenterStateWhoCard && self.viewModel.interaction.profileRequired && !self.viewModel.hasNonContextMessages)) {
+	if (self.state != ATMessageCenterStateEmpty && !(self.state == ATMessageCenterStateWhoCard && self.viewModel.profileRequired && !self.viewModel.hasNonContextMessages)) {
 		[self scrollToFooterView:nil];
 	}
 }
@@ -1255,9 +1255,9 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 - (BOOL)shouldShowProfileViewBeforeComposing:(BOOL)beforeComposing {
 	if ([ApptentiveUtilities emailAddressIsValid:[Apptentive sharedConnection].personEmailAddress]) {
 		return NO;
-	} else if (self.viewModel.interaction.profileRequired) {
+	} else if (self.viewModel.profileRequired) {
 		return YES;
-	} else if (self.viewModel.interaction.profileRequested && !beforeComposing) {
+	} else if (self.viewModel.profileRequested && !beforeComposing) {
 		return ![[Apptentive.shared.backend.session.userInfo objectForKey:ATMessageCenterDidSkipProfileKey] boolValue];
 	} else {
 		return NO;

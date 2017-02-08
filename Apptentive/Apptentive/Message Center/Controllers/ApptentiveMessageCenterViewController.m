@@ -741,7 +741,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	}];
 }
 
-- (IBAction)sendButtonPressed:(id)sender {
+- (IBAction)send:(id)sender {
 	[self.viewModel sendMessage:self.trimmedMessage withAttachments:self.attachmentController.attachments];
 
 	[self.attachmentController clear];

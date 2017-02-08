@@ -89,8 +89,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 @property (strong, nonatomic) IBOutlet ApptentiveAttachmentController *attachmentController;
 
-@property (strong, nonatomic) NSDateFormatter *dateFormatter;
-
 @property (readonly, nonatomic) NSIndexPath *indexPathOfLastMessage;
 
 @property (assign, nonatomic) ATMessageCenterState state;
@@ -123,11 +121,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.navigationItem.rightBarButtonItem.accessibilityHint = ApptentiveLocalizedString(@"Closes Message Center.", @"Accessibility hint for 'close' button");
 
 	[self.viewModel start];
-
-	self.dateFormatter = [[NSDateFormatter alloc] init];
-	self.dateFormatter.dateStyle = NSDateFormatterLongStyle;
-	self.dateFormatter.timeStyle = NSDateFormatterNoStyle;
-	self.viewModel.dateFormatter.dateFormat = self.dateFormatter.dateFormat; // Used to determine if date changed between messages
 
 	self.navigationItem.title = self.viewModel.title;
 
@@ -479,7 +472,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		header = [[UITableViewHeaderFooterView alloc] initWithReuseIdentifier:@"Date"];
 	}
 
-	header.textLabel.text = [self.dateFormatter stringFromDate:[self.viewModel dateOfMessageGroupAtIndex:section]];
+	header.textLabel.text = [self.viewModel titleForHeaderInSection:section];
 
 	return header;
 }

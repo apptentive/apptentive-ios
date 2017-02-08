@@ -44,7 +44,10 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 - (instancetype)initWithInteraction:(ApptentiveInteraction *)interaction {
 	if ((self = [super init])) {
 		_interaction = interaction;
+
 		_dateFormatter = [[NSDateFormatter alloc] init];
+		_dateFormatter.dateStyle = NSDateFormatterLongStyle;
+		_dateFormatter.timeStyle = NSDateFormatterNoStyle;
 
 		_attachmentDownloadSession = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:self delegateQueue:nil];
 		_taskIndexPaths = [NSMutableDictionary dictionary];
@@ -294,6 +297,10 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 
 - (NSString *)textOfMessageAtIndexPath:(NSIndexPath *)indexPath {
 	return [self messageAtIndexPath:indexPath].body;
+}
+
+- (NSString *)titleForHeaderInSection:(NSInteger)index {
+	return [self.dateFormatter stringFromDate:[self dateOfMessageGroupAtIndex:index]];
 }
 
 - (NSDate *)dateOfMessageGroupAtIndex:(NSInteger)index {

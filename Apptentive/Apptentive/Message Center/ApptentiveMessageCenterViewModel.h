@@ -93,7 +93,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterMessageStatus) {
 - (NSInteger)numberOfMessagesInGroup:(NSInteger)groupIndex;
 - (ATMessageCenterMessageType)cellTypeAtIndexPath:(NSIndexPath *)indexPath;
 - (NSString *)textOfMessageAtIndexPath:(NSIndexPath *)indexPath;
-- (NSDate *)dateOfMessageGroupAtIndex:(NSInteger)index;
+- (NSString *)titleForHeaderInSection:(NSInteger)index;
 - (ATMessageCenterMessageStatus)statusOfMessageAtIndexPath:(NSIndexPath *)indexPath;
 - (BOOL)shouldShowDateForMessageGroupAtIndex:(NSInteger)index;
 - (NSString *)senderOfMessageAtIndexPath:(NSIndexPath *)indexPath;

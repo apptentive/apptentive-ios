@@ -26,6 +26,9 @@
 	ApptentiveMessageCenterViewController *messageCenter = navigationController.viewControllers.firstObject;
 	messageCenter.viewModel = [[ApptentiveMessageCenterViewModel alloc] initWithInteraction:self.interaction];
 
+	Apptentive.shared.backend.presentedMessageCenterViewController = messageCenter;
+	Apptentive.shared.backend.messageDelegate = messageCenter;
+
 	[viewController presentViewController:navigationController animated:YES completion:nil];
 }
 

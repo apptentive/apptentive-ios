@@ -25,7 +25,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterMessageStatus) {
 	ATMessageCenterMessageStatusFailed,
 };
 
-@protocol ApptentiveMessageCenterViewModelDelegate;
+@protocol ApptentiveMessageCenterViewModelDelegate, ApptentiveStyle;
 
 @class ApptentiveInteraction;
 
@@ -35,6 +35,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterMessageStatus) {
 @property (weak, nonatomic) NSObject<ApptentiveMessageCenterViewModelDelegate> *delegate;
 @property (readonly, nonatomic) NSDateFormatter *dateFormatter;
 @property (readonly, nonatomic) ApptentiveInteraction *interaction;
+
+@property (readonly, nonatomic) id<ApptentiveStyle> styleSheet;
 
 @property (readonly, nonatomic) NSString *title;
 @property (readonly, nonatomic) NSString *branding;
@@ -60,6 +62,9 @@ typedef NS_ENUM(NSInteger, ATMessageCenterMessageStatus) {
 @property (readonly, nonatomic) BOOL profileRequested;
 @property (readonly, nonatomic) BOOL profileRequired;
 
+@property (readonly, nonatomic) NSString *personName;
+@property (readonly, nonatomic) NSString *personEmailAddress;
+
 @property (readonly, nonatomic) NSString *profileInitialTitle;
 @property (readonly, nonatomic) NSString *profileInitialNamePlaceholder;
 @property (readonly, nonatomic) NSString *profileInitialEmailPlaceholder;
@@ -72,6 +77,11 @@ typedef NS_ENUM(NSInteger, ATMessageCenterMessageStatus) {
 @property (readonly, nonatomic) NSString *profileEditEmailPlaceholder;
 @property (readonly, nonatomic) NSString *profileEditSkipButtonTitle;
 @property (readonly, nonatomic) NSString *profileEditSaveButtonTitle;
+
+@property (readonly, nonatomic) BOOL networkIsReachable;
+
+@property (assign, nonatomic) BOOL didSkipProfile;
+@property (strong, nonatomic) NSString *draftMessage;
 
 - (instancetype)initWithInteraction:(ApptentiveInteraction *)interaction;
 - (void)start;
@@ -91,6 +101,9 @@ typedef NS_ENUM(NSInteger, ATMessageCenterMessageStatus) {
 - (void)markAsReadMessageAtIndexPath:(NSIndexPath *)indexPath;
 
 - (void)removeUnsentContextMessages;
+
+- (void)sendMessage:(NSString *)message withAttachments:(NSArray *)attachments;
+- (void)setPersonName:(NSString *)name emailAddress:(NSString *)emailAddress;
 
 - (NSInteger)numberOfAttachmentsForMessageAtIndex:(NSInteger)index;
 - (BOOL)shouldUsePlaceholderForAttachmentAtIndexPath:(NSIndexPath *)indexPath;

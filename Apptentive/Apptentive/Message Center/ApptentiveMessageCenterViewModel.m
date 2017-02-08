@@ -17,10 +17,16 @@
 #import "ApptentiveFileAttachment.h"
 #import "ApptentiveUtilities.h"
 #import "ApptentiveInteraction.h"
+#import "ApptentivePerson.h"
+#import "ApptentiveMutablePerson.h"
+#import "ApptentiveReachability.h"
 
 NSString *const ATMessageCenterServerErrorDomain = @"com.apptentive.MessageCenterServerError";
 NSString *const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenterErrorMessages";
 NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
+
+NSString *const ATMessageCenterDidSkipProfileKey = @"ATMessageCenterDidSkipProfileKey";
+NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKey";
 
 @interface ApptentiveMessageCenterViewModel () <NSFetchedResultsControllerDelegate>
 
@@ -28,6 +34,7 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 @property (readonly, nonatomic) ApptentiveMessage *lastUserMessage;
 @property (readonly, nonatomic) NSURLSession *attachmentDownloadSession;
 @property (readonly, nonatomic) NSMutableDictionary<NSValue *, NSIndexPath *> *taskIndexPaths;
+@property (strong, nonatomic) ApptentiveMessage *contextMessage;
 
 @end
 
@@ -90,6 +97,10 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 		ApptentiveLogError(@"Got an error loading messages: %@", error);
 		//TODO: Handle this error.
 	}
+
+	if (self.contextMessageBody) {
+		self.contextMessage = [Apptentive.shared.backend automatedMessageWithTitle:nil body:self.contextMessageBody];
+	}
 }
 
 - (void)stop {
@@ -97,6 +108,10 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 }
 
 #pragma mark - Message center view controller support
+
+- (id<ApptentiveStyle>)styleSheet {
+	return Apptentive.shared.style;
+}
 
 - (NSString *)title {
 	return self.interaction.configuration[@"title"];
@@ -178,6 +193,14 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 
 - (BOOL)profileRequired {
 	return [self.interaction.configuration[@"profile"][@"require"] boolValue];
+}
+
+- (NSString *)personName {
+	return Apptentive.shared.backend.session.person.name;
+}
+
+- (NSString *)personEmailAddress {
+	return Apptentive.shared.backend.session.person.emailAddress;
 }
 
 #pragma mark - Profile (Initial)
@@ -507,6 +530,50 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 	@synchronized(self) {
 		NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"(pendingState == %d)", ATPendingMessageStateComposing];
 		[ApptentiveData removeEntitiesNamed:@"ATMessage" withPredicate:fetchPredicate];
+	}
+}
+
+- (void)sendMessage:(NSString *)message withAttachments:(NSArray *)attachments {
+	if (self.contextMessage) {
+		[[Apptentive sharedConnection].backend sendAutomatedMessage:self.contextMessage];
+		self.contextMessage = nil;
+	}
+
+	if (attachments.count > 0) {
+		[Apptentive.shared.backend sendCompoundMessageWithText:message attachments:attachments hiddenOnClient:NO];
+	} else {
+		[Apptentive.shared.backend sendTextMessageWithBody:message];
+	}
+}
+
+- (void)setPersonName:(NSString *)name emailAddress:(NSString *)emailAddress {
+	[Apptentive.shared.backend.session updatePerson:^(ApptentiveMutablePerson *person) {
+		person.name = name;
+		person.emailAddress = emailAddress;
+	}];
+}
+
+- (BOOL)networkIsReachable {
+	return [[ApptentiveReachability sharedReachability] currentNetworkStatus] != ApptentiveNetworkNotReachable;
+}
+
+- (BOOL)didSkipProfile {
+	return [[Apptentive.shared.backend.session.userInfo objectForKey:ATMessageCenterDidSkipProfileKey] boolValue];
+}
+
+- (void)setDidSkipProfile:(BOOL)didSkipProfile {
+	[Apptentive.shared.backend.session setUserInfo:@(didSkipProfile) forKey:ATMessageCenterDidSkipProfileKey];
+}
+
+- (NSString *)draftMessage {
+	return Apptentive.shared.backend.session.userInfo[ATMessageCenterDraftMessageKey];
+}
+
+- (void)setDraftMessage:(NSString *)draftMessage {
+	if (draftMessage) {
+		[Apptentive.shared.backend.session setUserInfo:draftMessage forKey:ATMessageCenterDraftMessageKey];
+	} else {
+		[Apptentive.shared.backend.session removeUserInfoForKey:ATMessageCenterDraftMessageKey];
 	}
 }
 

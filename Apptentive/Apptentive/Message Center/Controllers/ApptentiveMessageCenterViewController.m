@@ -621,6 +621,15 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[self presentViewController:alertController animated:YES completion:nil];
 }
 
+- (void)messageCenterViewModel:(ApptentiveMessageCenterViewModel *)viewModel messageProgressDidChange:(float)progress {
+	ApptentiveProgressNavigationBar *navigationBar = (ApptentiveProgressNavigationBar *)self.navigationController.navigationBar;
+
+	navigationBar.progressView.hidden = progress == 0;
+
+	BOOL animated = navigationBar.progressView.progress < progress;
+	[navigationBar.progressView setProgress:progress animated:animated];
+}
+
 #pragma mark Collection view delegate
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -704,17 +713,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	}
 
 	return NO;
-}
-
-#pragma mark - Message backend delegate
-
-- (void)backend:(ApptentiveBackend *)backend messageProgressDidChange:(float)progress {
-	ApptentiveProgressNavigationBar *navigationBar = (ApptentiveProgressNavigationBar *)self.navigationController.navigationBar;
-
-	navigationBar.progressView.hidden = progress == 0;
-
-	BOOL animated = navigationBar.progressView.progress < progress;
-	[navigationBar.progressView setProgress:progress animated:animated];
 }
 
 #pragma mark - Action sheet delegate

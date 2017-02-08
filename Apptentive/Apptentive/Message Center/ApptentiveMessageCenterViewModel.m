@@ -531,6 +531,12 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 	});
 }
 
+#pragma mark - Message backend delegate
+
+- (void)backend:(ApptentiveBackend *)backend messageProgressDidChange:(float)progress {
+	[self.delegate messageCenterViewModel:self messageProgressDidChange:progress];
+}
+
 #pragma mark - Misc
 
 - (void)removeUnsentContextMessages {

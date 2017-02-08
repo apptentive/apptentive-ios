@@ -6,8 +6,7 @@
 //  Copyright (c) 2013 Apptentive, Inc. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import <CoreData/CoreData.h>
+#import "ApptentiveBackend.h"
 #import "ApptentiveMessage.h"
 
 typedef NS_ENUM(NSInteger, ATMessageCenterMessageType) {
@@ -29,7 +28,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterMessageStatus) {
 
 @class ApptentiveInteraction;
 
-@interface ApptentiveMessageCenterViewModel : NSObject <NSURLSessionDownloadDelegate>
+@interface ApptentiveMessageCenterViewModel : NSObject <NSURLSessionDownloadDelegate, ATBackendMessageDelegate>
 
 @property (readonly, strong, nonatomic) NSFetchedResultsController *fetchedMessagesController;
 @property (weak, nonatomic) NSObject<ApptentiveMessageCenterViewModelDelegate> *delegate;
@@ -123,5 +122,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterMessageStatus) {
 - (void)messageCenterViewModel:(ApptentiveMessageCenterViewModel *)viewModel attachmentDownloadAtIndexPath:(NSIndexPath *)indexPath didProgress:(float)progress;
 - (void)messageCenterViewModel:(ApptentiveMessageCenterViewModel *)viewModel didLoadAttachmentThumbnailAtIndexPath:(NSIndexPath *)indexPath;
 - (void)messageCenterViewModel:(ApptentiveMessageCenterViewModel *)viewModel didFailToLoadAttachmentThumbnailAtIndexPath:(NSIndexPath *)indexPath error:(NSError *)error;
+- (void)messageCenterViewModel:(ApptentiveMessageCenterViewModel *)viewModel messageProgressDidChange:(float)progress;
 
 @end

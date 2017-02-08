@@ -715,14 +715,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	return NO;
 }
 
-#pragma mark - Action sheet delegate
-
-- (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex {
-	if (buttonIndex == actionSheet.destructiveButtonIndex) {
-		[self discardDraft];
-	}
-}
-
 #pragma mark - Actions
 
 - (IBAction)dismiss:(id)sender {
@@ -771,28 +763,16 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		return;
 	}
 
-	if (NSClassFromString(@"UIAlertController")) {
-		UIAlertController *alertController = [UIAlertController alertControllerWithTitle:self.viewModel.composerCloseConfirmBody message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:self.viewModel.composerCloseConfirmBody message:nil preferredStyle:UIAlertControllerStyleActionSheet];
 
-		[alertController addAction:[UIAlertAction actionWithTitle:self.viewModel.composerCloseCancelButtonTitle style:UIAlertActionStyleCancel handler:nil]];
-		[alertController addAction:[UIAlertAction actionWithTitle:self.viewModel.composerCloseDiscardButtonTitle style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
-			[self discardDraft];
-		}]];
+	[alertController addAction:[UIAlertAction actionWithTitle:self.viewModel.composerCloseCancelButtonTitle style:UIAlertActionStyleCancel handler:nil]];
+	[alertController addAction:[UIAlertAction actionWithTitle:self.viewModel.composerCloseDiscardButtonTitle style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+		[self discardDraft];
+	}]];
 
-		[self presentViewController:alertController animated:YES completion:nil];
-		alertController.popoverPresentationController.sourceView = sender.superview;
-		alertController.popoverPresentationController.sourceRect = sender.frame;
-	} else {
-		UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:self.viewModel.composerCloseConfirmBody delegate:self cancelButtonTitle:self.viewModel.composerCloseCancelButtonTitle destructiveButtonTitle:self.viewModel.composerCloseDiscardButtonTitle otherButtonTitles:nil];
-
-		if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
-			[actionSheet showFromRect:sender.frame inView:sender.superview animated:YES];
-		} else if (!self.navigationController.toolbarHidden) {
-			[actionSheet showFromToolbar:self.navigationController.toolbar];
-		} else {
-			[actionSheet showInView:self.view];
-		}
-	}
+	[self presentViewController:alertController animated:YES completion:nil];
+	alertController.popoverPresentationController.sourceView = sender.superview;
+	alertController.popoverPresentationController.sourceRect = sender.frame;
 }
 
 - (IBAction)showWho:(id)sender {

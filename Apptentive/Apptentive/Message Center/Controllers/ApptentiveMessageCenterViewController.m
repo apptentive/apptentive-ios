@@ -94,7 +94,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 @property (strong, nonatomic) IBOutlet ApptentiveAttachmentController *attachmentController;
 
-@property (strong, nonatomic) ApptentiveMessageCenterDataSource *dataSource;
+@property (strong, nonatomic) ApptentiveMessageCenterViewModel *viewModel;
 @property (strong, nonatomic) NSDateFormatter *dateFormatter;
 
 @property (readonly, nonatomic) NSIndexPath *indexPathOfLastMessage;
@@ -133,15 +133,15 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.navigationItem.rightBarButtonItem.title = ApptentiveLocalizedString(@"Close", @"Button that closes Message Center.");
 	self.navigationItem.rightBarButtonItem.accessibilityHint = ApptentiveLocalizedString(@"Closes Message Center.", @"Accessibility hint for 'close' button");
 
-	self.dataSource = [[ApptentiveMessageCenterDataSource alloc] initWithDelegate:self];
-	[self.dataSource start];
+	self.viewModel = [[ApptentiveMessageCenterViewModel alloc] initWithDelegate:self];
+	[self.viewModel start];
 
 	[Apptentive sharedConnection].backend.messageDelegate = self;
 
 	self.dateFormatter = [[NSDateFormatter alloc] init];
 	self.dateFormatter.dateStyle = NSDateFormatterLongStyle;
 	self.dateFormatter.timeStyle = NSDateFormatterNoStyle;
-	self.dataSource.dateFormatter.dateFormat = self.dateFormatter.dateFormat; // Used to determine if date changed between messages
+	self.viewModel.dateFormatter.dateFormat = self.dateFormatter.dateFormat; // Used to determine if date changed between messages
 
 	self.navigationItem.title = self.interaction.title;
 
@@ -266,7 +266,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (void)dealloc {
-	[self.dataSource removeUnsentContextMessages];
+	[self.viewModel removeUnsentContextMessages];
 
 	self.tableView.delegate = nil;
 	self.messageInputView.messageView.delegate = nil;
@@ -329,24 +329,24 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-	return [self.dataSource numberOfMessageGroups];
+	return [self.viewModel numberOfMessageGroups];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	return [self.dataSource numberOfMessagesInGroup:section];
+	return [self.viewModel numberOfMessagesInGroup:section];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-	[self.dataSource markAsReadMessageAtIndexPath:indexPath];
+	[self.viewModel markAsReadMessageAtIndexPath:indexPath];
 
 	UITableViewCell<ApptentiveMessageCenterCell> *cell;
-	ATMessageCenterMessageType type = [self.dataSource cellTypeAtIndexPath:indexPath];
+	ATMessageCenterMessageType type = [self.viewModel cellTypeAtIndexPath:indexPath];
 
 	if (type == ATMessageCenterMessageTypeMessage || type == ATMessageCenterMessageTypeCompoundMessage) {
 		NSString *cellIdentifier = type == ATMessageCenterMessageTypeCompoundMessage ? @"CompoundMessage" : @"Message";
 		ApptentiveMessageCenterMessageCell *messageCell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
 
-		switch ([self.dataSource statusOfMessageAtIndexPath:indexPath]) {
+		switch ([self.viewModel statusOfMessageAtIndexPath:indexPath]) {
 			case ATMessageCenterMessageStatusHidden:
 				messageCell.statusLabelHidden = YES;
 				messageCell.layer.borderWidth = 0;
@@ -379,10 +379,10 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		NSString *cellIdentifier = type == ATMessageCenterMessageTypeCompoundReply ? @"CompoundReply" : @"Reply";
 		ApptentiveMessageCenterReplyCell *replyCell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
 
-		replyCell.supportUserImageView.imageURL = [self.dataSource imageURLOfSenderAtIndexPath:indexPath];
+		replyCell.supportUserImageView.imageURL = [self.viewModel imageURLOfSenderAtIndexPath:indexPath];
 
-		replyCell.messageLabel.text = [self.dataSource textOfMessageAtIndexPath:indexPath];
-		replyCell.senderLabel.text = [self.dataSource senderOfMessageAtIndexPath:indexPath];
+		replyCell.messageLabel.text = [self.viewModel textOfMessageAtIndexPath:indexPath];
+		replyCell.senderLabel.text = [self.viewModel senderOfMessageAtIndexPath:indexPath];
 
 		cell = replyCell;
 	} else { // Message cell
@@ -391,9 +391,9 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		cell = contextMessageCell;
 	}
 
-	cell.messageLabel.font = [[Apptentive sharedConnection].style fontForStyle:UIFontTextStyleBody];
-	cell.messageLabel.textColor = [[Apptentive sharedConnection].style colorForStyle:UIFontTextStyleBody];
-	cell.messageLabel.text = [self.dataSource textOfMessageAtIndexPath:indexPath];
+	cell.messageLabel.font = [[Apptentive sharedConnection].styleSheet fontForStyle:UIFontTextStyleBody];
+	cell.messageLabel.textColor = [[Apptentive sharedConnection].styleSheet colorForStyle:UIFontTextStyleBody];
+	cell.messageLabel.text = [self.viewModel textOfMessageAtIndexPath:indexPath];
 
 	if (type == ATMessageCenterMessageTypeCompoundMessage || type == ATMessageCenterMessageTypeCompoundReply) {
 		UITableViewCell<ApptentiveMessageCenterCompoundCell> *compoundCell = (ApptentiveCompoundMessageCell *)cell;
@@ -418,7 +418,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
 	CGFloat height = self.tableView.sectionHeaderHeight;
 
-	if ([self.dataSource shouldShowDateForMessageGroupAtIndex:section]) {
+	if ([self.viewModel shouldShowDateForMessageGroupAtIndex:section]) {
 		height += HEADER_LABEL_HEIGHT;
 	}
 
@@ -428,9 +428,9 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 	// iOS 7 requires this and there's no good way to instantiate a cell to sample, so we're hard-coding it for now.
 	CGFloat verticalMargin, horizontalMargin, minimumCellHeight;
-	BOOL statusLabelVisible = [self.dataSource statusOfMessageAtIndexPath:indexPath] != ATMessageCenterMessageStatusHidden;
+	BOOL statusLabelVisible = [self.viewModel statusOfMessageAtIndexPath:indexPath] != ATMessageCenterMessageStatusHidden;
 
-	switch ([self.dataSource cellTypeAtIndexPath:indexPath]) {
+	switch ([self.viewModel cellTypeAtIndexPath:indexPath]) {
 		case ATMessageCenterMessageTypeContextMessage:
 		case ATMessageCenterMessageTypeMessage:
 			horizontalMargin = MESSAGE_LABEL_TOTAL_HORIZONTAL_MARGIN;
@@ -464,7 +464,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		verticalMargin += STATUS_LABEL_HEIGHT + STATUS_LABEL_MARGIN;
 	}
 
-	NSString *labelText = [self.dataSource textOfMessageAtIndexPath:indexPath];
+	NSString *labelText = [self.viewModel textOfMessageAtIndexPath:indexPath];
 	CGFloat effectiveLabelWidth = CGRectGetWidth(tableView.bounds) - horizontalMargin;
 	CGRect labelRect = CGRectZero;
 	if (labelText.length) {
@@ -485,7 +485,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 #pragma mark Table view delegate
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-	if (![self.dataSource shouldShowDateForMessageGroupAtIndex:section]) {
+	if (![self.viewModel shouldShowDateForMessageGroupAtIndex:section]) {
 		return nil;
 	}
 
@@ -495,7 +495,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		header = [[UITableViewHeaderFooterView alloc] initWithReuseIdentifier:@"Date"];
 	}
 
-	header.textLabel.text = [self.dateFormatter stringFromDate:[self.dataSource dateOfMessageGroupAtIndex:section]];
+	header.textLabel.text = [self.dateFormatter stringFromDate:[self.viewModel dateOfMessageGroupAtIndex:section]];
 
 	return header;
 }
@@ -509,7 +509,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-	switch ([self.dataSource cellTypeAtIndexPath:indexPath]) {
+	switch ([self.viewModel cellTypeAtIndexPath:indexPath]) {
 		case ATMessageCenterMessageTypeMessage:
 		case ATMessageCenterMessageTypeCompoundMessage:
 			cell.contentView.backgroundColor = [[Apptentive sharedConnection].style colorForStyle:ApptentiveColorMessageBackground];
@@ -532,7 +532,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 - (void)tableView:(UITableView *)tableView performAction:(SEL)action forRowAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
 	if (indexPath) {
-		[[UIPasteboard generalPasteboard] setValue:[self.dataSource textOfMessageAtIndexPath:indexPath] forPasteboardType:(__bridge NSString *)kUTTypeUTF8PlainText];
+		[[UIPasteboard generalPasteboard] setValue:[self.viewModel textOfMessageAtIndexPath:indexPath] forPasteboardType:(__bridge NSString *)kUTTypeUTF8PlainText];
 	}
 }
 
@@ -607,9 +607,9 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	}
 }
 
-#pragma mark Message center data source delegate
+#pragma mark Message center view model delegate
 
-- (void)messageCenterDataSource:(ApptentiveMessageCenterDataSource *)dataSource didLoadAttachmentThumbnailAtIndexPath:(NSIndexPath *)indexPath {
+- (void)messageCenterViewModel:(ApptentiveMessageCenterViewModel *)viewModel didLoadAttachmentThumbnailAtIndexPath:(NSIndexPath *)indexPath {
 	ApptentiveCompoundMessageCell *cell = (ApptentiveCompoundMessageCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:indexPath.section]];
 	ApptentiveIndexedCollectionView *collectionView = cell.collectionView;
 	NSIndexPath *collectionViewIndexPath = [NSIndexPath indexPathForItem:indexPath.row inSection:0];
@@ -619,7 +619,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[collectionView reloadItemsAtIndexPaths:@[collectionViewIndexPath]];
 }
 
-- (void)messageCenterDataSource:(ApptentiveMessageCenterDataSource *)dataSource attachmentDownloadAtIndexPath:(NSIndexPath *)indexPath didProgress:(float)progress {
+- (void)messageCenterViewModel:(ApptentiveMessageCenterViewModel *)viewModel attachmentDownloadAtIndexPath:(NSIndexPath *)indexPath didProgress:(float)progress {
 	ApptentiveCompoundMessageCell *cell = (ApptentiveCompoundMessageCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:indexPath.section]];
 	ApptentiveIndexedCollectionView *collectionView = cell.collectionView;
 	NSIndexPath *collectionViewIndexPath = [NSIndexPath indexPathForItem:indexPath.row inSection:0];
@@ -629,7 +629,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[attachmentCell.progressView setProgress:progress animated:YES];
 }
 
-- (void)messageCenterDataSource:(ApptentiveMessageCenterDataSource *)dataSource didFailToLoadAttachmentThumbnailAtIndexPath:(NSIndexPath *)indexPath error:(NSError *)error {
+- (void)messageCenterViewModel:(ApptentiveMessageCenterViewModel *)viewModel didFailToLoadAttachmentThumbnailAtIndexPath:(NSIndexPath *)indexPath error:(NSError *)error {
 	ApptentiveCompoundMessageCell *cell = (ApptentiveCompoundMessageCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:indexPath.section]];
 	ApptentiveIndexedCollectionView *collectionView = cell.collectionView;
 	NSIndexPath *collectionViewIndexPath = [NSIndexPath indexPathForItem:indexPath.row inSection:0];
@@ -649,15 +649,15 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
 	NSIndexPath *attachmentIndexPath = [NSIndexPath indexPathForItem:indexPath.item inSection:((ApptentiveIndexedCollectionView *)collectionView).index];
 
-	if ([self.dataSource canPreviewAttachmentAtIndexPath:attachmentIndexPath]) {
+	if ([self.viewModel canPreviewAttachmentAtIndexPath:attachmentIndexPath]) {
 		QLPreviewController *previewController = [[QLPreviewController alloc] init];
 
-		previewController.dataSource = [self.dataSource previewDataSourceAtIndex:((ApptentiveIndexedCollectionView *)collectionView).index];
+		previewController.dataSource = [self.viewModel previewDataSourceAtIndex:((ApptentiveIndexedCollectionView *)collectionView).index];
 		previewController.currentPreviewItemIndex = indexPath.row;
 
 		[self.navigationController pushViewController:previewController animated:YES];
 	} else {
-		[self.dataSource downloadAttachmentAtIndexPath:attachmentIndexPath];
+		[self.viewModel downloadAttachmentAtIndexPath:attachmentIndexPath];
 	}
 }
 
@@ -668,16 +668,16 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-	return [self.dataSource numberOfAttachmentsForMessageAtIndex:((ApptentiveIndexedCollectionView *)collectionView).index];
+	return [self.viewModel numberOfAttachmentsForMessageAtIndex:((ApptentiveIndexedCollectionView *)collectionView).index];
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
 	ApptentiveAttachmentCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"Attachment" forIndexPath:indexPath];
 	NSIndexPath *attachmentIndexPath = [NSIndexPath indexPathForItem:indexPath.item inSection:((ApptentiveIndexedCollectionView *)collectionView).index];
 
-	cell.usePlaceholder = [self.dataSource shouldUsePlaceholderForAttachmentAtIndexPath:attachmentIndexPath];
-	cell.imageView.image = [self.dataSource imageForAttachmentAtIndexPath:attachmentIndexPath size:[ApptentiveAttachmentCell sizeForScreen:[UIScreen mainScreen] withMargin:ATTACHMENT_MARGIN]];
-	cell.extensionLabel.text = [self.dataSource extensionForAttachmentAtIndexPath:attachmentIndexPath];
+	cell.usePlaceholder = [self.viewModel shouldUsePlaceholderForAttachmentAtIndexPath:attachmentIndexPath];
+	cell.imageView.image = [self.viewModel imageForAttachmentAtIndexPath:attachmentIndexPath size:[ApptentiveAttachmentCell sizeForScreen:[UIScreen mainScreen] withMargin:ATTACHMENT_MARGIN]];
+	cell.extensionLabel.text = [self.viewModel extensionForAttachmentAtIndexPath:attachmentIndexPath];
 
 	return cell;
 }
@@ -753,7 +753,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 - (IBAction)dismiss:(id)sender {
 	[self.attachmentController resignFirstResponder];
 
-	[self.dataSource stop];
+	[self.viewModel stop];
 
 	UIViewController *presentingViewController = self.presentingViewController;
 
@@ -934,7 +934,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		if ([cell isKindOfClass:[ApptentiveMessageCenterMessageCell class]]) {
 			ApptentiveMessageCenterMessageCell *messageCell = (ApptentiveMessageCenterMessageCell *)cell;
 			NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-			BOOL shouldHideStatus = [self.dataSource statusOfMessageAtIndexPath:indexPath] == ATMessageCenterMessageStatusHidden;
+			BOOL shouldHideStatus = [self.viewModel statusOfMessageAtIndexPath:indexPath] == ATMessageCenterMessageStatusHidden;
 
 			if (messageCell.statusLabelHidden != shouldHideStatus) {
 				[indexPathsToReload addObject:indexPath];
@@ -996,14 +996,14 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 			@"trigger": @"automatic" }];
 
 		self.state = ATMessageCenterStateWhoCard;
-	} else if (!self.dataSource.hasNonContextMessages) {
+	} else if (!self.viewModel.hasNonContextMessages) {
 		self.state = ATMessageCenterStateEmpty;
-	} else if (self.dataSource.lastMessageIsReply) {
+	} else if (self.viewModel.lastMessageIsReply) {
 		self.state = ATMessageCenterStateReplied;
 	} else {
 		BOOL networkIsUnreachable = [[ApptentiveReachability sharedReachability] currentNetworkStatus] == ApptentiveNetworkNotReachable;
 
-		switch (self.dataSource.lastUserMessageState) {
+		switch (self.viewModel.lastUserMessageState) {
 			case ATPendingMessageStateConfirmed:
 				self.state = ATMessageCenterStateConfirmed;
 				break;
@@ -1164,7 +1164,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 	CGRect localKeyboardRect = self.view.window ? [self.view.window convertRect:self.lastKnownKeyboardRect toView:self.tableView.superview] : self.lastKnownKeyboardRect;
 
-	CGFloat footerSpace = [self.dataSource numberOfMessageGroups] > 0 ? self.tableView.sectionFooterHeight : 0;
+	CGFloat footerSpace = [self.viewModel numberOfMessageGroups] > 0 ? self.tableView.sectionFooterHeight : 0;
 	CGFloat verticalOffset = CGRectGetMaxY(self.rectOfLastMessage) + footerSpace;
 	CGFloat toolbarHeight = self.navigationController.toolbarHidden ? 0 : CGRectGetHeight(self.navigationController.toolbar.bounds);
 
@@ -1199,7 +1199,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 			height -= CGRectGetHeight(self.navigationController.toolbar.bounds);
 		}
 
-		if (!self.dataSource.hasNonContextMessages && CGRectGetMinY(localKeyboardRect) >= CGRectGetMaxY(self.tableView.frame)) {
+		if (!self.viewModel.hasNonContextMessages && CGRectGetMinY(localKeyboardRect) >= CGRectGetMaxY(self.tableView.frame)) {
 			height -= CGRectGetHeight(self.greetingView.bounds);
 		}
 	} else {
@@ -1239,7 +1239,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (void)scrollToLastMessageAnimated:(BOOL)animated {
-	if (self.state != ATMessageCenterStateEmpty && !(self.state == ATMessageCenterStateWhoCard && self.interaction.profileRequired && !self.dataSource.hasNonContextMessages)) {
+	if (self.state != ATMessageCenterStateEmpty && !(self.state == ATMessageCenterStateWhoCard && self.interaction.profileRequired && !self.viewModel.hasNonContextMessages)) {
 		[self scrollToFooterView:nil];
 	}
 }

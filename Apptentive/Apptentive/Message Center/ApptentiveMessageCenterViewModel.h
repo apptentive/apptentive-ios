@@ -1,5 +1,5 @@
 //
-//  ApptentiveMessageCenterDataSource.h
+//  ApptentiveMessageCenterViewModel.h
 //  Apptentive
 //
 //  Created by Andrew Wooster on 11/12/13.
@@ -25,15 +25,15 @@ typedef NS_ENUM(NSInteger, ATMessageCenterMessageStatus) {
 	ATMessageCenterMessageStatusFailed,
 };
 
-@protocol ApptentiveMessageCenterDataSourceDelegate;
+@protocol ApptentiveMessageCenterViewModelDelegate;
 
 
-@interface ApptentiveMessageCenterDataSource : NSObject <NSURLSessionDownloadDelegate>
+@interface ApptentiveMessageCenterViewModel : NSObject <NSURLSessionDownloadDelegate>
 @property (readonly, strong, nonatomic) NSFetchedResultsController *fetchedMessagesController;
-@property (weak, nonatomic) NSObject<ApptentiveMessageCenterDataSourceDelegate> *delegate;
+@property (weak, nonatomic) NSObject<ApptentiveMessageCenterViewModelDelegate> *delegate;
 @property (readonly, nonatomic) NSDateFormatter *dateFormatter;
 
-- (id)initWithDelegate:(NSObject<ApptentiveMessageCenterDataSourceDelegate> *)delegate;
+- (id)initWithDelegate:(NSObject<ApptentiveMessageCenterViewModelDelegate> *)delegate;
 - (void)start;
 - (void)stop;
 
@@ -65,10 +65,10 @@ typedef NS_ENUM(NSInteger, ATMessageCenterMessageStatus) {
 
 @end
 
-@protocol ApptentiveMessageCenterDataSourceDelegate <NSObject, NSFetchedResultsControllerDelegate>
+@protocol ApptentiveMessageCenterViewModelDelegate <NSObject, NSFetchedResultsControllerDelegate>
 
-- (void)messageCenterDataSource:(ApptentiveMessageCenterDataSource *)dataSource attachmentDownloadAtIndexPath:(NSIndexPath *)indexPath didProgress:(float)progress;
-- (void)messageCenterDataSource:(ApptentiveMessageCenterDataSource *)dataSource didLoadAttachmentThumbnailAtIndexPath:(NSIndexPath *)indexPath;
-- (void)messageCenterDataSource:(ApptentiveMessageCenterDataSource *)dataSource didFailToLoadAttachmentThumbnailAtIndexPath:(NSIndexPath *)indexPath error:(NSError *)error;
+- (void)messageCenterViewModel:(ApptentiveMessageCenterViewModel *)viewModel attachmentDownloadAtIndexPath:(NSIndexPath *)indexPath didProgress:(float)progress;
+- (void)messageCenterViewModel:(ApptentiveMessageCenterViewModel *)viewModel didLoadAttachmentThumbnailAtIndexPath:(NSIndexPath *)indexPath;
+- (void)messageCenterViewModel:(ApptentiveMessageCenterViewModel *)viewModel didFailToLoadAttachmentThumbnailAtIndexPath:(NSIndexPath *)indexPath error:(NSError *)error;
 
 @end

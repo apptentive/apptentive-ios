@@ -1,12 +1,12 @@
 //
-//  ApptentiveMessageCenterDataSource.m
+//  ApptentiveMessageCenterViewModel.m
 //  Apptentive
 //
 //  Created by Andrew Wooster on 11/12/13.
 //  Copyright (c) 2013 Apptentive, Inc. All rights reserved.
 //
 
-#import "ApptentiveMessageCenterDataSource.h"
+#import "ApptentiveMessageCenterViewModel.h"
 
 #import "ApptentiveBackend.h"
 #import "Apptentive.h"
@@ -21,7 +21,7 @@ NSString *const ATMessageCenterServerErrorDomain = @"com.apptentive.MessageCente
 NSString *const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenterErrorMessages";
 
 
-@interface ApptentiveMessageCenterDataSource () <NSFetchedResultsControllerDelegate>
+@interface ApptentiveMessageCenterViewModel () <NSFetchedResultsControllerDelegate>
 
 @property (readwrite, strong, nonatomic) NSFetchedResultsController *fetchedMessagesController;
 @property (readonly, nonatomic) ApptentiveMessage *lastUserMessage;
@@ -31,9 +31,9 @@ NSString *const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenter
 @end
 
 
-@implementation ApptentiveMessageCenterDataSource
+@implementation ApptentiveMessageCenterViewModel
 
-- (id)initWithDelegate:(NSObject<ApptentiveMessageCenterDataSourceDelegate> *)aDelegate {
+- (id)initWithDelegate:(NSObject<ApptentiveMessageCenterViewModelDelegate> *)aDelegate {
 	if ((self = [super init])) {
 		_delegate = aDelegate;
 		_dateFormatter = [[NSDateFormatter alloc] init];
@@ -266,7 +266,7 @@ NSString *const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenter
 	NSURLRequest *request = [NSURLRequest requestWithURL:attachment.remoteURL];
 	NSURLSessionDownloadTask *task = [self.attachmentDownloadSession downloadTaskWithRequest:request];
 
-	[self.delegate messageCenterDataSource:self attachmentDownloadAtIndexPath:indexPath didProgress:0];
+    [self.delegate messageCenterViewModel:self attachmentDownloadAtIndexPath:indexPath didProgress:0];
 
 	[self setIndexPath:indexPath forTask:task];
 	[task resume];
@@ -335,7 +335,7 @@ NSString *const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenter
 	dispatch_async(dispatch_get_main_queue(), ^{
 		// -completeMoveToStorageFor: must be called on main thread.
 		[[self fileAttachmentAtIndexPath:attachmentIndexPath] completeMoveToStorageFor:finalLocation];
-		[self.delegate messageCenterDataSource:self didLoadAttachmentThumbnailAtIndexPath:attachmentIndexPath];
+		[self.delegate messageCenterViewModel:self didLoadAttachmentThumbnailAtIndexPath:attachmentIndexPath];
 	});
 }
 
@@ -343,7 +343,7 @@ NSString *const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenter
 	NSIndexPath *attachmentIndexPath = [self indexPathForTask:downloadTask];
 
 	dispatch_async(dispatch_get_main_queue(), ^{
-		[self.delegate messageCenterDataSource:self attachmentDownloadAtIndexPath:attachmentIndexPath didProgress:(double)totalBytesWritten / (double)totalBytesExpectedToWrite];
+        [self.delegate messageCenterViewModel:self attachmentDownloadAtIndexPath:attachmentIndexPath didProgress:(double) totalBytesWritten / (double) totalBytesExpectedToWrite];
 	});
 }
 
@@ -354,7 +354,7 @@ NSString *const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenter
 	[self removeTask:task];
 
 	dispatch_async(dispatch_get_main_queue(), ^{
-		[self.delegate messageCenterDataSource:self didFailToLoadAttachmentThumbnailAtIndexPath:attachmentIndexPath error:error];
+		[self.delegate messageCenterViewModel:self didFailToLoadAttachmentThumbnailAtIndexPath:attachmentIndexPath error:error];
 	});
 }
 

@@ -43,6 +43,7 @@
 #define REPLY_CELL_MINIMUM_HEIGHT 66.0
 #define STATUS_LABEL_HEIGHT 14.0
 #define STATUS_LABEL_MARGIN 6.0
+#define MINIMUM_INPUT_VIEW_HEIGHT 108.0
 
 NSString *const ATInteractionMessageCenterEventLabelLaunch = @"launch";
 NSString *const ATInteractionMessageCenterEventLabelClose = @"close";
@@ -1143,9 +1144,17 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 			height -= CGRectGetHeight(self.navigationController.toolbar.bounds);
 		}
 
+		// In an empty state (possibly w/ context message) when the keyboard is not visible, leave room for greeting view + context message
 		if (!self.viewModel.hasNonContextMessages && CGRectGetMinY(localKeyboardRect) >= CGRectGetMaxY(self.tableView.frame)) {
-			height -= CGRectGetHeight(self.greetingView.bounds);
+			if (self.viewModel.numberOfMessageGroups == 0) {
+				height -= CGRectGetHeight(self.greetingView.bounds);
+			} else {
+				height -= CGRectGetMaxY(self.rectOfLastMessage) + self.tableView.sectionFooterHeight;
+			}
 		}
+
+		// But don't shrink the thing until it's unusably small on e.g. 4S devices
+		height = fmax(height, MINIMUM_INPUT_VIEW_HEIGHT);
 	} else {
 		height = CGRectGetHeight(self.activeFooterView.bounds);
 

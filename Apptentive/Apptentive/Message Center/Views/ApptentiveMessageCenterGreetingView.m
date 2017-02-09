@@ -44,13 +44,13 @@
 	[super traitCollectionDidChange:previousTraitCollection];
 
 	self.translatesAutoresizingMaskIntoConstraints = NO;
-	[self setNeedsUpdateConstraints];
 	[self sizeToFit];
 	self.translatesAutoresizingMaskIntoConstraints = YES;
 }
 
 - (CGSize)sizeThatFits:(CGSize)size {
-	return [self systemLayoutSizeFittingSize:CGSizeMake(self.bounds.size.width, 2000)];
+	[self updateConstraints];
+	return [self systemLayoutSizeFittingSize:CGSizeMake(size.width, 2000)];
 }
 
 - (void)updateConstraints {

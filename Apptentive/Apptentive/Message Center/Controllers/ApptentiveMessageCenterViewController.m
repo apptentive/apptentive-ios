@@ -236,9 +236,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 	[self updateSendButtonEnabledStatus];
 
-	[self.greetingView sizeToFit];
-	self.tableView.tableHeaderView = self.greetingView;
-
 	self.iOSAfter8_0 = [[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){8, 1, 0}];
 }
 
@@ -259,9 +256,18 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	}
 }
 
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+	[self.greetingView sizeToFit];
+	[self resizeFooterView:nil];
+}
+
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
 	[coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> _Nonnull context) {
-		self.tableView.tableHeaderView = self.greetingView;
+		// If the old cached keyboard rect overlaps the screen, assume it's moving off screen.
+		if (CGRectGetMinY(self.lastKnownKeyboardRect) <= CGRectGetHeight(self.view.bounds)) {
+			self.lastKnownKeyboardRect = CGRectMake(0, CGRectGetHeight(self.view.bounds), self.lastKnownKeyboardRect.size.width, self.lastKnownKeyboardRect.size.height);
+		}
+
 		[self resizeFooterView:nil];
 	} completion:^(id<UIViewControllerTransitionCoordinatorContext> _Nonnull context){
 	}];
@@ -287,7 +293,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	}
 
 	if (self.isSubsequentDisplay == NO || self.attachmentController.active) {
-		[self resizeFooterView:nil];
 		[self engageGreetingViewEventIfNecessary];
 		[self scrollToLastMessageAnimated:NO];
 

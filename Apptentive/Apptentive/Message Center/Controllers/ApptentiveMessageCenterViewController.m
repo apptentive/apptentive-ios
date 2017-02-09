@@ -237,6 +237,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[self updateSendButtonEnabledStatus];
 
 	[self.greetingView sizeToFit];
+	self.tableView.tableHeaderView = self.greetingView;
 
 	self.iOSAfter8_0 = [[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){8, 1, 0}];
 }

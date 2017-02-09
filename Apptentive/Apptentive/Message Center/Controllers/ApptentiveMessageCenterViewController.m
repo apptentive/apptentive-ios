@@ -1189,9 +1189,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (void)scrollToLastMessageAnimated:(BOOL)animated {
-	if (self.state != ATMessageCenterStateEmpty && !(self.state == ATMessageCenterStateWhoCard && self.viewModel.profileRequired && !self.viewModel.hasNonContextMessages)) {
-		[self scrollToFooterView:nil];
-	}
+	[self scrollToFooterView:nil];
 }
 
 - (void)engageGreetingViewEventIfNecessary {

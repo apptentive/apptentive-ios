@@ -395,7 +395,7 @@ Returns a Boolean value indicating whether the given event will cause an Interac
 ///-------------------------------------
 
 /**
- Attaches text to the user's feedback.
+ Attaches text to the user's feedback. This method should be called from the main thread only.
 
  This will appear in your online Apptentive dashboard, but will *not* appear in Message Center on the device.
 
@@ -404,7 +404,7 @@ Returns a Boolean value indicating whether the given event will cause an Interac
 - (void)sendAttachmentText:(NSString *)text APPTENTIVE_SWIFT_NAME(sendAttachment(_:));
 
 /**
- Attaches an image the user's feedback.
+ Attaches an image the user's feedback. This method should be called from the main thread only.
 
  This will appear in your online Apptentive dashboard, but will *not* appear in Message Center on the device.
 
@@ -413,7 +413,7 @@ Returns a Boolean value indicating whether the given event will cause an Interac
 - (void)sendAttachmentImage:(UIImage *)image APPTENTIVE_SWIFT_NAME(sendAttachment(_:));
 
 /**
- Attaches an arbitrary file to the user's feedback.
+ Attaches an arbitrary file to the user's feedback. This method should be called from the main thread only.
 
  This will appear in your online Apptentive dashboard, but will *not* appear in Message Center on the device.
 

@@ -63,7 +63,9 @@
 	self.sendBar.layer.borderColor = self.borderColor.CGColor;
 }
 
-- (void)updateConstraints {
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+	[super traitCollectionDidChange:previousTraitCollection];
+
 	CGFloat outerVerticalSpace = self.regularOuterVerticalSpace;
 
 	if (self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassCompact) {
@@ -84,8 +86,6 @@
 
 	self.outerTopSpace.constant = outerVerticalSpace;
 	self.outerBottomSpace.constant = outerVerticalSpace;
-
-	[super updateConstraints];
 }
 
 @end

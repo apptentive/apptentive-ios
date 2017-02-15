@@ -72,7 +72,9 @@
 	self.buttonBar.layer.borderColor = self.borderColor.CGColor;
 }
 
-- (void)updateConstraints {
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+	[super traitCollectionDidChange:previousTraitCollection];
+
 	// Deactivate all, then selectively re-activate
 	[NSLayoutConstraint deactivateConstraints:self.portraitFullConstraints];
 	[NSLayoutConstraint deactivateConstraints:self.portraitCompactConstraints];
@@ -100,8 +102,6 @@
 				break;
 		}
 	}
-
-	[super updateConstraints];
 }
 
 - (void)setMode:(ATMessageCenterProfileMode)mode {
@@ -120,7 +120,7 @@
 			self.emailVerticalSpaceToButtonBar.constant = 16.0;
 		}
 
-		[self updateConstraints];
+		[self traitCollectionDidChange:self.traitCollection];
 
 		[UIView animateWithDuration:0.25 animations:^{
 			self.nameField.alpha = nameFieldAlpha;

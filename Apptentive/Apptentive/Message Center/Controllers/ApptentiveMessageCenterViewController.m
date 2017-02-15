@@ -257,9 +257,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
-	self.greetingView.translatesAutoresizingMaskIntoConstraints = NO;
-	[self.greetingView sizeToFit];
-	self.greetingView.translatesAutoresizingMaskIntoConstraints = YES;
+	[self.greetingView traitCollectionDidChange:previousTraitCollection];
 
 	[self resizeFooterView:nil];
 }
@@ -1179,7 +1177,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[UIView animateWithDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue] animations:^{
 		self.tableView.tableFooterView.frame = frame;
 		[self.tableView.tableFooterView layoutIfNeeded];
-		[self.activeFooterView updateConstraints];
 		self.tableView.tableFooterView = self.tableView.tableFooterView;
 	}];
 }

@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		012285481E4A81AD00DD2F58 /* Apptentive_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2CFAB1E490A9600C2103A /* Apptentive_Private.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		012285491E4A831500DD2F58 /* Apptentive.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01A2CF911E49062700C2103A /* Apptentive.framework */; };
+		015408A41E54D8810027E196 /* ApptentiveTableView.h in Headers */ = {isa = PBXBuildFile; fileRef = 015408A21E54D8810027E196 /* ApptentiveTableView.h */; };
+		015408A51E54D8810027E196 /* ApptentiveTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 015408A31E54D8810027E196 /* ApptentiveTableView.m */; };
 		01A2CF9B1E49062800C2103A /* Apptentive.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01A2CF911E49062700C2103A /* Apptentive.framework */; };
 		01A2CFA21E49062800C2103A /* Apptentive.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2CF941E49062700C2103A /* Apptentive.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		01A2D0F81E490A9700C2103A /* Apptentive_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2CFAB1E490A9600C2103A /* Apptentive_Private.h */; };
@@ -342,6 +344,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		015408A21E54D8810027E196 /* ApptentiveTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveTableView.h; sourceTree = "<group>"; };
+		015408A31E54D8810027E196 /* ApptentiveTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveTableView.m; sourceTree = "<group>"; };
 		01A2CF911E49062700C2103A /* Apptentive.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Apptentive.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		01A2CF941E49062700C2103A /* Apptentive.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Apptentive.h; sourceTree = "<group>"; };
 		01A2CF951E49062700C2103A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -1144,6 +1148,8 @@
 		01A2D06A1E490A9700C2103A /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				015408A21E54D8810027E196 /* ApptentiveTableView.h */,
+				015408A31E54D8810027E196 /* ApptentiveTableView.m */,
 				01A2D06B1E490A9700C2103A /* ApptentiveAttachButton.h */,
 				01A2D06C1E490A9700C2103A /* ApptentiveAttachButton.m */,
 				01A2D06D1E490A9700C2103A /* ApptentiveAttachmentCell.h */,
@@ -1171,8 +1177,6 @@
 				01A2D0831E490A9700C2103A /* ApptentiveMessageCenterStatusView.m */,
 				01A2D0841E490A9700C2103A /* ApptentiveProgressNavigationBar.h */,
 				01A2D0851E490A9700C2103A /* ApptentiveProgressNavigationBar.m */,
-				0110935D1E4CE8EB0093CD2E /* ApptentiveTableView.h */,
-				0110935E1E4CE8EB0093CD2E /* ApptentiveTableView.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1436,7 +1440,7 @@
 				01A2D18E1E490A9700C2103A /* ApptentiveMessageCenterContextMessageCell.h in Headers */,
 				01A2D1B41E490A9700C2103A /* ApptentiveLegacySurveyResponse.h in Headers */,
 				01A2D1C61E490A9700C2103A /* ApptentiveMessageRequestOperation.h in Headers */,
-				0110935F1E4CE8EB0093CD2E /* ApptentiveTableView.h in Headers */,
+				015408A41E54D8810027E196 /* ApptentiveTableView.h in Headers */,
 				01A2D1921E490A9700C2103A /* ApptentiveMessageCenterInputView.h in Headers */,
 				01A2D1131E490A9700C2103A /* ApptentiveInteractionEnjoymentDialogController.h in Headers */,
 				01A2D1351E490A9700C2103A /* ApptentiveMutableDevice.h in Headers */,
@@ -1791,7 +1795,7 @@
 				01A2D1201E490A9700C2103A /* ApptentiveAppRelease.m in Sources */,
 				01A2D1281E490A9700C2103A /* ApptentiveEngagement.m in Sources */,
 				01A2D1C91E490A9700C2103A /* ApptentiveNetworkQueue.m in Sources */,
-				011093601E4CE8EB0093CD2E /* ApptentiveTableView.m in Sources */,
+				015408A51E54D8810027E196 /* ApptentiveTableView.m in Sources */,
 				01A2D12C1E490A9700C2103A /* ApptentiveInteraction.m in Sources */,
 				01A2D1C11E490A9700C2103A /* ATDataModel v2 to v3.xcmappingmodel in Sources */,
 				01A2D1021E490A9700C2103A /* ApptentiveNetworkImageView.m in Sources */,

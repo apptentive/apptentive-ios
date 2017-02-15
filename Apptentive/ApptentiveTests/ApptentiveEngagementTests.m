@@ -286,17 +286,17 @@
 	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
 	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] initWithConversation:[[ApptentiveConversation alloc] initWithAPIKey:@"foo"]];
 
-	[usageData.conversation.engagement warmCodePoint:@"app.launch"];
+	[usageData.conversation warmCodePoint:@"app.launch"];
 	invocation.criteria = @{ @"code_point/app.launch/invokes/cf_bundle_short_version_string": @1 };
-	[usageData.conversation.engagement engageCodePoint:@"app.launch"];
+	[usageData.conversation engageCodePoint:@"app.launch"];
 	XCTAssertTrue([invocation criteriaAreMetForConversation:usageData.conversation], @"This version has been invoked 1 time.");
 	[usageData.conversation.engagement resetBuild];
 	XCTAssertTrue([invocation criteriaAreMetForConversation:usageData.conversation], @"Reset build should not affect version");
 
 	[usageData.conversation.engagement resetVersion];
 	XCTAssertFalse([invocation criteriaAreMetForConversation:usageData.conversation], @"Codepoint version invokes.");
-	[usageData.conversation.engagement engageCodePoint:@"app.launch"];
-	[usageData.conversation.engagement engageCodePoint:@"app.launch"];
+	[usageData.conversation engageCodePoint:@"app.launch"];
+	[usageData.conversation engageCodePoint:@"app.launch"];
 	XCTAssertFalse([invocation criteriaAreMetForConversation:usageData.conversation], @"Codepoint version invokes.");
 
 	// "version" has been replaced with "cf_bundle_short_version_string"
@@ -308,17 +308,17 @@
 	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
 	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] initWithConversation:[[ApptentiveConversation alloc] initWithAPIKey:@"foo"]];
 
-	[usageData.conversation.engagement warmCodePoint:@"app.launch"];
+	[usageData.conversation warmCodePoint:@"app.launch"];
 	invocation.criteria = @{ @"code_point/app.launch/invokes/cf_bundle_version": @1 };
-	[usageData.conversation.engagement engageCodePoint:@"app.launch"];
+	[usageData.conversation engageCodePoint:@"app.launch"];
 	XCTAssertTrue([invocation criteriaAreMetForConversation:usageData.conversation], @"This build has been invoked 1 time.");
 	[usageData.conversation.engagement resetVersion];
 	XCTAssertTrue([invocation criteriaAreMetForConversation:usageData.conversation], @"Reset version should not affect version");
 
 	[usageData.conversation.engagement resetBuild];
 	XCTAssertFalse([invocation criteriaAreMetForConversation:usageData.conversation], @"Codepoint build invokes.");
-	[usageData.conversation.engagement engageCodePoint:@"app.launch"];
-	[usageData.conversation.engagement engageCodePoint:@"app.launch"];
+	[usageData.conversation engageCodePoint:@"app.launch"];
+	[usageData.conversation engageCodePoint:@"app.launch"];
 	XCTAssertFalse([invocation criteriaAreMetForConversation:usageData.conversation], @"Codepoint build invokes.");
 
 	// "build" has been replaced with "cf_bundle_version"
@@ -330,17 +330,17 @@
 	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
 	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] initWithConversation:[[ApptentiveConversation alloc] initWithAPIKey:@"foo"]];
 
-	[usageData.conversation.engagement warmInteraction:@"526fe2836dd8bf546a00000b"];
+	[usageData.conversation warmInteraction:@"526fe2836dd8bf546a00000b"];
 	invocation.criteria = @{ @"interactions/526fe2836dd8bf546a00000b/invokes/cf_bundle_short_version_string": @(1) };
-	[usageData.conversation.engagement engageInteraction:@"526fe2836dd8bf546a00000b"];
+	[usageData.conversation engageInteraction:@"526fe2836dd8bf546a00000b"];
 	XCTAssertTrue([invocation criteriaAreMetForConversation:usageData.conversation], @"This version has been invoked 1 time.");
 	[usageData.conversation.engagement resetBuild];
 	XCTAssertTrue([invocation criteriaAreMetForConversation:usageData.conversation], @"Reset build should not affect version");
 
 	[usageData.conversation.engagement resetVersion];
 	XCTAssertFalse([invocation criteriaAreMetForConversation:usageData.conversation], @"Interaction version invokes.");
-	[usageData.conversation.engagement engageInteraction:@"526fe2836dd8bf546a00000b"];
-	[usageData.conversation.engagement engageInteraction:@"526fe2836dd8bf546a00000b"];
+	[usageData.conversation engageInteraction:@"526fe2836dd8bf546a00000b"];
+	[usageData.conversation engageInteraction:@"526fe2836dd8bf546a00000b"];
 	XCTAssertFalse([invocation criteriaAreMetForConversation:usageData.conversation], @"Interaction version invokes.");
 
 	// "version" has been replaced with "cf_bundle_short_version_string"
@@ -352,17 +352,17 @@
 	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
 	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] initWithConversation:[[ApptentiveConversation alloc] initWithAPIKey:@"foo"]];
 
-	[usageData.conversation.engagement warmInteraction:@"526fe2836dd8bf546a00000b"];
+	[usageData.conversation warmInteraction:@"526fe2836dd8bf546a00000b"];
 	invocation.criteria = @{ @"interactions/526fe2836dd8bf546a00000b/invokes/cf_bundle_version": @(1) };
-	[usageData.conversation.engagement engageInteraction:@"526fe2836dd8bf546a00000b"];
+	[usageData.conversation engageInteraction:@"526fe2836dd8bf546a00000b"];
 	XCTAssertTrue([invocation criteriaAreMetForConversation:usageData.conversation], @"This version has been invoked 1 time.");
 	[usageData.conversation.engagement resetVersion];
 	XCTAssertTrue([invocation criteriaAreMetForConversation:usageData.conversation], @"Reset build should not affect version");
 
 	[usageData.conversation.engagement resetBuild];
 	XCTAssertFalse([invocation criteriaAreMetForConversation:usageData.conversation], @"Interaction build invokes.");
-	[usageData.conversation.engagement engageInteraction:@"526fe2836dd8bf546a00000b"];
-	[usageData.conversation.engagement engageInteraction:@"526fe2836dd8bf546a00000b"];
+	[usageData.conversation engageInteraction:@"526fe2836dd8bf546a00000b"];
+	[usageData.conversation engageInteraction:@"526fe2836dd8bf546a00000b"];
 	XCTAssertFalse([invocation criteriaAreMetForConversation:usageData.conversation], @"Interaction build invokes.");
 
 	// "build" has been replaced with "cf_bundle_version"
@@ -377,8 +377,8 @@
 	invocation.criteria = @{ @"code_point/app.launch/invokes/cf_bundle_short_version_string": @1,
 		@"application/cf_bundle_short_version_string": [Apptentive versionObjectWithVersion:@"1.3.0"],
 		@"application/cf_bundle_version": [Apptentive versionObjectWithVersion:@"39"] };
-	[usageData.conversation.engagement warmCodePoint:@"app.launch"];
-	[usageData.conversation.engagement engageCodePoint:@"app.launch"];
+	[usageData.conversation warmCodePoint:@"app.launch"];
+	[usageData.conversation engageCodePoint:@"app.launch"];
 
 	[usageData.conversation.appRelease setValue:[[ApptentiveVersion alloc] initWithString:@"1.3.0"] forKey:@"version"];
 	XCTAssertFalse([invocation criteriaAreMetForConversation:usageData.conversation], @"Test Upgrade Message without build number.");
@@ -392,14 +392,14 @@
 		@"code_point/app.launch/invokes/cf_bundle_short_version_string": @{@"$gte": @1} };
 
 	XCTAssertTrue([invocation criteriaAreMetForConversation:usageData.conversation], @"Test Upgrade Message.");
-	[usageData.conversation.engagement engageCodePoint:@"app.launch"];
+	[usageData.conversation engageCodePoint:@"app.launch"];
 	XCTAssertTrue([invocation criteriaAreMetForConversation:usageData.conversation], @"Test Upgrade Message.");
 
 	invocation.criteria = @{ @"application/cf_bundle_short_version_string": [Apptentive versionObjectWithVersion:@"1.3.1"],
 		@"code_point/app.launch/invokes/cf_bundle_short_version_string": @{@"$lte": @3} };
-	[usageData.conversation.engagement engageCodePoint:@"app.launch"];
+	[usageData.conversation engageCodePoint:@"app.launch"];
 	XCTAssertTrue([invocation criteriaAreMetForConversation:usageData.conversation], @"Test Upgrade Message.");
-	[usageData.conversation.engagement engageCodePoint:@"app.launch"];
+	[usageData.conversation engageCodePoint:@"app.launch"];
 	XCTAssertFalse([invocation criteriaAreMetForConversation:usageData.conversation], @"Test Upgrade Message.");
 
 	invocation.criteria = @{ @"code_point/app.launch/invokes/cf_bundle_short_version_string": @[@1],
@@ -472,45 +472,45 @@
 
 	Apptentive.shared.localInteractionsURL = [[NSBundle bundleForClass:[self class]] URLForResource:@"testInteractions" withExtension:@"json"];
 
-	[Apptentive.shared.backend.conversation.engagement warmCodePoint:@"local#app#init"];
-	[Apptentive.shared.backend.conversation.engagement engageCodePoint:@"local#app#init"];
-	[Apptentive.shared.backend.conversation.engagement engageCodePoint:@"local#app#init"];
-	[Apptentive.shared.backend.conversation.engagement engageCodePoint:@"local#app#init"];
-	[Apptentive.shared.backend.conversation.engagement engageCodePoint:@"local#app#init"];
-	[Apptentive.shared.backend.conversation.engagement engageCodePoint:@"local#app#init"];
-	[Apptentive.shared.backend.conversation.engagement engageCodePoint:@"local#app#init"];
-	[Apptentive.shared.backend.conversation.engagement engageCodePoint:@"local#app#init"];
-	[Apptentive.shared.backend.conversation.engagement engageCodePoint:@"local#app#init"];
-	[Apptentive.shared.backend.conversation.engagement engageCodePoint:@"local#app#init"];
+	[Apptentive.shared.backend.conversation warmCodePoint:@"local#app#init"];
+	[Apptentive.shared.backend.conversation engageCodePoint:@"local#app#init"];
+	[Apptentive.shared.backend.conversation engageCodePoint:@"local#app#init"];
+	[Apptentive.shared.backend.conversation engageCodePoint:@"local#app#init"];
+	[Apptentive.shared.backend.conversation engageCodePoint:@"local#app#init"];
+	[Apptentive.shared.backend.conversation engageCodePoint:@"local#app#init"];
+	[Apptentive.shared.backend.conversation engageCodePoint:@"local#app#init"];
+	[Apptentive.shared.backend.conversation engageCodePoint:@"local#app#init"];
+	[Apptentive.shared.backend.conversation engageCodePoint:@"local#app#init"];
+	[Apptentive.shared.backend.conversation engageCodePoint:@"local#app#init"];
 
 	[Apptentive.shared.backend.conversation.appRelease setValue:[NSDate dateWithTimeIntervalSinceNow:-863999] forKey:@"timeAtInstallTotal"];
 
-	[Apptentive.shared.backend.conversation.engagement warmCodePoint:@"local#app#testRatingFlow"];
-	[Apptentive.shared.backend.conversation.engagement engageCodePoint:@"local#app#testRatingFlow"];
-	[Apptentive.shared.backend.conversation.engagement engageCodePoint:@"local#app#testRatingFlow"];
-	[Apptentive.shared.backend.conversation.engagement engageCodePoint:@"local#app#testRatingFlow"];
-	[Apptentive.shared.backend.conversation.engagement engageCodePoint:@"local#app#testRatingFlow"];
-	[Apptentive.shared.backend.conversation.engagement engageCodePoint:@"local#app#testRatingFlow"];
-	[Apptentive.shared.backend.conversation.engagement engageCodePoint:@"local#app#testRatingFlow"];
-	[Apptentive.shared.backend.conversation.engagement engageCodePoint:@"local#app#testRatingFlow"];
-	[Apptentive.shared.backend.conversation.engagement engageCodePoint:@"local#app#testRatingFlow"];
-	[Apptentive.shared.backend.conversation.engagement engageCodePoint:@"local#app#testRatingFlow"];
+	[Apptentive.shared.backend.conversation warmCodePoint:@"local#app#testRatingFlow"];
+	[Apptentive.shared.backend.conversation engageCodePoint:@"local#app#testRatingFlow"];
+	[Apptentive.shared.backend.conversation engageCodePoint:@"local#app#testRatingFlow"];
+	[Apptentive.shared.backend.conversation engageCodePoint:@"local#app#testRatingFlow"];
+	[Apptentive.shared.backend.conversation engageCodePoint:@"local#app#testRatingFlow"];
+	[Apptentive.shared.backend.conversation engageCodePoint:@"local#app#testRatingFlow"];
+	[Apptentive.shared.backend.conversation engageCodePoint:@"local#app#testRatingFlow"];
+	[Apptentive.shared.backend.conversation engageCodePoint:@"local#app#testRatingFlow"];
+	[Apptentive.shared.backend.conversation engageCodePoint:@"local#app#testRatingFlow"];
+	[Apptentive.shared.backend.conversation engageCodePoint:@"local#app#testRatingFlow"];
 
 	XCTAssertFalse([Apptentive.shared canShowInteractionForEvent:@"testRatingFlow"], @"The OR clauses are failing.");
 
-	[Apptentive.shared.backend.conversation.engagement engageCodePoint:@"local#app#init"];
-	[Apptentive.shared.backend.conversation.engagement engageCodePoint:@"local#app#init"];
+	[Apptentive.shared.backend.conversation engageCodePoint:@"local#app#init"];
+	[Apptentive.shared.backend.conversation engageCodePoint:@"local#app#init"];
 
-	[Apptentive.shared.backend.conversation.engagement engageCodePoint:@"local#app#testRatingFlow"];
-	[Apptentive.shared.backend.conversation.engagement engageCodePoint:@"local#app#testRatingFlow"];
+	[Apptentive.shared.backend.conversation engageCodePoint:@"local#app#testRatingFlow"];
+	[Apptentive.shared.backend.conversation engageCodePoint:@"local#app#testRatingFlow"];
 
 	XCTAssertTrue([Apptentive.shared canShowInteractionForEvent:@"testRatingFlow"], @"One of the OR clauses is true. The other ANDed clause is also true. Should work.");
 
 	[Apptentive.shared.backend.conversation.appRelease setValue:[NSDate dateWithTimeIntervalSinceNow:-864001] forKey:@"timeAtInstallTotal"];
 	XCTAssertTrue([Apptentive.shared canShowInteractionForEvent:@"testRatingFlow"], @"All of the OR clauses are true. The other ANDed clause is also true. Should work.");
 
-	[Apptentive.shared.backend.conversation.engagement warmInteraction:@"533ed97a7724c5457e00003f"];
-	[Apptentive.shared.backend.conversation.engagement engageInteraction:@"533ed97a7724c5457e00003f"];
+	[Apptentive.shared.backend.conversation warmInteraction:@"533ed97a7724c5457e00003f"];
+	[Apptentive.shared.backend.conversation engageInteraction:@"533ed97a7724c5457e00003f"];
 	XCTAssertFalse([Apptentive.shared canShowInteractionForEvent:@"testRatingFlow"], @"All the OR clauses are true. The other ANDed clause is not true. Should fail.");
 }
 

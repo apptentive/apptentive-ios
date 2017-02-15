@@ -190,6 +190,26 @@ static NSString *const ATMessageCenterDidSkipProfileKey = @"ATMessageCenterDidSk
 	}
 }
 
+- (void)warmCodePoint:(NSString *)codePoint {
+	[self.engagement warmCodePoint:codePoint];
+}
+
+- (void)engageCodePoint:(NSString *)codePoint {
+	[self.engagement engageCodePoint:codePoint];
+
+	[self.delegate conversationEngagementDidChange:self];
+}
+
+- (void)warmInteraction:(NSString *)codePoint {
+	[self.engagement warmCodePoint:codePoint];
+}
+
+- (void)engageInteraction:(NSString *)interactionIdentifier {
+	[self.engagement engageInteraction:interactionIdentifier];
+
+	[self.delegate conversationEngagementDidChange:self];
+}
+
 - (void)didOverrideStyles {
 	if (!self.appRelease.overridingStyles) {
 		[self.appRelease setOverridingStyles];

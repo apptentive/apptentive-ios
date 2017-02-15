@@ -25,6 +25,7 @@
 @property (strong, nonatomic) NSDictionary *deviceDiffs;
 @property (strong, nonatomic) NSDictionary *conversationPayload;
 @property (assign, nonatomic) BOOL userInfoChanged;
+@property (assign, nonatomic) BOOL engagementChanged;
 
 @end
 
@@ -359,6 +360,10 @@
 
 - (void)conversationUserInfoDidChange:(ApptentiveConversation *)conversation {
 	self.userInfoChanged = YES;
+}
+
+- (void)conversationEngagementDidChange:(ApptentiveConversation *)conversation {
+	self.engagementChanged = YES;
 }
 
 @end

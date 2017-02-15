@@ -138,6 +138,40 @@
 
 
 /**
+ Adds the specified code point to the engagement history, having zero
+ invocations and a `nil` last invoke date.
+
+ @param codePoint The identifier for the code point.
+ */
+- (void)warmCodePoint:(NSString *)codePoint;
+
+
+/**
+ Marks the specified code point as having been engaged.
+
+ @param codePoint The identifier for the code point.
+ */
+- (void)engageCodePoint:(NSString *)codePoint;
+
+
+/**
+ Adds the specified interaction to the engagement history, having zero
+ invocations and a `nil` last invoke date.
+
+ @param interactionIdentifier The identifier for the interaction.
+ */
+- (void)warmInteraction:(NSString *)interactionIdentifier;
+
+
+/**
+ Marks the specified interaction as having been engaged.
+
+ @param interactionIdentifier The identifier for the interaction.
+ */
+- (void)engageInteraction:(NSString *)interactionIdentifier;
+
+
+/**
  This method should be called when the developer has made changes to the 
  styling of the Apptentive SDK.
  */
@@ -256,8 +290,16 @@
 /**
  Indicates that the user info has changed
 
- @param conversation The conversation associated with the change.
+ @param conversation The session associated with the change.
  */
 - (void)conversationUserInfoDidChange:(ApptentiveConversation *)conversation;
+
+
+/**
+ Indicates that the engagement data has changed.
+
+ @param conversation The conversation associated with the change.
+ */
+- (void)conversationEngagementDidChange:(ApptentiveConversation *)conversation;
 
 @end

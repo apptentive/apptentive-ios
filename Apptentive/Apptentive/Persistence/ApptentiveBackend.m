@@ -579,6 +579,14 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	[self.queue addOperation:conversationSaveOperation];
 }
 
+- (void)conversationEngagementDidChange:(ApptentiveConversation *)conversation {
+	NSBlockOperation *conversationSaveOperation = [NSBlockOperation blockOperationWithBlock:^{
+		[self saveConversation];
+	}];
+
+	[self.queue addOperation:conversationSaveOperation];
+}
+
 #pragma mark - Messages
 
 - (ApptentiveMessage *)automatedMessageWithTitle:(NSString *)title body:(NSString *)body {

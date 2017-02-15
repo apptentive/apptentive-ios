@@ -143,19 +143,19 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 }
 
 - (void)codePointWasSeen:(NSString *)codePoint {
-	[self.conversation.engagement warmCodePoint:codePoint];
+	[self.conversation warmCodePoint:codePoint];
 }
 
 - (void)codePointWasEngaged:(NSString *)codePoint {
-	[self.conversation.engagement engageCodePoint:codePoint];
+	[self.conversation engageCodePoint:codePoint];
 }
 
 - (void)interactionWasSeen:(NSString *)interactionID {
-	[self.conversation.engagement warmInteraction:interactionID];
+	[self.conversation warmInteraction:interactionID];
 }
 
 - (void)interactionWasEngaged:(ApptentiveInteraction *)interaction {
-	[self.conversation.engagement engageInteraction:interaction.identifier];
+	[self.conversation engageInteraction:interaction.identifier];
 }
 
 - (void)presentInteraction:(ApptentiveInteraction *)interaction fromViewController:(UIViewController *)viewController {

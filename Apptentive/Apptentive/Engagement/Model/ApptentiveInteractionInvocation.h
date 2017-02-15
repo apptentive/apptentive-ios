@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class ApptentiveInteractionUsageData, ApptentiveSession;
+@class ApptentiveInteractionUsageData, ApptentiveConversation;
 
 
 @interface ApptentiveInteractionInvocation : NSObject <NSCoding, NSCopying>
@@ -20,7 +20,7 @@
 + (ApptentiveInteractionInvocation *)invocationWithJSONDictionary:(NSDictionary *)jsonDictionary;
 + (NSArray *)invocationsWithJSONArray:(NSArray *)jsonArray;
 
-- (BOOL)criteriaAreMetForSession:(ApptentiveSession *)data;
+- (BOOL)criteriaAreMetForConversation:(ApptentiveConversation *)data;
 
 - (NSPredicate *)criteriaPredicate;
 

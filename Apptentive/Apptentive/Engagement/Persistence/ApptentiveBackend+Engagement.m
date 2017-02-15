@@ -56,7 +56,7 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 		}
 
 		if (invocation && [invocation isKindOfClass:[ApptentiveInteractionInvocation class]]) {
-			if ([invocation criteriaAreMetForSession:self.session]) {
+			if ([invocation criteriaAreMetForConversation:self.conversation]) {
 				interactionID = invocation.interactionID;
 				break;
 			}
@@ -143,19 +143,19 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 }
 
 - (void)codePointWasSeen:(NSString *)codePoint {
-	[self.session.engagement warmCodePoint:codePoint];
+	[self.conversation.engagement warmCodePoint:codePoint];
 }
 
 - (void)codePointWasEngaged:(NSString *)codePoint {
-	[self.session.engagement engageCodePoint:codePoint];
+	[self.conversation.engagement engageCodePoint:codePoint];
 }
 
 - (void)interactionWasSeen:(NSString *)interactionID {
-	[self.session.engagement warmInteraction:interactionID];
+	[self.conversation.engagement warmInteraction:interactionID];
 }
 
 - (void)interactionWasEngaged:(ApptentiveInteraction *)interaction {
-	[self.session.engagement engageInteraction:interaction.identifier];
+	[self.conversation.engagement engageInteraction:interaction.identifier];
 }
 
 - (void)presentInteraction:(ApptentiveInteraction *)interaction fromViewController:(UIViewController *)viewController {

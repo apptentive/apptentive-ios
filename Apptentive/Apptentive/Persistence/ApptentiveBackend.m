@@ -108,19 +108,19 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 				}
 			}
 
-			// Session
-			if ([[NSFileManager defaultManager] fileExistsAtPath:[self sessionPath]]) {
-				self->_session = [NSKeyedUnarchiver unarchiveObjectWithFile:[self sessionPath]];
+			// Conversation
+			if ([[NSFileManager defaultManager] fileExistsAtPath:[self conversationPath]]) {
+				self->_conversation = [NSKeyedUnarchiver unarchiveObjectWithFile:[self conversationPath]];
 			} else if ([[NSUserDefaults standardUserDefaults] objectForKey:@"ATEngagementInstallDateKey"]) {
-				self->_session = [[ApptentiveSession alloc] initAndMigrate];
-				if ([self saveSession]) {
-					[ApptentiveSession deleteMigratedData];
+				self->_conversation = [[ApptentiveConversation alloc] initAndMigrate];
+				if ([self saveConversation]) {
+					[ApptentiveConversation deleteMigratedData];
 				}
 			} else {
-				self->_session = [[ApptentiveSession alloc] initWithAPIKey:APIKey];
+				self->_conversation = [[ApptentiveConversation alloc] initWithAPIKey:APIKey];
 			}
 
-			self->_session.delegate = self;
+			self->_conversation.delegate = self;
 
 			// Configuration
 			if ([[NSFileManager defaultManager] fileExistsAtPath:[self configurationPath]]) {
@@ -146,10 +146,10 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 				self->_manifest = [[ApptentiveEngagementManifest alloc] init];
 			}
 
-			NSString *token = self.session.token ?: self.session.APIKey;
-			self->_networkQueue = [[ApptentiveNetworkQueue alloc] initWithBaseURL:baseURL token:token SDKVersion:self.session.SDK.version.versionString platform:@"iOS"];
+			NSString *token = self.conversation.token ?: self.conversation.APIKey;
+			self->_networkQueue = [[ApptentiveNetworkQueue alloc] initWithBaseURL:baseURL token:token SDKVersion:self.conversation.SDK.version.versionString platform:@"iOS"];
 
-			if (self.session.token == nil) {
+			if (self.conversation.token == nil) {
 				[self createConversation];
 			}
 
@@ -168,7 +168,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 
 			// Run this once we have a token and core data
 			NSBlockOperation *becomeReadyOperation = [NSBlockOperation blockOperationWithBlock:^{
-				self->_serialNetworkQueue = [[ApptentiveSerialNetworkQueue alloc] initWithBaseURL:baseURL token:self.session.token SDKVersion:self.session.SDK.version.versionString platform:@"iOS" parentManagedObjectContext:self.managedObjectContext];
+				self->_serialNetworkQueue = [[ApptentiveSerialNetworkQueue alloc] initWithBaseURL:baseURL token:self.conversation.token SDKVersion:self.conversation.SDK.version.versionString platform:@"iOS" parentManagedObjectContext:self.managedObjectContext];
 
 				[self.serialNetworkQueue addObserver:self forKeyPath:@"messageSendProgress" options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew context:nil];
 				[self.serialNetworkQueue addObserver:self forKeyPath:@"messageTaskCount" options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew context:nil];
@@ -181,7 +181,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 				[self networkStatusChanged:nil];
 				[self startMonitoringAppLifecycleMetrics];
 				[self startMonitoringUnreadMessages];
-				[self.session checkForDiffs];
+				[self.conversation checkForDiffs];
 
 				NSString *legacyTaskPath = [self.supportDirectoryPath stringByAppendingPathComponent:@"tasks.objects"];
 				NSError *error;
@@ -322,7 +322,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 			[self.networkQueue resetBackoffDelay];
 			[self.serialNetworkQueue resetBackoffDelay];
 
-			[self.session checkForDiffs];
+			[self.conversation checkForDiffs];
 
 			[self updateConfigurationIfNeeded];
 			[self updateEngagementManifestIfNeeded];
@@ -330,7 +330,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 
 			[self processQueuedRecords];
 		} else {
-			[self saveSession];
+			[self saveConversation];
 
 			[self.networkQueue cancelAllOperations];
 			[self.serialNetworkQueue cancelAllOperations];
@@ -357,11 +357,11 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 #pragma mark -
 
 - (void)createConversation {
-	if (self.conversationOperation != nil || self.session.token != nil) {
+	if (self.conversationOperation != nil || self.conversation.token != nil) {
 		return;
 	}
 
-	self.conversationOperation = [[ApptentiveRequestOperation alloc] initWithPath:@"conversation" method:@"POST" payload:self.session.conversationCreationJSON delegate:self dataSource:self.networkQueue];
+	self.conversationOperation = [[ApptentiveRequestOperation alloc] initWithPath:@"conversation" method:@"POST" payload:self.conversation.conversationCreationJSON delegate:self dataSource:self.networkQueue];
 
 	[self.networkQueue addOperation:self.conversationOperation];
 }
@@ -373,7 +373,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 
 	self.configurationOperation = [[ApptentiveRequestOperation alloc] initWithPath:@"conversation/configuration" method:@"GET" payload:nil delegate:self dataSource:self.networkQueue];
 
-	if (!self.session.token && self.conversationOperation) {
+	if (!self.conversation.token && self.conversationOperation) {
 		[self.configurationOperation addDependency:self.conversationOperation];
 	}
 
@@ -387,7 +387,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 
 	self.manifestOperation = [[ApptentiveRequestOperation alloc] initWithPath:@"interactions" method:@"GET" payload:nil delegate:self dataSource:self.networkQueue];
 
-	if (!self.session.token && self.conversationOperation) {
+	if (!self.conversation.token && self.conversationOperation) {
 		[self.manifestOperation addDependency:self.conversationOperation];
 	}
 
@@ -454,9 +454,9 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	NSString *deviceID = conversationResponse[@"device_id"];
 
 	if (token != nil) {
-		[self.session setToken:token personID:personID deviceID:deviceID];
+		[self.conversation setToken:token personID:personID deviceID:deviceID];
 
-		[self saveSession];
+		[self saveConversation];
 
 		self.networkQueue.token = token;
 		self.serialNetworkQueue.token = token;
@@ -482,9 +482,9 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	});
 }
 
-- (BOOL)saveSession {
-	@synchronized(self.session) {
-		return [NSKeyedArchiver archiveRootObject:self.session toFile:[self sessionPath]];
+- (BOOL)saveConversation {
+	@synchronized(self.conversation) {
+		return [NSKeyedArchiver archiveRootObject:self.conversation toFile:[self conversationPath]];
 	}
 }
 
@@ -520,9 +520,9 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 - (void)messageCenterWillDismiss:(ApptentiveMessageCenterViewController *)messageCenter {
 }
 
-#pragma mark - Session delegate
+#pragma mark - Conversation delegate
 
-- (void)session:(ApptentiveSession *)session conversationDidChange:(NSDictionary *)payload {
+- (void)conversation:(ApptentiveConversation *)conversation appReleaseOrSDKDidChange:(NSDictionary *)payload {
 	NSBlockOperation *conversationDidChangeOperation = [NSBlockOperation blockOperationWithBlock:^{
 		NSManagedObjectContext *context = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
 		context.parentContext = self.managedObjectContext;
@@ -531,7 +531,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 			[ApptentiveSerialRequest enqueueRequestWithPath:@"conversation" method:@"PUT" payload:payload attachments:nil identifier:nil inContext:context];
 		}];
 
-		[self saveSession];
+		[self saveConversation];
 
 		self.manifest.expiry = [NSDate distantPast];
 	}];
@@ -539,7 +539,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	[self.queue addOperation:conversationDidChangeOperation];
 }
 
-- (void)session:(ApptentiveSession *)session personDidChange:(NSDictionary *)diffs {
+- (void)conversation:(ApptentiveConversation *)conversation personDidChange:(NSDictionary *)diffs {
 	NSBlockOperation *personDidChangeOperation = [NSBlockOperation blockOperationWithBlock:^{
 		NSManagedObjectContext *context = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
 		context.parentContext = self.managedObjectContext;
@@ -548,13 +548,13 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 			[ApptentiveSerialRequest enqueueRequestWithPath:@"people" method:@"PUT" payload:diffs attachments:nil identifier:nil inContext:context];
 		}];
 
-		[self saveSession];
+		[self saveConversation];
 	}];
 
 	[self.queue addOperation:personDidChangeOperation];
 }
 
-- (void)session:(ApptentiveSession *)session deviceDidChange:(NSDictionary *)diffs {
+- (void)conversation:(ApptentiveConversation *)conversation deviceDidChange:(NSDictionary *)diffs {
 	NSBlockOperation *deviceDidChangeOperation = [NSBlockOperation blockOperationWithBlock:^{
 		NSManagedObjectContext *context = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
 		context.parentContext = self.managedObjectContext;
@@ -563,7 +563,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 			[ApptentiveSerialRequest enqueueRequestWithPath:@"devices" method:@"PUT" payload:diffs attachments:nil identifier:nil inContext:context];
 		}];
 
-		[self saveSession];
+		[self saveConversation];
 
 		self.manifest.expiry = [NSDate distantPast];
 	}];
@@ -571,12 +571,12 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	[self.queue addOperation:deviceDidChangeOperation];
 }
 
-- (void)sessionUserInfoDidChange:(ApptentiveSession *)session {
-	NSBlockOperation *sessionSaveOperation = [NSBlockOperation blockOperationWithBlock:^{
-		[self saveSession];
+- (void)conversationUserInfoDidChange:(ApptentiveConversation *)conversation {
+	NSBlockOperation *conversationSaveOperation = [NSBlockOperation blockOperationWithBlock:^{
+		[self saveConversation];
 	}];
 
-	[self.queue addOperation:sessionSaveOperation];
+	[self.queue addOperation:conversationSaveOperation];
 }
 
 #pragma mark - Messages
@@ -662,7 +662,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 - (BOOL)sendMessage:(ApptentiveMessage *)message {
 	NSAssert([NSThread isMainThread], @"-sendMessage: should only be called on main thread");
 
-	ApptentiveMessageSender *sender = [ApptentiveMessageSender findSenderWithID:self.session.person.identifier inContext:self.managedObjectContext];
+	ApptentiveMessageSender *sender = [ApptentiveMessageSender findSenderWithID:self.conversation.person.identifier inContext:self.managedObjectContext];
 	if (sender) {
 		message.sender = sender;
 	}
@@ -808,7 +808,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 
 	self.messageOperation = [[ApptentiveRequestOperation alloc] initWithPath:@"conversation" method:@"GET" payload:nil delegate:self dataSource:self.networkQueue];
 
-	if (!self.session.token && self.conversationOperation) {
+	if (!self.conversation.token && self.conversationOperation) {
 		[self.messageOperation addDependency:self.conversationOperation];
 	}
 
@@ -829,7 +829,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 				ApptentiveMessage *message = [ApptentiveMessage messageWithJSON:messageJSON inContext:context];
 
 				if (message) {
-					if ([self.session.person.identifier isEqualToString:message.sender.apptentiveID]) {
+					if ([self.conversation.person.identifier isEqualToString:message.sender.apptentiveID]) {
 						message.sentByUser = @(YES);
 						message.seenByUser = @(YES);
 					}
@@ -854,7 +854,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 
 				[self completeMessageFetchWithResult:lastMessageID != nil ? UIBackgroundFetchResultNewData : UIBackgroundFetchResultNoData];
 
-				[self.session didDownloadMessagesUpTo:lastMessageID];
+				[self.conversation didDownloadMessagesUpTo:lastMessageID];
 			});
 		}];
 	} else {
@@ -937,8 +937,8 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	return imageCachePath;
 }
 
-- (NSString *)sessionPath {
-	return [self.supportDirectoryPath stringByAppendingPathComponent:@"session"];
+- (NSString *)conversationPath {
+	return [self.supportDirectoryPath stringByAppendingPathComponent:@"conversation"];
 }
 
 - (NSString *)configurationPath {

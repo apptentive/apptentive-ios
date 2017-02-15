@@ -199,11 +199,11 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 }
 
 - (NSString *)personName {
-	return Apptentive.shared.backend.session.person.name;
+	return Apptentive.shared.backend.conversation.person.name;
 }
 
 - (NSString *)personEmailAddress {
-	return Apptentive.shared.backend.session.person.emailAddress;
+	return Apptentive.shared.backend.conversation.person.emailAddress;
 }
 
 #pragma mark - Profile (Initial)
@@ -560,7 +560,7 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 }
 
 - (void)setPersonName:(NSString *)name emailAddress:(NSString *)emailAddress {
-	[Apptentive.shared.backend.session updatePerson:^(ApptentiveMutablePerson *person) {
+	[Apptentive.shared.backend.conversation updatePerson:^(ApptentiveMutablePerson *person) {
 		person.name = name;
 		person.emailAddress = emailAddress;
 	}];
@@ -571,22 +571,22 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 }
 
 - (BOOL)didSkipProfile {
-	return [[Apptentive.shared.backend.session.userInfo objectForKey:ATMessageCenterDidSkipProfileKey] boolValue];
+	return [[Apptentive.shared.backend.conversation.userInfo objectForKey:ATMessageCenterDidSkipProfileKey] boolValue];
 }
 
 - (void)setDidSkipProfile:(BOOL)didSkipProfile {
-	[Apptentive.shared.backend.session setUserInfo:@(didSkipProfile) forKey:ATMessageCenterDidSkipProfileKey];
+	[Apptentive.shared.backend.conversation setUserInfo:@(didSkipProfile) forKey:ATMessageCenterDidSkipProfileKey];
 }
 
 - (NSString *)draftMessage {
-	return Apptentive.shared.backend.session.userInfo[ATMessageCenterDraftMessageKey];
+	return Apptentive.shared.backend.conversation.userInfo[ATMessageCenterDraftMessageKey];
 }
 
 - (void)setDraftMessage:(NSString *)draftMessage {
 	if (draftMessage) {
-		[Apptentive.shared.backend.session setUserInfo:draftMessage forKey:ATMessageCenterDraftMessageKey];
+		[Apptentive.shared.backend.conversation setUserInfo:draftMessage forKey:ATMessageCenterDraftMessageKey];
 	} else {
-		[Apptentive.shared.backend.session removeUserInfoForKey:ATMessageCenterDraftMessageKey];
+		[Apptentive.shared.backend.conversation removeUserInfoForKey:ATMessageCenterDraftMessageKey];
 	}
 }
 

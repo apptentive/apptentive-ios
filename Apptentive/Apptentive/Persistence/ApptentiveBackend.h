@@ -11,7 +11,7 @@
 
 #import "ApptentiveMessage.h"
 #import "ApptentiveSerialNetworkQueue.h"
-#import "ApptentiveSession.h"
+#import "ApptentiveConversation.h"
 
 
 @class ApptentiveConversation, ApptentiveEngagementManifest, ApptentiveAppConfiguration, ApptentiveMessageCenterViewController;
@@ -23,7 +23,7 @@
  Only a single backend object will be created by the Apptentive singleton
  at the time that the API key is set.
  
- It comprises a session object, containing all of the data collected
+ It comprises a conversation object, containing all of the data collected
  about the user, device, app, SDK, and events and interactions that have 
  been engaged. 
  
@@ -33,9 +33,9 @@
  used for PUT and POST requests (person/device updates, events, messages,
  and survey responses).
  */
-@interface ApptentiveBackend : NSObject <NSFetchedResultsControllerDelegate, ApptentiveSessionDelegate, ApptentiveRequestOperationDelegate>
+@interface ApptentiveBackend : NSObject <NSFetchedResultsControllerDelegate, ApptentiveConversationDelegate, ApptentiveRequestOperationDelegate>
 
-@property (readonly, strong, nonatomic) ApptentiveSession *session;
+@property (readonly, strong, nonatomic) ApptentiveConversation *conversation;
 @property (readonly, strong, nonatomic) ApptentiveAppConfiguration *configuration;
 @property (readonly, strong, nonatomic) ApptentiveEngagementManifest *manifest;
 

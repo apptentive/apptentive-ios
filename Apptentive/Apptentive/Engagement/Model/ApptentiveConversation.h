@@ -1,5 +1,5 @@
 //
-//  ApptentiveSession.h
+//  ApptentiveConversation.h
 //  Apptentive
 //
 //  Created by Frank Schmitt on 11/15/16.
@@ -9,50 +9,50 @@
 #import "ApptentiveState.h"
 
 @class ApptentivePerson, ApptentiveDevice, ApptentiveSDK, ApptentiveAppRelease, ApptentiveEngagement, ApptentiveMutablePerson, ApptentiveMutableDevice, ApptentiveVersion;
-@protocol ApptentiveSessionDelegate;
+@protocol ApptentiveConversationDelegate;
 
 /**
- An `ApptentiveSession` object stores data related to a user session. It is
+ An `ApptentiveConversation` object stores data related to a conversation. It is
  intended to encompass all of the data necessary for an invocation to determine
  whether an interaction should be shown.
  
- In the most typical case, the session object will be unarchived from disk. 
+ In the most typical case, the conversation object will be unarchived from disk.
  
- If older session data (stored primarily in `NSUserDefaults`) is present, it
- can be migrated using the `-initAndMigrate` method. 
+ If older conversation data (stored primarily in `NSUserDefaults`) is present,
+ it can be migrated using the `-initAndMigrate` method.
  
  Finally, if this is a fresh installation of the SDK, the `-initWithAPIKey:`
  method should be used.
 */
-@interface ApptentiveSession : ApptentiveState
+@interface ApptentiveConversation : ApptentiveState
 
 /**
- The `ApptentiveAppRelease` object for this session.
+ The `ApptentiveAppRelease` object for this conversation.
  */
 @property (readonly, nonatomic) ApptentiveAppRelease *appRelease;
 
 /**
- The `ApptentiveSDK` object for this session.
+ The `ApptentiveSDK` object for this conversation.
  */
 @property (readonly, nonatomic) ApptentiveSDK *SDK;
 
 /**
- The `ApptentivePerson` object for this session.
+ The `ApptentivePerson` object for this conversation.
  */
 @property (readonly, nonatomic) ApptentivePerson *person;
 
 /**
- The `ApptentiveDevice` object for this session.
+ The `ApptentiveDevice` object for this conversation.
  */
 @property (readonly, nonatomic) ApptentiveDevice *device;
 
 /**
- The `ApptentiveEngagement` object for this session.
+ The `ApptentiveEngagement` object for this conversation.
  */
 @property (readonly, nonatomic) ApptentiveEngagement *engagement;
 
 /**
- The API key used to initialize the session.
+ The API key used to initialize the conversation.
  */
 @property (readonly, nonatomic) NSString *APIKey;
 
@@ -78,15 +78,15 @@
 @property (readonly, nonatomic) NSDictionary *userInfo;
 
 /**
- The delegate for the session.
+ The delegate for the conversation.
  */
-@property (weak, nonatomic) id<ApptentiveSessionDelegate> delegate;
+@property (weak, nonatomic) id<ApptentiveConversationDelegate> delegate;
 
 /**
- Creates a new `ApptentiveSession` object, using the specified API key.
+ Creates a new `ApptentiveConversation` object, using the specified API key.
 
- @param APIKey The Apptentive API key to be used for the session.
- @return The newly-initialized session object.
+ @param APIKey The Apptentive API key to be used for the conversation.
+ @return The newly-initialized conversation object.
  */
 - (instancetype)initWithAPIKey:(NSString *)APIKey;
 
@@ -97,15 +97,15 @@
  used to authorize subsequent network requests.
 
  @param token The token to be used to authorize future network requests.
- @param personID The idenfier for the person associated with this session.
- @param deviceID The idenfier for the device associated with this session.
+ @param personID The idenfier for the person associated with this conversation.
+ @param deviceID The idenfier for the device associated with this conversation.
  */
 - (void)setToken:(NSString *)token personID:(NSString *)personID deviceID:(NSString *)deviceID;
 
 
 /**
  This method will compare the current app release, SDK, and device information
- match that which is stored in the session. 
+ match that which is stored in the conversation. 
  
  If there are differences, the delegate is notified accordingly.
  
@@ -116,7 +116,7 @@
 
 
 /**
- Makes a batch of changes to the session's person object.
+ Makes a batch of changes to the conversation's person object.
  The updated person object is then compared to the previous version, and the
  delegate is notified of any differences.
 
@@ -127,7 +127,7 @@
 
 
 /**
- Makes a batch of changes to the session's device object.
+ Makes a batch of changes to the conversation's device object.
  The updated device object is then compared to the previous version, and the
  delegate is notified of any differences.
 
@@ -167,7 +167,7 @@
 
 
 /**
- Sets free-form user info on the session object.
+ Sets free-form user info on the conversation object.
 
  @param object The object to be set or updated
  @param key The key representing the object
@@ -176,7 +176,7 @@
 
 
 /**
- Clears free-form user info on the session object
+ Clears free-form user info on the conversation object
 
  @param key The key representing the object.
  */
@@ -200,13 +200,13 @@
 
 
 /**
- The indentifier for the person associated with this session on the server.
+ The indentifier for the person associated with this conversation on the server.
  */
 @property (readonly, nonatomic) NSString *personID;
 
 
 /**
- The identifier for the device associated with this session on the server.
+ The identifier for the device associated with this conversation on the server.
  */
 @property (readonly, nonatomic) NSString *deviceID;
 
@@ -214,50 +214,50 @@
 
 
 /**
- The `ApptentiveSessionDelegate` protocol is used to communicate updates to the
+ The `ApptentiveconversationDelegate` protocol is used to communicate updates to the
  person, device, and conversation objects, and user info. These updates are
  intended to be communicated to the Apptentive server, or in the case of user
  info, saved locally.
  */
-@protocol ApptentiveSessionDelegate <NSObject>
+@protocol ApptentiveConversationDelegate <NSObject>
 
 
 /**
  Indicates that the conversation object (comprised of the app release and SDK
  objects) has changed.
 
- @param session The session associated with the change.
+ @param conversation The conversation associated with the change.
  @param payload A dictionary suitable for encoding as JSON and sending to the
  server.
  */
-- (void)session:(ApptentiveSession *)session conversationDidChange:(NSDictionary *)payload;
+- (void)conversation:(ApptentiveConversation *)conversation appReleaseOrSDKDidChange:(NSDictionary *)payload;
 
 
 /**
  Indicates that the device object has changed.
 
- @param session The session associated with the change.
+ @param conversation The conversation associated with the change.
  @param diffs A dictionary suitable for encoding as JSON and sending to the
  server.
  */
-- (void)session:(ApptentiveSession *)session deviceDidChange:(NSDictionary *)diffs;
+- (void)conversation:(ApptentiveConversation *)conversation deviceDidChange:(NSDictionary *)diffs;
 
 
 /**
  Indicates that the person object has changed.
 
- @param session The session associated with the change.
+ @param conversation The conversation associated with the change.
  @param diffs A dictionary suitable for encoding as JSON and sending to the
  server.
  */
-- (void)session:(ApptentiveSession *)session personDidChange:(NSDictionary *)diffs;
+- (void)conversation:(ApptentiveConversation *)conversation personDidChange:(NSDictionary *)diffs;
 
 
 /**
  Indicates that the user info has changed
 
- @param session The session associated with the change.
+ @param conversation The conversation associated with the change.
  */
-- (void)sessionUserInfoDidChange:(ApptentiveSession *)session;
+- (void)conversationUserInfoDidChange:(ApptentiveConversation *)conversation;
 
 @end

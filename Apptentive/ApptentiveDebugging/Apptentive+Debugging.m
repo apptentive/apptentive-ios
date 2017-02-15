@@ -25,7 +25,7 @@
 }
 
 - (NSString *)SDKVersion {
-	return self.backend.session.SDK.version.versionString;
+	return self.backend.conversation.SDK.version.versionString;
 }
 
 - (void)setLocalInteractionsURL:(NSURL *)localInteractionsURL {
@@ -57,7 +57,7 @@
 }
 
 - (NSDictionary *)deviceInfo {
-	return Apptentive.shared.backend.session.device.JSONDictionary;
+	return Apptentive.shared.backend.conversation.device.JSONDictionary;
 }
 
 - (NSArray *)engagementEvents {
@@ -100,7 +100,7 @@
 }
 
 - (NSString *)conversationToken {
-	return Apptentive.shared.backend.session.token;
+	return Apptentive.shared.backend.conversation.token;
 }
 
 - (void)resetSDK {
@@ -110,11 +110,11 @@
 }
 
 - (NSDictionary *)customPersonData {
-	return self.backend.session.person.customData ?: @{};
+	return self.backend.conversation.person.customData ?: @{};
 }
 
 - (NSDictionary *)customDeviceData {
-	return self.backend.session.device.customData ?: @{};
+	return self.backend.conversation.device.customData ?: @{};
 }
 
 @end

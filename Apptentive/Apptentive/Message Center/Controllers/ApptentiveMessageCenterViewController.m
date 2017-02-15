@@ -257,7 +257,10 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+	self.greetingView.translatesAutoresizingMaskIntoConstraints = NO;
 	[self.greetingView sizeToFit];
+	self.greetingView.translatesAutoresizingMaskIntoConstraints = YES;
+
 	[self resizeFooterView:nil];
 }
 

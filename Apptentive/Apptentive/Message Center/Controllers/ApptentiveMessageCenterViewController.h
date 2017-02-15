@@ -7,14 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "ApptentiveMessageCenterDataSource.h"
-#import "ApptentiveBackend.h"
+#import "ApptentiveMessageCenterViewModel.h"
 
 @class ApptentiveMessageCenterInteraction;
 
 
-@interface ApptentiveMessageCenterViewController : UITableViewController <ApptentiveMessageCenterDataSourceDelegate, UITextViewDelegate, UITextFieldDelegate, ATBackendMessageDelegate, UIActionSheetDelegate, UICollectionViewDataSource, UICollectionViewDelegate>
+@interface ApptentiveMessageCenterViewController : UITableViewController <ApptentiveMessageCenterViewModelDelegate, UITextViewDelegate, UITextFieldDelegate, UICollectionViewDataSource, UICollectionViewDelegate>
 
-@property (strong, nonatomic) ApptentiveMessageCenterInteraction *interaction;
+@property (strong, nonatomic) ApptentiveMessageCenterViewModel *viewModel;
 
 @end

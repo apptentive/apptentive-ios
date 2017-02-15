@@ -56,6 +56,13 @@ NSString *const ATInteractionAboutViewEventLabelClose = @"close";
 
 	self.landscapeConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:[about]-(16)-[privacy]" options:NSLayoutFormatAlignAllBaseline metrics:nil views:@{ @"about": self.aboutButton,
 		@"privacy": self.privacyButton }];
+
+	[NSLayoutConstraint deactivateConstraints:self.portraitConstraints];
+
+	[self.view addConstraints:self.landscapeConstraints];
+
+	[NSLayoutConstraint deactivateConstraints:self.landscapeConstraints];
+	[NSLayoutConstraint activateConstraints:self.portraitConstraints];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -88,13 +95,13 @@ NSString *const ATInteractionAboutViewEventLabelClose = @"close";
 	self.aboutLabel.preferredMaxLayoutWidth = CGRectGetWidth(self.view.bounds) - 40.0;
 
 	if (isCompactHeight && !isCompactWidth) {
-		[self.view removeConstraints:self.portraitConstraints];
-		[self.view addConstraints:self.landscapeConstraints];
+		[NSLayoutConstraint deactivateConstraints:self.portraitConstraints];
+		[NSLayoutConstraint activateConstraints:self.landscapeConstraints];
 
 		self.privacyButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
 	} else {
-		[self.view removeConstraints:self.landscapeConstraints];
-		[self.view addConstraints:self.portraitConstraints];
+		[NSLayoutConstraint deactivateConstraints:self.portraitConstraints];
+		[NSLayoutConstraint activateConstraints:self.portraitConstraints];
 
 		self.privacyButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
 	}

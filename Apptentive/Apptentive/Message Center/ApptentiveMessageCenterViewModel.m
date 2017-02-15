@@ -1,12 +1,12 @@
 //
-//  ApptentiveMessageCenterDataSource.m
+//  ApptentiveMessageCenterViewModel.m
 //  Apptentive
 //
 //  Created by Andrew Wooster on 11/12/13.
 //  Copyright (c) 2013 Apptentive, Inc. All rights reserved.
 //
 
-#import "ApptentiveMessageCenterDataSource.h"
+#import "ApptentiveMessageCenterViewModel.h"
 
 #import "ApptentiveBackend.h"
 #import "Apptentive.h"
@@ -16,27 +16,38 @@
 #import "ApptentiveAttachmentCell.h"
 #import "ApptentiveFileAttachment.h"
 #import "ApptentiveUtilities.h"
+#import "ApptentiveInteraction.h"
+#import "ApptentivePerson.h"
+#import "ApptentiveMutablePerson.h"
+#import "ApptentiveReachability.h"
 
 NSString *const ATMessageCenterServerErrorDomain = @"com.apptentive.MessageCenterServerError";
 NSString *const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenterErrorMessages";
+NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 
+NSString *const ATMessageCenterDidSkipProfileKey = @"ATMessageCenterDidSkipProfileKey";
+NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKey";
 
-@interface ApptentiveMessageCenterDataSource () <NSFetchedResultsControllerDelegate>
+@interface ApptentiveMessageCenterViewModel () <NSFetchedResultsControllerDelegate>
 
 @property (readwrite, strong, nonatomic) NSFetchedResultsController *fetchedMessagesController;
 @property (readonly, nonatomic) ApptentiveMessage *lastUserMessage;
 @property (readonly, nonatomic) NSURLSession *attachmentDownloadSession;
 @property (readonly, nonatomic) NSMutableDictionary<NSValue *, NSIndexPath *> *taskIndexPaths;
+@property (strong, nonatomic) ApptentiveMessage *contextMessage;
 
 @end
 
 
-@implementation ApptentiveMessageCenterDataSource
+@implementation ApptentiveMessageCenterViewModel
 
-- (id)initWithDelegate:(NSObject<ApptentiveMessageCenterDataSourceDelegate> *)aDelegate {
+- (instancetype)initWithInteraction:(ApptentiveInteraction *)interaction {
 	if ((self = [super init])) {
-		_delegate = aDelegate;
+		_interaction = interaction;
+
 		_dateFormatter = [[NSDateFormatter alloc] init];
+		_dateFormatter.dateStyle = NSDateFormatterLongStyle;
+		_dateFormatter.timeStyle = NSDateFormatterNoStyle;
 
 		_attachmentDownloadSession = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:self delegateQueue:nil];
 		_taskIndexPaths = [NSMutableDictionary dictionary];
@@ -89,6 +100,10 @@ NSString *const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenter
 		ApptentiveLogError(@"Got an error loading messages: %@", error);
 		//TODO: Handle this error.
 	}
+
+	if (self.contextMessageBody) {
+		self.contextMessage = [Apptentive.shared.backend automatedMessageWithTitle:nil body:self.contextMessageBody];
+	}
 }
 
 - (void)stop {
@@ -96,6 +111,148 @@ NSString *const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenter
 }
 
 #pragma mark - Message center view controller support
+
+- (id<ApptentiveStyle>)styleSheet {
+	return Apptentive.shared.style;
+}
+
+- (NSString *)title {
+	return self.interaction.configuration[@"title"];
+}
+
+- (NSString *)branding {
+	return self.interaction.configuration[@"branding"];
+}
+
+#pragma mark - Composer
+
+- (NSString *)composerTitle {
+	return self.interaction.configuration[@"composer"][@"title"];
+}
+
+- (NSString *)composerPlaceholderText {
+	return self.interaction.configuration[@"composer"][@"hint_text"];
+}
+
+- (NSString *)composerSendButtonTitle {
+	return self.interaction.configuration[@"composer"][@"send_button"];
+}
+
+- (NSString *)composerCloseConfirmBody {
+	return self.interaction.configuration[@"composer"][@"close_confirm_body"];
+}
+
+- (NSString *)composerCloseDiscardButtonTitle {
+	return self.interaction.configuration[@"composer"][@"close_discard_button"];
+}
+
+- (NSString *)composerCloseCancelButtonTitle {
+	return self.interaction.configuration[@"composer"][@"close_cancel_button"];
+}
+
+#pragma mark - Greeting
+
+- (NSString *)greetingTitle {
+	return self.interaction.configuration[@"greeting"][@"title"];
+}
+
+- (NSString *)greetingBody {
+	return self.interaction.configuration[@"greeting"][@"body"];
+}
+
+- (NSURL *)greetingImageURL {
+	NSString *URLString = self.interaction.configuration[@"greeting"][@"image_url"];
+
+	return (URLString.length > 0) ? [NSURL URLWithString:URLString] : nil;
+}
+
+#pragma mark - Status
+
+- (NSString *)statusBody {
+	return self.interaction.configuration[@"status"][@"body"];
+}
+
+#pragma mark - Context / Automated Message
+
+- (NSString *)contextMessageBody {
+	return self.interaction.configuration[@"automated_message"][@"body"];
+}
+
+#pragma mark - Error Messages
+
+- (NSString *)HTTPErrorBody {
+	return self.interaction.configuration[@"error_messages"][@"http_error_body"];
+}
+
+- (NSString *)networkErrorBody {
+	return self.interaction.configuration[@"error_messages"][@"network_error_body"];
+}
+
+#pragma mark - Profile
+
+- (BOOL)profileRequested {
+	return [self.interaction.configuration[@"profile"][@"request"] boolValue];
+}
+
+- (BOOL)profileRequired {
+	return [self.interaction.configuration[@"profile"][@"require"] boolValue];
+}
+
+- (NSString *)personName {
+	return Apptentive.shared.backend.session.person.name;
+}
+
+- (NSString *)personEmailAddress {
+	return Apptentive.shared.backend.session.person.emailAddress;
+}
+
+#pragma mark - Profile (Initial)
+
+- (NSString *)profileInitialTitle {
+	return self.interaction.configuration[@"profile"][@"initial"][@"title"];
+}
+
+- (NSString *)profileInitialNamePlaceholder {
+	return self.interaction.configuration[@"profile"][@"initial"][@"name_hint"];
+}
+
+- (NSString *)profileInitialEmailPlaceholder {
+	return self.interaction.configuration[@"profile"][@"initial"][@"email_hint"];
+}
+
+- (NSString *)profileInitialSkipButtonTitle {
+	return self.interaction.configuration[@"profile"][@"initial"][@"skip_button"];
+}
+
+- (NSString *)profileInitialSaveButtonTitle {
+	return self.interaction.configuration[@"profile"][@"initial"][@"save_button"];
+}
+
+- (NSString *)profileInitialEmailExplanation {
+	return self.interaction.configuration[@"profile"][@"initial"][@"email_explanation"];
+}
+
+#pragma mark - Profile (Edit)
+
+- (NSString *)profileEditTitle {
+	return self.interaction.configuration[@"profile"][@"edit"][@"title"];
+}
+
+- (NSString *)profileEditNamePlaceholder {
+	return self.interaction.configuration[@"profile"][@"edit"][@"name_hint"];
+}
+
+- (NSString *)profileEditEmailPlaceholder {
+	return self.interaction.configuration[@"profile"][@"edit"][@"email_hint"];
+}
+
+- (NSString *)profileEditSkipButtonTitle {
+	return self.interaction.configuration[@"profile"][@"edit"][@"skip_button"];
+}
+
+- (NSString *)profileEditSaveButtonTitle {
+	return self.interaction.configuration[@"profile"][@"edit"][@"save_button"];
+}
 
 - (BOOL)hasNonContextMessages {
 	if (self.numberOfMessageGroups == 0 || [self numberOfMessagesInGroup:0] == 0) {
@@ -140,6 +297,10 @@ NSString *const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenter
 
 - (NSString *)textOfMessageAtIndexPath:(NSIndexPath *)indexPath {
 	return [self messageAtIndexPath:indexPath].body;
+}
+
+- (NSString *)titleForHeaderInSection:(NSInteger)index {
+	return [self.dateFormatter stringFromDate:[self dateOfMessageGroupAtIndex:index]];
 }
 
 - (NSDate *)dateOfMessageGroupAtIndex:(NSInteger)index {
@@ -197,6 +358,18 @@ NSString *const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenter
 
 - (void)markAsReadMessageAtIndexPath:(NSIndexPath *)indexPath {
 	ApptentiveMessage *message = [self messageAtIndexPath:indexPath];
+
+	if (message.apptentiveID && ![message.sentByUser boolValue]) {
+		NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+
+		if (message.apptentiveID) {
+			[userInfo setObject:message.apptentiveID forKey:@"message_id"];
+		}
+
+		[userInfo setObject:@"CompoundMessage" forKey:@"message_type"];
+
+		[self.interaction engage:ATInteractionMessageCenterEventLabelRead fromViewController:nil userInfo:userInfo];
+	}
 
 	[message markAsRead];
 }
@@ -266,7 +439,7 @@ NSString *const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenter
 	NSURLRequest *request = [NSURLRequest requestWithURL:attachment.remoteURL];
 	NSURLSessionDownloadTask *task = [self.attachmentDownloadSession downloadTaskWithRequest:request];
 
-	[self.delegate messageCenterDataSource:self attachmentDownloadAtIndexPath:indexPath didProgress:0];
+    [self.delegate messageCenterViewModel:self attachmentDownloadAtIndexPath:indexPath didProgress:0];
 
 	[self setIndexPath:indexPath forTask:task];
 	[task resume];
@@ -335,7 +508,7 @@ NSString *const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenter
 	dispatch_async(dispatch_get_main_queue(), ^{
 		// -completeMoveToStorageFor: must be called on main thread.
 		[[self fileAttachmentAtIndexPath:attachmentIndexPath] completeMoveToStorageFor:finalLocation];
-		[self.delegate messageCenterDataSource:self didLoadAttachmentThumbnailAtIndexPath:attachmentIndexPath];
+		[self.delegate messageCenterViewModel:self didLoadAttachmentThumbnailAtIndexPath:attachmentIndexPath];
 	});
 }
 
@@ -343,7 +516,7 @@ NSString *const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenter
 	NSIndexPath *attachmentIndexPath = [self indexPathForTask:downloadTask];
 
 	dispatch_async(dispatch_get_main_queue(), ^{
-		[self.delegate messageCenterDataSource:self attachmentDownloadAtIndexPath:attachmentIndexPath didProgress:(double)totalBytesWritten / (double)totalBytesExpectedToWrite];
+        [self.delegate messageCenterViewModel:self attachmentDownloadAtIndexPath:attachmentIndexPath didProgress:(double) totalBytesWritten / (double) totalBytesExpectedToWrite];
 	});
 }
 
@@ -354,8 +527,14 @@ NSString *const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenter
 	[self removeTask:task];
 
 	dispatch_async(dispatch_get_main_queue(), ^{
-		[self.delegate messageCenterDataSource:self didFailToLoadAttachmentThumbnailAtIndexPath:attachmentIndexPath error:error];
+		[self.delegate messageCenterViewModel:self didFailToLoadAttachmentThumbnailAtIndexPath:attachmentIndexPath error:error];
 	});
+}
+
+#pragma mark - Message backend delegate
+
+- (void)backend:(ApptentiveBackend *)backend messageProgressDidChange:(float)progress {
+	[self.delegate messageCenterViewModel:self messageProgressDidChange:progress];
 }
 
 #pragma mark - Misc
@@ -364,6 +543,50 @@ NSString *const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenter
 	@synchronized(self) {
 		NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"(pendingState == %d)", ATPendingMessageStateComposing];
 		[ApptentiveData removeEntitiesNamed:@"ATMessage" withPredicate:fetchPredicate];
+	}
+}
+
+- (void)sendMessage:(NSString *)message withAttachments:(NSArray *)attachments {
+	if (self.contextMessage) {
+		[[Apptentive sharedConnection].backend sendAutomatedMessage:self.contextMessage];
+		self.contextMessage = nil;
+	}
+
+	if (attachments.count > 0) {
+		[Apptentive.shared.backend sendCompoundMessageWithText:message attachments:attachments hiddenOnClient:NO];
+	} else {
+		[Apptentive.shared.backend sendTextMessageWithBody:message];
+	}
+}
+
+- (void)setPersonName:(NSString *)name emailAddress:(NSString *)emailAddress {
+	[Apptentive.shared.backend.session updatePerson:^(ApptentiveMutablePerson *person) {
+		person.name = name;
+		person.emailAddress = emailAddress;
+	}];
+}
+
+- (BOOL)networkIsReachable {
+	return [[ApptentiveReachability sharedReachability] currentNetworkStatus] != ApptentiveNetworkNotReachable;
+}
+
+- (BOOL)didSkipProfile {
+	return [[Apptentive.shared.backend.session.userInfo objectForKey:ATMessageCenterDidSkipProfileKey] boolValue];
+}
+
+- (void)setDidSkipProfile:(BOOL)didSkipProfile {
+	[Apptentive.shared.backend.session setUserInfo:@(didSkipProfile) forKey:ATMessageCenterDidSkipProfileKey];
+}
+
+- (NSString *)draftMessage {
+	return Apptentive.shared.backend.session.userInfo[ATMessageCenterDraftMessageKey];
+}
+
+- (void)setDraftMessage:(NSString *)draftMessage {
+	if (draftMessage) {
+		[Apptentive.shared.backend.session setUserInfo:draftMessage forKey:ATMessageCenterDraftMessageKey];
+	} else {
+		[Apptentive.shared.backend.session removeUserInfoForKey:ATMessageCenterDraftMessageKey];
 	}
 }
 

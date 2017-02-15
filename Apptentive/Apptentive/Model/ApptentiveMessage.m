@@ -12,12 +12,8 @@
 #import "ApptentiveJSONSerialization.h"
 #import "ApptentiveMessageSender.h"
 #import "NSDictionary+Apptentive.h"
-#import "ApptentiveMessageCenterInteraction.h"
 #import "ApptentiveFileAttachment.h"
 #import "ApptentiveSerialRequest+Record.h"
-
-
-NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 
 
 @implementation ApptentiveMessage
@@ -305,17 +301,6 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 - (void)markAsRead {
 	if (![self.seenByUser boolValue]) {
 		self.seenByUser = @YES;
-		if (self.apptentiveID && ![self.sentByUser boolValue]) {
-			NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
-
-			if (self.apptentiveID) {
-				[userInfo setObject:self.apptentiveID forKey:@"message_id"];
-			}
-
-			[userInfo setObject:@"CompoundMessage" forKey:@"message_type"];
-
-			[[ApptentiveMessageCenterInteraction interactionForInvokingMessageEvents] engage:ATInteractionMessageCenterEventLabelRead fromViewController:nil userInfo:userInfo];
-		}
 
 		// Doing this synchronously triggers Core Data's recursive save detection.
 		dispatch_async(dispatch_get_main_queue(), ^{

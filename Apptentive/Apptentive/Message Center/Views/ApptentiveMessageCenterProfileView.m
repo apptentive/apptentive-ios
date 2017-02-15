@@ -72,33 +72,36 @@
 	self.buttonBar.layer.borderColor = self.borderColor.CGColor;
 }
 
-- (void)updateConstraints {
-	[self.containerView removeConstraints:self.containerView.constraints];
-	[self.containerView addConstraints:self.baseConstraints];
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+	[super traitCollectionDidChange:previousTraitCollection];
+
+	// Deactivate all, then selectively re-activate
+	[NSLayoutConstraint deactivateConstraints:self.portraitFullConstraints];
+	[NSLayoutConstraint deactivateConstraints:self.portraitCompactConstraints];
+	[NSLayoutConstraint deactivateConstraints:self.landscapeFullConstraints];
+	[NSLayoutConstraint deactivateConstraints:self.landscapeCompactConstraints];
 
 	if (self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassCompact) {
 		switch (self.mode) {
 			case ATMessageCenterProfileModeFull:
-				[self.containerView addConstraints:self.landscapeFullConstraints];
+				[NSLayoutConstraint activateConstraints:self.landscapeFullConstraints];
 				break;
 
 			case ATMessageCenterProfileModeCompact:
-				[self.containerView addConstraints:self.landscapeCompactConstraints];
+				[NSLayoutConstraint activateConstraints:self.landscapeCompactConstraints];
 				break;
 		}
 	} else {
 		switch (self.mode) {
 			case ATMessageCenterProfileModeFull:
-				[self.containerView addConstraints:self.portraitFullConstraints];
+				[NSLayoutConstraint activateConstraints:self.portraitFullConstraints];
 				break;
 
 			case ATMessageCenterProfileModeCompact:
-				[self.containerView addConstraints:self.portraitCompactConstraints];
+				[NSLayoutConstraint activateConstraints:self.portraitCompactConstraints];
 				break;
 		}
 	}
-
-	[super updateConstraints];
 }
 
 - (void)setMode:(ATMessageCenterProfileMode)mode {
@@ -117,7 +120,7 @@
 			self.emailVerticalSpaceToButtonBar.constant = 16.0;
 		}
 
-		[self updateConstraints];
+		[self traitCollectionDidChange:self.traitCollection];
 
 		[UIView animateWithDuration:0.25 animations:^{
 			self.nameField.alpha = nameFieldAlpha;

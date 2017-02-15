@@ -44,16 +44,7 @@
 	[super traitCollectionDidChange:previousTraitCollection];
 
 	self.translatesAutoresizingMaskIntoConstraints = NO;
-	[self setNeedsUpdateConstraints];
-	[self sizeToFit];
-	self.translatesAutoresizingMaskIntoConstraints = YES;
-}
 
-- (CGSize)sizeThatFits:(CGSize)size {
-	return [self systemLayoutSizeFittingSize:CGSizeMake(self.bounds.size.width, 2000)];
-}
-
-- (void)updateConstraints {
 	if (self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassCompact) {
 		// Landscape on phone: Center vertically, offset horizontally
 		self.imageCenterYConstraint.constant = 0.0;
@@ -71,7 +62,13 @@
 		self.textCenterYConstraint.constant = -self.imageWidthConstraint.constant / 2.0 - 7.0;
 	}
 
-	[super updateConstraints];
+	self.translatesAutoresizingMaskIntoConstraints = YES;
+
+	[self sizeToFit];
+}
+
+- (CGSize)sizeThatFits:(CGSize)size {
+	return [self systemLayoutSizeFittingSize:CGSizeMake(size.width, 2000)];
 }
 
 @end

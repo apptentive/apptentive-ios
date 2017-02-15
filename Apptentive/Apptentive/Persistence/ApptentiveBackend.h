@@ -73,7 +73,6 @@
  */
 - (BOOL)presentMessageCenterFromViewController:(UIViewController *)viewController;
 - (BOOL)presentMessageCenterFromViewController:(UIViewController *)viewController withCustomData:(NSDictionary *)customData;
-- (void)messageCenterWillDismiss:(ApptentiveMessageCenterViewController *)messageCenter;
 
 - (void)attachCustomDataToMessage:(ApptentiveMessage *)message;
 - (void)dismissMessageCenterAnimated:(BOOL)animated completion:(void (^)(void))completion;

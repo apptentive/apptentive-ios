@@ -518,9 +518,6 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 }
 
 - (void)messageCenterWillDismiss:(ApptentiveMessageCenterViewController *)messageCenter {
-	if (self.presentedMessageCenterViewController) {
-		self.presentedMessageCenterViewController = nil;
-	}
 }
 
 #pragma mark - Session delegate
@@ -797,6 +794,10 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 		_messageCenterInForeground = NO;
 
 		[self updateMessageCheckingTimer];
+
+		if (self.presentedMessageCenterViewController) {
+			self.presentedMessageCenterViewController = nil;
+		}
 	}
 }
 

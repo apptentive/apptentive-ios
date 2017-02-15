@@ -29,9 +29,6 @@
 @property (strong, nonatomic) NSArray *landscapeConstraints;
 @property (strong, nonatomic) NSArray *portraitConstraints;
 
-@property (strong, nonatomic) NSArray *landscapeSendBarConstraints;
-@property (strong, nonatomic) NSArray *portraitSendBarConstraints;
-
 @end
 
 
@@ -45,13 +42,16 @@
 
 	NSDictionary *views = @{ @"sendBar": self.sendBar,
 		@"messageView": self.messageView };
-	self.portraitConstraints = @[self.sendBarLeadingToSuperview, self.sendBarBottomToTextView, self.textViewTrailingToSuperview];
+	self.portraitConstraints = @[self.sendBarLeadingToSuperview, self.sendBarBottomToTextView, self.textViewTrailingToSuperview, self.titleLabelToClearButton, self.attachButtonToSendButton, self.clearButtonToAttachButton, self.buttonCenters, self.buttonBaselines, self.clearButtonLeadingToSuperview, self.sendButtonVerticalCenter];
 
-	self.landscapeConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(0)-[messageView]-(0)-[sendBar]-(0)-|" options:NSLayoutFormatAlignAllTop | NSLayoutFormatAlignAllBottom metrics:nil views:views];
+	NSArray *landscapeContainerConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(0)-[messageView]-(0)-[sendBar]-(0)-|" options:NSLayoutFormatAlignAllTop | NSLayoutFormatAlignAllBottom metrics:nil views:views];
+	[self.containerView addConstraints:landscapeContainerConstraints];
 
-	self.portraitSendBarConstraints = @[self.titleLabelToClearButton, self.attachButtonToSendButton, self.clearButtonToAttachButton, self.buttonCenters, self.buttonBaselines, self.clearButtonLeadingToSuperview, self.sendButtonVerticalCenter];
+	NSArray *landscapeSendBarConstraints = @[[NSLayoutConstraint constraintWithItem:self.sendBar attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.clearButton attribute:NSLayoutAttributeTop multiplier:1.0 constant:0], [NSLayoutConstraint constraintWithItem:self.sendBar attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.sendButton attribute:NSLayoutAttributeBottom multiplier:1.0 constant:4.0], [NSLayoutConstraint constraintWithItem:self.attachButton attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.sendBar attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0.0]];
+	[self.sendBar addConstraints:landscapeSendBarConstraints];
 
-	self.landscapeSendBarConstraints = @[[NSLayoutConstraint constraintWithItem:self.sendBar attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.clearButton attribute:NSLayoutAttributeTop multiplier:1.0 constant:0], [NSLayoutConstraint constraintWithItem:self.sendBar attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.sendButton attribute:NSLayoutAttributeBottom multiplier:1.0 constant:4.0], [NSLayoutConstraint constraintWithItem:self.attachButton attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.sendBar attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0.0]];
+	self.landscapeConstraints = [landscapeContainerConstraints arrayByAddingObjectsFromArray:landscapeSendBarConstraints];
+	[NSLayoutConstraint deactivateConstraints:self.landscapeConstraints];
 
 	[super awakeFromNib];
 }
@@ -63,17 +63,16 @@
 	self.sendBar.layer.borderColor = self.borderColor.CGColor;
 }
 
-- (void)updateConstraints {
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+	[super traitCollectionDidChange:previousTraitCollection];
+
 	CGFloat outerVerticalSpace = self.regularOuterVerticalSpace;
 
 	if (self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassCompact) {
 		self.titleLabel.alpha = 0;
 
-		[self.containerView removeConstraints:self.portraitConstraints];
-		[self.containerView addConstraints:self.landscapeConstraints];
-
-		[self.sendBar removeConstraints:self.portraitSendBarConstraints];
-		[self.sendBar addConstraints:self.landscapeSendBarConstraints];
+		[NSLayoutConstraint deactivateConstraints:self.portraitConstraints];
+		[NSLayoutConstraint activateConstraints:self.landscapeConstraints];
 
 		if (CGRectGetHeight(self.bounds) < 44.0 * 3.0) {
 			outerVerticalSpace = 0.0;
@@ -81,17 +80,12 @@
 	} else {
 		self.titleLabel.alpha = 1;
 
-		[self.containerView removeConstraints:self.landscapeConstraints];
-		[self.containerView addConstraints:self.portraitConstraints];
-
-		[self.sendBar removeConstraints:self.landscapeSendBarConstraints];
-		[self.sendBar addConstraints:self.portraitSendBarConstraints];
+		[NSLayoutConstraint deactivateConstraints:self.landscapeConstraints];
+		[NSLayoutConstraint activateConstraints:self.portraitConstraints];
 	}
 
 	self.outerTopSpace.constant = outerVerticalSpace;
 	self.outerBottomSpace.constant = outerVerticalSpace;
-
-	[super updateConstraints];
 }
 
 @end

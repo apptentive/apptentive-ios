@@ -8,7 +8,7 @@
 
 #import "ApptentiveState.h"
 
-@class ApptentivePerson, ApptentiveDevice, ApptentiveSDK, ApptentiveAppRelease, ApptentiveEngagement, ApptentiveMutablePerson, ApptentiveMutableDevice, ApptentiveVersion;
+@class ApptentivePerson, ApptentiveDevice, ApptentiveSDK, ApptentiveAppRelease, ApptentiveEngagement, ApptentiveMutablePerson, ApptentiveMutableDevice, ApptentiveVersion, ApptentiveConversationMetadataItem;
 @protocol ApptentiveConversationDelegate;
 
 /**
@@ -81,6 +81,8 @@
  The delegate for the conversation.
  */
 @property (weak, nonatomic) id<ApptentiveConversationDelegate> delegate;
+
++ (instancetype)conversationWithMetadataItem:(ApptentiveConversationMetadataItem *)item;
 
 /**
  Creates a new `ApptentiveConversation` object, using the specified API key.

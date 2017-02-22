@@ -16,6 +16,7 @@
 #import "ApptentiveVersion.h"
 #import "ApptentiveMutablePerson.h"
 #import "ApptentiveMutableDevice.h"
+#import "ApptentiveConversationMetadataItem.h"
 
 static NSString *const AppReleaseKey = @"appRelease";
 static NSString *const SDKKey = @"SDK";
@@ -44,6 +45,12 @@ static NSString *const ATMessageCenterDidSkipProfileKey = @"ATMessageCenterDidSk
 @implementation ApptentiveConversation
 
 @synthesize token = _token;
+
++ (instancetype)conversationWithMetadataItem:(ApptentiveConversationMetadataItem *)item {
+	ApptentiveConversation *result = [NSKeyedUnarchiver unarchiveObjectWithFile:item.fileName];
+
+	return result;
+}
 
 - (instancetype)init {
 	NSAssert(NO, @"Must call -initWithAPIKey:");

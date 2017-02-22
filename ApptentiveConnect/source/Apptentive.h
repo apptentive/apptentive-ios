@@ -566,6 +566,8 @@ Returns a Boolean value indicating whether the given event will cause an Interac
 
 - (void)setPushNotificationIntegration:(ApptentivePushProvider)pushProvider withDeviceToken:(NSData *)deviceToken APPTENTIVE_SWIFT_NAME(setPushProvider(_:deviceToken:));
 
+- (void)dismissAllInteractions:(BOOL)animated;
+
 #if APPTENTIVE_DEBUG
 - (void)checkSDKConfiguration;
 #endif

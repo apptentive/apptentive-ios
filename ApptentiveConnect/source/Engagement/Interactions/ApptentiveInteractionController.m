@@ -8,6 +8,7 @@
 
 #import "ApptentiveInteractionController.h"
 #import "ApptentiveInteraction.h"
+#import "Apptentive_Private.h"
 
 static NSDictionary *interactionControllerClassRegistry;
 
@@ -27,7 +28,7 @@ static NSDictionary *interactionControllerClassRegistry;
 	}
 }
 
-	+ (Class)interactionControllerClassWithType : (NSString *)type {
++ (Class)interactionControllerClassWithType : (NSString *)type {
 	Class result;
 	@synchronized([ApptentiveInteractionController class]) {
 		result = interactionControllerClassRegistry[type];
@@ -46,13 +47,25 @@ static NSDictionary *interactionControllerClassRegistry;
 
 	if (self) {
 		_interaction = interaction;
+
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dismissInteraction:) name:ApptentiveInteractionsShouldDismissNotification object:nil];
 	}
 
 	return self;
 }
 
+- (void)dealloc {
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (void)presentInteractionFromViewController:(UIViewController *)viewController {
-	ApptentiveLogInfo(@"Unable to present interaction with unknown type “%@”", self.interaction.type);
+	self.presentingViewController = viewController;
+}
+
+- (void)dismissInteraction:(NSNotification *)notification {
+	BOOL animated = [notification.object boolValue];
+
+	[self.presentingViewController dismissViewControllerAnimated:animated completion:nil];
 }
 
 @end

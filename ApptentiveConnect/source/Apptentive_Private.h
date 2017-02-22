@@ -18,6 +18,7 @@ extern NSString *const ApptentiveInteractionsDidUpdateNotification;
 extern NSString *const ApptentiveConversationCreatedNotification;
 extern NSString *const ApptentiveCustomDeviceDataPreferenceKey;
 extern NSString *const ApptentiveCustomPersonDataPreferenceKey;
+extern NSString *const ApptentiveInteractionsShouldDismissNotification;
 
 @class ApptentiveMessage, ApptentiveWebClient, ApptentiveBackend, ApptentiveEngagementBackend;
 

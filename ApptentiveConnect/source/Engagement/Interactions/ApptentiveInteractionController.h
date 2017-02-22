@@ -19,7 +19,8 @@
 - (instancetype)initWithInteraction:(ApptentiveInteraction *)interaction;
 
 @property (readonly, nonatomic) ApptentiveInteraction *interaction;
+@property (strong, nonatomic) UIViewController *presentingViewController;
 
-- (void)presentInteractionFromViewController:(UIViewController *)viewController;
+- (void)presentInteractionFromViewController:(UIViewController *)viewController NS_REQUIRES_SUPER;
 
 @end

@@ -21,6 +21,8 @@ NSString *const ATInteractionUpgradeMessageEventLabelLaunch = @"launch";
 }
 
 - (void)presentInteractionFromViewController:(UIViewController *)viewController {
+	[super presentInteractionFromViewController:viewController];
+
 	UINavigationController *navigationController = [[Apptentive storyboard] instantiateViewControllerWithIdentifier:@"UpgradeMessageNavigation"];
 	ApptentiveInteractionUpgradeMessageViewController *result = (ApptentiveInteractionUpgradeMessageViewController *)navigationController.viewControllers.firstObject;
 

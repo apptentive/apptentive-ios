@@ -566,7 +566,15 @@ Returns a Boolean value indicating whether the given event will cause an Interac
 
 - (void)setPushNotificationIntegration:(ApptentivePushProvider)pushProvider withDeviceToken:(NSData *)deviceToken APPTENTIVE_SWIFT_NAME(setPushProvider(_:deviceToken:));
 
-- (void)dismissAllInteractions:(BOOL)animated;
+
+/**
+ Dismisses any currently-visible interactions. 
+ 
+ @discussion This method is for internal use and is subject to change.
+
+ @param animated Whether to animate the dismissal.
+ */
+- (void)dismissAllInteractions:(BOOL)animated APPTENTIVE_SWIFT_NAME(dismissAllInteractions(animated:));
 
 #if APPTENTIVE_DEBUG
 - (void)checkSDKConfiguration;

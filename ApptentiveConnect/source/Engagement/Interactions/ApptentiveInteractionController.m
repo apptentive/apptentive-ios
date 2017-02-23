@@ -63,7 +63,7 @@ static NSDictionary *interactionControllerClassRegistry;
 }
 
 - (void)dismissInteraction:(NSNotification *)notification {
-	BOOL animated = [notification.object boolValue];
+	BOOL animated = [notification.userInfo[ApptentiveInteractionsShouldDismissAnimatedKey] boolValue];
 
 	[self.presentingViewController dismissViewControllerAnimated:animated completion:nil];
 }

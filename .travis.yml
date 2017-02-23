@@ -1,0 +1,8 @@
+language: objective-c
+osx_image: xcode8.2
+xcode_project: Apptentive/Apptentive.xcodeproj
+xcode_scheme: Apptentive
+before_install:
+    - echo y | fastlane snapshot reset_simulators
+script:
+    - xcodebuild clean test -sdk iphonesimulator -project Apptentive/Apptentive.xcodeproj -scheme Apptentive -destination platform="iOS Simulator,name=iPhone SE,OS=10.2" CODE_SIGNING_REQUIRED=NO

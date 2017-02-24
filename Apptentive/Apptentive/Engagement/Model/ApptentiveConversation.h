@@ -257,6 +257,15 @@
  */
 @protocol ApptentiveConversationDelegate <NSObject>
 
+@optional
+
+/**
+ Indicates that the conversation object (any of its parts) has changed.
+ 
+ @param conversation The conversation associated with the change.
+ server.
+ */
+- (void)conversationDidChange:(ApptentiveConversation *)conversation;
 
 /**
  Indicates that the conversation object (comprised of the app release and SDK

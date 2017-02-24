@@ -12,8 +12,7 @@
 
 static NSString *const ConversationMetadataFilename = @"conversation-v1.meta";
 
-
-@interface ApptentiveConversationManager ()
+@interface ApptentiveConversationManager () <ApptentiveConversationDelegate>
 
 @property (strong, nonatomic) ApptentiveConversationMetadata *conversationMetadata;
 @property (readonly, nonatomic) NSString *metadataPath;
@@ -58,26 +57,54 @@ static NSString *const ConversationMetadataFilename = @"conversation-v1.meta";
 	return [NSKeyedArchiver archiveRootObject:self.conversationMetadata toFile:self.metadataPath];
 }
 
-#pragma mark - Conversation Delegate
+#pragma mark - ApptentiveConversationDelegate
 
+/**
+ Indicates that the conversation object (any of its parts) has changed.
+ 
+ @param conversation The conversation associated with the change.
+ server.
+ */
+- (void)conversationDidChange:(ApptentiveConversation *)conversation {
+    [self scheduleConversationSave];
+}
+
+/**
+ Indicates that the device object has changed.
+ 
+ @param conversation The conversation associated with the change.
+ @param diffs A dictionary suitable for encoding as JSON and sending to the
+ server.
+ */
 - (void)conversation:(ApptentiveConversation *)conversation deviceDidChange:(NSDictionary *)diffs {
 	// TODO: kick off device update request (Extract from ApptentiveBackend)
-
-	[self scheduleConversationSave];
 }
 
+/**
+ Indicates that the person object has changed.
+ 
+ @param conversation The conversation associated with the change.
+ @param diffs A dictionary suitable for encoding as JSON and sending to the
+ server.
+ */
 - (void)conversation:(ApptentiveConversation *)conversation personDidChange:(NSDictionary *)diffs {
 	// TODO: kick off person update request (Extract from ApptentiveBackend)
-
-	[self scheduleConversationSave];
 }
 
+/**
+ Indicates that the user info has changed
+ 
+ @param conversation The session associated with the change.
+ */
 - (void)conversationUserInfoDidChange:(ApptentiveConversation *)conversation {
-	[self scheduleConversationSave];
 }
 
+/**
+ Indicates that the engagement data has changed.
+ 
+ @param conversation The conversation associated with the change.
+ */
 - (void)conversationEngagementDidChange:(ApptentiveConversation *)conversation {
-	[self scheduleConversationSave];
 }
 
 #pragma mark - Private

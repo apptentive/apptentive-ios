@@ -15,7 +15,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ApptentiveConversationManager : NSObject <ApptentiveConversationDelegate>
+@interface ApptentiveConversationManager : NSObject
 
 @property (readonly, strong, nonatomic) NSString *storagePath;
 @property (readonly, strong, nonatomic) NSOperationQueue *operationQueue;

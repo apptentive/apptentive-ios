@@ -11,12 +11,22 @@
 #define VERSION 1
 
 static NSString *const StateKey = @"state";
-static NSString *const UserIdentifierKey = @"userIdentifier";
-static NSString *const KeyIdentifierKey = @"keyIdentifier";
+static NSString *const ConversationIdentifierKey = @"conversationIdentifier";
 static NSString *const FileNameKey = @"fileName";
 static NSString *const VersionKey = @"version";
 
 @implementation ApptentiveConversationMetadataItem
+
+- (instancetype)initWithConversationIdentifier:(NSString *)conversationIdentifier filename:(NSString *)filename {
+	self = [super init];
+
+	if (self) {
+		_conversationIdentifier = conversationIdentifier;
+		_fileName = filename;
+	}
+
+	return self;
+}
 
 + (BOOL)supportsSecureCoding {
 	return YES;
@@ -27,8 +37,7 @@ static NSString *const VersionKey = @"version";
 
 	if (self) {
 		_state = [coder decodeIntegerForKey:StateKey];
-		_userIdentifier = [coder decodeObjectOfClass:[NSString class] forKey:UserIdentifierKey];
-		_keyIdentifier = [coder decodeObjectOfClass:[NSString class] forKey:KeyIdentifierKey];
+		_conversationIdentifier = [coder decodeObjectOfClass:[NSString class] forKey:ConversationIdentifierKey];
 		_fileName = [coder decodeObjectOfClass:[NSString class] forKey:FileNameKey];
 	}
 
@@ -37,8 +46,7 @@ static NSString *const VersionKey = @"version";
 
 - (void)encodeWithCoder:(NSCoder *)coder {
 	[coder encodeInteger:self.state forKey:StateKey];
-	[coder encodeObject:self.userIdentifier forKey:UserIdentifierKey];
-	[coder encodeObject:self.keyIdentifier forKey:KeyIdentifierKey];
+	[coder encodeObject:self.conversationIdentifier forKey:ConversationIdentifierKey];
 	[coder encodeObject:self.fileName forKey:FileNameKey];
 	[coder encodeInteger:VERSION forKey:VersionKey];
 }

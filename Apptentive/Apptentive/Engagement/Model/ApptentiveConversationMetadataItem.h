@@ -16,9 +16,10 @@ typedef NS_ENUM(NSInteger, ApptentiveConversationState) {
 
 @interface ApptentiveConversationMetadataItem : NSObject <NSSecureCoding>
 
+- (instancetype)initWithConversationIdentifier:(NSString *)conversationIdentifier filename:(NSString *)filename;
+
 @property (assign, nonatomic) ApptentiveConversationState state;
-@property (strong, nonatomic) NSString *userIdentifier;
-@property (strong, nonatomic) NSString *keyIdentifier;
+@property (strong, nonatomic) NSString *conversationIdentifier;
 @property (strong, nonatomic) NSString *fileName;
 
 @property (readonly, nonatomic, getter=isActive) BOOL active;

@@ -88,10 +88,17 @@ static NSString *const ConversationMetadataFilename = @"conversation-v1.meta";
 
 - (ApptentiveConversationMetadata *)resolveMetadata {
 
-    if ([ApptentiveUtilities fileExistsAtPath:self.metadataPath]) {
-        ApptentiveConversationMetadata *metadata = [NSKeyedUnarchiver unarchiveObjectWithFile:self.metadataPath];
-        // TODO: dispatch debug event
-        return metadata;
+    NSString *metadataPath = self.metadataPath;
+    
+    ApptentiveConversationMetadata *metadata = nil;
+    if ([ApptentiveUtilities fileExistsAtPath:metadataPath]) {
+        metadata = [NSKeyedUnarchiver unarchiveObjectWithFile:metadataPath];
+        if (metadata) {
+            // TODO: dispatch debug event
+            return metadata;
+        }
+        
+        ApptentiveLogWarning(@"Unable to deserialize metadata from file: %@", metadataPath);
     }
     
     return [[ApptentiveConversationMetadata alloc] init];

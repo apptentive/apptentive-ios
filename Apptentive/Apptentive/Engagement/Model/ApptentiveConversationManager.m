@@ -9,6 +9,7 @@
 #import "ApptentiveConversationManager.h"
 #import "ApptentiveConversationMetadata.h"
 #import "ApptentiveConversationMetadataItem.h"
+#import "ApptentiveUtilities.h"
 
 static NSString *const ConversationMetadataFilename = @"conversation-v1.meta";
 
@@ -17,14 +18,7 @@ static NSString *const ConversationMetadataFilename = @"conversation-v1.meta";
 @property (strong, nonatomic) ApptentiveConversationMetadata *conversationMetadata;
 @property (readonly, nonatomic) NSString *metadataPath;
 
-- (void)loadConversation:(ApptentiveConversationMetadataItem *)metadataItem;
-- (void)fetchConversationToken;
-- (void)setActiveConversation:(ApptentiveConversation *)conversation;
-- (void)scheduleConversationSave;
-- (BOOL)saveConversation;
-
 @end
-
 
 @implementation ApptentiveConversationManager
 
@@ -33,28 +27,78 @@ static NSString *const ConversationMetadataFilename = @"conversation-v1.meta";
 
 	if (self) {
 		_storagePath = storagePath;
-		_conversationMetadata = [NSKeyedUnarchiver unarchiveObjectWithFile:self.metadataPath];
 		_operationQueue = operationQueue;
 	}
 
 	return self;
 }
 
-- (BOOL)loadActiveConversation {
-	ApptentiveConversationMetadataItem *item = [self firstConversationPassingTest:^BOOL(ApptentiveConversationMetadataItem *item) {
-		return item.isActive;
-	}];
+#pragma mark - Conversations
 
-	if (item) {
-		[self loadConversation:item];
-		return YES;
-	} else {
-		return NO;
-	}
+- (BOOL)loadActiveConversation {
+    
+    // resolve metadata
+    _conversationMetadata = [self resolveMetadata];
+    
+    // try to load conversaton
+    _activeConversation = [self loadActiveConversationFromMetadata:_conversationMetadata];
+    if (_activeConversation) {
+        _activeConversation.delegate = self;
+        [self notifyConversationDidBecomeActive];
+        return YES;
+    }
+    
+    // no convesation - fetch one
+    [self fetchConversationToken];
+    
+    return NO;
+}
+
+- (ApptentiveConversation *)loadActiveConversationFromMetadata:(ApptentiveConversationMetadata *)metadata {
+    // if the user was logged in previously - we should have an active conversation
+    ApptentiveLogDebug(@"Loading active conversation...");
+    ApptentiveConversationMetadataItem *activeItem = [metadata findItemFilter:^BOOL(ApptentiveConversationMetadataItem *item) {
+        return item.isActive;
+    }];
+    
+    if (activeItem) {
+        return [self loadConversation:activeItem];
+    }
+    
+    // if no user was logged in previously - we might have a default conversation
+    ApptentiveLogDebug(@"Loading default conversation...");
+    ApptentiveConversationMetadataItem *defaultItem = [metadata findItemFilter:^BOOL(ApptentiveConversationMetadataItem *item) {
+        return item.isDefault;
+    }];
+    
+    if (defaultItem) {
+        return [self loadConversation:defaultItem];
+    }
+    
+    // TODO: check for legacy conversations
+    ApptentiveLogDebug(@"Can't load conversation");
+    return nil;
+}
+
+- (void)notifyConversationDidBecomeActive {
+    
+}
+
+#pragma mark - Metadata
+
+- (ApptentiveConversationMetadata *)resolveMetadata {
+
+    if ([ApptentiveUtilities fileExistsAtPath:self.metadataPath]) {
+        ApptentiveConversationMetadata *metadata = [NSKeyedUnarchiver unarchiveObjectWithFile:self.metadataPath];
+        // TODO: dispatch debug event
+        return metadata;
+    }
+    
+    return [[ApptentiveConversationMetadata alloc] init];
 }
 
 - (BOOL)saveMetadata {
-	return [NSKeyedArchiver archiveRootObject:self.conversationMetadata toFile:self.metadataPath];
+    return [NSKeyedArchiver archiveRootObject:self.conversationMetadata toFile:self.metadataPath];
 }
 
 #pragma mark - ApptentiveConversationDelegate
@@ -129,12 +173,8 @@ static NSString *const ConversationMetadataFilename = @"conversation-v1.meta";
 	}];
 }
 
-- (void)loadConversation:(ApptentiveConversationMetadataItem *)metadataItem {
-	[self loadConversationAtPath:metadataItem.fileName];
-}
-
-- (void)loadConversationAtPath:(NSString *)path {
-	self.activeConversation = [NSKeyedUnarchiver unarchiveObjectWithFile:[self conversationPathForFilename:path]];
+- (ApptentiveConversation *)loadConversation:(ApptentiveConversationMetadataItem *)metadataItem {
+	return [NSKeyedUnarchiver unarchiveObjectWithFile:metadataItem.fileName];
 }
 
 - (BOOL)saveConversation {
@@ -150,16 +190,6 @@ static NSString *const ConversationMetadataFilename = @"conversation-v1.meta";
 
 - (NSString *)conversationPathForFilename:(NSString *)filename {
 	return [self.storagePath stringByAppendingPathComponent:filename];
-}
-
-- (ApptentiveConversationMetadataItem *)firstConversationPassingTest:(BOOL (^)(ApptentiveConversationMetadataItem *))filterBlock {
-	for (ApptentiveConversationMetadataItem *item in self.conversationMetadata.items) {
-		if (filterBlock(item)) {
-			return item;
-		}
-	}
-
-	return nil;
 }
 
 @end

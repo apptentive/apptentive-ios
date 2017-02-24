@@ -45,4 +45,18 @@ static NSString *const VersionKey = @"version";
 	[coder encodeInteger:VERSION forKey:VersionKey];
 }
 
+#pragma mark - Filtering
+
+- (ApptentiveConversationMetadataItem *)findItemFilter:(ApptentiveConversationMetadataItemFilter)filter {
+    // TODO: ApptentiveAssertNotNull(filter);
+    if (filter != nil) {
+        for (id item in _items) {
+            if (filter(item)) {
+                return item;
+            }
+        }
+    }
+    return nil;
+}
+
 @end

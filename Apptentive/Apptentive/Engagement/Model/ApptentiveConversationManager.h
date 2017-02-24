@@ -23,6 +23,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithStoragePath:(NSString *)storagePath operationQueue:(NSOperationQueue *)operationQueue;
 
+/**
+ * Attempts to load an active conversation.
+ * Returns NO if active conversation is missing or cannot be loaded.
+ */
 - (BOOL)loadActiveConversation;
 
 - (BOOL)saveMetadata;

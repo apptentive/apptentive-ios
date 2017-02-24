@@ -8,8 +8,14 @@
 
 #import <Foundation/Foundation.h>
 
+@class ApptentiveConversationMetadataItem;
+
+typedef BOOL(^ApptentiveConversationMetadataItemFilter)(ApptentiveConversationMetadataItem *item);
+
 @interface ApptentiveConversationMetadata : NSObject <NSSecureCoding>
 
 @property (strong, nonatomic) NSMutableArray *items;
+
+- (ApptentiveConversationMetadataItem *)findItemFilter:(ApptentiveConversationMetadataItemFilter)filter;
 
 @end

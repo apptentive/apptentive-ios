@@ -11,6 +11,7 @@
 #import "Apptentive_Private.h"
 
 static NSDictionary *interactionControllerClassRegistry;
+static NSString *const ApptentiveInteractionEventLabelClose = @"close";
 
 
 @implementation ApptentiveInteractionController
@@ -48,7 +49,7 @@ static NSDictionary *interactionControllerClassRegistry;
 	if (self) {
 		_interaction = interaction;
 
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dismissInteraction:) name:ApptentiveInteractionsShouldDismissNotification object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dismissInteractionNotification:) name:ApptentiveInteractionsShouldDismissNotification object:nil];
 	}
 
 	return self;
@@ -62,10 +63,14 @@ static NSDictionary *interactionControllerClassRegistry;
 	self.presentingViewController = viewController;
 }
 
-- (void)dismissInteraction:(NSNotification *)notification {
+- (void)dismissInteractionNotification:(NSNotification *)notification {
 	BOOL animated = [notification.userInfo[ApptentiveInteractionsShouldDismissAnimatedKey] boolValue];
+	UIViewController *presentingViewController = self.presentingViewController;
 
-	[self.presentingViewController dismissViewControllerAnimated:animated completion:nil];
+	[self.presentingViewController dismissViewControllerAnimated:animated completion:^{
+		[self.interaction engage:ApptentiveInteractionEventLabelClose fromViewController:presentingViewController userInfo:@{ @"cause": @"notification" }];
+	}];
+
 }
 
 @end

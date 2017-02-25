@@ -93,8 +93,9 @@ static NSString *const ATMessageCenterDidSkipProfileKey = @"ATMessageCenterDidSk
 	[coder encodeObject:@1 forKey:ArchiveVersionKey];
 }
 
-- (void)setToken:(NSString *)token personID:(NSString *)personID deviceID:(NSString *)deviceID {
+- (void)setToken:(NSString *)token conversationID:(NSString *)conversationID personID:(NSString *)personID deviceID:(NSString *)deviceID {
 	_token = token;
+	_identifier = conversationID;
 	self.person.identifier = personID;
 	self.device.identifier = deviceID;
 }
@@ -290,6 +291,7 @@ static NSString *const ATMessageCenterDidSkipProfileKey = @"ATMessageCenterDidSk
 		[NSKeyedUnarchiver setClass:[self class] forClassName:@"ApptentiveConversation"];
 
 		_token = legacyConversation.token;
+		_identifier = @"legacy_conversation";
 		_person.identifier = legacyConversation.personID;
 		_device.identifier = legacyConversation.deviceID;
 

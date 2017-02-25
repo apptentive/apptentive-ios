@@ -52,12 +52,14 @@
 @property (readonly, nonatomic) ApptentiveEngagement *engagement;
 
 /**
- */
-
-/**
  The authorization token obtained when creating the conversation.
  */
 @property (readonly, nonatomic) NSString *token;
+
+/**
+ The identifier (obtained from server) for the conversation.
+ */
+@property (readonly, nonatomic) NSString *identifier;
 
 /**
  The identifier for the last message downloaded from the conversation.
@@ -100,7 +102,7 @@
  @param personID The idenfier for the person associated with this conversation.
  @param deviceID The idenfier for the device associated with this conversation.
  */
-- (void)setToken:(NSString *)token personID:(NSString *)personID deviceID:(NSString *)deviceID;
+- (void)setToken:(NSString *)token conversationID:(NSString *)conversationID personID:(NSString *)personID deviceID:(NSString *)deviceID;
 
 
 /**

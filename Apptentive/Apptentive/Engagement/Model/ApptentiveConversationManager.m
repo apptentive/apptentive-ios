@@ -289,11 +289,12 @@ static NSString *const ConfigurationFilename = @"configuration-v1.archive";
 
 - (void)processConversationResponse:(NSDictionary *)conversationResponse {
 	NSString *token = conversationResponse[@"token"];
+	NSString *conversationID = conversationResponse[@"id"];
 	NSString *personID = conversationResponse[@"person_id"];
 	NSString *deviceID = conversationResponse[@"device_id"];
 
 	if (token != nil) {
-		[self.activeConversation setToken:token personID:personID deviceID:deviceID];
+		[self.pendingConversation setToken:token conversationID:conversationID personID:personID deviceID:deviceID];
 
 		[self saveConversation];
 

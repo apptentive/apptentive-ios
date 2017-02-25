@@ -25,7 +25,7 @@
 }
 
 - (NSString *)SDKVersion {
-	return self.backend.conversation.SDK.version.versionString;
+	return kApptentiveVersionString;
 }
 
 - (void)setLocalInteractionsURL:(NSURL *)localInteractionsURL {
@@ -45,7 +45,7 @@
 }
 
 - (NSString *)manifestJSON {
-	NSDictionary *JSONDictionary = self.backend.manifest.JSONDictionary;
+	NSDictionary *JSONDictionary = self.backend.conversationManager.manifest.JSONDictionary;
 
 	if (JSONDictionary != nil) {
 		NSData *outputJSONData = [NSJSONSerialization dataWithJSONObject:JSONDictionary options:NSJSONWritingPrettyPrinted error:NULL];
@@ -57,11 +57,11 @@
 }
 
 - (NSDictionary *)deviceInfo {
-	return Apptentive.shared.backend.conversation.device.JSONDictionary;
+	return Apptentive.shared.backend.conversationManager.activeConversation.device.JSONDictionary;
 }
 
 - (NSArray *)engagementEvents {
-	NSDictionary *targets = Apptentive.shared.backend.manifest.targets;
+	NSDictionary *targets = Apptentive.shared.backend.conversationManager.manifest.targets;
 	NSArray *localCodePoints = [targets.allKeys filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF BEGINSWITH[c] %@", @"local#app#"]];
 	NSMutableArray *eventNames = [NSMutableArray array];
 	for (NSString *codePoint in localCodePoints) {
@@ -72,7 +72,7 @@
 }
 
 - (NSArray *)engagementInteractions {
-	return self.backend.manifest.interactions.allValues;
+	return self.backend.conversationManager.manifest.interactions.allValues;
 }
 
 - (NSInteger)numberOfEngagementInteractions {
@@ -100,7 +100,7 @@
 }
 
 - (NSString *)conversationToken {
-	return Apptentive.shared.backend.conversation.token;
+	return Apptentive.shared.backend.conversationManager.activeConversation.token;
 }
 
 - (void)resetSDK {
@@ -110,11 +110,11 @@
 }
 
 - (NSDictionary *)customPersonData {
-	return self.backend.conversation.person.customData ?: @{};
+	return self.backend.conversationManager.activeConversation.person.customData ?: @{};
 }
 
 - (NSDictionary *)customDeviceData {
-	return self.backend.conversation.device.customData ?: @{};
+	return self.backend.conversationManager.activeConversation.device.customData ?: @{};
 }
 
 @end

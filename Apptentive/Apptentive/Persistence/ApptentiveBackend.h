@@ -11,7 +11,7 @@
 
 #import "ApptentiveMessage.h"
 #import "ApptentiveSerialNetworkQueue.h"
-#import "ApptentiveConversation.h"
+#import "ApptentiveConversationManager.h"
 
 
 @class ApptentiveConversation, ApptentiveEngagementManifest, ApptentiveAppConfiguration, ApptentiveMessageCenterViewController;
@@ -33,11 +33,10 @@
  used for PUT and POST requests (person/device updates, events, messages,
  and survey responses).
  */
-@interface ApptentiveBackend : NSObject <NSFetchedResultsControllerDelegate, ApptentiveConversationDelegate, ApptentiveRequestOperationDelegate>
+@interface ApptentiveBackend : NSObject <NSFetchedResultsControllerDelegate, ApptentiveConversationManagerDelegate, ApptentiveRequestOperationDelegate>
 
-@property (readonly, strong, nonatomic) ApptentiveConversation *conversation;
+@property (readonly, strong, nonatomic) ApptentiveConversationManager *conversationManager;
 @property (readonly, strong, nonatomic) ApptentiveAppConfiguration *configuration;
-@property (readonly, strong, nonatomic) ApptentiveEngagementManifest *manifest;
 
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (readonly, strong, nonatomic) NSString *supportDirectoryPath;
@@ -58,6 +57,9 @@
  */
 - (instancetype)initWithAPIKey:(NSString *)APIKey baseURL:(NSURL *)baseURL storagePath:(NSString *)storagePath;
 
+@property (readonly, strong, nonatomic) NSString *APIKey;
+@property (readonly, strong, nonatomic) NSURL *baseURL;
+@property (readonly, strong, nonatomic) NSString *storagePath;
 
 /**
  Instructs the serial network queue to add network operations for the currently-queued network payloads.
@@ -69,7 +71,7 @@
  Presents Message Center using the modal presentation style from the specified view controller.
 
  @param viewController The view controller from which to present message center
- @return <#return value description#>
+ @return Whether message center was displayed
  */
 - (BOOL)presentMessageCenterFromViewController:(UIViewController *)viewController;
 - (BOOL)presentMessageCenterFromViewController:(UIViewController *)viewController withCustomData:(NSDictionary *)customData;
@@ -102,10 +104,7 @@
 
 - (BOOL)isReady;
 
-- (void)checkForMessages;
-
 - (void)fetchMessagesInBackground:(void (^)(UIBackgroundFetchResult))completionHandler;
-- (void)completeMessageFetchWithResult:(UIBackgroundFetchResult)fetchResult;
 
 - (void)resetBackend;
 

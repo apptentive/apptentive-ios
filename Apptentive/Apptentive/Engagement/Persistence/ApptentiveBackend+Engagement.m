@@ -56,7 +56,7 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 		}
 
 		if (invocation && [invocation isKindOfClass:[ApptentiveInteractionInvocation class]]) {
-			if ([invocation criteriaAreMetForConversation:self.conversation]) {
+			if ([invocation criteriaAreMetForConversation:self.conversationManager.activeConversation]) {
 				interactionID = invocation.interactionID;
 				break;
 			}
@@ -65,14 +65,14 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 
 	ApptentiveInteraction *interaction = nil;
 	if (interactionID) {
-		interaction = self.manifest.interactions[interactionID];
+		interaction = self.conversationManager.manifest.interactions[interactionID];
 	}
 
 	return interaction;
 }
 
 - (ApptentiveInteraction *)interactionForEvent:(NSString *)event {
-	NSArray *invocations = self.manifest.targets[event];
+	NSArray *invocations = self.conversationManager.manifest.targets[event];
 	ApptentiveInteraction *interaction = [self interactionForInvocations:invocations];
 
 	return interaction;
@@ -143,19 +143,19 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 }
 
 - (void)codePointWasSeen:(NSString *)codePoint {
-	[self.conversation warmCodePoint:codePoint];
+	[self.conversationManager.activeConversation warmCodePoint:codePoint];
 }
 
 - (void)codePointWasEngaged:(NSString *)codePoint {
-	[self.conversation engageCodePoint:codePoint];
+	[self.conversationManager.activeConversation engageCodePoint:codePoint];
 }
 
 - (void)interactionWasSeen:(NSString *)interactionID {
-	[self.conversation warmInteraction:interactionID];
+	[self.conversationManager.activeConversation warmInteraction:interactionID];
 }
 
 - (void)interactionWasEngaged:(ApptentiveInteraction *)interaction {
-	[self.conversation engageInteraction:interaction.identifier];
+	[self.conversationManager.activeConversation engageInteraction:interaction.identifier];
 }
 
 - (void)presentInteraction:(ApptentiveInteraction *)interaction fromViewController:(UIViewController *)viewController {

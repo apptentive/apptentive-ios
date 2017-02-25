@@ -103,7 +103,7 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 }
 
 - (id<ApptentiveStyle>)styleSheet {
-	[self.backend.conversation didOverrideStyles];
+	[self.backend.conversationManager.activeConversation didOverrideStyles];
 
 	return _style;
 }
@@ -111,25 +111,25 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 - (void)setStyleSheet:(id<ApptentiveStyle>)style {
 	_style = style;
 
-	[self.backend.conversation didOverrideStyles];
+	[self.backend.conversationManager.activeConversation didOverrideStyles];
 }
 
 - (NSString *)personName {
-	return self.backend.conversation.person.name;
+	return self.backend.conversationManager.activeConversation.person.name;
 }
 
 - (void)setPersonName:(NSString *)personName {
-	[self.backend.conversation updatePerson:^(ApptentiveMutablePerson *person) {
+	[self.backend.conversationManager.activeConversation updatePerson:^(ApptentiveMutablePerson *person) {
 		person.name = personName;
 	}];
 }
 
 - (NSString *)personEmailAddress {
-	return self.backend.conversation.person.emailAddress;
+	return self.backend.conversationManager.activeConversation.person.emailAddress;
 }
 
 - (void)setPersonEmailAddress:(NSString *)personEmailAddress {
-	[self.backend.conversation updatePerson:^(ApptentiveMutablePerson *person) {
+	[self.backend.conversationManager.activeConversation updatePerson:^(ApptentiveMutablePerson *person) {
 		person.emailAddress = personEmailAddress;
 	}];
 }
@@ -147,37 +147,37 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 }
 
 - (void)addCustomDeviceDataString:(NSString *)string withKey:(NSString *)key {
-	[self.backend.conversation updateDevice:^(ApptentiveMutableDevice *device) {
+	[self.backend.conversationManager.activeConversation updateDevice:^(ApptentiveMutableDevice *device) {
 		[device addCustomString:string withKey:key];
 	}];
 }
 
 - (void)addCustomDeviceDataNumber:(NSNumber *)number withKey:(NSString *)key {
-	[self.backend.conversation updateDevice:^(ApptentiveMutableDevice *device) {
+	[self.backend.conversationManager.activeConversation updateDevice:^(ApptentiveMutableDevice *device) {
 		[device addCustomNumber:number withKey:key];
 	}];
 }
 
 - (void)addCustomDeviceDataBool:(BOOL)boolValue withKey:(NSString *)key {
-	[self.backend.conversation updateDevice:^(ApptentiveMutableDevice *device) {
+	[self.backend.conversationManager.activeConversation updateDevice:^(ApptentiveMutableDevice *device) {
 		[device addCustomBool:boolValue withKey:key];
 	}];
 }
 
 - (void)addCustomPersonDataString:(NSString *)string withKey:(NSString *)key {
-	[self.backend.conversation updatePerson:^(ApptentiveMutablePerson *person) {
+	[self.backend.conversationManager.activeConversation updatePerson:^(ApptentiveMutablePerson *person) {
 		[person addCustomString:string withKey:key];
 	}];
 }
 
 - (void)addCustomPersonDataNumber:(NSNumber *)number withKey:(NSString *)key {
-	[self.backend.conversation updatePerson:^(ApptentiveMutablePerson *person) {
+	[self.backend.conversationManager.activeConversation updatePerson:^(ApptentiveMutablePerson *person) {
 		[person addCustomNumber:number withKey:key];
 	}];
 }
 
 - (void)addCustomPersonDataBool:(BOOL)boolValue withKey:(NSString *)key {
-	[self.backend.conversation updatePerson:^(ApptentiveMutablePerson *person) {
+	[self.backend.conversationManager.activeConversation updatePerson:^(ApptentiveMutablePerson *person) {
 		[person addCustomBool:boolValue withKey:key];
 	}];
 }
@@ -219,13 +219,13 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 }
 
 - (void)removeCustomPersonDataWithKey:(NSString *)key {
-	[self.backend.conversation updatePerson:^(ApptentiveMutablePerson *person) {
+	[self.backend.conversationManager.activeConversation updatePerson:^(ApptentiveMutablePerson *person) {
 		[person removeCustomValueWithKey:key];
 	}];
 }
 
 - (void)removeCustomDeviceDataWithKey:(NSString *)key {
-	[self.backend.conversation updateDevice:^(ApptentiveMutableDevice *device) {
+	[self.backend.conversationManager.activeConversation updateDevice:^(ApptentiveMutableDevice *device) {
 		[device removeCustomValueWithKey:key];
 	}];
 }
@@ -250,7 +250,7 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 }
 
 - (NSDictionary *)integrationConfiguration {
-	return self.backend.conversation.device.integrationConfiguration;
+	return self.backend.conversationManager.activeConversation.device.integrationConfiguration;
 }
 
 - (void)setPushNotificationIntegration:(ApptentivePushProvider)pushProvider withDeviceToken:(NSData *)deviceToken {
@@ -260,7 +260,7 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 								ntohl(tokenBytes[3]), ntohl(tokenBytes[4]), ntohl(tokenBytes[5]),
 								ntohl(tokenBytes[6]), ntohl(tokenBytes[7])];
 
-	[self.backend.conversation updateDevice:^(ApptentiveMutableDevice *device) {
+	[self.backend.conversationManager.activeConversation updateDevice:^(ApptentiveMutableDevice *device) {
 		NSMutableDictionary *integrationConfiguration = [device.integrationConfiguration mutableCopy];
 
 		[integrationConfiguration removeObjectForKey:[self integrationKeyForPushProvider:ApptentivePushProviderApptentive]];
@@ -290,7 +290,7 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 }
 
 - (void)addIntegration:(NSString *)integration withConfiguration:(NSDictionary *)configuration {
-	[self.backend.conversation updateDevice:^(ApptentiveMutableDevice *device) {
+	[self.backend.conversationManager.activeConversation updateDevice:^(ApptentiveMutableDevice *device) {
 		NSMutableDictionary *integrationConfiguration = [device.integrationConfiguration mutableCopy];
 		[integrationConfiguration setObject:configuration forKey:integration];
 		device.integrationConfiguration = integrationConfiguration;
@@ -298,7 +298,7 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 }
 
 - (void)removeIntegration:(NSString *)integration {
-	[self.backend.conversation updateDevice:^(ApptentiveMutableDevice *device) {
+	[self.backend.conversationManager.activeConversation updateDevice:^(ApptentiveMutableDevice *device) {
 		NSMutableDictionary *integrationConfiguration = [device.integrationConfiguration mutableCopy];
 		[integrationConfiguration removeObjectForKey:integration];
 		device.integrationConfiguration = integrationConfiguration;
@@ -466,7 +466,7 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 				if ([action isEqualToString:@"pmc"]) {
 					[self presentMessageCenterFromViewController:viewController];
 				} else {
-					[self.backend checkForMessages];
+					[self.backend.conversationManager checkForMessages];
 				}
 				break;
 		}

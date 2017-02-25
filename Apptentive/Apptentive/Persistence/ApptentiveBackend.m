@@ -102,11 +102,13 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateMessageCheckingTimer) name:ApptentiveInteractionsDidUpdateNotification object:nil];
 
 		[_operationQueue addOperationWithBlock:^{
-			[self startUp];
+			[self createSupportDirectoryIfNeeded];
 
 			dispatch_sync(dispatch_get_main_queue(), ^{
 				[self setUpCoreData];
 			});
+
+			[self startUp];
 
 			[self finishStartup];
 		}];
@@ -247,18 +249,21 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 
 #pragma mark -
 
-- (void)startUp {
+- (void)createSupportDirectoryIfNeeded {
 	if (![[NSFileManager defaultManager] fileExistsAtPath:self->_supportDirectoryPath]) {
 		NSError *error;
 		if (![[NSFileManager defaultManager] createDirectoryAtPath:self->_supportDirectoryPath withIntermediateDirectories:YES attributes:nil error:&error]) {
 			ApptentiveLogError(@"Unable to create storage path “%@”: %@", self->_supportDirectoryPath, error);
 		}
 	}
+}
 
+- (void)startUp {
 	_networkQueue = [[ApptentiveNetworkQueue alloc] initWithBaseURL:self.baseURL token:self.APIKey SDKVersion:kApptentiveVersionString platform:@"iOS"];
 
-	_conversationManager = [[ApptentiveConversationManager alloc] initWithStoragePath:_supportDirectoryPath operationQueue:_operationQueue networkQueue:_networkQueue];
+	_conversationManager = [[ApptentiveConversationManager alloc] initWithStoragePath:_supportDirectoryPath operationQueue:_operationQueue networkQueue:_networkQueue parentManagedObjectContext:self.managedObjectContext];
 
+	[self.conversationManager loadActiveConversation];
 }
 
 // Note: must be called on main thread

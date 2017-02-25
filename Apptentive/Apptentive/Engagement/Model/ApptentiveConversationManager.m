@@ -14,7 +14,6 @@
 #import "Apptentive_Private.h"
 #import "ApptentiveNetworkQueue.h"
 #import "ApptentiveAppConfiguration.h"
-#import <CoreData/CoreData.h>
 #import "ApptentiveMessage.h"
 #import "ApptentivePerson.h"
 #import "ApptentiveMessageSender.h"
@@ -28,26 +27,31 @@ static NSString *const ConfigurationFilename = @"configuration-v1.archive";
 @interface ApptentiveConversationManager () <ApptentiveConversationDelegate>
 
 @property (strong, nonatomic) ApptentiveConversationMetadata *conversationMetadata;
-@property (readonly, nonatomic) NSString *metadataPath;
 
 @property (strong, nonatomic) ApptentiveRequestOperation *conversationOperation;
 @property (strong, nonatomic) ApptentiveRequestOperation *configurationOperation;
 @property (strong, nonatomic) ApptentiveRequestOperation *messageOperation;
 @property (strong, nonatomic) ApptentiveRequestOperation *manifestOperation;
 
-@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+@property (strong, nonatomic) ApptentiveConversation *pendingConversation;
+
+@property (readonly, nonatomic) NSString *metadataPath;
+@property (readonly, nonatomic) NSString *conversationPath;
+@property (readonly, nonatomic) NSString *configurationPath;
+@property (readonly, nonatomic) NSString *manifestPath;
 
 @end
 
 @implementation ApptentiveConversationManager
 
-- (instancetype)initWithStoragePath:(NSString *)storagePath operationQueue:(NSOperationQueue *)operationQueue networkQueue:(nonnull ApptentiveNetworkQueue *)networkQueue {
+- (instancetype)initWithStoragePath:(NSString *)storagePath operationQueue:(NSOperationQueue *)operationQueue networkQueue:(nonnull ApptentiveNetworkQueue *)networkQueue parentManagedObjectContext:(nonnull NSManagedObjectContext *)parentManagedObjectContext {
 	self = [super init];
 
 	if (self) {
 		_storagePath = storagePath;
 		_operationQueue = operationQueue;
 		_networkQueue = networkQueue;
+		_parentManagedObjectContext = parentManagedObjectContext;
 	}
 
 	return self;
@@ -56,7 +60,6 @@ static NSString *const ConfigurationFilename = @"configuration-v1.archive";
 #pragma mark - Conversations
 
 - (BOOL)loadActiveConversation {
-    
     // resolve metadata
     _conversationMetadata = [self resolveMetadata];
     
@@ -92,7 +95,8 @@ static NSString *const ConfigurationFilename = @"configuration-v1.archive";
     }];
     
     if (defaultItem) {
-        return [self loadConversation:defaultItem];
+		self.activeConversation = [self loadConversation:defaultItem];
+        return self.activeConversation;
     }
     
     // TODO: check for legacy conversations
@@ -101,7 +105,9 @@ static NSString *const ConfigurationFilename = @"configuration-v1.archive";
 }
 
 - (void)notifyConversationDidBecomeActive {
-    
+	if ([self.delegate respondsToSelector:@selector(conversationManager:didLoadConversation:)]) {
+		[self.delegate conversationManager:self didLoadConversation:self.activeConversation];
+	}
 }
 
 - (void)checkForMessages {
@@ -115,25 +121,25 @@ static NSString *const ConfigurationFilename = @"configuration-v1.archive";
 }
 
 - (void)resume {
-#if APPTENTIVE_DEBUG
-	[Apptentive.shared checkSDKConfiguration];
-
-
-	self.configuration.expiry = [NSDate distantPast];
-	self.manifest.expiry = [NSDate distantPast];
-#endif
-
-	[self.activeConversation checkForDiffs];
-
-	if ([self.configuration.expiry timeIntervalSinceNow] <= 0) {
-		[self fetchConfiguration];
-	}
-
-	if ([self.manifest.expiry timeIntervalSinceNow] <= 0) {
-		[self fetchEngagementManifest];
-	}
-
-	[self checkForMessages];
+//#if APPTENTIVE_DEBUG
+//	[Apptentive.shared checkSDKConfiguration];
+//
+//
+//	self.configuration.expiry = [NSDate distantPast];
+//	self.manifest.expiry = [NSDate distantPast];
+//#endif
+//
+//	[self.activeConversation checkForDiffs];
+//
+//	if ([self.configuration.expiry timeIntervalSinceNow] <= 0) {
+//		[self fetchConfiguration];
+//	}
+//
+//	if ([self.manifest.expiry timeIntervalSinceNow] <= 0) {
+//		[self fetchEngagementManifest];
+//	}
+//
+//	[self checkForMessages];
 }
 
 - (void)pause {
@@ -179,7 +185,7 @@ static NSString *const ConfigurationFilename = @"configuration-v1.archive";
 - (void)conversation:(ApptentiveConversation *)conversation appReleaseOrSDKDidChange:(NSDictionary *)payload {
 	NSBlockOperation *conversationDidChangeOperation = [NSBlockOperation blockOperationWithBlock:^{
 		NSManagedObjectContext *context = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-		context.parentContext = self.managedObjectContext;
+		context.parentContext = self.parentManagedObjectContext;
 
 		[context performBlock:^{
 			[ApptentiveSerialRequest enqueueRequestWithPath:@"conversation" method:@"PUT" payload:payload attachments:nil identifier:nil inContext:context];
@@ -196,7 +202,7 @@ static NSString *const ConfigurationFilename = @"configuration-v1.archive";
 - (void)conversation:(ApptentiveConversation *)conversation personDidChange:(NSDictionary *)diffs {
 	NSBlockOperation *personDidChangeOperation = [NSBlockOperation blockOperationWithBlock:^{
 		NSManagedObjectContext *context = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-		context.parentContext = self.managedObjectContext;
+		context.parentContext = self.parentManagedObjectContext;
 
 		[context performBlock:^{
 			[ApptentiveSerialRequest enqueueRequestWithPath:@"people" method:@"PUT" payload:diffs attachments:nil identifier:nil inContext:context];
@@ -211,7 +217,7 @@ static NSString *const ConfigurationFilename = @"configuration-v1.archive";
 - (void)conversation:(ApptentiveConversation *)conversation deviceDidChange:(NSDictionary *)diffs {
 	NSBlockOperation *deviceDidChangeOperation = [NSBlockOperation blockOperationWithBlock:^{
 		NSManagedObjectContext *context = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-		context.parentContext = self.managedObjectContext;
+		context.parentContext = self.parentManagedObjectContext;
 
 		[context performBlock:^{
 			[ApptentiveSerialRequest enqueueRequestWithPath:@"devices" method:@"PUT" payload:diffs attachments:nil identifier:nil inContext:context];
@@ -296,13 +302,11 @@ static NSString *const ConfigurationFilename = @"configuration-v1.archive";
 	if (token != nil) {
 		[self.pendingConversation setToken:token conversationID:conversationID personID:personID deviceID:deviceID];
 
+		self.activeConversation = self.pendingConversation;
+
 		[self saveConversation];
 
-		self.networkQueue.token = token;
-
-		if ([self.delegate respondsToSelector:@selector(conversationManager:didLoadConversation:)]) {
-			[self.delegate conversationManager:self didLoadConversation:self.activeConversation];
-		}
+		[self notifyConversationDidBecomeActive];
 	}
 }
 
@@ -327,7 +331,7 @@ static NSString *const ConfigurationFilename = @"configuration-v1.archive";
 
 	if ([messages isKindOfClass:[NSArray class]]) {
 		NSManagedObjectContext *context = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-		context.parentContext = self.managedObjectContext;
+		context.parentContext = self.parentManagedObjectContext;
 
 		[context performBlock:^{
 			NSString *lastMessageID = nil;
@@ -355,7 +359,7 @@ static NSString *const ConfigurationFilename = @"configuration-v1.archive";
 
 			dispatch_async(dispatch_get_main_queue(), ^{
 				NSError *mainContextSaveError;
-				if (![self.managedObjectContext save:&mainContextSaveError]) {
+				if (![self.parentManagedObjectContext save:&mainContextSaveError]) {
 					ApptentiveLogError(@"Failed to save received messages in main context: %@", error);
 				}
 
@@ -399,6 +403,8 @@ static NSString *const ConfigurationFilename = @"configuration-v1.archive";
 		return;
 	}
 
+	self.pendingConversation = [[ApptentiveConversation alloc] init];
+
 	self.conversationOperation = [[ApptentiveRequestOperation alloc] initWithPath:@"conversation" method:@"POST" payload:self.activeConversation.conversationCreationJSON delegate:self dataSource:self.networkQueue];
 
 	[self.networkQueue addOperation:self.conversationOperation];
@@ -435,9 +441,10 @@ static NSString *const ConfigurationFilename = @"configuration-v1.archive";
 - (void)setActiveConversation:(ApptentiveConversation *)conversation {
 	_activeConversation = conversation;
 
-	// TODO: Add any necessary side effects
-	// Such as marking this conversation as active in the metadata
-	// and clearing the active flag on previously active convo
+	ApptentiveConversationMetadataItem *activeMetadataItem = [self.conversationMetadata setActiveConversation:conversation];
+	[self saveMetadata];
+
+	_conversationPath = [self conversationPathForFilename:activeMetadataItem.fileName];
 }
 
 - (void)scheduleConversationSave {
@@ -449,17 +456,14 @@ static NSString *const ConfigurationFilename = @"configuration-v1.archive";
 }
 
 - (ApptentiveConversation *)loadConversation:(ApptentiveConversationMetadataItem *)metadataItem {
-	return [NSKeyedUnarchiver unarchiveObjectWithFile:metadataItem.fileName];
+	_conversationPath = [self conversationPathForFilename:metadataItem.fileName];
+	return [NSKeyedUnarchiver unarchiveObjectWithFile:self.conversationPath];
 }
 
 #pragma mark - Paths
 
 - (NSString *)metadataPath {
 	return [self.storagePath stringByAppendingPathComponent:ConversationMetadataFilename];
-}
-
-- (NSString *)conversationPath {
-	return [self.storagePath stringByAppendingPathComponent:ConversationFilename];
 }
 
 - (NSString *)configurationPath {

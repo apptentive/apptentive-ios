@@ -7,6 +7,8 @@
 //
 
 #import "ApptentiveConversationMetadata.h"
+#import "ApptentiveConversationMetadataItem.h"
+#import "ApptentiveConversation.h"
 
 #define VERSION 1
 
@@ -43,6 +45,28 @@ static NSString *const VersionKey = @"version";
 - (void)encodeWithCoder:(NSCoder *)coder {
 	[coder encodeObject:self.items forKey:ItemsKey];
 	[coder encodeInteger:VERSION forKey:VersionKey];
+}
+
+- (ApptentiveConversationMetadataItem *)setActiveConversation:(ApptentiveConversation *)conversation {
+	ApptentiveConversationMetadataItem *oldItem = [self findItemFilter:^BOOL(ApptentiveConversationMetadataItem *item) {
+		return item.isActive;
+	}];
+
+	oldItem.state = ApptentiveConversationStateNone;
+
+	ApptentiveConversationMetadataItem *newItem = [self findItemFilter:^BOOL(ApptentiveConversationMetadataItem *item) {
+		return item.conversationIdentifier == conversation.identifier;
+	}];
+
+	if (newItem == nil) {
+		newItem = [[ApptentiveConversationMetadataItem alloc] initWithConversationIdentifier:conversation.identifier filename:[NSString stringWithFormat:@"conversation-%@", conversation.identifier]];
+		
+		[self.items addObject:newItem];
+	}
+
+	newItem.state = ApptentiveConversationStateActive;
+
+	return newItem;
 }
 
 #pragma mark - Filtering

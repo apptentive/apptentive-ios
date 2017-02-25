@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "ApptentiveConversation.h"
 #import "ApptentiveRequestOperation.h"
+#import <CoreData/CoreData.h>
 
 @class ApptentiveConversationMetadataItem, ApptentiveConversation, ApptentiveNetworkQueue, ApptentiveEngagementManifest, ApptentiveAppConfiguration;
 
@@ -25,10 +26,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (weak, nonatomic) id<ApptentiveConversationManagerDelegate> delegate;
 
-@property (strong, nonatomic) ApptentiveEngagementManifest *manifest;
-@property (strong, nonatomic) ApptentiveAppConfiguration *configuration;
+@property (readonly, strong, nonatomic) ApptentiveEngagementManifest *manifest;
+@property (readonly, strong, nonatomic) ApptentiveAppConfiguration *configuration;
 
-- (instancetype)initWithStoragePath:(NSString *)storagePath operationQueue:(NSOperationQueue *)operationQueue networkQueue:(ApptentiveNetworkQueue *)networkQueue;
+@property (readonly, strong, nonatomic) NSManagedObjectContext *parentManagedObjectContext;
+
+- (instancetype)initWithStoragePath:(NSString *)storagePath operationQueue:(NSOperationQueue *)operationQueue networkQueue:(ApptentiveNetworkQueue *)networkQueue parentManagedObjectContext:(NSManagedObjectContext *)parentManagedObjectContext;
 
 /**
  * Attempts to load an active conversation.

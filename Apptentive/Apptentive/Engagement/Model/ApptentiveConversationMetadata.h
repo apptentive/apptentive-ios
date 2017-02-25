@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class ApptentiveConversationMetadataItem;
+@class ApptentiveConversationMetadataItem, ApptentiveConversation;
 
 typedef BOOL(^ApptentiveConversationMetadataItemFilter)(ApptentiveConversationMetadataItem *item);
 
@@ -17,5 +17,7 @@ typedef BOOL(^ApptentiveConversationMetadataItemFilter)(ApptentiveConversationMe
 @property (strong, nonatomic) NSMutableArray *items;
 
 - (ApptentiveConversationMetadataItem *)findItemFilter:(ApptentiveConversationMetadataItemFilter)filter;
+
+- (ApptentiveConversationMetadataItem *)setActiveConversation:(ApptentiveConversation *)conversation;
 
 @end

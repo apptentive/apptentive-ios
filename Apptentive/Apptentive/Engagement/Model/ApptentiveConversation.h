@@ -52,9 +52,7 @@
 @property (readonly, nonatomic) ApptentiveEngagement *engagement;
 
 /**
- The API key used to initialize the conversation.
  */
-@property (readonly, nonatomic) NSString *APIKey;
 
 /**
  The authorization token obtained when creating the conversation.

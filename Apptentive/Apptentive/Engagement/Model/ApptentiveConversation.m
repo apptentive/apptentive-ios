@@ -53,11 +53,6 @@ static NSString *const ATMessageCenterDidSkipProfileKey = @"ATMessageCenterDidSk
 }
 
 - (instancetype)init {
-	NSAssert(NO, @"Must call -initWithAPIKey:");
-	return nil;
-}
-
-- (instancetype)initWithAPIKey:(NSString *)APIKey {
 	self = [super init];
 	if (self) {
 		_appRelease = [[ApptentiveAppRelease alloc] initWithCurrentAppRelease];
@@ -66,7 +61,6 @@ static NSString *const ATMessageCenterDidSkipProfileKey = @"ATMessageCenterDidSk
 		_device = [[ApptentiveDevice alloc] initWithCurrentDevice];
 		_engagement = [[ApptentiveEngagement alloc] init];
 		_mutableUserInfo = [[NSMutableDictionary alloc] init];
-		_APIKey = APIKey;
 	}
 	return self;
 }
@@ -79,7 +73,6 @@ static NSString *const ATMessageCenterDidSkipProfileKey = @"ATMessageCenterDidSk
 		_person = [coder decodeObjectOfClass:[ApptentivePerson class] forKey:PersonKey];
 		_device = [coder decodeObjectOfClass:[ApptentiveDevice class] forKey:DeviceKey];
 		_engagement = [coder decodeObjectOfClass:[ApptentiveEngagement class] forKey:EngagementKey];
-		_APIKey = [coder decodeObjectOfClass:[NSString class] forKey:APIKeyKey];
 		_token = [coder decodeObjectOfClass:[NSString class] forKey:TokenKey];
 		_lastMessageID = [coder decodeObjectOfClass:[NSString class] forKey:LastMessageIDKey];
 		_mutableUserInfo = [coder decodeObjectOfClass:[NSMutableDictionary class] forKey:MutableUserInfoKey];
@@ -94,7 +87,6 @@ static NSString *const ATMessageCenterDidSkipProfileKey = @"ATMessageCenterDidSk
 	[coder encodeObject:self.person forKey:PersonKey];
 	[coder encodeObject:self.device forKey:DeviceKey];
 	[coder encodeObject:self.engagement forKey:EngagementKey];
-	[coder encodeObject:self.APIKey forKey:APIKeyKey];
 	[coder encodeObject:self.token forKey:TokenKey];
 	[coder encodeObject:self.lastMessageID forKey:LastMessageIDKey];
 	[coder encodeObject:self.mutableUserInfo forKey:MutableUserInfoKey];

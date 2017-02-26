@@ -84,14 +84,6 @@
 
 + (instancetype)conversationWithMetadataItem:(ApptentiveConversationMetadataItem *)item;
 
-/**
- Creates a new `ApptentiveConversation` object, using the specified API key.
-
- @param APIKey The Apptentive API key to be used for the conversation.
- @return The newly-initialized conversation object.
- */
-- (instancetype)initWithAPIKey:(NSString *)APIKey;
-
 
 /**
  This method is called when a conversation request completes, which specifies

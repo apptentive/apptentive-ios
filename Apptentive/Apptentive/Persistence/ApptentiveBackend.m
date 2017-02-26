@@ -42,6 +42,8 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 @property (readonly, strong, nonatomic) ApptentiveNetworkQueue *networkQueue;
 @property (readonly, strong, nonatomic) ApptentiveSerialNetworkQueue *serialNetworkQueue;
 
+@property (strong, nonatomic) ApptentiveRequestOperation *configurationOperation;
+
 @property (assign, nonatomic) ATBackendState state;
 @property (assign, nonatomic) BOOL working;
 @property (assign, nonatomic) BOOL shouldStopWorking;
@@ -109,6 +111,17 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 			});
 
 			[self startUp];
+
+			if ([[NSFileManager defaultManager] fileExistsAtPath:[self configurationPath]]) {
+				self->_configuration = [NSKeyedUnarchiver unarchiveObjectWithFile:[self configurationPath]];
+			} else if ([[NSUserDefaults standardUserDefaults] objectForKey:@"ATConfigurationSDKVersionKey"]) {
+				self->_configuration = [[ApptentiveAppConfiguration alloc] initWithUserDefaults:[NSUserDefaults standardUserDefaults]];
+				if ([self saveConfiguration]) {
+					[ApptentiveAppConfiguration deleteMigratedData];
+				}
+			} else {
+				self->_configuration = [[ApptentiveAppConfiguration alloc] init];
+			}
 
 			[self finishStartup];
 		}];
@@ -211,6 +224,16 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	if (_working != working) {
 		_working = working;
 		if (_working) {
+#if APPTENTIVE_DEBUG
+			[Apptentive.shared checkSDKConfiguration];
+
+
+			self.configuration.expiry = [NSDate distantPast];
+#endif
+			if ([self.configuration.expiry timeIntervalSinceNow] <= 0) {
+				[self fetchConfiguration];
+			}
+
 			[self.networkQueue resetBackoffDelay];
 			[self.serialNetworkQueue resetBackoffDelay];
 
@@ -236,11 +259,6 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	return (self.state == ATBackendStateReady);
 }
 
-// TODO: App configuration should move back to backend.
-- (ApptentiveAppConfiguration *)configuration {
-	return self.conversationManager.configuration;
-}
-
 #pragma mark - Core Data stack
 
 - (NSManagedObjectContext *)managedObjectContext {
@@ -248,6 +266,20 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 }
 
 #pragma mark -
+
+- (void)fetchConfiguration {
+	if (self.configurationOperation != nil || !self.working) {
+		return;
+	}
+
+	self.configurationOperation = [[ApptentiveRequestOperation alloc] initWithPath:@"conversation/configuration" method:@"GET" payload:nil delegate:self dataSource:self.networkQueue];
+
+	if (!self.conversationManager.activeConversation && self.conversationManager.conversationOperation) {
+		[self.configurationOperation addDependency:self.conversationManager.conversationOperation];
+	}
+
+	[self.networkQueue addOperation:self.configurationOperation];
+}
 
 - (void)createSupportDirectoryIfNeeded {
 	if (![[NSFileManager defaultManager] fileExistsAtPath:self->_supportDirectoryPath]) {
@@ -316,9 +348,49 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	[self processQueuedRecords];
 }
 
+#pragma mark Apptentive request operation delegate
+
+- (void)requestOperationDidFinish:(ApptentiveRequestOperation *)operation {
+	ApptentiveLogDebug(@"%@ %@ finished successfully.", operation.request.HTTPMethod, operation.request.URL.absoluteString);
+
+	if (operation == self.configurationOperation) {
+		[self processConfigurationResponse:(NSDictionary *)operation.responseObject cacheLifetime:operation.cacheLifetime];
+
+		self.configurationOperation = nil;
+	}
+}
+
+- (void)requestOperationWillRetry:(ApptentiveRequestOperation *)operation withError:(NSError *)error {
+	if (error) {
+		ApptentiveLogError(@"%@ %@ failed with error: %@", operation.request.HTTPMethod, operation.request.URL.absoluteString, error);
+	}
+
+	ApptentiveLogInfo(@"%@ %@ will retry in %f seconds.", operation.request.HTTPMethod, operation.request.URL.absoluteString, self.networkQueue.backoffDelay);
+}
+
+- (void)requestOperation:(ApptentiveRequestOperation *)operation didFailWithError:(NSError *)error {
+	ApptentiveLogError(@"%@ %@ failed with error: %@. Not retrying.", operation.request.HTTPMethod, operation.request.URL.absoluteString, error);
+
+	if (operation == self.configurationOperation) {
+		self.configurationOperation = nil;
+	}
+}
+
 - (void)processQueuedRecords {
 	if (self.isReady && self.working) {
 		[self.serialNetworkQueue resume];
+	}
+}
+
+- (void)processConfigurationResponse:(NSDictionary *)configurationResponse cacheLifetime:(NSTimeInterval)cacheLifetime {
+	_configuration = [[ApptentiveAppConfiguration alloc] initWithJSONDictionary:configurationResponse cacheLifetime:cacheLifetime];
+
+	[self saveConfiguration];
+}
+
+- (BOOL)saveConfiguration {
+	@synchronized(self.configuration) {
+		return [NSKeyedArchiver archiveRootObject:self.configuration toFile:[self configurationPath]];
 	}
 }
 
@@ -645,6 +717,10 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	}
 	NSString *imageCachePath = [cachePath stringByAppendingPathComponent:@"images.cache"];
 	return imageCachePath;
+}
+
+- (NSString *)configurationPath {
+	return [self.supportDirectoryPath stringByAppendingPathComponent:@"configuration"];
 }
 
 #pragma mark - Debugging

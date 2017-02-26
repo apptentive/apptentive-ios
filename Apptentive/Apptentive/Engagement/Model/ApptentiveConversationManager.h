@@ -22,6 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (readonly, strong, nonatomic) NSString *storagePath;
 @property (readonly, strong, nonatomic) NSOperationQueue *operationQueue;
 @property (readonly, strong, nonatomic) ApptentiveNetworkQueue *networkQueue;
+@property (strong, nonatomic, nullable) ApptentiveRequestOperation *conversationOperation;
 @property (readonly, strong, nullable, nonatomic) ApptentiveConversation *activeConversation;
 
 @property (weak, nonatomic) id<ApptentiveConversationManagerDelegate> delegate;

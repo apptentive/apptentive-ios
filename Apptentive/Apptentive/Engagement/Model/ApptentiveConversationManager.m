@@ -13,7 +13,6 @@
 #import "ApptentiveEngagementManifest.h"
 #import "Apptentive_Private.h"
 #import "ApptentiveNetworkQueue.h"
-#import "ApptentiveAppConfiguration.h"
 #import "ApptentiveMessage.h"
 #import "ApptentivePerson.h"
 #import "ApptentiveMessageSender.h"
@@ -22,22 +21,18 @@
 static NSString *const ConversationMetadataFilename = @"conversation-v1.meta";
 static NSString *const ConversationFilename = @"conversation-v1.archive";
 static NSString *const ManifestFilename = @"manifest-v1.archive";
-static NSString *const ConfigurationFilename = @"configuration-v1.archive";
 
 @interface ApptentiveConversationManager () <ApptentiveConversationDelegate>
 
 @property (strong, nonatomic) ApptentiveConversationMetadata *conversationMetadata;
 
-@property (strong, nonatomic) ApptentiveRequestOperation *conversationOperation;
-@property (strong, nonatomic) ApptentiveRequestOperation *configurationOperation;
-@property (strong, nonatomic) ApptentiveRequestOperation *messageOperation;
-@property (strong, nonatomic) ApptentiveRequestOperation *manifestOperation;
+@property (strong, nonatomic, nullable) ApptentiveRequestOperation *messageOperation;
+@property (strong, nonatomic, nullable) ApptentiveRequestOperation *manifestOperation;
 
 @property (strong, nonatomic) ApptentiveConversation *pendingConversation;
 
 @property (readonly, nonatomic) NSString *metadataPath;
 @property (readonly, nonatomic) NSString *conversationPath;
-@property (readonly, nonatomic) NSString *configurationPath;
 @property (readonly, nonatomic) NSString *manifestPath;
 
 @end
@@ -256,10 +251,6 @@ static NSString *const ConfigurationFilename = @"configuration-v1.archive";
 		[self processConversationResponse:(NSDictionary *)operation.responseObject];
 
 		self.conversationOperation = nil;
-	} else if (operation == self.configurationOperation) {
-		[self processConfigurationResponse:(NSDictionary *)operation.responseObject cacheLifetime:operation.cacheLifetime];
-
-		self.configurationOperation = nil;
 	} else if (operation == self.manifestOperation) {
 		[self processManifestResponse:(NSDictionary *)operation.responseObject cacheLifetime:operation.cacheLifetime];
 
@@ -284,8 +275,6 @@ static NSString *const ConfigurationFilename = @"configuration-v1.archive";
 
 	if (operation == self.conversationOperation) {
 		self.conversationOperation = nil;
-	} else if (operation == self.configurationOperation) {
-		self.configurationOperation = nil;
 	} else if (operation == self.manifestOperation) {
 		self.manifestOperation = nil;
 	} else if (operation == self.messageOperation) {
@@ -308,12 +297,6 @@ static NSString *const ConfigurationFilename = @"configuration-v1.archive";
 
 		[self notifyConversationDidBecomeActive];
 	}
-}
-
-- (void)processConfigurationResponse:(NSDictionary *)configurationResponse cacheLifetime:(NSTimeInterval)cacheLifetime {
-	_configuration = [[ApptentiveAppConfiguration alloc] initWithJSONDictionary:configurationResponse cacheLifetime:cacheLifetime];
-
-	[self saveConfiguration];
 }
 
 - (void)processManifestResponse:(NSDictionary *)manifestResponse cacheLifetime:(NSTimeInterval)cacheLifetime {
@@ -384,12 +367,6 @@ static NSString *const ConfigurationFilename = @"configuration-v1.archive";
 	}
 }
 
-- (BOOL)saveConfiguration {
-	@synchronized(self.configuration) {
-		return [NSKeyedArchiver archiveRootObject:self.configuration toFile:[self configurationPath]];
-	}
-}
-
 - (BOOL)saveManifest {
 	@synchronized(self.manifest) {
 		return [NSKeyedArchiver archiveRootObject:_manifest toFile:[self manifestPath]];
@@ -408,20 +385,6 @@ static NSString *const ConfigurationFilename = @"configuration-v1.archive";
 	self.conversationOperation = [[ApptentiveRequestOperation alloc] initWithPath:@"conversation" method:@"POST" payload:self.activeConversation.conversationCreationJSON delegate:self dataSource:self.networkQueue];
 
 	[self.networkQueue addOperation:self.conversationOperation];
-}
-
-- (void)fetchConfiguration {
-	if (self.configurationOperation != nil) {
-		return;
-	}
-
-	self.configurationOperation = [[ApptentiveRequestOperation alloc] initWithPath:@"conversation/configuration" method:@"GET" payload:nil delegate:self dataSource:self.networkQueue];
-
-	if (!self.activeConversation.token && self.conversationOperation) {
-		[self.configurationOperation addDependency:self.conversationOperation];
-	}
-
-	[self.networkQueue addOperation:self.configurationOperation];
 }
 
 - (void)fetchEngagementManifest {
@@ -464,10 +427,6 @@ static NSString *const ConfigurationFilename = @"configuration-v1.archive";
 
 - (NSString *)metadataPath {
 	return [self.storagePath stringByAppendingPathComponent:ConversationMetadataFilename];
-}
-
-- (NSString *)configurationPath {
-	return [self.storagePath stringByAppendingPathComponent:ConfigurationFilename];
 }
 
 - (NSString *)manifestPath {

@@ -178,6 +178,9 @@
 		} else {
 			self.failed = YES;
 		}
+		
+		self.shouldRetry = sender.shouldRetry;
+
 		[self stop];
 		message = nil;
 	}

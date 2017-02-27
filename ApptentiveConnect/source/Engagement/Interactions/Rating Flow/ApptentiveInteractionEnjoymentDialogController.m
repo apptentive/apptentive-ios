@@ -22,7 +22,6 @@ NSString *const ATInteractionEnjoymentDialogEventLabelNo = @"no";
 
 @interface ApptentiveInteractionEnjoymentDialogController ()
 
-@property (strong, nonatomic) UIViewController *viewController;
 @property (strong, nonatomic) UIAlertController *alertController;
 
 @end
@@ -35,12 +34,13 @@ NSString *const ATInteractionEnjoymentDialogEventLabelNo = @"no";
 }
 
 - (void)presentInteractionFromViewController:(UIViewController *)viewController {
-	self.viewController = viewController;
+	[super presentInteractionFromViewController:viewController];
+
 	self.alertController = [self alertControllerWithInteraction:self.interaction];
 
 	if (self.alertController) {
 		[viewController presentViewController:self.alertController animated:YES completion:^{
-			[self.interaction engage:ATInteractionEnjoymentDialogEventLabelLaunch fromViewController:self.viewController];
+			[self.interaction engage:ATInteractionEnjoymentDialogEventLabelLaunch fromViewController:self.presentingViewController];
 		}];
 	}
 }
@@ -80,18 +80,18 @@ NSString *const ATInteractionEnjoymentDialogEventLabelNo = @"no";
 	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:self.title message:self.body preferredStyle:UIAlertControllerStyleAlert];
 
 	[alertController addAction:[UIAlertAction actionWithTitle:self.noText style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-		if (!self.viewController) {
+		if (!self.presentingViewController) {
 			UIViewController *candidateVC = [ApptentiveUtilities rootViewControllerForCurrentWindow];
 			if (candidateVC) {
-				self.viewController = candidateVC;
+				self.presentingViewController = candidateVC;
 			}
 		}
 		
-        [self.interaction engage:ATInteractionEnjoymentDialogEventLabelNo fromViewController:self.viewController];
+        [self.interaction engage:ATInteractionEnjoymentDialogEventLabelNo fromViewController:self.presentingViewController];
 	}]];
 
 	[alertController addAction:[UIAlertAction actionWithTitle:self.yesText style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        [self.interaction engage:ATInteractionEnjoymentDialogEventLabelYes fromViewController:self.viewController];
+        [self.interaction engage:ATInteractionEnjoymentDialogEventLabelYes fromViewController:self.presentingViewController];
 	}]];
 
 	return alertController;

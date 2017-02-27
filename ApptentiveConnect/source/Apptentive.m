@@ -33,7 +33,9 @@ NSString *const ApptentiveCustomPersonDataChangedNotification = @"ApptentiveCust
 NSString *const ApptentiveCustomDeviceDataChangedNotification = @"ApptentiveCustomDeviceDataChangedNotification";
 NSString *const ApptentiveInteractionsDidUpdateNotification = @"ApptentiveInteractionsDidUpdateNotification";
 NSString *const ApptentiveConversationCreatedNotification = @"ApptentiveConversationCreatedNotification";
+NSString *const ApptentiveInteractionsShouldDismissNotification = @"ApptentiveInteractionsShouldDismissNotification";
 
+NSString *const ApptentiveInteractionsShouldDismissAnimatedKey = @"ApptentiveInteractionsShouldDismissAnimatedKey";
 NSString *const ApptentiveCustomDeviceDataPreferenceKey = @"ApptentiveCustomDeviceDataPreferenceKey";
 NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPersonDataPreferenceKey";
 
@@ -592,6 +594,10 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 
 + (UIStoryboard *)storyboard {
 	return [UIStoryboard storyboardWithName:@"Apptentive" bundle:[Apptentive resourceBundle]];
+}
+
+- (void)dismissAllInteractions:(BOOL)animated {
+	[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveInteractionsShouldDismissNotification object:self userInfo:@{ ApptentiveInteractionsShouldDismissAnimatedKey: @(animated) }];
 }
 
 #pragma mark - Debugging and diagnostics

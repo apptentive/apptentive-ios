@@ -23,7 +23,6 @@ NSString *const ATInteractionRatingDialogEventLabelDecline = @"decline";
 
 @interface ApptentiveInteractionRatingDialogController ()
 
-@property (strong, nonatomic) UIViewController *viewController;
 @property (strong, nonatomic) UIAlertController *alertController;
 
 @end
@@ -36,13 +35,13 @@ NSString *const ATInteractionRatingDialogEventLabelDecline = @"decline";
 }
 
 - (void)presentInteractionFromViewController:(UIViewController *)viewController {
-	self.viewController = viewController;
+	[super presentInteractionFromViewController:viewController];
 
 	self.alertController = [self alertControllerWithInteraction:self.interaction];
 
 	if (self.alertController) {
 		[viewController presentViewController:self.alertController animated:YES completion:^{
-			[self.interaction engage:ATInteractionRatingDialogEventLabelLaunch fromViewController:self.viewController];
+			[self.interaction engage:ATInteractionRatingDialogEventLabelLaunch fromViewController:self.presentingViewController];
 		}];
 	}
 }
@@ -88,15 +87,15 @@ NSString *const ATInteractionRatingDialogEventLabelDecline = @"decline";
 	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:self.title message:self.body preferredStyle:UIAlertControllerStyleAlert];
 
 	[alertController addAction:[UIAlertAction actionWithTitle:self.rateText style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-		[self.interaction engage:ATInteractionRatingDialogEventLabelRate fromViewController:self.viewController];
+		[self.interaction engage:ATInteractionRatingDialogEventLabelRate fromViewController:self.presentingViewController];
 	}]];
 
 	[alertController addAction:[UIAlertAction actionWithTitle:self.remindText style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-		[self.interaction engage:ATInteractionRatingDialogEventLabelRemind fromViewController:self.viewController];
+		[self.interaction engage:ATInteractionRatingDialogEventLabelRemind fromViewController:self.presentingViewController];
 	}]];
 
 	[alertController addAction:[UIAlertAction actionWithTitle:self.declineText style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-		[self.interaction engage:ATInteractionRatingDialogEventLabelDecline fromViewController:self.viewController];
+		[self.interaction engage:ATInteractionRatingDialogEventLabelDecline fromViewController:self.presentingViewController];
 	}]];
 
 	return alertController;

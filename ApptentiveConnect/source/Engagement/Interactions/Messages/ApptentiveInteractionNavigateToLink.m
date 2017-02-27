@@ -19,6 +19,8 @@ NSString *const ATInteractionNavigateToLinkEventLabelNavigate = @"navigate";
 }
 
 - (void)presentInteractionFromViewController:(UIViewController *)viewController {
+	[super presentInteractionFromViewController:viewController];
+
 	BOOL openedURL = NO;
 	NSString *urlString = self.interaction.configuration[@"url"];
 	NSURL *url = [NSURL URLWithString:urlString];

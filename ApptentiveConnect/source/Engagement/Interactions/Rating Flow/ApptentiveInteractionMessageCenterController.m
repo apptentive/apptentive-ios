@@ -27,6 +27,8 @@
 }
 
 - (void)presentInteractionFromViewController:(UIViewController *)viewController {
+	[super presentInteractionFromViewController:viewController];
+
 	UINavigationController *navigationController = [[Apptentive storyboard] instantiateViewControllerWithIdentifier:@"MessageCenterNavigation"];
 
 	ApptentiveMessageCenterViewController *messageCenter = navigationController.viewControllers.firstObject;

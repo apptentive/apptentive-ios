@@ -45,7 +45,7 @@ NSString *const ATInteractionMessageCenterEventLabelAttachmentDelete = @"attachm
 	self.collectionView.layer.shadowRadius = 1.0 / [UIScreen mainScreen].scale;
 	self.collectionView.layer.shadowOffset = CGSizeMake(0.0, -1.0 / [UIScreen mainScreen].scale);
 	self.collectionView.layer.masksToBounds = NO;
-	self.collectionView.layer.shadowColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveColorSeparator].CGColor;
+	self.collectionView.layer.shadowColor = [[Apptentive sharedConnection].style colorForStyle:ApptentiveColorSeparator].CGColor;
 
 	// Hide the attach button if tapping it will cause a crash (due to unsupported portrait orientation).
 	BOOL isPhone = [UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone;
@@ -74,7 +74,7 @@ NSString *const ATInteractionMessageCenterEventLabelAttachmentDelete = @"attachm
 	[self didChangeValueForKey:@"attachments"];
 
 	self.collectionViewFooterSize = ((UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout).footerReferenceSize;
-	self.collectionView.backgroundColor = [[Apptentive sharedConnection].styleSheet colorForStyle:ApptentiveColorBackground];
+	self.collectionView.backgroundColor = [[Apptentive sharedConnection].style colorForStyle:ApptentiveColorBackground];
 
 	self.numberFormatter = [[NSNumberFormatter alloc] init];
 

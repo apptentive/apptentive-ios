@@ -50,8 +50,6 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 	NSMutableDictionary *_integrationConfiguration;
 }
 
-@synthesize styleSheet = _styleSheet;
-
 + (NSString *)supportDirectoryPath {
 	NSString *appSupportDirectoryPath = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES).firstObject;
 	NSString *apptentiveDirectoryPath = [appSupportDirectoryPath stringByAppendingPathComponent:@"com.apptentive.feedback"];
@@ -91,7 +89,7 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 		_customDeviceData = [[[NSUserDefaults standardUserDefaults] objectForKey:ApptentiveCustomDeviceDataPreferenceKey] mutableCopy] ?: [[NSMutableDictionary alloc] init];
 
 		_integrationConfiguration = [[NSMutableDictionary alloc] init];
-		_styleSheet = [[ApptentiveStyleSheet alloc] init];
+		_style = [[ApptentiveStyleSheet alloc] init];
 
 		ApptentiveLogInfo(@"Apptentive SDK Version %@", kApptentiveVersionString);
 	}
@@ -141,11 +139,11 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 - (id<ApptentiveStyle>)styleSheet {
 	_didAccessStyleSheet = YES;
 
-	return _styleSheet;
+	return _style;
 }
 
 - (void)setStyleSheet:(id<ApptentiveStyle>)styleSheet {
-	_styleSheet = styleSheet;
+	_style = styleSheet;
 
 	_didAccessStyleSheet = YES;
 }

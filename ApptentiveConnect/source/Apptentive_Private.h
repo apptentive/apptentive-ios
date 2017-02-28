@@ -43,6 +43,8 @@ extern NSString *const ApptentiveInteractionsShouldDismissAnimatedKey;
 @property (readonly, nonatomic) NSString *distributionName;
 @property (readonly, nonatomic) NSString *distributionVersion;
 
+@property (strong, nonatomic) id<ApptentiveStyle> style;
+
 /*!
  * Returns the NSBundle corresponding to the bundle containing Apptentive's
  * images, xibs, strings files, etc.

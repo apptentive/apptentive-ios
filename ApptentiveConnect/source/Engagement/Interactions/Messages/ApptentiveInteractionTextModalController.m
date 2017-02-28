@@ -159,6 +159,8 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 	};
 
 	[self.interaction engage:ATInteractionTextModalEventLabelDismiss fromViewController:self.presentingViewController userInfo:userInfo];
+
+	self.alertController = nil;
 }
 
 - (alertActionHandler)createButtonHandlerBlockDismiss:(NSDictionary *)actionConfig {
@@ -185,6 +187,8 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 	if (interaction) {
 		[[Apptentive sharedConnection].engagementBackend presentInteraction:interaction fromViewController:self.presentingViewController];
 	}
+
+	self.alertController = nil;
 }
 
 - (alertActionHandler)createButtonHandlerBlockInteractionAction:(NSDictionary *)actionConfig {

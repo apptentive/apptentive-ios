@@ -88,10 +88,14 @@ NSString *const ATInteractionEnjoymentDialogEventLabelNo = @"no";
 		}
 		
         [self.interaction engage:ATInteractionEnjoymentDialogEventLabelNo fromViewController:self.presentingViewController];
+
+		self.alertController = nil;
 	}]];
 
 	[alertController addAction:[UIAlertAction actionWithTitle:self.yesText style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         [self.interaction engage:ATInteractionEnjoymentDialogEventLabelYes fromViewController:self.presentingViewController];
+
+		self.alertController = nil;
 	}]];
 
 	return alertController;

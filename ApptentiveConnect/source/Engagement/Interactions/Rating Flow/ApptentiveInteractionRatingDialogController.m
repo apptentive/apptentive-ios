@@ -88,14 +88,20 @@ NSString *const ATInteractionRatingDialogEventLabelDecline = @"decline";
 
 	[alertController addAction:[UIAlertAction actionWithTitle:self.rateText style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
 		[self.interaction engage:ATInteractionRatingDialogEventLabelRate fromViewController:self.presentingViewController];
+
+		self.alertController = nil;
 	}]];
 
 	[alertController addAction:[UIAlertAction actionWithTitle:self.remindText style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
 		[self.interaction engage:ATInteractionRatingDialogEventLabelRemind fromViewController:self.presentingViewController];
+
+		self.alertController = nil;
 	}]];
 
 	[alertController addAction:[UIAlertAction actionWithTitle:self.declineText style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
 		[self.interaction engage:ATInteractionRatingDialogEventLabelDecline fromViewController:self.presentingViewController];
+
+		self.alertController = nil;
 	}]];
 
 	return alertController;

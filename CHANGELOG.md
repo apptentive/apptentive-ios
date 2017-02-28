@@ -1,6 +1,10 @@
+2017-01-06 frankus, weeeBox v3.4.2
+-------------------------
+Version 3.4.2 fixes the retry logic for certain network requests. 
+
 2017-01-06 frankus v3.4.1
 -------------------------
-Version 3.4.0 fixes visual issues in surveys and upgrade messages. 
+Version 3.4.1 fixes visual issues in surveys and upgrade messages. 
 
 2016-12-07 frankus v3.4.0
 -------------------------

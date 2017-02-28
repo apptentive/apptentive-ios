@@ -136,6 +136,7 @@
 - (void)at_APIRequestDidFail:(ApptentiveAPIRequest *)sender {
 	@synchronized(self) {
 		self.failed = YES;
+		self.shouldRetry = sender.shouldRetry;
 		self.lastErrorTitle = sender.errorTitle;
 		self.lastErrorMessage = sender.errorMessage;
 		ApptentiveLogInfo(@"ApptentiveAPIRequest failed: %@, %@", sender.errorTitle, sender.errorMessage);

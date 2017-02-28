@@ -118,6 +118,7 @@
 			self.lastErrorTitle = request.errorTitle;
 			self.lastErrorMessage = request.errorMessage;
 			self.failed = YES;
+			self.shouldRetry = request.shouldRetry;
 			[self stop];
 		}
 	}

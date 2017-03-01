@@ -33,6 +33,7 @@
 
 	ApptentiveMessageCenterViewController *messageCenter = navigationController.viewControllers.firstObject;
 	messageCenter.interaction = (ApptentiveMessageCenterInteraction *)self.interaction;
+	messageCenter.interactionController = self;
 
 	[viewController presentViewController:navigationController animated:YES completion:nil];
 }

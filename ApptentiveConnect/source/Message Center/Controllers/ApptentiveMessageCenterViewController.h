@@ -10,7 +10,7 @@
 #import "ApptentiveMessageCenterDataSource.h"
 #import "ApptentiveBackend.h"
 
-@class ApptentiveMessageCenterInteraction;
+@class ApptentiveMessageCenterInteraction, ApptentiveInteractionController;
 
 
 @interface ApptentiveMessageCenterViewController : UITableViewController <ApptentiveMessageCenterDataSourceDelegate, UITextViewDelegate, UITextFieldDelegate, ATBackendMessageDelegate, UIActionSheetDelegate, UICollectionViewDataSource, UICollectionViewDelegate>
@@ -18,5 +18,6 @@
 + (void)resetPreferences;
 
 @property (strong, nonatomic) ApptentiveMessageCenterInteraction *interaction;
+@property (strong, nonatomic) ApptentiveInteractionController *interactionController;
 
 @end

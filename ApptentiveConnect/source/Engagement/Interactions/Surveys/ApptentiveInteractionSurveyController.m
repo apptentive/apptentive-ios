@@ -32,7 +32,10 @@ NSString *const ATInteractionSurveyEventLabelLaunch = @"launch";
 	ApptentiveSurveyViewModel *viewModel = [[ApptentiveSurveyViewModel alloc] initWithInteraction:self.interaction];
 	if (viewModel) {
 		ApptentiveSurveyViewController *surveyViewController = navigationController.viewControllers.firstObject;
+
 		surveyViewController.viewModel = viewModel;
+		surveyViewController.interactionController = self;
+
 		[viewController presentViewController:navigationController animated:YES completion:nil];
 	}
 

@@ -7,11 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
-@class ApptentiveInteraction;
+
+@class ApptentiveInteraction, ApptentiveInteractionController;
 
 
 @interface ApptentiveInteractionUpgradeMessageViewController : UIViewController
 
 @property (strong, nonatomic) ApptentiveInteraction *upgradeMessageInteraction;
+@property (strong, nonatomic) ApptentiveInteractionController *interactionController;
 
 @end

@@ -46,6 +46,12 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 	}
 }
 
+- (void)dismissInteractionNotification:(NSNotification *)notification {
+	[super dismissInteractionNotification:notification];
+
+	self.alertController = nil;
+}
+
 #pragma mark UIAlertController
 
 - (UIAlertController *)alertControllerWithInteraction:(ApptentiveInteraction *)interaction {

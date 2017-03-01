@@ -46,6 +46,12 @@ NSString *const ATInteractionRatingDialogEventLabelDecline = @"decline";
 	}
 }
 
+- (void)dismissInteractionNotification:(NSNotification *)notification {
+	self.alertController = nil;
+
+	[super dismissInteractionNotification:notification];
+}
+
 - (NSString *)title {
 	NSString *title = self.interaction.configuration[@"title"] ?: ApptentiveLocalizedString(@"Thank You", @"Rate app title.");
 

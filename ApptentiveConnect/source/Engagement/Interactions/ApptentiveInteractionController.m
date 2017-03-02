@@ -11,7 +11,7 @@
 #import "Apptentive_Private.h"
 
 static NSDictionary *interactionControllerClassRegistry;
-static NSString *const ApptentiveInteractionEventLabelClose = @"close";
+static NSString *const ApptentiveInteractionEventLabelCancel = @"cancel";
 
 
 @implementation ApptentiveInteractionController
@@ -68,9 +68,12 @@ static NSString *const ApptentiveInteractionEventLabelClose = @"close";
 	UIViewController *presentingViewController = self.presentingViewController;
 
 	[self.presentingViewController dismissViewControllerAnimated:animated completion:^{
-		[self.interaction engage:ApptentiveInteractionEventLabelClose fromViewController:presentingViewController userInfo:@{ @"cause": @"notification" }];
+		[self.interaction engage:self.programmaticDismissEventLabel fromViewController:presentingViewController userInfo:@{ @"cause": @"notification" }];
 	}];
+}
 
+- (NSString *)programmaticDismissEventLabel {
+	return ApptentiveInteractionEventLabelCancel;
 }
 
 @end

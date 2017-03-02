@@ -12,6 +12,7 @@
 #import "ApptentiveInteraction.h"
 
 NSString *const ATInteractionUpgradeMessageEventLabelLaunch = @"launch";
+NSString *const ATInteractionUpgradeMessageEventLabelDismiss = @"dismiss";
 
 
 @implementation ApptentiveInteractionUpgradeMessageController
@@ -34,6 +35,10 @@ NSString *const ATInteractionUpgradeMessageEventLabelLaunch = @"launch";
 	[viewController presentViewController:navigationController animated:YES completion:nil];
 
 	[result.upgradeMessageInteraction engage:ATInteractionUpgradeMessageEventLabelLaunch fromViewController:viewController];
+}
+
+- (NSString *)programmaticDismissEventLabel {
+	return ATInteractionUpgradeMessageEventLabelDismiss;
 }
 
 @end

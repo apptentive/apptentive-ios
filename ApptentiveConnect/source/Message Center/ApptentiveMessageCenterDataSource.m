@@ -44,8 +44,6 @@ NSString *const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenter
 
 - (void)dealloc {
 	// TODO: get resume data from cancelled downloads and use it
-	[self.attachmentDownloadSession invalidateAndCancel];
-
 	self.fetchedMessagesController.delegate = nil;
 }
 
@@ -91,6 +89,8 @@ NSString *const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenter
 
 - (void)stop {
 	[[Apptentive sharedConnection].backend messageCenterLeftForeground];
+
+	[self.attachmentDownloadSession invalidateAndCancel];
 }
 
 #pragma mark - Message center view controller support

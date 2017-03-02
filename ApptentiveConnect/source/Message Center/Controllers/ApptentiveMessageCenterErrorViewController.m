@@ -52,6 +52,17 @@ NSString *const ATInteractionMessageCenterEventLabelNoInteractionClose = @"no_in
 	self.imageView.tintColor = [[Apptentive sharedConnection].style colorForStyle:ApptentiveTextStyleMessageCenterStatus];
 	self.textLabel.textColor = [[Apptentive sharedConnection].style colorForStyle:ApptentiveTextStyleMessageCenterStatus];
 	self.view.backgroundColor = [[Apptentive sharedConnection].style colorForStyle:ApptentiveColorCollectionBackground];
+
+	[[NSNotificationCenter defaultCenter] addObserverForName:ApptentiveInteractionsShouldDismissNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+		BOOL animated = [note.userInfo[ApptentiveInteractionsShouldDismissAnimatedKey] boolValue];
+		[self dismissViewControllerAnimated:animated completion:^{
+			[[Apptentive sharedConnection].engagementBackend engageCodePoint:[self codePointForEvent:ATInteractionMessageCenterEventLabelNoInteractionClose] fromInteraction:nil userInfo:@{ @"cause": @"notification" } customData:nil extendedData:nil fromViewController:self];
+		}];
+	}];
+}
+
+- (void)dealloc {
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (IBAction)dismiss:(id)sender {

@@ -53,12 +53,7 @@ NSString *const ATInteractionMessageCenterEventLabelNoInteractionClose = @"no_in
 	self.textLabel.textColor = [[Apptentive sharedConnection].style colorForStyle:ApptentiveTextStyleMessageCenterStatus];
 	self.view.backgroundColor = [[Apptentive sharedConnection].style colorForStyle:ApptentiveColorCollectionBackground];
 
-	[[NSNotificationCenter defaultCenter] addObserverForName:ApptentiveInteractionsShouldDismissNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
-		BOOL animated = [note.userInfo[ApptentiveInteractionsShouldDismissAnimatedKey] boolValue];
-		[self dismissViewControllerAnimated:animated completion:^{
-			[[Apptentive sharedConnection].engagementBackend engageCodePoint:[self codePointForEvent:ATInteractionMessageCenterEventLabelNoInteractionClose] fromInteraction:nil userInfo:@{ @"cause": @"notification" } customData:nil extendedData:nil fromViewController:self];
-		}];
-	}];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dismissNotification:) name:ApptentiveInteractionsShouldDismissNotification object:nil];
 }
 
 - (void)dealloc {
@@ -69,6 +64,13 @@ NSString *const ATInteractionMessageCenterEventLabelNoInteractionClose = @"no_in
 	[[Apptentive sharedConnection].engagementBackend engageCodePoint:[self codePointForEvent:ATInteractionMessageCenterEventLabelNoInteractionClose] fromInteraction:nil userInfo:nil customData:nil extendedData:nil fromViewController:self];
 
 	[self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)dismissNotification:(NSNotification *)notification {
+	BOOL animated = [notification.userInfo[ApptentiveInteractionsShouldDismissAnimatedKey] boolValue];
+	[self dismissViewControllerAnimated:animated completion:^{
+		[[Apptentive sharedConnection].engagementBackend engageCodePoint:[self codePointForEvent:ATInteractionMessageCenterEventLabelNoInteractionClose] fromInteraction:nil userInfo:@{ @"cause": @"notification" } customData:nil extendedData:nil fromViewController:self];
+	}];
 }
 
 @end

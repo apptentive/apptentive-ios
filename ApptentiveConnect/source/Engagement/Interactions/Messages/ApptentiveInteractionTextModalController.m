@@ -111,6 +111,11 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 
 #pragma mark Alert Button Actions
 
+// NOTE: The action blocks below create a retain cycle. We use this to our
+// advantage to make sure the interaction controller sticks around until the
+// alert controller is dismissed. At that point we clear the reference to the
+// alert controller to break the retain cycle.
+
 - (UIAlertAction *)alertActionWithConfiguration:(NSDictionary *)actionConfig {
 	NSString *title = actionConfig[@"label"];
 

@@ -33,6 +33,8 @@
 
 	ApptentiveMessageCenterViewController *messageCenter = navigationController.viewControllers.firstObject;
 	messageCenter.interaction = (ApptentiveMessageCenterInteraction *)self.interaction;
+
+	// Add owning reference to self so we stick around until VC is dismissed.
 	messageCenter.interactionController = self;
 
 	[viewController presentViewController:navigationController animated:YES completion:nil];

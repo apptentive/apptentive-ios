@@ -77,6 +77,11 @@ NSString *const ATInteractionEnjoymentDialogEventLabelNo = @"no";
 
 #pragma mark UIAlertController
 
+// NOTE: The action blocks below create a retain cycle. We use this to our
+// advantage to make sure the interaction controller sticks around until the
+// alert controller is dismissed. At that point we clear the reference to the
+// alert controller to break the retain cycle.
+
 - (UIAlertController *)alertControllerWithInteraction:(ApptentiveInteraction *)interaction {
 	if (!self.title && !self.body) {
 		ApptentiveLogError(@"Skipping display of Enjoyment Dialog that does not have a title or body.");

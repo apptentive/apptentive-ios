@@ -27,6 +27,8 @@ NSString *const ATInteractionUpgradeMessageEventLabelLaunch = @"launch";
 	ApptentiveInteractionUpgradeMessageViewController *result = (ApptentiveInteractionUpgradeMessageViewController *)navigationController.viewControllers.firstObject;
 
 	result.upgradeMessageInteraction = self.interaction;
+
+	// Add owning reference to self so we stick around until VC is dismissed. 
 	result.interactionController = self;
 
 	[viewController presentViewController:navigationController animated:YES completion:nil];

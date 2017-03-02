@@ -18,6 +18,10 @@
 + (void)resetPreferences;
 
 @property (strong, nonatomic) ApptentiveMessageCenterInteraction *interaction;
+
+// This strong reference makes sure the interaction controller sticks around
+// until the view controller is dismissed (required for
+// `-dismissAllInteractions:` calls).
 @property (strong, nonatomic) ApptentiveInteractionController *interactionController;
 
 @end

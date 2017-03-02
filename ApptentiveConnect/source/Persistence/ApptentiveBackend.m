@@ -493,13 +493,7 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 }
 
 - (void)updateEngagementManifestIfNeeded {
-	if (![ApptentiveConversationUpdater conversationExists]) {
-		return;
-	}
-
-	if (![[ApptentiveTaskQueue sharedTaskQueue] hasTaskOfClass:[ApptentiveEngagementGetManifestTask class]]) {
-		[[Apptentive sharedConnection].engagementBackend checkForEngagementManifest];
-	}
+	[[Apptentive sharedConnection].engagementBackend checkForEngagementManifest];
 }
 
 #pragma mark NSFetchedResultsControllerDelegate
@@ -778,7 +772,7 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 	[ApptentiveMetrics sharedMetrics];
 
 	// One-shot actions at startup.
-	[self performSelector:@selector(checkForEngagementManifest) withObject:nil afterDelay:3];
+	[self performSelector:@selector(updateEngagementManifestIfNeeded) withObject:nil afterDelay:3];
 	[self performSelector:@selector(updateDeviceIfNeeded) withObject:nil afterDelay:7];
 	[self performSelector:@selector(checkForMessages) withObject:nil afterDelay:8];
 	[self performSelector:@selector(updatePersonIfNeeded) withObject:nil afterDelay:9];
@@ -851,15 +845,6 @@ NSString *const ATInfoDistributionVersionKey = @"ATInfoDistributionVersionKey";
 
 - (void)deviceDataChanged:(NSNotification *)notification {
 	[self performSelector:@selector(updateDeviceIfNeeded) withObject:nil afterDelay:1];
-}
-
-- (void)checkForEngagementManifest {
-	@autoreleasepool {
-		if (![self isReady]) {
-			return;
-		}
-		[[Apptentive sharedConnection].engagementBackend checkForEngagementManifest];
-	}
 }
 
 - (void)setupDataManager {

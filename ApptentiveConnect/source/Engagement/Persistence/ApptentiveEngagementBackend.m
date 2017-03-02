@@ -117,7 +117,7 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 }
 
 - (void)checkForEngagementManifest {
-	if (!self.localEngagementManifestURL && [self shouldRetrieveNewEngagementManifest]) {
+	if (!self.localEngagementManifestURL && [self shouldRetrieveNewEngagementManifest] && ![[ApptentiveTaskQueue sharedTaskQueue] hasTaskOfClass:[ApptentiveEngagementGetManifestTask class]]) {
 		ApptentiveEngagementGetManifestTask *task = [[ApptentiveEngagementGetManifestTask alloc] init];
 		[[ApptentiveTaskQueue sharedTaskQueue] addTask:task];
 		task = nil;

@@ -46,6 +46,12 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 	}
 }
 
+- (void)dismissInteractionNotification:(NSNotification *)notification {
+	[super dismissInteractionNotification:notification];
+
+	self.alertController = nil;
+}
+
 #pragma mark UIAlertController
 
 - (UIAlertController *)alertControllerWithInteraction:(ApptentiveInteraction *)interaction {
@@ -105,6 +111,11 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 
 #pragma mark Alert Button Actions
 
+// NOTE: The action blocks below create a retain cycle. We use this to our
+// advantage to make sure the interaction controller sticks around until the
+// alert controller is dismissed. At that point we clear the reference to the
+// alert controller to break the retain cycle.
+
 - (UIAlertAction *)alertActionWithConfiguration:(NSDictionary *)actionConfig {
 	NSString *title = actionConfig[@"label"];
 
@@ -159,6 +170,8 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 	};
 
 	[self.interaction engage:ATInteractionTextModalEventLabelDismiss fromViewController:self.presentingViewController userInfo:userInfo];
+
+	self.alertController = nil;
 }
 
 - (alertActionHandler)createButtonHandlerBlockDismiss:(NSDictionary *)actionConfig {
@@ -185,6 +198,8 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 	if (interaction) {
 		[[Apptentive sharedConnection].engagementBackend presentInteraction:interaction fromViewController:self.presentingViewController];
 	}
+
+	self.alertController = nil;
 }
 
 - (alertActionHandler)createButtonHandlerBlockInteractionAction:(NSDictionary *)actionConfig {

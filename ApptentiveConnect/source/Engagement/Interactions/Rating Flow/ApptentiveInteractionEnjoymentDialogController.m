@@ -45,6 +45,12 @@ NSString *const ATInteractionEnjoymentDialogEventLabelNo = @"no";
 	}
 }
 
+- (void)dismissInteractionNotification:(NSNotification *)notification {
+	self.alertController = nil;
+
+	[super dismissInteractionNotification:notification];
+}
+
 - (NSString *)title {
 	NSString *title = self.interaction.configuration[@"title"] ?: [NSString stringWithFormat:ApptentiveLocalizedString(@"Do you love %@?", @"Title for enjoyment alert view. Parameter is app name."), [[Apptentive sharedConnection].backend appName]];
 
@@ -71,6 +77,11 @@ NSString *const ATInteractionEnjoymentDialogEventLabelNo = @"no";
 
 #pragma mark UIAlertController
 
+// NOTE: The action blocks below create a retain cycle. We use this to our
+// advantage to make sure the interaction controller sticks around until the
+// alert controller is dismissed. At that point we clear the reference to the
+// alert controller to break the retain cycle.
+
 - (UIAlertController *)alertControllerWithInteraction:(ApptentiveInteraction *)interaction {
 	if (!self.title && !self.body) {
 		ApptentiveLogError(@"Skipping display of Enjoyment Dialog that does not have a title or body.");
@@ -88,10 +99,14 @@ NSString *const ATInteractionEnjoymentDialogEventLabelNo = @"no";
 		}
 		
         [self.interaction engage:ATInteractionEnjoymentDialogEventLabelNo fromViewController:self.presentingViewController];
+
+		self.alertController = nil;
 	}]];
 
 	[alertController addAction:[UIAlertAction actionWithTitle:self.yesText style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         [self.interaction engage:ATInteractionEnjoymentDialogEventLabelYes fromViewController:self.presentingViewController];
+
+		self.alertController = nil;
 	}]];
 
 	return alertController;

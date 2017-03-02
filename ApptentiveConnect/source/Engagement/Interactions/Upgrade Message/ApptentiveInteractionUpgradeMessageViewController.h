@@ -7,11 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
-@class ApptentiveInteraction;
+
+@class ApptentiveInteraction, ApptentiveInteractionController;
 
 
 @interface ApptentiveInteractionUpgradeMessageViewController : UIViewController
 
 @property (strong, nonatomic) ApptentiveInteraction *upgradeMessageInteraction;
+
+// This strong reference makes sure the interaction controller sticks around
+// until the view controller is dismissed (required for
+// `-dismissAllInteractions:` calls).
+@property (strong, nonatomic) ApptentiveInteractionController *interactionController;
 
 @end

@@ -22,5 +22,6 @@
 @property (strong, nonatomic) UIViewController *presentingViewController;
 
 - (void)presentInteractionFromViewController:(UIViewController *)viewController NS_REQUIRES_SUPER;
+- (void)dismissInteractionNotification:(NSNotification *)notification NS_REQUIRES_SUPER;
 
 @end

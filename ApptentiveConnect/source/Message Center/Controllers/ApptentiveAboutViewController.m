@@ -28,9 +28,10 @@ NSString *const ATInteractionAboutViewEventLabelClose = @"close";
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *privacyButtonLeadingConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *aboutButtonPrivacyButtonVeritcalConstraint;
 
-
 @property (strong, nonatomic) NSArray *portraitConstraints;
 @property (strong, nonatomic) NSArray *landscapeConstraints;
+
+@property (strong, nonatomic) NSDictionary *closeEventUserInfo;
 
 @end
 
@@ -57,10 +58,7 @@ NSString *const ATInteractionAboutViewEventLabelClose = @"close";
 	self.landscapeConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:[about]-(16)-[privacy]" options:NSLayoutFormatAlignAllBaseline metrics:nil views:@{ @"about": self.aboutButton,
 		@"privacy": self.privacyButton }];
 
-	__weak __typeof__(self) weakSelf = self;
-	[[NSNotificationCenter defaultCenter] addObserverForName:ApptentiveInteractionsShouldDismissNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
-		weakSelf.dismissedByNotification = YES;
-	}];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addCause) name:ApptentiveInteractionsShouldDismissNotification object:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -68,9 +66,7 @@ NSString *const ATInteractionAboutViewEventLabelClose = @"close";
 
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 
-	NSDictionary *userInfo = self.dismissedByNotification ? @{ @"cause" : @"notification"} : nil;
-
-	[[Apptentive sharedConnection].engagementBackend engageCodePoint:[self codePointForEvent:ATInteractionAboutViewEventLabelClose] fromInteraction:nil userInfo:userInfo customData:nil extendedData:nil fromViewController:self];
+	[[Apptentive sharedConnection].engagementBackend engageCodePoint:[self codePointForEvent:ATInteractionAboutViewEventLabelClose] fromInteraction:nil userInfo:self.closeEventUserInfo customData:nil extendedData:nil fromViewController:self];
 }
 
 - (IBAction)learnMore:(id)sender {
@@ -109,6 +105,10 @@ NSString *const ATInteractionAboutViewEventLabelClose = @"close";
 	}
 
 	[self.view layoutIfNeeded];
+}
+
+- (void)addCause {
+	self.closeEventUserInfo = @{ @"cause" : @"notification"};
 }
 
 @end

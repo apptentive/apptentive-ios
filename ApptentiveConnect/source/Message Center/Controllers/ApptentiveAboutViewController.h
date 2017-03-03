@@ -13,4 +13,6 @@
 
 @interface ApptentiveAboutViewController : UIViewController
 
+@property (assign, nonatomic) BOOL dismissedByNotification;
+
 @end

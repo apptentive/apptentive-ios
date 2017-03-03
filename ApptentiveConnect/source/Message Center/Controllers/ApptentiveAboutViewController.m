@@ -56,12 +56,21 @@ NSString *const ATInteractionAboutViewEventLabelClose = @"close";
 
 	self.landscapeConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:[about]-(16)-[privacy]" options:NSLayoutFormatAlignAllBaseline metrics:nil views:@{ @"about": self.aboutButton,
 		@"privacy": self.privacyButton }];
+
+	__weak __typeof__(self) weakSelf = self;
+	[[NSNotificationCenter defaultCenter] addObserverForName:ApptentiveInteractionsShouldDismissNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+		weakSelf.dismissedByNotification = YES;
+	}];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
 	[super viewWillDisappear:animated];
 
-	[[Apptentive sharedConnection].engagementBackend engageCodePoint:[self codePointForEvent:ATInteractionAboutViewEventLabelClose] fromInteraction:nil userInfo:nil customData:nil extendedData:nil fromViewController:self];
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
+
+	NSDictionary *userInfo = self.dismissedByNotification ? @{ @"cause" : @"notification"} : nil;
+
+	[[Apptentive sharedConnection].engagementBackend engageCodePoint:[self codePointForEvent:ATInteractionAboutViewEventLabelClose] fromInteraction:nil userInfo:userInfo customData:nil extendedData:nil fromViewController:self];
 }
 
 - (IBAction)learnMore:(id)sender {

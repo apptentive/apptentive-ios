@@ -110,20 +110,9 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 				[self setUpCoreData];
 			});
 
+			[self loadConfiguration];
+
 			[self startUp];
-
-			if ([[NSFileManager defaultManager] fileExistsAtPath:[self configurationPath]]) {
-				self->_configuration = [NSKeyedUnarchiver unarchiveObjectWithFile:[self configurationPath]];
-			} else if ([[NSUserDefaults standardUserDefaults] objectForKey:@"ATConfigurationSDKVersionKey"]) {
-				self->_configuration = [[ApptentiveAppConfiguration alloc] initWithUserDefaults:[NSUserDefaults standardUserDefaults]];
-				if ([self saveConfiguration]) {
-					[ApptentiveAppConfiguration deleteMigratedData];
-				}
-			} else {
-				self->_configuration = [[ApptentiveAppConfiguration alloc] init];
-			}
-
-			[self finishStartup];
 		}];
 	}
 
@@ -309,8 +298,21 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	}
 }
 
-- (void)finishStartup {
-	_serialNetworkQueue = [[ApptentiveSerialNetworkQueue alloc] initWithBaseURL:self.baseURL token:self.APIKey SDKVersion:kApptentiveVersionString platform:@"iOS"	parentManagedObjectContext:self.managedObjectContext];
+- (void)loadConfiguration {
+	if ([[NSFileManager defaultManager] fileExistsAtPath:[self configurationPath]]) {
+		self->_configuration = [NSKeyedUnarchiver unarchiveObjectWithFile:[self configurationPath]];
+	} else if ([[NSUserDefaults standardUserDefaults] objectForKey:@"ATConfigurationSDKVersionKey"]) {
+		self->_configuration = [[ApptentiveAppConfiguration alloc] initWithUserDefaults:[NSUserDefaults standardUserDefaults]];
+		if ([self saveConfiguration]) {
+			[ApptentiveAppConfiguration deleteMigratedData];
+		}
+	} else {
+		self->_configuration = [[ApptentiveAppConfiguration alloc] init];
+	}
+}
+
+- (void)finishStartupWithToken:(NSString *)token {
+	_serialNetworkQueue = [[ApptentiveSerialNetworkQueue alloc] initWithBaseURL:self.baseURL token:token SDKVersion:kApptentiveVersionString platform:@"iOS"	parentManagedObjectContext:self.managedObjectContext];
 
 	[self.serialNetworkQueue addObserver:self forKeyPath:@"messageSendProgress" options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew context:nil];
 	[self.serialNetworkQueue addObserver:self forKeyPath:@"messageTaskCount" options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew context:nil];
@@ -377,7 +379,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 }
 
 - (void)processQueuedRecords {
-	if (self.isReady && self.working) {
+	if (self.isReady && self.working && self.conversationManager.activeConversation.token != nil) {
 		[self.serialNetworkQueue resume];
 	}
 }
@@ -656,7 +658,10 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 
 - (void)conversationManager:(ApptentiveConversationManager *)manager didLoadConversation:(ApptentiveConversation *)conversation {
 	self.networkQueue.token = conversation.token;
-	self.serialNetworkQueue.token = conversation.token;
+
+	if (self.state != ATBackendStateReady) {
+		[self finishStartupWithToken:conversation.token];
+	}
 }
 
 #pragma mark Message send progress

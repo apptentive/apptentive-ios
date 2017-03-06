@@ -116,25 +116,17 @@ static NSString *const ManifestFilename = @"manifest-v1.archive";
 }
 
 - (void)resume {
-//#if APPTENTIVE_DEBUG
-//	[Apptentive.shared checkSDKConfiguration];
-//
-//
-//	self.configuration.expiry = [NSDate distantPast];
-//	self.manifest.expiry = [NSDate distantPast];
-//#endif
-//
-//	[self.activeConversation checkForDiffs];
-//
-//	if ([self.configuration.expiry timeIntervalSinceNow] <= 0) {
-//		[self fetchConfiguration];
-//	}
-//
-//	if ([self.manifest.expiry timeIntervalSinceNow] <= 0) {
-//		[self fetchEngagementManifest];
-//	}
-//
-//	[self checkForMessages];
+#if APPTENTIVE_DEBUG
+	[Apptentive.shared checkSDKConfiguration];
+
+	self.manifest.expiry = [NSDate distantPast];
+#endif
+
+	if ([self.manifest.expiry timeIntervalSinceNow] <= 0) {
+		[self fetchEngagementManifest];
+	}
+
+	[self checkForMessages];
 }
 
 - (void)pause {

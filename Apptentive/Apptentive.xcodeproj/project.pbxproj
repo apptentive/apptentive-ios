@@ -324,6 +324,8 @@
 		01A2D2A11E4963F700C2103A /* v2CorruptDatabase in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D29E1E4963F700C2103A /* v2CorruptDatabase */; };
 		01A2D2A21E4963F700C2103A /* v2WALDatabase in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D29F1E4963F700C2103A /* v2WALDatabase */; };
 		01A2D2A31E4963F700C2103A /* v3WALDatabase in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D2A01E4963F700C2103A /* v3WALDatabase */; };
+		01E8E2361E6E096D00786738 /* ApptentiveInteractionAppleRatingDialogController.h in Headers */ = {isa = PBXBuildFile; fileRef = 01E8E2341E6E096D00786738 /* ApptentiveInteractionAppleRatingDialogController.h */; };
+		01E8E2371E6E096D00786738 /* ApptentiveInteractionAppleRatingDialogController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01E8E2351E6E096D00786738 /* ApptentiveInteractionAppleRatingDialogController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -683,6 +685,8 @@
 		01A2D29E1E4963F700C2103A /* v2CorruptDatabase */ = {isa = PBXFileReference; lastKnownFileType = folder; path = v2CorruptDatabase; sourceTree = "<group>"; };
 		01A2D29F1E4963F700C2103A /* v2WALDatabase */ = {isa = PBXFileReference; lastKnownFileType = folder; path = v2WALDatabase; sourceTree = "<group>"; };
 		01A2D2A01E4963F700C2103A /* v3WALDatabase */ = {isa = PBXFileReference; lastKnownFileType = folder; path = v3WALDatabase; sourceTree = "<group>"; };
+		01E8E2341E6E096D00786738 /* ApptentiveInteractionAppleRatingDialogController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveInteractionAppleRatingDialogController.h; sourceTree = "<group>"; };
+		01E8E2351E6E096D00786738 /* ApptentiveInteractionAppleRatingDialogController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveInteractionAppleRatingDialogController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -843,6 +847,8 @@
 				01A2CFCF1E490A9700C2103A /* ApptentiveInteractionMessageCenterController.m */,
 				01A2CFD01E490A9700C2103A /* ApptentiveInteractionRatingDialogController.h */,
 				01A2CFD11E490A9700C2103A /* ApptentiveInteractionRatingDialogController.m */,
+				01E8E2341E6E096D00786738 /* ApptentiveInteractionAppleRatingDialogController.h */,
+				01E8E2351E6E096D00786738 /* ApptentiveInteractionAppleRatingDialogController.m */,
 			);
 			path = "Rating Flow";
 			sourceTree = "<group>";
@@ -1428,6 +1434,7 @@
 				01A2D0F81E490A9700C2103A /* Apptentive_Private.h in Headers */,
 				01A2D19E1E490A9700C2103A /* ApptentiveBackend+Metrics.h in Headers */,
 				01A2D1DE1E490A9700C2103A /* ApptentiveSurveyAnswer.h in Headers */,
+				01E8E2361E6E096D00786738 /* ApptentiveInteractionAppleRatingDialogController.h in Headers */,
 				01A2D12F1E490A9700C2103A /* ApptentiveInteractionUsageData.h in Headers */,
 				01A2D1DA1E490A9700C2103A /* ApptentiveReachability.h in Headers */,
 				01A2D1851E490A9700C2103A /* ApptentiveAttachmentCell.h in Headers */,
@@ -1769,6 +1776,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				01E8E2371E6E096D00786738 /* ApptentiveInteractionAppleRatingDialogController.m in Sources */,
 				01A2D1081E490A9700C2103A /* ApptentiveInteractionController.m in Sources */,
 				01A2D1E51E490A9700C2103A /* ApptentiveSurveyLayoutAttributes.m in Sources */,
 				01A2D1DD1E490A9700C2103A /* ApptentiveSurvey.m in Sources */,

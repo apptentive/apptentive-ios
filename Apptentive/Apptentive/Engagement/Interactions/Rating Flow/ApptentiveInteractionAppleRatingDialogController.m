@@ -23,6 +23,15 @@ NSString *const ApptentiveInteractionAppleRatingDialogEventLabelNotShown = @"not
 }
 
 - (void)presentInteractionFromViewController:(UIViewController *)viewController {
+	[self.interaction engage:ApptentiveInteractionAppleRatingDialogEventLabelRequest fromViewController:viewController];
+
+	// Avoid crashing if mistakenly launched on a pre-10.3 system
+	if ([SKStoreReviewController class] == nil) {
+		[self.interaction engage:ApptentiveInteractionAppleRatingDialogEventLabelNotShown fromViewController:viewController];
+
+		return;
+	}
+
 	// Assume the review request will not be shown…
 	__block NSString *result = ApptentiveInteractionAppleRatingDialogEventLabelNotShown;
 
@@ -36,8 +45,6 @@ NSString *const ApptentiveInteractionAppleRatingDialogEventLabelNotShown = @"not
 
 	// This may or may not display a review window
 	[SKStoreReviewController requestReview];
-
-	[self.interaction engage:ApptentiveInteractionAppleRatingDialogEventLabelRequest fromViewController:viewController];
 
 	// Give the window a sec to appear
 	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, REVIEW_WINDOW_TIMEOUT), dispatch_get_main_queue(), ^{

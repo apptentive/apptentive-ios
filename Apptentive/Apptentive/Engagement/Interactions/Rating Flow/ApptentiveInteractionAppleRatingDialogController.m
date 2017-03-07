@@ -25,9 +25,16 @@ NSString *const ApptentiveInteractionAppleRatingDialogEventLabelNotShown = @"not
 - (void)presentInteractionFromViewController:(UIViewController *)viewController {
 	[self.interaction engage:ApptentiveInteractionAppleRatingDialogEventLabelRequest fromViewController:viewController];
 
+	BOOL appleRatingDialogAvailable = NO;
+
+	// Make sure we can compile on pre-10.3 SDKs
+#ifdef __IPHONE_10_3
 	// Avoid crashing if mistakenly launched on a pre-10.3 system
-	if ([SKStoreReviewController class] == nil) {
-		[self.interaction engage:ApptentiveInteractionAppleRatingDialogEventLabelNotShown fromViewController:viewController];
+	appleRatingDialogAvailable = [SKStoreReviewController class] != nil;
+#endif
+
+	if (!appleRatingDialogAvailable) {
+		[self.interaction engage:ApptentiveInteractionAppleRatingDialogEventLabelNotShown fromViewController:viewController userInfo:@{ @"cause": @"unavailable" }];
 
 		return;
 	}

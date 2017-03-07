@@ -23,11 +23,13 @@ NSString *const ApptentiveInteractionAppleRatingDialogEventLabelNotShown = @"not
 }
 
 - (void)presentInteractionFromViewController:(UIViewController *)viewController {
+	// Assume the review request will not be shown…
 	__block NSString *result = ApptentiveInteractionAppleRatingDialogEventLabelNotShown;
 
-	// Listen for new windows whose class name starts with "SKStoreReview"
+	// …but listen for new windows whose class name starts with "SKStoreReview"
 	id<NSObject> notifier = [[NSNotificationCenter defaultCenter] addObserverForName:UIWindowDidBecomeVisibleNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
 		if ([NSStringFromClass([note.object class]) hasPrefix:@"SKStoreReview"]) {
+			// Review window was shown
 			result = ApptentiveInteractionAppleRatingDialogEventLabelShown;
 		}
 	}];

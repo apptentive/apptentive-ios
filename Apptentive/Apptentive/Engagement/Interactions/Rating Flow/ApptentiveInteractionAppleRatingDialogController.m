@@ -8,6 +8,8 @@
 
 #import "ApptentiveInteractionAppleRatingDialogController.h"
 #import "ApptentiveInteraction.h"
+#import "Apptentive_Private.h"
+#import "ApptentiveBackend+Engagement.h"
 #import <StoreKit/StoreKit.h>
 
 NSString *const ApptentiveInteractionAppleRatingDialogEventLabelRequest = @"request";
@@ -25,41 +27,46 @@ NSString *const ApptentiveInteractionAppleRatingDialogEventLabelNotShown = @"not
 - (void)presentInteractionFromViewController:(UIViewController *)viewController {
 	[self.interaction engage:ApptentiveInteractionAppleRatingDialogEventLabelRequest fromViewController:viewController];
 
-	BOOL appleRatingDialogAvailable = NO;
-
-	// Make sure we can compile on pre-10.3 SDKs
+	// Guard against not having store review controller class in OS and/or SDK
+	Class storeReviewControllerClass = nil;
 #ifdef __IPHONE_10_3
-	// Avoid crashing if mistakenly launched on a pre-10.3 system
-	appleRatingDialogAvailable = [SKStoreReviewController class] != nil;
+	storeReviewControllerClass = [SKStoreReviewController class];
 #endif
 
-	if (!appleRatingDialogAvailable) {
-		[self.interaction engage:ApptentiveInteractionAppleRatingDialogEventLabelNotShown fromViewController:viewController userInfo:@{ @"cause": @"unavailable" }];
-
-		return;
-	}
-
 	// Assume the review request will not be shown…
-	__block NSString *result = ApptentiveInteractionAppleRatingDialogEventLabelNotShown;
+	__block BOOL didShowReviewController = NO;
 
 	// …but listen for new windows whose class name starts with "SKStoreReview"
 	id<NSObject> notifier = [[NSNotificationCenter defaultCenter] addObserverForName:UIWindowDidBecomeVisibleNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
 		if ([NSStringFromClass([note.object class]) hasPrefix:@"SKStoreReview"]) {
 			// Review window was shown
-			result = ApptentiveInteractionAppleRatingDialogEventLabelShown;
+			didShowReviewController = YES;
 		}
 	}];
 
 	// This may or may not display a review window
-	[SKStoreReviewController requestReview];
+	[storeReviewControllerClass requestReview];
 
 	// Give the window a sec to appear
 	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, REVIEW_WINDOW_TIMEOUT), dispatch_get_main_queue(), ^{
-		// Indicate whether a window was shown
-		[self.interaction engage:result fromViewController:viewController];
-
 		[[NSNotificationCenter defaultCenter] removeObserver:notifier];
+
+		if (didShowReviewController) {
+			[self.interaction engage:ApptentiveInteractionAppleRatingDialogEventLabelShown fromViewController:viewController];
+		} else {
+			[self invokeNotShownInteractionFromViewController:viewController];
+		}
 	});
+}
+
+- (void)invokeNotShownInteractionFromViewController:(UIViewController *)viewController {
+	[self.interaction engage:ApptentiveInteractionAppleRatingDialogEventLabelNotShown fromViewController:viewController];
+
+	ApptentiveInteraction *interaction = [Apptentive.shared.backend interactionForIdentifier:self.interaction.configuration[@"not_shown_interaction"]];
+
+	if (interaction) {
+		[[Apptentive sharedConnection].backend presentInteraction:interaction fromViewController:viewController];
+	}
 }
 
 @end

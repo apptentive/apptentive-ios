@@ -26,12 +26,7 @@ NSString *const ApptentiveInteractionAppleRatingDialogEventLabelNotShown = @"not
 
 - (void)presentInteractionFromViewController:(UIViewController *)viewController {
 	[self.interaction engage:ApptentiveInteractionAppleRatingDialogEventLabelRequest fromViewController:viewController];
-
-	// Guard against not having store review controller class in OS and/or SDK
-	Class storeReviewControllerClass = nil;
-#ifdef __IPHONE_10_3
-	storeReviewControllerClass = [SKStoreReviewController class];
-#endif
+	NSString *notShownReason = nil;
 
 	// Assume the review request will not be shown…
 	__block BOOL didShowReviewController = NO;
@@ -44,8 +39,17 @@ NSString *const ApptentiveInteractionAppleRatingDialogEventLabelNotShown = @"not
 		}
 	}];
 
-	// This may or may not display a review window
-	[storeReviewControllerClass requestReview];
+	// Guard against not having store review controller class in OS and/or SDK
+#ifdef __IPHONE_10_3
+	if ([SKStoreReviewController class] != nil) {
+		// This may or may not display a review window
+		[SKStoreReviewController performSelector:@selector(requestReview)];
+	} else {
+		notShownReason = @"os too old";
+	}
+#else
+	notShownReason = @"tools too old";
+#endif
 
 	// Give the window a sec to appear
 	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, REVIEW_WINDOW_TIMEOUT), dispatch_get_main_queue(), ^{
@@ -54,13 +58,19 @@ NSString *const ApptentiveInteractionAppleRatingDialogEventLabelNotShown = @"not
 		if (didShowReviewController) {
 			[self.interaction engage:ApptentiveInteractionAppleRatingDialogEventLabelShown fromViewController:viewController];
 		} else {
-			[self invokeNotShownInteractionFromViewController:viewController];
+			[self invokeNotShownInteractionFromViewController:viewController withReason:notShownReason];
 		}
 	});
 }
 
-- (void)invokeNotShownInteractionFromViewController:(UIViewController *)viewController {
-	[self.interaction engage:ApptentiveInteractionAppleRatingDialogEventLabelNotShown fromViewController:viewController];
+- (void)invokeNotShownInteractionFromViewController:(UIViewController *)viewController withReason:(NSString *)notShownReason {
+	NSDictionary *userInfo = nil;
+
+	if (notShownReason) {
+		userInfo = @{ @"cause": notShownReason };
+	}
+
+	[self.interaction engage:ApptentiveInteractionAppleRatingDialogEventLabelNotShown fromViewController:viewController userInfo:userInfo];
 
 	ApptentiveInteraction *interaction = [Apptentive.shared.backend interactionForIdentifier:self.interaction.configuration[@"not_shown_interaction"]];
 

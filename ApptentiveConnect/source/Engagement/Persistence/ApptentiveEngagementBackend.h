@@ -45,7 +45,7 @@ extern NSString *const ApptentiveEngagementMessageCenterEvent;
 + (NSString *)cachedInteractionsStoragePath;
 
 - (ApptentiveInteraction *)interactionForEvent:(NSString *)event;
-
+- (ApptentiveInteraction *)interactionForIdentifier:(NSString *)identifier;
 - (ApptentiveInteraction *)interactionForInvocations:(NSArray *)invocations;
 
 - (BOOL)canShowInteractionForLocalEvent:(NSString *)event;

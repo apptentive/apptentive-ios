@@ -267,10 +267,14 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 
 	ApptentiveInteraction *interaction = nil;
 	if (interactionID) {
-		interaction = self.engagementInteractions[interactionID];
+		interaction = [self interactionForIdentifier:interactionID];
 	}
 
 	return interaction;
+}
+
+- (ApptentiveInteraction *)interactionForIdentifier:(NSString *)identifier {
+	return self.engagementInteractions[identifier];
 }
 
 - (ApptentiveInteraction *)interactionForEvent:(NSString *)event {

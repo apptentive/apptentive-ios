@@ -41,7 +41,7 @@ NSString *const ApptentiveInteractionAppleRatingDialogEventLabelNotShown = @"not
 
 	// Guard against not having store review controller class in OS and/or SDK
 #ifdef __IPHONE_10_3
-	if ([SKStoreReviewController class] != nil) {
+	if ([[SKStoreReviewController class] respondsToSelector:@selector(requestReview)]) {
 		// This may or may not display a review window
 		[SKStoreReviewController performSelector:@selector(requestReview)];
 	} else {

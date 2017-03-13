@@ -9,7 +9,7 @@
 #import "CriteriaTests.h"
 #import "ApptentiveInteractionInvocation.h"
 #import "Apptentive.h"
-#import "ApptentiveSession.h"
+#import "ApptentiveConversation.h"
 #import "ApptentiveEngagement.h"
 #import "ApptentiveDevice.h"
 #import "ApptentiveMutableDevice.h"
@@ -18,7 +18,7 @@
 
 @interface CriteriaTest ()
 
-@property (strong, nonatomic) ApptentiveSession *data;
+@property (strong, nonatomic) ApptentiveConversation *data;
 
 @end
 
@@ -47,7 +47,7 @@
 		self.interaction = [ApptentiveInteractionInvocation invocationWithJSONDictionary:invocationDictionary];
 	}
 
-	self.data = [[ApptentiveSession alloc] initWithAPIKey:@"foo"];
+	self.data = [[ApptentiveConversation alloc] initWithAPIKey:@"foo"];
 
 	[self.data updateDevice:^(ApptentiveMutableDevice *device) {
 		[device addCustomNumber:@5 withKey:@"number_5"];
@@ -67,7 +67,7 @@
 @implementation CornerCasesThatShouldBeFalse
 
 - (void)testCornerCasesThatShouldBeFalse {
-	XCTAssertTrue([self.interaction criteriaAreMetForSession:self.data]);
+	XCTAssertTrue([self.interaction criteriaAreMetForConversation:self.data]);
 }
 
 @end
@@ -80,7 +80,7 @@
 @implementation CornerCasesThatShouldBeTrue
 
 - (void)testCornerCasesThatShouldBeTrue {
-	XCTAssertTrue([self.interaction criteriaAreMetForSession:self.data]);
+	XCTAssertTrue([self.interaction criteriaAreMetForConversation:self.data]);
 }
 
 @end
@@ -99,7 +99,7 @@
 	[Apptentive sharedConnection].personName = nil;
 	[Apptentive sharedConnection].personEmailAddress = nil;
 
-	XCTAssertTrue([self.interaction criteriaAreMetForSession:self.data]);
+	XCTAssertTrue([self.interaction criteriaAreMetForConversation:self.data]);
 }
 
 @end
@@ -129,7 +129,7 @@
 		person.emailAddress = @"test@example.com";
 	}];
 
-	XCTAssertTrue([self.interaction criteriaAreMetForSession:self.data]);
+	XCTAssertTrue([self.interaction criteriaAreMetForConversation:self.data]);
 }
 
 @end
@@ -142,7 +142,7 @@
 @implementation OperatorStartsWith
 
 - (void)testOperatorStartsWith {
-	XCTAssertTrue([self.interaction criteriaAreMetForSession:self.data]);
+	XCTAssertTrue([self.interaction criteriaAreMetForConversation:self.data]);
 }
 
 @end
@@ -155,7 +155,7 @@
 @implementation OperatorEndsWith
 
 - (void)testOperatorEndsWith {
-	XCTAssertTrue([self.interaction criteriaAreMetForSession:self.data]);
+	XCTAssertTrue([self.interaction criteriaAreMetForConversation:self.data]);
 }
 
 @end
@@ -168,7 +168,7 @@
 @implementation OperatorNot
 
 - (void)testOperatorNot {
-	XCTAssertTrue([self.interaction criteriaAreMetForSession:self.data]);
+	XCTAssertTrue([self.interaction criteriaAreMetForConversation:self.data]);
 }
 
 @end
@@ -181,7 +181,7 @@
 @implementation OperatorExists
 
 - (void)testOperatorExists {
-	XCTAssertTrue([self.interaction criteriaAreMetForSession:self.data]);
+	XCTAssertTrue([self.interaction criteriaAreMetForConversation:self.data]);
 }
 
 @end
@@ -194,7 +194,7 @@
 @implementation WhitespaceTrimming
 
 - (void)testWhitespaceTrimming {
-	XCTAssertTrue([self.interaction criteriaAreMetForSession:self.data]);
+	XCTAssertTrue([self.interaction criteriaAreMetForConversation:self.data]);
 }
 
 @end

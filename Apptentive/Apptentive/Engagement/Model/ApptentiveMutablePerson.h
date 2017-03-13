@@ -14,7 +14,7 @@
 /**
  An `ApptentiveMutablePerson` is a version of the `ApptentivePerson` object
  whose name, email, and custom data can be modified. It is intended for use
- inside a the block passed to `ApptentiveSession`'s `-updatePerson:` method.
+ inside a the block passed to `ApptentiveConversation`'s `-updatePerson:` method.
  */
 @interface ApptentiveMutablePerson : ApptentiveMutableCustomData
 

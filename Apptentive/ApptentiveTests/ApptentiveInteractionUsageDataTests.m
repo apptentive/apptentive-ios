@@ -13,7 +13,7 @@
 #import "ApptentiveBackend+Engagement.h"
 #import "ApptentiveInteractionInvocation.h"
 #import "ApptentiveInteractionUsageData.h"
-#import "ApptentiveSession.h"
+#import "ApptentiveConversation.h"
 #import "ApptentiveAppRelease.h"
 #import "ApptentiveVersion.h"
 #import "ApptentiveBackend.h"
@@ -32,14 +32,14 @@
 - (void)setUp {
 	[super setUp];
 
-	self.usage = [[ApptentiveInteractionUsageData alloc] initWithSession:[[ApptentiveSession alloc] initWithAPIKey:@"foo"]];
+	self.usage = [[ApptentiveInteractionUsageData alloc] initWithConversation:[[ApptentiveConversation alloc] initWithAPIKey:@"foo"]];
 }
 
 - (void)testApplicationVersion {
 	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
 	invocation.criteria = @{ @"application/cf_bundle_short_version_string": @{@"$eq": @{@"_type": @"version", @"version": @"4.0.0"}} };
 
-	[self.usage.session.appRelease setValue:[[ApptentiveVersion alloc] initWithString:@"2"] forKey:@"version"];
+	[self.usage.conversation.appRelease setValue:[[ApptentiveVersion alloc] initWithString:@"2"] forKey:@"version"];
 
 	NSDictionary *evaluationDictionary = [self.usage predicateEvaluationDictionary];
 	NSDictionary *versionValue = evaluationDictionary[@"application/cf_bundle_short_version_string"];
@@ -47,9 +47,9 @@
 	XCTAssertEqualObjects(versionValue[@"_type"], @"version");
 	XCTAssertEqualObjects(versionValue[@"version"], @"2");
 
-	XCTAssertFalse([invocation criteriaAreMetForSession:self.usage.session], @"4.0.0 is not 2");
-	[self.usage.session.appRelease setValue:[[ApptentiveVersion alloc] initWithString:@"4.0"] forKey:@"version"];
-	XCTAssertTrue([invocation criteriaAreMetForSession:self.usage.session], @"4.0 is like 4.0.0");
+	XCTAssertFalse([invocation criteriaAreMetForConversation:self.usage.conversation], @"4.0.0 is not 2");
+	[self.usage.conversation.appRelease setValue:[[ApptentiveVersion alloc] initWithString:@"4.0"] forKey:@"version"];
+	XCTAssertTrue([invocation criteriaAreMetForConversation:self.usage.conversation], @"4.0 is like 4.0.0");
 }
 
 - (void)testDefaultApplicationVersion {
@@ -63,7 +63,7 @@
 - (void)testSDKVersion {
 	Apptentive.shared.APIKey = @"foo";
 	sleep(1);
-	ApptentiveInteractionUsageData *usage = [[ApptentiveInteractionUsageData alloc] initWithSession:[[ApptentiveSession alloc] initWithAPIKey:@"foo"]];
+	ApptentiveInteractionUsageData *usage = [[ApptentiveInteractionUsageData alloc] initWithConversation:[[ApptentiveConversation alloc] initWithAPIKey:@"foo"]];
 
 	NSDictionary *evaluationDictionary = [usage predicateEvaluationDictionary];
 	NSDictionary *versionValue = evaluationDictionary[@"sdk/version"];
@@ -77,7 +77,7 @@
 	NSDictionary *currentTimeValue = evaluationDictionary[@"current_time"];
 	XCTAssertNotNil(currentTimeValue, @"No current_time key found.");
 	XCTAssertEqualObjects(currentTimeValue[@"_type"], @"datetime");
-	XCTAssertEqualWithAccuracy([currentTimeValue[@"sec"] doubleValue], self.usage.session.currentTime.timeIntervalSince1970, 0.01);
+	XCTAssertEqualWithAccuracy([currentTimeValue[@"sec"] doubleValue], self.usage.conversation.currentTime.timeIntervalSince1970, 0.01);
 }
 
 - (void)testTimeAtInstall {
@@ -85,19 +85,19 @@
 	NSDictionary *timeAtInstallValue = evaluationDictionary[@"time_at_install/total"];
 	XCTAssertNotNil(timeAtInstallValue, @"No time_at_install/total key found.");
 	XCTAssertEqualObjects(timeAtInstallValue[@"_type"], @"datetime");
-	XCTAssertEqualWithAccuracy([timeAtInstallValue[@"sec"] doubleValue], self.usage.session.appRelease.timeAtInstallTotal.timeIntervalSince1970, 0.01);
+	XCTAssertEqualWithAccuracy([timeAtInstallValue[@"sec"] doubleValue], self.usage.conversation.appRelease.timeAtInstallTotal.timeIntervalSince1970, 0.01);
 
 	NSDictionary *timeAtInstallVersionValue = evaluationDictionary[@"time_at_install/cf_bundle_short_version_string"];
 	XCTAssertNotNil(timeAtInstallVersionValue, @"No time_at_install/version key found.");
 	XCTAssertEqualObjects(timeAtInstallVersionValue[@"_type"], @"datetime");
-	XCTAssertEqualWithAccuracy([timeAtInstallVersionValue[@"sec"] doubleValue], self.usage.session.appRelease.timeAtInstallVersion.timeIntervalSince1970, 0.01);
+	XCTAssertEqualWithAccuracy([timeAtInstallVersionValue[@"sec"] doubleValue], self.usage.conversation.appRelease.timeAtInstallVersion.timeIntervalSince1970, 0.01);
 }
 
 //TODO: Test for code point last_invoked_at/total
 //TODO: Test for interaction last_invoked_at/total
 
 - (void)testPerson {
-	[self.usage.session updatePerson:^(ApptentiveMutablePerson *person) {
+	[self.usage.conversation updatePerson:^(ApptentiveMutablePerson *person) {
 		person.name = nil;
 		person.emailAddress = nil;
 	}];
@@ -106,7 +106,7 @@
 	XCTAssertNil(evaluationDictionary[@"person/name"]);
 	XCTAssertNil(evaluationDictionary[@"person/email"]);
 
-	[self.usage.session updatePerson:^(ApptentiveMutablePerson *person) {
+	[self.usage.conversation updatePerson:^(ApptentiveMutablePerson *person) {
 		person.name = @"Andrew";
 		person.emailAddress = @"example@example.com";
 	}];

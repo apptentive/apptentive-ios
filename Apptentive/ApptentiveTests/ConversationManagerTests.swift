@@ -14,7 +14,7 @@ class ConversationManagerTests: XCTestCase {
     override func setUp() {
         super.setUp()
 
-		conversationManager = ApptentiveConversationManager(storagePath: <#T##String#>, operationQueue:  OperationQueue)
+		conversationManager = ApptentiveConversationManager()
     }
 
     override func tearDown() {

@@ -108,10 +108,6 @@
 
 - (void)resetBackend;
 
-// Debugging
-
-@property (strong, nonatomic) NSURL *localEngagementManifestURL;
-
 @end
 
 @protocol ATBackendMessageDelegate <NSObject>

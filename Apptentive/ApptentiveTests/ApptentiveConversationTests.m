@@ -34,17 +34,16 @@
 - (void)setUp {
     [super setUp];
 
-	self.conversation = [[ApptentiveConversation alloc] initWithAPIKey:@"ABC123"];
+	self.conversation = [[ApptentiveConversation alloc] init];
 	self.conversation.delegate = self;
 }
 
 - (void)testConversation {
-	XCTAssertEqualObjects(self.conversation.APIKey, @"ABC123");
 	XCTAssertNil(self.conversation.token);
 	XCTAssertNil(self.conversation.person.identifier);
 	XCTAssertNil(self.conversation.device.identifier);
 
-	[self.conversation setToken:@"DEF456" personID:@"GHI789" deviceID:@"JKL101"];
+	[self.conversation setToken:@"DEF456" conversationID:@"ABC123" personID:@"GHI789" deviceID:@"JKL101"];
 
 	XCTAssertEqualObjects(self.conversation.token, @"DEF456");
 	XCTAssertEqualObjects(self.conversation.person.identifier, @"GHI789");
@@ -277,7 +276,7 @@
 
 - (void)testNSCoding {
 	// Make some changes to the default values
-	[self.conversation setToken:@"DEF456" personID:@"GHI789" deviceID:@"JKL101"];
+	[self.conversation setToken:@"DEF456" conversationID:@"ABC123" personID:@"GHI789" deviceID:@"JKL101"];
 	[self.conversation setUserInfo:@"foo" forKey:@"bar"];
 
 	[self.conversation didOverrideStyles];

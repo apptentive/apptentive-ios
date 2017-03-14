@@ -23,7 +23,7 @@
 @implementation ApptentiveConnectTests
 
 - (void)testCustomPersonData {
-	ApptentiveConversation *conversation = [[ApptentiveConversation alloc] initWithAPIKey:@"foo"];
+	ApptentiveConversation *conversation = [[ApptentiveConversation alloc] init];
 
 	// Add standard types of data
 	XCTAssertTrue(conversation.person.name == nil, @"Name should not be set.");
@@ -57,7 +57,7 @@
 }
 
 - (void)testCustomDeviceData {
-	ApptentiveConversation *conversation = [[ApptentiveConversation alloc] initWithAPIKey:@"foo"];
+	ApptentiveConversation *conversation = [[ApptentiveConversation alloc] init];
 
 	[conversation updateDevice:^(ApptentiveMutableDevice *device) {
 		[device addCustomString:@"black" withKey:@"color"];

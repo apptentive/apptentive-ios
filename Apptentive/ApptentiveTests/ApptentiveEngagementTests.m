@@ -94,7 +94,7 @@
 	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
 	invocation.criteria = @{ @"time_at_install/total": @{@"$before": @(-5 * 60 * 60 * 24), @"$after": @(-7 * 60 * 60 * 24)} };
 
-	ApptentiveConversation *conversation = [[ApptentiveConversation alloc] initWithAPIKey:@"foo"];
+	ApptentiveConversation *conversation = [[ApptentiveConversation alloc] init];
 
 	[conversation.appRelease setValue:[NSDate dateWithTimeIntervalSinceNow:-6 * 60 * 60 * 24] forKey:@"timeAtInstallTotal"];
 	[conversation.appRelease setValue:[NSDate dateWithTimeIntervalSinceNow:-6 * 60 * 60 * 24] forKey:@"timeAtInstallVersion"];
@@ -112,7 +112,7 @@
 	invocation.criteria = @{ @"time_at_install/total": @{@"$before": @(6 * 60 * 60 * 24)},
 		@"time_at_install/cf_bundle_short_version_string": @{@"$before": @(6 * 60 * 60 * 24)} };
 
-	ApptentiveConversation *conversation = [[ApptentiveConversation alloc] initWithAPIKey:@"foo"];
+	ApptentiveConversation *conversation = [[ApptentiveConversation alloc] init];
 
 	[conversation.appRelease setValue:[NSDate dateWithTimeIntervalSinceNow:-6 * 60 * 60 * 24] forKey:@"timeAtInstallTotal"];
 	[conversation.appRelease setValue:[NSDate dateWithTimeIntervalSinceNow:-6 * 60 * 60 * 24] forKey:@"timeAtInstallVersion"];
@@ -152,7 +152,7 @@
 - (void)testInteractionCriteriaDaysSnceInstall {
 	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
 
-	ApptentiveConversation *conversation = [[ApptentiveConversation alloc] initWithAPIKey:@"foo"];
+	ApptentiveConversation *conversation = [[ApptentiveConversation alloc] init];
 
 	NSTimeInterval dayTimeInterval = 60 * 60 * 24;
 
@@ -173,7 +173,7 @@
 
 - (void)testInteractionCriteriaDebug {
 	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
-	ApptentiveConversation *conversation = [[ApptentiveConversation alloc] initWithAPIKey:@"foo"];
+	ApptentiveConversation *conversation = [[ApptentiveConversation alloc] init];
 
 // Debug default to false
 #if APPTENTIVE_DEBUG
@@ -195,7 +195,7 @@
 
 - (void)testInteractionCriteriaVersion {
 	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
-	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] initWithConversation:[[ApptentiveConversation alloc] initWithAPIKey:@"foo"]];
+	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] initWithConversation:[[ApptentiveConversation alloc] init]];
 
 	invocation.criteria = @{ @"application/cf_bundle_short_version_string": [Apptentive versionObjectWithVersion:@"1.2.8"] };
 	[usageData.conversation.appRelease setValue:[[ApptentiveVersion alloc] initWithString:@"1.2.8"] forKey:@"version"];
@@ -212,7 +212,7 @@
 
 - (void)testInteractionCriteriaBuild {
 	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
-	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] initWithConversation:[[ApptentiveConversation alloc] initWithAPIKey:@"foo"]];
+	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] initWithConversation:[[ApptentiveConversation alloc] init]];
 
 	invocation.criteria = @{ @"application/cf_bundle_version": [Apptentive versionObjectWithVersion:@"39"] };
 	[usageData.conversation.appRelease setValue:[[ApptentiveVersion alloc] initWithString:@"39"] forKey:@"build"];
@@ -242,7 +242,7 @@
 
 - (void)testInteractionCriteriaSDK {
 	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
-	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] initWithConversation:[[ApptentiveConversation alloc] initWithAPIKey:@"foo"]];
+	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] initWithConversation:[[ApptentiveConversation alloc] init]];
 
 	invocation.criteria = @{ @"sdk/version": [Apptentive versionObjectWithVersion:@"1.4.2"] };
 	[usageData.conversation.SDK setValue:[[ApptentiveVersion alloc] initWithString:@"1.4.2"] forKey:@"version"];
@@ -260,7 +260,7 @@
 
 - (void)testInteractionCriteriaCurrentTime {
 	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
-	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] initWithConversation:[[ApptentiveConversation alloc] initWithAPIKey:@"foo"]];
+	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] initWithConversation:[[ApptentiveConversation alloc] init]];
 
 	invocation.criteria = @{ @"current_time": @{@"$exists": @YES} };
 	XCTAssertTrue([invocation criteriaAreMetForConversation:usageData.conversation], @"Must have default current time.");
@@ -284,7 +284,7 @@
 
 - (void)testCodePointInvokesVersion {
 	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
-	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] initWithConversation:[[ApptentiveConversation alloc] initWithAPIKey:@"foo"]];
+	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] initWithConversation:[[ApptentiveConversation alloc] init]];
 
 	[usageData.conversation warmCodePoint:@"app.launch"];
 	invocation.criteria = @{ @"code_point/app.launch/invokes/cf_bundle_short_version_string": @1 };
@@ -306,7 +306,7 @@
 
 - (void)testCodePointInvokesBuild {
 	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
-	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] initWithConversation:[[ApptentiveConversation alloc] initWithAPIKey:@"foo"]];
+	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] initWithConversation:[[ApptentiveConversation alloc] init]];
 
 	[usageData.conversation warmCodePoint:@"app.launch"];
 	invocation.criteria = @{ @"code_point/app.launch/invokes/cf_bundle_version": @1 };
@@ -328,7 +328,7 @@
 
 - (void)testInteractionInvokesVersion {
 	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
-	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] initWithConversation:[[ApptentiveConversation alloc] initWithAPIKey:@"foo"]];
+	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] initWithConversation:[[ApptentiveConversation alloc] init]];
 
 	[usageData.conversation warmInteraction:@"526fe2836dd8bf546a00000b"];
 	invocation.criteria = @{ @"interactions/526fe2836dd8bf546a00000b/invokes/cf_bundle_short_version_string": @(1) };
@@ -350,7 +350,7 @@
 
 - (void)testInteractionInvokesBuild {
 	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
-	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] initWithConversation:[[ApptentiveConversation alloc] initWithAPIKey:@"foo"]];
+	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] initWithConversation:[[ApptentiveConversation alloc] init]];
 
 	[usageData.conversation warmInteraction:@"526fe2836dd8bf546a00000b"];
 	invocation.criteria = @{ @"interactions/526fe2836dd8bf546a00000b/invokes/cf_bundle_version": @(1) };
@@ -372,7 +372,7 @@
 
 - (void)testUpgradeMessageCriteria {
 	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
-	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] initWithConversation:[[ApptentiveConversation alloc] initWithAPIKey:@"foo"]];
+	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] initWithConversation:[[ApptentiveConversation alloc] init]];
 
 	invocation.criteria = @{ @"code_point/app.launch/invokes/cf_bundle_short_version_string": @1,
 		@"application/cf_bundle_short_version_string": [Apptentive versionObjectWithVersion:@"1.3.0"],
@@ -406,13 +406,13 @@
 		@"application_version": @"1.3.1",
 		@"application_build": @"39" };
 
-	[Apptentive.shared.backend.conversation.engagement resetVersion];
+	[Apptentive.shared.backend.conversationManager.activeConversation.engagement resetVersion];
 	XCTAssertFalse([invocation criteriaAreMetForConversation:usageData.conversation], @"Should fail with invalid types.");
 }
 
 - (void)testIsUpdateVersionsAndBuilds {
 	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
-	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] initWithConversation:[[ApptentiveConversation alloc] initWithAPIKey:@"foo"]];
+	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] initWithConversation:[[ApptentiveConversation alloc] init]];
 
 	//Version
 	invocation.criteria = @{ @"is_update/cf_bundle_short_version_string": @YES };
@@ -467,57 +467,59 @@
 }
 
 - (void)testEnjoymentDialogCriteria {
+	// TODO: create synchronous backend initializer
 	[Apptentive sharedConnection].APIKey = @"bogus_api_key"; // trigger creation of engagement backend
-	sleep(1);
 
+	// The conversation manager doesn't yet exist here, so this has no effect
 	Apptentive.shared.localInteractionsURL = [[NSBundle bundleForClass:[self class]] URLForResource:@"testInteractions" withExtension:@"json"];
 
-	[Apptentive.shared.backend.conversation warmCodePoint:@"local#app#init"];
-	[Apptentive.shared.backend.conversation engageCodePoint:@"local#app#init"];
-	[Apptentive.shared.backend.conversation engageCodePoint:@"local#app#init"];
-	[Apptentive.shared.backend.conversation engageCodePoint:@"local#app#init"];
-	[Apptentive.shared.backend.conversation engageCodePoint:@"local#app#init"];
-	[Apptentive.shared.backend.conversation engageCodePoint:@"local#app#init"];
-	[Apptentive.shared.backend.conversation engageCodePoint:@"local#app#init"];
-	[Apptentive.shared.backend.conversation engageCodePoint:@"local#app#init"];
-	[Apptentive.shared.backend.conversation engageCodePoint:@"local#app#init"];
-	[Apptentive.shared.backend.conversation engageCodePoint:@"local#app#init"];
+	[Apptentive.shared.backend.conversationManager.activeConversation warmCodePoint:@"local#app#init"];
+	[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#init"];
+	[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#init"];
+	[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#init"];
+	[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#init"];
+	[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#init"];
+	[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#init"];
+	[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#init"];
+	[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#init"];
+	[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#init"];
 
-	[Apptentive.shared.backend.conversation.appRelease setValue:[NSDate dateWithTimeIntervalSinceNow:-863999] forKey:@"timeAtInstallTotal"];
+	[Apptentive.shared.backend.conversationManager.activeConversation.appRelease setValue:[NSDate dateWithTimeIntervalSinceNow:-863999] forKey:@"timeAtInstallTotal"];
 
-	[Apptentive.shared.backend.conversation warmCodePoint:@"local#app#testRatingFlow"];
-	[Apptentive.shared.backend.conversation engageCodePoint:@"local#app#testRatingFlow"];
-	[Apptentive.shared.backend.conversation engageCodePoint:@"local#app#testRatingFlow"];
-	[Apptentive.shared.backend.conversation engageCodePoint:@"local#app#testRatingFlow"];
-	[Apptentive.shared.backend.conversation engageCodePoint:@"local#app#testRatingFlow"];
-	[Apptentive.shared.backend.conversation engageCodePoint:@"local#app#testRatingFlow"];
-	[Apptentive.shared.backend.conversation engageCodePoint:@"local#app#testRatingFlow"];
-	[Apptentive.shared.backend.conversation engageCodePoint:@"local#app#testRatingFlow"];
-	[Apptentive.shared.backend.conversation engageCodePoint:@"local#app#testRatingFlow"];
-	[Apptentive.shared.backend.conversation engageCodePoint:@"local#app#testRatingFlow"];
+	[Apptentive.shared.backend.conversationManager.activeConversation warmCodePoint:@"local#app#testRatingFlow"];
+	[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#testRatingFlow"];
+	[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#testRatingFlow"];
+	[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#testRatingFlow"];
+	[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#testRatingFlow"];
+	[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#testRatingFlow"];
+	[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#testRatingFlow"];
+	[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#testRatingFlow"];
+	[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#testRatingFlow"];
+	[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#testRatingFlow"];
 
 	XCTAssertFalse([Apptentive.shared canShowInteractionForEvent:@"testRatingFlow"], @"The OR clauses are failing.");
 
-	[Apptentive.shared.backend.conversation engageCodePoint:@"local#app#init"];
-	[Apptentive.shared.backend.conversation engageCodePoint:@"local#app#init"];
+	[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#init"];
+	[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#init"];
 
-	[Apptentive.shared.backend.conversation engageCodePoint:@"local#app#testRatingFlow"];
-	[Apptentive.shared.backend.conversation engageCodePoint:@"local#app#testRatingFlow"];
+	[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#testRatingFlow"];
+	[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#testRatingFlow"];
 
 	XCTAssertTrue([Apptentive.shared canShowInteractionForEvent:@"testRatingFlow"], @"One of the OR clauses is true. The other ANDed clause is also true. Should work.");
 
-	[Apptentive.shared.backend.conversation.appRelease setValue:[NSDate dateWithTimeIntervalSinceNow:-864001] forKey:@"timeAtInstallTotal"];
+	[Apptentive.shared.backend.conversationManager.activeConversation.appRelease setValue:[NSDate dateWithTimeIntervalSinceNow:-864001] forKey:@"timeAtInstallTotal"];
 	XCTAssertTrue([Apptentive.shared canShowInteractionForEvent:@"testRatingFlow"], @"All of the OR clauses are true. The other ANDed clause is also true. Should work.");
 
-	[Apptentive.shared.backend.conversation warmInteraction:@"533ed97a7724c5457e00003f"];
-	[Apptentive.shared.backend.conversation engageInteraction:@"533ed97a7724c5457e00003f"];
+	[Apptentive.shared.backend.conversationManager.activeConversation warmInteraction:@"533ed97a7724c5457e00003f"];
+	[Apptentive.shared.backend.conversationManager.activeConversation engageInteraction:@"533ed97a7724c5457e00003f"];
 	XCTAssertFalse([Apptentive.shared canShowInteractionForEvent:@"testRatingFlow"], @"All the OR clauses are true. The other ANDed clause is not true. Should fail.");
 }
 
 - (void)testCanShowInteractionForEvent {
+	// TODO: create synchronous backend initializer
 	[Apptentive sharedConnection].APIKey = @"bogus_api_key"; // trigger creation of engagement backend
-	sleep(1);
 
+	// The conversation manager doesn't yet exist here, so this has no effect
 	Apptentive.shared.localInteractionsURL = [[NSBundle bundleForClass:[self class]] URLForResource:@"testInteractions" withExtension:@"json"];
 
 	XCTAssertTrue([[Apptentive sharedConnection] canShowInteractionForEvent:@"canShow"], @"If invocation is valid, it will be shown for the next targeted event.");

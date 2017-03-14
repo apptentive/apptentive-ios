@@ -26,7 +26,7 @@
 - (void)setUp {
 	[super setUp];
 
-	self.usageData = [ApptentiveInteractionUsageData usageDataWithConversation:[[ApptentiveConversation alloc] initWithAPIKey:@"foo"]];
+	self.usageData = [ApptentiveInteractionUsageData usageDataWithConversation:[[ApptentiveConversation alloc] init]];
 }
 
 - (void)incrementCodePoint:(NSString *)codePoint {

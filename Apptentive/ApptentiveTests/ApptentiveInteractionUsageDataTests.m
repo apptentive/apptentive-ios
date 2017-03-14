@@ -32,7 +32,7 @@
 - (void)setUp {
 	[super setUp];
 
-	self.usage = [[ApptentiveInteractionUsageData alloc] initWithConversation:[[ApptentiveConversation alloc] initWithAPIKey:@"foo"]];
+	self.usage = [[ApptentiveInteractionUsageData alloc] initWithConversation:[[ApptentiveConversation alloc] init]];
 }
 
 - (void)testApplicationVersion {
@@ -63,7 +63,7 @@
 - (void)testSDKVersion {
 	Apptentive.shared.APIKey = @"foo";
 	sleep(1);
-	ApptentiveInteractionUsageData *usage = [[ApptentiveInteractionUsageData alloc] initWithConversation:[[ApptentiveConversation alloc] initWithAPIKey:@"foo"]];
+	ApptentiveInteractionUsageData *usage = [[ApptentiveInteractionUsageData alloc] initWithConversation:[[ApptentiveConversation alloc] init]];
 
 	NSDictionary *evaluationDictionary = [usage predicateEvaluationDictionary];
 	NSDictionary *versionValue = evaluationDictionary[@"sdk/version"];

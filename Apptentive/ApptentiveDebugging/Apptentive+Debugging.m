@@ -29,11 +29,11 @@
 }
 
 - (void)setLocalInteractionsURL:(NSURL *)localInteractionsURL {
-	self.backend.localEngagementManifestURL = localInteractionsURL;
+	self.backend.conversationManager.localEngagementManifestURL = localInteractionsURL;
 }
 
 - (NSURL *)localInteractionsURL {
-	return self.backend.localEngagementManifestURL;
+	return self.backend.conversationManager.localEngagementManifestURL;
 }
 
 - (NSString *)storagePath {

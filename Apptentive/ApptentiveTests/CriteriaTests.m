@@ -47,7 +47,7 @@
 		self.interaction = [ApptentiveInteractionInvocation invocationWithJSONDictionary:invocationDictionary];
 	}
 
-	self.data = [[ApptentiveConversation alloc] initWithAPIKey:@"foo"];
+	self.data = [[ApptentiveConversation alloc] init];
 
 	[self.data updateDevice:^(ApptentiveMutableDevice *device) {
 		[device addCustomNumber:@5 withKey:@"number_5"];

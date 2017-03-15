@@ -136,8 +136,18 @@ static NSString *const ManifestFilename = @"manifest-v1.archive";
 
 - (BOOL)endActiveConversation {
 	if (self.activeConversation != nil) {
+		ApptentiveConversationMetadataItem *activeItem = [self.conversationMetadata findItemFilter:^BOOL(ApptentiveConversationMetadataItem *item) {
+			return item.conversationIdentifier = self.activeConversation.identifier;
+		}];
+
+		activeItem.state = ApptentiveConversationStateLoggedOut;
+		[self saveMetadata];
+
 		self.activeConversation.state = ApptentiveConversationStateLoggedOut;
-		// TODO: notify people?
+		[self saveConversation];
+
+		[self notifyConversationStateDidChange];
+
 		return YES;
 	}
 

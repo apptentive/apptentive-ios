@@ -39,6 +39,7 @@ NS_ASSUME_NONNULL_BEGIN
  * Returns NO if active conversation is missing or cannot be loaded.
  */
 - (BOOL)loadActiveConversation;
+- (BOOL)endActiveConversation;
 
 - (BOOL)saveMetadata;
 
@@ -57,7 +58,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol ApptentiveConversationManagerDelegate <NSObject>
 
-- (void)conversationManager:(ApptentiveConversationManager *)manager didLoadConversation:(ApptentiveConversation *)conversation;
+- (void)conversationManager:(ApptentiveConversationManager *)manager conversationDidChangeState:(ApptentiveConversation *)conversation;
 
 - (void)conversationManagerMessageFetchCompleted:(BOOL)success;
 

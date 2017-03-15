@@ -7,8 +7,9 @@
 //
 
 #import "ApptentiveState.h"
+#import "ApptentiveConversationMetadataItem.h"
 
-@class ApptentivePerson, ApptentiveDevice, ApptentiveSDK, ApptentiveAppRelease, ApptentiveEngagement, ApptentiveMutablePerson, ApptentiveMutableDevice, ApptentiveVersion, ApptentiveConversationMetadataItem;
+@class ApptentivePerson, ApptentiveDevice, ApptentiveSDK, ApptentiveAppRelease, ApptentiveEngagement, ApptentiveMutablePerson, ApptentiveMutableDevice, ApptentiveVersion;
 @protocol ApptentiveConversationDelegate;
 
 /**
@@ -25,6 +26,11 @@
  method should be used.
 */
 @interface ApptentiveConversation : ApptentiveState
+
+/**
+ Whether the conversation is anonymous, has a token, is logged in, etc.
+ */
+@property (assign, nonatomic) ApptentiveConversationState state;
 
 /**
  The `ApptentiveAppRelease` object for this conversation.

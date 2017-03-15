@@ -656,7 +656,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	}
 }
 
-- (void)conversationManager:(ApptentiveConversationManager *)manager didLoadConversation:(ApptentiveConversation *)conversation {
+- (void)conversationManager:(ApptentiveConversationManager *)manager conversationDidChangeState:(ApptentiveConversation *)conversation {
 	self.networkQueue.token = conversation.token;
 
 	if (self.state != ATBackendStateReady) {

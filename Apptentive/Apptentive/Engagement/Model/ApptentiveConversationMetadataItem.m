@@ -51,12 +51,4 @@ static NSString *const VersionKey = @"version";
 	[coder encodeInteger:VERSION forKey:VersionKey];
 }
 
-- (BOOL)isActive {
-	return self.state == ApptentiveConversationStateActive;
-}
-
-- (BOOL)isDefault {
-	return self.state == ApptentiveConversationStateDefault;
-}
-
 @end

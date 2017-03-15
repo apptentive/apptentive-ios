@@ -18,6 +18,6 @@ typedef BOOL(^ApptentiveConversationMetadataItemFilter)(ApptentiveConversationMe
 
 - (ApptentiveConversationMetadataItem *)findItemFilter:(ApptentiveConversationMetadataItemFilter)filter;
 
-- (ApptentiveConversationMetadataItem *)setActiveConversation:(ApptentiveConversation *)conversation;
+@property (strong, nonatomic) ApptentiveConversationMetadataItem *activeConversationMetadataItem;
 
 @end

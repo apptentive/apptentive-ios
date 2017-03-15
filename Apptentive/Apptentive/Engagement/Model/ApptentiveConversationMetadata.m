@@ -13,7 +13,6 @@
 #define VERSION 1
 
 static NSString *const ItemsKey = @"items";
-static NSString *const ActiveConversationMetadataKey = @"activeConversationMetadata";
 static NSString *const VersionKey = @"version";
 
 
@@ -38,7 +37,6 @@ static NSString *const VersionKey = @"version";
 
 	if (self) {
 		_items = [coder decodeObjectOfClass:[NSMutableArray class] forKey:ItemsKey];
-		_activeConversationMetadataItem = [coder decodeObjectOfClass:[ApptentiveConversationMetadataItem class] forKey:ActiveConversationMetadataKey];
 	}
 
 	return self;
@@ -46,11 +44,10 @@ static NSString *const VersionKey = @"version";
 
 - (void)encodeWithCoder:(NSCoder *)coder {
 	[coder encodeObject:self.items forKey:ItemsKey];
-	[coder encodeObject:self.activeConversationMetadataItem forKey:ActiveConversationMetadataKey];
 	[coder encodeInteger:VERSION forKey:VersionKey];
 }
 
-- (ApptentiveConversationMetadataItem *)setActiveConversation:(ApptentiveConversation *)conversation {
+- (ApptentiveConversationMetadataItem *)findOrCreateMetadataForConversation:(ApptentiveConversation *)conversation {
 	ApptentiveConversationMetadataItem *newItem = [self findItemFilter:^BOOL(ApptentiveConversationMetadataItem *item) {
 		return item.conversationIdentifier == conversation.identifier;
 	}];
@@ -60,8 +57,6 @@ static NSString *const VersionKey = @"version";
 		
 		[self.items addObject:newItem];
 	}
-
-	_activeConversationMetadataItem = newItem;
 
 	return newItem;
 }

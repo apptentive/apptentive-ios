@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 typedef NS_ENUM(NSInteger, ApptentiveConversationState) {
-	ApptentiveConversationStateNone = 0,
+	ApptentiveConversationStateUndefined = 0,
 	ApptentiveConversationStateAnonymousPending,
 	ApptentiveConversationStateAnonymous,
 	ApptentiveConversationStateLoggedIn,

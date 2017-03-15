@@ -73,6 +73,8 @@ static NSString *const ManifestFilename = @"manifest-v1.archive";
 
 	if (self.activeConversation != nil) {
 		self.activeConversation.delegate = self;
+
+		[self notifyConversationStateDidChange];
 		return true;
 	}
 

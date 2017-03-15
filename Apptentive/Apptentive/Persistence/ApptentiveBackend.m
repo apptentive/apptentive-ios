@@ -283,6 +283,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	_networkQueue = [[ApptentiveNetworkQueue alloc] initWithBaseURL:self.baseURL token:self.APIKey SDKVersion:kApptentiveVersionString platform:@"iOS"];
 
 	_conversationManager = [[ApptentiveConversationManager alloc] initWithStoragePath:_supportDirectoryPath operationQueue:_operationQueue networkQueue:_networkQueue parentManagedObjectContext:self.managedObjectContext];
+	self.conversationManager.delegate = self;
 
 	[self.conversationManager loadActiveConversation];
 }

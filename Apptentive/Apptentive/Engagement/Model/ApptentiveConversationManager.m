@@ -89,7 +89,7 @@ static NSString *const ManifestFilename = @"manifest-v1.archive";
  */
 - (ApptentiveConversation *)loadConversation {
     // if no user was logged in previously - we might have a default conversation
-    ApptentiveLogDebug(@"Loading logged-in conversation...");
+    ApptentiveLogDebug(@"Attempting to load logged-in conversation…");
     ApptentiveConversationMetadataItem *loggedInItem = [self.conversationMetadata findItemFilter:^BOOL(ApptentiveConversationMetadataItem *item) {
         return item.state == ApptentiveConversationStateLoggedIn;
     }];
@@ -98,8 +98,8 @@ static NSString *const ManifestFilename = @"manifest-v1.archive";
 		return [self loadConversation:loggedInItem];
     }
 
-	// if no user was logged in previously - we might have an anonymous conversation
-	ApptentiveLogDebug(@"Loading anonymous conversation...");
+	// if no user is currently logged in - we might have an anonymous conversation
+	ApptentiveLogDebug(@"Attempting to load anonymous conversation…");
 	ApptentiveConversationMetadataItem *anonymousItem = [self.conversationMetadata findItemFilter:^BOOL(ApptentiveConversationMetadataItem *item) {
 		return item.state == ApptentiveConversationStateAnonymous || item.state == ApptentiveConversationStateAnonymousPending;
 	}];
@@ -147,7 +147,7 @@ static NSString *const ManifestFilename = @"manifest-v1.archive";
 #pragma mark - Conversation fetching
 
 - (void)fetchConversationToken:(ApptentiveConversation *)conversation {
-	NSAssert(conversation.state == ApptentiveConversationStateAnonymousPending, @"Only anonyous pending conversations should load tokens");
+	NSAssert(conversation.state == ApptentiveConversationStateAnonymousPending, @"Only anonymous pending conversations need to be created on the server");
 
 	self.conversationOperation = [[ApptentiveRequestOperation alloc] initWithPath:@"conversation" method:@"POST" payload:conversation.conversationCreationJSON delegate:self dataSource:self.networkQueue];
 
@@ -321,6 +321,8 @@ static NSString *const ManifestFilename = @"manifest-v1.archive";
 	ApptentiveLogError(@"%@ %@ failed with error: %@. Not retrying.", operation.request.HTTPMethod, operation.request.URL.absoluteString, error);
 
 	if (operation == self.conversationOperation) {
+		// This is a permanent failure. We should basically disable the SDK at this point.
+		// TODO: disable the SDK until next launch
 		self.conversationOperation = nil;
 	} else if (operation == self.manifestOperation) {
 		self.manifestOperation = nil;

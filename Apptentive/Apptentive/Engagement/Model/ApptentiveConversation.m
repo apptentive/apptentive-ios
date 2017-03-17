@@ -94,10 +94,19 @@ static NSString *const ATMessageCenterDidSkipProfileKey = @"ATMessageCenterDidSk
 }
 
 - (void)setToken:(NSString *)token conversationID:(NSString *)conversationID personID:(NSString *)personID deviceID:(NSString *)deviceID {
-	_token = token;
+	self.token = token;
 	_identifier = conversationID;
 	self.person.identifier = personID;
 	self.device.identifier = deviceID;
+}
+
+- (void)setToken:(NSString *)token {
+	if (token == nil) {
+		ApptentiveLogError(@"Attempting to set token to nil. Ignoring.");
+		return;
+	}
+
+	_token = token;
 }
 
 - (void)checkForDiffs {

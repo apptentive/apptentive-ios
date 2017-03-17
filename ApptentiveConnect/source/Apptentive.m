@@ -20,6 +20,7 @@
 #import "ApptentiveUnreadMessagesBadgeView.h"
 #import "ApptentiveAboutViewController.h"
 #import "ApptentiveStyleSheet.h"
+#import "ApptentiveDeviceUpdater.h"
 
 NSString *const ApptentiveMessageCenterUnreadCountChangedNotification = @"ApptentiveMessageCenterUnreadCountChangedNotification";
 
@@ -38,6 +39,7 @@ NSString *const ApptentiveInteractionsShouldDismissNotification = @"ApptentiveIn
 NSString *const ApptentiveInteractionsShouldDismissAnimatedKey = @"ApptentiveInteractionsShouldDismissAnimatedKey";
 NSString *const ApptentiveCustomDeviceDataPreferenceKey = @"ApptentiveCustomDeviceDataPreferenceKey";
 NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPersonDataPreferenceKey";
+NSString *const ApptentiveIntegrationConfigurationPreferenceKey = @"ApptentiveIntegrationConfigurationPreferenceKey";
 
 
 @interface Apptentive () <ApptentiveBannerViewControllerDelegate>
@@ -88,7 +90,8 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 		_customPersonData = [[[NSUserDefaults standardUserDefaults] objectForKey:ApptentiveCustomPersonDataPreferenceKey] mutableCopy] ?: [[NSMutableDictionary alloc] init];
 		_customDeviceData = [[[NSUserDefaults standardUserDefaults] objectForKey:ApptentiveCustomDeviceDataPreferenceKey] mutableCopy] ?: [[NSMutableDictionary alloc] init];
 
-		_integrationConfiguration = [[NSMutableDictionary alloc] init];
+		[self restoreIntegrationConfiguration];
+
 		_style = [[ApptentiveStyleSheet alloc] init];
 
 		ApptentiveLogInfo(@"Apptentive SDK Version %@", kApptentiveVersionString);
@@ -104,6 +107,36 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 - (void)saveCustomDeviceData {
 	[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveCustomDeviceDataChangedNotification object:self.customPersonData];
 	[[NSUserDefaults standardUserDefaults] setObject:_customDeviceData forKey:ApptentiveCustomDeviceDataPreferenceKey];
+}
+
+- (void)saveIntegrationConfiguration {
+	[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveCustomDeviceDataChangedNotification object:self.customDeviceData];
+	[[NSUserDefaults standardUserDefaults] setObject:_integrationConfiguration forKey:ApptentiveIntegrationConfigurationPreferenceKey];
+}
+
+- (void)restoreIntegrationConfiguration {
+	_integrationConfiguration = [[NSMutableDictionary alloc] init];
+
+	NSDictionary *previousIntegrationConfiguration = [[NSUserDefaults standardUserDefaults] objectForKey:ApptentiveIntegrationConfigurationPreferenceKey];
+	NSDictionary *previousDeviceIntegrationConfiguration = [ApptentiveDeviceUpdater lastSavedVersion][@"device"][@"integration_config"];
+
+	// The following band-aids a race condition where an empty integration configuration can be erroneously sent.
+	if (previousIntegrationConfiguration == nil && previousDeviceIntegrationConfiguration != nil) {
+		// If don't have a saved integration config, but we have previously sent one as part of device update, copy the value from the device update.
+		[_integrationConfiguration addEntriesFromDictionary:previousDeviceIntegrationConfiguration];
+
+		// Then remove integration_config from the previous device update, so that we trigger an update when we diff the new against the old.
+		NSMutableDictionary *mutableDeviceUpdate = [[ApptentiveDeviceUpdater lastSavedVersion] mutableCopy];
+		NSDictionary *device = mutableDeviceUpdate[@"device"];
+		if (device != nil) {
+			NSMutableDictionary *mutableDevice = [mutableDeviceUpdate[@"device"] mutableCopy];
+			mutableDevice[@"integration_config"] = @{};
+			mutableDeviceUpdate[@"device"] = [mutableDevice copy];
+			[[NSUserDefaults standardUserDefaults] setObject:[mutableDeviceUpdate copy] forKey:ATDeviceLastUpdateValuePreferenceKey];
+		}
+	} else if (previousIntegrationConfiguration != nil) {
+		[_integrationConfiguration addEntriesFromDictionary:previousIntegrationConfiguration];
+	}
 }
 
 - (void)setAPIKey:(NSString *)APIKey {
@@ -320,7 +353,7 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 - (void)addIntegration:(NSString *)integration withConfiguration:(NSDictionary *)configuration {
 	[_integrationConfiguration setObject:configuration forKey:integration];
 
-	[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveCustomDeviceDataChangedNotification object:self.customDeviceData];
+	[self saveIntegrationConfiguration];
 }
 
 - (void)addIntegration:(NSString *)integration withDeviceToken:(NSData *)deviceToken {
@@ -336,7 +369,7 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 - (void)removeIntegration:(NSString *)integration {
 	[_integrationConfiguration removeObjectForKey:integration];
 
-	[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveCustomDeviceDataChangedNotification object:self.customDeviceData];
+	[self saveIntegrationConfiguration];
 }
 
 - (BOOL)canShowInteractionForEvent:(NSString *)event {

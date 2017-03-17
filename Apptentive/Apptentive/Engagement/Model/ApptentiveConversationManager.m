@@ -350,6 +350,10 @@ static NSString *const ManifestFilename = @"manifest-v1.archive";
 	if (token != nil) {
 		[self.activeConversation setToken:token conversationID:conversationID personID:personID deviceID:deviceID];
 
+		if (self.activeConversation.state == ApptentiveConversationStateAnonymousPending) {
+			self.activeConversation.state = ApptentiveConversationStateAnonymous;
+		}
+
 		[self saveConversation];
 
 		[self notifyConversationStateDidChange];

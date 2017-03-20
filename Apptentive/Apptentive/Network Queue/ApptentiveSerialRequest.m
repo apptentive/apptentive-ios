@@ -33,7 +33,7 @@
     
     ApptentiveAssertNotNil(context, @"Managed object context is nill");
     if (context == nil) {
-        ApptentiveLogError(@"Unable encode enqueue request: managed oejct context is nil");
+        ApptentiveLogError(@"Unable encode enqueue request: managed object context is nil");
         return NO;
     }
     

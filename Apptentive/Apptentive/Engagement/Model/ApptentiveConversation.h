@@ -84,7 +84,6 @@
 
 + (instancetype)conversationWithMetadataItem:(ApptentiveConversationMetadataItem *)item;
 
-
 /**
  This method is called when a conversation request completes, which specifies
  the identifiers for the person and device along with the token that will be

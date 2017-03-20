@@ -16,19 +16,22 @@
 
 @dynamic apiVersion;
 @dynamic attachments;
+@dynamic conversationIdentifier;
 @dynamic date;
 @dynamic identifier;
 @dynamic method;
 @dynamic path;
 @dynamic payload;
 
-+ (void)enqueueRequestWithPath:(NSString *)path method:(NSString *)method payload:(NSDictionary *)payload attachments:(NSOrderedSet *)attachments identifier:(NSString *)identifier inContext:(NSManagedObjectContext *)context {
++ (void)enqueueRequestWithPath:(NSString *)path method:(NSString *)method payload:(NSDictionary *)payload attachments:(NSOrderedSet *)attachments identifier:(NSString *)identifier conversationIdentifier:(NSString *)conversationIdentifier inContext:(NSManagedObjectContext *)context {
+
 	ApptentiveSerialRequest *request = (ApptentiveSerialRequest *)[[NSManagedObject alloc] initWithEntity:[NSEntityDescription entityForName:@"QueuedRequest" inManagedObjectContext:context] insertIntoManagedObjectContext:context];
 
 	request.date = [NSDate date];
 	request.path = path;
 	request.method = method;
 	request.identifier = identifier;
+	request.conversationIdentifier = conversationIdentifier;
 	request.apiVersion = [ApptentiveRequestOperation APIVersion];
 
 	NSError *error;

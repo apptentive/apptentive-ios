@@ -175,7 +175,7 @@ static NSString *const ManifestFilename = @"manifest-v1.archive";
 		context.parentContext = self.parentManagedObjectContext;
 
 		[context performBlock:^{
-			[ApptentiveSerialRequest enqueueRequestWithPath:@"conversation" method:@"PUT" payload:payload attachments:nil identifier:nil inContext:context];
+			[ApptentiveSerialRequest enqueueRequestWithPath:@"conversation" method:@"PUT" payload:payload attachments:nil identifier:nil conversationIdentifier:self.activeConversation.identifier inContext:context];
 		}];
 
 		[self saveConversation];
@@ -192,7 +192,7 @@ static NSString *const ManifestFilename = @"manifest-v1.archive";
 		context.parentContext = self.parentManagedObjectContext;
 
 		[context performBlock:^{
-			[ApptentiveSerialRequest enqueueRequestWithPath:@"people" method:@"PUT" payload:diffs attachments:nil identifier:nil inContext:context];
+			[ApptentiveSerialRequest enqueueRequestWithPath:@"people" method:@"PUT" payload:diffs attachments:nil identifier:nil conversationIdentifier:self.activeConversation.identifier inContext:context];
 		}];
 
 		[self saveConversation];
@@ -207,7 +207,7 @@ static NSString *const ManifestFilename = @"manifest-v1.archive";
 		context.parentContext = self.parentManagedObjectContext;
 
 		[context performBlock:^{
-			[ApptentiveSerialRequest enqueueRequestWithPath:@"devices" method:@"PUT" payload:diffs attachments:nil identifier:nil inContext:context];
+			[ApptentiveSerialRequest enqueueRequestWithPath:@"devices" method:@"PUT" payload:diffs attachments:nil identifier:nil conversationIdentifier:self.activeConversation.identifier inContext:context];
 		}];
 
 		[self saveConversation];

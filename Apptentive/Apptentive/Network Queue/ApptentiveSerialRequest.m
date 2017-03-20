@@ -27,7 +27,13 @@
     
     ApptentiveAssertTrue(conversationIdentifier.length > 0, @"Invalid conversation id '@%'", conversationIdentifier);
     if (conversationIdentifier.length == 0) {
-        ApptentiveLogError(@"Unable encode enqueue request '%@': conversation id is nil or empty");
+        ApptentiveLogError(@"Unable encode enqueue request: conversation id is nil or empty");
+        return NO;
+    }
+    
+    ApptentiveAssertNotNil(context, @"Managed object context is nill");
+    if (context == nil) {
+        ApptentiveLogError(@"Unable encode enqueue request: managed oejct context is nil");
         return NO;
     }
     

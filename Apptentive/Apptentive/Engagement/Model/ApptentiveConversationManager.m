@@ -88,42 +88,50 @@ static NSString *const ManifestFilename = @"manifest-v1.archive";
  @return the conversation that was loaded, or `nil` in the case that no conversation was loaded.
  */
 - (ApptentiveConversation *)loadConversation {
-    // if no user was logged in previously - we might have a default conversation
-    ApptentiveLogDebug(@"Attempting to load logged-in conversation…");
-    ApptentiveConversationMetadataItem *loggedInItem = [self.conversationMetadata findItemFilter:^BOOL(ApptentiveConversationMetadataItem *item) {
+	// we're going to scan metadata in attempt to find existing conversations
+	ApptentiveConversationMetadataItem *item;
+
+	// if the user was logged in previously - we should have an active conversation
+    item = [self.conversationMetadata findItemFilter:^BOOL(ApptentiveConversationMetadataItem *item) {
         return item.state == ApptentiveConversationStateLoggedIn;
     }];
-    
-    if (loggedInItem != nil) {
-		return [self loadConversation:loggedInItem];
+    if (item != nil) {
+		ApptentiveLogDebug(@"Loading logged-in conversation...");
+		return [self loadConversation:item];
     }
 
-	// if no user is currently logged in - we might have an anonymous conversation
-	ApptentiveLogDebug(@"Attempting to load anonymous conversation…");
-	ApptentiveConversationMetadataItem *anonymousItem = [self.conversationMetadata findItemFilter:^BOOL(ApptentiveConversationMetadataItem *item) {
-		return item.state == ApptentiveConversationStateAnonymous || item.state == ApptentiveConversationStateAnonymousPending;
+	// if no users were logged in previously - we might have an anonymous conversation
+	item = [self.conversationMetadata findItemFilter:^BOOL(ApptentiveConversationMetadataItem *item) {
+		return item.state == ApptentiveConversationStateAnonymous;
 	}];
 
-	if (anonymousItem != nil) {
-		ApptentiveConversation *conversation = [self loadConversation: anonymousItem];
-		if (conversation.state == ApptentiveConversationStateAnonymousPending) { // was conversation token fetched?
-			[self fetchConversationToken:conversation];
-		}
+	if (item != nil) {
+		ApptentiveLogDebug(@"Loading anonymous conversation...");
+		return [self loadConversation: item];
+	}
 
+	// check if we have a 'pending' anonymous conversation
+	item = [self.conversationMetadata findItemFilter:^BOOL(ApptentiveConversationMetadataItem *item) {
+		return item.state == item.state == ApptentiveConversationStateAnonymousPending;
+	}];
+	if (item != nil) {
+		ApptentiveConversation *conversation = [self loadConversation: item];
+		[self fetchConversationToken:conversation];
 		return conversation;
 	}
 
-	if (self.conversationMetadata.items.count == 0) {
-		ApptentiveLogDebug(@"Can't load conversation: creating anonymous conversation...");
-		ApptentiveConversation *anonymousConversation = [[ApptentiveConversation alloc] init];
-		anonymousConversation.state = ApptentiveConversationStateAnonymousPending;
-		[self fetchConversationToken:anonymousConversation];
-		
-		return anonymousConversation;
+	// any remaining conversations are 'logged out', and we should not load them.
+	if (self.conversationMetadata.items.count > 0) {
+		ApptentiveLogDebug(@"Can't load conversation: only 'logged-out' conversations available");
+		return nil;
 	}
 
-	ApptentiveLogDebug(@"Can't load conversation: only 'logged-out' conversations available");
-	return nil;
+	// no conversation available: create a new one
+	ApptentiveLogDebug(@"Can't load conversation: creating anonymous conversation...");
+	ApptentiveConversation *anonymousConversation = [[ApptentiveConversation alloc] init];
+	anonymousConversation.state = ApptentiveConversationStateAnonymousPending;
+	[self fetchConversationToken:anonymousConversation];
+	return anonymousConversation;
 }
 
 - (ApptentiveConversation *)loadConversation:(ApptentiveConversationMetadataItem *)item {

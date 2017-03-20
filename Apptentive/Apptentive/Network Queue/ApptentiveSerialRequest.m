@@ -23,9 +23,21 @@
 @dynamic path;
 @dynamic payload;
 
-+ (void)enqueueRequestWithPath:(NSString *)path method:(NSString *)method payload:(NSDictionary *)payload attachments:(NSOrderedSet *)attachments identifier:(NSString *)identifier conversationIdentifier:(NSString *)conversationIdentifier inContext:(NSManagedObjectContext *)context {
-
-	ApptentiveSerialRequest *request = (ApptentiveSerialRequest *)[[NSManagedObject alloc] initWithEntity:[NSEntityDescription entityForName:@"QueuedRequest" inManagedObjectContext:context] insertIntoManagedObjectContext:context];
++ (BOOL)enqueueRequestWithPath:(NSString *)path method:(NSString *)method payload:(NSDictionary *)payload attachments:(NSOrderedSet *)attachments identifier:(NSString *)identifier conversationIdentifier:(NSString *)conversationIdentifier inContext:(NSManagedObjectContext *)context {
+    
+    ApptentiveAssertTrue(conversationIdentifier.length > 0, @"Invalid conversation id '@%'", conversationIdentifier);
+    if (conversationIdentifier.length == 0) {
+        ApptentiveLogError(@"Unable encode enqueue request '%@': conversation id is nil or empty");
+        return NO;
+    }
+    
+    ApptentiveSerialRequest *request = (ApptentiveSerialRequest *)[[NSManagedObject alloc] initWithEntity:[NSEntityDescription entityForName:@"QueuedRequest" inManagedObjectContext:context] insertIntoManagedObjectContext:context];
+    
+    ApptentiveAssertNotNil(request, @"Can't load managed request object");
+    if (request == nil) {
+        ApptentiveLogError(@"Unable encode enqueue request '%@': can't load managed request object", path);
+        return NO;
+    }
 
 	request.date = [NSDate date];
 	request.path = path;
@@ -39,7 +51,7 @@
 
 	if (!request.payload) {
 		ApptentiveLogError(@"Unable to encode payload for %@ request: %@", path, error);
-		return;
+        return NO;
 	}
 
 	NSMutableArray *attachmentArray = [NSMutableArray arrayWithCapacity:attachments.count];
@@ -55,6 +67,8 @@
 			ApptentiveLogError(@"Error saving request for %@ to queue: %@", path, error);
 		}
 	}];
+    
+    return YES;
 }
 
 @end

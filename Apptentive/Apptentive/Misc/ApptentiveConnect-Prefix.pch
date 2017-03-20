@@ -6,4 +6,5 @@
 	#import <Foundation/Foundation.h>
 	#import "ApptentiveLog.h"
     #import "ApptentiveAssert.h"
+    #import "ApptentiveSafeCollections.h"
 #endif

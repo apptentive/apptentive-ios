@@ -285,6 +285,9 @@
 		01AF1BF61C0F9C0D00CB4821 /* ATDataModel v3 to v4.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 583E3969188E08DD0030B51E /* ATDataModel v3 to v4.xcmappingmodel */; };
 		01B147B31B5D8D3A0000D041 /* ApptentiveMessageCenterProfileView.h in Headers */ = {isa = PBXBuildFile; fileRef = 01B147B11B5D8D3A0000D041 /* ApptentiveMessageCenterProfileView.h */; };
 		01B147B41B5D8D3A0000D041 /* ApptentiveMessageCenterProfileView.m in Sources */ = {isa = PBXBuildFile; fileRef = 01B147B21B5D8D3A0000D041 /* ApptentiveMessageCenterProfileView.m */; };
+		01B28D271E71F83200F4B2CE /* ApptentiveInteractionAppleRatingDialogController.h in Headers */ = {isa = PBXBuildFile; fileRef = 01B28D251E71F83200F4B2CE /* ApptentiveInteractionAppleRatingDialogController.h */; };
+		01B28D281E71F83200F4B2CE /* ApptentiveInteractionAppleRatingDialogController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01B28D261E71F83200F4B2CE /* ApptentiveInteractionAppleRatingDialogController.m */; };
+		01B28D291E71F86E00F4B2CE /* ApptentiveInteractionAppleRatingDialogController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01B28D261E71F83200F4B2CE /* ApptentiveInteractionAppleRatingDialogController.m */; };
 		01BD9E041B55E465004F12AB /* ApptentiveMessageCenterInputView.h in Headers */ = {isa = PBXBuildFile; fileRef = 01BD9E021B55E465004F12AB /* ApptentiveMessageCenterInputView.h */; };
 		01BD9E051B55E465004F12AB /* ApptentiveMessageCenterInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = 01BD9E031B55E465004F12AB /* ApptentiveMessageCenterInputView.m */; };
 		01C30CEB1B0D09F8006BC911 /* ApptentiveMessageCenterGreetingView.h in Headers */ = {isa = PBXBuildFile; fileRef = 01C30CE91B0D09F8006BC911 /* ApptentiveMessageCenterGreetingView.h */; };
@@ -670,6 +673,8 @@
 		01AE42061B38E38D006B9191 /* ApptentiveBannerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveBannerViewController.m; sourceTree = "<group>"; };
 		01B147B11B5D8D3A0000D041 /* ApptentiveMessageCenterProfileView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveMessageCenterProfileView.h; sourceTree = "<group>"; };
 		01B147B21B5D8D3A0000D041 /* ApptentiveMessageCenterProfileView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveMessageCenterProfileView.m; sourceTree = "<group>"; };
+		01B28D251E71F83200F4B2CE /* ApptentiveInteractionAppleRatingDialogController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveInteractionAppleRatingDialogController.h; sourceTree = "<group>"; };
+		01B28D261E71F83200F4B2CE /* ApptentiveInteractionAppleRatingDialogController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveInteractionAppleRatingDialogController.m; sourceTree = "<group>"; };
 		01BD9E021B55E465004F12AB /* ApptentiveMessageCenterInputView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveMessageCenterInputView.h; sourceTree = "<group>"; };
 		01BD9E031B55E465004F12AB /* ApptentiveMessageCenterInputView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveMessageCenterInputView.m; sourceTree = "<group>"; };
 		01C30CE91B0D09F8006BC911 /* ApptentiveMessageCenterGreetingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveMessageCenterGreetingView.h; sourceTree = "<group>"; };
@@ -1849,6 +1854,8 @@
 		58D17D4418C5656D00D123BC /* Rating Flow */ = {
 			isa = PBXGroup;
 			children = (
+				01B28D251E71F83200F4B2CE /* ApptentiveInteractionAppleRatingDialogController.h */,
+				01B28D261E71F83200F4B2CE /* ApptentiveInteractionAppleRatingDialogController.m */,
 				58AB415518E3A9870034FAA5 /* ApptentiveInteractionAppStoreController.h */,
 				58AB415618E3A9870034FAA5 /* ApptentiveInteractionAppStoreController.m */,
 				586C47A718B424E900725C22 /* ApptentiveInteractionEnjoymentDialogController.h */,
@@ -2008,6 +2015,7 @@
 				49B7E916178BA8060059E776 /* ApptentiveSurveyResponse.h in Headers */,
 				49B7E91B178BAB8D0059E776 /* ApptentiveSurveyResponseTask.h in Headers */,
 				0132F8CF1C851C0800A452E3 /* ApptentiveSurveyQuestionView.h in Headers */,
+				01B28D271E71F83200F4B2CE /* ApptentiveInteractionAppleRatingDialogController.h in Headers */,
 				58D17D4718C5674000D123BC /* ApptentiveInteractionRatingDialogController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2422,6 +2430,7 @@
 				016986B61DA57965008C4C78 /* ApptentiveDeviceInfo.m in Sources */,
 				016986B71DA57965008C4C78 /* ApptentiveEvent.m in Sources */,
 				016986B81DA57965008C4C78 /* ApptentiveFileAttachment.m in Sources */,
+				01B28D291E71F86E00F4B2CE /* ApptentiveInteractionAppleRatingDialogController.m in Sources */,
 				016986B91DA57965008C4C78 /* ApptentiveMessageSender.m in Sources */,
 				016986BA1DA57965008C4C78 /* ApptentiveMessage.m in Sources */,
 				016986BB1DA57965008C4C78 /* ApptentivePersonInfo.m in Sources */,
@@ -2477,6 +2486,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				01B28D281E71F83200F4B2CE /* ApptentiveInteractionAppleRatingDialogController.m in Sources */,
 				01D3128F1B69349900B369E1 /* ApptentiveProgressNavigationBar.m in Sources */,
 				49C002A3133413BB0071F088 /* Apptentive.m in Sources */,
 				49D1125013368CC200603373 /* ApptentiveTask.m in Sources */,

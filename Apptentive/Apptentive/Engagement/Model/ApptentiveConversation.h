@@ -88,8 +88,11 @@
  */
 @property (weak, nonatomic) id<ApptentiveConversationDelegate> delegate;
 
-+ (instancetype)conversationWithMetadataItem:(ApptentiveConversationMetadataItem *)item;
-
+/**
+ The name of the file used to archive the conversation. Copied from the conversation
+ metadata item. The conversation manager uses this to save the conversation.
+ */
+@property (strong, nonatomic) NSString *fileName;
 
 /**
  This method is called when a conversation request completes, which specifies

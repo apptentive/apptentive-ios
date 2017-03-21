@@ -15,6 +15,7 @@ static NSString *const ConversationIdentifierKey = @"conversationIdentifier";
 static NSString *const FileNameKey = @"fileName";
 static NSString *const VersionKey = @"version";
 
+
 @implementation ApptentiveConversationMetadataItem
 
 - (instancetype)initWithConversationIdentifier:(NSString *)conversationIdentifier filename:(NSString *)filename {

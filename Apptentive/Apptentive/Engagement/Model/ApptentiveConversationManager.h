@@ -19,6 +19,7 @@ extern NSString *const ApptentiveConversationStateDidChangeNotification;
 
 NS_ASSUME_NONNULL_BEGIN
 
+
 @interface ApptentiveConversationManager : NSObject <ApptentiveConversationDelegate, ApptentiveRequestOperationDelegate>
 
 @property (readonly, strong, nonatomic) NSString *storagePath;

@@ -24,6 +24,7 @@ static NSString *const ManifestFilename = @"manifest-v1.archive";
 
 NSString *const ApptentiveConversationStateDidChangeNotification = @"ApptentiveConversationStateDidChangeNotification";
 
+
 @interface ApptentiveConversationManager () <ApptentiveConversationDelegate>
 
 @property (strong, nonatomic) ApptentiveConversationMetadata *conversationMetadata;
@@ -36,6 +37,7 @@ NSString *const ApptentiveConversationStateDidChangeNotification = @"ApptentiveC
 @property (readonly, nonatomic) NSString *manifestPath;
 
 @end
+
 
 @implementation ApptentiveConversationManager
 
@@ -88,13 +90,13 @@ NSString *const ApptentiveConversationStateDidChangeNotification = @"ApptentiveC
 	ApptentiveConversationMetadataItem *item;
 
 	// if the user was logged in previously - we should have an active conversation
-    item = [self.conversationMetadata findItemFilter:^BOOL(ApptentiveConversationMetadataItem *item) {
+	item = [self.conversationMetadata findItemFilter:^BOOL(ApptentiveConversationMetadataItem *item) {
         return item.state == ApptentiveConversationStateLoggedIn;
-    }];
-    if (item != nil) {
+	}];
+	if (item != nil) {
 		ApptentiveLogDebug(@"Loading logged-in conversation...");
 		return [self loadConversation:item];
-    }
+	}
 
 	// if no users were logged in previously - we might have an anonymous conversation
 	item = [self.conversationMetadata findItemFilter:^BOOL(ApptentiveConversationMetadataItem *item) {
@@ -103,7 +105,7 @@ NSString *const ApptentiveConversationStateDidChangeNotification = @"ApptentiveC
 
 	if (item != nil) {
 		ApptentiveLogDebug(@"Loading anonymous conversation...");
-		return [self loadConversation: item];
+		return [self loadConversation:item];
 	}
 
 	// check if we have a 'pending' anonymous conversation
@@ -111,7 +113,7 @@ NSString *const ApptentiveConversationStateDidChangeNotification = @"ApptentiveC
 		return item.state == item.state == ApptentiveConversationStateAnonymousPending;
 	}];
 	if (item != nil) {
-		ApptentiveConversation *conversation = [self loadConversation: item];
+		ApptentiveConversation *conversation = [self loadConversation:item];
 		[self fetchConversationToken:conversation];
 		return conversation;
 	}
@@ -195,25 +197,24 @@ NSString *const ApptentiveConversationStateDidChangeNotification = @"ApptentiveC
 #pragma mark - Metadata
 
 - (ApptentiveConversationMetadata *)resolveMetadata {
+	NSString *metadataPath = self.metadataPath;
 
-    NSString *metadataPath = self.metadataPath;
-    
-    ApptentiveConversationMetadata *metadata = nil;
-    if ([ApptentiveUtilities fileExistsAtPath:metadataPath]) {
-        metadata = [NSKeyedUnarchiver unarchiveObjectWithFile:metadataPath];
-        if (metadata) {
-            // TODO: dispatch debug event
-            return metadata;
-        }
-        
-        ApptentiveLogWarning(@"Unable to deserialize metadata from file: %@", metadataPath);
-    }
-    
-    return [[ApptentiveConversationMetadata alloc] init];
+	ApptentiveConversationMetadata *metadata = nil;
+	if ([ApptentiveUtilities fileExistsAtPath:metadataPath]) {
+		metadata = [NSKeyedUnarchiver unarchiveObjectWithFile:metadataPath];
+		if (metadata) {
+			// TODO: dispatch debug event
+			return metadata;
+		}
+
+		ApptentiveLogWarning(@"Unable to deserialize metadata from file: %@", metadataPath);
+	}
+
+	return [[ApptentiveConversationMetadata alloc] init];
 }
 
 - (BOOL)saveMetadata {
-    return [NSKeyedArchiver archiveRootObject:self.conversationMetadata toFile:self.metadataPath];
+	return [NSKeyedArchiver archiveRootObject:self.conversationMetadata toFile:self.metadataPath];
 }
 
 #pragma mark - ApptentiveConversationDelegate
@@ -225,7 +226,7 @@ NSString *const ApptentiveConversationStateDidChangeNotification = @"ApptentiveC
  server.
  */
 - (void)conversationDidChange:(ApptentiveConversation *)conversation {
-    [self scheduleConversationSave];
+	[self scheduleConversationSave];
 }
 
 - (void)conversation:(ApptentiveConversation *)conversation appReleaseOrSDKDidChange:(NSDictionary *)payload {
@@ -470,7 +471,6 @@ NSString *const ApptentiveConversationStateDidChangeNotification = @"ApptentiveC
 #pragma mark - Metadata
 
 
-
 - (void)checkForMessages {
 	self.messageOperation = [[ApptentiveRequestOperation alloc] initWithPath:@"conversation" method:@"GET" payload:nil delegate:self dataSource:self.networkQueue];
 
@@ -500,7 +500,7 @@ NSString *const ApptentiveConversationStateDidChangeNotification = @"ApptentiveC
 }
 
 
-#pragma mark - Debugging 
+#pragma mark - Debugging
 
 - (void)setLocalEngagementManifestURL:(NSURL *)localEngagementManifestURL {
 	if (_localEngagementManifestURL != localEngagementManifestURL) {

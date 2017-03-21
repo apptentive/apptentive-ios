@@ -150,11 +150,11 @@ static NSString *const ATMessageCenterDidSkipProfileKey = @"ATMessageCenterDidSk
 		}
 
 		if (conversationNeedsUpdate) {
-            [self notifyConversationChanged];
-            
-            if ([_delegate respondsToSelector:@selector(conversation:appReleaseOrSDKDidChange:)]) {
-                [_delegate conversation:self appReleaseOrSDKDidChange:self.conversationUpdateJSON];
-            }
+			[self notifyConversationChanged];
+
+			if ([_delegate respondsToSelector:@selector(conversation:appReleaseOrSDKDidChange:)]) {
+				[_delegate conversation:self appReleaseOrSDKDidChange:self.conversationUpdateJSON];
+			}
 		}
 	}
 }
@@ -175,12 +175,12 @@ static NSString *const ATMessageCenterDidSkipProfileKey = @"ATMessageCenterDidSk
 
 		if (personDiffs.count > 0) {
 			_person = newPerson;
-            
-            [self notifyConversationChanged];
 
-            if ([_delegate respondsToSelector:@selector(conversation:personDidChange:)]) {
-                [_delegate conversation:self personDidChange:@{ @"person": personDiffs }];
-            }
+			[self notifyConversationChanged];
+
+			if ([_delegate respondsToSelector:@selector(conversation:personDidChange:)]) {
+				[_delegate conversation:self personDidChange:@{ @"person": personDiffs }];
+			}
 		}
 	}
 }
@@ -201,28 +201,28 @@ static NSString *const ATMessageCenterDidSkipProfileKey = @"ATMessageCenterDidSk
 
 		if (deviceDiffs.count > 0) {
 			_device = newDevice;
-            
-            [self notifyConversationChanged];
 
-            if ([_delegate respondsToSelector:@selector(conversation:deviceDidChange:)]) {
-                [_delegate conversation:self deviceDidChange:@{ @"device": deviceDiffs }];
-            }
+			[self notifyConversationChanged];
+
+			if ([_delegate respondsToSelector:@selector(conversation:deviceDidChange:)]) {
+				[_delegate conversation:self deviceDidChange:@{ @"device": deviceDiffs }];
+			}
 		}
 	}
 }
 
 - (void)notifyConversationChanged {
-    if ([_delegate respondsToSelector:@selector(conversationDidChange:)]) {
-        [_delegate conversationDidChange:self];
-    }
+	if ([_delegate respondsToSelector:@selector(conversationDidChange:)]) {
+		[_delegate conversationDidChange:self];
+	}
 }
 
 - (void)notifyConversationEngagementDidChange {
-    [self notifyConversationChanged];
-    
-    if ([_delegate respondsToSelector:@selector(conversationEngagementDidChange:)]) {
-        [_delegate conversationEngagementDidChange:self];
-    }
+	[self notifyConversationChanged];
+
+	if ([_delegate respondsToSelector:@selector(conversationEngagementDidChange:)]) {
+		[_delegate conversationEngagementDidChange:self];
+	}
 }
 
 - (void)warmCodePoint:(NSString *)codePoint {
@@ -232,7 +232,7 @@ static NSString *const ATMessageCenterDidSkipProfileKey = @"ATMessageCenterDidSk
 - (void)engageCodePoint:(NSString *)codePoint {
 	[self.engagement engageCodePoint:codePoint];
 
-    [self notifyConversationEngagementDidChange];
+	[self notifyConversationEngagementDidChange];
 }
 
 - (void)warmInteraction:(NSString *)codePoint {
@@ -242,7 +242,7 @@ static NSString *const ATMessageCenterDidSkipProfileKey = @"ATMessageCenterDidSk
 - (void)engageInteraction:(NSString *)interactionIdentifier {
 	[self.engagement engageInteraction:interactionIdentifier];
 
-    [self notifyConversationEngagementDidChange];
+	[self notifyConversationEngagementDidChange];
 }
 
 - (void)didOverrideStyles {
@@ -336,11 +336,11 @@ static NSString *const ATMessageCenterDidSkipProfileKey = @"ATMessageCenterDidSk
 	if (object != nil && key != nil) {
 		[self.mutableUserInfo setObject:object forKey:key];
 
-        [self notifyConversationChanged];
-        
-        if ([_delegate respondsToSelector:@selector(conversationUserInfoDidChange:)]) {
-            [_delegate conversationUserInfoDidChange:self];
-        }
+		[self notifyConversationChanged];
+
+		if ([_delegate respondsToSelector:@selector(conversationUserInfoDidChange:)]) {
+			[_delegate conversationUserInfoDidChange:self];
+		}
 	} else {
 		ApptentiveLogError(@"Attempting to set user info with nil key and/or value");
 	}

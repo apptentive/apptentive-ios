@@ -10,7 +10,8 @@
 
 @class ApptentiveConversationMetadataItem, ApptentiveConversation;
 
-typedef BOOL(^ApptentiveConversationMetadataItemFilter)(ApptentiveConversationMetadataItem *item);
+typedef BOOL (^ApptentiveConversationMetadataItemFilter)(ApptentiveConversationMetadataItem *item);
+
 
 @interface ApptentiveConversationMetadata : NSObject <NSSecureCoding>
 

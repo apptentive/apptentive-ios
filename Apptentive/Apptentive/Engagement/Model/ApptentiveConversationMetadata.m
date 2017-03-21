@@ -54,7 +54,7 @@ static NSString *const VersionKey = @"version";
 
 	if (newItem == nil) {
 		newItem = [[ApptentiveConversationMetadataItem alloc] initWithConversationIdentifier:conversation.identifier filename:[NSString stringWithFormat:@"conversation-%@", conversation.identifier]];
-		
+
 		[self.items addObject:newItem];
 	}
 
@@ -64,15 +64,15 @@ static NSString *const VersionKey = @"version";
 #pragma mark - Filtering
 
 - (ApptentiveConversationMetadataItem *)findItemFilter:(ApptentiveConversationMetadataItemFilter)filter {
-    // TODO: ApptentiveAssertNotNull(filter);
-    if (filter != nil) {
-        for (id item in _items) {
-            if (filter(item)) {
-                return item;
-            }
-        }
-    }
-    return nil;
+	// TODO: ApptentiveAssertNotNull(filter);
+	if (filter != nil) {
+		for (id item in _items) {
+			if (filter(item)) {
+				return item;
+			}
+		}
+	}
+	return nil;
 }
 
 @end

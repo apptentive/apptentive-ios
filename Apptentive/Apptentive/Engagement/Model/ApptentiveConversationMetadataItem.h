@@ -16,6 +16,7 @@ typedef NS_ENUM(NSInteger, ApptentiveConversationState) {
 	ApptentiveConversationStateLoggedOut
 };
 
+
 @interface ApptentiveConversationMetadataItem : NSObject <NSSecureCoding>
 
 - (instancetype)initWithConversationIdentifier:(NSString *)conversationIdentifier filename:(NSString *)filename;

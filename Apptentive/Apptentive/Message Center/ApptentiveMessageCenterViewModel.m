@@ -7,6 +7,7 @@
 //
 
 #import "ApptentiveMessageCenterViewModel.h"
+#import "ApptentiveMessageManager.h"
 
 #import "ApptentiveBackend.h"
 #import "Apptentive.h"
@@ -102,7 +103,7 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 	}
 
 	if (self.contextMessageBody) {
-		self.contextMessage = [Apptentive.shared.backend automatedMessageWithTitle:nil body:self.contextMessageBody];
+		self.contextMessage = [Apptentive.shared.backend.messageManager automatedMessageWithTitle:nil body:self.contextMessageBody];
 	}
 }
 
@@ -548,14 +549,14 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 
 - (void)sendMessage:(NSString *)message withAttachments:(NSArray *)attachments {
 	if (self.contextMessage) {
-		[[Apptentive sharedConnection].backend sendAutomatedMessage:self.contextMessage];
+		[[Apptentive sharedConnection].backend.messageManager sendAutomatedMessage:self.contextMessage];
 		self.contextMessage = nil;
 	}
 
 	if (attachments.count > 0) {
-		[Apptentive.shared.backend sendCompoundMessageWithText:message attachments:attachments hiddenOnClient:NO];
+		[Apptentive.shared.backend.messageManager sendCompoundMessageWithText:message attachments:attachments hiddenOnClient:NO];
 	} else {
-		[Apptentive.shared.backend sendTextMessageWithBody:message];
+		[Apptentive.shared.backend.messageManager sendTextMessageWithBody:message];
 	}
 }
 

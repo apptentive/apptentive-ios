@@ -25,6 +25,7 @@
 #import "ApptentiveMutableDevice.h"
 #import "ApptentiveSDK.h"
 #import "ApptentiveVersion.h"
+#import "ApptentiveMessageManager.h"
 
 NSString *const ApptentiveMessageCenterUnreadCountChangedNotification = @"ApptentiveMessageCenterUnreadCountChangedNotification";
 
@@ -135,15 +136,15 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 }
 
 - (void)sendAttachmentText:(NSString *)text {
-	[self.backend sendTextMessageWithBody:text hiddenOnClient:YES];
+	[self.backend.messageManager sendTextMessageWithBody:text hiddenOnClient:YES];
 }
 
 - (void)sendAttachmentImage:(UIImage *)image {
-	[self.backend sendImageMessageWithImage:image hiddenOnClient:YES];
+	[self.backend.messageManager sendImageMessageWithImage:image hiddenOnClient:YES];
 }
 
 - (void)sendAttachmentFile:(NSData *)fileData withMimeType:(NSString *)mimeType {
-	[self.backend sendFileMessageWithFileData:fileData andMimeType:mimeType hiddenOnClient:YES];
+	[self.backend.messageManager sendFileMessageWithFileData:fileData andMimeType:mimeType hiddenOnClient:YES];
 }
 
 - (void)addCustomDeviceDataString:(NSString *)string withKey:(NSString *)key {
@@ -466,7 +467,7 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 				if ([action isEqualToString:@"pmc"]) {
 					[self presentMessageCenterFromViewController:viewController];
 				} else {
-					[self.backend checkForMessages];
+					[self.backend.messageManager checkForMessages];
 				}
 				break;
 		}

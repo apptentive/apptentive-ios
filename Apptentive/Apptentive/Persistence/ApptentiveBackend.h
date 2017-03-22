@@ -14,7 +14,7 @@
 #import "ApptentiveSession.h"
 
 
-@class ApptentiveConversation, ApptentiveEngagementManifest, ApptentiveAppConfiguration, ApptentiveMessageCenterViewController;
+@class ApptentiveConversation, ApptentiveEngagementManifest, ApptentiveAppConfiguration, ApptentiveMessageCenterViewController, ApptentiveMessageManager;
 
 @protocol ATBackendMessageDelegate;
 
@@ -47,6 +47,8 @@
 
 @property (readonly, nonatomic) NSURLCache *imageCache;
 
+@property (strong, nonatomic) ApptentiveMessageManager *messageManager;
+
 
 /**
  Initializes a new backend object.
@@ -74,24 +76,7 @@
 - (BOOL)presentMessageCenterFromViewController:(UIViewController *)viewController;
 - (BOOL)presentMessageCenterFromViewController:(UIViewController *)viewController withCustomData:(NSDictionary *)customData;
 
-- (void)attachCustomDataToMessage:(ApptentiveMessage *)message;
 - (void)dismissMessageCenterAnimated:(BOOL)animated completion:(void (^)(void))completion;
-
-- (ApptentiveMessage *)automatedMessageWithTitle:(NSString *)title body:(NSString *)body;
-- (BOOL)sendAutomatedMessage:(ApptentiveMessage *)message;
-
-- (ApptentiveMessage *)createTextMessageWithBody:(NSString *)body hiddenOnClient:(BOOL)hidden;
-- (BOOL)sendTextMessageWithBody:(NSString *)body;
-- (BOOL)sendTextMessageWithBody:(NSString *)body hiddenOnClient:(BOOL)hidden;
-- (BOOL)sendTextMessage:(ApptentiveMessage *)message;
-
-- (BOOL)sendImageMessageWithImage:(UIImage *)image;
-- (BOOL)sendImageMessageWithImage:(UIImage *)image hiddenOnClient:(BOOL)hidden;
-
-- (BOOL)sendFileMessageWithFileData:(NSData *)fileData andMimeType:(NSString *)mimeType;
-- (BOOL)sendFileMessageWithFileData:(NSData *)fileData andMimeType:(NSString *)mimeType hiddenOnClient:(BOOL)hidden;
-
-- (BOOL)sendCompoundMessageWithText:(NSString *)text attachments:(NSArray *)attachments hiddenOnClient:(BOOL)hidden;
 
 - (NSString *)attachmentDirectoryPath;
 
@@ -101,8 +86,6 @@
 - (void)messageCenterLeftForeground;
 
 - (BOOL)isReady;
-
-- (void)checkForMessages;
 
 - (void)fetchMessagesInBackground:(void (^)(UIBackgroundFetchResult))completionHandler;
 - (void)completeMessageFetchWithResult:(UIBackgroundFetchResult)fetchResult;

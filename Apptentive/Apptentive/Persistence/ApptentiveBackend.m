@@ -28,6 +28,7 @@
 
 #import "ApptentiveLegacyEvent.h"
 #import "ApptentiveLegacySurveyResponse.h"
+#import "ApptentiveMessageManager.h"
 
 typedef NS_ENUM(NSInteger, ATBackendState) {
 	ATBackendStateStarting,
@@ -44,7 +45,6 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 
 @property (strong, nonatomic) ApptentiveRequestOperation *conversationOperation;
 @property (strong, nonatomic) ApptentiveRequestOperation *configurationOperation;
-@property (strong, nonatomic) ApptentiveRequestOperation *messageOperation;
 @property (strong, nonatomic) ApptentiveRequestOperation *manifestOperation;
 
 @property (assign, nonatomic) ATBackendState state;
@@ -55,8 +55,6 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 @property (copy, nonatomic) NSDictionary *currentCustomData;
 @property (strong, nonatomic) NSTimer *messageRetrievalTimer;
 @property (strong, nonatomic) ApptentiveDataManager *dataManager;
-@property (strong, nonatomic) NSFetchedResultsController *unreadCountController;
-@property (assign, nonatomic) NSUInteger previousUnreadCount;
 
 @property (readonly, nonatomic, getter=isMessageCenterInForeground) BOOL messageCenterInForeground;
 @property (copy, nonatomic) void (^backgroundFetchBlock)(UIBackgroundFetchResult);
@@ -95,7 +93,6 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopWorking:) name:UIApplicationWillTerminateNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopWorking:) name:UIApplicationDidEnterBackgroundNotification object:nil];
 
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkForMessages) name:UIApplicationWillEnterForegroundNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleRemoteNotificationInUIApplicationStateActive) name:UIApplicationDidBecomeActiveNotification object:nil];
 
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkStatusChanged:) name:ApptentiveReachabilityStatusChanged object:nil];
@@ -178,9 +175,12 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 					[ApptentiveFileAttachment addMissingExtensions];
 				});
 
+				self.messageManager = [[ApptentiveMessageManager alloc] initWithStoragePath:storagePath networkQueue:self->_networkQueue pollingInterval:self.configuration.messageCenter.backgroundPollingInterval];
+
+				[[NSNotificationCenter defaultCenter] addObserver:self.messageManager selector:@selector(checkForMessages) name:UIApplicationWillEnterForegroundNotification object:nil];
+
 				[self networkStatusChanged:nil];
 				[self startMonitoringAppLifecycleMetrics];
-				[self startMonitoringUnreadMessages];
 				[self.session checkForDiffs];
 
 				NSString *legacyTaskPath = [self.supportDirectoryPath stringByAppendingPathComponent:@"tasks.objects"];
@@ -276,38 +276,6 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	}
 }
 
-- (void)startMonitoringUnreadMessages {
-	@autoreleasepool {
-		if (self.unreadCountController != nil) {
-			ApptentiveLogError(@"startMonitoringUnreadMessages called more than once!");
-			return;
-		}
-		NSFetchRequest *request = [[NSFetchRequest alloc] init];
-		[request setEntity:[NSEntityDescription entityForName:@"ATMessage" inManagedObjectContext:[self managedObjectContext]]];
-		[request setFetchBatchSize:20];
-		NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"clientCreationTime" ascending:YES];
-		[request setSortDescriptors:@[sortDescriptor]];
-		sortDescriptor = nil;
-
-		NSPredicate *unreadPredicate = [NSPredicate predicateWithFormat:@"seenByUser == %@ AND sentByUser == %@", @(NO), @(NO)];
-		request.predicate = unreadPredicate;
-
-		NSFetchedResultsController *newController = [[NSFetchedResultsController alloc] initWithFetchRequest:request managedObjectContext:[self managedObjectContext] sectionNameKeyPath:nil cacheName:nil];
-		newController.delegate = self;
-		self.unreadCountController = newController;
-
-		NSError *error = nil;
-		if (![self.unreadCountController performFetch:&error]) {
-			ApptentiveLogError(@"got an error loading unread messages: %@", error);
-			//!! handle me
-		} else {
-			[self controllerDidChangeContent:self.unreadCountController];
-		}
-
-		request = nil;
-	}
-}
-
 #pragma mark Accessors
 
 - (void)setWorking:(BOOL)working {
@@ -326,7 +294,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 
 			[self updateConfigurationIfNeeded];
 			[self updateEngagementManifestIfNeeded];
-			[self checkForMessages];
+			[self.messageManager checkForMessages];
 
 			[self processQueuedRecords];
 		} else {
@@ -419,10 +387,6 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 		[self processManifestResponse:(NSDictionary *)operation.responseObject cacheLifetime:operation.cacheLifetime];
 
 		self.manifestOperation = nil;
-	} else if (operation == self.messageOperation) {
-		[self processMessagesResponse:(NSDictionary *)operation.responseObject];
-
-		self.messageOperation = nil;
 	}
 }
 
@@ -443,8 +407,6 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 		self.configurationOperation = nil;
 	} else if (operation == self.manifestOperation) {
 		self.manifestOperation = nil;
-	} else if (operation == self.messageOperation) {
-		self.messageOperation = nil;
 	}
 }
 
@@ -498,26 +460,6 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	@synchronized(self.manifest) {
 		return [NSKeyedArchiver archiveRootObject:_manifest toFile:[self manifestPath]];
 	}
-}
-
-#pragma mark NSFetchedResultsControllerDelegate
-
-- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
-	if (controller == self.unreadCountController) {
-		id<NSFetchedResultsSectionInfo> sectionInfo = [[self.unreadCountController sections] objectAtIndex:0];
-		NSUInteger unreadCount = [sectionInfo numberOfObjects];
-		if (unreadCount != self.previousUnreadCount) {
-			if (unreadCount > self.previousUnreadCount && !self.messageCenterInForeground) {
-				ApptentiveMessage *message = sectionInfo.objects.firstObject;
-				[[Apptentive sharedConnection] showNotificationBannerForMessage:message];
-			}
-			self.previousUnreadCount = unreadCount;
-			[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveMessageCenterUnreadCountChangedNotification object:nil userInfo:@{ @"count": @(self.previousUnreadCount) }];
-		}
-	}
-}
-
-- (void)messageCenterWillDismiss:(ApptentiveMessageCenterViewController *)messageCenter {
 }
 
 #pragma mark - Session delegate
@@ -579,108 +521,6 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	[self.queue addOperation:sessionSaveOperation];
 }
 
-#pragma mark - Messages
-
-- (ApptentiveMessage *)automatedMessageWithTitle:(NSString *)title body:(NSString *)body {
-	ApptentiveMessage *message = [ApptentiveMessage newInstanceWithBody:body attachments:nil];
-	message.hidden = @NO;
-	message.title = title;
-	message.pendingState = @(ATPendingMessageStateComposing);
-	message.sentByUser = @YES;
-	message.automated = @YES;
-	NSError *error = nil;
-	if (![[self managedObjectContext] save:&error]) {
-		ApptentiveLogError(@"Unable to send automated message with title: %@, body: %@, error: %@", title, body, error);
-		message = nil;
-	}
-
-	return message;
-}
-
-- (BOOL)sendAutomatedMessage:(ApptentiveMessage *)message {
-	message.pendingState = @(ATPendingMessageStateSending);
-
-	return [self sendMessage:message];
-}
-
-- (BOOL)sendTextMessageWithBody:(NSString *)body {
-	return [self sendTextMessageWithBody:body hiddenOnClient:NO];
-}
-
-- (BOOL)sendTextMessageWithBody:(NSString *)body hiddenOnClient:(BOOL)hidden {
-	return [self sendTextMessage:[self createTextMessageWithBody:body hiddenOnClient:hidden]];
-}
-
-- (ApptentiveMessage *)createTextMessageWithBody:(NSString *)body hiddenOnClient:(BOOL)hidden {
-	ApptentiveMessage *message = [ApptentiveMessage newInstanceWithBody:body attachments:nil];
-	message.sentByUser = @YES;
-	message.seenByUser = @YES;
-	message.hidden = @(hidden);
-
-	if (!hidden) {
-		[self attachCustomDataToMessage:message];
-	}
-
-	return message;
-}
-
-- (BOOL)sendTextMessage:(ApptentiveMessage *)message {
-	message.pendingState = @(ATPendingMessageStateSending);
-
-	return [self sendMessage:message];
-}
-
-- (BOOL)sendImageMessageWithImage:(UIImage *)image {
-	return [self sendImageMessageWithImage:image hiddenOnClient:NO];
-}
-
-- (BOOL)sendImageMessageWithImage:(UIImage *)image hiddenOnClient:(BOOL)hidden {
-	NSData *imageData = UIImageJPEGRepresentation(image, 0.95);
-	NSString *mimeType = @"image/jpeg";
-	return [self sendFileMessageWithFileData:imageData andMimeType:mimeType hiddenOnClient:hidden];
-}
-
-
-- (BOOL)sendFileMessageWithFileData:(NSData *)fileData andMimeType:(NSString *)mimeType {
-	return [self sendFileMessageWithFileData:fileData andMimeType:mimeType hiddenOnClient:NO];
-}
-
-- (BOOL)sendFileMessageWithFileData:(NSData *)fileData andMimeType:(NSString *)mimeType hiddenOnClient:(BOOL)hidden {
-	ApptentiveFileAttachment *fileAttachment = [ApptentiveFileAttachment newInstanceWithFileData:fileData MIMEType:mimeType name:nil];
-	return [self sendCompoundMessageWithText:nil attachments:@[fileAttachment] hiddenOnClient:hidden];
-}
-
-- (BOOL)sendCompoundMessageWithText:(NSString *)text attachments:(NSArray *)attachments hiddenOnClient:(BOOL)hidden {
-	ApptentiveMessage *compoundMessage = [ApptentiveMessage newInstanceWithBody:text attachments:attachments];
-	compoundMessage.pendingState = @(ATPendingMessageStateSending);
-	compoundMessage.sentByUser = @YES;
-	compoundMessage.hidden = @(hidden);
-
-	return [self sendMessage:compoundMessage];
-}
-
-- (BOOL)sendMessage:(ApptentiveMessage *)message {
-	NSAssert([NSThread isMainThread], @"-sendMessage: should only be called on main thread");
-
-	ApptentiveMessageSender *sender = [ApptentiveMessageSender findSenderWithID:self.session.person.identifier inContext:self.managedObjectContext];
-	if (sender) {
-		message.sender = sender;
-	}
-
-	NSError *error;
-	if (![[self managedObjectContext] save:&error]) {
-		ApptentiveLogError(@"Error (%@) saving message: %@", error, message);
-		return NO;
-	}
-
-	[ApptentiveSerialRequest enqueueMessage:message inContext:[self managedObjectContext]];
-
-	[self processQueuedRecords];
-
-	return YES;
-}
-
-
 #pragma mark Message Center
 
 - (BOOL)presentMessageCenterFromViewController:(UIViewController *)viewController {
@@ -719,14 +559,6 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	return didShowMessageCenter;
 }
 
-- (void)attachCustomDataToMessage:(ApptentiveMessage *)message {
-	if (self.currentCustomData) {
-		[message addCustomDataFromDictionary:self.currentCustomData];
-		// Only attach custom data to the first message.
-		self.currentCustomData = nil;
-	}
-}
-
 - (void)dismissMessageCenterAnimated:(BOOL)animated completion:(void (^)(void))completion {
 	self.currentCustomData = nil;
 
@@ -747,35 +579,18 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 #pragma mark Message Polling
 
 - (NSUInteger)unreadMessageCount {
-	return self.previousUnreadCount;
+	return self.messageManager.unreadCount;
 }
 
 - (void)updateMessageCheckingTimer {
 	if (self.working) {
 		if (self.messageCenterInForeground) {
-			[self checkForMessagesAtRefreshInterval:self.configuration.messageCenter.foregroundPollingInterval];
+			self.messageManager.pollingInterval = self.configuration.messageCenter.foregroundPollingInterval;
 		} else {
-			[self checkForMessagesAtRefreshInterval:self.configuration.messageCenter.backgroundPollingInterval];
+			self.messageManager.pollingInterval = self.configuration.messageCenter.backgroundPollingInterval;
 		}
 	} else {
-		[self stopMessageCheckingTimer];
-	}
-}
-
-- (void)stopMessageCheckingTimer {
-	if (self.messageRetrievalTimer) {
-		[self.messageRetrievalTimer invalidate];
-		self.messageRetrievalTimer = nil;
-	}
-}
-
-- (void)checkForMessagesAtRefreshInterval:(NSTimeInterval)refreshInterval {
-	@synchronized(self) {
-		[self stopMessageCheckingTimer];
-
-		self.messageRetrievalTimer = [NSTimer timerWithTimeInterval:refreshInterval target:self selector:@selector(checkForMessages) userInfo:nil repeats:YES];
-		NSRunLoop *mainRunLoop = [NSRunLoop mainRunLoop];
-		[mainRunLoop addTimer:self.messageRetrievalTimer forMode:NSDefaultRunLoopMode];
+		[self.messageManager stopPolling];
 	}
 }
 
@@ -783,7 +598,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	@synchronized(self) {
 		_messageCenterInForeground = YES;
 
-		[self checkForMessages];
+		[self.messageManager checkForMessages];
 
 		[self updateMessageCheckingTimer];
 	}
@@ -801,72 +616,10 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	}
 }
 
-- (void)checkForMessages {
-	if (!self.isReady || self.messageOperation != nil || !self.working) {
-		return;
-	}
-
-	self.messageOperation = [[ApptentiveRequestOperation alloc] initWithPath:@"conversation" method:@"GET" payload:nil delegate:self dataSource:self.networkQueue];
-
-	if (!self.session.token && self.conversationOperation) {
-		[self.messageOperation addDependency:self.conversationOperation];
-	}
-
-	[self.networkQueue addOperation:self.messageOperation];
-}
-
-- (void)processMessagesResponse:(NSDictionary *)response {
-	NSArray *messages = response[@"items"];
-
-	if ([messages isKindOfClass:[NSArray class]]) {
-		NSManagedObjectContext *context = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-		context.parentContext = self.managedObjectContext;
-
-		[context performBlock:^{
-			NSString *lastMessageID = nil;
-
-			for (NSDictionary *messageJSON in messages) {
-				ApptentiveMessage *message = [ApptentiveMessage messageWithJSON:messageJSON inContext:context];
-
-				if (message) {
-					if ([self.session.person.identifier isEqualToString:message.sender.apptentiveID]) {
-						message.sentByUser = @(YES);
-						message.seenByUser = @(YES);
-					}
-
-					message.pendingState = @(ATPendingMessageStateConfirmed);
-
-					lastMessageID = message.apptentiveID;
-				}
-			}
-
-			NSError *error = nil;
-			if (![context save:&error]) {
-				ApptentiveLogError(@"Failed to save received messages: %@", error);
-				return;
-			}
-
-			dispatch_async(dispatch_get_main_queue(), ^{
-				NSError *mainContextSaveError;
-				if (![self.managedObjectContext save:&mainContextSaveError]) {
-					ApptentiveLogError(@"Failed to save received messages in main context: %@", error);
-				}
-
-				[self completeMessageFetchWithResult:lastMessageID != nil ? UIBackgroundFetchResultNewData : UIBackgroundFetchResultNoData];
-
-				[self.session didDownloadMessagesUpTo:lastMessageID];
-			});
-		}];
-	} else {
-		ApptentiveLogError(@"Expected array of dictionaries for message response");
-		[self completeMessageFetchWithResult:UIBackgroundFetchResultFailed];
-	}
-}
-
 - (void)fetchMessagesInBackground:(void (^)(UIBackgroundFetchResult))completionHandler {
 	self.backgroundFetchBlock = completionHandler;
 
-	[self checkForMessages];
+	[self.messageManager checkForMessages];
 }
 
 - (void)completeMessageFetchWithResult:(UIBackgroundFetchResult)fetchResult {

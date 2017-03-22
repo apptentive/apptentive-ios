@@ -7,6 +7,7 @@
 //
 
 #import "ApptentiveMessage.h"
+#import "Apptentive_Private.h"
 #import "ApptentiveBackend.h"
 #import "ApptentiveData.h"
 #import "ApptentiveJSONSerialization.h"
@@ -60,6 +61,10 @@
 + (instancetype)newInstanceWithJSON:(NSDictionary *)json {
 	NSAssert(NO, @"Shouldn't call newInstanceWithJSON without context argument");
 	return nil;
+}
+
++ (instancetype)messageWithJSON:(NSDictionary *)json {
+	return [self messageWithJSON:json inContext:Apptentive.shared.backend.managedObjectContext];
 }
 
 + (instancetype)messageWithJSON:(NSDictionary *)json inContext:(NSManagedObjectContext *)context {

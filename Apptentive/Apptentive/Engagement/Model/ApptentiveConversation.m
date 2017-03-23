@@ -46,12 +46,6 @@ static NSString *const ATMessageCenterDidSkipProfileKey = @"ATMessageCenterDidSk
 
 @synthesize token = _token;
 
-+ (instancetype)conversationWithMetadataItem:(ApptentiveConversationMetadataItem *)item {
-	ApptentiveConversation *result = [NSKeyedUnarchiver unarchiveObjectWithFile:item.fileName];
-
-	return result;
-}
-
 - (instancetype)init {
 	self = [super init];
 	if (self) {

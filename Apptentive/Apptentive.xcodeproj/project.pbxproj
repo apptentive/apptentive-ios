@@ -206,7 +206,6 @@
 		01A2D1C11E490A9700C2103A /* ATDataModel v2 to v3.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0AC1E490A9700C2103A /* ATDataModel v2 to v3.xcmappingmodel */; };
 		01A2D1C21E490A9700C2103A /* ATDataModel v3 to v4.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0AD1E490A9700C2103A /* ATDataModel v3 to v4.xcmappingmodel */; };
 		01A2D1C31E490A9700C2103A /* ATDataModel v4 to v5.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0AE1E490A9700C2103A /* ATDataModel v4 to v5.xcmappingmodel */; };
-		01A2D1C41E490A9700C2103A /* ATDataModel v5 to v6.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0AF1E490A9700C2103A /* ATDataModel v5 to v6.xcmappingmodel */; };
 		01A2D1C51E490A9700C2103A /* ATDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0B01E490A9700C2103A /* ATDataModel.xcdatamodeld */; };
 		01A2D1C61E490A9700C2103A /* ApptentiveMessageRequestOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0B81E490A9700C2103A /* ApptentiveMessageRequestOperation.h */; };
 		01A2D1C71E490A9700C2103A /* ApptentiveMessageRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0B91E490A9700C2103A /* ApptentiveMessageRequestOperation.m */; };
@@ -321,10 +320,11 @@
 		01A2D29A1E4963A500C2103A /* ATDataModel v2 to v3.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0AC1E490A9700C2103A /* ATDataModel v2 to v3.xcmappingmodel */; };
 		01A2D29B1E4963A500C2103A /* ATDataModel v3 to v4.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0AD1E490A9700C2103A /* ATDataModel v3 to v4.xcmappingmodel */; };
 		01A2D29C1E4963A500C2103A /* ATDataModel v4 to v5.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0AE1E490A9700C2103A /* ATDataModel v4 to v5.xcmappingmodel */; };
-		01A2D29D1E4963A500C2103A /* ATDataModel v5 to v6.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0AF1E490A9700C2103A /* ATDataModel v5 to v6.xcmappingmodel */; };
 		01A2D2A11E4963F700C2103A /* v2CorruptDatabase in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D29E1E4963F700C2103A /* v2CorruptDatabase */; };
 		01A2D2A21E4963F700C2103A /* v2WALDatabase in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D29F1E4963F700C2103A /* v2WALDatabase */; };
 		01A2D2A31E4963F700C2103A /* v3WALDatabase in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D2A01E4963F700C2103A /* v3WALDatabase */; };
+		01E04F971E8074F400D7E849 /* ATDataModel v5 to v6.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 01E04F961E8074F400D7E849 /* ATDataModel v5 to v6.xcmappingmodel */; };
+		01E04F981E80757100D7E849 /* ATDataModel v5 to v6.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 01E04F961E8074F400D7E849 /* ATDataModel v5 to v6.xcmappingmodel */; };
 		01E8E2361E6E096D00786738 /* ApptentiveInteractionAppleRatingDialogController.h in Headers */ = {isa = PBXBuildFile; fileRef = 01E8E2341E6E096D00786738 /* ApptentiveInteractionAppleRatingDialogController.h */; };
 		01E8E2371E6E096D00786738 /* ApptentiveInteractionAppleRatingDialogController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01E8E2351E6E096D00786738 /* ApptentiveInteractionAppleRatingDialogController.m */; };
 		01F1DFF41E5BBFB3009AB3D2 /* ApptentiveConversationManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 01F1DFF21E5BBFB3009AB3D2 /* ApptentiveConversationManager.h */; };
@@ -333,6 +333,12 @@
 		01F1DFF91E5BBFBD009AB3D2 /* ApptentiveConversationMetadata.m in Sources */ = {isa = PBXBuildFile; fileRef = 01F1DFF71E5BBFBD009AB3D2 /* ApptentiveConversationMetadata.m */; };
 		01F1DFFC1E5BBFCB009AB3D2 /* ApptentiveConversationMetadataItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 01F1DFFA1E5BBFCB009AB3D2 /* ApptentiveConversationMetadataItem.h */; };
 		01F1DFFD1E5BBFCB009AB3D2 /* ApptentiveConversationMetadataItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 01F1DFFB1E5BBFCB009AB3D2 /* ApptentiveConversationMetadataItem.m */; };
+		EF18123F1E807FC00053BD68 /* ApptentiveAssert.h in Headers */ = {isa = PBXBuildFile; fileRef = EF18123D1E807FC00053BD68 /* ApptentiveAssert.h */; };
+		EF1812401E807FC00053BD68 /* ApptentiveAssert.h in Headers */ = {isa = PBXBuildFile; fileRef = EF18123D1E807FC00053BD68 /* ApptentiveAssert.h */; };
+		EF18124B1E8084C80053BD68 /* ApptentiveSafeCollections.h in Headers */ = {isa = PBXBuildFile; fileRef = EF1812491E8084C80053BD68 /* ApptentiveSafeCollections.h */; };
+		EF18124C1E8084C80053BD68 /* ApptentiveSafeCollections.h in Headers */ = {isa = PBXBuildFile; fileRef = EF1812491E8084C80053BD68 /* ApptentiveSafeCollections.h */; };
+		EF18124D1E8084C80053BD68 /* ApptentiveSafeCollections.m in Sources */ = {isa = PBXBuildFile; fileRef = EF18124A1E8084C80053BD68 /* ApptentiveSafeCollections.m */; };
+		EF18124E1E8084C80053BD68 /* ApptentiveSafeCollections.m in Sources */ = {isa = PBXBuildFile; fileRef = EF18124A1E8084C80053BD68 /* ApptentiveSafeCollections.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -573,7 +579,6 @@
 		01A2D0AC1E490A9700C2103A /* ATDataModel v2 to v3.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = "ATDataModel v2 to v3.xcmappingmodel"; sourceTree = "<group>"; };
 		01A2D0AD1E490A9700C2103A /* ATDataModel v3 to v4.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = "ATDataModel v3 to v4.xcmappingmodel"; sourceTree = "<group>"; };
 		01A2D0AE1E490A9700C2103A /* ATDataModel v4 to v5.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = "ATDataModel v4 to v5.xcmappingmodel"; sourceTree = "<group>"; };
-		01A2D0AF1E490A9700C2103A /* ATDataModel v5 to v6.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = "ATDataModel v5 to v6.xcmappingmodel"; sourceTree = "<group>"; };
 		01A2D0B11E490A9700C2103A /* ATDataModel 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "ATDataModel 2.xcdatamodel"; sourceTree = "<group>"; };
 		01A2D0B21E490A9700C2103A /* ATDataModel 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "ATDataModel 3.xcdatamodel"; sourceTree = "<group>"; };
 		01A2D0B31E490A9700C2103A /* ATDataModel 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "ATDataModel 4.xcdatamodel"; sourceTree = "<group>"; };
@@ -694,6 +699,7 @@
 		01A2D29E1E4963F700C2103A /* v2CorruptDatabase */ = {isa = PBXFileReference; lastKnownFileType = folder; path = v2CorruptDatabase; sourceTree = "<group>"; };
 		01A2D29F1E4963F700C2103A /* v2WALDatabase */ = {isa = PBXFileReference; lastKnownFileType = folder; path = v2WALDatabase; sourceTree = "<group>"; };
 		01A2D2A01E4963F700C2103A /* v3WALDatabase */ = {isa = PBXFileReference; lastKnownFileType = folder; path = v3WALDatabase; sourceTree = "<group>"; };
+		01E04F961E8074F400D7E849 /* ATDataModel v5 to v6.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = "ATDataModel v5 to v6.xcmappingmodel"; sourceTree = "<group>"; };
 		01E8E2341E6E096D00786738 /* ApptentiveInteractionAppleRatingDialogController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveInteractionAppleRatingDialogController.h; sourceTree = "<group>"; };
 		01E8E2351E6E096D00786738 /* ApptentiveInteractionAppleRatingDialogController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveInteractionAppleRatingDialogController.m; sourceTree = "<group>"; };
 		01F1DFF21E5BBFB3009AB3D2 /* ApptentiveConversationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveConversationManager.h; sourceTree = "<group>"; };
@@ -702,6 +708,9 @@
 		01F1DFF71E5BBFBD009AB3D2 /* ApptentiveConversationMetadata.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveConversationMetadata.m; sourceTree = "<group>"; };
 		01F1DFFA1E5BBFCB009AB3D2 /* ApptentiveConversationMetadataItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveConversationMetadataItem.h; sourceTree = "<group>"; };
 		01F1DFFB1E5BBFCB009AB3D2 /* ApptentiveConversationMetadataItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveConversationMetadataItem.m; sourceTree = "<group>"; };
+		EF18123D1E807FC00053BD68 /* ApptentiveAssert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveAssert.h; sourceTree = "<group>"; };
+		EF1812491E8084C80053BD68 /* ApptentiveSafeCollections.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveSafeCollections.h; sourceTree = "<group>"; };
+		EF18124A1E8084C80053BD68 /* ApptentiveSafeCollections.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveSafeCollections.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1222,12 +1231,15 @@
 		01A2D0891E490A9700C2103A /* Misc */ = {
 			isa = PBXGroup;
 			children = (
+				EF18123D1E807FC00053BD68 /* ApptentiveAssert.h */,
 				01A2D08A1E490A9700C2103A /* ApptentiveConnect-Prefix.pch */,
 				01A2D08B1E490A9700C2103A /* ApptentiveJSONSerialization.h */,
 				01A2D08C1E490A9700C2103A /* ApptentiveJSONSerialization.m */,
 				01A2D08D1E490A9700C2103A /* ApptentiveLog.h */,
 				01A2D08E1E490A9700C2103A /* ApptentiveLogger.h */,
 				01A2D08F1E490A9700C2103A /* ApptentiveLogger.m */,
+				EF1812491E8084C80053BD68 /* ApptentiveSafeCollections.h */,
+				EF18124A1E8084C80053BD68 /* ApptentiveSafeCollections.m */,
 				01A2D0901E490A9700C2103A /* ApptentiveUtilities.h */,
 				01A2D0911E490A9700C2103A /* ApptentiveUtilities.m */,
 				01A2D0921E490A9700C2103A /* NSDictionary+Apptentive.h */,
@@ -1259,7 +1271,7 @@
 				01A2D0AC1E490A9700C2103A /* ATDataModel v2 to v3.xcmappingmodel */,
 				01A2D0AD1E490A9700C2103A /* ATDataModel v3 to v4.xcmappingmodel */,
 				01A2D0AE1E490A9700C2103A /* ATDataModel v4 to v5.xcmappingmodel */,
-				01A2D0AF1E490A9700C2103A /* ATDataModel v5 to v6.xcmappingmodel */,
+				01E04F961E8074F400D7E849 /* ATDataModel v5 to v6.xcmappingmodel */,
 				01A2D0B01E490A9700C2103A /* ATDataModel.xcdatamodeld */,
 			);
 			path = Model;
@@ -1520,10 +1532,12 @@
 				01A2D1291E490A9700C2103A /* ApptentiveEngagementManifest.h in Headers */,
 				01A2D19A1E490A9700C2103A /* ApptentiveMessageCenterStatusView.h in Headers */,
 				01A2D1B61E490A9700C2103A /* ApptentiveMessage.h in Headers */,
+				EF18124B1E8084C80053BD68 /* ApptentiveSafeCollections.h in Headers */,
 				01A2D1A41E490A9700C2103A /* ApptentiveLogger.h in Headers */,
 				01A2D1A11E490A9700C2103A /* ApptentiveJSONSerialization.h in Headers */,
 				01A2D1B01E490A9700C2103A /* ApptentiveFileAttachment.h in Headers */,
 				01A2D13B1E490A9700C2103A /* ApptentiveSDK.h in Headers */,
+				EF18123F1E807FC00053BD68 /* ApptentiveAssert.h in Headers */,
 				01A2D1071E490A9700C2103A /* ApptentiveInteractionController.h in Headers */,
 				01A2D1E41E490A9700C2103A /* ApptentiveSurveyLayoutAttributes.h in Headers */,
 				01A2D1111E490A9700C2103A /* ApptentiveInteractionAppStoreController.h in Headers */,
@@ -1558,8 +1572,10 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EF18124C1E8084C80053BD68 /* ApptentiveSafeCollections.h in Headers */,
 				01A2D28C1E49609100C2103A /* ApptentiveDebugging.h in Headers */,
 				012285481E4A81AD00DD2F58 /* Apptentive_Private.h in Headers */,
+				EF1812401E807FC00053BD68 /* ApptentiveAssert.h in Headers */,
 				01A2D2951E4960E100C2103A /* Apptentive+Debugging.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1840,7 +1856,6 @@
 				01A2D1341E490A9700C2103A /* ApptentiveMutableCustomData.m in Sources */,
 				01A2D1841E490A9700C2103A /* ApptentiveAttachButton.m in Sources */,
 				01A2D1CF1E490A9700C2103A /* ApptentiveSerialRequest+Record.m in Sources */,
-				01A2D1C41E490A9700C2103A /* ATDataModel v5 to v6.xcmappingmodel in Sources */,
 				01A2D1121E490A9700C2103A /* ApptentiveInteractionAppStoreController.m in Sources */,
 				01A2D12E1E490A9700C2103A /* ApptentiveInteractionInvocation.m in Sources */,
 				01A2D1041E490A9700C2103A /* ApptentivePassThroughWindow.m in Sources */,
@@ -1852,6 +1867,7 @@
 				01A2D1A91E490A9700C2103A /* NSDictionary+ApptentiveAdditions.m in Sources */,
 				01A2D1951E490A9700C2103A /* ApptentiveMessageCenterMessageCell.m in Sources */,
 				01A2D0FE1E490A9700C2103A /* ApptentiveHUDViewController.m in Sources */,
+				EF18124D1E8084C80053BD68 /* ApptentiveSafeCollections.m in Sources */,
 				01A2D18F1E490A9700C2103A /* ApptentiveMessageCenterContextMessageCell.m in Sources */,
 				01A2D1FB1E490A9700C2103A /* ApptentiveSurveyQuestionView.m in Sources */,
 				01A2D1421E490A9700C2103A /* ApptentiveVersion.m in Sources */,
@@ -1891,6 +1907,7 @@
 				01A2D1A51E490A9700C2103A /* ApptentiveLogger.m in Sources */,
 				01A2D1971E490A9700C2103A /* ApptentiveMessageCenterProfileView.m in Sources */,
 				01A2D1DB1E490A9700C2103A /* ApptentiveReachability.m in Sources */,
+				01E04F971E8074F400D7E849 /* ATDataModel v5 to v6.xcmappingmodel in Sources */,
 				01A2D1161E490A9700C2103A /* ApptentiveInteractionMessageCenterController.m in Sources */,
 				01A2D1C71E490A9700C2103A /* ApptentiveMessageRequestOperation.m in Sources */,
 				01A2D1261E490A9700C2103A /* ApptentiveDevice.m in Sources */,
@@ -1919,8 +1936,8 @@
 			files = (
 				01A2D2411E4946D600C2103A /* ApptentiveEngagementTests.m in Sources */,
 				01A2D2421E4946D600C2103A /* ApptentiveInteractionInvocationTests.m in Sources */,
-				01A2D29D1E4963A500C2103A /* ATDataModel v5 to v6.xcmappingmodel in Sources */,
 				01A2D24A1E4946D600C2103A /* CodePointAndInteractionTests.m in Sources */,
+				01E04F981E80757100D7E849 /* ATDataModel v5 to v6.xcmappingmodel in Sources */,
 				01A2D2481E4946D600C2103A /* ApptentiveSurveyTests.m in Sources */,
 				01A2D29B1E4963A500C2103A /* ATDataModel v3 to v4.xcmappingmodel in Sources */,
 				01A2D2451E4946D600C2103A /* ApptentiveMigrationTests.m in Sources */,
@@ -1944,6 +1961,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EF18124E1E8084C80053BD68 /* ApptentiveSafeCollections.m in Sources */,
 				01A2D2961E4960E100C2103A /* Apptentive+Debugging.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

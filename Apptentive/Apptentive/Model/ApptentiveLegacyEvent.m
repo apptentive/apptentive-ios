@@ -8,6 +8,8 @@
 
 #import "ApptentiveLegacyEvent.h"
 #import "ApptentiveSerialRequest+Record.h"
+#import "Apptentive_Private.h"
+#import "ApptentiveBackend.h"
 
 
 @implementation ApptentiveLegacyEvent
@@ -18,6 +20,7 @@
 
 + (void)enqueueUnsentEventsInContext:(NSManagedObjectContext *)context {
 	NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"ATEvent"];
+	NSString *conversationIdentifier = Apptentive.shared.backend.conversationManager.activeConversation.identifier;
 
 	NSError *error;
 	NSArray *unsentEvents = [context executeFetchRequest:request error:&error];
@@ -28,7 +31,7 @@
 	}
 
 	for (ApptentiveLegacyEvent *event in unsentEvents) {
-		[ApptentiveSerialRequest enqueueRequestWithPath:@"events" method:@"POST" payload:event.apiJSON attachments:nil identifier:nil inContext:context];
+		[ApptentiveSerialRequest enqueueRequestWithPath:@"events" method:@"POST" payload:event.apiJSON attachments:nil identifier:nil conversationIdentifier:conversationIdentifier inContext:context];
 		[context deleteObject:event];
 	}
 }

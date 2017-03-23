@@ -36,6 +36,11 @@
 @property (strong, nonatomic) NSOrderedSet *attachments;
 
 /**
+ The conversation identifier (used to associate with a conversation for authentication).
+ */
+@property (strong, nonatomic) NSString *conversationIdentifier;
+
+/**
  The date on which the request was created.
  */
 @property (strong, nonatomic) NSDate *date;
@@ -70,6 +75,6 @@
  @param identifier An optional string that identifies a request.
  @param context The managed object context to use to create the request.
  */
-+ (void)enqueueRequestWithPath:(NSString *)path method:(NSString *)method payload:(NSDictionary *)payload attachments:(NSOrderedSet *)attachments identifier:(NSString *)identifier inContext:(NSManagedObjectContext *)context;
++ (BOOL)enqueueRequestWithPath:(NSString *)path method:(NSString *)method payload:(NSDictionary *)payload attachments:(NSOrderedSet *)attachments identifier:(NSString *)identifier conversationIdentifier:(NSString *)conversationIdentifier inContext:(NSManagedObjectContext *)context;
 
 @end

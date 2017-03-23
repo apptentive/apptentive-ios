@@ -27,7 +27,7 @@
  @param payload The payload to be JSON encoded.
  @param context The managed object context to use to create the request.
  */
-+ (void)enqueueRequestWithPath:(NSString *)path containerName:(NSString *)containerName noncePrefix:(NSString *)noncePrefix payload:(NSDictionary *)payload inContext:(NSManagedObjectContext *)context;
++ (void)enqueueRequestWithPath:(NSString *)path containerName:(NSString *)containerName noncePrefix:(NSString *)noncePrefix payload:(NSDictionary *)payload conversationIdentifier:(NSString *)conversationIdentifier inContext:(NSManagedObjectContext *)context;
 
 /**
  Creates and enqueues a request for transmitting survey answers.
@@ -36,7 +36,7 @@
  @param identifier The survey identifier, used in creating the path.
  @param context The managed object context to use to create the request.
  */
-+ (void)enqueueSurveyResponseWithAnswers:(NSDictionary *)answers identifier:(NSString *)identifier inContext:(NSManagedObjectContext *)context;
++ (void)enqueueSurveyResponseWithAnswers:(NSDictionary *)answers identifier:(NSString *)identifier conversationIdentifier:(NSString *)conversationIdentifier inContext:(NSManagedObjectContext *)context;
 
 /**
  Creates and enqueues a request for transmitting an event.
@@ -48,7 +48,7 @@
  @param extendedData Any extended data that should be included with the event.
  @param context The managed object context to use to create the request.
  */
-+ (void)enqueueEventWithLabel:(NSString *)label interactionIdentifier:(NSString *)interactionIdenfier userInfo:userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData inContext:(NSManagedObjectContext *)context;
++ (void)enqueueEventWithLabel:(NSString *)label interactionIdentifier:(NSString *)interactionIdenfier userInfo:userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData conversationIdentifier:(NSString *)conversationIdentifier inContext:(NSManagedObjectContext *)context;
 
 /**
  Creates and enqueues a message transmission.
@@ -56,6 +56,6 @@
  @param message The message to be sent.
  @param context The managed object context to use to create the request.
  */
-+ (void)enqueueMessage:(ApptentiveMessage *)message inContext:(NSManagedObjectContext *)context;
++ (void)enqueueMessage:(ApptentiveMessage *)message conversationIdentifier:(NSString *)conversationIdentifier inContext:(NSManagedObjectContext *)context;
 
 @end

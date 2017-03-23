@@ -11,14 +11,13 @@
 #import "ApptentiveRequestOperation.h"
 #import <CoreData/CoreData.h>
 
-extern NSString *const ApptentiveConversationStateDidChangeNotification;
-
 @class ApptentiveConversationMetadataItem, ApptentiveConversation, ApptentiveNetworkQueue, ApptentiveEngagementManifest, ApptentiveAppConfiguration;
 
 @protocol ApptentiveConversationManagerDelegate;
 
 NS_ASSUME_NONNULL_BEGIN
 
+extern NSString *const ApptentiveConversationStateDidChangeNotification;
 
 @interface ApptentiveConversationManager : NSObject <ApptentiveConversationDelegate, ApptentiveRequestOperationDelegate>
 

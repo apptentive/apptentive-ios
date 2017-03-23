@@ -9,7 +9,8 @@
 /* Begin PBXBuildFile section */
 		012285481E4A81AD00DD2F58 /* Apptentive_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2CFAB1E490A9600C2103A /* Apptentive_Private.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		012285491E4A831500DD2F58 /* Apptentive.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01A2CF911E49062700C2103A /* Apptentive.framework */; };
-		0140D6181E84788A007B5130 /* ATDataModel v5 to v6.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 0140D6171E84788A007B5130 /* ATDataModel v5 to v6.xcmappingmodel */; };
+		0140D6211E84893A007B5130 /* ATDataModel v5 to v6.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 0140D6201E84893A007B5130 /* ATDataModel v5 to v6.xcmappingmodel */; };
+		0140D6221E848AE6007B5130 /* ATDataModel v5 to v6.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 0140D6201E84893A007B5130 /* ATDataModel v5 to v6.xcmappingmodel */; };
 		015408A41E54D8810027E196 /* ApptentiveTableView.h in Headers */ = {isa = PBXBuildFile; fileRef = 015408A21E54D8810027E196 /* ApptentiveTableView.h */; };
 		015408A51E54D8810027E196 /* ApptentiveTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 015408A31E54D8810027E196 /* ApptentiveTableView.m */; };
 		01917D451E5E0B7400B37D82 /* ConversationManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01917D441E5E0B7400B37D82 /* ConversationManagerTests.swift */; };
@@ -358,7 +359,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0140D6171E84788A007B5130 /* ATDataModel v5 to v6.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = "ATDataModel v5 to v6.xcmappingmodel"; sourceTree = "<group>"; };
+		0140D6201E84893A007B5130 /* ATDataModel v5 to v6.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = "ATDataModel v5 to v6.xcmappingmodel"; sourceTree = "<group>"; };
 		015408A21E54D8810027E196 /* ApptentiveTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveTableView.h; sourceTree = "<group>"; };
 		015408A31E54D8810027E196 /* ApptentiveTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveTableView.m; sourceTree = "<group>"; };
 		01917D431E5E0B7400B37D82 /* ApptentiveTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ApptentiveTests-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -1270,7 +1271,7 @@
 				01A2D0AC1E490A9700C2103A /* ATDataModel v2 to v3.xcmappingmodel */,
 				01A2D0AD1E490A9700C2103A /* ATDataModel v3 to v4.xcmappingmodel */,
 				01A2D0AE1E490A9700C2103A /* ATDataModel v4 to v5.xcmappingmodel */,
-				0140D6171E84788A007B5130 /* ATDataModel v5 to v6.xcmappingmodel */,
+				0140D6201E84893A007B5130 /* ATDataModel v5 to v6.xcmappingmodel */,
 				01A2D0B01E490A9700C2103A /* ATDataModel.xcdatamodeld */,
 			);
 			path = Model;
@@ -1857,7 +1858,7 @@
 				01A2D1CF1E490A9700C2103A /* ApptentiveSerialRequest+Record.m in Sources */,
 				01A2D1121E490A9700C2103A /* ApptentiveInteractionAppStoreController.m in Sources */,
 				01A2D12E1E490A9700C2103A /* ApptentiveInteractionInvocation.m in Sources */,
-				0140D6181E84788A007B5130 /* ATDataModel v5 to v6.xcmappingmodel in Sources */,
+				0140D6211E84893A007B5130 /* ATDataModel v5 to v6.xcmappingmodel in Sources */,
 				01A2D1041E490A9700C2103A /* ApptentivePassThroughWindow.m in Sources */,
 				01A2D1EB1E490A9700C2103A /* ApptentiveSurveyAnswerCell.m in Sources */,
 				01A2D1C31E490A9700C2103A /* ATDataModel v4 to v5.xcmappingmodel in Sources */,
@@ -1936,6 +1937,7 @@
 				01A2D2411E4946D600C2103A /* ApptentiveEngagementTests.m in Sources */,
 				01A2D2421E4946D600C2103A /* ApptentiveInteractionInvocationTests.m in Sources */,
 				01A2D24A1E4946D600C2103A /* CodePointAndInteractionTests.m in Sources */,
+				0140D6221E848AE6007B5130 /* ATDataModel v5 to v6.xcmappingmodel in Sources */,
 				01A2D2481E4946D600C2103A /* ApptentiveSurveyTests.m in Sources */,
 				01A2D29B1E4963A500C2103A /* ATDataModel v3 to v4.xcmappingmodel in Sources */,
 				01A2D2451E4946D600C2103A /* ApptentiveMigrationTests.m in Sources */,

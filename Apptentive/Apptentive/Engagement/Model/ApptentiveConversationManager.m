@@ -33,7 +33,6 @@ NSString *const ApptentiveConversationStateDidChangeNotification = @"ApptentiveC
 @property (strong, nonatomic, nullable) ApptentiveRequestOperation *manifestOperation;
 
 @property (readonly, nonatomic) NSString *metadataPath;
-@property (readonly, nonatomic) NSString *conversationPath;
 @property (readonly, nonatomic) NSString *manifestPath;
 
 @end
@@ -128,14 +127,15 @@ NSString *const ApptentiveConversationStateDidChangeNotification = @"ApptentiveC
 	ApptentiveLogDebug(@"Can't load conversation: creating anonymous conversation...");
 	ApptentiveConversation *anonymousConversation = [[ApptentiveConversation alloc] init];
 	anonymousConversation.state = ApptentiveConversationStateAnonymousPending;
+	anonymousConversation.fileName = [NSUUID UUID].UUIDString;
 	[self fetchConversationToken:anonymousConversation];
 	return anonymousConversation;
 }
 
 - (ApptentiveConversation *)loadConversation:(ApptentiveConversationMetadataItem *)item {
-	_conversationPath = [self conversationPathForFilename:item.fileName];
-	ApptentiveConversation *conversation = [NSKeyedUnarchiver unarchiveObjectWithFile:self.conversationPath];
+	ApptentiveConversation *conversation = [NSKeyedUnarchiver unarchiveObjectWithFile:[self conversationPathForFilename:item.fileName]];
 	conversation.state = item.state;
+	conversation.fileName = item.fileName;
 
 	return conversation;
 }
@@ -178,6 +178,7 @@ NSString *const ApptentiveConversationStateDidChangeNotification = @"ApptentiveC
 		return;
 	}
 
+	// if the conversation is 'logged-in' we should not have any other 'logged-in' items in metadata
 	if (conversation.state == ApptentiveConversationStateLoggedIn) {
 		for (ApptentiveConversationMetadataItem *item in self.conversationMetadata.items) {
 			if (item.state == ApptentiveConversationStateLoggedIn) {
@@ -186,9 +187,15 @@ NSString *const ApptentiveConversationStateDidChangeNotification = @"ApptentiveC
 		}
 	}
 
+	// update the state of the corresponding item
 	ApptentiveConversationMetadataItem *item = [self.conversationMetadata findItemFilter:^BOOL(ApptentiveConversationMetadataItem *item) {
 		return item.conversationIdentifier = conversation.identifier;
 	}];
+	if (item == nil) {
+		item = [[ApptentiveConversationMetadataItem alloc] initWithConversationIdentifier:conversation.identifier filename:conversation.fileName];
+		[self.conversationMetadata addItem:item];
+	}
+
 	item.state = conversation.state;
 
 	[self saveMetadata];
@@ -419,7 +426,7 @@ NSString *const ApptentiveConversationStateDidChangeNotification = @"ApptentiveC
 
 - (BOOL)saveConversation {
 	@synchronized(self.activeConversation) {
-		return [NSKeyedArchiver archiveRootObject:self.activeConversation toFile:[self conversationPath]];
+		return [NSKeyedArchiver archiveRootObject:self.activeConversation toFile:[self conversationPathForFilename:self.activeConversation.fileName]];
 	}
 }
 

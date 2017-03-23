@@ -18,6 +18,6 @@ typedef BOOL (^ApptentiveConversationMetadataItemFilter)(ApptentiveConversationM
 @property (strong, nonatomic) NSMutableArray *items;
 
 - (ApptentiveConversationMetadataItem *)findItemFilter:(ApptentiveConversationMetadataItemFilter)filter;
-- (ApptentiveConversationMetadataItem *)findOrCreateMetadataForConversation:(ApptentiveConversation *)conversation;
+- (void)addItem:(ApptentiveConversationMetadataItem *)item;
 
 @end

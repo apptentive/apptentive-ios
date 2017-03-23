@@ -47,18 +47,10 @@ static NSString *const VersionKey = @"version";
 	[coder encodeInteger:VERSION forKey:VersionKey];
 }
 
-- (ApptentiveConversationMetadataItem *)findOrCreateMetadataForConversation:(ApptentiveConversation *)conversation {
-	ApptentiveConversationMetadataItem *newItem = [self findItemFilter:^BOOL(ApptentiveConversationMetadataItem *item) {
-		return item.conversationIdentifier == conversation.identifier;
-	}];
+- (void)addItem:(ApptentiveConversationMetadataItem *)item {
+	ApptentiveAssertNotNil(item, @"Attempting to add nil item to metadata");
 
-	if (newItem == nil) {
-		newItem = [[ApptentiveConversationMetadataItem alloc] initWithConversationIdentifier:conversation.identifier filename:[NSString stringWithFormat:@"conversation-%@", conversation.identifier]];
-
-		[self.items addObject:newItem];
-	}
-
-	return newItem;
+	[self.items addObject:item];
 }
 
 #pragma mark - Filtering

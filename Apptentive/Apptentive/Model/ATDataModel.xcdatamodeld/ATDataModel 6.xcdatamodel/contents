@@ -57,7 +57,7 @@
     </entity>
     <entity name="QueuedRequest" representedClassName="ApptentiveSerialRequest" syncable="YES">
         <attribute name="apiVersion" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="conversationIdentier" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="conversationIdentifier" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="identifier" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="method" optional="YES" attributeType="String" syncable="YES"/>

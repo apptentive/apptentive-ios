@@ -7,8 +7,9 @@
 //
 
 #import "ApptentiveState.h"
+#import "ApptentiveConversationMetadataItem.h"
 
-@class ApptentivePerson, ApptentiveDevice, ApptentiveSDK, ApptentiveAppRelease, ApptentiveEngagement, ApptentiveMutablePerson, ApptentiveMutableDevice, ApptentiveVersion, ApptentiveConversationMetadataItem;
+@class ApptentivePerson, ApptentiveDevice, ApptentiveSDK, ApptentiveAppRelease, ApptentiveEngagement, ApptentiveMutablePerson, ApptentiveMutableDevice, ApptentiveVersion;
 @protocol ApptentiveConversationDelegate;
 
 /**
@@ -25,6 +26,11 @@
  method should be used.
 */
 @interface ApptentiveConversation : ApptentiveState
+
+/**
+ Whether the conversation is anonymous, has a token, is logged in, etc.
+ */
+@property (assign, nonatomic) ApptentiveConversationState state;
 
 /**
  The `ApptentiveAppRelease` object for this conversation.
@@ -82,7 +88,11 @@
  */
 @property (weak, nonatomic) id<ApptentiveConversationDelegate> delegate;
 
-+ (instancetype)conversationWithMetadataItem:(ApptentiveConversationMetadataItem *)item;
+/**
+ The name of the file used to archive the conversation. Copied from the conversation
+ metadata item. The conversation manager uses this to save the conversation.
+ */
+@property (strong, nonatomic) NSString *fileName;
 
 /**
  This method is called when a conversation request completes, which specifies

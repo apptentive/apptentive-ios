@@ -283,6 +283,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	_networkQueue = [[ApptentiveNetworkQueue alloc] initWithBaseURL:self.baseURL token:self.APIKey SDKVersion:kApptentiveVersionString platform:@"iOS"];
 
 	_conversationManager = [[ApptentiveConversationManager alloc] initWithStoragePath:_supportDirectoryPath operationQueue:_operationQueue networkQueue:_networkQueue parentManagedObjectContext:self.managedObjectContext];
+	self.conversationManager.delegate = self;
 
 	[self.conversationManager loadActiveConversation];
 }
@@ -657,11 +658,14 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	}
 }
 
-- (void)conversationManager:(ApptentiveConversationManager *)manager didLoadConversation:(ApptentiveConversation *)conversation {
-	self.networkQueue.token = conversation.token;
+- (void)conversationManager:(ApptentiveConversationManager *)manager conversationDidChangeState:(ApptentiveConversation *)conversation {
+	// Anonymous pending conversations will not yet have a token, so we can't finish starting up yet in that case. 
+	if (conversation.state != ApptentiveConversationStateAnonymousPending) {
+		self.networkQueue.token = conversation.token;
 
-	if (self.state != ATBackendStateReady) {
-		[self finishStartupWithToken:conversation.token];
+		if (self.state != ATBackendStateReady) {
+			[self finishStartupWithToken:conversation.token];
+		}
 	}
 }
 

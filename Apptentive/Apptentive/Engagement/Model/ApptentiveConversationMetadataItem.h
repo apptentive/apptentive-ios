@@ -9,10 +9,13 @@
 #import <Foundation/Foundation.h>
 
 typedef NS_ENUM(NSInteger, ApptentiveConversationState) {
-	ApptentiveConversationStateNone = 0,
-	ApptentiveConversationStateDefault,
-	ApptentiveConversationStateActive
+	ApptentiveConversationStateUndefined = 0,
+	ApptentiveConversationStateAnonymousPending,
+	ApptentiveConversationStateAnonymous,
+	ApptentiveConversationStateLoggedIn,
+	ApptentiveConversationStateLoggedOut
 };
+
 
 @interface ApptentiveConversationMetadataItem : NSObject <NSSecureCoding>
 
@@ -21,8 +24,5 @@ typedef NS_ENUM(NSInteger, ApptentiveConversationState) {
 @property (assign, nonatomic) ApptentiveConversationState state;
 @property (strong, nonatomic) NSString *conversationIdentifier;
 @property (strong, nonatomic) NSString *fileName;
-
-@property (readonly, nonatomic, getter=isActive) BOOL active;
-@property (readonly, nonatomic, getter=isDefault) BOOL isDefault;
 
 @end

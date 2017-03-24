@@ -22,6 +22,9 @@ static NSString *const ConversationMetadataFilename = @"conversation-v1.meta";
 static NSString *const ConversationFilename = @"conversation-v1.archive";
 static NSString *const ManifestFilename = @"manifest-v1.archive";
 
+NSString *const ApptentiveConversationStateDidChangeNotification = @"ApptentiveConversationStateDidChangeNotification";
+
+
 @interface ApptentiveConversationManager () <ApptentiveConversationDelegate>
 
 @property (strong, nonatomic) ApptentiveConversationMetadata *conversationMetadata;
@@ -29,13 +32,11 @@ static NSString *const ManifestFilename = @"manifest-v1.archive";
 @property (strong, nonatomic, nullable) ApptentiveRequestOperation *messageOperation;
 @property (strong, nonatomic, nullable) ApptentiveRequestOperation *manifestOperation;
 
-@property (strong, nonatomic) ApptentiveConversation *pendingConversation;
-
 @property (readonly, nonatomic) NSString *metadataPath;
-@property (readonly, nonatomic) NSString *conversationPath;
 @property (readonly, nonatomic) NSString *manifestPath;
 
 @end
+
 
 @implementation ApptentiveConversationManager
 
@@ -54,107 +55,168 @@ static NSString *const ManifestFilename = @"manifest-v1.archive";
 
 #pragma mark - Conversations
 
+/**
+ Attempts to load a logged-in conversation. If no conversations are found, a new one will be created.
+ If only logged-out conversations are found, returns `NO`.
+
+ @return `YES` if a conversation was loaded
+ */
 - (BOOL)loadActiveConversation {
-    // resolve metadata
-    _conversationMetadata = [self resolveMetadata];
-    
-    // try to load conversaton
-    _activeConversation = [self loadActiveConversationFromMetadata:_conversationMetadata];
-    if (_activeConversation) {
-        _activeConversation.delegate = self;
-        [self notifyConversationDidBecomeActive];
-        return YES;
-    }
-    
-    // no conversation - fetch one
-    [self fetchConversationToken];
-    
-    return NO;
-}
+	// resolving metadata
+	_conversationMetadata = [self resolveMetadata];
 
-- (ApptentiveConversation *)loadActiveConversationFromMetadata:(ApptentiveConversationMetadata *)metadata {
-    // if the user was logged in previously - we should have an active conversation
-    ApptentiveLogDebug(@"Loading active conversation...");
-    ApptentiveConversationMetadataItem *activeItem = [metadata findItemFilter:^BOOL(ApptentiveConversationMetadataItem *item) {
-        return item.isActive;
-    }];
-    
-    if (activeItem) {
-        return [self loadConversation:activeItem];
-    }
-    
-    // if no user was logged in previously - we might have a default conversation
-    ApptentiveLogDebug(@"Loading default conversation...");
-    ApptentiveConversationMetadataItem *defaultItem = [metadata findItemFilter:^BOOL(ApptentiveConversationMetadataItem *item) {
-        return item.isDefault;
-    }];
-    
-    if (defaultItem) {
-		self.activeConversation = [self loadConversation:defaultItem];
-        return self.activeConversation;
-    }
-    
-    // TODO: check for legacy conversations
-    ApptentiveLogDebug(@"Can't load conversation");
-    return nil;
-}
+	// attempt to load existing conversation
+	_activeConversation = [self loadConversation];
+	// TODO: dispatch debug event (EVT_CONVERSATION_LOAD_ACTIVE, activeConversation != null);
 
-- (void)notifyConversationDidBecomeActive {
-	if ([self.delegate respondsToSelector:@selector(conversationManager:didLoadConversation:)]) {
-		[self.delegate conversationManager:self didLoadConversation:self.activeConversation];
-	}
-}
+	if (self.activeConversation != nil) {
+		self.activeConversation.delegate = self;
 
-- (void)checkForMessages {
-	self.messageOperation = [[ApptentiveRequestOperation alloc] initWithPath:@"conversation" method:@"GET" payload:nil delegate:self dataSource:self.networkQueue];
-
-	if (!self.activeConversation.token && self.conversationOperation) {
-		[self.messageOperation addDependency:self.conversationOperation];
+		[self handleConversationStateChange:self.activeConversation];
+		return true;
 	}
 
-	[self.networkQueue addOperation:self.messageOperation];
+	return false;
 }
 
-- (void)resume {
-#if APPTENTIVE_DEBUG
-	[Apptentive.shared checkSDKConfiguration];
+- (ApptentiveConversation *)loadConversation {
+	// we're going to scan metadata in attempt to find existing conversations
+	ApptentiveConversationMetadataItem *item;
 
-	self.manifest.expiry = [NSDate distantPast];
-#endif
-
-	if ([self.manifest.expiry timeIntervalSinceNow] <= 0) {
-		[self fetchEngagementManifest];
+	// if the user was logged in previously - we should have an active conversation
+	item = [self.conversationMetadata findItemFilter:^BOOL(ApptentiveConversationMetadataItem *item) {
+        return item.state == ApptentiveConversationStateLoggedIn;
+	}];
+	if (item != nil) {
+		ApptentiveLogDebug(@"Loading logged-in conversation...");
+		return [self loadConversation:item];
 	}
 
-	[self checkForMessages];
+	// if no users were logged in previously - we might have an anonymous conversation
+	item = [self.conversationMetadata findItemFilter:^BOOL(ApptentiveConversationMetadataItem *item) {
+		return item.state == ApptentiveConversationStateAnonymous;
+	}];
+
+	if (item != nil) {
+		ApptentiveLogDebug(@"Loading anonymous conversation...");
+		return [self loadConversation:item];
+	}
+
+	// check if we have a 'pending' anonymous conversation
+	item = [self.conversationMetadata findItemFilter:^BOOL(ApptentiveConversationMetadataItem *item) {
+		return item.state == item.state == ApptentiveConversationStateAnonymousPending;
+	}];
+	if (item != nil) {
+		ApptentiveConversation *conversation = [self loadConversation:item];
+		[self fetchConversationToken:conversation];
+		return conversation;
+	}
+
+	// any remaining conversations are 'logged out', and we should not load them.
+	if (self.conversationMetadata.items.count > 0) {
+		ApptentiveLogDebug(@"Can't load conversation: only 'logged-out' conversations available");
+		return nil;
+	}
+
+	// no conversation available: create a new one
+	ApptentiveLogDebug(@"Can't load conversation: creating anonymous conversation...");
+	ApptentiveConversation *anonymousConversation = [[ApptentiveConversation alloc] init];
+	anonymousConversation.state = ApptentiveConversationStateAnonymousPending;
+	anonymousConversation.fileName = [NSUUID UUID].UUIDString;
+	[self fetchConversationToken:anonymousConversation];
+	return anonymousConversation;
 }
 
-- (void)pause {
+- (ApptentiveConversation *)loadConversation:(ApptentiveConversationMetadataItem *)item {
+	ApptentiveConversation *conversation = [NSKeyedUnarchiver unarchiveObjectWithFile:[self conversationPathForFilename:item.fileName]];
+	conversation.state = item.state;
+	conversation.fileName = item.fileName;
+
+	return conversation;
+}
+
+- (BOOL)endActiveConversation {
+	if (self.activeConversation != nil) {
+		self.activeConversation.state = ApptentiveConversationStateLoggedOut;
+		[self saveConversation];
+		[self handleConversationStateChange:self.activeConversation];
+
+		_activeConversation = nil;
+
+		return YES;
+	}
+
+	return NO;
+}
+
+#pragma mark - Conversation Token Fetching
+
+- (void)fetchConversationToken:(ApptentiveConversation *)conversation {
+	self.conversationOperation = [[ApptentiveRequestOperation alloc] initWithPath:@"conversation" method:@"POST" payload:conversation.conversationCreationJSON delegate:self dataSource:self.networkQueue];
+
+	[self.networkQueue addOperation:self.conversationOperation];
+}
+
+- (void)handleConversationStateChange:(ApptentiveConversation *)conversation {
+	[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveConversationStateDidChangeNotification object:self];
+
+	if ([self.delegate respondsToSelector:@selector(conversationManager:conversationDidChangeState:)]) {
+		[self.delegate conversationManager:self conversationDidChangeState:self.activeConversation];
+	}
+
+	[self updateMetadataItems:conversation];
+}
+
+- (void)updateMetadataItems:(ApptentiveConversation *)conversation {
+	if (conversation.state == ApptentiveConversationStateAnonymousPending) {
+		ApptentiveLogDebug(@"Skipping updating metadata since conversation is anonymous and pending");
+		return;
+	}
+
+	// if the conversation is 'logged-in' we should not have any other 'logged-in' items in metadata
+	if (conversation.state == ApptentiveConversationStateLoggedIn) {
+		for (ApptentiveConversationMetadataItem *item in self.conversationMetadata.items) {
+			if (item.state == ApptentiveConversationStateLoggedIn) {
+				item.state = ApptentiveConversationStateLoggedOut;
+			}
+		}
+	}
+
+	// update the state of the corresponding item
+	ApptentiveConversationMetadataItem *item = [self.conversationMetadata findItemFilter:^BOOL(ApptentiveConversationMetadataItem *item) {
+		return item.conversationIdentifier = conversation.identifier;
+	}];
+	if (item == nil) {
+		item = [[ApptentiveConversationMetadataItem alloc] initWithConversationIdentifier:conversation.identifier filename:conversation.fileName];
+		[self.conversationMetadata addItem:item];
+	}
+
+	item.state = conversation.state;
+
 	[self saveMetadata];
 }
 
 #pragma mark - Metadata
 
 - (ApptentiveConversationMetadata *)resolveMetadata {
+	NSString *metadataPath = self.metadataPath;
 
-    NSString *metadataPath = self.metadataPath;
-    
-    ApptentiveConversationMetadata *metadata = nil;
-    if ([ApptentiveUtilities fileExistsAtPath:metadataPath]) {
-        metadata = [NSKeyedUnarchiver unarchiveObjectWithFile:metadataPath];
-        if (metadata) {
-            // TODO: dispatch debug event
-            return metadata;
-        }
-        
-        ApptentiveLogWarning(@"Unable to deserialize metadata from file: %@", metadataPath);
-    }
-    
-    return [[ApptentiveConversationMetadata alloc] init];
+	ApptentiveConversationMetadata *metadata = nil;
+	if ([ApptentiveUtilities fileExistsAtPath:metadataPath]) {
+		metadata = [NSKeyedUnarchiver unarchiveObjectWithFile:metadataPath];
+		if (metadata) {
+			// TODO: dispatch debug event
+			return metadata;
+		}
+
+		ApptentiveLogWarning(@"Unable to deserialize metadata from file: %@", metadataPath);
+	}
+
+	return [[ApptentiveConversationMetadata alloc] init];
 }
 
 - (BOOL)saveMetadata {
-    return [NSKeyedArchiver archiveRootObject:self.conversationMetadata toFile:self.metadataPath];
+	return [NSKeyedArchiver archiveRootObject:self.conversationMetadata toFile:self.metadataPath];
 }
 
 #pragma mark - ApptentiveConversationDelegate
@@ -166,7 +228,7 @@ static NSString *const ManifestFilename = @"manifest-v1.archive";
  server.
  */
 - (void)conversationDidChange:(ApptentiveConversation *)conversation {
-    [self scheduleConversationSave];
+	[self scheduleConversationSave];
 }
 
 - (void)conversation:(ApptentiveConversation *)conversation appReleaseOrSDKDidChange:(NSDictionary *)payload {
@@ -266,6 +328,8 @@ static NSString *const ManifestFilename = @"manifest-v1.archive";
 	ApptentiveLogError(@"%@ %@ failed with error: %@. Not retrying.", operation.request.HTTPMethod, operation.request.URL.absoluteString, error);
 
 	if (operation == self.conversationOperation) {
+		// This is a permanent failure. We should basically disable the SDK at this point.
+		// TODO: disable the SDK until next launch
 		self.conversationOperation = nil;
 	} else if (operation == self.manifestOperation) {
 		self.manifestOperation = nil;
@@ -281,13 +345,15 @@ static NSString *const ManifestFilename = @"manifest-v1.archive";
 	NSString *deviceID = conversationResponse[@"device_id"];
 
 	if (token != nil) {
-		[self.pendingConversation setToken:token conversationID:conversationID personID:personID deviceID:deviceID];
+		[self.activeConversation setToken:token conversationID:conversationID personID:personID deviceID:deviceID];
 
-		self.activeConversation = self.pendingConversation;
+		if (self.activeConversation.state == ApptentiveConversationStateAnonymousPending) {
+			self.activeConversation.state = ApptentiveConversationStateAnonymous;
+		}
 
 		[self saveConversation];
 
-		[self notifyConversationDidBecomeActive];
+		[self handleConversationStateChange:self.activeConversation];
 	}
 }
 
@@ -355,7 +421,7 @@ static NSString *const ManifestFilename = @"manifest-v1.archive";
 
 - (BOOL)saveConversation {
 	@synchronized(self.activeConversation) {
-		return [NSKeyedArchiver archiveRootObject:self.activeConversation toFile:[self conversationPath]];
+		return [NSKeyedArchiver archiveRootObject:self.activeConversation toFile:[self conversationPathForFilename:self.activeConversation.fileName]];
 	}
 }
 
@@ -366,18 +432,6 @@ static NSString *const ManifestFilename = @"manifest-v1.archive";
 }
 
 #pragma mark - Private
-
-- (void)fetchConversationToken {
-	if (self.conversationOperation != nil || self.activeConversation.token != nil) {
-		return;
-	}
-
-	self.pendingConversation = [[ApptentiveConversation alloc] init];
-
-	self.conversationOperation = [[ApptentiveRequestOperation alloc] initWithPath:@"conversation" method:@"POST" payload:self.activeConversation.conversationCreationJSON delegate:self dataSource:self.networkQueue];
-
-	[self.networkQueue addOperation:self.conversationOperation];
-}
 
 - (void)fetchEngagementManifest {
 	if (self.manifestOperation != nil) {
@@ -393,26 +447,12 @@ static NSString *const ManifestFilename = @"manifest-v1.archive";
 	[self.networkQueue addOperation:self.manifestOperation];
 }
 
-- (void)setActiveConversation:(ApptentiveConversation *)conversation {
-	_activeConversation = conversation;
-
-	ApptentiveConversationMetadataItem *activeMetadataItem = [self.conversationMetadata setActiveConversation:conversation];
-	[self saveMetadata];
-
-	_conversationPath = [self conversationPathForFilename:activeMetadataItem.fileName];
-}
-
 - (void)scheduleConversationSave {
 	[self.operationQueue addOperationWithBlock:^{
 		if (![self saveConversation]) {
 			ApptentiveLogError(@"Error saving active conversation.");
 		}
 	}];
-}
-
-- (ApptentiveConversation *)loadConversation:(ApptentiveConversationMetadataItem *)metadataItem {
-	_conversationPath = [self conversationPathForFilename:metadataItem.fileName];
-	return [NSKeyedUnarchiver unarchiveObjectWithFile:self.conversationPath];
 }
 
 #pragma mark - Paths
@@ -429,7 +469,40 @@ static NSString *const ManifestFilename = @"manifest-v1.archive";
 	return [self.storagePath stringByAppendingPathComponent:filename];
 }
 
-#pragma mark - Debugging 
+
+#pragma mark - Metadata
+
+
+- (void)checkForMessages {
+	self.messageOperation = [[ApptentiveRequestOperation alloc] initWithPath:@"conversation" method:@"GET" payload:nil delegate:self dataSource:self.networkQueue];
+
+	if (!self.activeConversation.token && self.conversationOperation) {
+		[self.messageOperation addDependency:self.conversationOperation];
+	}
+
+	[self.networkQueue addOperation:self.messageOperation];
+}
+
+- (void)resume {
+#if APPTENTIVE_DEBUG
+	[Apptentive.shared checkSDKConfiguration];
+
+	self.manifest.expiry = [NSDate distantPast];
+#endif
+
+	if ([self.manifest.expiry timeIntervalSinceNow] <= 0) {
+		[self fetchEngagementManifest];
+	}
+
+	[self checkForMessages];
+}
+
+- (void)pause {
+	[self saveMetadata];
+}
+
+
+#pragma mark - Debugging
 
 - (void)setLocalEngagementManifestURL:(NSURL *)localEngagementManifestURL {
 	if (_localEngagementManifestURL != localEngagementManifestURL) {

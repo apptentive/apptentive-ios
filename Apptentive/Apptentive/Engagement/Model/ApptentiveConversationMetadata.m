@@ -47,40 +47,24 @@ static NSString *const VersionKey = @"version";
 	[coder encodeInteger:VERSION forKey:VersionKey];
 }
 
-- (ApptentiveConversationMetadataItem *)setActiveConversation:(ApptentiveConversation *)conversation {
-	ApptentiveConversationMetadataItem *oldItem = [self findItemFilter:^BOOL(ApptentiveConversationMetadataItem *item) {
-		return item.isActive;
-	}];
+- (void)addItem:(ApptentiveConversationMetadataItem *)item {
+	ApptentiveAssertNotNil(item, @"Attempting to add nil item to metadata");
 
-	oldItem.state = ApptentiveConversationStateNone;
-
-	ApptentiveConversationMetadataItem *newItem = [self findItemFilter:^BOOL(ApptentiveConversationMetadataItem *item) {
-		return item.conversationIdentifier == conversation.identifier;
-	}];
-
-	if (newItem == nil) {
-		newItem = [[ApptentiveConversationMetadataItem alloc] initWithConversationIdentifier:conversation.identifier filename:[NSString stringWithFormat:@"conversation-%@", conversation.identifier]];
-		
-		[self.items addObject:newItem];
-	}
-
-	newItem.state = ApptentiveConversationStateActive;
-
-	return newItem;
+	[self.items addObject:item];
 }
 
 #pragma mark - Filtering
 
 - (ApptentiveConversationMetadataItem *)findItemFilter:(ApptentiveConversationMetadataItemFilter)filter {
-    // TODO: ApptentiveAssertNotNull(filter);
-    if (filter != nil) {
-        for (id item in _items) {
-            if (filter(item)) {
-                return item;
-            }
-        }
-    }
-    return nil;
+	// TODO: ApptentiveAssertNotNull(filter);
+	if (filter != nil) {
+		for (id item in _items) {
+			if (filter(item)) {
+				return item;
+			}
+		}
+	}
+	return nil;
 }
 
 @end

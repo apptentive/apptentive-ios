@@ -56,13 +56,8 @@ NSString *const ApptentiveConversationStateDidChangeNotification = @"ApptentiveC
 #pragma mark - Conversations
 
 /**
- * Attempts to load an active conversation. Returns <code>false</code> if active conversation is
- * missing or cannot be loaded
- */
-
-/**
  Attempts to load a logged-in conversation. If no conversations are found, a new one will be created.
- If only logged-out conversations are found, returns false.
+ If only logged-out conversations are found, returns `NO`.
 
  @return `YES` if a conversation was loaded
  */

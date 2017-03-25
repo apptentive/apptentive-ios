@@ -13,13 +13,13 @@
 #import "ApptentiveDataManager.h"
 #import "ApptentiveReachability.h"
 #import "ApptentiveUtilities.h"
-#import "ApptentiveMessageSender.h"
+#import "ApptentiveLegacyMessageSender.h"
 #import "ApptentiveLog.h"
 #import "ApptentiveMessageCenterViewController.h"
 #import "ApptentiveAppConfiguration.h"
 #import "ApptentiveEngagementManifest.h"
 #import "ApptentiveSerialRequest+Record.h"
-#import "ApptentiveFileAttachment.h"
+#import "ApptentiveLegacyFileAttachment.h"
 #import "ApptentiveAppRelease.h"
 #import "ApptentiveSDK.h"
 #import "ApptentivePerson.h"
@@ -28,6 +28,7 @@
 
 #import "ApptentiveLegacyEvent.h"
 #import "ApptentiveLegacySurveyResponse.h"
+#import "ApptentiveLegacyMessage.h"
 #import "ApptentiveMessageManager.h"
 
 typedef NS_ENUM(NSInteger, ATBackendState) {
@@ -172,7 +173,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 
 				self.state = ATBackendStateReady;
 				dispatch_async(dispatch_get_main_queue(), ^{
-					[ApptentiveFileAttachment addMissingExtensions];
+					[ApptentiveLegacyFileAttachment addMissingExtensions];
 				});
 
 				self.messageManager = [[ApptentiveMessageManager alloc] initWithStoragePath:storagePath networkQueue:self->_networkQueue pollingInterval:self.configuration.messageCenter.backgroundPollingInterval];
@@ -194,7 +195,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 				migrationContext.parentContext = self.managedObjectContext;
 
 				[migrationContext performBlockAndWait:^{
-					[ApptentiveMessage enqueueUnsentMessagesInContext:migrationContext];
+					[ApptentiveLegacyMessage enqueueUnsentMessagesInContext:migrationContext];
 					[ApptentiveLegacyEvent enqueueUnsentEventsInContext:migrationContext];
 					[ApptentiveLegacySurveyResponse enqueueUnsentSurveyResponsesInContext:migrationContext];
 

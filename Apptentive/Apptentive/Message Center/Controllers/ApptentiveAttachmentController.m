@@ -12,7 +12,7 @@
 #import "ApptentiveMessageCenterViewController.h"
 #import "ApptentiveInteraction.h"
 #import "Apptentive_Private.h"
-#import "ApptentiveFileAttachment.h"
+#import "ApptentiveLegacyFileAttachment.h"
 
 #define MAX_NUMBER_OF_ATTACHMENTS 4
 #define ATTACHMENT_MARGIN CGSizeMake(16.0, 15.0)
@@ -90,7 +90,7 @@ NSString *const ATInteractionMessageCenterEventLabelAttachmentDelete = @"attachm
 	return self.viewController;
 }
 
-- (NSArray<ApptentiveFileAttachment *> *)attachments {
+- (NSArray<ApptentiveLegacyFileAttachment *> *)attachments {
 	if (_attachments == nil) {
 		NSMutableArray *attachments = [NSMutableArray array];
 		NSInteger index = 1;
@@ -100,7 +100,7 @@ NSString *const ATInteractionMessageCenterEventLabelAttachmentDelete = @"attachm
 
 			// TODO: Localize this once server can accept non-ASCII filenames
 			NSString *name = [NSString stringWithFormat:@"Attachment %@", numberString];
-			ApptentiveFileAttachment *attachment = [ApptentiveFileAttachment newInstanceWithFileData:UIImageJPEGRepresentation(image, 0.6) MIMEType:@"image/jpeg" name:name];
+			ApptentiveLegacyFileAttachment *attachment = [ApptentiveLegacyFileAttachment newInstanceWithFileData:UIImageJPEGRepresentation(image, 0.6) MIMEType:@"image/jpeg" name:name];
 
 			index++;
 			[attachments addObject:attachment];

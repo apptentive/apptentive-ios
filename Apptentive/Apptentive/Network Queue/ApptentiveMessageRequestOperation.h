@@ -7,7 +7,7 @@
 //
 
 #import "ApptentiveSerialRequestOperation.h"
-#import "ApptentiveMessage.h"
+#import "ApptentiveLegacyMessage.h"
 
 
 /**

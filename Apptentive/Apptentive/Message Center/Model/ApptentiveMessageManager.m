@@ -8,27 +8,30 @@
 
 #import "ApptentiveMessageManager.h"
 #import "ApptentiveMessage.h"
+#import "ApptentiveMessageSender.h"
 #import "ApptentiveNetworkQueue.h"
 #import "ApptentiveSerialRequest+Record.h"
 
+#import "ApptentiveLegacyMessage.h"
 #import "Apptentive_Private.h"
-#import "ApptentiveMessageSender.h"
+#import "ApptentiveLegacyMessageSender.h"
 #import "ApptentiveBackend.h"
 #import "ApptentiveSession.h"
 #import "ApptentivePerson.h"
-#import "ApptentiveFileAttachment.h"
+#import "ApptentiveLegacyFileAttachment.h"
 
 @interface ApptentiveMessageManager ()
 
 @property (strong, nonatomic) ApptentiveRequestOperation *messageOperation;
 @property (strong, nonatomic) NSTimer *messageFetchTimer;
 @property (strong, nonatomic) NSDictionary *currentCustomData;
+@property (strong, nonatomic) NSDictionary *messageIdentifierIndex;
 
 @end
 
 @implementation ApptentiveMessageManager
 
-- (instancetype)initWithStoragePath:(NSString *)storagePath networkQueue:(ApptentiveNetworkQueue *)networkQueue pollingInterval:(NSTimeInterval)pollingInterval {
+- (instancetype)initWithStoragePath:(NSString *)storagePath networkQueue:(ApptentiveNetworkQueue *)networkQueue pollingInterval:(NSTimeInterval)pollingInterval  {
 	self = [super init];
 
 	if (self) {
@@ -36,6 +39,7 @@
 		_networkQueue = networkQueue;
 
 		// TODO: Load previous messages from disk
+		// TODO: Index previous messages in messageIdentifierIndex
 
 		// Use setter to initialize timer
 		self.pollingInterval = pollingInterval;
@@ -55,6 +59,11 @@
 	[self.networkQueue addOperation:self.messageOperation];
 }
 
+// TODO: Inject message sender in initializer?
+- (NSString *)localUserIdentifier {
+	return Apptentive.shared.backend.session.person.identifier;
+}
+
 #pragma mark Request Operation Delegate
 
 - (void)requestOperationDidFinish:(ApptentiveRequestOperation *)operation {
@@ -62,33 +71,38 @@
 	self.messageOperation = nil;
 
 	if (messageListJSON == nil) {
-		ApptentiveLogError(@"Unexpected response from messages request");
+		ApptentiveLogError(@"Unexpected response from /messages request");
 		return;
 	}
 
 	NSMutableArray *mutableMessages = [NSMutableArray arrayWithCapacity:messageListJSON.count];
+	NSMutableDictionary *mutableMessageIdentifierIndex = [NSMutableDictionary dictionaryWithCapacity:messageListJSON.count];
+	NSInteger unreadCount = 0;
+
 	for (NSDictionary *messageJSON in messageListJSON) {
-		// TODO: Assert that messageJSON is, in fact, a dictionary
-		ApptentiveMessage *message = [ApptentiveMessage messageWithJSON:messageJSON];
+		ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithJSON:messageJSON];
 
 		if (message) {
-			if ([message.sender.apptentiveID isEqualToString:Apptentive.shared.backend.session.person.identifier]) {
-				message.seenByUser = @YES;
-				message.sentByUser = @YES;
-			}
+			NSString *pendingIdentifier = message.pendingMessageIdentifier;
+
+			ApptentiveMessage *previousVersion = self.messageIdentifierIndex[pendingIdentifier];
+
+			if (![message.sender.identifier isEqualToString:self.localUserIdentifier]) {
+				if (previousVersion != nil) {
+					message.state = previousVersion.state;
+				} else {
+					message.state = ApptentiveMessageStateUnread;
+					unreadCount ++;
+				}
+			} // else state defaults to sent
 
 			[mutableMessages addObject:message];
+			[mutableMessageIdentifierIndex setObject:message forKey:pendingIdentifier];
 		}
 	}
+	// TODO: merge with local storage
 	_messages = [mutableMessages copy];
-
-	// Update unread count
-	NSInteger unreadCount = 0;
-	for (ApptentiveMessage *message in self.messages) {
-		if (![message.seenByUser boolValue]) {
-			unreadCount ++;
-		}
-	}
+	_messageIdentifierIndex = [mutableMessageIdentifierIndex copy];
 
 	if (_unreadCount != unreadCount) {
 		_unreadCount = unreadCount;
@@ -131,8 +145,8 @@
 
 #pragma mark - Sending Messages
 
-- (ApptentiveMessage *)automatedMessageWithTitle:(NSString *)title body:(NSString *)body {
-	ApptentiveMessage *message = [ApptentiveMessage newInstanceWithBody:body attachments:nil];
+- (ApptentiveLegacyMessage *)automatedMessageWithTitle:(NSString *)title body:(NSString *)body {
+	ApptentiveLegacyMessage *message = [ApptentiveLegacyMessage newInstanceWithBody:body attachments:nil];
 	message.hidden = @NO;
 	message.title = title;
 	message.pendingState = @(ATPendingMessageStateComposing);
@@ -147,7 +161,7 @@
 	return message;
 }
 
-- (BOOL)sendAutomatedMessage:(ApptentiveMessage *)message {
+- (BOOL)sendAutomatedMessage:(ApptentiveLegacyMessage *)message {
 	message.pendingState = @(ATPendingMessageStateSending);
 
 	return [self sendMessage:message];
@@ -161,8 +175,8 @@
 	return [self sendTextMessage:[self createTextMessageWithBody:body hiddenOnClient:hidden]];
 }
 
-- (ApptentiveMessage *)createTextMessageWithBody:(NSString *)body hiddenOnClient:(BOOL)hidden {
-	ApptentiveMessage *message = [ApptentiveMessage newInstanceWithBody:body attachments:nil];
+- (ApptentiveLegacyMessage *)createTextMessageWithBody:(NSString *)body hiddenOnClient:(BOOL)hidden {
+	ApptentiveLegacyMessage *message = [ApptentiveLegacyMessage newInstanceWithBody:body attachments:nil];
 	message.sentByUser = @YES;
 	message.seenByUser = @YES;
 	message.hidden = @(hidden);
@@ -174,7 +188,7 @@
 	return message;
 }
 
-- (BOOL)sendTextMessage:(ApptentiveMessage *)message {
+- (BOOL)sendTextMessage:(ApptentiveLegacyMessage *)message {
 	message.pendingState = @(ATPendingMessageStateSending);
 
 	return [self sendMessage:message];
@@ -196,12 +210,12 @@
 }
 
 - (BOOL)sendFileMessageWithFileData:(NSData *)fileData andMimeType:(NSString *)mimeType hiddenOnClient:(BOOL)hidden {
-	ApptentiveFileAttachment *fileAttachment = [ApptentiveFileAttachment newInstanceWithFileData:fileData MIMEType:mimeType name:nil];
+	ApptentiveLegacyFileAttachment *fileAttachment = [ApptentiveLegacyFileAttachment newInstanceWithFileData:fileData MIMEType:mimeType name:nil];
 	return [self sendCompoundMessageWithText:nil attachments:@[fileAttachment] hiddenOnClient:hidden];
 }
 
 - (BOOL)sendCompoundMessageWithText:(NSString *)text attachments:(NSArray *)attachments hiddenOnClient:(BOOL)hidden {
-	ApptentiveMessage *compoundMessage = [ApptentiveMessage newInstanceWithBody:text attachments:attachments];
+	ApptentiveLegacyMessage *compoundMessage = [ApptentiveLegacyMessage newInstanceWithBody:text attachments:attachments];
 	compoundMessage.pendingState = @(ATPendingMessageStateSending);
 	compoundMessage.sentByUser = @YES;
 	compoundMessage.hidden = @(hidden);
@@ -209,10 +223,10 @@
 	return [self sendMessage:compoundMessage];
 }
 
-- (BOOL)sendMessage:(ApptentiveMessage *)message {
+- (BOOL)sendMessage:(ApptentiveLegacyMessage *)message {
 	NSAssert([NSThread isMainThread], @"-sendMessage: should only be called on main thread");
 
-	ApptentiveMessageSender *sender = [ApptentiveMessageSender findSenderWithID:Apptentive.shared.backend.session.person.identifier inContext:Apptentive.shared.backend.managedObjectContext];
+	ApptentiveLegacyMessageSender *sender = [ApptentiveLegacyMessageSender findSenderWithID:Apptentive.shared.backend.session.person.identifier inContext:Apptentive.shared.backend.managedObjectContext];
 	if (sender) {
 		message.sender = sender;
 	}
@@ -230,7 +244,7 @@
 	return YES;
 }
 
-- (void)attachCustomDataToMessage:(ApptentiveMessage *)message {
+- (void)attachCustomDataToMessage:(ApptentiveLegacyMessage *)message {
 	if (self.currentCustomData) {
 		[message addCustomDataFromDictionary:self.currentCustomData];
 		// Only attach custom data to the first message.

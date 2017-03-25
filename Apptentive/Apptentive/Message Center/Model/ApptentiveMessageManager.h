@@ -12,11 +12,14 @@
 @class ApptentiveMessage, ApptentiveNetworkQueue;
 @protocol ApptentiveMessageManagerDelegate;
 
+@class ApptentiveLegacyMessage;
+
 @interface ApptentiveMessageManager : NSObject <ApptentiveRequestOperationDelegate>
 
 @property (readonly, nonatomic) NSString *storagePath;
 @property (readonly, nonatomic) ApptentiveNetworkQueue *networkQueue;
 @property (assign, nonatomic) NSTimeInterval pollingInterval;
+@property (readonly, nonatomic) NSString *localUserIdentifier;
 
 @property (readonly, nonatomic) NSInteger unreadCount;
 @property (readonly, nonatomic) NSArray<ApptentiveMessage *> *messages;
@@ -30,13 +33,13 @@
 
 
 
-- (ApptentiveMessage *)automatedMessageWithTitle:(NSString *)title body:(NSString *)body;
-- (BOOL)sendAutomatedMessage:(ApptentiveMessage *)message;
+- (ApptentiveLegacyMessage *)automatedMessageWithTitle:(NSString *)title body:(NSString *)body;
+- (BOOL)sendAutomatedMessage:(ApptentiveLegacyMessage *)message;
 
-- (ApptentiveMessage *)createTextMessageWithBody:(NSString *)body hiddenOnClient:(BOOL)hidden;
+- (ApptentiveLegacyMessage *)createTextMessageWithBody:(NSString *)body hiddenOnClient:(BOOL)hidden;
 - (BOOL)sendTextMessageWithBody:(NSString *)body;
 - (BOOL)sendTextMessageWithBody:(NSString *)body hiddenOnClient:(BOOL)hidden;
-- (BOOL)sendTextMessage:(ApptentiveMessage *)message;
+- (BOOL)sendTextMessage:(ApptentiveLegacyMessage *)message;
 
 - (BOOL)sendImageMessageWithImage:(UIImage *)image;
 - (BOOL)sendImageMessageWithImage:(UIImage *)image hiddenOnClient:(BOOL)hidden;

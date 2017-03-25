@@ -8,7 +8,7 @@
 
 #import "ApptentiveSerialRequest.h"
 
-@class ApptentiveMessage;
+@class ApptentiveLegacyMessage;
 
 
 /**
@@ -56,6 +56,6 @@
  @param message The message to be sent.
  @param context The managed object context to use to create the request.
  */
-+ (void)enqueueMessage:(ApptentiveMessage *)message inContext:(NSManagedObjectContext *)context;
++ (void)enqueueMessage:(ApptentiveLegacyMessage *)message inContext:(NSManagedObjectContext *)context;
 
 @end

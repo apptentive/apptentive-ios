@@ -240,7 +240,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (void)dealloc {
-	[self.viewModel removeUnsentContextMessages];
+//	[self.viewModel removeUnsentContextMessages];
 
 	self.tableView.delegate = nil;
 	self.messageInputView.messageView.delegate = nil;
@@ -956,20 +956,17 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		BOOL networkIsUnreachable = !self.viewModel.networkIsReachable;
 
 		switch (self.viewModel.lastUserMessageState) {
-			case ATPendingMessageStateConfirmed:
+			case ApptentiveMessageStateSent:
 				self.state = ATMessageCenterStateConfirmed;
 				break;
-			case ATPendingMessageStateError:
+			case ApptentiveMessageStateFailedToSend:
 				self.state = networkIsUnreachable ? ATMessageCenterStateNetworkError : ATMessageCenterStateHTTPError;
 				break;
-			case ATPendingMessageStateSending:
+			case ApptentiveMessageStateWaiting:
+			case ApptentiveMessageStateSending:
 				self.state = networkIsUnreachable ? ATMessageCenterStateNetworkError : ATMessageCenterStateSending;
 				break;
-			case ATPendingMessageStateComposing:
-				// This indicates that the last message is a context message.
-				self.state = ATMessageCenterStateReplied;
-				break;
-			case ATPendingMessageStateNone:
+			default:
 				self.state = ATMessageCenterStateEmpty;
 				break;
 		}

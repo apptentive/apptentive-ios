@@ -8,6 +8,7 @@
 
 #import "ApptentiveBackend.h"
 #import "ApptentiveMessage.h"
+#import <QuickLook/QuickLook.h>
 
 typedef NS_ENUM(NSInteger, ATMessageCenterMessageType) {
 	ATMessageCenterMessageTypeMessage,
@@ -99,8 +100,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterMessageStatus) {
 - (NSURL *)imageURLOfSenderAtIndexPath:(NSIndexPath *)indexPath;
 - (void)markAsReadMessageAtIndexPath:(NSIndexPath *)indexPath;
 
-- (void)removeUnsentContextMessages;
-
 - (void)sendMessage:(NSString *)message withAttachments:(NSArray *)attachments;
 - (void)setPersonName:(NSString *)name emailAddress:(NSString *)emailAddress;
 
@@ -113,7 +112,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterMessageStatus) {
 - (id<QLPreviewControllerDataSource>)previewDataSourceAtIndex:(NSInteger)index;
 
 @property (readonly, nonatomic) BOOL lastMessageIsReply;
-@property (readonly, nonatomic) ATPendingMessageState lastUserMessageState;
+@property (readonly, nonatomic) ApptentiveMessageState lastUserMessageState;
 
 @end
 

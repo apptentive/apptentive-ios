@@ -122,7 +122,7 @@
 		NSArray *results = [context executeFetchRequest:fetchRequest error:&error];
 
 		if (results.count == 1) {
-			((ApptentiveMessage *)results.firstObject).pendingState = @(pendingState);
+			((ApptentiveLegacyMessage *)results.firstObject).pendingState = @(pendingState);
 		} else {
 			ApptentiveLogError(@"Unable to identify message with ID “%@”. (error: %@)", self.messageRequestInfo.identifier, error);
 		}

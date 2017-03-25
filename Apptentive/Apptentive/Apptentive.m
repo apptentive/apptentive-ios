@@ -12,7 +12,7 @@
 #import "ApptentiveBackend+Engagement.h"
 #import "ApptentiveInteraction.h"
 #import "ApptentiveUtilities.h"
-#import "ApptentiveMessageSender.h"
+#import "ApptentiveLegacyMessageSender.h"
 #import "ApptentiveMessageCenterViewController.h"
 #import "ApptentiveBannerViewController.h"
 #import "ApptentiveUnreadMessagesBadgeView.h"
@@ -26,6 +26,7 @@
 #import "ApptentiveSDK.h"
 #import "ApptentiveVersion.h"
 #import "ApptentiveMessageManager.h"
+#import "ApptentiveMessageSender.h"
 
 NSString *const ApptentiveMessageCenterUnreadCountChangedNotification = @"ApptentiveMessageCenterUnreadCountChangedNotification";
 
@@ -502,7 +503,7 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 	if (self.backend.configuration.messageCenter.notificationPopupEnabled && [message isKindOfClass:[ApptentiveMessage class]]) {
 		// TODO: Display something if body is empty
 		ApptentiveMessage *textMessage = (ApptentiveMessage *)message;
-		NSURL *profilePhotoURL = textMessage.sender.profilePhotoURL ? [NSURL URLWithString:textMessage.sender.profilePhotoURL] : nil;
+		NSURL *profilePhotoURL = textMessage.sender.profilePhotoURL;
 
 		ApptentiveBannerViewController *banner = [ApptentiveBannerViewController bannerWithImageURL:profilePhotoURL title:textMessage.sender.name message:textMessage.body];
 

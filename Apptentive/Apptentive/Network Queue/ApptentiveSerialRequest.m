@@ -7,7 +7,7 @@
 //
 
 #import "ApptentiveSerialRequest.h"
-#import "ApptentiveFileAttachment.h"
+#import "ApptentiveLegacyFileAttachment.h"
 #import "ApptentiveRequestOperation.h"
 #import "ApptentiveSerialRequestAttachment.h"
 
@@ -40,7 +40,7 @@
 	}
 
 	NSMutableArray *attachmentArray = [NSMutableArray arrayWithCapacity:attachments.count];
-	for (ApptentiveFileAttachment *attachment in attachments) {
+	for (ApptentiveLegacyFileAttachment *attachment in attachments) {
 		[attachmentArray addObject:[ApptentiveSerialRequestAttachment queuedAttachmentWithName:attachment.name path:attachment.fullLocalPath MIMEType:attachment.mimeType inContext:context]];
 	}
 	request.attachments = [NSOrderedSet orderedSetWithArray:attachmentArray];

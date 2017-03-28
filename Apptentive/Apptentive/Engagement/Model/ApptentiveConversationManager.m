@@ -159,9 +159,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 }
 
 - (void)handleConversationStateChange:(ApptentiveConversation *)conversation {
-	[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveConversationStateDidChangeNotification object:self];
-    ApptentiveAssertNotNil(conversation);
-    
+	ApptentiveAssertNotNil(conversation);
     if (conversation != nil) {
         NSDictionary *userInfo = @{ ApptentiveConversationStateDidChangeNotificationKeyConversation : conversation };
         [[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveConversationStateDidChangeNotification

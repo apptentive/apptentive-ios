@@ -21,7 +21,7 @@
 
 + (void)enqueueUnsentSurveyResponsesInContext:(NSManagedObjectContext *)context {
 	NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"ATSurveyResponse"];
-	NSString *conversationIdentifier = Apptentive.shared.backend.conversationManager.activeConversation.identifier;
+	ApptentiveConversation *conversation = Apptentive.shared.backend.conversationManager.activeConversation;
 
 	NSError *error;
 	NSArray *unsentSurveyResponses = [context executeFetchRequest:request error:&error];
@@ -32,7 +32,7 @@
 	}
 
 	for (ApptentiveLegacySurveyResponse *response in unsentSurveyResponses) {
-		[ApptentiveSerialRequest enqueueRequestWithPath:[NSString stringWithFormat:@"surveys/%@/respond", response.surveyID] method:@"POST" payload:response.apiJSON attachments:nil identifier:nil conversationIdentifier:conversationIdentifier inContext:context];
+		[ApptentiveSerialRequest enqueueRequestWithPath:[NSString stringWithFormat:@"surveys/%@/respond", response.surveyID] method:@"POST" payload:response.apiJSON attachments:nil identifier:nil conversation:conversation inContext:context];
 		[context deleteObject:response];
 	}
 }

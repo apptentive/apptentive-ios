@@ -18,6 +18,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 extern NSString *const ApptentiveConversationStateDidChangeNotification;
+extern NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation;
 
 
 @interface ApptentiveConversationManager : NSObject <ApptentiveConversationDelegate, ApptentiveRequestOperationDelegate>

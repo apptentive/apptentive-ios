@@ -9,6 +9,7 @@
 #import <CoreData/CoreData.h>
 
 @class ApptentiveFileAttachment;
+@class ApptentiveConversation;
 
 
 /**
@@ -75,6 +76,6 @@
  @param identifier An optional string that identifies a request.
  @param context The managed object context to use to create the request.
  */
-+ (BOOL)enqueueRequestWithPath:(NSString *)path method:(NSString *)method payload:(NSDictionary *)payload attachments:(NSOrderedSet *)attachments identifier:(NSString *)identifier conversationIdentifier:(NSString *)conversationIdentifier inContext:(NSManagedObjectContext *)context;
++ (BOOL)enqueueRequestWithPath:(NSString *)path method:(NSString *)method payload:(NSDictionary *)payload attachments:(NSOrderedSet *)attachments identifier:(NSString *)identifier conversation:(ApptentiveConversation *)conversation inContext:(NSManagedObjectContext *)context;
 
 @end

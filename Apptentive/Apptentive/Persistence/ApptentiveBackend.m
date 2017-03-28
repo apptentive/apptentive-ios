@@ -281,6 +281,10 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 
 - (void)startUp {
 	_networkQueue = [[ApptentiveNetworkQueue alloc] initWithBaseURL:self.baseURL token:self.APIKey SDKVersion:kApptentiveVersionString platform:@"iOS"];
+	_serialNetworkQueue = [[ApptentiveSerialNetworkQueue alloc] initWithBaseURL:self.baseURL token:self.APIKey SDKVersion:kApptentiveVersionString platform:@"iOS"	parentManagedObjectContext:self.managedObjectContext];
+
+	[self.serialNetworkQueue addObserver:self forKeyPath:@"messageSendProgress" options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew context:nil];
+	[self.serialNetworkQueue addObserver:self forKeyPath:@"messageTaskCount" options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew context:nil];
 
 	_conversationManager = [[ApptentiveConversationManager alloc] initWithStoragePath:_supportDirectoryPath operationQueue:_operationQueue networkQueue:_networkQueue parentManagedObjectContext:self.managedObjectContext];
 	self.conversationManager.delegate = self;
@@ -313,11 +317,6 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 }
 
 - (void)finishStartupWithToken:(NSString *)token {
-	_serialNetworkQueue = [[ApptentiveSerialNetworkQueue alloc] initWithBaseURL:self.baseURL token:token SDKVersion:kApptentiveVersionString platform:@"iOS"	parentManagedObjectContext:self.managedObjectContext];
-
-	[self.serialNetworkQueue addObserver:self forKeyPath:@"messageSendProgress" options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew context:nil];
-	[self.serialNetworkQueue addObserver:self forKeyPath:@"messageTaskCount" options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew context:nil];
-
 	self.state = ATBackendStateReady;
 	dispatch_async(dispatch_get_main_queue(), ^{
 		[ApptentiveFileAttachment addMissingExtensions];
@@ -511,8 +510,8 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 		return NO;
 	}
 
-	NSString *conversationIdentifier = self.conversationManager.activeConversation.identifier;
-	[ApptentiveSerialRequest enqueueMessage:message conversationIdentifier:conversationIdentifier inContext:[self managedObjectContext]];
+	ApptentiveConversation *conversation = self.conversationManager.activeConversation;
+	[ApptentiveSerialRequest enqueueMessage:message conversation:conversation inContext:[self managedObjectContext]];
 
 	[self processQueuedRecords];
 
@@ -662,6 +661,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	// Anonymous pending conversations will not yet have a token, so we can't finish starting up yet in that case. 
 	if (conversation.state != ApptentiveConversationStateAnonymousPending) {
 		self.networkQueue.token = conversation.token;
+		self.serialNetworkQueue.token = conversation.token;
 
 		if (self.state != ATBackendStateReady) {
 			[self finishStartupWithToken:conversation.token];

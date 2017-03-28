@@ -37,7 +37,7 @@
 + (void)enqueueUnsentMessagesInContext:(NSManagedObjectContext *)context {
 	NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"ATMessage"];
 	request.predicate = [NSPredicate predicateWithFormat:@"(pendingState == %d) || (pendingState == %d)", ATPendingMessageStateSending, ATPendingMessageStateError];
-	NSString *conversationIdentifier = Apptentive.shared.backend.conversationManager.activeConversation.identifier;
+	ApptentiveConversation *conversation = Apptentive.shared.backend.conversationManager.activeConversation;
 
 
 	NSError *error;
@@ -49,7 +49,7 @@
 	}
 
 	for (ApptentiveMessage *message in unsentMessages) {
-		[ApptentiveSerialRequest enqueueMessage:message conversationIdentifier:conversationIdentifier inContext:context];
+		[ApptentiveSerialRequest enqueueMessage:message conversation:conversation inContext:context];
 	}
 }
 

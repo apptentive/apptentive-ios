@@ -10,7 +10,7 @@
 #import "ApptentiveSerialRequest.h"
 #import "ApptentiveSerialRequestOperation.h"
 #import "ApptentiveMessageRequestOperation.h"
-
+#import "ApptentiveConversationManager.h"
 
 @interface ApptentiveSerialNetworkQueue ()
 
@@ -32,9 +32,15 @@
 
 		self.maxConcurrentOperationCount = 1;
 		_backgroundTaskIdentifier = UIBackgroundTaskInvalid;
+        
+        [self registerNotifications];
 	}
 
 	return self;
+}
+
+- (void)dealloc {
+    [self unregisterNotifications];
 }
 
 - (void)resume {
@@ -52,6 +58,7 @@
 		[moc performBlockAndWait:^{
 			NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"QueuedRequest"];
 			fetchRequest.sortDescriptors = @[ [NSSortDescriptor sortDescriptorWithKey:@"date" ascending:YES] ];
+            fetchRequest.predicate = [NSPredicate predicateWithFormat:@"conversationIdentifier != nil"]; // make sure we don't include "anonymous" conversation here
 
 			NSError *error;
 			queuedRequests = [moc executeFetchRequest:fetchRequest error:&error];
@@ -201,6 +208,91 @@
 
 - (NSInteger)messageTaskCount {
 	return self.activeTaskProgress.count;
+}
+
+#pragma mark -
+#pragma mark Update missing conversation IDs
+
+- (void)updateMissingConversationId:(NSString *)conversationId {
+    
+    // create a child context on a private concurrent queue
+    NSManagedObjectContext *childContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+    
+    // set parent context
+    [childContext setParentContext:self.parentManagedObjectContext];
+    
+    // execute the block on a background thread (this call returns immediatelly)
+    [childContext performBlock:^{
+        
+        // fetch all the requests without a conversation id (no sorting needed)
+        NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"QueuedRequest"];
+        fetchRequest.predicate = [NSPredicate predicateWithFormat:@"conversationIdentifier = nil"];
+        
+        NSError *fetchError;
+        NSArray *queuedRequests = [childContext executeFetchRequest:fetchRequest error:&fetchError];
+        if (fetchError != nil) {
+            ApptentiveLogError(@"Error while fetching requests without a conversation id: %@", fetchError);
+            return;
+        }
+        
+        ApptentiveLogDebug(@"Fetched %d requests without a conversation id", queuedRequests.count);
+        
+        if (queuedRequests.count > 0) {
+            
+            // Set a new conversation identifier
+            for (ApptentiveSerialRequest *requestInfo in queuedRequests) {
+                requestInfo.conversationIdentifier = conversationId;
+            }
+            
+            // save child context
+            [childContext performBlockAndWait:^{
+                NSError *saveError;
+                if (![childContext save:&saveError]) {
+                    ApptentiveLogError(@"Unable to save temporary managed object context: %@", saveError);
+                }
+            }];
+            
+            // save parent context on the main thread
+            dispatch_async(dispatch_get_main_queue(), ^{
+                NSError *parentSaveError;
+                if (![childContext.parentContext save:&parentSaveError]) {
+                    ApptentiveLogError(@"Unable to save parent managed object context: %@", parentSaveError);
+                }
+                
+                // we call 'resume' to send everything
+                [self resume];
+            });
+        }
+    }];
+}
+
+#pragma mark -
+#pragma mark Notifications
+
+- (void)registerNotifications {
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(conversationStateDidChangeNotification:)
+                                                 name:ApptentiveConversationStateDidChangeNotification
+                                               object:nil];
+}
+
+- (void)unregisterNotifications {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)conversationStateDidChangeNotification:(NSNotification *)notification {
+    
+    ApptentiveConversation *conversation = notification.userInfo[ApptentiveConversationStateDidChangeNotificationKeyConversation];
+    ApptentiveAssertNotNil(conversation);
+    
+    if (conversation.state == ApptentiveConversationStateAnonymous) {
+        NSString *conversationId = conversation.identifier;
+        ApptentiveAssertNotNil(conversationId);
+        
+        if (conversationId != nil) {
+            [self updateMissingConversationId:conversationId];
+        }
+    }
 }
 
 @end

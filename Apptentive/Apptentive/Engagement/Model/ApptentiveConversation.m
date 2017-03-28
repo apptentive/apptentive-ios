@@ -28,6 +28,7 @@ static NSString *const TokenKey = @"token";
 static NSString *const LastMessageIDKey = @"lastMessageID";
 static NSString *const MutableUserInfoKey = @"mutableUserInfo";
 static NSString *const ArchiveVersionKey = @"archiveVersion";
+static NSString *const IdentifierKey = @"identifier";
 
 // Legacy keys
 static NSString *const ATCurrentConversationPreferenceKey = @"ATCurrentConversationPreferenceKey";
@@ -70,6 +71,7 @@ static NSString *const ATMessageCenterDidSkipProfileKey = @"ATMessageCenterDidSk
 		_token = [coder decodeObjectOfClass:[NSString class] forKey:TokenKey];
 		_lastMessageID = [coder decodeObjectOfClass:[NSString class] forKey:LastMessageIDKey];
 		_mutableUserInfo = [coder decodeObjectOfClass:[NSMutableDictionary class] forKey:MutableUserInfoKey];
+		_identifier = [coder decodeObjectOfClass:[NSString class] forKey:IdentifierKey];
 	}
 	return self;
 }
@@ -84,6 +86,7 @@ static NSString *const ATMessageCenterDidSkipProfileKey = @"ATMessageCenterDidSk
 	[coder encodeObject:self.token forKey:TokenKey];
 	[coder encodeObject:self.lastMessageID forKey:LastMessageIDKey];
 	[coder encodeObject:self.mutableUserInfo forKey:MutableUserInfoKey];
+	[coder encodeObject:self.identifier forKey:IdentifierKey];
 	[coder encodeObject:@1 forKey:ArchiveVersionKey];
 }
 

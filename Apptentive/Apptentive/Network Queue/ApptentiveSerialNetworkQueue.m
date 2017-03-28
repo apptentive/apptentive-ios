@@ -10,7 +10,7 @@
 #import "ApptentiveSerialRequest.h"
 #import "ApptentiveSerialRequestOperation.h"
 #import "ApptentiveMessageRequestOperation.h"
-
+#import "ApptentiveConversationManager.h"
 
 @interface ApptentiveSerialNetworkQueue ()
 
@@ -32,9 +32,15 @@
 
 		self.maxConcurrentOperationCount = 1;
 		_backgroundTaskIdentifier = UIBackgroundTaskInvalid;
+        
+        [self registerNotifications];
 	}
 
 	return self;
+}
+
+- (void)dealloc {
+    [self unregisterNotifications];
 }
 
 - (void)resume {
@@ -201,6 +207,24 @@
 
 - (NSInteger)messageTaskCount {
 	return self.activeTaskProgress.count;
+}
+
+#pragma mark -
+#pragma mark Notifications
+
+- (void)registerNotifications {
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(conversationStateDidChangeNotification:)
+                                                 name:ApptentiveConversationStateDidChangeNotification
+                                               object:nil];
+}
+
+- (void)unregisterNotifications {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)conversationStateDidChangeNotification:(NSNotification *)notification {
+    
 }
 
 @end

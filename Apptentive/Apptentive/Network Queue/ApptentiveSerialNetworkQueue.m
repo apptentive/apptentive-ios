@@ -58,6 +58,7 @@
 		[moc performBlockAndWait:^{
 			NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"QueuedRequest"];
 			fetchRequest.sortDescriptors = @[ [NSSortDescriptor sortDescriptorWithKey:@"date" ascending:YES] ];
+            fetchRequest.predicate = [NSPredicate predicateWithFormat:@"conversationIdentifier != nil"]; // make sure we don't include "anonymous" conversation here
 
 			NSError *error;
 			queuedRequests = [moc executeFetchRequest:fetchRequest error:&error];
@@ -225,7 +226,7 @@
         
         // fetch all the requests without a conversation id (no sorting needed)
         NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"QueuedRequest"];
-        fetchRequest.predicate = [NSPredicate predicateWithFormat:@"identifier = nil"];
+        fetchRequest.predicate = [NSPredicate predicateWithFormat:@"conversationIdentifier = nil"];
         
         NSError *fetchError;
         NSArray *queuedRequests = [childContext executeFetchRequest:fetchRequest error:&fetchError];

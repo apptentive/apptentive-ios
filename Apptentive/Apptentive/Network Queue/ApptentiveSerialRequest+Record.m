@@ -12,26 +12,26 @@
 
 @implementation ApptentiveSerialRequest (Record)
 
-+ (void)enqueueRequestWithPath:(NSString *)path containerName:(NSString *)containerName noncePrefix:(NSString *)noncePrefix payload:(NSDictionary *)payload conversationIdentifier:(NSString *)conversationIdentifier inContext:(NSManagedObjectContext *)context {
++ (void)enqueueRequestWithPath:(NSString *)path containerName:(NSString *)containerName noncePrefix:(NSString *)noncePrefix payload:(NSDictionary *)payload conversation:(ApptentiveConversation *)conversation inContext:(NSManagedObjectContext *)context {
 	NSMutableDictionary *fullPayload = [payload mutableCopy];
 
 	fullPayload[@"nonce"] = [NSString stringWithFormat:@"%@:%@", noncePrefix, [NSUUID UUID].UUIDString];
 	fullPayload[@"client_created_at"] = @([NSDate date].timeIntervalSince1970);
 	fullPayload[@"client_created_at_utc_offset"] = @([[NSTimeZone systemTimeZone] secondsFromGMTForDate:[NSDate date]]);
 
-	[self enqueueRequestWithPath:path method:@"POST" payload:@{ containerName: fullPayload } attachments:nil identifier:nil conversationIdentifier:conversationIdentifier inContext:context];
+	[self enqueueRequestWithPath:path method:@"POST" payload:@{ containerName: fullPayload } attachments:nil identifier:nil conversation:conversation inContext:context];
 }
 
-+ (void)enqueueSurveyResponseWithAnswers:(NSDictionary *)answers identifier:(NSString *)identifier conversationIdentifier:(NSString *)conversationIdentifier inContext:(NSManagedObjectContext *)context {
++ (void)enqueueSurveyResponseWithAnswers:(NSDictionary *)answers identifier:(NSString *)identifier conversation:(ApptentiveConversation *)conversation inContext:(NSManagedObjectContext *)context {
 	NSMutableDictionary *payload = [NSMutableDictionary dictionary];
 
 	payload[@"id"] = identifier;
 	payload[@"answers"] = answers;
 
-	[self enqueueRequestWithPath:[NSString stringWithFormat:@"surveys/%@/respond", identifier] containerName:@"survey" noncePrefix:@"pending-survey-response" payload:payload conversationIdentifier:conversationIdentifier inContext:context];
+	[self enqueueRequestWithPath:[NSString stringWithFormat:@"surveys/%@/respond", identifier] containerName:@"survey" noncePrefix:@"pending-survey-response" payload:payload conversation:conversation inContext:context];
 }
 
-+ (void)enqueueEventWithLabel:(NSString *)label interactionIdentifier:(NSString *)interactionIdenfier userInfo:(id)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData conversationIdentifier:(NSString *)conversationIdentifier inContext:(NSManagedObjectContext *)context {
++ (void)enqueueEventWithLabel:(NSString *)label interactionIdentifier:(NSString *)interactionIdenfier userInfo:(id)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData conversation:(ApptentiveConversation *)conversation inContext:(NSManagedObjectContext *)context {
 	NSMutableDictionary *payload = [NSMutableDictionary dictionary];
 
 	payload[@"label"] = label;
@@ -66,11 +66,11 @@
 		}
 	}
 
-	[self enqueueRequestWithPath:@"events" containerName:@"event" noncePrefix:@"event" payload:payload conversationIdentifier:conversationIdentifier inContext:context];
+	[self enqueueRequestWithPath:@"events" containerName:@"event" noncePrefix:@"event" payload:payload conversation:conversation inContext:context];
 }
 
-+ (void)enqueueMessage:(ApptentiveMessage *)message conversationIdentifier:(NSString *)conversationIdentifier inContext:(NSManagedObjectContext *)context {
-	[self enqueueRequestWithPath:@"messages" method:@"POST" payload:message.apiJSON attachments:message.attachments identifier:message.pendingMessageID conversationIdentifier:conversationIdentifier inContext:context];
++ (void)enqueueMessage:(ApptentiveMessage *)message conversation:(ApptentiveConversation *)conversation inContext:(NSManagedObjectContext *)context {
+	[self enqueueRequestWithPath:@"messages" method:@"POST" payload:message.apiJSON attachments:message.attachments identifier:message.pendingMessageID conversation:conversation inContext:context];
 }
 
 @end

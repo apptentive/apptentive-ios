@@ -8,14 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-typedef NS_ENUM(NSInteger, ApptentiveConversationState) {
-	ApptentiveConversationStateUndefined = 0,
-	ApptentiveConversationStateAnonymousPending,
-	ApptentiveConversationStateAnonymous,
-	ApptentiveConversationStateLoggedIn,
-	ApptentiveConversationStateLoggedOut
-};
-
+#import "ApptentiveConversation.h"
 
 @interface ApptentiveConversationMetadataItem : NSObject <NSSecureCoding>
 

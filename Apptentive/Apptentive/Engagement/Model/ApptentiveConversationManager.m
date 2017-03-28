@@ -246,7 +246,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		context.parentContext = self.parentManagedObjectContext;
 
 		[context performBlock:^{
-			[ApptentiveSerialRequest enqueueRequestWithPath:@"conversation" method:@"PUT" payload:payload attachments:nil identifier:nil conversationIdentifier:self.activeConversation.identifier inContext:context];
+			[ApptentiveSerialRequest enqueueRequestWithPath:@"conversation" method:@"PUT" payload:payload attachments:nil identifier:nil conversation:self.activeConversation inContext:context];
 		}];
 
 		[self saveConversation];
@@ -263,7 +263,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		context.parentContext = self.parentManagedObjectContext;
 
 		[context performBlock:^{
-			[ApptentiveSerialRequest enqueueRequestWithPath:@"people" method:@"PUT" payload:diffs attachments:nil identifier:nil conversationIdentifier:self.activeConversation.identifier inContext:context];
+			[ApptentiveSerialRequest enqueueRequestWithPath:@"people" method:@"PUT" payload:diffs attachments:nil identifier:nil conversation:self.activeConversation inContext:context];
 		}];
 
 		[self saveConversation];
@@ -278,7 +278,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		context.parentContext = self.parentManagedObjectContext;
 
 		[context performBlock:^{
-			[ApptentiveSerialRequest enqueueRequestWithPath:@"devices" method:@"PUT" payload:diffs attachments:nil identifier:nil conversationIdentifier:self.activeConversation.identifier inContext:context];
+			[ApptentiveSerialRequest enqueueRequestWithPath:@"devices" method:@"PUT" payload:diffs attachments:nil identifier:nil conversation:self.activeConversation inContext:context];
 		}];
 
 		[self saveConversation];

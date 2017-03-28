@@ -10,7 +10,7 @@
 #import "ApptentiveFileAttachment.h"
 #import "ApptentiveRequestOperation.h"
 #import "ApptentiveSerialRequestAttachment.h"
-
+#import "ApptentiveConversation.h"
 
 @implementation ApptentiveSerialRequest
 
@@ -23,11 +23,16 @@
 @dynamic path;
 @dynamic payload;
 
-+ (BOOL)enqueueRequestWithPath:(NSString *)path method:(NSString *)method payload:(NSDictionary *)payload attachments:(NSOrderedSet *)attachments identifier:(NSString *)identifier conversationIdentifier:(NSString *)conversationIdentifier inContext:(NSManagedObjectContext *)context {
++ (BOOL)enqueueRequestWithPath:(NSString *)path method:(NSString *)method payload:(NSDictionary *)payload attachments:(NSOrderedSet *)attachments identifier:(NSString *)identifier conversation:(ApptentiveConversation *)conversation inContext:(NSManagedObjectContext *)context {
     
-    ApptentiveAssertTrue(conversationIdentifier.length > 0, @"Invalid conversation id '@%'", conversationIdentifier);
-    if (conversationIdentifier.length == 0) {
-        ApptentiveLogError(@"Unable encode enqueue request: conversation id is nil or empty");
+    ApptentiveAssertNotNil(conversation);
+    if (conversation == nil) {
+        return NO;
+    }
+    
+    ApptentiveAssertTrue(conversation.state != ApptentiveConversationStateUndefined && conversation.state != ApptentiveConversationStateLoggedOut, @"Unexpected conversation state: %ld", conversation.state);
+    if (conversation.state == ApptentiveConversationStateUndefined ||
+        conversation.state == ApptentiveConversationStateLoggedOut) {
         return NO;
     }
     
@@ -49,7 +54,7 @@
 	request.path = path;
 	request.method = method;
 	request.identifier = identifier;
-	request.conversationIdentifier = conversationIdentifier;
+    request.conversationIdentifier = conversation.identifier;
 	request.apiVersion = [ApptentiveRequestOperation APIVersion];
 
 	NSError *error;

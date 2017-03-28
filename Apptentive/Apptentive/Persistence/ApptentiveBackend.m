@@ -511,8 +511,8 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 		return NO;
 	}
 
-	NSString *conversationIdentifier = self.conversationManager.activeConversation.identifier;
-	[ApptentiveSerialRequest enqueueMessage:message conversationIdentifier:conversationIdentifier inContext:[self managedObjectContext]];
+	ApptentiveConversation *conversation = self.conversationManager.activeConversation;
+	[ApptentiveSerialRequest enqueueMessage:message conversation:conversation inContext:[self managedObjectContext]];
 
 	[self processQueuedRecords];
 

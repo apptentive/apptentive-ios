@@ -236,8 +236,8 @@ NSString *const ApptentiveInteractionSurveyEventLabelCancel = @"cancel";
 }
 
 - (void)submit {
-	NSString *conversationIdentifier = Apptentive.shared.backend.conversationManager.activeConversation.identifier;
-	[ApptentiveSerialRequest enqueueSurveyResponseWithAnswers:self.answers identifier:self.interaction.identifier conversationIdentifier:conversationIdentifier inContext:Apptentive.shared.backend.managedObjectContext];
+	ApptentiveConversation *conversation = Apptentive.shared.backend.conversationManager.activeConversation;
+	[ApptentiveSerialRequest enqueueSurveyResponseWithAnswers:self.answers identifier:self.interaction.identifier conversation:conversation inContext:Apptentive.shared.backend.managedObjectContext];
 
 	[Apptentive.shared.backend processQueuedRecords];
 }

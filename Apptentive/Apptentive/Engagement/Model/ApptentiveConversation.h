@@ -7,9 +7,16 @@
 //
 
 #import "ApptentiveState.h"
-#import "ApptentiveConversationMetadataItem.h"
 
-@class ApptentivePerson, ApptentiveDevice, ApptentiveSDK, ApptentiveAppRelease, ApptentiveEngagement, ApptentiveMutablePerson, ApptentiveMutableDevice, ApptentiveVersion;
+typedef NS_ENUM(NSInteger, ApptentiveConversationState) {
+    ApptentiveConversationStateUndefined = 0,
+    ApptentiveConversationStateAnonymousPending,
+    ApptentiveConversationStateAnonymous,
+    ApptentiveConversationStateLoggedIn,
+    ApptentiveConversationStateLoggedOut
+};
+
+@class ApptentivePerson, ApptentiveDevice, ApptentiveSDK, ApptentiveAppRelease, ApptentiveEngagement, ApptentiveMutablePerson, ApptentiveMutableDevice, ApptentiveVersion, ApptentiveConversationMetadataItem;
 @protocol ApptentiveConversationDelegate;
 
 /**

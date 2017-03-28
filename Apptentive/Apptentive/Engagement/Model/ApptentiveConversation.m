@@ -28,7 +28,7 @@ static NSString *const TokenKey = @"token";
 static NSString *const LastMessageIDKey = @"lastMessageID";
 static NSString *const MutableUserInfoKey = @"mutableUserInfo";
 static NSString *const ArchiveVersionKey = @"archiveVersion";
-static NSString *const IdentifierKey = @"identifier"
+static NSString *const IdentifierKey = @"identifier";
 
 // Legacy keys
 static NSString *const ATCurrentConversationPreferenceKey = @"ATCurrentConversationPreferenceKey";

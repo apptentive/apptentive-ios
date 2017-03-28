@@ -241,7 +241,7 @@
             
             // Set a new conversation identifier
             for (ApptentiveSerialRequest *requestInfo in queuedRequests) {
-                requestInfo.identifier = conversationId;
+                requestInfo.conversationIdentifier = conversationId;
             }
             
             // save child context
@@ -259,11 +259,8 @@
                     ApptentiveLogError(@"Unable to save parent managed object context: %@", parentSaveError);
                 }
                 
-                // why do we need this code?
-                if (self.backgroundTaskIdentifier != UIBackgroundTaskInvalid) {
-                    [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTaskIdentifier];
-                    self.backgroundTaskIdentifier = UIBackgroundTaskInvalid;
-                }
+                // we call 'resume' to send everything
+                [self resume];
             });
         }
     }];

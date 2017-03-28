@@ -23,6 +23,7 @@ static NSString *const ConversationFilename = @"conversation-v1.archive";
 static NSString *const ManifestFilename = @"manifest-v1.archive";
 
 NSString *const ApptentiveConversationStateDidChangeNotification = @"ApptentiveConversationStateDidChangeNotification";
+NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation = @"conversation";
 
 
 @interface ApptentiveConversationManager () <ApptentiveConversationDelegate>
@@ -159,9 +160,17 @@ NSString *const ApptentiveConversationStateDidChangeNotification = @"ApptentiveC
 
 - (void)handleConversationStateChange:(ApptentiveConversation *)conversation {
 	[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveConversationStateDidChangeNotification object:self];
+    ApptentiveAssertNotNil(conversation);
+    
+    if (conversation != nil) {
+        NSDictionary *userInfo = @{ ApptentiveConversationStateDidChangeNotificationKeyConversation : conversation };
+        [[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveConversationStateDidChangeNotification
+                                                            object:self
+                                                          userInfo:userInfo];
+    }
 
 	if ([self.delegate respondsToSelector:@selector(conversationManager:conversationDidChangeState:)]) {
-		[self.delegate conversationManager:self conversationDidChangeState:self.activeConversation];
+		[self.delegate conversationManager:self conversationDidChangeState:conversation];
 	}
 
 	[self updateMetadataItems:conversation];

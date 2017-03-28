@@ -210,6 +210,69 @@
 }
 
 #pragma mark -
+#pragma mark Update missing conversation IDs
+
+- (void)updateMissingConversationId:(NSString *)conversationId {
+    
+    // create a block for the operation queue to perform all core-data related ops in the background
+    NSBlockOperation *updateBlock = [NSBlockOperation blockOperationWithBlock:^{
+        NSManagedObjectContext *childContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+        
+        // set parent context
+        [childContext setParentContext:self.parentManagedObjectContext];
+        
+        // wait until the block is executed
+        [childContext performBlockAndWait:^{
+            
+            // fetch all the requests without a conversation id (no sorting needed)
+            NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"QueuedRequest"];
+            fetchRequest.predicate = [NSPredicate predicateWithFormat:@"identifier = nil"];
+            
+            NSError *fetchError;
+            NSArray *queuedRequests = [childContext executeFetchRequest:fetchRequest error:&fetchError];
+            if (fetchError != nil) {
+                ApptentiveLogError(@"Error while fetching requests without a conversation id: %@", fetchError);
+                return;
+            }
+            
+            ApptentiveLogDebug(@"Fetched %d requests without a conversation id", queuedRequests.count);
+            
+            if (queuedRequests.count > 0) {
+                // Set a new conversation identifier
+                for (ApptentiveSerialRequest *requestInfo in queuedRequests) {
+                    requestInfo.identifier = conversationId;
+                }
+                
+                // save child context
+                [childContext performBlockAndWait:^{
+                    NSError *saveError;
+                    if (![childContext save:&saveError]) {
+                        ApptentiveLogError(@"Unable to save temporary managed object context: %@", saveError);
+                    }
+                }];
+                
+                // save parent context on the main thread (not sure why we need that)
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    NSError *parentSaveError;
+                    if (![childContext.parentContext save:&parentSaveError]) {
+                        ApptentiveLogError(@"Unable to save parent managed object context: %@", parentSaveError);
+                    }
+                    
+                    // not sure what this code does
+                    if (self.backgroundTaskIdentifier != UIBackgroundTaskInvalid) {
+                        [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTaskIdentifier];
+                        self.backgroundTaskIdentifier = UIBackgroundTaskInvalid;
+                    }
+                });
+            }
+        }];
+    }];
+    
+    // schedule update operation
+    [self addOperation:updateBlock];
+}
+
+#pragma mark -
 #pragma mark Notifications
 
 - (void)registerNotifications {
@@ -225,6 +288,17 @@
 
 - (void)conversationStateDidChangeNotification:(NSNotification *)notification {
     
+    ApptentiveConversation *conversation = notification.userInfo[ApptentiveConversationStateDidChangeNotificationKeyConversation];
+    ApptentiveAssertNotNil(conversation);
+    
+    if (conversation.state == ApptentiveConversationStateAnonymous) {
+        NSString *conversationId = conversation.identifier;
+        ApptentiveAssertNotNil(conversationId);
+        
+        if (conversationId != nil) {
+            [self updateMissingConversationId:conversationId];
+        }
+    }
 }
 
 @end

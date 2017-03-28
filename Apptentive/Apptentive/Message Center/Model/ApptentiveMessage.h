@@ -38,7 +38,7 @@ typedef NS_ENUM(NSInteger, ApptentiveMessageState) {
 - (instancetype)initWithJSON:(NSDictionary *)JSON;
 - (instancetype)initWithBody:(NSString *)body attachments:(NSArray *)attachments sender:(ApptentiveMessageSender *)sender;
 
-#pragma mark - Computed properties
+- (ApptentiveMessage *)mergedWith:(ApptentiveMessage *)messageFromServer;
 
 @end
 

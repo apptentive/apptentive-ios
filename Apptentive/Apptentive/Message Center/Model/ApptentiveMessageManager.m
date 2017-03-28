@@ -64,6 +64,10 @@
 	return Apptentive.shared.backend.session.person.identifier;
 }
 
+- (NSInteger)numberOfMessages {
+	return self.messages.count;
+}
+
 #pragma mark Request Operation Delegate
 
 - (void)requestOperationDidFinish:(ApptentiveRequestOperation *)operation {
@@ -86,21 +90,29 @@
 			NSString *pendingIdentifier = message.pendingMessageIdentifier;
 
 			ApptentiveMessage *previousVersion = self.messageIdentifierIndex[pendingIdentifier];
+			BOOL sentByLocalUser = [message.sender.identifier isEqualToString:self.localUserIdentifier];
 
-			if (![message.sender.identifier isEqualToString:self.localUserIdentifier]) {
-				if (previousVersion != nil) {
-					message.state = previousVersion.state;
-				} else {
-					message.state = ApptentiveMessageStateUnread;
-					unreadCount ++;
+			if (previousVersion != nil) {
+				// Update with server identifier and date
+				message = [previousVersion mergedWith:message];
+
+				if (sentByLocalUser) {
+					message.state = ApptentiveMessageStateSent;
 				}
+			} else if (!sentByLocalUser) {
+				message.state = ApptentiveMessageStateUnread;
+				unreadCount ++;
 			} // else state defaults to sent
 
 			[mutableMessages addObject:message];
 			[mutableMessageIdentifierIndex setObject:message forKey:pendingIdentifier];
 		}
 	}
+
 	// TODO: merge with local storage
+
+	[mutableMessages sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"sentDate" ascending:YES]]];
+
 	_messages = [mutableMessages copy];
 	_messageIdentifierIndex = [mutableMessageIdentifierIndex copy];
 

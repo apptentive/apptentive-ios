@@ -26,16 +26,19 @@
 
 		_body = JSON[@"body"];
 
-		NSMutableArray *mutableAttachments;
-		if ([JSON[@"attachments"] isKindOfClass:[NSArray class]]) {
-			for (NSDictionary *attachmentJSON in JSON[@"attachments"]) {
+		NSArray *attachmentsJSON = JSON[@"attachments"];
+		if ([attachmentsJSON isKindOfClass:[NSArray class]]) {
+			NSMutableArray *mutableAttachments = [NSMutableArray arrayWithCapacity:attachmentsJSON.count];
+
+			for (NSDictionary *attachmentJSON in attachmentsJSON) {
 				ApptentiveAttachment *attachment = [[ApptentiveAttachment alloc] initWithJSON:attachmentJSON];
 				if (attachment != nil) {
 					[mutableAttachments addObject:attachment];
 				}
 			}
+
+			_attachments = [mutableAttachments copy];
 		}
-		_attachments = [mutableAttachments copy];
 
 		_sender = [[ApptentiveMessageSender alloc] initWithJSON:JSON[@"sender"]];
 
@@ -67,6 +70,13 @@
 		_pendingMessageIdentifier = [NSUUID UUID].UUIDString;
 		_state = ApptentiveMessageStatePending;
 	}
+
+	return self;
+}
+
+- (ApptentiveMessage *)mergedWith:(ApptentiveMessage *)messageFromServer {
+	_identifier = messageFromServer.identifier;
+	_sentDate = messageFromServer.sentDate;
 
 	return self;
 }

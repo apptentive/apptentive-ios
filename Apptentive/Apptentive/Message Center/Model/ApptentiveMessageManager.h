@@ -31,6 +31,8 @@
 - (void)checkForMessages;
 - (void)stopPolling;
 
+- (NSInteger)numberOfMessages;
+
 
 
 - (ApptentiveLegacyMessage *)automatedMessageWithTitle:(NSString *)title body:(NSString *)body;

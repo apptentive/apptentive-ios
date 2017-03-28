@@ -31,9 +31,8 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 NSString *const ATMessageCenterDidSkipProfileKey = @"ATMessageCenterDidSkipProfileKey";
 NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKey";
 
-@interface ApptentiveMessageCenterViewModel () <NSFetchedResultsControllerDelegate>
+@interface ApptentiveMessageCenterViewModel ()
 
-@property (readwrite, strong, nonatomic) NSFetchedResultsController *fetchedMessagesController;
 @property (readonly, nonatomic) ApptentiveMessage *lastUserMessage;
 @property (readonly, nonatomic) NSURLSession *attachmentDownloadSession;
 @property (readonly, nonatomic) NSMutableDictionary<NSValue *, NSIndexPath *> *taskIndexPaths;
@@ -44,9 +43,10 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 
 @implementation ApptentiveMessageCenterViewModel
 
-- (instancetype)initWithInteraction:(ApptentiveInteraction *)interaction {
+- (instancetype)initWithInteraction:(ApptentiveInteraction *)interaction messageManager:(ApptentiveMessageManager *)messageManager {
 	if ((self = [super init])) {
 		_interaction = interaction;
+		_messageManager = messageManager;
 
 		_dateFormatter = [[NSDateFormatter alloc] init];
 		_dateFormatter.dateStyle = NSDateFormatterLongStyle;
@@ -62,46 +62,11 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 	// TODO: get resume data from cancelled downloads and use it
 	[self.attachmentDownloadSession invalidateAndCancel];
 
-	self.fetchedMessagesController.delegate = nil;
-}
-
-- (NSFetchedResultsController *)fetchedMessagesController {
-	@synchronized(self) {
-		if (!_fetchedMessagesController) {
-			[NSFetchedResultsController deleteCacheWithName:@"at-messages-cache"];
-			NSFetchRequest *request = [[NSFetchRequest alloc] init];
-			[request setEntity:[NSEntityDescription entityForName:@"ATMessage" inManagedObjectContext:[[Apptentive sharedConnection].backend managedObjectContext]]];
-			[request setFetchBatchSize:20];
-
-			//NSSortDescriptor *creationTimeSort = [[NSSortDescriptor alloc] initWithKey:@"creationTime" ascending:YES];
-			NSSortDescriptor *clientCreationTimeSort = [[NSSortDescriptor alloc] initWithKey:@"clientCreationTime" ascending:YES];
-			[request setSortDescriptors:@[clientCreationTimeSort]];
-
-			NSPredicate *predicate = [NSPredicate predicateWithFormat:@"creationTime != %d AND clientCreationTime != %d AND hidden != %@", 0, 0, @YES];
-			[request setPredicate:predicate];
-
-			// For now, group each message into its own section.
-			// In the future, we'll save an attribute that coalesces
-			// closely-grouped (in time) messages into a single section.
-			NSString *cacheName = [[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){9, 0, 0}] ? nil : @"at-messages-cache";
-			NSFetchedResultsController *newController = [[NSFetchedResultsController alloc] initWithFetchRequest:request managedObjectContext:[[Apptentive sharedConnection].backend managedObjectContext] sectionNameKeyPath:@"clientCreationTime" cacheName:cacheName];
-			newController.delegate = self;
-			_fetchedMessagesController = newController;
-
-			request = nil;
-		}
-	}
-	return _fetchedMessagesController;
+	self.messageManager.delegate = nil;
 }
 
 - (void)start {
 	[[Apptentive sharedConnection].backend messageCenterEnteredForeground];
-
-	NSError *error = nil;
-	if (![self.fetchedMessagesController performFetch:&error]) {
-		ApptentiveLogError(@"Got an error loading messages: %@", error);
-		//TODO: Handle this error.
-	}
 
 	if (self.contextMessageBody) {
 #warning make context message work
@@ -268,14 +233,11 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 }
 
 - (NSInteger)numberOfMessageGroups {
-	return self.fetchedMessagesController.sections.count;
+	return [self.messageManager numberOfMessages];
 }
 
 - (NSInteger)numberOfMessagesInGroup:(NSInteger)groupIndex {
-	if ([[self.fetchedMessagesController sections] count] > 0) {
-		return [[[self.fetchedMessagesController sections] objectAtIndex:groupIndex] numberOfObjects];
-	} else
-		return 0;
+	return 1;
 }
 
 - (ATMessageCenterMessageType)cellTypeAtIndexPath:(NSIndexPath *)indexPath {
@@ -283,17 +245,17 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 
 	if (message.automated) {
 		return ATMessageCenterMessageTypeContextMessage;
-	} else if ([self messageSentByLocalUser:message]) {
-		if (message.attachments.count) {
-			return ATMessageCenterMessageTypeCompoundMessage;
-		} else {
-			return ATMessageCenterMessageTypeMessage;
-		}
-	} else {
+	} else if (![self messageSentByLocalUser:message]) {
 		if (message.attachments.count) {
 			return ATMessageCenterMessageTypeCompoundReply;
 		} else {
 			return ATMessageCenterMessageTypeReply;
+		}
+	} else {
+		if (message.attachments.count) {
+			return ATMessageCenterMessageTypeCompoundMessage;
+		} else {
+			return ATMessageCenterMessageTypeMessage;
 		}
 	}
 }
@@ -383,8 +345,7 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 }
 
 - (BOOL)lastMessageIsReply {
-	id<NSFetchedResultsSectionInfo> section = self.fetchedMessagesController.sections.lastObject;
-	ApptentiveMessage *lastMessage = section.objects.lastObject;
+	ApptentiveMessage *lastMessage = self.messageManager.messages.lastObject;
 
 	return ![self messageSentByLocalUser:lastMessage];
 }
@@ -500,10 +461,7 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 	NSIndexPath *attachmentIndexPath = [self indexPathForTask:downloadTask];
 	[self removeTask:downloadTask];
 
-	__block NSURL *finalLocation;
-	[self.fetchedMessagesController.managedObjectContext performBlockAndWait:^{
-		finalLocation = [self fileAttachmentAtIndexPath:attachmentIndexPath].permanentLocation;
-	}];
+	NSURL *finalLocation = [self fileAttachmentAtIndexPath:attachmentIndexPath].permanentLocation;
 
 	// -beginMoveToStorageFrom: must be called on this (background) thread.
 	NSError *error;
@@ -611,15 +569,13 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 }
 
 - (ApptentiveMessage *)messageAtIndexPath:(NSIndexPath *)indexPath {
-	return [self.fetchedMessagesController objectAtIndexPath:indexPath];
+	return [self.messageManager.messages objectAtIndex:indexPath.section];
 }
 
 - (ApptentiveMessage *)lastUserMessage {
-	for (id<NSFetchedResultsSectionInfo> section in self.fetchedMessagesController.sections.reverseObjectEnumerator) {
-		for (ApptentiveMessage *message in section.objects.reverseObjectEnumerator) {
-			if ([self messageSentByLocalUser:message]) {
-				return message;
-			}
+	for (ApptentiveMessage *message in self.messageManager.messages.reverseObjectEnumerator) {
+		if ([self messageSentByLocalUser:message]) {
+			return message;
 		}
 	}
 

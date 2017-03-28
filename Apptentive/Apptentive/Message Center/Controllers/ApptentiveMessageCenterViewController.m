@@ -527,13 +527,13 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[self engageGreetingViewEventIfNecessary];
 }
 
-#pragma mark Fetch results controller delegate
+#pragma mark Message center view model delegate
 
-- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
+- (void)viewModelWillChangeContent:(ApptentiveMessageCenterViewModel *)viewModel {
 	[self.tableView beginUpdates];
 }
 
-- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
+- (void)viewModelDidChangeContent:(ApptentiveMessageCenterViewModel *)controller {
 	[self updateStatusOfVisibleCells];
 
 	@try {
@@ -550,7 +550,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	}
 }
 
-- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath {
+- (void)viewModel:(ApptentiveMessageCenterViewModel *)viewModel didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath {
 	switch (type) {
 		case NSFetchedResultsChangeUpdate:
 			[self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
@@ -576,7 +576,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	}
 }
 
-- (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id<NSFetchedResultsSectionInfo>)sectionInfo atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type {
+- (void)viewModel:(ApptentiveMessageCenterViewModel *)viewModel didChangeSection:(id<NSFetchedResultsSectionInfo>)sectionInfo atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type {
 	switch (type) {
 		case NSFetchedResultsChangeInsert:
 			[self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
@@ -591,8 +591,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 			break;
 	}
 }
-
-#pragma mark Message center view model delegate
 
 - (void)messageCenterViewModel:(ApptentiveMessageCenterViewModel *)viewModel didLoadAttachmentThumbnailAtIndexPath:(NSIndexPath *)indexPath {
 	ApptentiveCompoundMessageCell *cell = (ApptentiveCompoundMessageCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:indexPath.section]];

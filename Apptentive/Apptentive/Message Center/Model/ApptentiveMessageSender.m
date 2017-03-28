@@ -19,7 +19,7 @@
 		}
 
 		_name = JSON[@"name"];
-		_identifier = JSON[@"identifier"];
+		_identifier = JSON[@"id"];
 
 		NSString *profilePhotoURLString = JSON[@"profile_photo"];
 		if ([profilePhotoURLString isKindOfClass:[NSString class]]) {

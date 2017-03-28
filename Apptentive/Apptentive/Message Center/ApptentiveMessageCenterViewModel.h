@@ -31,10 +31,10 @@ typedef NS_ENUM(NSInteger, ATMessageCenterMessageStatus) {
 
 @interface ApptentiveMessageCenterViewModel : NSObject <NSURLSessionDownloadDelegate, ATBackendMessageDelegate>
 
-@property (readonly, strong, nonatomic) NSFetchedResultsController *fetchedMessagesController;
 @property (weak, nonatomic) NSObject<ApptentiveMessageCenterViewModelDelegate> *delegate;
 @property (readonly, nonatomic) NSDateFormatter *dateFormatter;
 @property (readonly, nonatomic) ApptentiveInteraction *interaction;
+@property (readonly, nonatomic) ApptentiveMessageManager *messageManager;
 
 @property (readonly, nonatomic) id<ApptentiveStyle> styleSheet;
 
@@ -83,7 +83,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterMessageStatus) {
 @property (assign, nonatomic) BOOL didSkipProfile;
 @property (strong, nonatomic) NSString *draftMessage;
 
-- (instancetype)initWithInteraction:(ApptentiveInteraction *)interaction;
+- (instancetype)initWithInteraction:(ApptentiveInteraction *)interaction messageManager:(ApptentiveMessageManager *)messageManager;
 - (void)start;
 - (void)stop;
 
@@ -117,7 +117,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterMessageStatus) {
 @end
 
 @protocol ApptentiveMessageCenterViewModelDelegate <NSObject, NSFetchedResultsControllerDelegate>
-
+@optional
+- (void)messageCenterViewModelDidUpdateMessages:(ApptentiveMessageCenterViewModel *)viewModel;
 - (void)messageCenterViewModel:(ApptentiveMessageCenterViewModel *)viewModel attachmentDownloadAtIndexPath:(NSIndexPath *)indexPath didProgress:(float)progress;
 - (void)messageCenterViewModel:(ApptentiveMessageCenterViewModel *)viewModel didLoadAttachmentThumbnailAtIndexPath:(NSIndexPath *)indexPath;
 - (void)messageCenterViewModel:(ApptentiveMessageCenterViewModel *)viewModel didFailToLoadAttachmentThumbnailAtIndexPath:(NSIndexPath *)indexPath error:(NSError *)error;

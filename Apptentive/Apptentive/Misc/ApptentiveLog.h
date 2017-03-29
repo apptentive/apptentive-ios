@@ -21,6 +21,7 @@ typedef enum : NSUInteger {
 
 #define ApptentiveLogTagConversation [ApptentiveLogTag conversationTag]
 
+extern void ApptentiveLogSetLevel(ApptentiveLogLevel level);
 void _ApptentiveLogHelper(ApptentiveLogLevel level, id arg, ...);
 
 #define ApptentiveLogCrit(...)    _ApptentiveLogHelper(ApptentiveLogLevelCrit, __VA_ARGS__)

@@ -102,3 +102,7 @@ void _ApptentiveLogHelper(ApptentiveLogLevel level, id arg, ...) {
         logMessage(fullMessage);
     }
 }
+
+void ApptentiveLogSetLevel(ApptentiveLogLevel level) {
+    _logLevel = level;
+}

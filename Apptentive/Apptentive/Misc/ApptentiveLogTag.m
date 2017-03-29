@@ -12,7 +12,8 @@ static ApptentiveLogTag * _conversationTag;
 
 @implementation ApptentiveLogTag
 
-- (void)initialize {
+
++ (void)initialize {
     if ([self class] == [ApptentiveLogTag class]) {
         _conversationTag = [ApptentiveLogTag logTagWithName:@"CONVERSATION" enabled:YES];
     }

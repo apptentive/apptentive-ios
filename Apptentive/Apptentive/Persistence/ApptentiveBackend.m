@@ -76,6 +76,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 		_state = ATBackendStateStarting;
 		_operationQueue = [[NSOperationQueue alloc] init];
 		_operationQueue.maxConcurrentOperationCount = 1;
+        _operationQueue.name = @"Apptentive Operation Queue";
 		_supportDirectoryPath = [[ApptentiveUtilities applicationSupportPath] stringByAppendingPathComponent:storagePath];
 
 		if ([UIApplication sharedApplication] != nil && ![UIApplication sharedApplication].isProtectedDataAvailable) {

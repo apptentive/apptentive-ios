@@ -110,7 +110,7 @@
 				if (predicateEvaluationDictionary) {
 					criteriaAreMet = [predicate evaluateWithObject:predicateEvaluationDictionary];
 					if (!criteriaAreMet) {
-						ApptentiveLogInfo(@"Interaction %@ predicate failed evaluation.", self.interactionID);
+						ApptentiveLogInfo(@"Criteria for showing interaction %@ not met.", self.interactionID);
 					}
 				} else {
 					ApptentiveLogError(@"Could not create predicate evaluation data.");

@@ -26,6 +26,8 @@ NSString *const ApptentiveInteractionAppleRatingDialogEventLabelNotShown = @"not
 }
 
 - (void)presentInteractionFromViewController:(UIViewController *)viewController {
+	[super presentInteractionFromViewController:viewController];
+
 	[self.interaction engage:ApptentiveInteractionAppleRatingDialogEventLabelRequest fromViewController:viewController];
 	NSString *notShownReason = nil;
 

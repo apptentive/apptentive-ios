@@ -63,6 +63,16 @@ typedef NS_ENUM(NSInteger, ApptentivePushProvider) {
 	ApptentivePushProviderParse,
 };
 
+/** Log levels supported by the logging system */
+typedef NS_ENUM(NSUInteger, ApptentiveLogLevel) {
+    ApptentiveLogLevelCrit    = 0,
+    ApptentiveLogLevelError   = 1,
+    ApptentiveLogLevelWarn    = 2,
+    ApptentiveLogLevelInfo    = 3,
+    ApptentiveLogLevelDebug   = 4,
+    ApptentiveLogLevelVerbose = 5
+};
+
 /**
  `Apptentive` is a singleton which is used as the main point of entry for the Apptentive service.
 
@@ -551,6 +561,17 @@ Returns a Boolean value indicating whether the given event will cause an Interac
 
 #if APPTENTIVE_DEBUG
 - (void)checkSDKConfiguration;
+#endif
+
+///---------------------------------
+/// @name Logging System
+///---------------------------------
+
+#ifdef APPTENTIVE_PREFER_PROPERTIES
+@property (assign, nonatomic) ApptentiveLogLevel logLevel;
+#else
+- (ApptentiveLogLevel)logLevel;
+- (void)setLogLevel:(ApptentiveLogLevel)logLevel;
 #endif
 
 @end

@@ -103,6 +103,10 @@ void _ApptentiveLogHelper(ApptentiveLogLevel level, id arg, ...) {
     }
 }
 
+ApptentiveLogLevel ApptentiveLogGetLevel(void) {
+    return _logLevel;
+}
+
 void ApptentiveLogSetLevel(ApptentiveLogLevel level) {
     _logLevel = level;
 }

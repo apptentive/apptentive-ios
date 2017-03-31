@@ -332,11 +332,8 @@
 		01F1DFFC1E5BBFCB009AB3D2 /* ApptentiveConversationMetadataItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 01F1DFFA1E5BBFCB009AB3D2 /* ApptentiveConversationMetadataItem.h */; };
 		01F1DFFD1E5BBFCB009AB3D2 /* ApptentiveConversationMetadataItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 01F1DFFB1E5BBFCB009AB3D2 /* ApptentiveConversationMetadataItem.m */; };
 		EF18123F1E807FC00053BD68 /* ApptentiveAssert.h in Headers */ = {isa = PBXBuildFile; fileRef = EF18123D1E807FC00053BD68 /* ApptentiveAssert.h */; };
-		EF1812401E807FC00053BD68 /* ApptentiveAssert.h in Headers */ = {isa = PBXBuildFile; fileRef = EF18123D1E807FC00053BD68 /* ApptentiveAssert.h */; };
 		EF18124B1E8084C80053BD68 /* ApptentiveSafeCollections.h in Headers */ = {isa = PBXBuildFile; fileRef = EF1812491E8084C80053BD68 /* ApptentiveSafeCollections.h */; };
-		EF18124C1E8084C80053BD68 /* ApptentiveSafeCollections.h in Headers */ = {isa = PBXBuildFile; fileRef = EF1812491E8084C80053BD68 /* ApptentiveSafeCollections.h */; };
 		EF18124D1E8084C80053BD68 /* ApptentiveSafeCollections.m in Sources */ = {isa = PBXBuildFile; fileRef = EF18124A1E8084C80053BD68 /* ApptentiveSafeCollections.m */; };
-		EF18124E1E8084C80053BD68 /* ApptentiveSafeCollections.m in Sources */ = {isa = PBXBuildFile; fileRef = EF18124A1E8084C80053BD68 /* ApptentiveSafeCollections.m */; };
 		EFF3FE3B1E8C2F05006AD2B4 /* ApptentiveLog.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF3FE3A1E8C2F05006AD2B4 /* ApptentiveLog.m */; };
 		EFF3FE421E8C386E006AD2B4 /* ApptentiveLogTag.h in Headers */ = {isa = PBXBuildFile; fileRef = EFF3FE401E8C386E006AD2B4 /* ApptentiveLogTag.h */; };
 		EFF3FE431E8C386E006AD2B4 /* ApptentiveLogTag.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF3FE411E8C386E006AD2B4 /* ApptentiveLogTag.m */; };
@@ -1575,10 +1572,8 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EF18124C1E8084C80053BD68 /* ApptentiveSafeCollections.h in Headers */,
 				01A2D28C1E49609100C2103A /* ApptentiveDebugging.h in Headers */,
 				012285481E4A81AD00DD2F58 /* Apptentive_Private.h in Headers */,
-				EF1812401E807FC00053BD68 /* ApptentiveAssert.h in Headers */,
 				01A2D2951E4960E100C2103A /* Apptentive+Debugging.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1965,7 +1960,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EF18124E1E8084C80053BD68 /* ApptentiveSafeCollections.m in Sources */,
 				01A2D2961E4960E100C2103A /* Apptentive+Debugging.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

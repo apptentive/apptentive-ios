@@ -8,19 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
+#import "Apptentive.h"
 #import "ApptentiveLogTag.h"
-
-typedef enum : NSUInteger {
-    ApptentiveLogLevelCrit    = 0,
-    ApptentiveLogLevelError   = 1,
-    ApptentiveLogLevelWarn    = 2,
-    ApptentiveLogLevelInfo    = 3,
-    ApptentiveLogLevelDebug   = 4,
-    ApptentiveLogLevelVerbose = 5
-} ApptentiveLogLevel;
 
 #define ApptentiveLogTagConversation [ApptentiveLogTag conversationTag]
 
+extern ApptentiveLogLevel ApptentiveLogGetLevel(void);
 extern void ApptentiveLogSetLevel(ApptentiveLogLevel level);
 void _ApptentiveLogHelper(ApptentiveLogLevel level, id arg, ...);
 

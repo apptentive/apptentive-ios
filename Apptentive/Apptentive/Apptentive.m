@@ -551,6 +551,17 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 }
 #endif
 
+#pragma mark -
+#pragma mark Logging System
+
+- (ApptentiveLogLevel)logLevel {
+    return ApptentiveLogGetLevel();
+}
+
+- (void)setLogLevel:(ApptentiveLogLevel)logLevel {
+    ApptentiveLogSetLevel(logLevel);
+}
+
 @end
 
 

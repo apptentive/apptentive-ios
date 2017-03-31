@@ -291,6 +291,8 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	self.conversationManager.delegate = self;
 
 	[self.conversationManager loadActiveConversation];
+    
+    [self.conversationManager.activeConversation checkForDiffs];
 }
 
 // Note: must be called on main thread

@@ -529,67 +529,41 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 #pragma mark Message center view model delegate
 
+//- (void)viewModelWillChangeContent:(ApptentiveMessageCenterViewModel *)viewModel {
+//	[self.tableView beginUpdates];
+//}
+//
+//- (void)viewModelDidChangeContent:(ApptentiveMessageCenterViewModel *)controller {
+//	[self updateStatusOfVisibleCells];
+//
+//	@try {
+//		[self.tableView endUpdates];
+//	} @catch (NSException *exception) {
+//		ApptentiveLogError(@"caught exception: %@: %@", [exception name], [exception description]);
+//	}
+//
+//	if (self.state != ATMessageCenterStateWhoCard && self.state != ATMessageCenterStateComposing) {
+//		[self updateState];
+//
+//		[self resizeFooterView:nil];
+//		[self scrollToLastMessageAnimated:YES];
+//	}
+//}
+
 - (void)viewModelWillChangeContent:(ApptentiveMessageCenterViewModel *)viewModel {
 	[self.tableView beginUpdates];
 }
 
-- (void)viewModelDidChangeContent:(ApptentiveMessageCenterViewModel *)controller {
-	[self updateStatusOfVisibleCells];
-
-	@try {
-		[self.tableView endUpdates];
-	} @catch (NSException *exception) {
-		ApptentiveLogError(@"caught exception: %@: %@", [exception name], [exception description]);
-	}
-
-	if (self.state != ATMessageCenterStateWhoCard && self.state != ATMessageCenterStateComposing) {
-		[self updateState];
-
-		[self resizeFooterView:nil];
-		[self scrollToLastMessageAnimated:YES];
-	}
+- (void)viewModelDidChangeContent:(ApptentiveMessageCenterViewModel *)viewModel {
+	[self.tableView endUpdates];
 }
 
-- (void)viewModel:(ApptentiveMessageCenterViewModel *)viewModel didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath {
-	switch (type) {
-		case NSFetchedResultsChangeUpdate:
-			[self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
-			break;
-
-		case NSFetchedResultsChangeInsert:
-			[self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
-			break;
-
-		case NSFetchedResultsChangeDelete:
-			[self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
-			break;
-
-		case NSFetchedResultsChangeMove:
-			if (![indexPath isEqual:newIndexPath]) {
-				[self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
-				[self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
-			}
-			break;
-
-		default:
-			break;
-	}
+- (void)messageCenterViewModel:(ApptentiveMessageCenterViewModel *)viewModel didInsertMessageAtIndexPath:(NSIndexPath *)indexPath {
+	[self.tableView insertSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
-- (void)viewModel:(ApptentiveMessageCenterViewModel *)viewModel didChangeSection:(id<NSFetchedResultsSectionInfo>)sectionInfo atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type {
-	switch (type) {
-		case NSFetchedResultsChangeInsert:
-			[self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
-			break;
-		case NSFetchedResultsChangeDelete:
-			[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
-			break;
-		case NSFetchedResultsChangeUpdate:
-			[self.tableView reloadSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
-			break;
-		default:
-			break;
-	}
+- (void)messageCenterViewModel:(ApptentiveMessageCenterViewModel *)viewModel didUpdateMessageAtIndexPath:(NSIndexPath *)indexPath {
+	[self.tableView reloadRowsAtIndexPaths:@[ indexPath ] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
 - (void)messageCenterViewModel:(ApptentiveMessageCenterViewModel *)viewModel didLoadAttachmentThumbnailAtIndexPath:(NSIndexPath *)indexPath {
@@ -960,6 +934,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 			case ApptentiveMessageStateFailedToSend:
 				self.state = networkIsUnreachable ? ATMessageCenterStateNetworkError : ATMessageCenterStateHTTPError;
 				break;
+			case ApptentiveMessageStatePending:
 			case ApptentiveMessageStateWaiting:
 			case ApptentiveMessageStateSending:
 				self.state = networkIsUnreachable ? ATMessageCenterStateNetworkError : ATMessageCenterStateSending;

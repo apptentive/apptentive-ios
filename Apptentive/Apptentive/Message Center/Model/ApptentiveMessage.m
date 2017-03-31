@@ -43,7 +43,7 @@
 		_sender = [[ApptentiveMessageSender alloc] initWithJSON:JSON[@"sender"]];
 
 		_sentDate = [NSDate dateWithTimeIntervalSince1970:[JSON[@"created_at"] doubleValue]];
-		_pendingMessageIdentifier = JSON[@"nonce"];
+		_localIdentifier = JSON[@"nonce"];
 
 		if ([JSON[@"hidden"] isKindOfClass:[NSNumber class]] && [JSON[@"hidden"] boolValue]) {
 			_state = ApptentiveMessageStateHidden;
@@ -58,16 +58,17 @@
 	return self;
 }
 
-- (instancetype)initWithBody:(NSString *)body attachments:(NSArray *)attachments sender:(ApptentiveMessageSender *)sender {
+- (instancetype)initWithBody:(NSString *)body attachments:(NSArray *)attachments senderIdentifier:(NSString *)senderIdentifier automated:(BOOL)automated customData:(NSDictionary *)customData {
 	self = [super init];
 
 	if (self) {
 		_body = body;
 		_attachments = attachments;
-		_sender = sender;
+		_sender = [[ApptentiveMessageSender alloc] initWithName:nil identifier:senderIdentifier profilePhotoURL:nil];
+		_automated = automated;
+		_customData = customData;
 
 		_sentDate = [NSDate date];
-		_pendingMessageIdentifier = [NSUUID UUID].UUIDString;
 		_state = ApptentiveMessageStatePending;
 	}
 
@@ -79,6 +80,10 @@
 	_sentDate = messageFromServer.sentDate;
 
 	return self;
+}
+
+- (void)updateWithLocalIdentifier:(NSString *)localIdentifier {
+	_localIdentifier = localIdentifier;
 }
 
 @end

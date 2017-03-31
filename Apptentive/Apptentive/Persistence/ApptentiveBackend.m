@@ -53,7 +53,6 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 @property (assign, nonatomic) BOOL shouldStopWorking;
 @property (assign, nonatomic) BOOL networkAvailable;
 
-@property (copy, nonatomic) NSDictionary *currentCustomData;
 @property (strong, nonatomic) NSTimer *messageRetrievalTimer;
 @property (strong, nonatomic) ApptentiveDataManager *dataManager;
 
@@ -556,7 +555,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 
 		[viewController presentViewController:navigationController animated:YES completion:nil];
 	}
-
+	
 	return didShowMessageCenter;
 }
 

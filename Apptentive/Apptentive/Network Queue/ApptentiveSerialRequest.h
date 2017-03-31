@@ -70,6 +70,6 @@
  @param identifier An optional string that identifies a request.
  @param context The managed object context to use to create the request.
  */
-+ (void)enqueueRequestWithPath:(NSString *)path method:(NSString *)method payload:(NSDictionary *)payload attachments:(NSOrderedSet *)attachments identifier:(NSString *)identifier inContext:(NSManagedObjectContext *)context;
++ (void)enqueueRequestWithPath:(NSString *)path method:(NSString *)method payload:(NSDictionary *)payload attachments:(NSArray *)attachments identifier:(NSString *)identifier inContext:(NSManagedObjectContext *)context;
 
 @end

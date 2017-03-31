@@ -15,6 +15,7 @@
 #import "NSDictionary+Apptentive.h"
 #import "ApptentiveLegacyFileAttachment.h"
 #import "ApptentiveSerialRequest+Record.h"
+#import "ApptentiveAttachment.h"
 
 
 @implementation ApptentiveLegacyMessage
@@ -46,7 +47,23 @@
 		return;
 	}
 
-	for (ApptentiveLegacyMessage *message in unsentMessages) {
+	for (ApptentiveLegacyMessage *legacyMessage in unsentMessages) {
+		NSMutableArray *attachments = [NSMutableArray arrayWithCapacity:legacyMessage.attachments.count];
+		for (ApptentiveLegacyFileAttachment *legacyAttachment in legacyMessage.attachments) {
+			ApptentiveAttachment *attachment = [[ApptentiveAttachment alloc] initWithPath:legacyAttachment.localPath contentType:legacyAttachment.mimeType name:legacyAttachment.name];
+
+			if (attachment) {
+				[attachments addObject:attachment];
+			}
+		}
+
+		NSDictionary *customData = @{};
+		if (legacyMessage.customData) {
+			customData = [NSKeyedUnarchiver unarchiveObjectWithData:legacyMessage.customData];
+		};
+
+		ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:legacyMessage.body attachments:attachments senderIdentifier:legacyMessage.sender.apptentiveID automated:legacyMessage.automated.boolValue customData:customData];
+
 		[ApptentiveSerialRequest enqueueMessage:message inContext:context];
 	}
 }

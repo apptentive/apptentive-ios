@@ -17,6 +17,8 @@
 @property (readonly, nonatomic) NSInteger size;
 @property (readonly, nonatomic) NSURL *remoteURL;
 
+@property (readonly, nonatomic) NSString *fullLocalPath;
+
 - (instancetype)initWithJSON:(NSDictionary *)JSON;
 - (instancetype)initWithPath:(NSString *)path contentType:(NSString *)contentType name:(NSString *)name;
 - (instancetype)initWithData:(NSData *)data contentType:(NSString *)contentType name:(NSString *)name;

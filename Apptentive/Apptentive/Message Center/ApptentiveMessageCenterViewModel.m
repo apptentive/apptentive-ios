@@ -47,6 +47,7 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 	if ((self = [super init])) {
 		_interaction = interaction;
 		_messageManager = messageManager;
+		messageManager.delegate = self;
 
 		_dateFormatter = [[NSDateFormatter alloc] init];
 		_dateFormatter.dateStyle = NSDateFormatterLongStyle;
@@ -69,8 +70,7 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 	[[Apptentive sharedConnection].backend messageCenterEnteredForeground];
 
 	if (self.contextMessageBody) {
-#warning make context message work
-		//		self.contextMessage = [Apptentive.shared.backend.messageManager automatedMessageWithTitle:nil body:self.contextMessageBody];
+		self.contextMessage = [[ApptentiveMessage alloc] initWithBody:self.contextMessageBody attachments:@[] senderIdentifier:self.messageManager.localUserIdentifier automated:YES customData:nil];
 	}
 }
 
@@ -416,45 +416,6 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 	return [self messageAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:index]];
 }
 
-#pragma mark NSFetchedResultsControllerDelegate
-
-- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath {
-	if ([self.delegate respondsToSelector:@selector(controller:didChangeObject:atIndexPath:forChangeType:newIndexPath:)]) {
-		[self.delegate controller:controller didChangeObject:anObject atIndexPath:indexPath forChangeType:type newIndexPath:newIndexPath];
-	}
-}
-
-- (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id<NSFetchedResultsSectionInfo>)sectionInfo atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type {
-	if ([self.delegate respondsToSelector:@selector(controller:didChangeSection:atIndex:forChangeType:)]) {
-		[self.delegate controller:controller didChangeSection:sectionInfo atIndex:sectionIndex forChangeType:type];
-	}
-}
-
-- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
-	if ([self.delegate respondsToSelector:@selector(controllerWillChangeContent:)]) {
-		[self.delegate controllerWillChangeContent:controller];
-	}
-}
-
-- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
-	if ([self.delegate respondsToSelector:@selector(controllerDidChangeContent:)]) {
-		[self.delegate controllerDidChangeContent:controller];
-	}
-}
-
-- (NSString *)controller:(NSFetchedResultsController *)controller sectionIndexTitleForSectionName:(NSString *)sectionName {
-	if ([self.delegate respondsToSelector:@selector(controller:sectionIndexTitleForSectionName:)]) {
-		return [self.delegate controller:controller sectionIndexTitleForSectionName:sectionName];
-	} else {
-		// Default implementation.
-		if (!sectionName || [sectionName length] == 0) {
-			return @"";
-		}
-		NSString *firstLetter = [sectionName substringWithRange:NSMakeRange(0, 1)];
-		return [firstLetter uppercaseStringWithLocale:[NSLocale currentLocale]];
-	}
-}
-
 #pragma mark - URL session delegate
 
 - (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didFinishDownloadingToURL:(NSURL *)location {
@@ -501,20 +462,37 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 	[self.delegate messageCenterViewModel:self messageProgressDidChange:progress];
 }
 
+#pragma mark - Message Manager delegate
+
+- (void)messageManagerWillBeginUpdates:(ApptentiveMessageManager *)manager {
+	[self.delegate viewModelWillChangeContent:self];
+}
+
+- (void)messageManagerDidEndUpdates:(ApptentiveMessageManager *)manager {
+	[self.delegate viewModelDidChangeContent:self];
+}
+
+- (void)messageManager:(ApptentiveMessageManager *)manager didInsertMessage:(ApptentiveMessage *)message atIndex:(NSInteger)index {
+	[self.delegate messageCenterViewModel:self didInsertMessageAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:index]];
+}
+
+- (void)messageManager:(ApptentiveMessageManager *)manager didUpdateMessage:(ApptentiveMessage *)message atIndex:(NSInteger)index {
+	[self.delegate messageCenterViewModel:self didUpdateMessageAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:index]];
+}
+
 #pragma mark - Misc
 
-- (void)sendMessage:(NSString *)message withAttachments:(NSArray *)attachments {
+- (void)sendMessage:(NSString *)messageText withAttachments:(NSArray *)attachments {
 	if (self.contextMessage) {
-#warning make context message work
-//		[[Apptentive sharedConnection].backend.messageManager sendAutomatedMessage:self.contextMessage];
+		[self.messageManager sendMessage:self.contextMessage];
 		self.contextMessage = nil;
 	}
 
-	if (attachments.count > 0) {
-		[Apptentive.shared.backend.messageManager sendCompoundMessageWithText:message attachments:attachments hiddenOnClient:NO];
-	} else {
-		[Apptentive.shared.backend.messageManager sendTextMessageWithBody:message];
-	}
+	ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:messageText attachments:attachments senderIdentifier:self.messageManager.localUserIdentifier automated:NO customData:Apptentive.shared.backend.currentCustomData];
+
+	[self.messageManager sendMessage:message];
+
+	Apptentive.shared.backend.currentCustomData = nil;
 }
 
 - (void)setPersonName:(NSString *)name emailAddress:(NSString *)emailAddress {

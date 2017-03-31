@@ -82,7 +82,9 @@
 	_fileName = storageLocation.lastPathComponent;
 }
 
-
+- (NSString *)fullLocalPath {
+	return [[self class] fullLocalPathForFilename:self.fileName];
+}
 
 #pragma mark - Computed Properties
 
@@ -132,10 +134,6 @@
 }
 
 #pragma mark - Private
-
-- (NSString *)fullLocalPath {
-	return [[self class] fullLocalPathForFilename:self.fileName];
-}
 
 - (NSString *)filenameForThumbnailOfSize:(CGSize)size {
 	if (self.fileName == nil) {

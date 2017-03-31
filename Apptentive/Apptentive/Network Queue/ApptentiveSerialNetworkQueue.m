@@ -11,6 +11,10 @@
 #import "ApptentiveSerialRequestOperation.h"
 #import "ApptentiveMessageRequestOperation.h"
 
+#import "ApptentiveMessageManager.h"
+#import "ApptentiveBackend.h"
+#import "Apptentive_Private.h"
+
 
 @interface ApptentiveSerialNetworkQueue ()
 
@@ -115,7 +119,7 @@
 	if (error) {
 		_status = ApptentiveQueueStatusError;
 
-		[self updateMessageErrorStatus];
+		[self updateMessageStatusForOperation:operation];
 
 		ApptentiveLogError(@"%@ %@ failed with error: %@", operation.request.HTTPMethod, operation.request.URL.absoluteString, error);
 	}
@@ -128,7 +132,7 @@
 - (void)requestOperationDidFinish:(ApptentiveRequestOperation *)operation {
 	_status = ApptentiveQueueStatusGroovy;
 
-	[self updateMessageErrorStatus];
+	[self updateMessageStatusForOperation:operation];
 
 	ApptentiveLogDebug(@"%@ %@ finished successfully.", operation.request.HTTPMethod, operation.request.URL.absoluteString);
 
@@ -138,7 +142,7 @@
 - (void)requestOperation:(ApptentiveRequestOperation *)operation didFailWithError:(NSError *)error {
 	_status = ApptentiveQueueStatusError;
 
-	[self updateMessageErrorStatus];
+	[self updateMessageStatusForOperation:operation];
 
 	ApptentiveLogError(@"%@ %@ failed with error: %@. Not retrying.", operation.request.HTTPMethod, operation.request.URL.absoluteString, error);
 
@@ -189,13 +193,21 @@
 	}
 }
 
-- (void)updateMessageErrorStatus {
-	ATPendingMessageState pendingMessageState = (self.status == ApptentiveQueueStatusError) ? ATPendingMessageStateError : ATPendingMessageStateSending;
+- (void)updateMessageStatusForOperation:(ApptentiveRequestOperation *)operation {
+	ApptentiveMessageManager *manager = Apptentive.shared.backend.messageManager;
 
-	for (NSOperation *operation in self.operations) {
-		if ([operation isKindOfClass:[ApptentiveMessageRequestOperation class]]) {
-			[(ApptentiveMessageRequestOperation *)operation setMessagePendingState:pendingMessageState];
+	for (NSOperation *op in self.operations) {
+		if ([op isKindOfClass:[ApptentiveMessageRequestOperation class]]) {
+			ApptentiveMessageRequestOperation *messageOperation = (ApptentiveMessageRequestOperation *)op;
+			if (self.status == ApptentiveQueueStatusError) {
+				[manager setState:ApptentiveMessageStateFailedToSend forMessageWithLocalIdentifier:messageOperation.messageRequestInfo.identifier];
+			} else if (messageOperation != operation) {
+				[manager setState:ApptentiveMessageStateSending forMessageWithLocalIdentifier:messageOperation.messageRequestInfo.identifier];
+			} else {
+				[manager setState:ApptentiveMessageStateSent forMessageWithLocalIdentifier:messageOperation.messageRequestInfo.identifier];
+			}
 		}
+
 	}
 }
 

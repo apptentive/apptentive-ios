@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "ApptentiveRequestOperation.h"
+#import "ApptentiveMessage.h"
 
-@class ApptentiveMessage, ApptentiveNetworkQueue;
+@class ApptentiveNetworkQueue;
 @protocol ApptentiveMessageManagerDelegate;
 
 @class ApptentiveLegacyMessage;
@@ -33,30 +34,18 @@
 
 - (NSInteger)numberOfMessages;
 
+- (void)sendMessage:(ApptentiveMessage *)message;
+- (void)enqueueMessageForSending:(ApptentiveMessage *)message;
 
-
-- (ApptentiveLegacyMessage *)automatedMessageWithTitle:(NSString *)title body:(NSString *)body;
-- (BOOL)sendAutomatedMessage:(ApptentiveLegacyMessage *)message;
-
-- (ApptentiveLegacyMessage *)createTextMessageWithBody:(NSString *)body hiddenOnClient:(BOOL)hidden;
-- (BOOL)sendTextMessageWithBody:(NSString *)body;
-- (BOOL)sendTextMessageWithBody:(NSString *)body hiddenOnClient:(BOOL)hidden;
-- (BOOL)sendTextMessage:(ApptentiveLegacyMessage *)message;
-
-- (BOOL)sendImageMessageWithImage:(UIImage *)image;
-- (BOOL)sendImageMessageWithImage:(UIImage *)image hiddenOnClient:(BOOL)hidden;
-
-- (BOOL)sendFileMessageWithFileData:(NSData *)fileData andMimeType:(NSString *)mimeType;
-- (BOOL)sendFileMessageWithFileData:(NSData *)fileData andMimeType:(NSString *)mimeType hiddenOnClient:(BOOL)hidden;
-
-- (BOOL)sendCompoundMessageWithText:(NSString *)text attachments:(NSArray *)attachments hiddenOnClient:(BOOL)hidden;
-
-
+- (void)setState:(ApptentiveMessageState)state forMessageWithLocalIdentifier:(NSString *)localIdentifier;
 @end
 
 @protocol ApptentiveMessageManagerDelegate <NSObject>
 
-- (void)messageManagerdidAppendMessage:(ApptentiveMessageManager *)manager didAppendMessage:(ApptentiveMessage *)message;
+- (void)messageManagerWillBeginUpdates:(ApptentiveMessageManager *)manager;
+- (void)messageManagerDidEndUpdates:(ApptentiveMessageManager *)manager;
+
 - (void)messageManager:(ApptentiveMessageManager *)manager didInsertMessage:(ApptentiveMessage *)message atIndex:(NSInteger)index;
+- (void)messageManager:(ApptentiveMessageManager *)manager didUpdateMessage:(ApptentiveMessage *)message atIndex:(NSInteger)index;
 
 @end

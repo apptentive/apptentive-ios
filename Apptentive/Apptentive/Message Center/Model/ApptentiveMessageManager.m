@@ -81,16 +81,17 @@
 
 	NSMutableArray *mutableMessages = [NSMutableArray arrayWithCapacity:messageListJSON.count];
 	NSMutableDictionary *mutableMessageIdentifierIndex = [NSMutableDictionary dictionaryWithCapacity:messageListJSON.count];
+	NSMutableArray *addedMessages = [NSMutableArray array];
 	NSInteger unreadCount = 0;
 
+	// Correlate messages from server with local messages
 	for (NSDictionary *messageJSON in messageListJSON) {
 		ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithJSON:messageJSON];
 
 		if (message) {
-			NSString *pendingIdentifier = message.pendingMessageIdentifier;
-
-			ApptentiveMessage *previousVersion = self.messageIdentifierIndex[pendingIdentifier];
+			ApptentiveMessage *previousVersion = self.messageIdentifierIndex[message.localIdentifier];
 			BOOL sentByLocalUser = [message.sender.identifier isEqualToString:self.localUserIdentifier];
+
 
 			if (previousVersion != nil) {
 				// Update with server identifier and date
@@ -99,22 +100,45 @@
 				if (sentByLocalUser) {
 					message.state = ApptentiveMessageStateSent;
 				}
-			} else if (!sentByLocalUser) {
-				message.state = ApptentiveMessageStateUnread;
-				unreadCount ++;
-			} // else state defaults to sent
+			} else {
+				[addedMessages addObject:message];
+
+				if (!sentByLocalUser) {
+					message.state = ApptentiveMessageStateUnread;
+					unreadCount ++;
+				} // else state defaults to sent
+			}
 
 			[mutableMessages addObject:message];
-			[mutableMessageIdentifierIndex setObject:message forKey:pendingIdentifier];
+			[mutableMessageIdentifierIndex setObject:message forKey:message.localIdentifier];
 		}
 	}
 
-	// TODO: merge with local storage
+	// Add local messages that aren't yet on server's list
+	for (ApptentiveMessage *message in self.messages) {
+		ApptentiveMessage *newVersion = mutableMessageIdentifierIndex[message.localIdentifier];
 
+		if (newVersion == nil) {
+			[mutableMessages addObject:message];
+			[mutableMessageIdentifierIndex setObject:message forKey:message.localIdentifier];
+		}
+	}
+
+	// Sort by sent date
 	[mutableMessages sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"sentDate" ascending:YES]]];
 
-	_messages = [mutableMessages copy];
-	_messageIdentifierIndex = [mutableMessageIdentifierIndex copy];
+	dispatch_sync(dispatch_get_main_queue(), ^{
+		[self.delegate messageManagerWillBeginUpdates:self];
+
+		_messages = [mutableMessages copy];
+		_messageIdentifierIndex = [mutableMessageIdentifierIndex copy];
+
+		for (ApptentiveMessage *newMessage in addedMessages) {
+			[self.delegate messageManager:self didInsertMessage:newMessage atIndex:[self.messages indexOfObject:newMessage]];
+		}
+
+		[self.delegate messageManagerDidEndUpdates:self];
+	});
 
 	if (_unreadCount != unreadCount) {
 		_unreadCount = unreadCount;
@@ -157,111 +181,43 @@
 
 #pragma mark - Sending Messages
 
-- (ApptentiveLegacyMessage *)automatedMessageWithTitle:(NSString *)title body:(NSString *)body {
-	ApptentiveLegacyMessage *message = [ApptentiveLegacyMessage newInstanceWithBody:body attachments:nil];
-	message.hidden = @NO;
-	message.title = title;
-	message.pendingState = @(ATPendingMessageStateComposing);
-	message.sentByUser = @YES;
-	message.automated = @YES;
-	NSError *error = nil;
-	if (![Apptentive.shared.backend.managedObjectContext save:&error]) {
-		ApptentiveLogError(@"Unable to send automated message with title: %@, body: %@, error: %@", title, body, error);
-		message = nil;
-	}
-
-	return message;
+- (void)sendMessage:(ApptentiveMessage *)message {
+	[self enqueueMessageForSending:message];
+	
+	[self appendMessage:message];
 }
 
-- (BOOL)sendAutomatedMessage:(ApptentiveLegacyMessage *)message {
-	message.pendingState = @(ATPendingMessageStateSending);
-
-	return [self sendMessage:message];
-}
-
-- (BOOL)sendTextMessageWithBody:(NSString *)body {
-	return [self sendTextMessageWithBody:body hiddenOnClient:NO];
-}
-
-- (BOOL)sendTextMessageWithBody:(NSString *)body hiddenOnClient:(BOOL)hidden {
-	return [self sendTextMessage:[self createTextMessageWithBody:body hiddenOnClient:hidden]];
-}
-
-- (ApptentiveLegacyMessage *)createTextMessageWithBody:(NSString *)body hiddenOnClient:(BOOL)hidden {
-	ApptentiveLegacyMessage *message = [ApptentiveLegacyMessage newInstanceWithBody:body attachments:nil];
-	message.sentByUser = @YES;
-	message.seenByUser = @YES;
-	message.hidden = @(hidden);
-
-	if (!hidden) {
-		[self attachCustomDataToMessage:message];
-	}
-
-	return message;
-}
-
-- (BOOL)sendTextMessage:(ApptentiveLegacyMessage *)message {
-	message.pendingState = @(ATPendingMessageStateSending);
-
-	return [self sendMessage:message];
-}
-
-- (BOOL)sendImageMessageWithImage:(UIImage *)image {
-	return [self sendImageMessageWithImage:image hiddenOnClient:NO];
-}
-
-- (BOOL)sendImageMessageWithImage:(UIImage *)image hiddenOnClient:(BOOL)hidden {
-	NSData *imageData = UIImageJPEGRepresentation(image, 0.95);
-	NSString *mimeType = @"image/jpeg";
-	return [self sendFileMessageWithFileData:imageData andMimeType:mimeType hiddenOnClient:hidden];
-}
-
-
-- (BOOL)sendFileMessageWithFileData:(NSData *)fileData andMimeType:(NSString *)mimeType {
-	return [self sendFileMessageWithFileData:fileData andMimeType:mimeType hiddenOnClient:NO];
-}
-
-- (BOOL)sendFileMessageWithFileData:(NSData *)fileData andMimeType:(NSString *)mimeType hiddenOnClient:(BOOL)hidden {
-	ApptentiveLegacyFileAttachment *fileAttachment = [ApptentiveLegacyFileAttachment newInstanceWithFileData:fileData MIMEType:mimeType name:nil];
-	return [self sendCompoundMessageWithText:nil attachments:@[fileAttachment] hiddenOnClient:hidden];
-}
-
-- (BOOL)sendCompoundMessageWithText:(NSString *)text attachments:(NSArray *)attachments hiddenOnClient:(BOOL)hidden {
-	ApptentiveLegacyMessage *compoundMessage = [ApptentiveLegacyMessage newInstanceWithBody:text attachments:attachments];
-	compoundMessage.pendingState = @(ATPendingMessageStateSending);
-	compoundMessage.sentByUser = @YES;
-	compoundMessage.hidden = @(hidden);
-
-	return [self sendMessage:compoundMessage];
-}
-
-- (BOOL)sendMessage:(ApptentiveLegacyMessage *)message {
-	NSAssert([NSThread isMainThread], @"-sendMessage: should only be called on main thread");
-
-	ApptentiveLegacyMessageSender *sender = [ApptentiveLegacyMessageSender findSenderWithID:Apptentive.shared.backend.session.person.identifier inContext:Apptentive.shared.backend.managedObjectContext];
-	if (sender) {
-		message.sender = sender;
-	}
-
-	NSError *error;
-	if (![Apptentive.shared.backend.managedObjectContext save:&error]) {
-		ApptentiveLogError(@"Error (%@) saving message: %@", error, message);
-		return NO;
-	}
-
+- (void)enqueueMessageForSending:(ApptentiveMessage *)message {
 	[ApptentiveSerialRequest enqueueMessage:message inContext:Apptentive.shared.backend.managedObjectContext];
 
 	[Apptentive.shared.backend processQueuedRecords];
-
-	return YES;
 }
 
-- (void)attachCustomDataToMessage:(ApptentiveLegacyMessage *)message {
-	if (self.currentCustomData) {
-		[message addCustomDataFromDictionary:self.currentCustomData];
-		// Only attach custom data to the first message.
-		self.currentCustomData = nil;
+- (void)setState:(ApptentiveMessageState)state forMessageWithLocalIdentifier:(NSString *)localIdentifier {
+	ApptentiveMessage *message = self.messageIdentifierIndex[localIdentifier];
+
+	if (message) {
+		message.state = state;
+		NSInteger index = [self.messages indexOfObject:message];
+
+		dispatch_async(dispatch_get_main_queue(), ^{
+			[self.delegate messageManager:self didUpdateMessage:message atIndex:index];
+		});
 	}
+}
+
+#pragma mark - Private
+
+- (void)appendMessage:(ApptentiveMessage *)message {
+	_messages = [self.messages arrayByAddingObject:message];
+
+	NSMutableDictionary *mutableMessageIdentifierIndex = [self.messageIdentifierIndex mutableCopy];
+	[mutableMessageIdentifierIndex setObject:message forKey:message.localIdentifier];
+	_messageIdentifierIndex = [mutableMessageIdentifierIndex copy];
+
+	dispatch_async(dispatch_get_main_queue(), ^{
+		[self.delegate messageManager:self didInsertMessage:message atIndex:self.messages.count - 1];
+	});
 }
 
 @end

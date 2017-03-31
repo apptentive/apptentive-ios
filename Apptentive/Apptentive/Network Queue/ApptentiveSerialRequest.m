@@ -7,7 +7,7 @@
 //
 
 #import "ApptentiveSerialRequest.h"
-#import "ApptentiveLegacyFileAttachment.h"
+#import "ApptentiveAttachment.h"
 #import "ApptentiveRequestOperation.h"
 #import "ApptentiveSerialRequestAttachment.h"
 
@@ -22,7 +22,7 @@
 @dynamic path;
 @dynamic payload;
 
-+ (void)enqueueRequestWithPath:(NSString *)path method:(NSString *)method payload:(NSDictionary *)payload attachments:(NSOrderedSet *)attachments identifier:(NSString *)identifier inContext:(NSManagedObjectContext *)context {
++ (void)enqueueRequestWithPath:(NSString *)path method:(NSString *)method payload:(NSDictionary *)payload attachments:(NSArray *)attachments identifier:(NSString *)identifier inContext:(NSManagedObjectContext *)context {
 	ApptentiveSerialRequest *request = (ApptentiveSerialRequest *)[[NSManagedObject alloc] initWithEntity:[NSEntityDescription entityForName:@"QueuedRequest" inManagedObjectContext:context] insertIntoManagedObjectContext:context];
 
 	request.date = [NSDate date];
@@ -40,8 +40,8 @@
 	}
 
 	NSMutableArray *attachmentArray = [NSMutableArray arrayWithCapacity:attachments.count];
-	for (ApptentiveLegacyFileAttachment *attachment in attachments) {
-		[attachmentArray addObject:[ApptentiveSerialRequestAttachment queuedAttachmentWithName:attachment.name path:attachment.fullLocalPath MIMEType:attachment.mimeType inContext:context]];
+	for (ApptentiveAttachment *attachment in attachments) {
+		[attachmentArray addObject:[ApptentiveSerialRequestAttachment queuedAttachmentWithName:attachment.name path:attachment.fullLocalPath MIMEType:attachment.contentType inContext:context]];
 	}
 	request.attachments = [NSOrderedSet orderedSetWithArray:attachmentArray];
 

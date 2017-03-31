@@ -7,7 +7,6 @@
 //
 
 #import "ApptentiveSerialRequestOperation.h"
-#import "ApptentiveLegacyMessage.h"
 
 
 /**
@@ -26,13 +25,5 @@
  Shadows the `requestInfo` property with the proper type casting.
  */
 @property (readonly, nonatomic) ApptentiveSerialRequest *messageRequestInfo;
-
-/**
- Sets the pending state of the `ATMessage` entity associated with the request.
-
- @param pendingState The `ATPendingMessageState` value with which to update the
- message.
- */
-- (void)setMessagePendingState:(ATPendingMessageState)pendingState;
 
 @end

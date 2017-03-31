@@ -7,17 +7,26 @@
 //
 
 #import "ApptentiveSerialRequest+Record.h"
-#import "ApptentiveLegacyMessage.h"
+#import "ApptentiveMessage.h"
 
 
 @implementation ApptentiveSerialRequest (Record)
 
-+ (void)enqueueRequestWithPath:(NSString *)path containerName:(NSString *)containerName noncePrefix:(NSString *)noncePrefix payload:(NSDictionary *)payload inContext:(NSManagedObjectContext *)context {
-	NSMutableDictionary *fullPayload = [payload mutableCopy];
++ (NSMutableDictionary *)boilerplateForRequestWithNoncePrefix:(NSString *)noncePrefix {
+	NSMutableDictionary *fullPayload = [NSMutableDictionary dictionary];
+	NSString *nonce = [NSString stringWithFormat:@"%@:%@", noncePrefix, [NSUUID UUID].UUIDString];
 
-	fullPayload[@"nonce"] = [NSString stringWithFormat:@"%@:%@", noncePrefix, [NSUUID UUID].UUIDString];
+	fullPayload[@"nonce"] = nonce;
 	fullPayload[@"client_created_at"] = @([NSDate date].timeIntervalSince1970);
 	fullPayload[@"client_created_at_utc_offset"] = @([[NSTimeZone systemTimeZone] secondsFromGMTForDate:[NSDate date]]);
+
+	return fullPayload;
+}
+
++ (void)enqueueRequestWithPath:(NSString *)path containerName:(NSString *)containerName noncePrefix:(NSString *)noncePrefix payload:(NSDictionary *)payload inContext:(NSManagedObjectContext *)context {
+	NSMutableDictionary *fullPayload = [self boilerplateForRequestWithNoncePrefix:noncePrefix];
+	
+	[fullPayload addEntriesFromDictionary:payload];
 
 	[self enqueueRequestWithPath:path method:@"POST" payload:@{ containerName: fullPayload } attachments:nil identifier:nil inContext:context];
 }
@@ -69,8 +78,29 @@
 	[self enqueueRequestWithPath:@"events" containerName:@"event" noncePrefix:@"event" payload:payload inContext:context];
 }
 
-+ (void)enqueueMessage:(ApptentiveLegacyMessage *)message inContext:(NSManagedObjectContext *)context {
-	[self enqueueRequestWithPath:@"messages" method:@"POST" payload:message.apiJSON attachments:message.attachments identifier:message.pendingMessageID inContext:context];
++ (void)enqueueMessage:(ApptentiveMessage *)message inContext:(NSManagedObjectContext *)context {
+	NSMutableDictionary *payload = [NSMutableDictionary dictionary];
+
+	if (message.body) {
+		payload[@"body"] = message.body;
+	}
+
+	payload[@"automated"] = @(message.automated);
+	payload[@"hidden"] = @(message.state == ApptentiveMessageStateHidden);
+	
+	if (message.customData) {
+		NSDictionary *customDataDictionary = message.customData;
+		if (customDataDictionary && customDataDictionary.count) {
+			payload[@"custom_data"] = customDataDictionary;
+		}
+	}
+
+	NSMutableDictionary *boilerplate = [self boilerplateForRequestWithNoncePrefix:@"pending-message"];
+	[payload addEntriesFromDictionary:boilerplate];
+
+	[self enqueueRequestWithPath:@"messages" method:@"POST" payload:payload attachments:message.attachments identifier:message.localIdentifier inContext:context];
+
+	[message updateWithLocalIdentifier:boilerplate[@"nonce"]];
 }
 
 @end

@@ -49,6 +49,7 @@
 
 @property (strong, nonatomic) ApptentiveMessageManager *messageManager;
 
+@property (copy, nonatomic) NSDictionary *currentCustomData;
 
 /**
  Initializes a new backend object.

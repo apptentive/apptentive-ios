@@ -27,6 +27,7 @@
 #import "ApptentiveVersion.h"
 #import "ApptentiveMessageManager.h"
 #import "ApptentiveMessageSender.h"
+#import "ApptentiveAttachment.h"
 
 NSString *const ApptentiveMessageCenterUnreadCountChangedNotification = @"ApptentiveMessageCenterUnreadCountChangedNotification";
 
@@ -137,15 +138,25 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 }
 
 - (void)sendAttachmentText:(NSString *)text {
-	[self.backend.messageManager sendTextMessageWithBody:text hiddenOnClient:YES];
+	ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:text attachments:nil senderIdentifier:self.backend.messageManager.localUserIdentifier automated:NO customData:nil];
+
+	[self.backend.messageManager enqueueMessageForSending:message];
 }
 
 - (void)sendAttachmentImage:(UIImage *)image {
-	[self.backend.messageManager sendImageMessageWithImage:image hiddenOnClient:YES];
+	ApptentiveAttachment *attachment = [[ApptentiveAttachment alloc] initWithData:UIImageJPEGRepresentation(image, 0.95) contentType:@"image/jpeg" name:nil];
+
+	ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:nil attachments:@[ attachment ] senderIdentifier:self.backend.messageManager.localUserIdentifier automated:NO customData:nil];
+
+	[self.backend.messageManager enqueueMessageForSending:message];
 }
 
 - (void)sendAttachmentFile:(NSData *)fileData withMimeType:(NSString *)mimeType {
-	[self.backend.messageManager sendFileMessageWithFileData:fileData andMimeType:mimeType hiddenOnClient:YES];
+	ApptentiveAttachment *attachment = [[ApptentiveAttachment alloc] initWithData:fileData contentType:mimeType name:nil];
+
+	ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:nil attachments:@[ attachment ] senderIdentifier:self.backend.messageManager.localUserIdentifier automated:NO customData:nil];
+
+	[self.backend.messageManager enqueueMessageForSending:message];
 }
 
 - (void)addCustomDeviceDataString:(NSString *)string withKey:(NSString *)key {

@@ -821,7 +821,6 @@
 		01A2CFBB1E490A9700C2103A /* Engagement */ = {
 			isa = PBXGroup;
 			children = (
-				01AD54981E8706800057D10C /* Message Center */,
 				01A2CFBC1E490A9700C2103A /* Interactions */,
 				01A2CFDA1E490A9700C2103A /* Model */,
 				01A2CFFF1E490A9700C2103A /* Persistence */,
@@ -834,6 +833,7 @@
 			children = (
 				01A2CFBD1E490A9700C2103A /* ApptentiveInteractionController.h */,
 				01A2CFBE1E490A9700C2103A /* ApptentiveInteractionController.m */,
+				01AD54981E8706800057D10C /* Message Center */,
 				01A2CFC41E490A9700C2103A /* Notes */,
 				01A2CFC91E490A9700C2103A /* Rating Flow */,
 				01A2CFD21E490A9700C2103A /* Surveys */,
@@ -1430,6 +1430,7 @@
 				01A2CFCF1E490A9700C2103A /* ApptentiveInteractionMessageCenterController.m */,
 			);
 			name = "Message Center";
+			path = ..;
 			sourceTree = "<group>";
 		};
 		01E04FA01E819CDA00D7E849 /* Model */ = {

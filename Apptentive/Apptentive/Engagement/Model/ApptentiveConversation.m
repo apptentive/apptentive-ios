@@ -99,7 +99,7 @@ static NSString *const ATMessageCenterDidSkipProfileKey = @"ATMessageCenterDidSk
 
 - (void)setToken:(NSString *)token {
 	if (token == nil) {
-		ApptentiveLogError(@"Attempting to set token to nil. Ignoring.");
+		ApptentiveLogError(ApptentiveLogTagConversation, @"Attempting to set token to nil. Ignoring.");
 		return;
 	}
 
@@ -339,7 +339,7 @@ static NSString *const ATMessageCenterDidSkipProfileKey = @"ATMessageCenterDidSk
 			[_delegate conversationUserInfoDidChange:self];
 		}
 	} else {
-		ApptentiveLogError(@"Attempting to set user info with nil key and/or value");
+		ApptentiveLogError(ApptentiveLogTagConversation, @"Attempting to set user info with nil key and/or value");
 	}
 }
 
@@ -347,7 +347,7 @@ static NSString *const ATMessageCenterDidSkipProfileKey = @"ATMessageCenterDidSk
 	if (key != nil) {
 		[self.mutableUserInfo removeObjectForKey:key];
 	} else {
-		ApptentiveLogError(@"Attempting to set user info with nil key and/or value");
+		ApptentiveLogError(ApptentiveLogTagConversation, @"Attempting to set user info with nil key and/or value");
 	}
 }
 

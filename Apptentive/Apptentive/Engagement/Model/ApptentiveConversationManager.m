@@ -89,7 +89,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
         return item.state == ApptentiveConversationStateLoggedIn;
 	}];
 	if (item != nil) {
-		ApptentiveLogDebug(@"Loading logged-in conversation...");
+		ApptentiveLogDebug(ApptentiveLogTagConversation, @"Loading logged-in conversation...");
 		return [self loadConversation:item];
 	}
 
@@ -99,7 +99,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	}];
 
 	if (item != nil) {
-		ApptentiveLogDebug(@"Loading anonymous conversation...");
+		ApptentiveLogDebug(ApptentiveLogTagConversation, @"Loading anonymous conversation...");
 		return [self loadConversation:item];
 	}
 
@@ -115,12 +115,12 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 	// any remaining conversations are 'logged out', and we should not load them.
 	if (self.conversationMetadata.items.count > 0) {
-		ApptentiveLogDebug(@"Can't load conversation: only 'logged-out' conversations available");
+		ApptentiveLogDebug(ApptentiveLogTagConversation, @"Can't load conversation: only 'logged-out' conversations available");
 		return nil;
 	}
 
 	// no conversation available: create a new one
-	ApptentiveLogDebug(@"Can't load conversation: creating anonymous conversation...");
+	ApptentiveLogDebug(ApptentiveLogTagConversation, @"Can't load conversation: creating anonymous conversation...");
 	ApptentiveConversation *anonymousConversation = [[ApptentiveConversation alloc] init];
 	anonymousConversation.state = ApptentiveConversationStateAnonymousPending;
 	anonymousConversation.fileName = [NSUUID UUID].UUIDString;

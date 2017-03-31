@@ -182,8 +182,6 @@
 		01A2D1A11E490A9700C2103A /* ApptentiveJSONSerialization.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D08B1E490A9700C2103A /* ApptentiveJSONSerialization.h */; };
 		01A2D1A21E490A9700C2103A /* ApptentiveJSONSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D08C1E490A9700C2103A /* ApptentiveJSONSerialization.m */; };
 		01A2D1A31E490A9700C2103A /* ApptentiveLog.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D08D1E490A9700C2103A /* ApptentiveLog.h */; };
-		01A2D1A41E490A9700C2103A /* ApptentiveLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D08E1E490A9700C2103A /* ApptentiveLogger.h */; };
-		01A2D1A51E490A9700C2103A /* ApptentiveLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D08F1E490A9700C2103A /* ApptentiveLogger.m */; };
 		01A2D1A61E490A9700C2103A /* ApptentiveUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0901E490A9700C2103A /* ApptentiveUtilities.h */; };
 		01A2D1A71E490A9700C2103A /* ApptentiveUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0911E490A9700C2103A /* ApptentiveUtilities.m */; };
 		01A2D1A81E490A9700C2103A /* NSDictionary+Apptentive.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0921E490A9700C2103A /* NSDictionary+Apptentive.h */; };
@@ -334,11 +332,11 @@
 		01F1DFFC1E5BBFCB009AB3D2 /* ApptentiveConversationMetadataItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 01F1DFFA1E5BBFCB009AB3D2 /* ApptentiveConversationMetadataItem.h */; };
 		01F1DFFD1E5BBFCB009AB3D2 /* ApptentiveConversationMetadataItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 01F1DFFB1E5BBFCB009AB3D2 /* ApptentiveConversationMetadataItem.m */; };
 		EF18123F1E807FC00053BD68 /* ApptentiveAssert.h in Headers */ = {isa = PBXBuildFile; fileRef = EF18123D1E807FC00053BD68 /* ApptentiveAssert.h */; };
-		EF1812401E807FC00053BD68 /* ApptentiveAssert.h in Headers */ = {isa = PBXBuildFile; fileRef = EF18123D1E807FC00053BD68 /* ApptentiveAssert.h */; };
 		EF18124B1E8084C80053BD68 /* ApptentiveSafeCollections.h in Headers */ = {isa = PBXBuildFile; fileRef = EF1812491E8084C80053BD68 /* ApptentiveSafeCollections.h */; };
-		EF18124C1E8084C80053BD68 /* ApptentiveSafeCollections.h in Headers */ = {isa = PBXBuildFile; fileRef = EF1812491E8084C80053BD68 /* ApptentiveSafeCollections.h */; };
 		EF18124D1E8084C80053BD68 /* ApptentiveSafeCollections.m in Sources */ = {isa = PBXBuildFile; fileRef = EF18124A1E8084C80053BD68 /* ApptentiveSafeCollections.m */; };
-		EF18124E1E8084C80053BD68 /* ApptentiveSafeCollections.m in Sources */ = {isa = PBXBuildFile; fileRef = EF18124A1E8084C80053BD68 /* ApptentiveSafeCollections.m */; };
+		EFF3FE3B1E8C2F05006AD2B4 /* ApptentiveLog.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF3FE3A1E8C2F05006AD2B4 /* ApptentiveLog.m */; };
+		EFF3FE421E8C386E006AD2B4 /* ApptentiveLogTag.h in Headers */ = {isa = PBXBuildFile; fileRef = EFF3FE401E8C386E006AD2B4 /* ApptentiveLogTag.h */; };
+		EFF3FE431E8C386E006AD2B4 /* ApptentiveLogTag.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF3FE411E8C386E006AD2B4 /* ApptentiveLogTag.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -554,8 +552,6 @@
 		01A2D08B1E490A9700C2103A /* ApptentiveJSONSerialization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveJSONSerialization.h; sourceTree = "<group>"; };
 		01A2D08C1E490A9700C2103A /* ApptentiveJSONSerialization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveJSONSerialization.m; sourceTree = "<group>"; };
 		01A2D08D1E490A9700C2103A /* ApptentiveLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveLog.h; sourceTree = "<group>"; };
-		01A2D08E1E490A9700C2103A /* ApptentiveLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveLogger.h; sourceTree = "<group>"; };
-		01A2D08F1E490A9700C2103A /* ApptentiveLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveLogger.m; sourceTree = "<group>"; };
 		01A2D0901E490A9700C2103A /* ApptentiveUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveUtilities.h; sourceTree = "<group>"; };
 		01A2D0911E490A9700C2103A /* ApptentiveUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveUtilities.m; sourceTree = "<group>"; };
 		01A2D0921E490A9700C2103A /* NSDictionary+Apptentive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+Apptentive.h"; sourceTree = "<group>"; };
@@ -711,6 +707,9 @@
 		EF18123D1E807FC00053BD68 /* ApptentiveAssert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveAssert.h; sourceTree = "<group>"; };
 		EF1812491E8084C80053BD68 /* ApptentiveSafeCollections.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveSafeCollections.h; sourceTree = "<group>"; };
 		EF18124A1E8084C80053BD68 /* ApptentiveSafeCollections.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveSafeCollections.m; sourceTree = "<group>"; };
+		EFF3FE3A1E8C2F05006AD2B4 /* ApptentiveLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveLog.m; sourceTree = "<group>"; };
+		EFF3FE401E8C386E006AD2B4 /* ApptentiveLogTag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveLogTag.h; sourceTree = "<group>"; };
+		EFF3FE411E8C386E006AD2B4 /* ApptentiveLogTag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveLogTag.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1236,8 +1235,9 @@
 				01A2D08B1E490A9700C2103A /* ApptentiveJSONSerialization.h */,
 				01A2D08C1E490A9700C2103A /* ApptentiveJSONSerialization.m */,
 				01A2D08D1E490A9700C2103A /* ApptentiveLog.h */,
-				01A2D08E1E490A9700C2103A /* ApptentiveLogger.h */,
-				01A2D08F1E490A9700C2103A /* ApptentiveLogger.m */,
+				EFF3FE3A1E8C2F05006AD2B4 /* ApptentiveLog.m */,
+				EFF3FE401E8C386E006AD2B4 /* ApptentiveLogTag.h */,
+				EFF3FE411E8C386E006AD2B4 /* ApptentiveLogTag.m */,
 				EF1812491E8084C80053BD68 /* ApptentiveSafeCollections.h */,
 				EF18124A1E8084C80053BD68 /* ApptentiveSafeCollections.m */,
 				01A2D0901E490A9700C2103A /* ApptentiveUtilities.h */,
@@ -1463,6 +1463,7 @@
 				01A2D13F1E490A9700C2103A /* ApptentiveState.h in Headers */,
 				01A2D1781E490A9700C2103A /* ApptentiveAboutViewController.h in Headers */,
 				01A2D17E1E490A9700C2103A /* ApptentiveMessageCenterErrorViewController.h in Headers */,
+				EFF3FE421E8C386E006AD2B4 /* ApptentiveLogTag.h in Headers */,
 				01A2D1981E490A9700C2103A /* ApptentiveMessageCenterReplyCell.h in Headers */,
 				01A2D1431E490A9700C2103A /* ApptentiveBackend+Engagement.h in Headers */,
 				01A2D18D1E490A9700C2103A /* ApptentiveMessageCenterCellProtocols.h in Headers */,
@@ -1533,7 +1534,6 @@
 				01A2D19A1E490A9700C2103A /* ApptentiveMessageCenterStatusView.h in Headers */,
 				01A2D1B61E490A9700C2103A /* ApptentiveMessage.h in Headers */,
 				EF18124B1E8084C80053BD68 /* ApptentiveSafeCollections.h in Headers */,
-				01A2D1A41E490A9700C2103A /* ApptentiveLogger.h in Headers */,
 				01A2D1A11E490A9700C2103A /* ApptentiveJSONSerialization.h in Headers */,
 				01A2D1B01E490A9700C2103A /* ApptentiveFileAttachment.h in Headers */,
 				01A2D13B1E490A9700C2103A /* ApptentiveSDK.h in Headers */,
@@ -1572,10 +1572,8 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EF18124C1E8084C80053BD68 /* ApptentiveSafeCollections.h in Headers */,
 				01A2D28C1E49609100C2103A /* ApptentiveDebugging.h in Headers */,
 				012285481E4A81AD00DD2F58 /* Apptentive_Private.h in Headers */,
-				EF1812401E807FC00053BD68 /* ApptentiveAssert.h in Headers */,
 				01A2D2951E4960E100C2103A /* Apptentive+Debugging.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1848,6 +1846,7 @@
 				01A2D1C91E490A9700C2103A /* ApptentiveNetworkQueue.m in Sources */,
 				015408A51E54D8810027E196 /* ApptentiveTableView.m in Sources */,
 				01A2D12C1E490A9700C2103A /* ApptentiveInteraction.m in Sources */,
+				EFF3FE431E8C386E006AD2B4 /* ApptentiveLogTag.m in Sources */,
 				01A2D1C11E490A9700C2103A /* ATDataModel v2 to v3.xcmappingmodel in Sources */,
 				01A2D1021E490A9700C2103A /* ApptentiveNetworkImageView.m in Sources */,
 				01A2D1F91E490A9700C2103A /* ApptentiveSurveyQuestionFooterView.m in Sources */,
@@ -1885,6 +1884,7 @@
 				01A2D17F1E490A9700C2103A /* ApptentiveMessageCenterErrorViewController.m in Sources */,
 				01A2D1D91E490A9700C2103A /* ApptentiveDataManager.m in Sources */,
 				01A2D17B1E490A9700C2103A /* ApptentiveAttachmentController.m in Sources */,
+				EFF3FE3B1E8C2F05006AD2B4 /* ApptentiveLog.m in Sources */,
 				01A2D1F31E490A9700C2103A /* ApptentiveSurveyMultilineCell.m in Sources */,
 				01A2D1881E490A9700C2103A /* ApptentiveCompoundMessageCell.m in Sources */,
 				01F1DFFD1E5BBFCB009AB3D2 /* ApptentiveConversationMetadataItem.m in Sources */,
@@ -1905,7 +1905,6 @@
 				01A2D1BF1E490A9700C2103A /* ApptentiveRecord.m in Sources */,
 				01A2D0FC1E490A9700C2103A /* ApptentiveStyleSheet.m in Sources */,
 				01A2D10E1E490A9700C2103A /* ApptentiveInteractionNavigateToLink.m in Sources */,
-				01A2D1A51E490A9700C2103A /* ApptentiveLogger.m in Sources */,
 				01A2D1971E490A9700C2103A /* ApptentiveMessageCenterProfileView.m in Sources */,
 				01A2D1DB1E490A9700C2103A /* ApptentiveReachability.m in Sources */,
 				01A2D1161E490A9700C2103A /* ApptentiveInteractionMessageCenterController.m in Sources */,
@@ -1961,7 +1960,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EF18124E1E8084C80053BD68 /* ApptentiveSafeCollections.m in Sources */,
 				01A2D2961E4960E100C2103A /* Apptentive+Debugging.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

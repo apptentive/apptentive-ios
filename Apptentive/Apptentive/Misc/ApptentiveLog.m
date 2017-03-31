@@ -71,10 +71,6 @@ static NSString* getCurrentThreadName() {
 #pragma mark -
 #pragma mark Log Functions
 
-inline static void logMessage(NSString *message) {
-    NSLog(@"%@", message);
-}
-
 void _ApptentiveLogHelper(ApptentiveLogLevel level, id arg, ...) {
     ApptentiveLogTag *tag = [arg isKindOfClass:[ApptentiveLogTag class]] ? arg : nil;
     if (shouldLogLevel(level) && (tag == nil || tag.enabled)) {
@@ -99,7 +95,8 @@ void _ApptentiveLogHelper(ApptentiveLogLevel level, id arg, ...) {
             [fullMessage appendFormat:@"[%@] ", tag.name];
         }
         [fullMessage appendString:message];
-        logMessage(fullMessage);
+        
+        NSLog(@"%@", fullMessage);
     }
 }
 

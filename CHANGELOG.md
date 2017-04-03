@@ -1,4 +1,8 @@
-2017-01-06 frankus, weeeBox v3.4.2
+2017-03-22 frankus, weeeBox v3.4.3
+-------------------------
+Version 3.4.3 fixes a bug where push notifications could stop working after a cold relaunch. 
+
+2017-03-03 frankus, weeeBox v3.4.2
 -------------------------
 Version 3.4.2 fixes the retry logic for certain network requests. 
 

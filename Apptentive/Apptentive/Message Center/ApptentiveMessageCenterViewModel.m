@@ -71,10 +71,17 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 
 	if (self.contextMessageBody) {
 		self.contextMessage = [[ApptentiveMessage alloc] initWithBody:self.contextMessageBody attachments:@[] senderIdentifier:self.messageManager.localUserIdentifier automated:YES customData:nil];
+		[self.contextMessage updateWithLocalIdentifier:@"context-message"];
+
+		[self.messageManager appendMessage:self.contextMessage];
 	}
 }
 
 - (void)stop {
+	if (self.contextMessage) {
+		[self.messageManager removeMessage:self.contextMessage];
+	}
+
 	[[Apptentive sharedConnection].backend messageCenterLeftForeground];
 }
 
@@ -473,18 +480,22 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 }
 
 - (void)messageManager:(ApptentiveMessageManager *)manager didInsertMessage:(ApptentiveMessage *)message atIndex:(NSInteger)index {
-	[self.delegate messageCenterViewModel:self didInsertMessageAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:index]];
+	[self.delegate messageCenterViewModel:self didInsertMessageAtIndex:index];
 }
 
 - (void)messageManager:(ApptentiveMessageManager *)manager didUpdateMessage:(ApptentiveMessage *)message atIndex:(NSInteger)index {
-	[self.delegate messageCenterViewModel:self didUpdateMessageAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:index]];
+	[self.delegate messageCenterViewModel:self didUpdateMessageAtIndex:index];
+}
+
+- (void)messageManager:(ApptentiveMessageManager *)manager didDeleteMessage:(ApptentiveMessage *)message atIndex:(NSInteger)index {
+	[self.delegate messageCenterViewModel:self didDeleteMessageAtIndex:index];
 }
 
 #pragma mark - Misc
 
 - (void)sendMessage:(NSString *)messageText withAttachments:(NSArray *)attachments {
 	if (self.contextMessage) {
-		[self.messageManager sendMessage:self.contextMessage];
+		[self.messageManager enqueueMessageForSending:self.contextMessage];
 		self.contextMessage = nil;
 	}
 

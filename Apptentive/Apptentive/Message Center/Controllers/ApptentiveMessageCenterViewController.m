@@ -529,41 +529,33 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 #pragma mark Message center view model delegate
 
-//- (void)viewModelWillChangeContent:(ApptentiveMessageCenterViewModel *)viewModel {
-//	[self.tableView beginUpdates];
-//}
-//
-//- (void)viewModelDidChangeContent:(ApptentiveMessageCenterViewModel *)controller {
-//	[self updateStatusOfVisibleCells];
-//
-//	@try {
-//		[self.tableView endUpdates];
-//	} @catch (NSException *exception) {
-//		ApptentiveLogError(@"caught exception: %@: %@", [exception name], [exception description]);
-//	}
-//
-//	if (self.state != ATMessageCenterStateWhoCard && self.state != ATMessageCenterStateComposing) {
-//		[self updateState];
-//
-//		[self resizeFooterView:nil];
-//		[self scrollToLastMessageAnimated:YES];
-//	}
-//}
-
 - (void)viewModelWillChangeContent:(ApptentiveMessageCenterViewModel *)viewModel {
 	[self.tableView beginUpdates];
 }
 
 - (void)viewModelDidChangeContent:(ApptentiveMessageCenterViewModel *)viewModel {
+	[self updateStatusOfVisibleCells];
+
 	[self.tableView endUpdates];
+
+	if (self.state != ATMessageCenterStateWhoCard && self.state != ATMessageCenterStateComposing) {
+		[self updateState];
+
+		[self resizeFooterView:nil];
+		[self scrollToLastMessageAnimated:YES];
+	}
 }
 
-- (void)messageCenterViewModel:(ApptentiveMessageCenterViewModel *)viewModel didInsertMessageAtIndexPath:(NSIndexPath *)indexPath {
-	[self.tableView insertSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationAutomatic];
+- (void)messageCenterViewModel:(ApptentiveMessageCenterViewModel *)viewModel didInsertMessageAtIndex:(NSInteger)index {
+	[self.tableView insertSections:[NSIndexSet indexSetWithIndex:index] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
-- (void)messageCenterViewModel:(ApptentiveMessageCenterViewModel *)viewModel didUpdateMessageAtIndexPath:(NSIndexPath *)indexPath {
-	[self.tableView reloadRowsAtIndexPaths:@[ indexPath ] withRowAnimation:UITableViewRowAnimationAutomatic];
+- (void)messageCenterViewModel:(ApptentiveMessageCenterViewModel *)viewModel didUpdateMessageAtIndex:(NSInteger)index {
+	[self.tableView reloadSections:[NSIndexSet indexSetWithIndex:index]  withRowAnimation:UITableViewRowAnimationAutomatic];
+}
+
+- (void)messageCenterViewModel:(ApptentiveMessageCenterViewModel *)viewModel didDeleteMessageAtIndex:(NSInteger)index {
+	[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:index] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
 - (void)messageCenterViewModel:(ApptentiveMessageCenterViewModel *)viewModel didLoadAttachmentThumbnailAtIndexPath:(NSIndexPath *)indexPath {

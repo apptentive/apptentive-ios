@@ -28,7 +28,7 @@ static NSString * const MessageStoreFileName = @"MessageStore.archive";
 @property (strong, nonatomic) ApptentiveRequestOperation *messageOperation;
 @property (strong, nonatomic) NSTimer *messageFetchTimer;
 @property (strong, nonatomic) NSDictionary *currentCustomData;
-@property (strong, nonatomic) NSDictionary *messageIdentifierIndex;
+@property (readonly, nonatomic) NSMutableDictionary *messageIdentifierIndex;
 @property (readonly, nonatomic) ApptentiveMessageStore *messageStore;
 
 @property (readonly, nonatomic) NSString *messageStorePath;
@@ -43,8 +43,13 @@ static NSString * const MessageStoreFileName = @"MessageStore.archive";
 	if (self) {
 		_storagePath = storagePath;
 		_networkQueue = networkQueue;
+		_messageIdentifierIndex = [NSMutableDictionary dictionary];
 
 		_messageStore = [NSKeyedUnarchiver unarchiveObjectWithFile:self.messageStorePath] ?: [[ApptentiveMessageStore alloc] init];
+
+		for (ApptentiveMessage *message in _messageStore.messages) {
+			_messageIdentifierIndex[message.localIdentifier] = message;
+		}
 
 		// Use setter to initialize timer
 		self.pollingInterval = pollingInterval;
@@ -81,7 +86,7 @@ static NSString * const MessageStoreFileName = @"MessageStore.archive";
 	return [self.storagePath stringByAppendingPathComponent:MessageStoreFileName];
 }
 
-- (BOOL)save {
+- (BOOL)saveMessageStore {
 	return [NSKeyedArchiver archiveRootObject:self.messageStore toFile:self.messageStorePath];
 }
 
@@ -99,7 +104,9 @@ static NSString * const MessageStoreFileName = @"MessageStore.archive";
 	NSMutableArray *mutableMessages = [NSMutableArray arrayWithCapacity:messageListJSON.count];
 	NSMutableDictionary *mutableMessageIdentifierIndex = [NSMutableDictionary dictionaryWithCapacity:messageListJSON.count];
 	NSMutableArray *addedMessages = [NSMutableArray array];
+	NSMutableArray *updatedMessages = [NSMutableArray array];
 	NSInteger unreadCount = 0;
+	NSString *lastDownloadedMessageIdentifier;
 
 	// Correlate messages from server with local messages
 	for (NSDictionary *messageJSON in messageListJSON) {
@@ -111,11 +118,17 @@ static NSString * const MessageStoreFileName = @"MessageStore.archive";
 
 
 			if (previousVersion != nil) {
+				ApptentiveMessageState previousState = previousVersion.state;
+
 				// Update with server identifier and date
 				message = [previousVersion mergedWith:message];
 
 				if (sentByLocalUser) {
 					message.state = ApptentiveMessageStateSent;
+				}
+
+				if (previousState != message.state) {
+					[updatedMessages addObject:message];
 				}
 			} else {
 				[addedMessages addObject:message];
@@ -128,38 +141,46 @@ static NSString * const MessageStoreFileName = @"MessageStore.archive";
 
 			[mutableMessages addObject:message];
 			[mutableMessageIdentifierIndex setObject:message forKey:message.localIdentifier];
+
+			lastDownloadedMessageIdentifier = message.identifier;
 		}
 	}
 
-	// Add local messages that aren't yet on server's list
-	for (ApptentiveMessage *message in self.messages) {
-		ApptentiveMessage *newVersion = mutableMessageIdentifierIndex[message.localIdentifier];
+	if (addedMessages.count + updatedMessages.count > 0) {
+		// Add local messages that aren't yet on server's list
+		for (ApptentiveMessage *message in self.messages) {
+			ApptentiveMessage *newVersion = mutableMessageIdentifierIndex[message.localIdentifier];
 
-		if (newVersion == nil) {
-			[mutableMessages addObject:message];
-			[mutableMessageIdentifierIndex setObject:message forKey:message.localIdentifier];
+			if (newVersion == nil) {
+				[mutableMessages addObject:message];
+				[mutableMessageIdentifierIndex setObject:message forKey:message.localIdentifier];
+			}
 		}
+
+		// Sort by sent date
+		[mutableMessages sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"sentDate" ascending:YES]]];
+
+		dispatch_sync(dispatch_get_main_queue(), ^{
+			[self.delegate messageManagerWillBeginUpdates:self];
+
+			[self.messageStore.messages removeAllObjects];
+			[self.messageStore.messages addObjectsFromArray:mutableMessages];
+			_messageIdentifierIndex = mutableMessageIdentifierIndex;
+
+			for (ApptentiveMessage *newMessage in addedMessages) {
+				[self.delegate messageManager:self didInsertMessage:newMessage atIndex:[self.messages indexOfObject:newMessage]];
+			}
+
+			for (ApptentiveMessage *updatedMessage in updatedMessages) {
+				[self.delegate messageManager:self didUpdateMessage:updatedMessage atIndex:[self.messages indexOfObject:updatedMessage]];
+			}
+
+			[self.delegate messageManagerDidEndUpdates:self];
+		});
+
+		self.messageStore.lastMessageIdentifier = lastDownloadedMessageIdentifier;
+		[self saveMessageStore];
 	}
-
-	// Sort by sent date
-	[mutableMessages sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"sentDate" ascending:YES]]];
-
-	dispatch_sync(dispatch_get_main_queue(), ^{
-		[self.delegate messageManagerWillBeginUpdates:self];
-
-		[self.messageStore.messages removeAllObjects];
-		[self.messageStore.messages addObjectsFromArray:mutableMessages];
-
-		_messageIdentifierIndex = [mutableMessageIdentifierIndex copy];
-
-		for (ApptentiveMessage *newMessage in addedMessages) {
-			[self.delegate messageManager:self didInsertMessage:newMessage atIndex:[self.messages indexOfObject:newMessage]];
-		}
-
-		[self.delegate messageManagerDidEndUpdates:self];
-	});
-
-	[self save];
 
 	if (_unreadCount != unreadCount) {
 		_unreadCount = unreadCount;
@@ -209,9 +230,19 @@ static NSString * const MessageStoreFileName = @"MessageStore.archive";
 }
 
 - (void)enqueueMessageForSending:(ApptentiveMessage *)message {
+	NSString *previousLocalIdentifier = message.localIdentifier;
+
 	[ApptentiveSerialRequest enqueueMessage:message inContext:Apptentive.shared.backend.managedObjectContext];
 
 	[Apptentive.shared.backend processQueuedRecords];
+
+	// Update the message identifier index for messages that were already appended
+	if (previousLocalIdentifier) {
+		[self.messageIdentifierIndex removeObjectForKey:previousLocalIdentifier];
+		[self.messageIdentifierIndex setObject:message forKey:message.localIdentifier];
+	}
+
+	message.state = ApptentiveMessageStateWaiting;
 }
 
 - (void)setState:(ApptentiveMessageState)state forMessageWithLocalIdentifier:(NSString *)localIdentifier {
@@ -221,26 +252,49 @@ static NSString * const MessageStoreFileName = @"MessageStore.archive";
 		message.state = state;
 		NSInteger index = [self.messages indexOfObject:message];
 
-		dispatch_async(dispatch_get_main_queue(), ^{
+		[self callOnMainThread:^{
+			[self.delegate messageManagerWillBeginUpdates:self];
 			[self.delegate messageManager:self didUpdateMessage:message atIndex:index];
-		});
+			[self.delegate messageManagerDidEndUpdates:self];
+		}];
 	}
 }
 
-#pragma mark - Private
-
 - (void)appendMessage:(ApptentiveMessage *)message {
+	NSInteger index = self.messages.count;
 	[self.messageStore.messages addObject:message];
+	[self.messageIdentifierIndex setObject:message forKey:message.localIdentifier];
 
-	NSMutableDictionary *mutableMessageIdentifierIndex = [self.messageIdentifierIndex mutableCopy];
-	[mutableMessageIdentifierIndex setObject:message forKey:message.localIdentifier];
-	_messageIdentifierIndex = [mutableMessageIdentifierIndex copy];
+	[self callOnMainThread:^{
+		[self.delegate messageManagerWillBeginUpdates:self];
+		[self.delegate messageManager:self didInsertMessage:message atIndex:index];
+		[self.delegate messageManagerDidEndUpdates:self];
+	}];
 
-	dispatch_async(dispatch_get_main_queue(), ^{
-		[self.delegate messageManager:self didInsertMessage:message atIndex:self.messages.count - 1];
-	});
+	[self saveMessageStore];
+}
 
-	[self save];
+- (void)removeMessage:(ApptentiveMessage *)message {
+	NSInteger index = [self.messageStore.messages indexOfObject:message];
+	[self.messageStore.messages removeObjectAtIndex:index];
+
+	[self.messageIdentifierIndex removeObjectForKey:message.localIdentifier];
+
+	[self callOnMainThread:^{
+		[self.delegate messageManagerWillBeginUpdates:self];
+		[self.delegate messageManager:self didDeleteMessage:message atIndex:index];
+		[self.delegate messageManagerDidEndUpdates:self];
+	}];
+
+	[self saveMessageStore];
+}
+
+- (void)callOnMainThread:(dispatch_block_t)block {
+	if ([NSThread isMainThread]) {
+		block();
+	} else {
+		dispatch_async(dispatch_get_main_queue(), block);
+	}
 }
 
 @end

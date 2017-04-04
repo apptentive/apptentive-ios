@@ -122,8 +122,9 @@ typedef NS_ENUM(NSInteger, ATMessageCenterMessageStatus) {
 
 - (void)viewModelWillChangeContent:(ApptentiveMessageCenterViewModel *)viewModel;
 - (void)viewModelDidChangeContent:(ApptentiveMessageCenterViewModel *)viewModel;
-- (void)messageCenterViewModel:(ApptentiveMessageCenterViewModel *)viewModel didInsertMessageAtIndexPath:(NSIndexPath *)indexPath;
-- (void)messageCenterViewModel:(ApptentiveMessageCenterViewModel *)viewModel didUpdateMessageAtIndexPath:(NSIndexPath *)indexPath;
+- (void)messageCenterViewModel:(ApptentiveMessageCenterViewModel *)viewModel didInsertMessageAtIndex:(NSInteger)index;
+- (void)messageCenterViewModel:(ApptentiveMessageCenterViewModel *)viewModel didUpdateMessageAtIndex:(NSInteger)index;
+- (void)messageCenterViewModel:(ApptentiveMessageCenterViewModel *)viewModel didDeleteMessageAtIndex:(NSInteger)index;
 
 - (void)messageCenterViewModel:(ApptentiveMessageCenterViewModel *)viewModel attachmentDownloadAtIndexPath:(NSIndexPath *)indexPath didProgress:(float)progress;
 - (void)messageCenterViewModel:(ApptentiveMessageCenterViewModel *)viewModel didLoadAttachmentThumbnailAtIndexPath:(NSIndexPath *)indexPath;

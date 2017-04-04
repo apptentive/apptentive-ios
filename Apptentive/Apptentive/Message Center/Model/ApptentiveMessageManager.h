@@ -31,12 +31,15 @@
 - (void)checkForMessages;
 - (void)stopPolling;
 
-- (BOOL)save;
+- (BOOL)saveMessageStore;
 
 - (NSInteger)numberOfMessages;
 
 - (void)sendMessage:(ApptentiveMessage *)message;
 - (void)enqueueMessageForSending:(ApptentiveMessage *)message;
+
+- (void)appendMessage:(ApptentiveMessage *)message;
+- (void)removeMessage:(ApptentiveMessage *)message;
 
 - (void)setState:(ApptentiveMessageState)state forMessageWithLocalIdentifier:(NSString *)localIdentifier;
 @end
@@ -48,5 +51,6 @@
 
 - (void)messageManager:(ApptentiveMessageManager *)manager didInsertMessage:(ApptentiveMessage *)message atIndex:(NSInteger)index;
 - (void)messageManager:(ApptentiveMessageManager *)manager didUpdateMessage:(ApptentiveMessage *)message atIndex:(NSInteger)index;
+- (void)messageManager:(ApptentiveMessageManager *)manager didDeleteMessage:(ApptentiveMessage *)message atIndex:(NSInteger)index;
 
 @end

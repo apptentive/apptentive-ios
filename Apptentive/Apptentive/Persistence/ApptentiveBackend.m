@@ -205,6 +205,10 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 				}];
 
 				[self processQueuedRecords];
+
+				if ([self imageCachePath]) {
+					_imageCache = [[NSURLCache alloc] initWithMemoryCapacity:1 * 1024 * 1024 diskCapacity:10 * 1024 * 1024 diskPath:[self imageCachePath]];
+				}
 			}];
 
 			if (self.conversationOperation) {

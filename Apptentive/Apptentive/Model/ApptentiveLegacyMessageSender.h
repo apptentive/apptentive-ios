@@ -21,22 +21,5 @@
 @property (strong, nonatomic) NSSet *sentMessages;
 @property (strong, nonatomic) NSSet *receivedMessages;
 
-+ (ApptentiveLegacyMessageSender *)findSenderWithID:(NSString *)apptentiveID inContext:(NSManagedObjectContext *)context;
-+ (ApptentiveLegacyMessageSender *)newOrExistingMessageSenderFromJSON:(NSDictionary *)json inContext:(NSManagedObjectContext *)context;
-- (NSDictionary *)apiJSON;
 @end
 
-
-@interface ApptentiveLegacyMessageSender (CoreDataGeneratedAccessors)
-
-- (void)addSentMessagesObject:(ApptentiveLegacyMessage *)value;
-- (void)removeSentMessagesObject:(ApptentiveLegacyMessage *)value;
-- (void)addSentMessages:(NSSet *)values;
-- (void)removeSentMessages:(NSSet *)values;
-
-- (void)addReceivedMessagesObject:(ApptentiveLegacyMessage *)value;
-- (void)removeReceivedMessagesObject:(ApptentiveLegacyMessage *)value;
-- (void)addReceivedMessages:(NSSet *)values;
-- (void)removeReceivedMessages:(NSSet *)values;
-
-@end

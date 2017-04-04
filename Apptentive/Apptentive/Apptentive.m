@@ -12,7 +12,6 @@
 #import "ApptentiveBackend+Engagement.h"
 #import "ApptentiveInteraction.h"
 #import "ApptentiveUtilities.h"
-#import "ApptentiveLegacyMessageSender.h"
 #import "ApptentiveMessageCenterViewController.h"
 #import "ApptentiveBannerViewController.h"
 #import "ApptentiveUnreadMessagesBadgeView.h"

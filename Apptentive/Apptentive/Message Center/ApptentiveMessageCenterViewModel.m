@@ -7,17 +7,13 @@
 //
 
 #import "ApptentiveMessageCenterViewModel.h"
-#import "ApptentiveMessageManager.h"
 #import "ApptentiveAttachment.h"
 #import "ApptentiveMessageSender.h"
 
 #import "ApptentiveBackend.h"
 #import "Apptentive.h"
 #import "Apptentive_Private.h"
-#import "ApptentiveData.h"
-//#import "ApptentiveLegacyMessageSender.h"
 #import "ApptentiveAttachmentCell.h"
-//#import "ApptentiveLegacyFileAttachment.h"
 #import "ApptentiveUtilities.h"
 #import "ApptentiveInteraction.h"
 #import "ApptentivePerson.h"
@@ -30,6 +26,7 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 
 NSString *const ATMessageCenterDidSkipProfileKey = @"ATMessageCenterDidSkipProfileKey";
 NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKey";
+
 
 @interface ApptentiveMessageCenterViewModel ()
 

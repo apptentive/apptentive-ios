@@ -12,14 +12,8 @@
 #import "ApptentiveNetworkQueue.h"
 #import "ApptentiveSerialRequest+Record.h"
 #import "ApptentiveMessageStore.h"
-
-#import "ApptentiveLegacyMessage.h"
 #import "Apptentive_Private.h"
-#import "ApptentiveLegacyMessageSender.h"
 #import "ApptentiveBackend.h"
-#import "ApptentiveSession.h"
-#import "ApptentivePerson.h"
-#import "ApptentiveLegacyFileAttachment.h"
 
 static NSString * const MessageStoreFileName = @"MessageStore.archive";
 

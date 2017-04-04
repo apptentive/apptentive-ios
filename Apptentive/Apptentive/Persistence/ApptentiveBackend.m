@@ -13,23 +13,22 @@
 #import "ApptentiveDataManager.h"
 #import "ApptentiveReachability.h"
 #import "ApptentiveUtilities.h"
-#import "ApptentiveLegacyMessageSender.h"
 #import "ApptentiveLog.h"
 #import "ApptentiveMessageCenterViewController.h"
 #import "ApptentiveAppConfiguration.h"
 #import "ApptentiveEngagementManifest.h"
 #import "ApptentiveSerialRequest+Record.h"
-#import "ApptentiveLegacyFileAttachment.h"
 #import "ApptentiveAppRelease.h"
 #import "ApptentiveSDK.h"
 #import "ApptentivePerson.h"
 #import "ApptentiveDevice.h"
 #import "ApptentiveVersion.h"
+#import "ApptentiveMessageManager.h"
 
 #import "ApptentiveLegacyEvent.h"
 #import "ApptentiveLegacySurveyResponse.h"
 #import "ApptentiveLegacyMessage.h"
-#import "ApptentiveMessageManager.h"
+#import "ApptentiveLegacyFileAttachment.h"
 
 typedef NS_ENUM(NSInteger, ATBackendState) {
 	ATBackendStateStarting,

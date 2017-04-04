@@ -63,8 +63,12 @@ static NSString * const MessageStoreFileName = @"MessageStore.archive";
 		return;
 	}
 
-	// TODO: limit request to un-downloaded messages
-	self.messageOperation = [[ApptentiveRequestOperation alloc] initWithPath:@"conversation" method:@"GET" payload:nil delegate:self dataSource:self.networkQueue];
+	NSString *path = @"conversation";
+	if (self.messageStore.lastMessageIdentifier != nil) {
+		path = [path stringByAppendingFormat:@"?after_id=%@", self.messageStore.lastMessageIdentifier];
+	}
+
+	self.messageOperation = [[ApptentiveRequestOperation alloc] initWithPath:path method:@"GET" payload:nil delegate:self dataSource:self.networkQueue];
 
 	[self.networkQueue addOperation:self.messageOperation];
 }

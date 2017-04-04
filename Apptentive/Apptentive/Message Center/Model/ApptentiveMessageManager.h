@@ -26,7 +26,7 @@
 
 @property (weak, nonatomic) id<ApptentiveMessageManagerDelegate> delegate;
 
-- (instancetype)initWithStoragePath:(NSString *)storagePath networkQueue:(ApptentiveNetworkQueue *)networkQueue pollingInterval:(NSTimeInterval)pollingInterval;
+- (instancetype)initWithStoragePath:(NSString *)storagePath networkQueue:(ApptentiveNetworkQueue *)networkQueue pollingInterval:(NSTimeInterval)pollingInterval localUserIdentifier:(NSString *)localUserIdentifier;
 
 - (void)checkForMessages;
 - (void)stopPolling;

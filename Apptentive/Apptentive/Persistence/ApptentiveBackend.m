@@ -175,7 +175,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 					[ApptentiveLegacyFileAttachment addMissingExtensions];
 				});
 
-				self.messageManager = [[ApptentiveMessageManager alloc] initWithStoragePath:self.attachmentDirectoryPath networkQueue:self->_networkQueue pollingInterval:self.configuration.messageCenter.backgroundPollingInterval];
+				self.messageManager = [[ApptentiveMessageManager alloc] initWithStoragePath:self.attachmentDirectoryPath networkQueue:self->_networkQueue pollingInterval:self.configuration.messageCenter.backgroundPollingInterval localUserIdentifier:self.session.person.identifier];
 
 				[[NSNotificationCenter defaultCenter] addObserver:self.messageManager selector:@selector(checkForMessages) name:UIApplicationWillEnterForegroundNotification object:nil];
 

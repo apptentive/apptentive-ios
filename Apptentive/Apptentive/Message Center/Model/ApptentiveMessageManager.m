@@ -37,14 +37,16 @@ static NSString * const MessageStoreFileName = @"MessageStore.archive";
 
 @implementation ApptentiveMessageManager
 
-- (instancetype)initWithStoragePath:(NSString *)storagePath networkQueue:(ApptentiveNetworkQueue *)networkQueue pollingInterval:(NSTimeInterval)pollingInterval  {
+- (instancetype)initWithStoragePath:(NSString *)storagePath networkQueue:(ApptentiveNetworkQueue *)networkQueue pollingInterval:(NSTimeInterval)pollingInterval localUserIdentifier:(NSString *)localUserIdentifier  {
 	self = [super init];
 
 	if (self) {
 		_storagePath = storagePath;
 		_networkQueue = networkQueue;
-		_messageIdentifierIndex = [NSMutableDictionary dictionary];
+		_localUserIdentifier = localUserIdentifier;
 
+
+		_messageIdentifierIndex = [NSMutableDictionary dictionary];
 		_messageStore = [NSKeyedUnarchiver unarchiveObjectWithFile:self.messageStorePath] ?: [[ApptentiveMessageStore alloc] init];
 
 		for (ApptentiveMessage *message in _messageStore.messages) {
@@ -71,11 +73,6 @@ static NSString * const MessageStoreFileName = @"MessageStore.archive";
 	self.messageOperation = [[ApptentiveRequestOperation alloc] initWithPath:path method:@"GET" payload:nil delegate:self dataSource:self.networkQueue];
 
 	[self.networkQueue addOperation:self.messageOperation];
-}
-
-// TODO: Inject message sender in initializer?
-- (NSString *)localUserIdentifier {
-	return Apptentive.shared.backend.session.person.identifier;
 }
 
 - (NSInteger)numberOfMessages {
@@ -240,7 +237,8 @@ static NSString * const MessageStoreFileName = @"MessageStore.archive";
 
 	[Apptentive.shared.backend processQueuedRecords];
 
-	// Update the message identifier index for messages that were already appended
+	// Update the message ID index for messages that were previously appended.
+	// (i.e. context messages).
 	if (previousLocalIdentifier) {
 		[self.messageIdentifierIndex removeObjectForKey:previousLocalIdentifier];
 		[self.messageIdentifierIndex setObject:message forKey:message.localIdentifier];
@@ -293,6 +291,14 @@ static NSString * const MessageStoreFileName = @"MessageStore.archive";
 	[self saveMessageStore];
 }
 
+
+/**
+ Executes a block synchronously if on main thread, asynchronously otherwise.
+ This is needed to avoid sending an insert/delete message for a section
+ that was already present/absent when the table view loaded.
+
+ @param block The block to execute.
+ */
 - (void)callOnMainThread:(dispatch_block_t)block {
 	if ([NSThread isMainThread]) {
 		block();

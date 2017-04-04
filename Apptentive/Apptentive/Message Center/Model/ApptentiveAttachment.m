@@ -233,5 +233,22 @@
 	}
 }
 
+@end
+
+@implementation ApptentiveAttachment (QuickLook)
+
+- (NSString *)previewItemTitle {
+	return self.name;
+}
+
+- (NSURL *)previewItemURL {
+	if (self.fileName) {
+		return [NSURL fileURLWithPath:self.fullLocalPath];
+	} else {
+		// Use fake path
+		NSString *name = self.name ?: [[NSUUID UUID].UUIDString stringByAppendingPathExtension:self.extension];
+		return [NSURL fileURLWithPath:[[self class] fullLocalPathForFilename:name]];
+	}
+}
 
 @end

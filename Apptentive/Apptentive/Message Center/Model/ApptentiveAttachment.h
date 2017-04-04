@@ -36,31 +36,5 @@
 
 @end
 
-/*
- 
- @property (copy, nonatomic) NSString *localPath;
- @property (copy, nonatomic) NSString *mimeType; // starts w/ lowercase b/c Core Data is stupid
- @property (copy, nonatomic) NSString *name;
- @property (strong, nonatomic) NSURL *remoteURL;
- @property (strong, nonatomic) NSURL *remoteThumbnailURL;
- @property (strong, nonatomic) ApptentiveLegacyMessage *message;
-
- @property (readonly, nonatomic) NSString *fullLocalPath;
- @property (readonly, nonatomic) NSData *fileData;
-
- + (instancetype)newInstanceWithFileData:(NSData *)fileData MIMEType:(NSString *)MIMEType name:(NSString *)name;
- + (instancetype)newInstanceWithJSON:(NSDictionary *)JSON inContext:(NSManagedObjectContext *)context;
- + (void)addMissingExtensions;
- - (void)updateWithJSON:(NSDictionary *)JSON;
-
- - (void)setFileData:(NSData *)data MIMEType:(NSString *)MIMEType name:(NSString *)name;
-
-  Can be called from background thread.
-- (NSURL *)permanentLocation;
-
- Must be called from main thread. 
-- (void)completeMoveToStorageFor:(NSURL *)storageLocation;
-
-- (UIImage *)thumbnailOfSize:(CGSize)size;
-
-*/
+@interface ApptentiveAttachment (QuickLook) <QLPreviewItem>
+@end

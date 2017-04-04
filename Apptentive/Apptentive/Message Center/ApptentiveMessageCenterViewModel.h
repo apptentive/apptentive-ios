@@ -26,9 +26,11 @@ typedef NS_ENUM(NSInteger, ATMessageCenterMessageStatus) {
 	ATMessageCenterMessageStatusFailed,
 };
 
-@protocol ApptentiveMessageCenterViewModelDelegate, ApptentiveStyle;
+@protocol ApptentiveMessageCenterViewModelDelegate
+, ApptentiveStyle;
 
 @class ApptentiveInteraction;
+
 
 @interface ApptentiveMessageCenterViewModel : NSObject <NSURLSessionDownloadDelegate, ATBackendMessageDelegate, ApptentiveMessageManagerDelegate>
 

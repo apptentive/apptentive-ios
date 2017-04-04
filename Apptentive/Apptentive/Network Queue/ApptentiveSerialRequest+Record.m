@@ -25,7 +25,7 @@
 
 + (void)enqueueRequestWithPath:(NSString *)path containerName:(NSString *)containerName noncePrefix:(NSString *)noncePrefix payload:(NSDictionary *)payload inContext:(NSManagedObjectContext *)context {
 	NSMutableDictionary *fullPayload = [self boilerplateForRequestWithNoncePrefix:noncePrefix];
-	
+
 	[fullPayload addEntriesFromDictionary:payload];
 
 	[self enqueueRequestWithPath:path method:@"POST" payload:@{ containerName: fullPayload } attachments:nil identifier:nil inContext:context];
@@ -87,7 +87,7 @@
 
 	payload[@"automated"] = @(message.automated);
 	payload[@"hidden"] = @(message.state == ApptentiveMessageStateHidden);
-	
+
 	if (message.customData) {
 		NSDictionary *customDataDictionary = message.customData;
 		if (customDataDictionary && customDataDictionary.count) {

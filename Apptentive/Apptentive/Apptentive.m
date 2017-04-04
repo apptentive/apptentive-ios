@@ -145,7 +145,7 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 - (void)sendAttachmentImage:(UIImage *)image {
 	ApptentiveAttachment *attachment = [[ApptentiveAttachment alloc] initWithData:UIImageJPEGRepresentation(image, 0.95) contentType:@"image/jpeg" name:nil];
 
-	ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:nil attachments:@[ attachment ] senderIdentifier:self.backend.messageManager.localUserIdentifier automated:NO customData:nil];
+	ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:nil attachments:@[attachment] senderIdentifier:self.backend.messageManager.localUserIdentifier automated:NO customData:nil];
 
 	[self.backend.messageManager enqueueMessageForSending:message];
 }
@@ -153,7 +153,7 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 - (void)sendAttachmentFile:(NSData *)fileData withMimeType:(NSString *)mimeType {
 	ApptentiveAttachment *attachment = [[ApptentiveAttachment alloc] initWithData:fileData contentType:mimeType name:nil];
 
-	ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:nil attachments:@[ attachment ] senderIdentifier:self.backend.messageManager.localUserIdentifier automated:NO customData:nil];
+	ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:nil attachments:@[attachment] senderIdentifier:self.backend.messageManager.localUserIdentifier automated:NO customData:nil];
 
 	[self.backend.messageManager enqueueMessageForSending:message];
 }

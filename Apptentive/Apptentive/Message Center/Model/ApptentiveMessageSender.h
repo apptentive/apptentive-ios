@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
+
 @interface ApptentiveMessageSender : NSObject <NSSecureCoding>
 
 @property (readonly, nonatomic) NSString *name;

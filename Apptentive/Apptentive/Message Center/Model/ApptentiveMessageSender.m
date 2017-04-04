@@ -8,9 +8,9 @@
 
 #import "ApptentiveMessageSender.h"
 
-static NSString * const NameKey = @"name";
-static NSString * const IdentifierKey = @"identifier";
-static NSString * const ProfilePhotoURLKey = @"profilePhotoURL";
+static NSString *const NameKey = @"name";
+static NSString *const IdentifierKey = @"identifier";
+static NSString *const ProfilePhotoURLKey = @"profilePhotoURL";
 
 
 @implementation ApptentiveMessageSender
@@ -51,8 +51,7 @@ static NSString * const ProfilePhotoURLKey = @"profilePhotoURL";
 	return self;
 }
 
-- (instancetype)initWithCoder:(NSCoder *)coder
-{
+- (instancetype)initWithCoder:(NSCoder *)coder {
 	self = [super init];
 	if (self) {
 		_name = [coder decodeObjectOfClass:[NSString class] forKey:NameKey];
@@ -62,8 +61,7 @@ static NSString * const ProfilePhotoURLKey = @"profilePhotoURL";
 	return self;
 }
 
-- (void)encodeWithCoder:(NSCoder *)coder
-{
+- (void)encodeWithCoder:(NSCoder *)coder {
 	[coder encodeObject:self.name forKey:NameKey];
 	[coder encodeObject:self.identifier forKey:IdentifierKey];
 	[coder encodeObject:self.profilePhotoURL forKey:ProfilePhotoURLKey];

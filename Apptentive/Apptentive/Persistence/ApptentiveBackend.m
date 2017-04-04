@@ -558,7 +558,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 
 		[viewController presentViewController:navigationController animated:YES completion:nil];
 	}
-	
+
 	return didShowMessageCenter;
 }
 

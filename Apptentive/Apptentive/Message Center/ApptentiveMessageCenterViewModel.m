@@ -410,7 +410,7 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 	NSURLRequest *request = [NSURLRequest requestWithURL:attachment.remoteURL];
 	NSURLSessionDownloadTask *task = [self.attachmentDownloadSession downloadTaskWithRequest:request];
 
-    [self.delegate messageCenterViewModel:self attachmentDownloadAtIndexPath:indexPath didProgress:0];
+	[self.delegate messageCenterViewModel:self attachmentDownloadAtIndexPath:indexPath didProgress:0];
 
 	[self setIndexPath:indexPath forTask:task];
 	[task resume];

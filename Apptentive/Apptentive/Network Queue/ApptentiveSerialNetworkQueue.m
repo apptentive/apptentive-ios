@@ -207,7 +207,6 @@
 				[manager setState:ApptentiveMessageStateSent forMessageWithLocalIdentifier:messageOperation.messageRequestInfo.identifier];
 			}
 		}
-
 	}
 }
 

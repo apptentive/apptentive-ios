@@ -10,15 +10,15 @@
 #import "ApptentiveMessageSender.h"
 #import "ApptentiveAttachment.h"
 
-static NSString * const IdentifierKey = @"identifier";
-static NSString * const LocalIdentifierKey = @"localIdentifier";
-static NSString * const SentDateKey = @"sentDate";
-static NSString * const AttachmentsKey = @"attachments";
-static NSString * const SenderKey = @"sender";
-static NSString * const BodyKey = @"body";
-static NSString * const StateKey = @"state";
-static NSString * const AutomatedKey = @"automated";
-static NSString * const CustomDataKey = @"customData";
+static NSString *const IdentifierKey = @"identifier";
+static NSString *const LocalIdentifierKey = @"localIdentifier";
+static NSString *const SentDateKey = @"sentDate";
+static NSString *const AttachmentsKey = @"attachments";
+static NSString *const SenderKey = @"sender";
+static NSString *const BodyKey = @"body";
+static NSString *const StateKey = @"state";
+static NSString *const AutomatedKey = @"automated";
+static NSString *const CustomDataKey = @"customData";
 
 
 @implementation ApptentiveMessage
@@ -90,8 +90,7 @@ static NSString * const CustomDataKey = @"customData";
 	return self;
 }
 
-- (instancetype)initWithCoder:(NSCoder *)coder
-{
+- (instancetype)initWithCoder:(NSCoder *)coder {
 	self = [super init];
 	if (self) {
 		_identifier = [coder decodeObjectOfClass:[NSString class] forKey:IdentifierKey];
@@ -107,8 +106,7 @@ static NSString * const CustomDataKey = @"customData";
 	return self;
 }
 
-- (void)encodeWithCoder:(NSCoder *)coder
-{
+- (void)encodeWithCoder:(NSCoder *)coder {
 	[coder encodeObject:self.identifier forKey:IdentifierKey];
 	[coder encodeObject:self.localIdentifier forKey:LocalIdentifierKey];
 	[coder encodeObject:self.sentDate forKey:SentDateKey];
@@ -132,6 +130,7 @@ static NSString * const CustomDataKey = @"customData";
 }
 
 @end
+
 
 @implementation ApptentiveMessage (QuickLook)
 

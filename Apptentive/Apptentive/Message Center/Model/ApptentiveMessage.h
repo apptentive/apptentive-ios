@@ -24,6 +24,7 @@ typedef NS_ENUM(NSInteger, ApptentiveMessageState) {
 	ApptentiveMessageStateHidden
 };
 
+
 @interface ApptentiveMessage : NSObject <NSSecureCoding>
 
 @property (readonly, nonatomic) NSString *identifier;
@@ -43,6 +44,7 @@ typedef NS_ENUM(NSInteger, ApptentiveMessageState) {
 - (void)updateWithLocalIdentifier:(NSString *)localIdentifier;
 
 @end
+
 
 @interface ApptentiveMessage (QuickLook) <QLPreviewControllerDataSource>
 @end

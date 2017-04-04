@@ -10,6 +10,7 @@
 #import <UIKit/UIKit.h>
 #import <QuickLook/QuickLook.h>
 
+
 @interface ApptentiveAttachment : NSObject <NSSecureCoding>
 
 @property (readonly, nonatomic) NSString *fileName;
@@ -36,6 +37,7 @@
 - (void)completeMoveToStorageFor:(NSURL *)storageLocation;
 
 @end
+
 
 @interface ApptentiveAttachment (QuickLook) <QLPreviewItem>
 @end

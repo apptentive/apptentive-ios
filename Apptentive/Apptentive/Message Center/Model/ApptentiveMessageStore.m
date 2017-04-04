@@ -8,9 +8,9 @@
 
 #import "ApptentiveMessageStore.h"
 
-static NSString * const MessagesKey = @"messages";
-static NSString * const LastMessageIdentifierKey = @"lastMessageIdentifier";
-static NSString * const ArchiveVersionKey = @"archiveVersion";
+static NSString *const MessagesKey = @"messages";
+static NSString *const LastMessageIdentifierKey = @"lastMessageIdentifier";
+static NSString *const ArchiveVersionKey = @"archiveVersion";
 
 
 @implementation ApptentiveMessageStore
@@ -19,8 +19,7 @@ static NSString * const ArchiveVersionKey = @"archiveVersion";
 	return YES;
 }
 
-- (instancetype)init
-{
+- (instancetype)init {
 	self = [super init];
 	if (self) {
 		_messages = [NSMutableArray array];
@@ -28,8 +27,7 @@ static NSString * const ArchiveVersionKey = @"archiveVersion";
 	return self;
 }
 
-- (instancetype)initWithCoder:(NSCoder *)coder
-{
+- (instancetype)initWithCoder:(NSCoder *)coder {
 	self = [super init];
 	if (self) {
 		_messages = [coder decodeObjectOfClass:[NSMutableArray class] forKey:MessagesKey];
@@ -38,8 +36,7 @@ static NSString * const ArchiveVersionKey = @"archiveVersion";
 	return self;
 }
 
-- (void)encodeWithCoder:(NSCoder *)coder
-{
+- (void)encodeWithCoder:(NSCoder *)coder {
 	[coder encodeObject:self.messages forKey:MessagesKey];
 	[coder encodeObject:self.lastMessageIdentifier forKey:LastMessageIdentifierKey];
 	[coder encodeObject:@1 forKey:ArchiveVersionKey];

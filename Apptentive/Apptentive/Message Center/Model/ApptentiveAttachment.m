@@ -16,11 +16,11 @@
 #import "ApptentiveBackend.h"
 
 
-static NSString * const FileNameKey = @"fileName";
-static NSString * const ContentTypeKey = @"contentType";
-static NSString * const NameKey = @"name";
-static NSString * const SizeKey = @"size";
-static NSString * const RemoteURLKey = @"remoteURL";
+static NSString *const FileNameKey = @"fileName";
+static NSString *const ContentTypeKey = @"contentType";
+static NSString *const NameKey = @"name";
+static NSString *const SizeKey = @"size";
+static NSString *const RemoteURLKey = @"remoteURL";
 
 
 @implementation ApptentiveAttachment
@@ -87,8 +87,7 @@ static NSString * const RemoteURLKey = @"remoteURL";
 	return self;
 }
 
-- (instancetype)initWithCoder:(NSCoder *)coder
-{
+- (instancetype)initWithCoder:(NSCoder *)coder {
 	self = [super init];
 	if (self) {
 		_fileName = [coder decodeObjectOfClass:[NSString class] forKey:FileNameKey];
@@ -100,8 +99,7 @@ static NSString * const RemoteURLKey = @"remoteURL";
 	return self;
 }
 
-- (void)encodeWithCoder:(NSCoder *)coder
-{
+- (void)encodeWithCoder:(NSCoder *)coder {
 	[coder encodeObject:self.fileName forKey:FileNameKey];
 	[coder encodeObject:self.contentType forKey:ContentTypeKey];
 	[coder encodeObject:self.name forKey:NameKey];
@@ -182,12 +180,12 @@ static NSString * const RemoteURLKey = @"remoteURL";
 - (UIImage *)createThumbnailOfSize:(CGSize)size {
 	CGImageSourceRef src = CGImageSourceCreateWithURL((__bridge CFURLRef)[NSURL fileURLWithPath:self.fullLocalPath], NULL);
 	CFDictionaryRef options = (__bridge CFDictionaryRef) @{
-														   (id)kCGImageSourceCreateThumbnailWithTransform: @YES,
-														   (id)
-														   kCGImageSourceCreateThumbnailFromImageAlways: @YES,
-														   (id)
-														   kCGImageSourceThumbnailMaxPixelSize: @(fmax(size.width, size.height))
-														   };
+		(id)kCGImageSourceCreateThumbnailWithTransform: @YES,
+		(id)
+		kCGImageSourceCreateThumbnailFromImageAlways: @YES,
+		(id)
+		kCGImageSourceThumbnailMaxPixelSize: @(fmax(size.width, size.height))
+	};
 	CGImageRef thumbnail = CGImageSourceCreateThumbnailAtIndex(src, 0, options);
 	CFRelease(src);
 
@@ -271,6 +269,7 @@ static NSString * const RemoteURLKey = @"remoteURL";
 }
 
 @end
+
 
 @implementation ApptentiveAttachment (QuickLook)
 

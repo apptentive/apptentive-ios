@@ -15,7 +15,8 @@
 #import "Apptentive_Private.h"
 #import "ApptentiveBackend.h"
 
-static NSString * const MessageStoreFileName = @"MessageStore.archive";
+static NSString *const MessageStoreFileName = @"MessageStore.archive";
+
 
 @interface ApptentiveMessageManager ()
 
@@ -29,9 +30,10 @@ static NSString * const MessageStoreFileName = @"MessageStore.archive";
 
 @end
 
+
 @implementation ApptentiveMessageManager
 
-- (instancetype)initWithStoragePath:(NSString *)storagePath networkQueue:(ApptentiveNetworkQueue *)networkQueue pollingInterval:(NSTimeInterval)pollingInterval localUserIdentifier:(NSString *)localUserIdentifier  {
+- (instancetype)initWithStoragePath:(NSString *)storagePath networkQueue:(ApptentiveNetworkQueue *)networkQueue pollingInterval:(NSTimeInterval)pollingInterval localUserIdentifier:(NSString *)localUserIdentifier {
 	self = [super init];
 
 	if (self) {
@@ -130,7 +132,7 @@ static NSString * const MessageStoreFileName = @"MessageStore.archive";
 
 				if (!sentByLocalUser) {
 					message.state = ApptentiveMessageStateUnread;
-					unreadCount ++;
+					unreadCount++;
 				} // else state defaults to sent
 			}
 
@@ -208,10 +210,10 @@ static NSString * const MessageStoreFileName = @"MessageStore.archive";
 - (void)setPollingInterval:(NSTimeInterval)pollingInterval {
 	if (_pollingInterval != pollingInterval) {
 		[self stopPolling];
-	
+
 		_pollingInterval = pollingInterval;
 
-		self.messageFetchTimer = [NSTimer timerWithTimeInterval:pollingInterval	target:self selector:@selector(checkForMessages) userInfo:nil repeats:YES];
+		self.messageFetchTimer = [NSTimer timerWithTimeInterval:pollingInterval target:self selector:@selector(checkForMessages) userInfo:nil repeats:YES];
 		[[NSRunLoop mainRunLoop] addTimer:self.messageFetchTimer forMode:NSDefaultRunLoopMode];
 	}
 }
@@ -220,7 +222,7 @@ static NSString * const MessageStoreFileName = @"MessageStore.archive";
 
 - (void)sendMessage:(ApptentiveMessage *)message {
 	[self enqueueMessageForSending:message];
-	
+
 	[self appendMessage:message];
 }
 

@@ -11,6 +11,7 @@
 #import "ApptentiveMessageSender.h"
 #import "ApptentiveNetworkQueue.h"
 #import "ApptentiveSerialRequest+Record.h"
+#import "ApptentiveMessageStore.h"
 
 #import "ApptentiveLegacyMessage.h"
 #import "Apptentive_Private.h"
@@ -20,12 +21,17 @@
 #import "ApptentivePerson.h"
 #import "ApptentiveLegacyFileAttachment.h"
 
+static NSString * const MessageStoreFileName = @"MessageStore.archive";
+
 @interface ApptentiveMessageManager ()
 
 @property (strong, nonatomic) ApptentiveRequestOperation *messageOperation;
 @property (strong, nonatomic) NSTimer *messageFetchTimer;
 @property (strong, nonatomic) NSDictionary *currentCustomData;
 @property (strong, nonatomic) NSDictionary *messageIdentifierIndex;
+@property (readonly, nonatomic) ApptentiveMessageStore *messageStore;
+
+@property (readonly, nonatomic) NSString *messageStorePath;
 
 @end
 
@@ -38,8 +44,7 @@
 		_storagePath = storagePath;
 		_networkQueue = networkQueue;
 
-		// TODO: Load previous messages from disk
-		// TODO: Index previous messages in messageIdentifierIndex
+		_messageStore = [NSKeyedUnarchiver unarchiveObjectWithFile:self.messageStorePath] ?: [[ApptentiveMessageStore alloc] init];
 
 		// Use setter to initialize timer
 		self.pollingInterval = pollingInterval;
@@ -66,6 +71,18 @@
 
 - (NSInteger)numberOfMessages {
 	return self.messages.count;
+}
+
+- (NSArray<ApptentiveMessage *> *)messages {
+	return self.messageStore.messages;
+}
+
+- (NSString *)messageStorePath {
+	return [self.storagePath stringByAppendingPathComponent:MessageStoreFileName];
+}
+
+- (BOOL)save {
+	return [NSKeyedArchiver archiveRootObject:self.messageStore toFile:self.messageStorePath];
 }
 
 #pragma mark Request Operation Delegate
@@ -130,7 +147,9 @@
 	dispatch_sync(dispatch_get_main_queue(), ^{
 		[self.delegate messageManagerWillBeginUpdates:self];
 
-		_messages = [mutableMessages copy];
+		[self.messageStore.messages removeAllObjects];
+		[self.messageStore.messages addObjectsFromArray:mutableMessages];
+
 		_messageIdentifierIndex = [mutableMessageIdentifierIndex copy];
 
 		for (ApptentiveMessage *newMessage in addedMessages) {
@@ -139,6 +158,8 @@
 
 		[self.delegate messageManagerDidEndUpdates:self];
 	});
+
+	[self save];
 
 	if (_unreadCount != unreadCount) {
 		_unreadCount = unreadCount;
@@ -209,7 +230,7 @@
 #pragma mark - Private
 
 - (void)appendMessage:(ApptentiveMessage *)message {
-	_messages = [self.messages arrayByAddingObject:message];
+	[self.messageStore.messages addObject:message];
 
 	NSMutableDictionary *mutableMessageIdentifierIndex = [self.messageIdentifierIndex mutableCopy];
 	[mutableMessageIdentifierIndex setObject:message forKey:message.localIdentifier];
@@ -218,6 +239,8 @@
 	dispatch_async(dispatch_get_main_queue(), ^{
 		[self.delegate messageManager:self didInsertMessage:message atIndex:self.messages.count - 1];
 	});
+
+	[self save];
 }
 
 @end

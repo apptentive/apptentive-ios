@@ -8,8 +8,9 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import <QuickLook/QuickLook.h>
 
-@interface ApptentiveAttachment : NSObject
+@interface ApptentiveAttachment : NSObject <NSSecureCoding>
 
 @property (readonly, nonatomic) NSString *fileName;
 @property (readonly, nonatomic) NSString *contentType;

@@ -10,7 +10,22 @@
 #import "ApptentiveMessageSender.h"
 #import "ApptentiveAttachment.h"
 
+static NSString * const IdentifierKey = @"identifier";
+static NSString * const LocalIdentifierKey = @"localIdentifier";
+static NSString * const SentDateKey = @"sentDate";
+static NSString * const AttachmentsKey = @"attachments";
+static NSString * const SenderKey = @"sender";
+static NSString * const BodyKey = @"body";
+static NSString * const StateKey = @"state";
+static NSString * const AutomatedKey = @"automated";
+static NSString * const CustomDataKey = @"customData";
+
+
 @implementation ApptentiveMessage
+
++ (BOOL)supportsSecureCoding {
+	return YES;
+}
 
 - (instancetype)initWithJSON:(NSDictionary *)JSON {
 	self = [super init];
@@ -73,6 +88,36 @@
 	}
 
 	return self;
+}
+
+- (instancetype)initWithCoder:(NSCoder *)coder
+{
+	self = [super init];
+	if (self) {
+		_identifier = [coder decodeObjectOfClass:[NSString class] forKey:IdentifierKey];
+		_localIdentifier = [coder decodeObjectOfClass:[NSString class] forKey:LocalIdentifierKey];
+		_sentDate = [coder decodeObjectOfClass:[NSDate class] forKey:SentDateKey];
+		_attachments = [coder decodeObjectOfClass:[ApptentiveAttachment class] forKey:AttachmentsKey];
+		_sender = [coder decodeObjectOfClass:[ApptentiveMessageSender class] forKey:SenderKey];
+		_body = [coder decodeObjectOfClass:[NSString class] forKey:BodyKey];
+		_state = [coder decodeIntegerForKey:StateKey];
+		_automated = [coder decodeBoolForKey:AutomatedKey];
+		_customData = [coder decodeObjectOfClass:[NSDictionary class] forKey:CustomDataKey];
+	}
+	return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)coder
+{
+	[coder encodeObject:self.identifier forKey:IdentifierKey];
+	[coder encodeObject:self.localIdentifier forKey:LocalIdentifierKey];
+	[coder encodeObject:self.sentDate forKey:SentDateKey];
+	[coder encodeObject:self.attachments forKey:AttachmentsKey];
+	[coder encodeObject:self.sender forKey:SenderKey];
+	[coder encodeObject:self.body forKey:BodyKey];
+	[coder encodeInteger:self.state forKey:StateKey];
+	[coder encodeBool:self.automated forKey:AutomatedKey];
+	[coder encodeObject:self.customData forKey:CustomDataKey];
 }
 
 - (ApptentiveMessage *)mergedWith:(ApptentiveMessage *)messageFromServer {

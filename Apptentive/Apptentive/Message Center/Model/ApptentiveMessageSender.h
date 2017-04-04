@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface ApptentiveMessageSender : NSObject
+@interface ApptentiveMessageSender : NSObject <NSSecureCoding>
 
 @property (readonly, nonatomic) NSString *name;
 @property (readonly, nonatomic) NSString *identifier;

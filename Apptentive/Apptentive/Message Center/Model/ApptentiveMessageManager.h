@@ -10,10 +10,9 @@
 #import "ApptentiveRequestOperation.h"
 #import "ApptentiveMessage.h"
 
-@class ApptentiveNetworkQueue;
+@class ApptentiveNetworkQueue, ApptentiveMessageStore;
 @protocol ApptentiveMessageManagerDelegate;
 
-@class ApptentiveLegacyMessage;
 
 @interface ApptentiveMessageManager : NSObject <ApptentiveRequestOperationDelegate>
 
@@ -31,6 +30,8 @@
 
 - (void)checkForMessages;
 - (void)stopPolling;
+
+- (BOOL)save;
 
 - (NSInteger)numberOfMessages;
 

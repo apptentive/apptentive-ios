@@ -8,6 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
-@interface ApptentiveMessageStore : NSObject
+@interface ApptentiveMessageStore : NSObject <NSSecureCoding>
+
+@property (readonly, strong, nonatomic) NSMutableArray *messages;
+@property (strong, nonatomic) NSString *lastMessageIdentifier;
 
 @end

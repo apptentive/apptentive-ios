@@ -8,7 +8,16 @@
 
 #import "ApptentiveMessageSender.h"
 
+static NSString * const NameKey = @"name";
+static NSString * const IdentifierKey = @"identifier";
+static NSString * const ProfilePhotoURLKey = @"profilePhotoURL";
+
+
 @implementation ApptentiveMessageSender
+
++ (BOOL)supportsSecureCoding {
+	return YES;
+}
 
 - (instancetype)initWithJSON:(NSDictionary *)JSON {
 	self = [super init];
@@ -40,6 +49,24 @@
 	}
 
 	return self;
+}
+
+- (instancetype)initWithCoder:(NSCoder *)coder
+{
+	self = [super init];
+	if (self) {
+		_name = [coder decodeObjectOfClass:[NSString class] forKey:NameKey];
+		_identifier = [coder decodeObjectOfClass:[NSString class] forKey:IdentifierKey];
+		_profilePhotoURL = [coder decodeObjectOfClass:[NSURL class] forKey:ProfilePhotoURLKey];
+	}
+	return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)coder
+{
+	[coder encodeObject:self.name forKey:NameKey];
+	[coder encodeObject:self.identifier forKey:IdentifierKey];
+	[coder encodeObject:self.profilePhotoURL forKey:ProfilePhotoURLKey];
 }
 
 @end

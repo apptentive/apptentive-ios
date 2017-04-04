@@ -24,7 +24,7 @@ typedef NS_ENUM(NSInteger, ApptentiveMessageState) {
 	ApptentiveMessageStateHidden
 };
 
-@interface ApptentiveMessage : NSObject
+@interface ApptentiveMessage : NSObject <NSSecureCoding>
 
 @property (readonly, nonatomic) NSString *identifier;
 @property (readonly, nonatomic) NSString *localIdentifier;

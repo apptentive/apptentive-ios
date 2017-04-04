@@ -15,7 +15,19 @@
 #import "Apptentive_Private.h"
 #import "ApptentiveBackend.h"
 
+
+static NSString * const FileNameKey = @"fileName";
+static NSString * const ContentTypeKey = @"contentType";
+static NSString * const NameKey = @"name";
+static NSString * const SizeKey = @"size";
+static NSString * const RemoteURLKey = @"remoteURL";
+
+
 @implementation ApptentiveAttachment
+
++ (BOOL)supportsSecureCoding {
+	return YES;
+}
 
 - (instancetype)initWithJSON:(NSDictionary *)JSON {
 	self = [super init];
@@ -63,13 +75,38 @@
 	self = [super init];
 
 	if (self) {
-		// TODO: create file from data
-
 		_contentType = contentType;
 		_name = name;
+
+		NSURL *URL = [self permanentLocation];
+		[data writeToURL:URL atomically:YES];
+		_fileName = URL.lastPathComponent;
+		_size = [data length];
 	}
 
 	return self;
+}
+
+- (instancetype)initWithCoder:(NSCoder *)coder
+{
+	self = [super init];
+	if (self) {
+		_fileName = [coder decodeObjectOfClass:[NSString class] forKey:FileNameKey];
+		_contentType = [coder decodeObjectOfClass:[NSString class] forKey:ContentTypeKey];
+		_name = [coder decodeObjectOfClass:[NSString class] forKey:NameKey];
+		_size = [coder decodeIntegerForKey:SizeKey];
+		_remoteURL = [coder decodeObjectOfClass:[NSURL class] forKey:RemoteURLKey];
+	}
+	return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)coder
+{
+	[coder encodeObject:self.fileName forKey:FileNameKey];
+	[coder encodeObject:self.contentType forKey:ContentTypeKey];
+	[coder encodeObject:self.name forKey:NameKey];
+	[coder encodeInteger:self.size forKey:SizeKey];
+	[coder encodeObject:self.remoteURL forKey:RemoteURLKey];
 }
 
 - (NSURL *)permanentLocation {

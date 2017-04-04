@@ -8,7 +8,7 @@
 
 #import <XCTest/XCTest.h>
 #import "ApptentiveDataManager.h"
-#import "ApptentiveMessage.h"
+#import "ApptentiveLegacyMessage.h"
 
 
 @interface ApptentiveMigrationTests : XCTestCase
@@ -53,7 +53,7 @@
 		NSArray *results = [moc executeFetchRequest:request error:nil];
 		XCTAssertTrue([results count] > 0, @"No messages found after database migration.");
 		for (NSManagedObject *c in results) {
-			ApptentiveMessage *message = (ApptentiveMessage *)c;
+			ApptentiveLegacyMessage *message = (ApptentiveLegacyMessage *)c;
 			XCTAssertNotNil(message.hidden, @"Messages should be visible by default after migration.");
 			XCTAssertFalse([(NSNumber *)message.hidden boolValue], @"Messages should be visible by default after migration.");
 		}

@@ -14,6 +14,7 @@
 // TODO: see if we can remove/inject these dependencies
 #import "Apptentive_Private.h"
 #import "ApptentiveBackend.h"
+#import "ApptentiveMessageManager.h"
 
 
 static NSString *const FileNameKey = @"fileName";
@@ -207,7 +208,7 @@ static NSString *const RemoteURLKey = @"remoteURL";
 	if (!filename) {
 		return nil;
 	}
-	return [[Apptentive.shared.backend attachmentDirectoryPath] stringByAppendingPathComponent:filename];
+	return [Apptentive.shared.backend.conversationManager.messageManager.attachmentDirectoryPath stringByAppendingPathComponent:filename];
 }
 
 + (BOOL)canCreateThumbnailForMIMEType:(NSString *)MIMEType {
@@ -249,7 +250,7 @@ static NSString *const RemoteURLKey = @"remoteURL";
 			return;
 		}
 		// Delete any thumbnails.
-		NSArray *filenames = [fm contentsOfDirectoryAtPath:[[Apptentive sharedConnection].backend attachmentDirectoryPath] error:&error];
+		NSArray *filenames = [fm contentsOfDirectoryAtPath:Apptentive.shared.backend.conversationManager.messageManager.attachmentDirectoryPath error:&error];
 		if (!filenames) {
 			ApptentiveLogError(@"Error listing attachments directory: %@", error);
 		} else {

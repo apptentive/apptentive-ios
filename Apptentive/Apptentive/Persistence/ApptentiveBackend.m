@@ -54,7 +54,6 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 @property (strong, nonatomic) ApptentiveDataManager *dataManager;
 
 @property (readonly, nonatomic, getter=isMessageCenterInForeground) BOOL messageCenterInForeground;
-@property (copy, nonatomic) void (^backgroundFetchBlock)(UIBackgroundFetchResult);
 
 @end
 
@@ -193,7 +192,6 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 			[self.serialNetworkQueue resetBackoffDelay];
 
 			[self.conversationManager resume];
-			[self.messageManager checkForMessages];
 
 			[self processQueuedRecords];
 		} else {
@@ -256,7 +254,6 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	_conversationManager = [[ApptentiveConversationManager alloc] initWithStoragePath:_supportDirectoryPath operationQueue:_operationQueue networkQueue:_networkQueue parentManagedObjectContext:self.managedObjectContext];
 	self.conversationManager.delegate = self;
 	
-	_message
 	_imageCache = [[NSURLCache alloc] initWithMemoryCapacity:1 * 1024 * 1024 diskCapacity:10 * 1024 * 1024 diskPath:[self imageCachePath]];
 
 	[self.conversationManager loadActiveConversation];
@@ -291,12 +288,11 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 - (void)finishStartupWithToken:(NSString *)token {
 	self.state = ATBackendStateReady;
 	dispatch_async(dispatch_get_main_queue(), ^{
-		[ApptentiveFileAttachment addMissingExtensions];
+		[ApptentiveLegacyFileAttachment addMissingExtensions];
 	});
 
 	[self networkStatusChanged:nil];
 	[self startMonitoringAppLifecycleMetrics];
-	[self startMonitoringUnreadMessages];
 
 	NSString *legacyTaskPath = [self.supportDirectoryPath stringByAppendingPathComponent:@"tasks.objects"];
 	NSError *error;
@@ -309,7 +305,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	migrationContext.parentContext = self.managedObjectContext;
 
 	[migrationContext performBlockAndWait:^{
-		[ApptentiveMessage enqueueUnsentMessagesInContext:migrationContext];
+		[ApptentiveLegacyMessage enqueueUnsentMessagesInContext:migrationContext];
 		[ApptentiveLegacyEvent enqueueUnsentEventsInContext:migrationContext];
 		[ApptentiveLegacySurveyResponse enqueueUnsentSurveyResponsesInContext:migrationContext];
 
@@ -426,18 +422,18 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 #pragma mark Message Polling
 
 - (NSUInteger)unreadMessageCount {
-	return self.messageManager.unreadCount;
+	return self.conversationManager.messageManager.unreadCount;
 }
 
 - (void)updateMessageCheckingTimer {
 	if (self.working) {
 		if (self.messageCenterInForeground) {
-			self.messageManager.pollingInterval = self.configuration.messageCenter.foregroundPollingInterval;
+			self.conversationManager.messageManager.pollingInterval = self.configuration.messageCenter.foregroundPollingInterval;
 		} else {
-			self.messageManager.pollingInterval = self.configuration.messageCenter.backgroundPollingInterval;
+			self.conversationManager.messageManager.pollingInterval = self.configuration.messageCenter.backgroundPollingInterval;
 		}
 	} else {
-		[self.messageManager stopPolling];
+		[self.conversationManager.messageManager stopPolling];
 	}
 }
 
@@ -445,7 +441,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	@synchronized(self) {
 		_messageCenterInForeground = YES;
 
-		[self.messageManager checkForMessages];
+		[self.conversationManager.messageManager checkForMessages];
 
 		[self updateMessageCheckingTimer];
 	}
@@ -463,30 +459,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	}
 }
 
-- (void)fetchMessagesInBackground:(void (^)(UIBackgroundFetchResult))completionHandler {
-	self.backgroundFetchBlock = completionHandler;
-
-	[self.messageManager checkForMessages];
-}
-
-- (void)completeMessageFetchWithResult:(UIBackgroundFetchResult)fetchResult {
-	if (self.backgroundFetchBlock) {
-		self.backgroundFetchBlock(fetchResult);
-	}
-}
-
 #pragma mark - Conversation manager delegate
-
-#warning make this work!
-- (void)conversationManagerMessageFetchCompleted:(BOOL)success {
-	UIBackgroundFetchResult fetchResult = success ? UIBackgroundFetchResultNewData : UIBackgroundFetchResultFailed;
-
-	if (self.backgroundFetchBlock) {
-		self.backgroundFetchBlock(fetchResult);
-
-		self.backgroundFetchBlock = nil;
-	}
-}
 
 - (void)conversationManager:(ApptentiveConversationManager *)manager conversationDidChangeState:(ApptentiveConversation *)conversation {
 	// Anonymous pending conversations will not yet have a token, so we can't finish starting up yet in that case. 
@@ -519,21 +492,21 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 
 #pragma mark - Paths
 
-- (NSString *)attachmentDirectoryPath {
-	if (!self.supportDirectoryPath) {
-		return nil;
-	}
-	NSString *newPath = [self.supportDirectoryPath stringByAppendingPathComponent:@"attachments"];
-	NSFileManager *fm = [NSFileManager defaultManager];
-	NSError *error = nil;
-	BOOL result = [fm createDirectoryAtPath:newPath withIntermediateDirectories:YES attributes:nil error:&error];
-	if (!result) {
-		ApptentiveLogError(@"Failed to create attachments directory: %@", newPath);
-		ApptentiveLogError(@"Error was: %@", error);
-		return nil;
-	}
-	return newPath;
-}
+//- (NSString *)attachmentDirectoryPath {
+//	if (!self.supportDirectoryPath) {
+//		return nil;
+//	}
+//	NSString *newPath = [self.supportDirectoryPath stringByAppendingPathComponent:@"attachments"];
+//	NSFileManager *fm = [NSFileManager defaultManager];
+//	NSError *error = nil;
+//	BOOL result = [fm createDirectoryAtPath:newPath withIntermediateDirectories:YES attributes:nil error:&error];
+//	if (!result) {
+//		ApptentiveLogError(@"Failed to create attachments directory: %@", newPath);
+//		ApptentiveLogError(@"Error was: %@", error);
+//		return nil;
+//	}
+//	return newPath;
+//}
 
 - (NSString *)cacheDirectoryPath {
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);

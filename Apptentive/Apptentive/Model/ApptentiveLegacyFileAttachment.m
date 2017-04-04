@@ -10,6 +10,7 @@
 #import "ApptentiveBackend.h"
 #import "ApptentiveData.h"
 #import "Apptentive_Private.h"
+#import "ApptentiveMessageManager.h"
 #import <MobileCoreServices/MobileCoreServices.h>
 
 
@@ -69,7 +70,7 @@
 	if (!filename) {
 		return nil;
 	}
-	return [[[Apptentive sharedConnection].backend attachmentDirectoryPath] stringByAppendingPathComponent:filename];
+	return [[[Apptentive sharedConnection].backend.conversationManager.messageManager attachmentDirectoryPath] stringByAppendingPathComponent:filename];
 }
 
 @end

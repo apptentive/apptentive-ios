@@ -46,8 +46,6 @@
 
 @property (readonly, nonatomic) NSURLCache *imageCache;
 
-@property (strong, nonatomic) ApptentiveMessageManager *messageManager;
-
 @property (copy, nonatomic) NSDictionary *currentCustomData;
 
 /**
@@ -81,7 +79,7 @@
 
 - (void)dismissMessageCenterAnimated:(BOOL)animated completion:(void (^)(void))completion;
 
-- (NSString *)attachmentDirectoryPath;
+//- (NSString *)attachmentDirectoryPath;
 
 - (NSUInteger)unreadMessageCount;
 
@@ -89,8 +87,6 @@
 - (void)messageCenterLeftForeground;
 
 - (BOOL)isReady;
-
-- (void)fetchMessagesInBackground:(void (^)(UIBackgroundFetchResult))completionHandler;
 
 - (void)resetBackend;
 

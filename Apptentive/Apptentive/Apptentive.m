@@ -137,25 +137,25 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 }
 
 - (void)sendAttachmentText:(NSString *)text {
-	ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:text attachments:nil senderIdentifier:self.backend.messageManager.localUserIdentifier automated:NO customData:nil];
+	ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:text attachments:nil senderIdentifier:self.backend.conversationManager.messageManager.localUserIdentifier automated:NO customData:nil];
 
-	[self.backend.messageManager enqueueMessageForSending:message];
+	[self.backend.conversationManager.messageManager enqueueMessageForSending:message];
 }
 
 - (void)sendAttachmentImage:(UIImage *)image {
 	ApptentiveAttachment *attachment = [[ApptentiveAttachment alloc] initWithData:UIImageJPEGRepresentation(image, 0.95) contentType:@"image/jpeg" name:nil];
 
-	ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:nil attachments:@[attachment] senderIdentifier:self.backend.messageManager.localUserIdentifier automated:NO customData:nil];
+	ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:nil attachments:@[attachment] senderIdentifier:self.backend.conversationManager.messageManager.localUserIdentifier automated:NO customData:nil];
 
-	[self.backend.messageManager enqueueMessageForSending:message];
+	[self.backend.conversationManager.messageManager enqueueMessageForSending:message];
 }
 
 - (void)sendAttachmentFile:(NSData *)fileData withMimeType:(NSString *)mimeType {
 	ApptentiveAttachment *attachment = [[ApptentiveAttachment alloc] initWithData:fileData contentType:mimeType name:nil];
 
-	ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:nil attachments:@[attachment] senderIdentifier:self.backend.messageManager.localUserIdentifier automated:NO customData:nil];
+	ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:nil attachments:@[attachment] senderIdentifier:self.backend.conversationManager.messageManager.localUserIdentifier automated:NO customData:nil];
 
-	[self.backend.messageManager enqueueMessageForSending:message];
+	[self.backend.conversationManager.messageManager enqueueMessageForSending:message];
 }
 
 - (void)addCustomDeviceDataString:(NSString *)string withKey:(NSString *)key {
@@ -461,7 +461,7 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 				NSNumber *contentAvailable = userInfo[@"aps"][@"content-available"];
 				if (contentAvailable.boolValue) {
 					shouldCallCompletionHandler = NO;
-					[self.backend fetchMessagesInBackground:completionHandler];
+					[self.backend.conversationManager.messageManager checkForMessagesInBackground:completionHandler];
 				}
 				break;
 			}
@@ -478,7 +478,7 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 				if ([action isEqualToString:@"pmc"]) {
 					[self presentMessageCenterFromViewController:viewController];
 				} else {
-					[self.backend.messageManager checkForMessages];
+					[self.backend.conversationManager.messageManager checkForMessages];
 				}
 				break;
 		}

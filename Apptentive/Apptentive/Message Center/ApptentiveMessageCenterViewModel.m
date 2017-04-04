@@ -325,7 +325,7 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 }
 
 - (BOOL)messageSentByLocalUser:(ApptentiveMessage *)message {
-	return [message.sender.identifier isEqualToString:Apptentive.shared.backend.session.person.identifier];
+	return [message.sender.identifier isEqualToString:self.messageManager.localUserIdentifier];
 }
 
 - (void)markAsReadMessageAtIndexPath:(NSIndexPath *)indexPath {

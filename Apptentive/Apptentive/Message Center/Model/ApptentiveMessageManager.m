@@ -15,7 +15,7 @@
 #import "Apptentive_Private.h"
 #import "ApptentiveBackend.h"
 
-static NSString *const MessageStoreFileName = @"MessageStore.archive";
+static NSString *const MessageStoreFileName = @"messages-v1.archive";
 
 
 @interface ApptentiveMessageManager ()
@@ -27,6 +27,7 @@ static NSString *const MessageStoreFileName = @"MessageStore.archive";
 @property (readonly, nonatomic) ApptentiveMessageStore *messageStore;
 
 @property (readonly, nonatomic) NSString *messageStorePath;
+@property (copy, nonatomic) void (^backgroundFetchBlock)(UIBackgroundFetchResult);
 
 @end
 
@@ -41,9 +42,16 @@ static NSString *const MessageStoreFileName = @"MessageStore.archive";
 		_networkQueue = networkQueue;
 		_localUserIdentifier = localUserIdentifier;
 
-
 		_messageIdentifierIndex = [NSMutableDictionary dictionary];
 		_messageStore = [NSKeyedUnarchiver unarchiveObjectWithFile:self.messageStorePath] ?: [[ApptentiveMessageStore alloc] init];
+
+		[self updateUnreadCount];
+
+		NSError *error;
+		if (![[NSFileManager defaultManager] createDirectoryAtPath:self.attachmentDirectoryPath withIntermediateDirectories:YES attributes:nil error:&error]) {
+			ApptentiveAssertTrue(NO, @"Unable to create attachments directory “%@” (%@)", self.attachmentDirectoryPath, error);
+			return nil;
+		}
 
 		for (ApptentiveMessage *message in _messageStore.messages) {
 			_messageIdentifierIndex[message.localIdentifier] = message;
@@ -71,6 +79,12 @@ static NSString *const MessageStoreFileName = @"MessageStore.archive";
 	[self.networkQueue addOperation:self.messageOperation];
 }
 
+- (void)checkForMessagesInBackground:(void (^)(UIBackgroundFetchResult))completionHandler {
+	self.backgroundFetchBlock = completionHandler;
+
+	[self checkForMessages];
+}
+
 - (NSInteger)numberOfMessages {
 	return self.messages.count;
 }
@@ -85,6 +99,10 @@ static NSString *const MessageStoreFileName = @"MessageStore.archive";
 
 - (BOOL)saveMessageStore {
 	return [NSKeyedArchiver archiveRootObject:self.messageStore toFile:self.messageStorePath];
+}
+
+- (NSString *)attachmentDirectoryPath {
+	return [self.storagePath stringByAppendingPathComponent:@"Attachments"];
 }
 
 #pragma mark Request Operation Delegate
@@ -102,7 +120,6 @@ static NSString *const MessageStoreFileName = @"MessageStore.archive";
 	NSMutableDictionary *mutableMessageIdentifierIndex = [NSMutableDictionary dictionaryWithCapacity:messageListJSON.count];
 	NSMutableArray *addedMessages = [NSMutableArray array];
 	NSMutableArray *updatedMessages = [NSMutableArray array];
-	NSInteger unreadCount = 0;
 	NSString *lastDownloadedMessageIdentifier;
 
 	// Correlate messages from server with local messages
@@ -132,7 +149,6 @@ static NSString *const MessageStoreFileName = @"MessageStore.archive";
 
 				if (!sentByLocalUser) {
 					message.state = ApptentiveMessageStateUnread;
-					unreadCount++;
 				} // else state defaults to sent
 			}
 
@@ -177,12 +193,11 @@ static NSString *const MessageStoreFileName = @"MessageStore.archive";
 
 		self.messageStore.lastMessageIdentifier = lastDownloadedMessageIdentifier;
 		[self saveMessageStore];
-	}
 
-	if (_unreadCount != unreadCount) {
-		_unreadCount = unreadCount;
-
-		[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveMessageCenterUnreadCountChangedNotification object:self userInfo:@{ @"count": @(unreadCount) }];
+		[self messageFetchCompleted:YES];
+		[self updateUnreadCount];
+	} else {
+		[self messageFetchCompleted:NO];
 	}
 }
 
@@ -229,7 +244,7 @@ static NSString *const MessageStoreFileName = @"MessageStore.archive";
 - (void)enqueueMessageForSending:(ApptentiveMessage *)message {
 	NSString *previousLocalIdentifier = message.localIdentifier;
 
-	[ApptentiveSerialRequest enqueueMessage:message inContext:Apptentive.shared.backend.managedObjectContext];
+	[ApptentiveSerialRequest enqueueMessage:message conversation:Apptentive.shared.backend.conversationManager.activeConversation inContext:Apptentive.shared.backend.managedObjectContext];
 
 	[Apptentive.shared.backend processQueuedRecords];
 
@@ -287,6 +302,22 @@ static NSString *const MessageStoreFileName = @"MessageStore.archive";
 	[self saveMessageStore];
 }
 
+#pragma mark - Private
+
+- (void)updateUnreadCount {
+	NSInteger unreadCount = 0;
+	for (ApptentiveMessage *message in self.messages) {
+		if (message.state == ApptentiveMessageStateUnread) {
+			unreadCount ++;
+		}
+	}
+
+	if (_unreadCount != unreadCount) {
+		_unreadCount = unreadCount;
+
+		[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveMessageCenterUnreadCountChangedNotification object:self userInfo:@{ @"count": @(unreadCount) }];
+	}
+}
 
 /**
  Executes a block synchronously if on main thread, asynchronously otherwise.
@@ -300,6 +331,16 @@ static NSString *const MessageStoreFileName = @"MessageStore.archive";
 		block();
 	} else {
 		dispatch_async(dispatch_get_main_queue(), block);
+	}
+}
+
+- (void)messageFetchCompleted:(BOOL)success {
+	UIBackgroundFetchResult fetchResult = success ? UIBackgroundFetchResultNewData : UIBackgroundFetchResultFailed;
+
+	if (self.backgroundFetchBlock) {
+		self.backgroundFetchBlock(fetchResult);
+
+		self.backgroundFetchBlock = nil;
 	}
 }
 

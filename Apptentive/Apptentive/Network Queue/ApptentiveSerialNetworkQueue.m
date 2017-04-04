@@ -200,7 +200,7 @@
 }
 
 - (void)updateMessageStatusForOperation:(ApptentiveRequestOperation *)operation {
-	ApptentiveMessageManager *manager = Apptentive.shared.backend.messageManager;
+	ApptentiveMessageManager *manager = Apptentive.shared.backend.conversationManager.messageManager;
 
 	for (NSOperation *op in self.operations) {
 		if ([op isKindOfClass:[ApptentiveMessageRequestOperation class]]) {

@@ -19,7 +19,7 @@
 @property (readonly, nonatomic) NSString *storagePath;
 @property (readonly, nonatomic) ApptentiveNetworkQueue *networkQueue;
 @property (assign, nonatomic) NSTimeInterval pollingInterval;
-@property (readonly, nonatomic) NSString *localUserIdentifier;
+@property (copy, nonatomic) NSString *localUserIdentifier;
 
 @property (readonly, nonatomic) NSInteger unreadCount;
 @property (readonly, nonatomic) NSArray<ApptentiveMessage *> *messages;
@@ -29,6 +29,9 @@
 - (instancetype)initWithStoragePath:(NSString *)storagePath networkQueue:(ApptentiveNetworkQueue *)networkQueue pollingInterval:(NSTimeInterval)pollingInterval localUserIdentifier:(NSString *)localUserIdentifier;
 
 - (void)checkForMessages;
+
+- (void)checkForMessagesInBackground:(void (^)(UIBackgroundFetchResult))completionHandler;
+
 - (void)stopPolling;
 
 - (BOOL)saveMessageStore;
@@ -42,6 +45,9 @@
 - (void)removeMessage:(ApptentiveMessage *)message;
 
 - (void)setState:(ApptentiveMessageState)state forMessageWithLocalIdentifier:(NSString *)localIdentifier;
+
+@property (readonly, nonatomic) NSString *attachmentDirectoryPath;
+
 @end
 
 @protocol ApptentiveMessageManagerDelegate <NSObject>

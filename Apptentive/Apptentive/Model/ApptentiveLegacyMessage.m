@@ -7,12 +7,9 @@
 //
 
 #import "ApptentiveLegacyMessage.h"
-//#import "Apptentive_Private.h"
-//#import "ApptentiveBackend.h"
-//#import "ApptentiveData.h"
-//#import "ApptentiveJSONSerialization.h"
+#import "Apptentive_Private.h"
+#import "ApptentiveBackend.h"
 #import "ApptentiveLegacyMessageSender.h"
-//#import "NSDictionary+Apptentive.h"
 #import "ApptentiveLegacyFileAttachment.h"
 #import "ApptentiveSerialRequest+Record.h"
 #import "ApptentiveAttachment.h"
@@ -65,7 +62,7 @@
 
 		ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:legacyMessage.body attachments:attachments senderIdentifier:legacyMessage.sender.apptentiveID automated:legacyMessage.automated.boolValue customData:customData];
 
-		[ApptentiveSerialRequest enqueueMessage:message inContext:context];
+		[ApptentiveSerialRequest enqueueMessage:message conversation:Apptentive.shared.backend.conversationManager.activeConversation inContext:context];
 	}
 }
 

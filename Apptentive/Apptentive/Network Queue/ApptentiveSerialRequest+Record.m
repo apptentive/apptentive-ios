@@ -23,7 +23,7 @@
 	return fullPayload;
 }
 
-+ (void)enqueueRequestWithPath:(NSString *)path containerName:(NSString *)containerName noncePrefix:(NSString *)noncePrefix payload:(NSDictionary *)payload inContext:(NSManagedObjectContext *)context {
++ (void)enqueueRequestWithPath:(NSString *)path containerName:(NSString *)containerName noncePrefix:(NSString *)noncePrefix payload:(NSDictionary *)payload conversation:(ApptentiveConversation *)conversation inContext:(NSManagedObjectContext *)context {
 	NSMutableDictionary *fullPayload = [self boilerplateForRequestWithNoncePrefix:noncePrefix];
 
 	[fullPayload addEntriesFromDictionary:payload];
@@ -78,7 +78,7 @@
 	[self enqueueRequestWithPath:@"events" containerName:@"event" noncePrefix:@"event" payload:payload conversation:conversation inContext:context];
 }
 
-+ (void)enqueueMessage:(ApptentiveMessage *)message inContext:(NSManagedObjectContext *)context {
++ (void)enqueueMessage:(ApptentiveMessage *)message  conversation:(ApptentiveConversation *)conversation inContext:(NSManagedObjectContext *)context {
 	NSMutableDictionary *payload = [NSMutableDictionary dictionary];
 
 	if (message.body) {

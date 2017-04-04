@@ -39,13 +39,11 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 
 @interface ApptentiveBackend ()
 
-@property (readonly, strong, nonatomic) NSOperationQueue *queue;
+@property (readonly, strong, nonatomic) NSOperationQueue *operationQueue;
 @property (readonly, strong, nonatomic) ApptentiveNetworkQueue *networkQueue;
 @property (readonly, strong, nonatomic) ApptentiveSerialNetworkQueue *serialNetworkQueue;
 
-@property (strong, nonatomic) ApptentiveRequestOperation *conversationOperation;
 @property (strong, nonatomic) ApptentiveRequestOperation *configurationOperation;
-@property (strong, nonatomic) ApptentiveRequestOperation *manifestOperation;
 
 @property (assign, nonatomic) ATBackendState state;
 @property (assign, nonatomic) BOOL working;
@@ -69,17 +67,22 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	self = [super init];
 
 	if (self) {
+		_APIKey = APIKey;
+		_baseURL = baseURL;
+		_storagePath = storagePath;
+
 		_state = ATBackendStateStarting;
-		_queue = [[NSOperationQueue alloc] init];
-		_queue.maxConcurrentOperationCount = 1;
+		_operationQueue = [[NSOperationQueue alloc] init];
+		_operationQueue.maxConcurrentOperationCount = 1;
+        _operationQueue.name = @"Apptentive Operation Queue";
 		_supportDirectoryPath = [[ApptentiveUtilities applicationSupportPath] stringByAppendingPathComponent:storagePath];
 
 		if ([UIApplication sharedApplication] != nil && ![UIApplication sharedApplication].isProtectedDataAvailable) {
-			_queue.suspended = YES;
+			_operationQueue.suspended = YES;
 			_state = ATBackendStateWaitingForDataProtectionUnlock;
 
 			[[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationProtectedDataDidBecomeAvailable object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *_Nonnull note) {
-				self.queue.suspended = NO;
+				self.operationQueue.suspended = NO;
 				self.state = ATBackendStateStarting;
 			}];
 		}
@@ -96,128 +99,19 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkStatusChanged:) name:ApptentiveReachabilityStatusChanged object:nil];
 
-		NSBlockOperation *startupOperation = [NSBlockOperation blockOperationWithBlock:^{
-			if (![[NSFileManager defaultManager] fileExistsAtPath:self->_supportDirectoryPath]) {
-				NSError *error;
-				if (![[NSFileManager defaultManager] createDirectoryAtPath:self->_supportDirectoryPath withIntermediateDirectories:YES attributes:nil error:&error]) {
-					ApptentiveLogError(@"Unable to create storage path “%@”: %@", self->_supportDirectoryPath, error);
-				}
-			}
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateMessageCheckingTimer) name:ApptentiveInteractionsDidUpdateNotification object:nil];
 
-			// Session
-			if ([[NSFileManager defaultManager] fileExistsAtPath:[self sessionPath]]) {
-				self->_session = [NSKeyedUnarchiver unarchiveObjectWithFile:[self sessionPath]];
-			} else if ([[NSUserDefaults standardUserDefaults] objectForKey:@"ATEngagementInstallDateKey"]) {
-				self->_session = [[ApptentiveSession alloc] initAndMigrate];
-				if ([self saveSession]) {
-					[ApptentiveSession deleteMigratedData];
-				}
-			} else {
-				self->_session = [[ApptentiveSession alloc] initWithAPIKey:APIKey];
-			}
-
-			self->_session.delegate = self;
-
-			// Configuration
-			if ([[NSFileManager defaultManager] fileExistsAtPath:[self configurationPath]]) {
-				self->_configuration = [NSKeyedUnarchiver unarchiveObjectWithFile:[self configurationPath]];
-			} else if ([[NSUserDefaults standardUserDefaults] objectForKey:@"ATConfigurationSDKVersionKey"]) {
-				self->_configuration = [[ApptentiveAppConfiguration alloc] initWithUserDefaults:[NSUserDefaults standardUserDefaults]];
-				if ([self saveConfiguration]) {
-					[ApptentiveAppConfiguration deleteMigratedData];
-				}
-			} else {
-				self->_configuration = [[ApptentiveAppConfiguration alloc] init];
-			}
-
-			// Interaction Manifest
-			if ([[NSFileManager defaultManager] fileExistsAtPath:[self manifestPath]]) {
-				self->_manifest = [NSKeyedUnarchiver unarchiveObjectWithFile:[self manifestPath]];
-			} else if ([[NSUserDefaults standardUserDefaults] objectForKey:@"ATEngagementInteractionsSDKVersionKey"]) {
-				self->_manifest = [[ApptentiveEngagementManifest alloc] initWithCachePath:[self supportDirectoryPath] userDefaults:[NSUserDefaults standardUserDefaults]];
-				if ([self saveManifest]) {
-					[ApptentiveEngagementManifest deleteMigratedDataFromCachePath:[self supportDirectoryPath]];
-				}
-			} else {
-				self->_manifest = [[ApptentiveEngagementManifest alloc] init];
-			}
-
-			NSString *token = self.session.token ?: self.session.APIKey;
-			self->_networkQueue = [[ApptentiveNetworkQueue alloc] initWithBaseURL:baseURL token:token SDKVersion:self.session.SDK.version.versionString platform:@"iOS"];
-
-			if (self.session.token == nil) {
-				[self createConversation];
-			}
-
-			[self updateConfigurationIfNeeded];
-			[self updateEngagementManifestIfNeeded];
+		[_operationQueue addOperationWithBlock:^{
+			[self createSupportDirectoryIfNeeded];
 
 			dispatch_sync(dispatch_get_main_queue(), ^{
-				ApptentiveLogDebug(@"Setting up data manager");
-				self.dataManager = [[ApptentiveDataManager alloc] initWithModelName:@"ATDataModel" inBundle:[ApptentiveUtilities resourceBundle] storagePath:[self supportDirectoryPath]];
-				if (![self.dataManager setupAndVerify]) {
-					ApptentiveLogError(@"Unable to setup and verify data manager.");
-				} else if (![self.dataManager persistentStoreCoordinator]) {
-					ApptentiveLogError(@"There was a problem setting up the persistent store coordinator!");
-				}
+				[self setUpCoreData];
 			});
 
-			// Run this once we have a token and core data
-			NSBlockOperation *becomeReadyOperation = [NSBlockOperation blockOperationWithBlock:^{
-				self->_serialNetworkQueue = [[ApptentiveSerialNetworkQueue alloc] initWithBaseURL:baseURL token:self.session.token SDKVersion:self.session.SDK.version.versionString platform:@"iOS" parentManagedObjectContext:self.managedObjectContext];
-
-				[self.serialNetworkQueue addObserver:self forKeyPath:@"messageSendProgress" options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew context:nil];
-				[self.serialNetworkQueue addObserver:self forKeyPath:@"messageTaskCount" options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew context:nil];
-
-				self.state = ATBackendStateReady;
-				dispatch_async(dispatch_get_main_queue(), ^{
-					[ApptentiveLegacyFileAttachment addMissingExtensions];
-				});
-
-				self.messageManager = [[ApptentiveMessageManager alloc] initWithStoragePath:self.attachmentDirectoryPath networkQueue:self->_networkQueue pollingInterval:self.configuration.messageCenter.backgroundPollingInterval localUserIdentifier:self.session.person.identifier];
-
-				[[NSNotificationCenter defaultCenter] addObserver:self.messageManager selector:@selector(checkForMessages) name:UIApplicationWillEnterForegroundNotification object:nil];
-
-				[self networkStatusChanged:nil];
-				[self startMonitoringAppLifecycleMetrics];
-				[self.session checkForDiffs];
-
-				NSString *legacyTaskPath = [self.supportDirectoryPath stringByAppendingPathComponent:@"tasks.objects"];
-				NSError *error;
-				if ([[NSFileManager defaultManager] fileExistsAtPath:legacyTaskPath] && ![[NSFileManager defaultManager] removeItemAtPath:legacyTaskPath error:&error]) {
-					ApptentiveLogError(@"Unable to delete migrated tasks: %@", error);
-				}
-
-				// Enqueue any unsent messages, events, or survey responses from <= v3.4
-				NSManagedObjectContext *migrationContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-				migrationContext.parentContext = self.managedObjectContext;
-
-				[migrationContext performBlockAndWait:^{
-					[ApptentiveLegacyMessage enqueueUnsentMessagesInContext:migrationContext];
-					[ApptentiveLegacyEvent enqueueUnsentEventsInContext:migrationContext];
-					[ApptentiveLegacySurveyResponse enqueueUnsentSurveyResponsesInContext:migrationContext];
-
-					NSError *coreDataError;
-					if (![migrationContext save:&coreDataError]) {
-						ApptentiveLogError(@"Unable to save migration context: %@", coreDataError);
-					}
-				}];
-
-				[self processQueuedRecords];
-
-				if ([self imageCachePath]) {
-					_imageCache = [[NSURLCache alloc] initWithMemoryCapacity:1 * 1024 * 1024 diskCapacity:10 * 1024 * 1024 diskPath:[self imageCachePath]];
-				}
-			}];
-
-			if (self.conversationOperation) {
-				[becomeReadyOperation addDependency:self.conversationOperation];
-			}
-
-			[self.queue addOperation:becomeReadyOperation];
+			[self loadConfiguration];
+			
+			[self startUp];
 		}];
-
-		[_queue addOperation:startupOperation];
 	}
 
 	return self;
@@ -287,21 +181,23 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 		if (_working) {
 #if APPTENTIVE_DEBUG
 			[Apptentive.shared checkSDKConfiguration];
+
+
 			self.configuration.expiry = [NSDate distantPast];
-			self.manifest.expiry = [NSDate distantPast];
 #endif
+			if ([self.configuration.expiry timeIntervalSinceNow] <= 0) {
+				[self fetchConfiguration];
+			}
+
 			[self.networkQueue resetBackoffDelay];
 			[self.serialNetworkQueue resetBackoffDelay];
 
-			[self.session checkForDiffs];
-
-			[self updateConfigurationIfNeeded];
-			[self updateEngagementManifestIfNeeded];
+			[self.conversationManager resume];
 			[self.messageManager checkForMessages];
 
 			[self processQueuedRecords];
 		} else {
-			[self saveSession];
+			[self.conversationManager pause];
 
 			[self.networkQueue cancelAllOperations];
 			[self.serialNetworkQueue cancelAllOperations];
@@ -327,50 +223,103 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 
 #pragma mark -
 
-- (void)createConversation {
-	if (self.conversationOperation != nil || self.session.token != nil) {
-		return;
-	}
-
-	self.conversationOperation = [[ApptentiveRequestOperation alloc] initWithPath:@"conversation" method:@"POST" payload:self.session.conversationCreationJSON delegate:self dataSource:self.networkQueue];
-
-	[self.networkQueue addOperation:self.conversationOperation];
-}
-
-- (void)updateConfigurationIfNeeded {
+- (void)fetchConfiguration {
 	if (self.configurationOperation != nil || !self.working) {
 		return;
 	}
 
 	self.configurationOperation = [[ApptentiveRequestOperation alloc] initWithPath:@"conversation/configuration" method:@"GET" payload:nil delegate:self dataSource:self.networkQueue];
 
-	if (!self.session.token && self.conversationOperation) {
-		[self.configurationOperation addDependency:self.conversationOperation];
+	if (!self.conversationManager.activeConversation && self.conversationManager.conversationOperation) {
+		[self.configurationOperation addDependency:self.conversationManager.conversationOperation];
 	}
 
 	[self.networkQueue addOperation:self.configurationOperation];
 }
 
-- (void)updateEngagementManifestIfNeeded {
-	if (self.manifestOperation != nil || self.localEngagementManifestURL != nil || !self.working) {
-		return;
+- (void)createSupportDirectoryIfNeeded {
+	if (![[NSFileManager defaultManager] fileExistsAtPath:self->_supportDirectoryPath]) {
+		NSError *error;
+		if (![[NSFileManager defaultManager] createDirectoryAtPath:self->_supportDirectoryPath withIntermediateDirectories:YES attributes:nil error:&error]) {
+			ApptentiveLogError(@"Unable to create storage path “%@”: %@", self->_supportDirectoryPath, error);
+		}
 	}
-
-	self.manifestOperation = [[ApptentiveRequestOperation alloc] initWithPath:@"interactions" method:@"GET" payload:nil delegate:self dataSource:self.networkQueue];
-
-	if (!self.session.token && self.conversationOperation) {
-		[self.manifestOperation addDependency:self.conversationOperation];
-	}
-
-	[self.networkQueue addOperation:self.manifestOperation];
 }
 
-#pragma mark -
+- (void)startUp {
+	_networkQueue = [[ApptentiveNetworkQueue alloc] initWithBaseURL:self.baseURL token:self.APIKey SDKVersion:kApptentiveVersionString platform:@"iOS"];
+	_serialNetworkQueue = [[ApptentiveSerialNetworkQueue alloc] initWithBaseURL:self.baseURL token:self.APIKey SDKVersion:kApptentiveVersionString platform:@"iOS"	parentManagedObjectContext:self.managedObjectContext];
 
-- (void)processQueuedRecords {
-	if (self.isReady && self.working) {
-		[self.serialNetworkQueue resume];
+	[self.serialNetworkQueue addObserver:self forKeyPath:@"messageSendProgress" options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew context:nil];
+	[self.serialNetworkQueue addObserver:self forKeyPath:@"messageTaskCount" options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew context:nil];
+
+	_conversationManager = [[ApptentiveConversationManager alloc] initWithStoragePath:_supportDirectoryPath operationQueue:_operationQueue networkQueue:_networkQueue parentManagedObjectContext:self.managedObjectContext];
+	self.conversationManager.delegate = self;
+	
+	_message
+	_imageCache = [[NSURLCache alloc] initWithMemoryCapacity:1 * 1024 * 1024 diskCapacity:10 * 1024 * 1024 diskPath:[self imageCachePath]];
+
+	[self.conversationManager loadActiveConversation];
+    
+  [self.conversationManager.activeConversation checkForDiffs];
+}
+
+// Note: must be called on main thread
+- (void)setUpCoreData {
+	ApptentiveLogDebug(@"Setting up data manager");
+	self.dataManager = [[ApptentiveDataManager alloc] initWithModelName:@"ATDataModel" inBundle:[ApptentiveUtilities resourceBundle] storagePath:[self supportDirectoryPath]];
+	if (![self.dataManager setupAndVerify]) {
+		ApptentiveLogError(@"Unable to setup and verify data manager.");
+	} else if (![self.dataManager persistentStoreCoordinator]) {
+		ApptentiveLogError(@"There was a problem setting up the persistent store coordinator!");
 	}
+}
+
+- (void)loadConfiguration {
+	if ([[NSFileManager defaultManager] fileExistsAtPath:[self configurationPath]]) {
+		self->_configuration = [NSKeyedUnarchiver unarchiveObjectWithFile:[self configurationPath]];
+	} else if ([[NSUserDefaults standardUserDefaults] objectForKey:@"ATConfigurationSDKVersionKey"]) {
+		self->_configuration = [[ApptentiveAppConfiguration alloc] initWithUserDefaults:[NSUserDefaults standardUserDefaults]];
+		if ([self saveConfiguration]) {
+			[ApptentiveAppConfiguration deleteMigratedData];
+		}
+	} else {
+		self->_configuration = [[ApptentiveAppConfiguration alloc] init];
+	}
+}
+
+- (void)finishStartupWithToken:(NSString *)token {
+	self.state = ATBackendStateReady;
+	dispatch_async(dispatch_get_main_queue(), ^{
+		[ApptentiveFileAttachment addMissingExtensions];
+	});
+
+	[self networkStatusChanged:nil];
+	[self startMonitoringAppLifecycleMetrics];
+	[self startMonitoringUnreadMessages];
+
+	NSString *legacyTaskPath = [self.supportDirectoryPath stringByAppendingPathComponent:@"tasks.objects"];
+	NSError *error;
+	if ([[NSFileManager defaultManager] fileExistsAtPath:legacyTaskPath] && ![[NSFileManager defaultManager] removeItemAtPath:legacyTaskPath error:&error]) {
+		ApptentiveLogError(@"Unable to delete migrated tasks: %@", error);
+	}
+
+	// Enqueue any unsent messages, events, or survey responses from <= v3.4
+	NSManagedObjectContext *migrationContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+	migrationContext.parentContext = self.managedObjectContext;
+
+	[migrationContext performBlockAndWait:^{
+		[ApptentiveMessage enqueueUnsentMessagesInContext:migrationContext];
+		[ApptentiveLegacyEvent enqueueUnsentEventsInContext:migrationContext];
+		[ApptentiveLegacySurveyResponse enqueueUnsentSurveyResponsesInContext:migrationContext];
+
+		NSError *coreDataError;
+		if (![migrationContext save:&coreDataError]) {
+			ApptentiveLogError(@"Unable to save migration context: %@", coreDataError);
+		}
+	}];
+
+	[self processQueuedRecords];
 }
 
 #pragma mark Apptentive request operation delegate
@@ -378,18 +327,10 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 - (void)requestOperationDidFinish:(ApptentiveRequestOperation *)operation {
 	ApptentiveLogDebug(@"%@ %@ finished successfully.", operation.request.HTTPMethod, operation.request.URL.absoluteString);
 
-	if (operation == self.conversationOperation) {
-		[self processConversationResponse:(NSDictionary *)operation.responseObject];
-
-		self.conversationOperation = nil;
-	} else if (operation == self.configurationOperation) {
+	if (operation == self.configurationOperation) {
 		[self processConfigurationResponse:(NSDictionary *)operation.responseObject cacheLifetime:operation.cacheLifetime];
 
 		self.configurationOperation = nil;
-	} else if (operation == self.manifestOperation) {
-		[self processManifestResponse:(NSDictionary *)operation.responseObject cacheLifetime:operation.cacheLifetime];
-
-		self.manifestOperation = nil;
 	}
 }
 
@@ -404,29 +345,14 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 - (void)requestOperation:(ApptentiveRequestOperation *)operation didFailWithError:(NSError *)error {
 	ApptentiveLogError(@"%@ %@ failed with error: %@. Not retrying.", operation.request.HTTPMethod, operation.request.URL.absoluteString, error);
 
-	if (operation == self.conversationOperation) {
-		self.conversationOperation = nil;
-	} else if (operation == self.configurationOperation) {
+	if (operation == self.configurationOperation) {
 		self.configurationOperation = nil;
-	} else if (operation == self.manifestOperation) {
-		self.manifestOperation = nil;
 	}
 }
 
-- (void)processConversationResponse:(NSDictionary *)conversationResponse {
-	NSString *token = conversationResponse[@"token"];
-	NSString *personID = conversationResponse[@"person_id"];
-	NSString *deviceID = conversationResponse[@"device_id"];
-
-	if (token != nil) {
-		[self.session setToken:token personID:personID deviceID:deviceID];
-
-		[self saveSession];
-
-		self.networkQueue.token = token;
-		self.serialNetworkQueue.token = token;
-
-		[self processQueuedRecords];
+- (void)processQueuedRecords {
+	if (self.isReady && self.working && self.conversationManager.activeConversation.token != nil) {
+		[self.serialNetworkQueue resume];
 	}
 }
 
@@ -436,92 +362,10 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	[self saveConfiguration];
 }
 
-- (void)processManifestResponse:(NSDictionary *)manifestResponse cacheLifetime:(NSTimeInterval)cacheLifetime {
-	_manifest = [[ApptentiveEngagementManifest alloc] initWithJSONDictionary:manifestResponse cacheLifetime:cacheLifetime];
-
-	[self saveManifest];
-
-	dispatch_async(dispatch_get_main_queue(), ^{
-		[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveInteractionsDidUpdateNotification object:self.manifest];
-		[self updateMessageCheckingTimer];
-	});
-}
-
-- (BOOL)saveSession {
-	@synchronized(self.session) {
-		return [NSKeyedArchiver archiveRootObject:self.session toFile:[self sessionPath]];
-	}
-}
-
 - (BOOL)saveConfiguration {
 	@synchronized(self.configuration) {
 		return [NSKeyedArchiver archiveRootObject:self.configuration toFile:[self configurationPath]];
 	}
-}
-
-- (BOOL)saveManifest {
-	@synchronized(self.manifest) {
-		return [NSKeyedArchiver archiveRootObject:_manifest toFile:[self manifestPath]];
-	}
-}
-
-#pragma mark - Session delegate
-
-- (void)session:(ApptentiveSession *)session conversationDidChange:(NSDictionary *)payload {
-	NSBlockOperation *conversationDidChangeOperation = [NSBlockOperation blockOperationWithBlock:^{
-		NSManagedObjectContext *context = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-		context.parentContext = self.managedObjectContext;
-
-		[context performBlock:^{
-			[ApptentiveSerialRequest enqueueRequestWithPath:@"conversation" method:@"PUT" payload:payload attachments:nil identifier:nil inContext:context];
-		}];
-
-		[self saveSession];
-
-		self.manifest.expiry = [NSDate distantPast];
-	}];
-
-	[self.queue addOperation:conversationDidChangeOperation];
-}
-
-- (void)session:(ApptentiveSession *)session personDidChange:(NSDictionary *)diffs {
-	NSBlockOperation *personDidChangeOperation = [NSBlockOperation blockOperationWithBlock:^{
-		NSManagedObjectContext *context = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-		context.parentContext = self.managedObjectContext;
-
-		[context performBlock:^{
-			[ApptentiveSerialRequest enqueueRequestWithPath:@"people" method:@"PUT" payload:diffs attachments:nil identifier:nil inContext:context];
-		}];
-
-		[self saveSession];
-	}];
-
-	[self.queue addOperation:personDidChangeOperation];
-}
-
-- (void)session:(ApptentiveSession *)session deviceDidChange:(NSDictionary *)diffs {
-	NSBlockOperation *deviceDidChangeOperation = [NSBlockOperation blockOperationWithBlock:^{
-		NSManagedObjectContext *context = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-		context.parentContext = self.managedObjectContext;
-
-		[context performBlock:^{
-			[ApptentiveSerialRequest enqueueRequestWithPath:@"devices" method:@"PUT" payload:diffs attachments:nil identifier:nil inContext:context];
-		}];
-
-		[self saveSession];
-
-		self.manifest.expiry = [NSDate distantPast];
-	}];
-
-	[self.queue addOperation:deviceDidChangeOperation];
-}
-
-- (void)sessionUserInfoDidChange:(ApptentiveSession *)session {
-	NSBlockOperation *sessionSaveOperation = [NSBlockOperation blockOperationWithBlock:^{
-		[self saveSession];
-	}];
-
-	[self.queue addOperation:sessionSaveOperation];
 }
 
 #pragma mark Message Center
@@ -628,8 +472,31 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 - (void)completeMessageFetchWithResult:(UIBackgroundFetchResult)fetchResult {
 	if (self.backgroundFetchBlock) {
 		self.backgroundFetchBlock(fetchResult);
+	}
+}
+
+#pragma mark - Conversation manager delegate
+
+#warning make this work!
+- (void)conversationManagerMessageFetchCompleted:(BOOL)success {
+	UIBackgroundFetchResult fetchResult = success ? UIBackgroundFetchResultNewData : UIBackgroundFetchResultFailed;
+
+	if (self.backgroundFetchBlock) {
+		self.backgroundFetchBlock(fetchResult);
 
 		self.backgroundFetchBlock = nil;
+	}
+}
+
+- (void)conversationManager:(ApptentiveConversationManager *)manager conversationDidChangeState:(ApptentiveConversation *)conversation {
+	// Anonymous pending conversations will not yet have a token, so we can't finish starting up yet in that case. 
+	if (conversation.state != ApptentiveConversationStateAnonymousPending) {
+		self.networkQueue.token = conversation.token;
+		self.serialNetworkQueue.token = conversation.token;
+
+		if (self.state != ATBackendStateReady) {
+			[self finishStartupWithToken:conversation.token];
+		}
 	}
 }
 
@@ -693,44 +560,11 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	return imageCachePath;
 }
 
-- (NSString *)sessionPath {
-	return [self.supportDirectoryPath stringByAppendingPathComponent:@"session"];
-}
-
 - (NSString *)configurationPath {
 	return [self.supportDirectoryPath stringByAppendingPathComponent:@"configuration"];
 }
 
-- (NSString *)manifestPath {
-	return [self.supportDirectoryPath stringByAppendingPathComponent:@"interactions"];
-}
-
 #pragma mark - Debugging
-
-- (void)setLocalEngagementManifestURL:(NSURL *)localEngagementManifestURL {
-	if (_localEngagementManifestURL != localEngagementManifestURL) {
-		_localEngagementManifestURL = localEngagementManifestURL;
-
-		if (localEngagementManifestURL == nil) {
-			_manifest = [NSKeyedUnarchiver unarchiveObjectWithFile:[self manifestPath]];
-			[self updateEngagementManifestIfNeeded];
-		} else {
-			[self.manifestOperation cancel];
-
-			NSError *error;
-			NSData *localData = [NSData dataWithContentsOfURL:localEngagementManifestURL];
-			NSDictionary *manifestDictionary = [NSJSONSerialization JSONObjectWithData:localData options:0 error:&error];
-
-			if (!manifestDictionary) {
-				ApptentiveLogError(@"Unable to parse local manifest %@: %@", localEngagementManifestURL.absoluteString, error);
-			}
-
-			_manifest = [[ApptentiveEngagementManifest alloc] initWithJSONDictionary:manifestDictionary cacheLifetime:MAXFLOAT];
-
-			[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveInteractionsDidUpdateNotification object:self.manifest];
-		}
-	}
-}
 
 - (void)resetBackend {
 	[self stopWorking:nil];

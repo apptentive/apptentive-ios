@@ -56,7 +56,7 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 		}
 
 		if (invocation && [invocation isKindOfClass:[ApptentiveInteractionInvocation class]]) {
-			if ([invocation criteriaAreMetForSession:self.session]) {
+			if ([invocation criteriaAreMetForConversation:self.conversationManager.activeConversation]) {
 				interactionID = invocation.interactionID;
 				break;
 			}
@@ -72,11 +72,11 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 }
 
 - (ApptentiveInteraction *)interactionForIdentifier:(NSString *)identifier {
-	return self.manifest.interactions[identifier];
+	return self.conversationManager.manifest.interactions[identifier];
 }
 
 - (ApptentiveInteraction *)interactionForEvent:(NSString *)event {
-	NSArray *invocations = self.manifest.targets[event];
+	NSArray *invocations = self.conversationManager.manifest.targets[event];
 	ApptentiveInteraction *interaction = [self interactionForInvocations:invocations];
 
 	return interaction;
@@ -147,19 +147,19 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 }
 
 - (void)codePointWasSeen:(NSString *)codePoint {
-	[self.session.engagement warmCodePoint:codePoint];
+	[self.conversationManager.activeConversation warmCodePoint:codePoint];
 }
 
 - (void)codePointWasEngaged:(NSString *)codePoint {
-	[self.session.engagement engageCodePoint:codePoint];
+	[self.conversationManager.activeConversation engageCodePoint:codePoint];
 }
 
 - (void)interactionWasSeen:(NSString *)interactionID {
-	[self.session.engagement warmInteraction:interactionID];
+	[self.conversationManager.activeConversation warmInteraction:interactionID];
 }
 
 - (void)interactionWasEngaged:(ApptentiveInteraction *)interaction {
-	[self.session.engagement engageInteraction:interaction.identifier];
+	[self.conversationManager.activeConversation engageInteraction:interaction.identifier];
 }
 
 - (void)presentInteraction:(ApptentiveInteraction *)interaction fromViewController:(UIViewController *)viewController {

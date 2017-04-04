@@ -28,19 +28,19 @@
 
 	[fullPayload addEntriesFromDictionary:payload];
 
-	[self enqueueRequestWithPath:path method:@"POST" payload:@{ containerName: fullPayload } attachments:nil identifier:nil inContext:context];
+	[self enqueueRequestWithPath:path method:@"POST" payload:@{ containerName: fullPayload } attachments:nil identifier:nil conversation:conversation inContext:context];
 }
 
-+ (void)enqueueSurveyResponseWithAnswers:(NSDictionary *)answers identifier:(NSString *)identifier inContext:(NSManagedObjectContext *)context {
++ (void)enqueueSurveyResponseWithAnswers:(NSDictionary *)answers identifier:(NSString *)identifier conversation:(ApptentiveConversation *)conversation inContext:(NSManagedObjectContext *)context {
 	NSMutableDictionary *payload = [NSMutableDictionary dictionary];
 
 	payload[@"id"] = identifier;
 	payload[@"answers"] = answers;
 
-	[self enqueueRequestWithPath:[NSString stringWithFormat:@"surveys/%@/respond", identifier] containerName:@"survey" noncePrefix:@"pending-survey-response" payload:payload inContext:context];
+	[self enqueueRequestWithPath:[NSString stringWithFormat:@"surveys/%@/respond", identifier] containerName:@"survey" noncePrefix:@"pending-survey-response" payload:payload conversation:conversation inContext:context];
 }
 
-+ (void)enqueueEventWithLabel:(NSString *)label interactionIdentifier:(NSString *)interactionIdenfier userInfo:(id)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData inContext:(NSManagedObjectContext *)context {
++ (void)enqueueEventWithLabel:(NSString *)label interactionIdentifier:(NSString *)interactionIdenfier userInfo:(id)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData conversation:(ApptentiveConversation *)conversation inContext:(NSManagedObjectContext *)context {
 	NSMutableDictionary *payload = [NSMutableDictionary dictionary];
 
 	payload[@"label"] = label;
@@ -75,7 +75,7 @@
 		}
 	}
 
-	[self enqueueRequestWithPath:@"events" containerName:@"event" noncePrefix:@"event" payload:payload inContext:context];
+	[self enqueueRequestWithPath:@"events" containerName:@"event" noncePrefix:@"event" payload:payload conversation:conversation inContext:context];
 }
 
 + (void)enqueueMessage:(ApptentiveMessage *)message inContext:(NSManagedObjectContext *)context {
@@ -98,7 +98,7 @@
 	NSMutableDictionary *boilerplate = [self boilerplateForRequestWithNoncePrefix:@"pending-message"];
 	[payload addEntriesFromDictionary:boilerplate];
 
-	[self enqueueRequestWithPath:@"messages" method:@"POST" payload:payload attachments:message.attachments identifier:message.localIdentifier inContext:context];
+	[self enqueueRequestWithPath:@"messages" method:@"POST" payload:payload attachments:message.attachments identifier:message.localIdentifier conversation:conversation inContext:context];
 
 	[message updateWithLocalIdentifier:boilerplate[@"nonce"]];
 }

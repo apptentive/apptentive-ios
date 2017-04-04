@@ -11,7 +11,7 @@
 #import "ApptentiveInteraction.h"
 #import "ApptentiveStyleSheet.h"
 #import "ApptentiveInteractionUsageData.h"
-#import "ApptentiveSession.h"
+#import "ApptentiveConversation.h"
 #import "Apptentive_Private.h"
 #import "ApptentiveBackend.h"
 #import "ApptentiveEngagement.h"

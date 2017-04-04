@@ -22,6 +22,11 @@
 	self = [super init];
 
 	if (self) {
+		if (token == nil || baseURL == nil || SDKVersion == nil || platform == nil) {
+			ApptentiveLogError(@"ApptentiveNetworkQueue: One or more required initializer parameters was nil");
+			return nil;
+		}
+
 		_baseURL = baseURL;
 		_token = token;
 

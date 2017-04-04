@@ -11,7 +11,7 @@
 
 #import "ApptentiveMessage.h"
 #import "ApptentiveSerialNetworkQueue.h"
-#import "ApptentiveSession.h"
+#import "ApptentiveConversationManager.h"
 
 
 @class ApptentiveConversation, ApptentiveEngagementManifest, ApptentiveAppConfiguration, ApptentiveMessageCenterViewController, ApptentiveMessageManager;
@@ -23,7 +23,7 @@
  Only a single backend object will be created by the Apptentive singleton
  at the time that the API key is set.
  
- It comprises a session object, containing all of the data collected
+ It comprises a conversation object, containing all of the data collected
  about the user, device, app, SDK, and events and interactions that have 
  been engaged. 
  
@@ -33,11 +33,10 @@
  used for PUT and POST requests (person/device updates, events, messages,
  and survey responses).
  */
-@interface ApptentiveBackend : NSObject <NSFetchedResultsControllerDelegate, ApptentiveSessionDelegate, ApptentiveRequestOperationDelegate>
+@interface ApptentiveBackend : NSObject <NSFetchedResultsControllerDelegate, ApptentiveConversationManagerDelegate, ApptentiveRequestOperationDelegate>
 
-@property (readonly, strong, nonatomic) ApptentiveSession *session;
+@property (readonly, strong, nonatomic) ApptentiveConversationManager *conversationManager;
 @property (readonly, strong, nonatomic) ApptentiveAppConfiguration *configuration;
-@property (readonly, strong, nonatomic) ApptentiveEngagementManifest *manifest;
 
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (readonly, strong, nonatomic) NSString *supportDirectoryPath;
@@ -61,6 +60,9 @@
  */
 - (instancetype)initWithAPIKey:(NSString *)APIKey baseURL:(NSURL *)baseURL storagePath:(NSString *)storagePath;
 
+@property (readonly, strong, nonatomic) NSString *APIKey;
+@property (readonly, strong, nonatomic) NSURL *baseURL;
+@property (readonly, strong, nonatomic) NSString *storagePath;
 
 /**
  Instructs the serial network queue to add network operations for the currently-queued network payloads.
@@ -72,7 +74,7 @@
  Presents Message Center using the modal presentation style from the specified view controller.
 
  @param viewController The view controller from which to present message center
- @return <#return value description#>
+ @return Whether message center was displayed
  */
 - (BOOL)presentMessageCenterFromViewController:(UIViewController *)viewController;
 - (BOOL)presentMessageCenterFromViewController:(UIViewController *)viewController withCustomData:(NSDictionary *)customData;
@@ -89,13 +91,8 @@
 - (BOOL)isReady;
 
 - (void)fetchMessagesInBackground:(void (^)(UIBackgroundFetchResult))completionHandler;
-- (void)completeMessageFetchWithResult:(UIBackgroundFetchResult)fetchResult;
 
 - (void)resetBackend;
-
-// Debugging
-
-@property (strong, nonatomic) NSURL *localEngagementManifestURL;
 
 @end
 

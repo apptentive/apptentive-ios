@@ -33,6 +33,10 @@ UIViewController *topChildViewController(UIViewController *viewController) {
 
 @implementation ApptentiveUtilities
 
++ (BOOL)fileExistsAtPath:(NSString *)path {
+    return path != nil && [[NSFileManager defaultManager] fileExistsAtPath:path];
+}
+
 + (NSString *)applicationSupportPath {
 	static NSString *_applicationSupportPath;
 	static dispatch_once_t onceToken;

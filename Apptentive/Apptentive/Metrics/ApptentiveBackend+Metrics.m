@@ -21,12 +21,14 @@ static NSString *ATInteractionAppEventLabelExit = @"exit";
 @implementation ApptentiveBackend (Metrics)
 
 - (void)addMetricWithName:(NSString *)name fromInteraction:(ApptentiveInteraction *)fromInteraction info:(NSDictionary *)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData {
+	ApptentiveConversation *conversation = self.conversationManager.activeConversation;
+
 	if (self.configuration.metricsEnabled == NO || name == nil) {
 		return;
 	}
 
 	dispatch_async(dispatch_get_main_queue(), ^{
-		[ApptentiveSerialRequest enqueueEventWithLabel:name interactionIdentifier:fromInteraction.identifier userInfo:userInfo customData:customData extendedData:extendedData inContext:Apptentive.shared.backend.managedObjectContext];
+		[ApptentiveSerialRequest enqueueEventWithLabel:name interactionIdentifier:fromInteraction.identifier userInfo:userInfo customData:customData extendedData:extendedData conversation:conversation inContext:Apptentive.shared.backend.managedObjectContext];
 	});
 
 	[self processQueuedRecords];

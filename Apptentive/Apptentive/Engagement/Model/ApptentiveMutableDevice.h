@@ -14,7 +14,7 @@
 /**
  `ApptentiveMutableDevice` is a version of the `ApptentiveDevice` object
  whose custom data can be modified. It is intended for use
- inside a the block passed to `ApptentiveSession`'s `-updateDevice:` method.
+ inside a the block passed to `ApptentiveConversation`'s `-updateDevice:` method.
  */
 @interface ApptentiveMutableDevice : ApptentiveMutableCustomData
 

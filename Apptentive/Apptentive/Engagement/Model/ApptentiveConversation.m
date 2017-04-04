@@ -1,12 +1,12 @@
 //
-//  ApptentiveSession.m
+//  ApptentiveConversation.m
 //  Apptentive
 //
 //  Created by Frank Schmitt on 11/15/16.
 //  Copyright © 2016 Apptentive, Inc. All rights reserved.
 //
 
-#import "ApptentiveSession.h"
+#import "ApptentiveConversation.h"
 #import "ApptentiveAppRelease.h"
 #import "ApptentiveSDK.h"
 #import "ApptentivePerson.h"
@@ -16,6 +16,7 @@
 #import "ApptentiveVersion.h"
 #import "ApptentiveMutablePerson.h"
 #import "ApptentiveMutableDevice.h"
+#import "ApptentiveConversationMetadataItem.h"
 
 static NSString *const AppReleaseKey = @"appRelease";
 static NSString *const SDKKey = @"SDK";
@@ -27,6 +28,7 @@ static NSString *const TokenKey = @"token";
 static NSString *const LastMessageIDKey = @"lastMessageID";
 static NSString *const MutableUserInfoKey = @"mutableUserInfo";
 static NSString *const ArchiveVersionKey = @"archiveVersion";
+static NSString *const IdentifierKey = @"identifier";
 
 // Legacy keys
 static NSString *const ATCurrentConversationPreferenceKey = @"ATCurrentConversationPreferenceKey";
@@ -34,23 +36,18 @@ static NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMe
 static NSString *const ATMessageCenterDidSkipProfileKey = @"ATMessageCenterDidSkipProfileKey";
 
 
-@interface ApptentiveSession ()
+@interface ApptentiveConversation ()
 
 @property (readonly, nonatomic) NSMutableDictionary *mutableUserInfo;
 
 @end
 
 
-@implementation ApptentiveSession
+@implementation ApptentiveConversation
 
 @synthesize token = _token;
 
 - (instancetype)init {
-	NSAssert(NO, @"Must call -initWithAPIKey:");
-	return nil;
-}
-
-- (instancetype)initWithAPIKey:(NSString *)APIKey {
 	self = [super init];
 	if (self) {
 		_appRelease = [[ApptentiveAppRelease alloc] initWithCurrentAppRelease];
@@ -59,7 +56,6 @@ static NSString *const ATMessageCenterDidSkipProfileKey = @"ATMessageCenterDidSk
 		_device = [[ApptentiveDevice alloc] initWithCurrentDevice];
 		_engagement = [[ApptentiveEngagement alloc] init];
 		_mutableUserInfo = [[NSMutableDictionary alloc] init];
-		_APIKey = APIKey;
 	}
 	return self;
 }
@@ -72,10 +68,10 @@ static NSString *const ATMessageCenterDidSkipProfileKey = @"ATMessageCenterDidSk
 		_person = [coder decodeObjectOfClass:[ApptentivePerson class] forKey:PersonKey];
 		_device = [coder decodeObjectOfClass:[ApptentiveDevice class] forKey:DeviceKey];
 		_engagement = [coder decodeObjectOfClass:[ApptentiveEngagement class] forKey:EngagementKey];
-		_APIKey = [coder decodeObjectOfClass:[NSString class] forKey:APIKeyKey];
 		_token = [coder decodeObjectOfClass:[NSString class] forKey:TokenKey];
 		_lastMessageID = [coder decodeObjectOfClass:[NSString class] forKey:LastMessageIDKey];
 		_mutableUserInfo = [coder decodeObjectOfClass:[NSMutableDictionary class] forKey:MutableUserInfoKey];
+		_identifier = [coder decodeObjectOfClass:[NSString class] forKey:IdentifierKey];
 	}
 	return self;
 }
@@ -87,17 +83,27 @@ static NSString *const ATMessageCenterDidSkipProfileKey = @"ATMessageCenterDidSk
 	[coder encodeObject:self.person forKey:PersonKey];
 	[coder encodeObject:self.device forKey:DeviceKey];
 	[coder encodeObject:self.engagement forKey:EngagementKey];
-	[coder encodeObject:self.APIKey forKey:APIKeyKey];
 	[coder encodeObject:self.token forKey:TokenKey];
 	[coder encodeObject:self.lastMessageID forKey:LastMessageIDKey];
 	[coder encodeObject:self.mutableUserInfo forKey:MutableUserInfoKey];
+	[coder encodeObject:self.identifier forKey:IdentifierKey];
 	[coder encodeObject:@1 forKey:ArchiveVersionKey];
 }
 
-- (void)setToken:(NSString *)token personID:(NSString *)personID deviceID:(NSString *)deviceID {
-	_token = token;
+- (void)setToken:(NSString *)token conversationID:(NSString *)conversationID personID:(NSString *)personID deviceID:(NSString *)deviceID {
+	self.token = token;
+	_identifier = conversationID;
 	self.person.identifier = personID;
 	self.device.identifier = deviceID;
+}
+
+- (void)setToken:(NSString *)token {
+	if (token == nil) {
+		ApptentiveLogError(ApptentiveLogTagConversation, @"Attempting to set token to nil. Ignoring.");
+		return;
+	}
+
+	_token = token;
 }
 
 - (void)checkForDiffs {
@@ -141,7 +147,11 @@ static NSString *const ATMessageCenterDidSkipProfileKey = @"ATMessageCenterDidSk
 		}
 
 		if (conversationNeedsUpdate) {
-			[self.delegate session:self conversationDidChange:self.conversationUpdateJSON];
+			[self notifyConversationChanged];
+
+			if ([_delegate respondsToSelector:@selector(conversation:appReleaseOrSDKDidChange:)]) {
+				[_delegate conversation:self appReleaseOrSDKDidChange:self.conversationUpdateJSON];
+			}
 		}
 	}
 }
@@ -163,7 +173,11 @@ static NSString *const ATMessageCenterDidSkipProfileKey = @"ATMessageCenterDidSk
 		if (personDiffs.count > 0) {
 			_person = newPerson;
 
-			[self.delegate session:self personDidChange:@{ @"person": personDiffs }];
+			[self notifyConversationChanged];
+
+			if ([_delegate respondsToSelector:@selector(conversation:personDidChange:)]) {
+				[_delegate conversation:self personDidChange:@{ @"person": personDiffs }];
+			}
 		}
 	}
 }
@@ -185,9 +199,47 @@ static NSString *const ATMessageCenterDidSkipProfileKey = @"ATMessageCenterDidSk
 		if (deviceDiffs.count > 0) {
 			_device = newDevice;
 
-			[self.delegate session:self deviceDidChange:@{ @"device": deviceDiffs }];
+			[self notifyConversationChanged];
+
+			if ([_delegate respondsToSelector:@selector(conversation:deviceDidChange:)]) {
+				[_delegate conversation:self deviceDidChange:@{ @"device": deviceDiffs }];
+			}
 		}
 	}
+}
+
+- (void)notifyConversationChanged {
+	if ([_delegate respondsToSelector:@selector(conversationDidChange:)]) {
+		[_delegate conversationDidChange:self];
+	}
+}
+
+- (void)notifyConversationEngagementDidChange {
+	[self notifyConversationChanged];
+
+	if ([_delegate respondsToSelector:@selector(conversationEngagementDidChange:)]) {
+		[_delegate conversationEngagementDidChange:self];
+	}
+}
+
+- (void)warmCodePoint:(NSString *)codePoint {
+	[self.engagement warmCodePoint:codePoint];
+}
+
+- (void)engageCodePoint:(NSString *)codePoint {
+	[self.engagement engageCodePoint:codePoint];
+
+	[self notifyConversationEngagementDidChange];
+}
+
+- (void)warmInteraction:(NSString *)codePoint {
+	[self.engagement warmCodePoint:codePoint];
+}
+
+- (void)engageInteraction:(NSString *)interactionIdentifier {
+	[self.engagement engageInteraction:interactionIdentifier];
+
+	[self notifyConversationEngagementDidChange];
 }
 
 - (void)didOverrideStyles {
@@ -237,8 +289,15 @@ static NSString *const ATMessageCenterDidSkipProfileKey = @"ATMessageCenterDidSk
 		_engagement = [[ApptentiveEngagement alloc] initAndMigrate];
 
 		NSData *legacyConversationData = [[NSUserDefaults standardUserDefaults] dataForKey:ATCurrentConversationPreferenceKey];
+
+		[NSKeyedUnarchiver setClass:[ApptentiveLegacyConversation class] forClassName:@"ApptentiveConversation"];
+
 		ApptentiveLegacyConversation *legacyConversation = (ApptentiveLegacyConversation *)[NSKeyedUnarchiver unarchiveObjectWithData:legacyConversationData];
+
+		[NSKeyedUnarchiver setClass:[self class] forClassName:@"ApptentiveConversation"];
+
 		_token = legacyConversation.token;
+		_identifier = @"legacy_conversation";
 		_person.identifier = legacyConversation.personID;
 		_device.identifier = legacyConversation.deviceID;
 
@@ -274,9 +333,13 @@ static NSString *const ATMessageCenterDidSkipProfileKey = @"ATMessageCenterDidSk
 	if (object != nil && key != nil) {
 		[self.mutableUserInfo setObject:object forKey:key];
 
-		[self.delegate sessionUserInfoDidChange:self];
+		[self notifyConversationChanged];
+
+		if ([_delegate respondsToSelector:@selector(conversationUserInfoDidChange:)]) {
+			[_delegate conversationUserInfoDidChange:self];
+		}
 	} else {
-		ApptentiveLogError(@"Attempting to set user info with nil key and/or value");
+		ApptentiveLogError(ApptentiveLogTagConversation, @"Attempting to set user info with nil key and/or value");
 	}
 }
 
@@ -284,7 +347,7 @@ static NSString *const ATMessageCenterDidSkipProfileKey = @"ATMessageCenterDidSk
 	if (key != nil) {
 		[self.mutableUserInfo removeObjectForKey:key];
 	} else {
-		ApptentiveLogError(@"Attempting to set user info with nil key and/or value");
+		ApptentiveLogError(ApptentiveLogTagConversation, @"Attempting to set user info with nil key and/or value");
 	}
 }
 
@@ -295,7 +358,6 @@ static NSString *const ATMessageCenterDidSkipProfileKey = @"ATMessageCenterDidSk
 
 + (void)load {
 	[NSKeyedUnarchiver setClass:self forClassName:@"ATConversation"];
-	[NSKeyedUnarchiver setClass:self forClassName:@"ApptentiveConversation"];
 }
 
 - (id)initWithCoder:(NSCoder *)coder {

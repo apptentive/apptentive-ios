@@ -8,6 +8,8 @@
 
 #import "ApptentiveLegacySurveyResponse.h"
 #import "ApptentiveSerialRequest+Record.h"
+#import "Apptentive_Private.h"
+#import "ApptentiveBackend.h"
 
 
 @implementation ApptentiveLegacySurveyResponse
@@ -19,6 +21,7 @@
 
 + (void)enqueueUnsentSurveyResponsesInContext:(NSManagedObjectContext *)context {
 	NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"ATSurveyResponse"];
+	ApptentiveConversation *conversation = Apptentive.shared.backend.conversationManager.activeConversation;
 
 	NSError *error;
 	NSArray *unsentSurveyResponses = [context executeFetchRequest:request error:&error];
@@ -29,7 +32,7 @@
 	}
 
 	for (ApptentiveLegacySurveyResponse *response in unsentSurveyResponses) {
-		[ApptentiveSerialRequest enqueueRequestWithPath:[NSString stringWithFormat:@"surveys/%@/respond", response.surveyID] method:@"POST" payload:response.apiJSON attachments:nil identifier:nil inContext:context];
+		[ApptentiveSerialRequest enqueueRequestWithPath:[NSString stringWithFormat:@"surveys/%@/respond", response.surveyID] method:@"POST" payload:response.apiJSON attachments:nil identifier:nil conversation:conversation inContext:context];
 		[context deleteObject:response];
 	}
 }

@@ -13,6 +13,8 @@
 
 @interface ApptentiveUtilities : NSObject
 
++ (BOOL)fileExistsAtPath:(NSString *)path;
+
 + (NSString *)applicationSupportPath;
 + (NSBundle *)resourceBundle;
 + (UIStoryboard *)storyboard;

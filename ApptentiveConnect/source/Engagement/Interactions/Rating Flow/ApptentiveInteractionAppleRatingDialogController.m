@@ -82,7 +82,7 @@ NSString *const ApptentiveInteractionAppleRatingDialogEventLabelFallback = @"fal
 		ApptentiveInteraction *interaction = [Apptentive.shared.engagementBackend interactionForIdentifier:notShownInteractionIdentifier];
 
 		if (interaction) {
-			[self.interaction engage:ApptentiveInteractionAppleRatingDialogEventLabelFallback fromViewController:viewController];
+			[self.interaction engage:ApptentiveInteractionAppleRatingDialogEventLabelFallback fromViewController:viewController userInfo:@{@"fallback_interaction_id": notShownInteractionIdentifier}];
 
 			[[Apptentive sharedConnection].engagementBackend presentInteraction:interaction fromViewController:viewController];
 		}

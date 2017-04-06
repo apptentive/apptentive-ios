@@ -45,6 +45,9 @@ extern NSString *const ApptentiveSurveyShownNotification;
 /** Notification sent when a survey is submitted by the user. */
 extern NSString *const ApptentiveSurveySentNotification;
 
+/** Error domain for the Apptentive SDK */
+extern NSString *const ApptentiveErrorDomain;
+
 /**
  When a survey is shown or sent, notification's userInfo dictionary will contain the ApptentiveSurveyIDKey key.
  Value is the ID of the survey that was shown or sent.
@@ -567,6 +570,14 @@ Returns a Boolean value indicating whether the given event will cause an Interac
 /// @name Authentication
 ///---------------------------------
 
+/**
+ Logs the specified user in, using the value of the proof parameter to
+ ensure that the login attempt is authorized.
+
+ @param token An authorization token.
+ @param completion A block that is called when the login attempt succeeds or fails.
+ */
+- (void)logInWithToken:(NSString *)token completion:(void(^)(BOOL success, NSError *error))completion;
 
 /**
  Ends the current user session. The user session will be persisted in a logged-out state

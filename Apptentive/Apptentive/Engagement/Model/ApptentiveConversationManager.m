@@ -23,6 +23,9 @@ static NSString *const ConversationMetadataFilename = @"conversation-v1.meta";
 static NSString *const ConversationFilename = @"conversation-v1.archive";
 static NSString *const ManifestFilename = @"manifest-v1.archive";
 
+static NSInteger ApptentiveNoActiveConversationErrorCode = -201;
+static NSInteger ApptentiveAlreadyLoggedInErrorCode = -202;
+
 NSString *const ApptentiveConversationStateDidChangeNotification = @"ApptentiveConversationStateDidChangeNotification";
 NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation = @"conversation";
 
@@ -31,10 +34,13 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 @property (strong, nonatomic) ApptentiveConversationMetadata *conversationMetadata;
 
-@property (strong, nonatomic, nullable) ApptentiveRequestOperation *manifestOperation;
+@property (strong, nullable, nonatomic) ApptentiveRequestOperation *manifestOperation;
+@property (strong, nullable, nonatomic) ApptentiveRequestOperation *loginRequestOperation;
 
 @property (readonly, nonatomic) NSString *metadataPath;
 @property (readonly, nonatomic) NSString *manifestPath;
+
+@property (copy, nonatomic) void (^loginCompletionBlock)(BOOL success, NSError *error);
 
 @end
 
@@ -245,6 +251,56 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 - (BOOL)saveMetadata {
 	return [NSKeyedArchiver archiveRootObject:self.conversationMetadata toFile:self.metadataPath];
+}
+
+#pragma mark - Login/Logout
+
+- (void)logInWithToken:(NSString *)token completion:(void (^)(BOOL, NSError * _Nonnull))completion {
+	if (completion == nil) {
+		completion = ^void(BOOL success, NSError *error) {};
+	}
+
+	self.loginCompletionBlock = [completion copy];
+
+	[self requestLoggedInConversationWithToken:token];
+}
+
+- (void)requestLoggedInConversationWithToken:(NSString *)token {
+	NSBlockOperation *loginOperation = [NSBlockOperation blockOperationWithBlock:^{
+		NSError *error;
+
+		if (self.activeConversation == nil) {
+			ApptentiveLogError(@"Unable to log in: no active conversation.");
+			error = [NSError errorWithDomain:ApptentiveErrorDomain code:ApptentiveNoActiveConversationErrorCode userInfo:@{ NSLocalizedFailureReasonErrorKey: @"Unable to log in. No active conversation." }];
+			[self completeLoginSuccess:NO error:error];
+		}
+
+		switch (self.activeConversation.state) {
+			case ApptentiveConversationStateLoggedIn:
+				error = [NSError errorWithDomain:ApptentiveErrorDomain code:ApptentiveAlreadyLoggedInErrorCode userInfo:@{ NSLocalizedFailureReasonErrorKey: @"Unable to log in. A logged in conversation is active." }];
+				[self completeLoginSuccess:NO error:error];
+				break;
+			default:
+				[self sendLoginRequest];
+				break;
+		}
+	}];
+
+	if (self.conversationOperation != nil) {
+		[loginOperation addDependency:self.conversationOperation];
+	}
+
+	[self.operationQueue addOperation:loginOperation];
+}
+
+- (void)sendLoginRequest {
+	NSError *error = [NSError errorWithDomain:ApptentiveErrorDomain code:-123 userInfo:@{ NSLocalizedFailureReasonErrorKey: @"Login Not implemented" }];
+	[self completeLoginSuccess:NO error:error];
+}
+
+- (void)completeLoginSuccess:(BOOL)success error:(NSError *)error {
+	self.loginCompletionBlock(success, error);
+	self.loginCompletionBlock = nil;
 }
 
 #pragma mark - ApptentiveConversationDelegate

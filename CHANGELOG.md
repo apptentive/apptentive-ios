@@ -1,4 +1,4 @@
-2017-04-04 frankus, weeeBox v3.5.0
+2017-04-05 frankus, weeeBox v3.5.0
 -------------------------
 Version 3.5.0 adds the ability to request the display of an SKStoreReviewController. 
 

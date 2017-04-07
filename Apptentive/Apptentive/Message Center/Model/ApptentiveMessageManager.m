@@ -54,6 +54,7 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 		}
 
 		for (ApptentiveMessage *message in _messageStore.messages) {
+#warning ApptentiveSafeCollections
 			_messageIdentifierIndex[message.localIdentifier] = message;
 		}
 
@@ -112,6 +113,7 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 	self.messageOperation = nil;
 
 	if (messageListJSON == nil) {
+#warning use assert
 		ApptentiveLogError(@"Unexpected response from /messages request");
 		return;
 	}
@@ -330,6 +332,7 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 	if ([NSThread isMainThread]) {
 		block();
 	} else {
+#warning Dispatch sync?
 		dispatch_async(dispatch_get_main_queue(), block);
 	}
 }

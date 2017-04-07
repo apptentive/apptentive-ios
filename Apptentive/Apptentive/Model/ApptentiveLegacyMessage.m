@@ -64,6 +64,8 @@
 
 		[ApptentiveSerialRequest enqueueMessage:message conversation:Apptentive.shared.backend.conversationManager.activeConversation inContext:context];
 	}
+
+#warning Delete legacy messages
 }
 
 @end

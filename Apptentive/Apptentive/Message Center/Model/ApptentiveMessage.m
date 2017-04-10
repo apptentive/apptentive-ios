@@ -30,11 +30,9 @@ static NSString *const CustomDataKey = @"customData";
 - (instancetype)initWithJSON:(NSDictionary *)JSON {
 	self = [super init];
 
-	if (![JSON isKindOfClass:[NSDictionary class]]) {
-		return nil;
-	}
-
 	if (self) {
+		ApptentiveAssertTrue([JSON isKindOfClass:[NSDictionary class]], @"Unexpected JSON when creating message");
+
 		if (![JSON isKindOfClass:[NSDictionary class]]) {
 			return nil;
 		}
@@ -53,6 +51,8 @@ static NSString *const CustomDataKey = @"customData";
 			}
 
 			_attachments = [mutableAttachments copy];
+		} else {
+			ApptentiveAssertNil(attachmentsJSON);
 		}
 
 		_sender = [[ApptentiveMessageSender alloc] initWithJSON:JSON[@"sender"]];

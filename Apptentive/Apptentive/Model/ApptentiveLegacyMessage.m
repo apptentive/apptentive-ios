@@ -63,9 +63,9 @@
 		ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:legacyMessage.body attachments:attachments senderIdentifier:legacyMessage.sender.apptentiveID automated:legacyMessage.automated.boolValue customData:customData];
 
 		[ApptentiveSerialRequest enqueueMessage:message conversation:Apptentive.shared.backend.conversationManager.activeConversation inContext:context];
-	}
 
-#warning Delete legacy messages
+		[context deleteObject:legacyMessage];
+	}
 }
 
 @end

@@ -137,8 +137,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (void)dealloc {
-	//	[self.viewModel removeUnsentContextMessages];
-
 	self.tableView.delegate = nil;
 	self.messageInputView.messageView.delegate = nil;
 	self.profileView.nameField.delegate = nil;
@@ -544,7 +542,11 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 - (void)viewModelDidChangeContent:(ApptentiveMessageCenterViewModel *)viewModel {
 	[self updateStatusOfVisibleCells];
 
-	[self.tableView endUpdates];
+	@try {
+		[self.tableView endUpdates];
+	} @catch (NSException *exc) {
+		ApptentiveAssertTrue(NO, @"Exception when updating table view");
+	}
 
 	if (self.state != ATMessageCenterStateWhoCard && self.state != ATMessageCenterStateComposing) {
 		[self updateState];
@@ -869,7 +871,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	@try {
 		[self.tableView reloadRowsAtIndexPaths:indexPathsToReload withRowAnimation:UITableViewRowAnimationFade];
 	} @catch (NSException *exception) {
-		ApptentiveLogError(@"caught exception: %@: %@", [exception name], [exception description]);
+		ApptentiveAssertTrue(NO, @"Exception when reloading row in table view");
 	}
 }
 

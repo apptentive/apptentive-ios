@@ -54,7 +54,11 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 		}
 
 		for (ApptentiveMessage *message in _messageStore.messages) {
-#warning ApptentiveSafeCollections
+			ApptentiveAssertNotNil(message.localIdentifier, @"Missing localIdentifier on message in archive");
+			if (message.localIdentifier == nil) {
+				continue;
+			}
+
 			_messageIdentifierIndex[message.localIdentifier] = message;
 		}
 
@@ -112,9 +116,8 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 	NSArray *messageListJSON = [operation.responseObject valueForKey:@"items"];
 	self.messageOperation = nil;
 
+	ApptentiveAssertNotNil(messageListJSON, @"Unexpected response from /messages endpoint");
 	if (messageListJSON == nil) {
-#warning use assert
-		ApptentiveLogError(@"Unexpected response from /messages request");
 		return;
 	}
 
@@ -261,6 +264,11 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 }
 
 - (void)setState:(ApptentiveMessageState)state forMessageWithLocalIdentifier:(NSString *)localIdentifier {
+	ApptentiveAssertNotNil(localIdentifier, @"Missing localIdentifier when updating message");
+	if (localIdentifier == nil) {
+		return;
+	}
+
 	ApptentiveMessage *message = self.messageIdentifierIndex[localIdentifier];
 
 	if (message) {
@@ -276,6 +284,11 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 }
 
 - (void)appendMessage:(ApptentiveMessage *)message {
+	ApptentiveAssertNotNil(message.localIdentifier, @"Missing localIdentifier when appending message");
+	if (message.localIdentifier == nil) {
+		return;
+	}
+
 	NSInteger index = self.messages.count;
 	[self.messageStore.messages addObject:message];
 	[self.messageIdentifierIndex setObject:message forKey:message.localIdentifier];
@@ -291,7 +304,18 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 
 - (void)removeMessage:(ApptentiveMessage *)message {
 	NSInteger index = [self.messageStore.messages indexOfObject:message];
+
+	ApptentiveAssertTrue(index != NSNotFound, @"Unable to find message to remove");
+	if (index == NSNotFound) {
+		return;
+	}
+
 	[self.messageStore.messages removeObjectAtIndex:index];
+
+	ApptentiveAssertNotNil(message.localIdentifier, @"Message to remove missing localIdentifier");
+	if (message.localIdentifier == nil) {
+		return;
+	}
 
 	[self.messageIdentifierIndex removeObjectForKey:message.localIdentifier];
 

@@ -205,7 +205,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 	// update the state of the corresponding item
 	ApptentiveConversationMetadataItem *item = [self.conversationMetadata findItemFilter:^BOOL(ApptentiveConversationMetadataItem *item) {
-		return item.conversationIdentifier = conversation.identifier;
+		return [item.conversationIdentifier isEqualToString:conversation.identifier];
 	}];
 	if (item == nil) {
 		item = [[ApptentiveConversationMetadataItem alloc] initWithConversationIdentifier:conversation.identifier directoryName:conversation.directoryName];

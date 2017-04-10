@@ -12,7 +12,6 @@
 #import "ApptentiveBackend+Engagement.h"
 #import "ApptentiveInteraction.h"
 #import "ApptentiveUtilities.h"
-#import "ApptentiveMessageSender.h"
 #import "ApptentiveMessageCenterViewController.h"
 #import "ApptentiveBannerViewController.h"
 #import "ApptentiveUnreadMessagesBadgeView.h"
@@ -25,6 +24,9 @@
 #import "ApptentiveMutableDevice.h"
 #import "ApptentiveSDK.h"
 #import "ApptentiveVersion.h"
+#import "ApptentiveMessageManager.h"
+#import "ApptentiveMessageSender.h"
+#import "ApptentiveAttachment.h"
 
 NSString *const ApptentiveMessageCenterUnreadCountChangedNotification = @"ApptentiveMessageCenterUnreadCountChangedNotification";
 
@@ -135,15 +137,25 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 }
 
 - (void)sendAttachmentText:(NSString *)text {
-	[self.backend sendTextMessageWithBody:text hiddenOnClient:YES];
+	ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:text attachments:nil senderIdentifier:self.backend.conversationManager.messageManager.localUserIdentifier automated:NO customData:nil];
+
+	[self.backend.conversationManager.messageManager enqueueMessageForSending:message];
 }
 
 - (void)sendAttachmentImage:(UIImage *)image {
-	[self.backend sendImageMessageWithImage:image hiddenOnClient:YES];
+	ApptentiveAttachment *attachment = [[ApptentiveAttachment alloc] initWithData:UIImageJPEGRepresentation(image, 0.95) contentType:@"image/jpeg" name:nil];
+
+	ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:nil attachments:@[attachment] senderIdentifier:self.backend.conversationManager.messageManager.localUserIdentifier automated:NO customData:nil];
+
+	[self.backend.conversationManager.messageManager enqueueMessageForSending:message];
 }
 
 - (void)sendAttachmentFile:(NSData *)fileData withMimeType:(NSString *)mimeType {
-	[self.backend sendFileMessageWithFileData:fileData andMimeType:mimeType hiddenOnClient:YES];
+	ApptentiveAttachment *attachment = [[ApptentiveAttachment alloc] initWithData:fileData contentType:mimeType name:nil];
+
+	ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:nil attachments:@[attachment] senderIdentifier:self.backend.conversationManager.messageManager.localUserIdentifier automated:NO customData:nil];
+
+	[self.backend.conversationManager.messageManager enqueueMessageForSending:message];
 }
 
 - (void)addCustomDeviceDataString:(NSString *)string withKey:(NSString *)key {
@@ -449,7 +461,7 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 				NSNumber *contentAvailable = userInfo[@"aps"][@"content-available"];
 				if (contentAvailable.boolValue) {
 					shouldCallCompletionHandler = NO;
-					[self.backend fetchMessagesInBackground:completionHandler];
+					[self.backend.conversationManager.messageManager checkForMessagesInBackground:completionHandler];
 				}
 				break;
 			}
@@ -466,7 +478,7 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 				if ([action isEqualToString:@"pmc"]) {
 					[self presentMessageCenterFromViewController:viewController];
 				} else {
-					[self.backend.conversationManager checkForMessages];
+					[self.backend.conversationManager.messageManager checkForMessages];
 				}
 				break;
 		}
@@ -501,7 +513,7 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 	if (self.backend.configuration.messageCenter.notificationPopupEnabled && [message isKindOfClass:[ApptentiveMessage class]]) {
 		// TODO: Display something if body is empty
 		ApptentiveMessage *textMessage = (ApptentiveMessage *)message;
-		NSURL *profilePhotoURL = textMessage.sender.profilePhotoURL ? [NSURL URLWithString:textMessage.sender.profilePhotoURL] : nil;
+		NSURL *profilePhotoURL = textMessage.sender.profilePhotoURL;
 
 		ApptentiveBannerViewController *banner = [ApptentiveBannerViewController bannerWithImageURL:profilePhotoURL title:textMessage.sender.name message:textMessage.body];
 

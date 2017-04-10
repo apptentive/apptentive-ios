@@ -93,45 +93,4 @@
 	return self.messageRequestInfo;
 }
 
-- (void)processResponse:(NSHTTPURLResponse *)response withObject:(NSObject *)responseObject {
-	[super processResponse:response withObject:responseObject];
-
-	[self setMessagePendingState:ATPendingMessageStateConfirmed];
-}
-
-- (void)processNetworkError:(NSError *)error {
-	[super processNetworkError:error];
-
-	[self setMessagePendingState:ATPendingMessageStateError];
-}
-
-- (void)processHTTPError:(NSError *)error withResponse:(NSHTTPURLResponse *)response responseData:(NSData *)responseData {
-	[super processHTTPError:error withResponse:response responseData:responseData];
-
-	[self setMessagePendingState:ATPendingMessageStateError];
-}
-
-- (void)setMessagePendingState:(ATPendingMessageState)pendingState {
-	NSManagedObjectContext *context = self.requestInfo.managedObjectContext;
-
-	[context performBlockAndWait:^{
-		NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ATMessage"];
-		fetchRequest.predicate = [NSPredicate predicateWithFormat:@"pendingMessageID = %@", self.messageRequestInfo.identifier];
-
-		NSError *error;
-		NSArray *results = [context executeFetchRequest:fetchRequest error:&error];
-
-		if (results.count == 1) {
-			((ApptentiveMessage *)results.firstObject).pendingState = @(pendingState);
-		} else {
-			ApptentiveLogError(@"Unable to identify message with ID “%@”. (error: %@)", self.messageRequestInfo.identifier, error);
-		}
-
-		if (![context save:&error]) {
-			ApptentiveLogError(@"Unable to save pending state of message: %@", error);
-		}
-	}];
-}
-
-
 @end

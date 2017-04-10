@@ -8,6 +8,7 @@
 
 #import "ApptentiveTableView.h"
 
+
 @implementation ApptentiveTableView
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {

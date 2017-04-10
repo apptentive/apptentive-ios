@@ -13,10 +13,11 @@
 #import "ApptentiveEngagementManifest.h"
 #import "Apptentive_Private.h"
 #import "ApptentiveNetworkQueue.h"
-#import "ApptentiveMessage.h"
+#import "ApptentiveBackend.h"
 #import "ApptentivePerson.h"
-#import "ApptentiveMessageSender.h"
 #import "ApptentiveSerialRequest.h"
+#import "ApptentiveMessageManager.h"
+#import "ApptentiveAppConfiguration.h"
 
 static NSString *const ConversationMetadataFilename = @"conversation-v1.meta";
 static NSString *const ConversationFilename = @"conversation-v1.archive";
@@ -30,7 +31,6 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 @property (strong, nonatomic) ApptentiveConversationMetadata *conversationMetadata;
 
-@property (strong, nonatomic, nullable) ApptentiveRequestOperation *messageOperation;
 @property (strong, nonatomic, nullable) ApptentiveRequestOperation *manifestOperation;
 
 @property (readonly, nonatomic) NSString *metadataPath;
@@ -123,22 +123,36 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	ApptentiveLogDebug(ApptentiveLogTagConversation, @"Can't load conversation: creating anonymous conversation...");
 	ApptentiveConversation *anonymousConversation = [[ApptentiveConversation alloc] init];
 	anonymousConversation.state = ApptentiveConversationStateAnonymousPending;
-	anonymousConversation.fileName = [NSUUID UUID].UUIDString;
+	anonymousConversation.directoryName = [NSUUID UUID].UUIDString;
+
 	[self fetchConversationToken:anonymousConversation];
+	[self createMessageManagerForConversation:anonymousConversation];
+
 	return anonymousConversation;
 }
 
 - (ApptentiveConversation *)loadConversation:(ApptentiveConversationMetadataItem *)item {
-	ApptentiveConversation *conversation = [NSKeyedUnarchiver unarchiveObjectWithFile:[self conversationPathForFilename:item.fileName]];
+	ApptentiveConversation *conversation = [NSKeyedUnarchiver unarchiveObjectWithFile:[self conversationArchivePathForDirectoryName:item.directoryName]];
 	conversation.state = item.state;
-	conversation.fileName = item.fileName;
+	conversation.directoryName = item.directoryName;
+
+	[self createMessageManagerForConversation:conversation];
 
 	return conversation;
+}
+
+- (void)createMessageManagerForConversation:(ApptentiveConversation *)conversation {
+	NSString *directoryPath = [self conversationContainerPathForDirectoryName:conversation.directoryName];
+
+	_messageManager  = [[ApptentiveMessageManager alloc] initWithStoragePath:directoryPath networkQueue:self.networkQueue pollingInterval:Apptentive.shared.backend.configuration.messageCenter.backgroundPollingInterval localUserIdentifier:conversation.person.identifier];
 }
 
 - (BOOL)endActiveConversation {
 	if (self.activeConversation != nil) {
 		self.activeConversation.state = ApptentiveConversationStateLoggedOut;
+		[self.messageManager saveMessageStore];
+		_messageManager = nil;
+
 		[self saveConversation];
 		[self handleConversationStateChange:self.activeConversation];
 
@@ -194,7 +208,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		return item.conversationIdentifier = conversation.identifier;
 	}];
 	if (item == nil) {
-		item = [[ApptentiveConversationMetadataItem alloc] initWithConversationIdentifier:conversation.identifier filename:conversation.fileName];
+		item = [[ApptentiveConversationMetadataItem alloc] initWithConversationIdentifier:conversation.identifier directoryName:conversation.directoryName];
 		[self.conversationMetadata addItem:item];
 	}
 
@@ -316,10 +330,6 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		[self processManifestResponse:(NSDictionary *)operation.responseObject cacheLifetime:operation.cacheLifetime];
 
 		self.manifestOperation = nil;
-	} else if (operation == self.messageOperation) {
-		[self processMessagesResponse:(NSDictionary *)operation.responseObject];
-
-		self.messageOperation = nil;
 	}
 }
 
@@ -340,8 +350,6 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		self.conversationOperation = nil;
 	} else if (operation == self.manifestOperation) {
 		self.manifestOperation = nil;
-	} else if (operation == self.messageOperation) {
-		self.messageOperation = nil;
 	}
 }
 
@@ -353,6 +361,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 	if (token != nil) {
 		[self.activeConversation setToken:token conversationID:conversationID personID:personID deviceID:deviceID];
+		self.messageManager.localUserIdentifier = personID;
 
 		if (self.activeConversation.state == ApptentiveConversationStateAnonymousPending) {
 			self.activeConversation.state = ApptentiveConversationStateAnonymous;
@@ -374,61 +383,21 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	});
 }
 
-- (void)processMessagesResponse:(NSDictionary *)response {
-	NSArray *messages = response[@"items"];
-
-	if ([messages isKindOfClass:[NSArray class]]) {
-		NSManagedObjectContext *context = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-		context.parentContext = self.parentManagedObjectContext;
-
-		[context performBlock:^{
-			NSString *lastMessageID = nil;
-
-			for (NSDictionary *messageJSON in messages) {
-				ApptentiveMessage *message = [ApptentiveMessage messageWithJSON:messageJSON inContext:context];
-
-				if (message) {
-					if ([self.activeConversation.person.identifier isEqualToString:message.sender.apptentiveID]) {
-						message.sentByUser = @(YES);
-						message.seenByUser = @(YES);
-					}
-
-					message.pendingState = @(ATPendingMessageStateConfirmed);
-
-					lastMessageID = message.apptentiveID;
-				}
-			}
-
-			NSError *error = nil;
-			if (![context save:&error]) {
-				ApptentiveLogError(@"Failed to save received messages: %@", error);
-				return;
-			}
-
-			dispatch_async(dispatch_get_main_queue(), ^{
-				NSError *mainContextSaveError;
-				if (![self.parentManagedObjectContext save:&mainContextSaveError]) {
-					ApptentiveLogError(@"Failed to save received messages in main context: %@", error);
-				}
-
-				if ([self.delegate respondsToSelector:@selector(conversationManagerMessageFetchCompleted:)]) {
-					[self.delegate conversationManagerMessageFetchCompleted:YES];
-				}
-
-				[self.activeConversation didDownloadMessagesUpTo:lastMessageID];
-			});
-		}];
-	} else {
-		ApptentiveLogError(@"Expected array of dictionaries for message response");
-		if ([self.delegate respondsToSelector:@selector(conversationManagerMessageFetchCompleted:)]) {
-			[self.delegate conversationManagerMessageFetchCompleted:NO];
-		}
-	}
-}
-
 - (BOOL)saveConversation {
 	@synchronized(self.activeConversation) {
-		return [NSKeyedArchiver archiveRootObject:self.activeConversation toFile:[self conversationPathForFilename:self.activeConversation.fileName]];
+		NSString *conversationDirectoryPath = [self conversationContainerPathForDirectoryName:self.activeConversation.directoryName];
+
+		BOOL isDirectory = NO;
+		if (![[NSFileManager defaultManager] fileExistsAtPath:conversationDirectoryPath isDirectory:&isDirectory] || !isDirectory) {
+			NSError *error;
+
+			if (![[NSFileManager defaultManager] createDirectoryAtPath:conversationDirectoryPath withIntermediateDirectories:YES attributes:nil error:&error]) {
+				ApptentiveAssertTrue(NO, @"Unable to create conversation directory “%@” (%@)", conversationDirectoryPath, error);
+				return NO;
+			}
+		}
+
+		return [NSKeyedArchiver archiveRootObject:self.activeConversation toFile:[self conversationArchivePathForDirectoryName:self.activeConversation.directoryName]];
 	}
 }
 
@@ -472,23 +441,15 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	return [self.storagePath stringByAppendingPathComponent:ManifestFilename];
 }
 
-- (NSString *)conversationPathForFilename:(NSString *)filename {
-	return [self.storagePath stringByAppendingPathComponent:filename];
+- (NSString *)conversationArchivePathForDirectoryName:(NSString *)directoryName {
+	return [[self conversationContainerPathForDirectoryName:directoryName] stringByAppendingPathComponent:ConversationFilename];
 }
 
+- (NSString *)conversationContainerPathForDirectoryName:(NSString *)directoryName {
+	return [self.storagePath stringByAppendingPathComponent:directoryName];
+}
 
 #pragma mark - Metadata
-
-
-- (void)checkForMessages {
-	self.messageOperation = [[ApptentiveRequestOperation alloc] initWithPath:@"conversation" method:@"GET" payload:nil delegate:self dataSource:self.networkQueue];
-
-	if (!self.activeConversation.token && self.conversationOperation) {
-		[self.messageOperation addDependency:self.conversationOperation];
-	}
-
-	[self.networkQueue addOperation:self.messageOperation];
-}
 
 - (void)resume {
 #if APPTENTIVE_DEBUG
@@ -501,7 +462,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		[self fetchEngagementManifest];
 	}
 
-	[self checkForMessages];
+	[self.messageManager checkForMessages];
 }
 
 - (void)pause {

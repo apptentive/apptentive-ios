@@ -18,12 +18,12 @@ static NSString *const VersionKey = @"version";
 
 @implementation ApptentiveConversationMetadataItem
 
-- (instancetype)initWithConversationIdentifier:(NSString *)conversationIdentifier filename:(NSString *)filename {
+- (instancetype)initWithConversationIdentifier:(NSString *)conversationIdentifier directoryName:(NSString *)filename {
 	self = [super init];
 
 	if (self) {
 		_conversationIdentifier = conversationIdentifier;
-		_fileName = filename;
+		_directoryName = filename;
 	}
 
 	return self;
@@ -39,7 +39,7 @@ static NSString *const VersionKey = @"version";
 	if (self) {
 		_state = [coder decodeIntegerForKey:StateKey];
 		_conversationIdentifier = [coder decodeObjectOfClass:[NSString class] forKey:ConversationIdentifierKey];
-		_fileName = [coder decodeObjectOfClass:[NSString class] forKey:FileNameKey];
+		_directoryName = [coder decodeObjectOfClass:[NSString class] forKey:FileNameKey];
 	}
 
 	return self;
@@ -48,7 +48,7 @@ static NSString *const VersionKey = @"version";
 - (void)encodeWithCoder:(NSCoder *)coder {
 	[coder encodeInteger:self.state forKey:StateKey];
 	[coder encodeObject:self.conversationIdentifier forKey:ConversationIdentifierKey];
-	[coder encodeObject:self.fileName forKey:FileNameKey];
+	[coder encodeObject:self.directoryName forKey:FileNameKey];
 	[coder encodeInteger:VERSION forKey:VersionKey];
 }
 

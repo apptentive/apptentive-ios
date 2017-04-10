@@ -11,7 +11,7 @@
 #import "ApptentiveRequestOperation.h"
 #import <CoreData/CoreData.h>
 
-@class ApptentiveConversationMetadataItem, ApptentiveConversation, ApptentiveNetworkQueue, ApptentiveEngagementManifest, ApptentiveAppConfiguration;
+@class ApptentiveConversationMetadataItem, ApptentiveConversation, ApptentiveNetworkQueue, ApptentiveEngagementManifest, ApptentiveAppConfiguration, ApptentiveMessageManager;
 
 @protocol ApptentiveConversationManagerDelegate;
 
@@ -28,11 +28,11 @@ extern NSString *const ApptentiveConversationStateDidChangeNotificationKeyConver
 @property (readonly, strong, nonatomic) ApptentiveNetworkQueue *networkQueue;
 @property (strong, nonatomic, nullable) ApptentiveRequestOperation *conversationOperation;
 @property (readonly, strong, nullable, nonatomic) ApptentiveConversation *activeConversation;
+@property (readonly, nonatomic) ApptentiveMessageManager *messageManager;
 
 @property (weak, nonatomic) id<ApptentiveConversationManagerDelegate> delegate;
 
 @property (readonly, strong, nonatomic) ApptentiveEngagementManifest *manifest;
-@property (readonly, strong, nonatomic) ApptentiveAppConfiguration *configuration;
 
 @property (readonly, strong, nonatomic) NSManagedObjectContext *parentManagedObjectContext;
 
@@ -46,8 +46,6 @@ extern NSString *const ApptentiveConversationStateDidChangeNotificationKeyConver
 - (BOOL)endActiveConversation;
 
 - (BOOL)saveMetadata;
-
-- (void)checkForMessages;
 
 - (void)resume;
 
@@ -63,8 +61,6 @@ extern NSString *const ApptentiveConversationStateDidChangeNotificationKeyConver
 @protocol ApptentiveConversationManagerDelegate <NSObject>
 
 - (void)conversationManager:(ApptentiveConversationManager *)manager conversationDidChangeState:(ApptentiveConversation *)conversation;
-
-- (void)conversationManagerMessageFetchCompleted:(BOOL)success;
 
 @end
 

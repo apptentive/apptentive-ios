@@ -71,7 +71,7 @@
 }
 
 - (void)setImageURL:(NSURL *)anImageURL {
-	if (_imageURL != anImageURL) {
+	if (_imageURL != anImageURL || self.image == nil) {
 		_imageURL = [anImageURL copy];
 		[self restartDownload];
 	}

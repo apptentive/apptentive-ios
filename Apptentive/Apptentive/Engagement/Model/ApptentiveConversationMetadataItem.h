@@ -12,10 +12,10 @@
 
 @interface ApptentiveConversationMetadataItem : NSObject <NSSecureCoding>
 
-- (instancetype)initWithConversationIdentifier:(NSString *)conversationIdentifier filename:(NSString *)filename;
+- (instancetype)initWithConversationIdentifier:(NSString *)conversationIdentifier directoryName:(NSString *)filename;
 
 @property (assign, nonatomic) ApptentiveConversationState state;
 @property (strong, nonatomic) NSString *conversationIdentifier;
-@property (strong, nonatomic) NSString *fileName;
+@property (strong, nonatomic) NSString *directoryName;
 
 @end

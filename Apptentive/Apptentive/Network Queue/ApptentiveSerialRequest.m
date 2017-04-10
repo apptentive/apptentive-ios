@@ -7,7 +7,7 @@
 //
 
 #import "ApptentiveSerialRequest.h"
-#import "ApptentiveFileAttachment.h"
+#import "ApptentiveAttachment.h"
 #import "ApptentiveRequestOperation.h"
 #import "ApptentiveSerialRequestAttachment.h"
 #import "ApptentiveConversation.h"
@@ -23,7 +23,7 @@
 @dynamic path;
 @dynamic payload;
 
-+ (BOOL)enqueueRequestWithPath:(NSString *)path method:(NSString *)method payload:(NSDictionary *)payload attachments:(NSOrderedSet *)attachments identifier:(NSString *)identifier conversation:(ApptentiveConversation *)conversation inContext:(NSManagedObjectContext *)context {
++ (BOOL)enqueueRequestWithPath:(NSString *)path method:(NSString *)method payload:(NSDictionary *)payload attachments:(NSArray *)attachments identifier:(NSString *)identifier conversation:(ApptentiveConversation *)conversation inContext:(NSManagedObjectContext *)context {
     
     ApptentiveAssertNotNil(conversation);
     if (conversation == nil) {
@@ -66,8 +66,8 @@
 	}
 
 	NSMutableArray *attachmentArray = [NSMutableArray arrayWithCapacity:attachments.count];
-	for (ApptentiveFileAttachment *attachment in attachments) {
-		[attachmentArray addObject:[ApptentiveSerialRequestAttachment queuedAttachmentWithName:attachment.name path:attachment.fullLocalPath MIMEType:attachment.mimeType inContext:context]];
+	for (ApptentiveAttachment *attachment in attachments) {
+		[attachmentArray addObject:[ApptentiveSerialRequestAttachment queuedAttachmentWithName:attachment.name path:attachment.fullLocalPath MIMEType:attachment.contentType inContext:context]];
 	}
 	request.attachments = [NSOrderedSet orderedSetWithArray:attachmentArray];
 

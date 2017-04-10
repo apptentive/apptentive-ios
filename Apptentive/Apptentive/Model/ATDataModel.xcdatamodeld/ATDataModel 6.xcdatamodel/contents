@@ -5,7 +5,7 @@
         <attribute name="label" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="pendingEventID" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
     </entity>
-    <entity name="ATFileAttachment" representedClassName="ApptentiveFileAttachment" syncable="YES">
+    <entity name="ATFileAttachment" representedClassName="ApptentiveLegacyFileAttachment" syncable="YES">
         <attribute name="localPath" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="mimeType" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
@@ -13,7 +13,7 @@
         <attribute name="remoteURL" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="message" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ATMessage" inverseName="attachments" inverseEntity="ATMessage" syncable="YES"/>
     </entity>
-    <entity name="ATMessage" representedClassName="ApptentiveMessage" parentEntity="ATRecord" syncable="YES">
+    <entity name="ATMessage" representedClassName="ApptentiveLegacyMessage" parentEntity="ATRecord" syncable="YES">
         <attribute name="automated" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="body" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="customData" optional="YES" attributeType="Binary" syncable="YES"/>
@@ -29,7 +29,7 @@
         <relationship name="attachments" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="ATFileAttachment" inverseName="message" inverseEntity="ATFileAttachment" syncable="YES"/>
         <relationship name="sender" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="ATMessageSender" inverseName="sentMessages" inverseEntity="ATMessageSender" syncable="YES"/>
     </entity>
-    <entity name="ATMessageSender" representedClassName="ApptentiveMessageSender" syncable="YES">
+    <entity name="ATMessageSender" representedClassName="ApptentiveLegacyMessageSender" syncable="YES">
         <attribute name="apptentiveID" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="emailAddress" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>

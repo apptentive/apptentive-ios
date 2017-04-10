@@ -114,6 +114,105 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 - (void)viewDidLoad {
 	[super viewDidLoad];
 
+	if (self.viewModel != nil) {
+		[self configureView];
+	}
+
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resizeFooterView:) name:UIKeyboardWillChangeFrameNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scrollToFooterView:) name:UIKeyboardWillShowNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resizeFooterView:) name:UIKeyboardDidHideNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardDidShowNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidHide:) name:UIKeyboardDidHideNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(saveDraft) name:UIApplicationDidEnterBackgroundNotification object:nil];
+
+	// Respond to dynamic type size changes
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateHeaderFooterTextSize:) name:UIContentSizeCategoryDidChangeNotification object:nil];
+
+	[self.attachmentController addObserver:self forKeyPath:@"attachments" options:0 context:NULL];
+	[self.attachmentController viewDidLoad];
+
+	[self updateSendButtonEnabledStatus];
+
+	self.iOSAfter8_0 = [[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){8, 1, 0}];
+}
+
+- (void)dealloc {
+	//	[self.viewModel removeUnsentContextMessages];
+
+	self.tableView.delegate = nil;
+	self.messageInputView.messageView.delegate = nil;
+	self.profileView.nameField.delegate = nil;
+	self.profileView.emailField.delegate = nil;
+
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
+
+	@try {
+		// May get here before -viewDidLoad completes, in which case we aren't an observer.
+		[self.attachmentController removeObserver:self forKeyPath:@"attachments"];
+	} @catch (NSException *__unused exception) {
+	}
+}
+
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+	[self.greetingView traitCollectionDidChange:previousTraitCollection];
+
+	[self resizeFooterView:nil];
+}
+
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+	[coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> _Nonnull context) {
+		// If the old cached keyboard rect overlaps the screen, assume it's moving off screen.
+		if (CGRectGetMinY(self.lastKnownKeyboardRect) <= CGRectGetHeight(self.view.bounds)) {
+			self.lastKnownKeyboardRect = CGRectMake(0, CGRectGetHeight(self.view.bounds), self.lastKnownKeyboardRect.size.width, self.lastKnownKeyboardRect.size.height);
+		}
+
+		[self resizeFooterView:nil];
+	} completion:^(id<UIViewControllerTransitionCoordinatorContext> _Nonnull context){
+	}];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+	[super viewWillAppear:animated];
+
+	self.lastKnownKeyboardRect = CGRectMake(0, CGRectGetHeight([UIScreen mainScreen].bounds), CGRectGetWidth([UIScreen mainScreen].bounds), 20);
+
+	if (self.attachmentController.active) {
+		self.state = ATMessageCenterStateComposing;
+		[self.attachmentController becomeFirstResponder];
+
+		CGSize screenSize = [UIScreen mainScreen].bounds.size;
+		CGSize drawerSize = self.attachmentController.inputView.bounds.size;
+		self.lastKnownKeyboardRect = CGRectMake(0, screenSize.height - drawerSize.height, screenSize.width, drawerSize.height);
+	} else if (self.messageComposerHasText || self.messageComposerHasAttachments) {
+		self.state = ATMessageCenterStateComposing;
+		[self.messageInputView.messageView becomeFirstResponder];
+	} else if (self.isSubsequentDisplay == NO) {
+		[self updateState];
+	}
+
+	if (self.isSubsequentDisplay == NO || self.attachmentController.active) {
+		[self engageGreetingViewEventIfNecessary];
+		[self scrollToLastMessageAnimated:NO];
+
+		self.isSubsequentDisplay = YES;
+	}
+}
+
+#pragma mark - View model
+
+- (void)setViewModel:(ApptentiveMessageCenterViewModel *)viewModel {
+	_viewModel.delegate = nil;
+
+	_viewModel = viewModel;
+
+	viewModel.delegate = self;
+
+	if (self.isViewLoaded) {
+		[self configureView];
+	}
+}
+
+- (void)configureView {
 	[self.viewModel.interaction engage:ATInteractionMessageCenterEventLabelLaunch fromViewController:self];
 
 	[self.navigationController.toolbar addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(compose:)]];
@@ -220,95 +319,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	} else {
 		self.navigationItem.leftBarButtonItem = nil;
 	}
-
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resizeFooterView:) name:UIKeyboardWillChangeFrameNotification object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scrollToFooterView:) name:UIKeyboardWillShowNotification object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resizeFooterView:) name:UIKeyboardDidHideNotification object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardDidShowNotification object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidHide:) name:UIKeyboardDidHideNotification object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(saveDraft) name:UIApplicationDidEnterBackgroundNotification object:nil];
-
-	// Respond to dynamic type size changes
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateHeaderFooterTextSize:) name:UIContentSizeCategoryDidChangeNotification object:nil];
-
-	[self.attachmentController addObserver:self forKeyPath:@"attachments" options:0 context:NULL];
-	[self.attachmentController viewDidLoad];
-
-	[self updateSendButtonEnabledStatus];
-
-	self.iOSAfter8_0 = [[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){8, 1, 0}];
-}
-
-- (void)dealloc {
-	//	[self.viewModel removeUnsentContextMessages];
-
-	self.tableView.delegate = nil;
-	self.messageInputView.messageView.delegate = nil;
-	self.profileView.nameField.delegate = nil;
-	self.profileView.emailField.delegate = nil;
-
-	[[NSNotificationCenter defaultCenter] removeObserver:self];
-
-	@try {
-		// May get here before -viewDidLoad completes, in which case we aren't an observer.
-		[self.attachmentController removeObserver:self forKeyPath:@"attachments"];
-	} @catch (NSException *__unused exception) {
-	}
-}
-
-- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
-	[self.greetingView traitCollectionDidChange:previousTraitCollection];
-
-	[self resizeFooterView:nil];
-}
-
-- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
-	[coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> _Nonnull context) {
-		// If the old cached keyboard rect overlaps the screen, assume it's moving off screen.
-		if (CGRectGetMinY(self.lastKnownKeyboardRect) <= CGRectGetHeight(self.view.bounds)) {
-			self.lastKnownKeyboardRect = CGRectMake(0, CGRectGetHeight(self.view.bounds), self.lastKnownKeyboardRect.size.width, self.lastKnownKeyboardRect.size.height);
-		}
-
-		[self resizeFooterView:nil];
-	} completion:^(id<UIViewControllerTransitionCoordinatorContext> _Nonnull context){
-	}];
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-	[super viewWillAppear:animated];
-
-	self.lastKnownKeyboardRect = CGRectMake(0, CGRectGetHeight([UIScreen mainScreen].bounds), CGRectGetWidth([UIScreen mainScreen].bounds), 20);
-
-	if (self.attachmentController.active) {
-		self.state = ATMessageCenterStateComposing;
-		[self.attachmentController becomeFirstResponder];
-
-		CGSize screenSize = [UIScreen mainScreen].bounds.size;
-		CGSize drawerSize = self.attachmentController.inputView.bounds.size;
-		self.lastKnownKeyboardRect = CGRectMake(0, screenSize.height - drawerSize.height, screenSize.width, drawerSize.height);
-	} else if (self.messageComposerHasText || self.messageComposerHasAttachments) {
-		self.state = ATMessageCenterStateComposing;
-		[self.messageInputView.messageView becomeFirstResponder];
-	} else if (self.isSubsequentDisplay == NO) {
-		[self updateState];
-	}
-
-	if (self.isSubsequentDisplay == NO || self.attachmentController.active) {
-		[self engageGreetingViewEventIfNecessary];
-		[self scrollToLastMessageAnimated:NO];
-
-		self.isSubsequentDisplay = YES;
-	}
-}
-
-#pragma mark - View model
-
-- (void)setViewModel:(ApptentiveMessageCenterViewModel *)viewModel {
-	_viewModel.delegate = nil;
-
-	_viewModel = viewModel;
-
-	viewModel.delegate = self;
 }
 
 #pragma mark - Table view data source

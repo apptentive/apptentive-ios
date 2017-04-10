@@ -44,26 +44,6 @@
 	XCTAssertFalse([dataManager didFailToMigrateStore], @"Failed to migrate the datastore.");
 	XCTAssertFalse([dataManager didRemovePersistentStore], @"Shouldn't have had to delete datastore.");
 
-	// Test that default value of hidden is NO for existing objects.
-	NSManagedObjectContext *moc = [dataManager managedObjectContext];
-	NSFetchRequest *request = [[NSFetchRequest alloc] init];
-	@try {
-		[request setEntity:[NSEntityDescription entityForName:@"ATMessage" inManagedObjectContext:moc]];
-		[request setFetchBatchSize:20];
-		NSArray *results = [moc executeFetchRequest:request error:nil];
-		XCTAssertTrue([results count] > 0, @"No messages found after database migration.");
-		for (NSManagedObject *c in results) {
-			ApptentiveLegacyMessage *message = (ApptentiveLegacyMessage *)c;
-			XCTAssertNotNil(message.hidden, @"Messages should be visible by default after migration.");
-			XCTAssertFalse([(NSNumber *)message.hidden boolValue], @"Messages should be visible by default after migration.");
-		}
-	}
-	@catch (NSException *exception) {
-		XCTFail(@"Unable to perform query: %@", exception);
-	}
-	@finally {
-		request = nil;
-	}
 }
 
 - (void)testV1Upgrade {

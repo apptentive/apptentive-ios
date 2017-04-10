@@ -167,7 +167,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 #pragma mark - Conversation Token Fetching
 
 - (void)fetchConversationToken:(ApptentiveConversation *)conversation {
-	self.conversationOperation = [[ApptentiveRequestOperation alloc] initWithPath:@"conversation" method:@"POST" payload:conversation.conversationCreationJSON delegate:self dataSource:self.networkQueue];
+    self.conversationOperation = [[ApptentiveRequestOperation alloc] initWithPath:@"conversation" method:@"POST" payload:conversation.conversationCreationJSON authToken:self.networkQueue.token delegate:self dataSource:self.networkQueue];
 
 	[self.networkQueue addOperation:self.conversationOperation];
 }
@@ -414,7 +414,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		return;
 	}
 
-	self.manifestOperation = [[ApptentiveRequestOperation alloc] initWithPath:@"interactions" method:@"GET" payload:nil delegate:self dataSource:self.networkQueue];
+    self.manifestOperation = [[ApptentiveRequestOperation alloc] initWithPath:@"interactions" method:@"GET" payload:nil authToken:self.networkQueue.token delegate:self dataSource:self.networkQueue];
 
 	if (!self.activeConversation.token && self.conversationOperation) {
 		[self.manifestOperation addDependency:self.conversationOperation];

@@ -80,11 +80,12 @@ The API version that this version of the SDK targets.
  @param method The HTTP request method that the request will use.
  @param payload A dictonary that will be JSON encoded and transmitted in the
  body of the request.
+ @param authToken The auth token for sending payloads
  @param delegate The delegate that the operation will communicate with.
  @param dataSource The data source that the operation will use
  @return The newly-initialized operation.
  */
-- (instancetype)initWithPath:(NSString *)path method:(NSString *)method payload:(NSDictionary *)payload delegate:(id<ApptentiveRequestOperationDelegate>)delegate dataSource:(id<ApptentiveRequestOperationDataSource>)dataSource;
+- (instancetype)initWithPath:(NSString *)path method:(NSString *)method payload:(NSDictionary *)payload authToken:(NSString *)authToken delegate:(id<ApptentiveRequestOperationDelegate>)delegate dataSource:(id<ApptentiveRequestOperationDataSource>)dataSource;
 
 /**
  Initializes a request operation with payload data.
@@ -93,11 +94,12 @@ The API version that this version of the SDK targets.
  @param method The HTTP request method that the request will use.
  @param payloadData The data to be transmitted in the request body.
  @param APIVersion The API version that the encoded data targets.
+ @param authToken The auth token for sending payloads
  @param delegate The delegate that the operation will communicate with.
  @param dataSource The data source that the operation will use
  @return The newly-initialized operation.
  */
-- (instancetype)initWithPath:(NSString *)path method:(NSString *)method payloadData:(NSData *)payloadData APIVersion:(NSString *)APIVersion delegate:(id<ApptentiveRequestOperationDelegate>)delegate dataSource:(id<ApptentiveRequestOperationDataSource>)dataSource;
+- (instancetype)initWithPath:(NSString *)path method:(NSString *)method payloadData:(NSData *)payloadData APIVersion:(NSString *)APIVersion authToken:(NSString *)authToken delegate:(id<ApptentiveRequestOperationDelegate>)delegate dataSource:(id<ApptentiveRequestOperationDataSource>)dataSource;
 
 /**
  An object that the request operation will communicate its status to.

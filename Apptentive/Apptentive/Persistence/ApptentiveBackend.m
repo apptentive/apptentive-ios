@@ -226,7 +226,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 		return;
 	}
 
-	self.configurationOperation = [[ApptentiveRequestOperation alloc] initWithPath:@"conversation/configuration" method:@"GET" payload:nil delegate:self dataSource:self.networkQueue];
+	self.configurationOperation = [[ApptentiveRequestOperation alloc] initWithPath:@"conversation/configuration" method:@"GET" payload:nil authToken:self.networkQueue.token delegate:self dataSource:self.networkQueue];
 
 	if (!self.conversationManager.activeConversation && self.conversationManager.conversationOperation) {
 		[self.configurationOperation addDependency:self.conversationManager.conversationOperation];
@@ -465,7 +465,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	// Anonymous pending conversations will not yet have a token, so we can't finish starting up yet in that case.
 	if (conversation.state != ApptentiveConversationStateAnonymousPending) {
 		self.networkQueue.token = conversation.token;
-		self.serialNetworkQueue.token = conversation.token;
+		// self.serialNetworkQueue.token = conversation.token; // serial network queue doesn't use a store token (each request will carry its own token instead)
 
 		if (self.state != ATBackendStateReady) {
 			[self finishStartupWithToken:conversation.token];

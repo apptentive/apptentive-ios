@@ -36,7 +36,6 @@
 			@"Accept-Encoding": @"gzip",
 			@"Accept-Charset": @"utf-8",
 			@"User-Agent": [NSString stringWithFormat:@"ApptentiveConnect/%@ (%@)", SDKVersion, platform],
-			@"Authorization": [@"OAuth " stringByAppendingString:token]
 		};
 
 		_URLSession = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:nil];
@@ -45,15 +44,6 @@
 	}
 
 	return self;
-}
-
-- (void)setToken:(NSString *)token {
-	NSURLSessionConfiguration *configuration = self.URLSession.configuration;
-	NSMutableDictionary *additionalHeaders = [configuration.HTTPAdditionalHeaders mutableCopy];
-	additionalHeaders[@"Authorization"] = [@"OAuth " stringByAppendingString:token];
-	configuration.HTTPAdditionalHeaders = additionalHeaders;
-
-	_URLSession = [NSURLSession sessionWithConfiguration:configuration];
 }
 
 - (void)increaseBackoffDelay {

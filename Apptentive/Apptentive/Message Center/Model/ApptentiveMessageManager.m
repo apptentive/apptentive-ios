@@ -79,7 +79,7 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 		path = [path stringByAppendingFormat:@"?after_id=%@", self.messageStore.lastMessageIdentifier];
 	}
 
-	self.messageOperation = [[ApptentiveRequestOperation alloc] initWithPath:path method:@"GET" payload:nil delegate:self dataSource:self.networkQueue];
+    self.messageOperation = [[ApptentiveRequestOperation alloc] initWithPath:path method:@"GET" payload:nil authToken:self.networkQueue.token delegate:self dataSource:self.networkQueue];
 
 	[self.networkQueue addOperation:self.messageOperation];
 }

@@ -23,7 +23,7 @@
 }
 
 - (instancetype)initWithRequestInfo:(ApptentiveSerialRequest *)requestInfo delegate:(id<ApptentiveRequestOperationDelegate, ApptentiveRequestOperationDataSource>)delegate {
-	self = [super initWithPath:requestInfo.path method:requestInfo.method payloadData:requestInfo.payload APIVersion:requestInfo.apiVersion delegate:delegate dataSource:delegate];
+    self = [super initWithPath:requestInfo.path method:requestInfo.method payloadData:requestInfo.payload APIVersion:requestInfo.apiVersion authToken:requestInfo.authToken delegate:delegate dataSource:delegate];
 
 	if (self) {
 		_requestInfo = requestInfo;

@@ -18,6 +18,7 @@
 @dynamic apiVersion;
 @dynamic attachments;
 @dynamic conversationIdentifier;
+@dynamic authToken;
 @dynamic date;
 @dynamic identifier;
 @dynamic method;
@@ -56,6 +57,7 @@
 	request.identifier = identifier;
 	request.conversationIdentifier = conversation.identifier;
 	request.apiVersion = [ApptentiveRequestOperation APIVersion];
+    request.authToken = conversation.token; // TODO: for the encrypted storage that might be something else
 
 	NSError *error;
 	request.payload = [NSJSONSerialization dataWithJSONObject:payload options:0 error:&error];

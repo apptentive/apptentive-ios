@@ -22,10 +22,11 @@
 
 - (void)presentInteractionFromViewController:(UIViewController *)viewController {
 	UINavigationController *navigationController = [[ApptentiveUtilities storyboard] instantiateViewControllerWithIdentifier:@"MessageCenterNavigation"];
+	ApptentiveMessageCenterViewController *messageCenter = navigationController.viewControllers.firstObject;
 
 	ApptentiveMessageCenterViewModel *viewModel = [[ApptentiveMessageCenterViewModel alloc] initWithInteraction:self.interaction messageManager:Apptentive.shared.backend.conversationManager.messageManager];
+	[viewModel start];
 
-	ApptentiveMessageCenterViewController *messageCenter = navigationController.viewControllers.firstObject;
 	messageCenter.viewModel = viewModel;
 
 	Apptentive.shared.backend.presentedMessageCenterViewController = messageCenter;

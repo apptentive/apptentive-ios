@@ -267,11 +267,11 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 		message.state = state;
 		NSInteger index = [self.messages indexOfObject:message];
 
-		[self callOnMainThread:^{
+		dispatch_async(dispatch_get_main_queue(), ^{
 			[self.delegate messageManagerWillBeginUpdates:self];
 			[self.delegate messageManager:self didUpdateMessage:message atIndex:index];
 			[self.delegate messageManagerDidEndUpdates:self];
-		}];
+		});
 	}
 }
 
@@ -280,11 +280,11 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 	[self.messageStore.messages addObject:message];
 	[self.messageIdentifierIndex setObject:message forKey:message.localIdentifier];
 
-	[self callOnMainThread:^{
+	dispatch_async(dispatch_get_main_queue(), ^{
 		[self.delegate messageManagerWillBeginUpdates:self];
 		[self.delegate messageManager:self didInsertMessage:message atIndex:index];
 		[self.delegate messageManagerDidEndUpdates:self];
-	}];
+	});
 
 	[self saveMessageStore];
 }
@@ -295,11 +295,11 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 
 	[self.messageIdentifierIndex removeObjectForKey:message.localIdentifier];
 
-	[self callOnMainThread:^{
+	dispatch_async(dispatch_get_main_queue(), ^{
 		[self.delegate messageManagerWillBeginUpdates:self];
 		[self.delegate messageManager:self didDeleteMessage:message atIndex:index];
 		[self.delegate messageManagerDidEndUpdates:self];
-	}];
+	});
 
 	[self saveMessageStore];
 }
@@ -318,22 +318,6 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 		_unreadCount = unreadCount;
 
 		[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveMessageCenterUnreadCountChangedNotification object:self userInfo:@{ @"count": @(unreadCount) }];
-	}
-}
-
-/**
- Executes a block synchronously if on main thread, asynchronously otherwise.
- This is needed to avoid sending an insert/delete message for a section
- that was already present/absent when the table view loaded.
-
- @param block The block to execute.
- */
-- (void)callOnMainThread:(dispatch_block_t)block {
-	if ([NSThread isMainThread]) {
-		block();
-	} else {
-#warning Dispatch sync?
-		dispatch_async(dispatch_get_main_queue(), block);
 	}
 }
 

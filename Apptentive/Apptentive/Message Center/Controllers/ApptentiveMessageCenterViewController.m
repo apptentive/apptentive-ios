@@ -220,8 +220,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.navigationItem.rightBarButtonItem.title = ApptentiveLocalizedString(@"Close", @"Button that closes Message Center.");
 	self.navigationItem.rightBarButtonItem.accessibilityHint = ApptentiveLocalizedString(@"Closes Message Center.", @"Accessibility hint for 'close' button");
 
-	[self.viewModel start];
-
 	self.navigationItem.title = self.viewModel.title;
 
 	self.tableView.separatorColor = [self.viewModel.styleSheet colorForStyle:ApptentiveColorSeparator];

@@ -39,7 +39,6 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 
 @interface ApptentiveBackend ()
 
-@property (readonly, strong, nonatomic) NSOperationQueue *operationQueue;
 @property (readonly, strong, nonatomic) ApptentiveNetworkQueue *networkQueue;
 @property (readonly, strong, nonatomic) ApptentiveSerialNetworkQueue *serialNetworkQueue;
 

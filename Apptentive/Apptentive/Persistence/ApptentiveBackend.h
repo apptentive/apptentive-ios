@@ -37,6 +37,7 @@
 
 @property (readonly, strong, nonatomic) ApptentiveConversationManager *conversationManager;
 @property (readonly, strong, nonatomic) ApptentiveAppConfiguration *configuration;
+@property (readonly, strong, nonatomic) NSOperationQueue *operationQueue;
 
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (readonly, strong, nonatomic) NSString *supportDirectoryPath;

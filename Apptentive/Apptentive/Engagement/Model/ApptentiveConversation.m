@@ -233,7 +233,7 @@ static NSString *const ATMessageCenterDidSkipProfileKey = @"ATMessageCenterDidSk
 }
 
 - (void)warmInteraction:(NSString *)codePoint {
-	[self.engagement warmCodePoint:codePoint];
+	[self.engagement warmInteraction:codePoint];
 }
 
 - (void)engageInteraction:(NSString *)interactionIdentifier {

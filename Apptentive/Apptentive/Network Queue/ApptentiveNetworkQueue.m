@@ -18,17 +18,16 @@
 @synthesize URLSession = _URLSession;
 @synthesize backoffDelay = _backoffDelay;
 
-- (instancetype)initWithBaseURL:(NSURL *)baseURL token:(NSString *)token SDKVersion:(NSString *)SDKVersion platform:(NSString *)platform {
+- (instancetype)initWithBaseURL:(NSURL *)baseURL SDKVersion:(NSString *)SDKVersion platform:(NSString *)platform {
 	self = [super init];
 
 	if (self) {
-		if (token == nil || baseURL == nil || SDKVersion == nil || platform == nil) {
+		if (baseURL == nil || SDKVersion == nil || platform == nil) {
 			ApptentiveLogError(@"ApptentiveNetworkQueue: One or more required initializer parameters was nil");
 			return nil;
 		}
 
 		_baseURL = baseURL;
-		_token = token;
 
 		NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
 		configuration.HTTPAdditionalHeaders = @{

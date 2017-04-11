@@ -57,7 +57,7 @@
 	request.identifier = identifier;
 	request.conversationIdentifier = conversation.identifier;
 	request.apiVersion = [ApptentiveRequestOperation APIVersion];
-    request.authToken = conversation.token; // TODO: for the encrypted storage that might be something else
+	request.authToken = conversation.token; // TODO: for the encrypted storage that might be something else
 
 	NSError *error;
 	request.payload = [NSJSONSerialization dataWithJSONObject:payload options:0 error:&error];

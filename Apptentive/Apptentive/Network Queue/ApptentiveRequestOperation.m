@@ -70,7 +70,7 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 		}
 	}
 
-    return [self initWithPath:path method:method payloadData:payloadData APIVersion:[[self class] APIVersion] authToken:authToken delegate:delegate dataSource:dataSource];
+	return [self initWithPath:path method:method payloadData:payloadData APIVersion:[[self class] APIVersion] authToken:authToken delegate:delegate dataSource:dataSource];
 }
 
 - (instancetype)initWithPath:(NSString *)path method:(NSString *)method payloadData:(NSData *)payloadData APIVersion:(NSString *)APIVersion authToken:(NSString *)authToken delegate:(id<ApptentiveRequestOperationDelegate>)delegate dataSource:(id<ApptentiveRequestOperationDataSource>)dataSource {
@@ -81,7 +81,7 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 	request.HTTPMethod = method;
 	[request addValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
 	[request addValue:APIVersion forHTTPHeaderField:@"X-API-Version"];
-    [request addValue:[@"OAuth " stringByAppendingString:authToken] forHTTPHeaderField:@"Authorization"];
+	[request addValue:[@"OAuth " stringByAppendingString:authToken] forHTTPHeaderField:@"Authorization"];
 
 	return [self initWithURLRequest:request delegate:delegate dataSource:dataSource];
 }

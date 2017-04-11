@@ -15,7 +15,6 @@
 
 extern ApptentiveLogLevel ApptentiveLogGetLevel(void);
 extern void ApptentiveLogSetLevel(ApptentiveLogLevel level);
-void _ApptentiveLogHelper(ApptentiveLogLevel level, id arg, va_list ap);
 
 void ApptentiveLogCrit(id arg, ...);
 void ApptentiveLogError(id arg, ...);

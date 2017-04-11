@@ -71,7 +71,7 @@ static NSString *getCurrentThreadName() {
 #pragma mark -
 #pragma mark Log Functions
 
-void _ApptentiveLogHelper(ApptentiveLogLevel level, id arg, va_list ap) {
+static void _ApptentiveLogHelper(ApptentiveLogLevel level, id arg, va_list ap) {
 	ApptentiveLogTag *tag = [arg isKindOfClass:[ApptentiveLogTag class]] ? arg : nil;
 	if (shouldLogLevel(level) && (tag == nil || tag.enabled)) {
 

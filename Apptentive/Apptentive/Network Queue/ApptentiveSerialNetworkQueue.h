@@ -55,7 +55,6 @@ typedef NS_ENUM(NSInteger, ApptentiveQueueStatus) {
  Initializes a new serial network queue with the specified parameters.
 
  @param baseURL The URL on which to base HTTP requests.
- @param token The authorization token to use for requests.
  @param SDKVersion The SDK version (used to generate the user agent header).
  @param platform The platform string (used to generate the user agent header).
  @param parentManagedObjectContext The managed object context to use as a parent
@@ -63,7 +62,7 @@ typedef NS_ENUM(NSInteger, ApptentiveQueueStatus) {
  information from Core Data.
  @return The newly-initialzed serial queue.
  */
-- (instancetype)initWithBaseURL:(NSURL *)baseURL token:(NSString *)token SDKVersion:(NSString *)SDKVersion platform:(NSString *)platform parentManagedObjectContext:(NSManagedObjectContext *)parentManagedObjectContext;
+- (instancetype)initWithBaseURL:(NSURL *)baseURL SDKVersion:(NSString *)SDKVersion platform:(NSString *)platform parentManagedObjectContext:(NSManagedObjectContext *)parentManagedObjectContext;
 
 /**
  Instructs the queue to read any pending request information from Core Data and

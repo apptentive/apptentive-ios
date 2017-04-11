@@ -42,6 +42,11 @@
 @property (strong, nonatomic) NSString *conversationIdentifier;
 
 /**
+ Authorization token that should be used to send a payload
+ */
+@property (strong, nonatomic) NSString *authToken;
+
+/**
  The date on which the request was created.
  */
 @property (strong, nonatomic) NSDate *date;

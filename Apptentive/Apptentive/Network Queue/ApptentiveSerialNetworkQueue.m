@@ -27,8 +27,8 @@
 
 @implementation ApptentiveSerialNetworkQueue
 
-- (instancetype)initWithBaseURL:(NSURL *)baseURL token:(NSString *)token SDKVersion:(NSString *)SDKVersion platform:(NSString *)platform parentManagedObjectContext:(NSManagedObjectContext *)parentManagedObjectContext {
-	self = [super initWithBaseURL:baseURL token:token SDKVersion:SDKVersion platform:platform];
+- (instancetype)initWithBaseURL:(NSURL *)baseURL SDKVersion:(NSString *)SDKVersion platform:(NSString *)platform parentManagedObjectContext:(NSManagedObjectContext *)parentManagedObjectContext {
+	self = [super initWithBaseURL:baseURL SDKVersion:SDKVersion platform:platform];
 
 	if (self) {
 		_parentManagedObjectContext = parentManagedObjectContext;

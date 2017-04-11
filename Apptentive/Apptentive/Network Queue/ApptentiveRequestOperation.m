@@ -57,7 +57,7 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 	return _serverErrorStatusCodes;
 }
 
-- (instancetype)initWithPath:(NSString *)path method:(NSString *)method payload:(NSDictionary *)payload delegate:(id<ApptentiveRequestOperationDelegate>)delegate dataSource:(id<ApptentiveRequestOperationDataSource>)dataSource {
+- (instancetype)initWithPath:(NSString *)path method:(NSString *)method payload:(NSDictionary *)payload authToken:(NSString *)authToken delegate:(id<ApptentiveRequestOperationDelegate>)delegate dataSource:(id<ApptentiveRequestOperationDataSource>)dataSource {
 	NSData *payloadData = nil;
 
 	if (payload) {
@@ -70,10 +70,10 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 		}
 	}
 
-	return [self initWithPath:path method:method payloadData:payloadData APIVersion:[[self class] APIVersion] delegate:delegate dataSource:dataSource];
+	return [self initWithPath:path method:method payloadData:payloadData APIVersion:[[self class] APIVersion] authToken:authToken delegate:delegate dataSource:dataSource];
 }
 
-- (instancetype)initWithPath:(NSString *)path method:(NSString *)method payloadData:(NSData *)payloadData APIVersion:(NSString *)APIVersion delegate:(id<ApptentiveRequestOperationDelegate>)delegate dataSource:(id<ApptentiveRequestOperationDataSource>)dataSource {
+- (instancetype)initWithPath:(NSString *)path method:(NSString *)method payloadData:(NSData *)payloadData APIVersion:(NSString *)APIVersion authToken:(NSString *)authToken delegate:(id<ApptentiveRequestOperationDelegate>)delegate dataSource:(id<ApptentiveRequestOperationDataSource>)dataSource {
 	NSURL *URL = [NSURL URLWithString:path relativeToURL:dataSource.baseURL];
 
 	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:URL];
@@ -81,6 +81,7 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 	request.HTTPMethod = method;
 	[request addValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
 	[request addValue:APIVersion forHTTPHeaderField:@"X-API-Version"];
+	[request addValue:[@"OAuth " stringByAppendingString:authToken] forHTTPHeaderField:@"Authorization"];
 
 	return [self initWithURLRequest:request delegate:delegate dataSource:dataSource];
 }

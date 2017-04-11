@@ -467,63 +467,77 @@
 }
 
 - (void)testEnjoymentDialogCriteria {
-	// TODO: create synchronous backend initializer
 	[Apptentive sharedConnection].APIKey = @"bogus_api_key"; // trigger creation of engagement backend
 
-	// The conversation manager doesn't yet exist here, so this has no effect
-	Apptentive.shared.localInteractionsURL = [[NSBundle bundleForClass:[self class]] URLForResource:@"testInteractions" withExtension:@"json"];
+	XCTestExpectation *expectation = [self expectationWithDescription:@"Backend stood up"];
 
-	[Apptentive.shared.backend.conversationManager.activeConversation warmCodePoint:@"local#app#init"];
-	[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#init"];
-	[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#init"];
-	[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#init"];
-	[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#init"];
-	[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#init"];
-	[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#init"];
-	[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#init"];
-	[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#init"];
-	[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#init"];
+	[Apptentive.shared.backend.operationQueue addOperationWithBlock:^{
+		Apptentive.shared.localInteractionsURL = [[NSBundle bundleForClass:[self class]] URLForResource:@"testInteractions" withExtension:@"json"];
 
-	[Apptentive.shared.backend.conversationManager.activeConversation.appRelease setValue:[NSDate dateWithTimeIntervalSinceNow:-863999] forKey:@"timeAtInstallTotal"];
+		[Apptentive.shared.backend.conversationManager.activeConversation warmCodePoint:@"local#app#init"];
+		[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#init"];
+		[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#init"];
+		[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#init"];
+		[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#init"];
+		[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#init"];
+		[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#init"];
+		[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#init"];
+		[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#init"];
+		[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#init"];
 
-	[Apptentive.shared.backend.conversationManager.activeConversation warmCodePoint:@"local#app#testRatingFlow"];
-	[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#testRatingFlow"];
-	[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#testRatingFlow"];
-	[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#testRatingFlow"];
-	[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#testRatingFlow"];
-	[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#testRatingFlow"];
-	[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#testRatingFlow"];
-	[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#testRatingFlow"];
-	[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#testRatingFlow"];
-	[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#testRatingFlow"];
+		[Apptentive.shared.backend.conversationManager.activeConversation.appRelease setValue:[NSDate dateWithTimeIntervalSinceNow:-863999] forKey:@"timeAtInstallTotal"];
 
-	XCTAssertFalse([Apptentive.shared canShowInteractionForEvent:@"testRatingFlow"], @"The OR clauses are failing.");
+		[Apptentive.shared.backend.conversationManager.activeConversation warmCodePoint:@"local#app#testRatingFlow"];
+		[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#testRatingFlow"];
+		[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#testRatingFlow"];
+		[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#testRatingFlow"];
+		[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#testRatingFlow"];
+		[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#testRatingFlow"];
+		[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#testRatingFlow"];
+		[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#testRatingFlow"];
+		[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#testRatingFlow"];
+		[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#testRatingFlow"];
 
-	[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#init"];
-	[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#init"];
+		[Apptentive.shared.backend.conversationManager.activeConversation warmInteraction:@"533ed97a7724c5457e00003f"];
 
-	[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#testRatingFlow"];
-	[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#testRatingFlow"];
+		XCTAssertFalse([Apptentive.shared canShowInteractionForEvent:@"testRatingFlow"], @"The OR clauses are failing.");
 
-	XCTAssertTrue([Apptentive.shared canShowInteractionForEvent:@"testRatingFlow"], @"One of the OR clauses is true. The other ANDed clause is also true. Should work.");
+		[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#init"];
+		[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#init"];
 
-	[Apptentive.shared.backend.conversationManager.activeConversation.appRelease setValue:[NSDate dateWithTimeIntervalSinceNow:-864001] forKey:@"timeAtInstallTotal"];
-	XCTAssertTrue([Apptentive.shared canShowInteractionForEvent:@"testRatingFlow"], @"All of the OR clauses are true. The other ANDed clause is also true. Should work.");
+		[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#testRatingFlow"];
+		[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#testRatingFlow"];
 
-	[Apptentive.shared.backend.conversationManager.activeConversation warmInteraction:@"533ed97a7724c5457e00003f"];
-	[Apptentive.shared.backend.conversationManager.activeConversation engageInteraction:@"533ed97a7724c5457e00003f"];
-	XCTAssertFalse([Apptentive.shared canShowInteractionForEvent:@"testRatingFlow"], @"All the OR clauses are true. The other ANDed clause is not true. Should fail.");
+		XCTAssertTrue([Apptentive.shared canShowInteractionForEvent:@"testRatingFlow"], @"One of the OR clauses is true. The other ANDed clause is also true. Should work.");
+
+		[Apptentive.shared.backend.conversationManager.activeConversation.appRelease setValue:[NSDate dateWithTimeIntervalSinceNow:-864001] forKey:@"timeAtInstallTotal"];
+		XCTAssertTrue([Apptentive.shared canShowInteractionForEvent:@"testRatingFlow"], @"All of the OR clauses are true. The other ANDed clause is also true. Should work.");
+
+		[Apptentive.shared.backend.conversationManager.activeConversation engageInteraction:@"533ed97a7724c5457e00003f"];
+		XCTAssertFalse([Apptentive.shared canShowInteractionForEvent:@"testRatingFlow"], @"All the OR clauses are true. The other ANDed clause is not true. Should fail.");
+
+		[expectation fulfill];
+	}];
+
+	[self waitForExpectationsWithTimeout:5 handler:nil];
 }
 
 - (void)testCanShowInteractionForEvent {
 	// TODO: create synchronous backend initializer
 	[Apptentive sharedConnection].APIKey = @"bogus_api_key"; // trigger creation of engagement backend
 
-	// The conversation manager doesn't yet exist here, so this has no effect
-	Apptentive.shared.localInteractionsURL = [[NSBundle bundleForClass:[self class]] URLForResource:@"testInteractions" withExtension:@"json"];
+	XCTestExpectation *expectation = [self expectationWithDescription:@"Backend stood up"];
 
-	XCTAssertTrue([[Apptentive sharedConnection] canShowInteractionForEvent:@"canShow"], @"If invocation is valid, it will be shown for the next targeted event.");
-	XCTAssertFalse([[Apptentive sharedConnection] canShowInteractionForEvent:@"cannotShow"], @"If invocation is not valid, it will not be shown for the next targeted event.");
+	[Apptentive.shared.backend.operationQueue addOperationWithBlock:^{
+		Apptentive.shared.localInteractionsURL = [[NSBundle bundleForClass:[self class]] URLForResource:@"testInteractions" withExtension:@"json"];
+
+		XCTAssertTrue([[Apptentive sharedConnection] canShowInteractionForEvent:@"canShow"], @"If invocation is valid, it will be shown for the next targeted event.");
+		XCTAssertFalse([[Apptentive sharedConnection] canShowInteractionForEvent:@"cannotShow"], @"If invocation is not valid, it will not be shown for the next targeted event.");
+
+		[expectation fulfill];
+	}];
+
+	[self waitForExpectationsWithTimeout:5 handler:nil];
 }
 
 @end

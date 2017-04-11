@@ -78,7 +78,7 @@
 	[self enqueueRequestWithPath:@"events" containerName:@"event" noncePrefix:@"event" payload:payload conversation:conversation inContext:context];
 }
 
-+ (void)enqueueMessage:(ApptentiveMessage *)message  conversation:(ApptentiveConversation *)conversation inContext:(NSManagedObjectContext *)context {
++ (void)enqueueMessage:(ApptentiveMessage *)message conversation:(ApptentiveConversation *)conversation inContext:(NSManagedObjectContext *)context {
 	NSMutableDictionary *payload = [NSMutableDictionary dictionary];
 
 	if (message.body) {

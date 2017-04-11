@@ -15,6 +15,7 @@
 #import "Apptentive_Private.h"
 #import "ApptentiveConversationManager.h"
 
+
 @interface ApptentiveSerialNetworkQueue ()
 
 @property (strong, readonly, nonatomic) NSManagedObjectContext *parentManagedObjectContext;
@@ -35,15 +36,15 @@
 
 		self.maxConcurrentOperationCount = 1;
 		_backgroundTaskIdentifier = UIBackgroundTaskInvalid;
-        
-        [self registerNotifications];
+
+		[self registerNotifications];
 	}
 
 	return self;
 }
 
 - (void)dealloc {
-    [self unregisterNotifications];
+	[self unregisterNotifications];
 }
 
 - (void)resume {
@@ -224,15 +225,14 @@
 #pragma mark Update missing conversation IDs
 
 - (void)updateMissingConversationId:(NSString *)conversationId {
-    
-    // create a child context on a private concurrent queue
-    NSManagedObjectContext *childContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-    
-    // set parent context
-    [childContext setParentContext:self.parentManagedObjectContext];
-    
-    // execute the block on a background thread (this call returns immediatelly)
-    [childContext performBlock:^{
+	// create a child context on a private concurrent queue
+	NSManagedObjectContext *childContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+
+	// set parent context
+	[childContext setParentContext:self.parentManagedObjectContext];
+
+	// execute the block on a background thread (this call returns immediatelly)
+	[childContext performBlock:^{
         
         // fetch all the requests without a conversation id (no sorting needed)
         NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"QueuedRequest"];
@@ -273,36 +273,35 @@
                 [self resume];
             });
         }
-    }];
+	}];
 }
 
 #pragma mark -
 #pragma mark Notifications
 
 - (void)registerNotifications {
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(conversationStateDidChangeNotification:)
-                                                 name:ApptentiveConversationStateDidChangeNotification
-                                               object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(conversationStateDidChangeNotification:)
+												 name:ApptentiveConversationStateDidChangeNotification
+											   object:nil];
 }
 
 - (void)unregisterNotifications {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)conversationStateDidChangeNotification:(NSNotification *)notification {
-    
-    ApptentiveConversation *conversation = notification.userInfo[ApptentiveConversationStateDidChangeNotificationKeyConversation];
-    ApptentiveAssertNotNil(conversation);
-    
-    if (conversation.state == ApptentiveConversationStateAnonymous) {
-        NSString *conversationId = conversation.identifier;
-        ApptentiveAssertNotNil(conversationId);
-        
-        if (conversationId != nil) {
-            [self updateMissingConversationId:conversationId];
-        }
-    }
+	ApptentiveConversation *conversation = notification.userInfo[ApptentiveConversationStateDidChangeNotificationKeyConversation];
+	ApptentiveAssertNotNil(conversation);
+
+	if (conversation.state == ApptentiveConversationStateAnonymous) {
+		NSString *conversationId = conversation.identifier;
+		ApptentiveAssertNotNil(conversationId);
+
+		if (conversationId != nil) {
+			[self updateMissingConversationId:conversationId];
+		}
+	}
 }
 
 @end

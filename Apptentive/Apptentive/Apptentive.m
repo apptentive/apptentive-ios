@@ -567,11 +567,11 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 #pragma mark Logging System
 
 - (ApptentiveLogLevel)logLevel {
-    return ApptentiveLogGetLevel();
+	return ApptentiveLogGetLevel();
 }
 
 - (void)setLogLevel:(ApptentiveLogLevel)logLevel {
-    ApptentiveLogSetLevel(logLevel);
+	ApptentiveLogSetLevel(logLevel);
 }
 
 @end

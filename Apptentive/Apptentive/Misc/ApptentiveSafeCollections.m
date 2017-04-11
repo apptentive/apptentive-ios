@@ -10,18 +10,18 @@
 #import "ApptentiveAssert.h"
 
 void ApptentiveDictionarySetKeyValue(NSMutableDictionary *dictionary, NSString *key, id value) {
-    ApptentiveAssertNotNil(key, @"Key is nil");
-    ApptentiveAssertNotNil(value, @"Value is nil");
-    if (key != nil && value != nil) {
-        dictionary[key] = value;
-    }
+	ApptentiveAssertNotNil(key, @"Key is nil");
+	ApptentiveAssertNotNil(value, @"Value is nil");
+	if (key != nil && value != nil) {
+		dictionary[key] = value;
+	}
 }
 
 BOOL ApptentiveDictionaryTrySetKeyValue(NSMutableDictionary *dictionary, NSString *key, id value) {
-    ApptentiveAssertNotNil(key, @"Key is nil");
-    if (key != nil && value != nil) {
-        dictionary[key] = value;
-        return YES;
-    }
-    return NO;
+	ApptentiveAssertNotNil(key, @"Key is nil");
+	if (key != nil && value != nil) {
+		dictionary[key] = value;
+		return YES;
+	}
+	return NO;
 }

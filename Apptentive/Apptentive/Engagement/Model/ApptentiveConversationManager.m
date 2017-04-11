@@ -144,7 +144,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 - (void)createMessageManagerForConversation:(ApptentiveConversation *)conversation {
 	NSString *directoryPath = [self conversationContainerPathForDirectoryName:conversation.directoryName];
 
-	_messageManager  = [[ApptentiveMessageManager alloc] initWithStoragePath:directoryPath networkQueue:self.networkQueue pollingInterval:Apptentive.shared.backend.configuration.messageCenter.backgroundPollingInterval localUserIdentifier:conversation.person.identifier];
+	_messageManager = [[ApptentiveMessageManager alloc] initWithStoragePath:directoryPath networkQueue:self.networkQueue pollingInterval:Apptentive.shared.backend.configuration.messageCenter.backgroundPollingInterval localUserIdentifier:conversation.person.identifier];
 }
 
 - (BOOL)endActiveConversation {
@@ -174,12 +174,12 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 - (void)handleConversationStateChange:(ApptentiveConversation *)conversation {
 	ApptentiveAssertNotNil(conversation);
-    if (conversation != nil) {
-        NSDictionary *userInfo = @{ ApptentiveConversationStateDidChangeNotificationKeyConversation : conversation };
-        [[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveConversationStateDidChangeNotification
-                                                            object:self
-                                                          userInfo:userInfo];
-    }
+	if (conversation != nil) {
+		NSDictionary *userInfo = @{ApptentiveConversationStateDidChangeNotificationKeyConversation: conversation};
+		[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveConversationStateDidChangeNotification
+															object:self
+														  userInfo:userInfo];
+	}
 
 	if ([self.delegate respondsToSelector:@selector(conversationManager:conversationDidChangeState:)]) {
 		[self.delegate conversationManager:self conversationDidChangeState:conversation];

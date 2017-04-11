@@ -8,6 +8,7 @@
 
 #import "ApptentiveInteractionController.h"
 
+
 @interface ApptentiveInteractionAppleRatingDialogController : ApptentiveInteractionController
 
 @end

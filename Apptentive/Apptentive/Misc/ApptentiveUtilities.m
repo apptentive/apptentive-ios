@@ -34,7 +34,7 @@ UIViewController *topChildViewController(UIViewController *viewController) {
 @implementation ApptentiveUtilities
 
 + (BOOL)fileExistsAtPath:(NSString *)path {
-    return path != nil && [[NSFileManager defaultManager] fileExistsAtPath:path];
+	return path != nil && [[NSFileManager defaultManager] fileExistsAtPath:path];
 }
 
 + (NSString *)applicationSupportPath {

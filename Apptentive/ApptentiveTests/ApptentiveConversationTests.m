@@ -18,6 +18,7 @@
 #import "ApptentiveMutablePerson.h"
 #import "ApptentiveMutableDevice.h"
 
+
 @interface ApptentiveConversationTests : XCTestCase <ApptentiveConversationDelegate>
 
 @property (strong, nonatomic) ApptentiveConversation *conversation;
@@ -29,10 +30,11 @@
 
 @end
 
+
 @implementation ApptentiveConversationTests
 
 - (void)setUp {
-    [super setUp];
+	[super setUp];
 
 	self.conversation = [[ApptentiveConversation alloc] init];
 	self.conversation.delegate = self;

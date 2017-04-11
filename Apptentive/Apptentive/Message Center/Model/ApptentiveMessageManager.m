@@ -334,7 +334,7 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 	NSInteger unreadCount = 0;
 	for (ApptentiveMessage *message in self.messages) {
 		if (message.state == ApptentiveMessageStateUnread) {
-			unreadCount ++;
+			unreadCount++;
 		}
 	}
 

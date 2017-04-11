@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
+
 @interface ApptentiveLogTag : NSObject
 
 @property (nonatomic, readonly) NSString *name;

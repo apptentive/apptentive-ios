@@ -65,12 +65,12 @@ typedef NS_ENUM(NSInteger, ApptentivePushProvider) {
 
 /** Log levels supported by the logging system */
 typedef NS_ENUM(NSUInteger, ApptentiveLogLevel) {
-    ApptentiveLogLevelCrit    = 0,
-    ApptentiveLogLevelError   = 1,
-    ApptentiveLogLevelWarn    = 2,
-    ApptentiveLogLevelInfo    = 3,
-    ApptentiveLogLevelDebug   = 4,
-    ApptentiveLogLevelVerbose = 5
+	ApptentiveLogLevelCrit = 0,
+	ApptentiveLogLevelError = 1,
+	ApptentiveLogLevelWarn = 2,
+	ApptentiveLogLevelInfo = 3,
+	ApptentiveLogLevelDebug = 4,
+	ApptentiveLogLevelVerbose = 5
 };
 
 /**

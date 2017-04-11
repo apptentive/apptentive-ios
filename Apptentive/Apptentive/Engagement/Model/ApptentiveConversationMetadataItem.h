@@ -10,6 +10,7 @@
 
 #import "ApptentiveConversation.h"
 
+
 @interface ApptentiveConversationMetadataItem : NSObject <NSSecureCoding>
 
 - (instancetype)initWithConversationIdentifier:(NSString *)conversationIdentifier directoryName:(NSString *)filename;

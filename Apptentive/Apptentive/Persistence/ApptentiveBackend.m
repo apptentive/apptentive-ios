@@ -73,7 +73,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 		_state = ATBackendStateStarting;
 		_operationQueue = [[NSOperationQueue alloc] init];
 		_operationQueue.maxConcurrentOperationCount = 1;
-        _operationQueue.name = @"Apptentive Operation Queue";
+		_operationQueue.name = @"Apptentive Operation Queue";
 		_supportDirectoryPath = [[ApptentiveUtilities applicationSupportPath] stringByAppendingPathComponent:storagePath];
 
 		if ([UIApplication sharedApplication] != nil && ![UIApplication sharedApplication].isProtectedDataAvailable) {
@@ -246,19 +246,19 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 
 - (void)startUp {
 	_networkQueue = [[ApptentiveNetworkQueue alloc] initWithBaseURL:self.baseURL token:self.APIKey SDKVersion:kApptentiveVersionString platform:@"iOS"];
-	_serialNetworkQueue = [[ApptentiveSerialNetworkQueue alloc] initWithBaseURL:self.baseURL token:self.APIKey SDKVersion:kApptentiveVersionString platform:@"iOS"	parentManagedObjectContext:self.managedObjectContext];
+	_serialNetworkQueue = [[ApptentiveSerialNetworkQueue alloc] initWithBaseURL:self.baseURL token:self.APIKey SDKVersion:kApptentiveVersionString platform:@"iOS" parentManagedObjectContext:self.managedObjectContext];
 
 	[self.serialNetworkQueue addObserver:self forKeyPath:@"messageSendProgress" options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew context:nil];
 	[self.serialNetworkQueue addObserver:self forKeyPath:@"messageTaskCount" options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew context:nil];
 
 	_conversationManager = [[ApptentiveConversationManager alloc] initWithStoragePath:_supportDirectoryPath operationQueue:_operationQueue networkQueue:_networkQueue parentManagedObjectContext:self.managedObjectContext];
 	self.conversationManager.delegate = self;
-	
+
 	_imageCache = [[NSURLCache alloc] initWithMemoryCapacity:1 * 1024 * 1024 diskCapacity:10 * 1024 * 1024 diskPath:[self imageCachePath]];
 
 	[self.conversationManager loadActiveConversation];
-    
-  [self.conversationManager.activeConversation checkForDiffs];
+
+	[self.conversationManager.activeConversation checkForDiffs];
 }
 
 // Note: must be called on main thread
@@ -462,7 +462,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 #pragma mark - Conversation manager delegate
 
 - (void)conversationManager:(ApptentiveConversationManager *)manager conversationDidChangeState:(ApptentiveConversation *)conversation {
-	// Anonymous pending conversations will not yet have a token, so we can't finish starting up yet in that case. 
+	// Anonymous pending conversations will not yet have a token, so we can't finish starting up yet in that case.
 	if (conversation.state != ApptentiveConversationStateAnonymousPending) {
 		self.networkQueue.token = conversation.token;
 		self.serialNetworkQueue.token = conversation.token;

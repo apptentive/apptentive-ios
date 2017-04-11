@@ -71,11 +71,9 @@ static NSString *getCurrentThreadName() {
 #pragma mark -
 #pragma mark Log Functions
 
-void _ApptentiveLogHelper(ApptentiveLogLevel level, id arg, ...) {
+void _ApptentiveLogHelper(ApptentiveLogLevel level, id arg, va_list ap) {
 	ApptentiveLogTag *tag = [arg isKindOfClass:[ApptentiveLogTag class]] ? arg : nil;
 	if (shouldLogLevel(level) && (tag == nil || tag.enabled)) {
-		va_list ap;
-		va_start(ap, arg);
 
 		if (tag != nil) {
 			arg = va_arg(ap, ApptentiveLogTag *);
@@ -99,6 +97,49 @@ void _ApptentiveLogHelper(ApptentiveLogLevel level, id arg, ...) {
 		NSLog(@"%@", fullMessage);
 	}
 }
+
+void ApptentiveLogCrit(id arg, ...) {
+	va_list ap;
+	va_start(ap, arg);
+	_ApptentiveLogHelper(ApptentiveLogLevelCrit, arg, ap);
+	va_end(ap);
+}
+
+void ApptentiveLogError(id arg, ...) {
+	va_list ap;
+	va_start(ap, arg);
+	_ApptentiveLogHelper(ApptentiveLogLevelError, arg, ap);
+	va_end(ap);
+}
+
+void ApptentiveLogWarning(id arg, ...) {
+	va_list ap;
+	va_start(ap, arg);
+	_ApptentiveLogHelper(ApptentiveLogLevelWarn, arg, ap);
+	va_end(ap);
+}
+
+void ApptentiveLogInfo(id arg, ...) {
+	va_list ap;
+	va_start(ap, arg);
+	_ApptentiveLogHelper(ApptentiveLogLevelInfo, arg, ap);
+	va_end(ap);
+}
+
+void ApptentiveLogDebug(id arg, ...) {
+	va_list ap;
+	va_start(ap, arg);
+	_ApptentiveLogHelper(ApptentiveLogLevelDebug, arg, ap);
+	va_end(ap);
+}
+
+void ApptentiveLogVerbose(id arg, ...) {
+	va_list ap;
+	va_start(ap, arg);
+	_ApptentiveLogHelper(ApptentiveLogLevelVerbose, arg, ap);
+	va_end(ap);
+}
+
 
 ApptentiveLogLevel ApptentiveLogGetLevel(void) {
 	return _logLevel;

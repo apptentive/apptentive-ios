@@ -564,6 +564,17 @@ Returns a Boolean value indicating whether the given event will cause an Interac
 #endif
 
 ///---------------------------------
+/// @name Authentication
+///---------------------------------
+
+
+/**
+ Ends the current user session. The user session will be persisted in a logged-out state
+ so that it can be resumed using the logIn: method.
+ */
+- (void)logOut;
+
+///---------------------------------
 /// @name Logging System
 ///---------------------------------
 

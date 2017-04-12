@@ -31,7 +31,7 @@
 	}
 
 	for (ApptentiveLegacyEvent *event in unsentEvents) {
-		[ApptentiveSerialRequest enqueueRequestWithPath:@"events" method:@"POST" payload:event.apiJSON attachments:nil identifier:nil conversation:conversation inContext:context];
+		[ApptentiveSerialRequest enqueueRequestWithPath:@"events" method:@"POST" payload:event.apiJSON conversation:conversation inContext:context];
 		[context deleteObject:event];
 	}
 }

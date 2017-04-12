@@ -563,6 +563,12 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 }
 #endif
 
+#pragma mark - Authentication
+
+- (void)logOut {
+	[self.backend.conversationManager endActiveConversation];
+}
+
 #pragma mark -
 #pragma mark Logging System
 

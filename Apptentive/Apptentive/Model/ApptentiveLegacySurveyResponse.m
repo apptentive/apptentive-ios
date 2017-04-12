@@ -32,7 +32,7 @@
 	}
 
 	for (ApptentiveLegacySurveyResponse *response in unsentSurveyResponses) {
-		[ApptentiveSerialRequest enqueueRequestWithPath:[NSString stringWithFormat:@"surveys/%@/respond", response.surveyID] method:@"POST" payload:response.apiJSON attachments:nil identifier:nil conversation:conversation inContext:context];
+		[ApptentiveSerialRequest enqueueRequestWithPath:[NSString stringWithFormat:@"surveys/%@/respond", response.surveyID] method:@"POST" payload:response.apiJSON conversation:conversation inContext:context];
 		[context deleteObject:response];
 	}
 }

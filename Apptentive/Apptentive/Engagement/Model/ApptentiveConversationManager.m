@@ -185,10 +185,10 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveConversationStateDidChangeNotification
 															object:self
 														  userInfo:userInfo];
-	}
 
-	if ([self.delegate respondsToSelector:@selector(conversationManager:conversationDidChangeState:)]) {
-		[self.delegate conversationManager:self conversationDidChangeState:conversation];
+		if ([self.delegate respondsToSelector:@selector(conversationManager:conversationDidChangeState:)]) {
+			[self.delegate conversationManager:self conversationDidChangeState:conversation];
+		}
 	}
 
 	[self updateMetadataItems:conversation];

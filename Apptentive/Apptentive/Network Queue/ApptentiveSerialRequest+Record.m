@@ -8,6 +8,7 @@
 
 #import "ApptentiveSerialRequest+Record.h"
 #import "ApptentiveMessage.h"
+#import "ApptentiveConversation.h"
 
 
 @implementation ApptentiveSerialRequest (Record)
@@ -28,7 +29,7 @@
 
 	[fullPayload addEntriesFromDictionary:payload];
 
-	[self enqueueRequestWithPath:path method:@"POST" payload:@{ containerName: fullPayload } attachments:nil identifier:nil conversation:conversation inContext:context];
+	[self enqueueRequestWithPath:path method:@"POST" payload:@{ containerName: fullPayload } conversation:conversation inContext:context];
 }
 
 + (void)enqueueSurveyResponseWithAnswers:(NSDictionary *)answers identifier:(NSString *)identifier conversation:(ApptentiveConversation *)conversation inContext:(NSManagedObjectContext *)context {
@@ -98,7 +99,7 @@
 	NSMutableDictionary *boilerplate = [self boilerplateForRequestWithNoncePrefix:@"pending-message"];
 	[payload addEntriesFromDictionary:boilerplate];
 
-	[self enqueueRequestWithPath:@"messages" method:@"POST" payload:payload attachments:message.attachments identifier:message.localIdentifier conversation:conversation inContext:context];
+	[self enqueueRequestWithPath:@"messages" method:@"POST" payload:payload attachments:message.attachments identifier:message.localIdentifier conversation:conversation authToken:conversation.token inContext:context];
 
 	[message updateWithLocalIdentifier:boilerplate[@"nonce"]];
 }

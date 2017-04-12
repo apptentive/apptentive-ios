@@ -156,9 +156,15 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		[self saveConversation];
 		[self handleConversationStateChange:self.activeConversation];
 
+		NSString *path = [NSString stringWithFormat:@"/conversations/%@/logout", self.activeConversation.identifier];
+		NSDictionary *payload = @{ @"token": self.activeConversation.token, @"logout": @{} };
+		[ApptentiveSerialRequest enqueueRequestWithPath:path method:@"POST" payload:payload attachments:nil identifier:nil conversation:self.activeConversation authToken:Apptentive.shared.APIKey inContext:self.parentManagedObjectContext];
+
 		_activeConversation = nil;
 
 		return YES;
+	} else {
+		ApptentiveLogInfo(@"Attempting to log out, but no conversation is active.");
 	}
 
 	return NO;
@@ -258,7 +264,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		context.parentContext = self.parentManagedObjectContext;
 
 		[context performBlock:^{
-			[ApptentiveSerialRequest enqueueRequestWithPath:@"conversation" method:@"PUT" payload:payload attachments:nil identifier:nil conversation:self.activeConversation inContext:context];
+			[ApptentiveSerialRequest enqueueRequestWithPath:@"conversation" method:@"PUT" payload:payload conversation:self.activeConversation inContext:context];
 		}];
 
 		[self saveConversation];
@@ -275,7 +281,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		context.parentContext = self.parentManagedObjectContext;
 
 		[context performBlock:^{
-			[ApptentiveSerialRequest enqueueRequestWithPath:@"people" method:@"PUT" payload:diffs attachments:nil identifier:nil conversation:self.activeConversation inContext:context];
+			[ApptentiveSerialRequest enqueueRequestWithPath:@"people" method:@"PUT" payload:diffs conversation:self.activeConversation inContext:context];
 		}];
 
 		[self saveConversation];
@@ -290,7 +296,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		context.parentContext = self.parentManagedObjectContext;
 
 		[context performBlock:^{
-			[ApptentiveSerialRequest enqueueRequestWithPath:@"devices" method:@"PUT" payload:diffs attachments:nil identifier:nil conversation:self.activeConversation inContext:context];
+			[ApptentiveSerialRequest enqueueRequestWithPath:@"devices" method:@"PUT" payload:diffs conversation:self.activeConversation inContext:context];
 		}];
 
 		[self saveConversation];

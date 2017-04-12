@@ -25,7 +25,7 @@
 @dynamic path;
 @dynamic payload;
 
-+ (BOOL)enqueueRequestWithPath:(NSString *)path method:(NSString *)method payload:(NSDictionary *)payload attachments:(NSArray *)attachments identifier:(NSString *)identifier conversation:(ApptentiveConversation *)conversation inContext:(NSManagedObjectContext *)context {
++ (BOOL)enqueueRequestWithPath:(NSString *)path method:(NSString *)method payload:(NSDictionary *)payload attachments:(NSArray *)attachments identifier:(NSString *)identifier conversation:(ApptentiveConversation *)conversation authToken:(NSString *)authToken inContext:(NSManagedObjectContext *)context {
 	ApptentiveAssertNotNil(conversation);
 	if (conversation == nil) {
 		return NO;
@@ -57,7 +57,7 @@
 	request.identifier = identifier;
 	request.conversationIdentifier = conversation.identifier;
 	request.apiVersion = [ApptentiveRequestOperation APIVersion];
-	request.authToken = conversation.token; // TODO: for the encrypted storage that might be something else
+	request.authToken = authToken;
 
 	NSError *error;
 	request.payload = [NSJSONSerialization dataWithJSONObject:payload options:0 error:&error];
@@ -82,6 +82,10 @@
 	}];
 
 	return YES;
+}
+
++ (BOOL)enqueueRequestWithPath:(NSString *)path method:(NSString *)method payload:(NSDictionary *)payload conversation:(ApptentiveConversation *)conversation inContext:(NSManagedObjectContext *)context {
+	return [self enqueueRequestWithPath:path method:method payload:payload attachments:nil identifier:nil conversation:conversation authToken:conversation.token inContext:context];
 }
 
 @end

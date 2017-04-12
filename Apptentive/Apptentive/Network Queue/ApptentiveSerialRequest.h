@@ -79,8 +79,22 @@
  @param payload The data to be transmitted in the body of the HTTP request.
  @param attachments Any attachments that should be included in the request.
  @param identifier An optional string that identifies a request.
+ @param conversation The conversation that is making the request.
+ @param authToken The authorization token to use for the request.
  @param context The managed object context to use to create the request.
  */
-+ (BOOL)enqueueRequestWithPath:(NSString *)path method:(NSString *)method payload:(NSDictionary *)payload attachments:(NSArray *)attachments identifier:(NSString *)identifier conversation:(ApptentiveConversation *)conversation inContext:(NSManagedObjectContext *)context;
++ (BOOL)enqueueRequestWithPath:(NSString *)path method:(NSString *)method payload:(NSDictionary *)payload attachments:(NSArray *)attachments identifier:(NSString *)identifier conversation:(ApptentiveConversation *)conversation authToken:(NSString *)authToken inContext:(NSManagedObjectContext *)context;
+
+/**
+ Creates an enqueues a request with the specified parameters, using the conversation's
+ token for authorization.
+
+ @param path The path to use to build the URL.
+ @param method The HTTP request method to use.
+ @param payload The data to be transmitted in the body of the HTTP request.
+ @param conversation The conversation that is making the request.
+ @param context The managed object context to use to create the request.
+ */
++ (BOOL)enqueueRequestWithPath:(NSString *)path method:(NSString *)method payload:(NSDictionary *)payload conversation:(ApptentiveConversation *)conversation inContext:(NSManagedObjectContext *)context;
 
 @end

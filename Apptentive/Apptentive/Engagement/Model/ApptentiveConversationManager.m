@@ -157,7 +157,8 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		[self handleConversationStateChange:self.activeConversation];
 
 		NSString *path = [NSString stringWithFormat:@"/conversations/%@/logout", self.activeConversation.identifier];
-		NSDictionary *payload = @{ @"token": self.activeConversation.token, @"logout": @{} };
+		NSDictionary *payload = @{ @"token": self.activeConversation.token,
+			@"logout": @{} };
 		[ApptentiveSerialRequest enqueueRequestWithPath:path method:@"POST" payload:payload attachments:nil identifier:nil conversation:self.activeConversation authToken:Apptentive.shared.APIKey inContext:self.parentManagedObjectContext];
 
 		_activeConversation = nil;

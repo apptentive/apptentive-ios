@@ -23,7 +23,7 @@ static NSString *const ConversationMetadataFilename = @"conversation-v1.meta";
 static NSString *const ConversationFilename = @"conversation-v1.archive";
 static NSString *const ManifestFilename = @"manifest-v1.archive";
 
-static NSInteger ApptentiveNoActiveConversationErrorCode = -201;
+static NSInteger ApptentiveInternalInconsistency = -201;
 static NSInteger ApptentiveAlreadyLoggedInErrorCode = -202;
 
 NSString *const ApptentiveConversationStateDidChangeNotification = @"ApptentiveConversationStateDidChangeNotification";
@@ -270,18 +270,30 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		NSError *error;
 
 		if (self.activeConversation == nil) {
-			ApptentiveLogError(@"Unable to log in: no active conversation.");
-			error = [NSError errorWithDomain:ApptentiveErrorDomain code:ApptentiveNoActiveConversationErrorCode userInfo:@{ NSLocalizedFailureReasonErrorKey: @"Unable to log in. No active conversation." }];
-			[self completeLoginSuccess:NO error:error];
+			[self sendLoginRequestWithToken:token];
 		}
 
 		switch (self.activeConversation.state) {
+			case ApptentiveConversationStateAnonymousPending:
+				if (self.conversationOperation == nil) {
+					[self fetchConversationToken:self.activeConversation];
+				}
+				// We will add conversation operation as a dependency below
+				break;
+
+			case ApptentiveConversationStateAnonymous:
+				[self sendLoginRequestWithToken:token];
+				break;
+
 			case ApptentiveConversationStateLoggedIn:
 				error = [NSError errorWithDomain:ApptentiveErrorDomain code:ApptentiveAlreadyLoggedInErrorCode userInfo:@{ NSLocalizedFailureReasonErrorKey: @"Unable to log in. A logged in conversation is active." }];
 				[self completeLoginSuccess:NO error:error];
 				break;
+
 			default:
-				[self sendLoginRequest];
+				ApptentiveAssertTrue(NO, @"Unexpected conversation state when logging in: %ld", self.activeConversation.state);
+				error = [NSError errorWithDomain:ApptentiveErrorDomain code:ApptentiveInternalInconsistency userInfo:@{ NSLocalizedFailureReasonErrorKey: @"Unexpected conversation state when logging in." }];
+				[self completeLoginSuccess:NO error:error];
 				break;
 		}
 	}];
@@ -293,7 +305,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	[self.operationQueue addOperation:loginOperation];
 }
 
-- (void)sendLoginRequest {
+- (void)sendLoginRequestWithToken:(NSString *)token {
 	NSError *error = [NSError errorWithDomain:ApptentiveErrorDomain code:-123 userInfo:@{ NSLocalizedFailureReasonErrorKey: @"Login Not implemented" }];
 	[self completeLoginSuccess:NO error:error];
 }

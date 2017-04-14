@@ -276,10 +276,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 		switch (self.activeConversation.state) {
 			case ApptentiveConversationStateAnonymousPending:
-				if (self.conversationOperation == nil) {
-					[self fetchConversationToken:self.activeConversation];
-				}
-				// We will add conversation operation as a dependency below
+				ApptentiveAssertTrue(NO, @"Login operation should not kick off until conversation fetch complete");
 				break;
 
 			case ApptentiveConversationStateAnonymous:

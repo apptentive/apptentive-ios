@@ -269,6 +269,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 		if (self.activeConversation == nil) {
 			[self sendLoginRequestWithToken:token];
+			return;
 		}
 
 		switch (self.activeConversation.state) {

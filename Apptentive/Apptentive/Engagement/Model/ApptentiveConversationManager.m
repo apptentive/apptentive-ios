@@ -37,6 +37,8 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 @property (strong, nullable, nonatomic) ApptentiveRequestOperation *manifestOperation;
 @property (strong, nullable, nonatomic) ApptentiveRequestOperation *loginRequestOperation;
 
+@property (strong, nullable, nonatomic) ApptentiveConversation *pendingLoggedInConversation;
+
 @property (readonly, nonatomic) NSString *metadataPath;
 @property (readonly, nonatomic) NSString *manifestPath;
 
@@ -305,8 +307,26 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 }
 
 - (void)sendLoginRequestWithToken:(NSString *)token {
-	NSError *error = [NSError errorWithDomain:ApptentiveErrorDomain code:-123 userInfo:@{ NSLocalizedFailureReasonErrorKey: @"Login Not implemented" }];
-	[self completeLoginSuccess:NO error:error];
+	NSString *path = @"/conversations";
+	NSMutableDictionary *payload = [NSMutableDictionary dictionary];
+
+	if (self.activeConversation) {
+		ApptentiveAssertTrue(self.activeConversation.state == ApptentiveConversationStateAnonymous, @"Active conversation must be anonymous to log in.");
+
+		path = [path stringByAppendingFormat:@"/%@/login", self.activeConversation.identifier];
+	} else {
+		self.pendingLoggedInConversation = [[ApptentiveConversation alloc] init];
+		self.pendingLoggedInConversation.state = ApptentiveConversationStateLoggedIn;
+
+		[payload addEntriesFromDictionary:self.pendingLoggedInConversation.conversationCreationJSON];
+		payload[@"token"] = token;
+
+		token = Apptentive.shared.APIKey;
+	}
+
+	self.loginRequestOperation = [[ApptentiveRequestOperation alloc] initWithPath:path method:@"POST" payload:payload authToken:token delegate:self dataSource:self.networkQueue];
+
+	[self.networkQueue addOperation:self.loginRequestOperation];
 }
 
 - (void)completeLoginSuccess:(BOOL)success error:(NSError *)error {
@@ -404,6 +424,10 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		[self processManifestResponse:(NSDictionary *)operation.responseObject cacheLifetime:operation.cacheLifetime];
 
 		self.manifestOperation = nil;
+	} else if (operation == self.loginRequestOperation) {
+		[self processLoginResponse:(NSDictionary *)operation.responseObject];
+
+		self.loginRequestOperation = nil;
 	}
 }
 
@@ -422,29 +446,20 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		// This is a permanent failure. We should basically disable the SDK at this point.
 		// TODO: disable the SDK until next launch
 		self.conversationOperation = nil;
+
+		[self.manifestOperation cancel];
+		[self.loginRequestOperation cancel];
 	} else if (operation == self.manifestOperation) {
 		self.manifestOperation = nil;
+	} else if (operation == self.loginRequestOperation) {
+		self.loginRequestOperation = nil;
+
+		[self completeLoginSuccess:NO error:error];
 	}
 }
 
 - (void)processConversationResponse:(NSDictionary *)conversationResponse {
-	NSString *token = conversationResponse[@"token"];
-	NSString *conversationID = conversationResponse[@"id"];
-	NSString *personID = conversationResponse[@"person_id"];
-	NSString *deviceID = conversationResponse[@"device_id"];
-
-	if (token != nil) {
-		[self.activeConversation setToken:token conversationID:conversationID personID:personID deviceID:deviceID];
-		self.messageManager.localUserIdentifier = personID;
-
-		if (self.activeConversation.state == ApptentiveConversationStateAnonymousPending) {
-			self.activeConversation.state = ApptentiveConversationStateAnonymous;
-		}
-
-		[self saveConversation];
-
-		[self handleConversationStateChange:self.activeConversation];
-	}
+	[self updateActiveConversationWithResponse:conversationResponse];
 }
 
 - (void)processManifestResponse:(NSDictionary *)manifestResponse cacheLifetime:(NSTimeInterval)cacheLifetime {
@@ -455,6 +470,45 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	dispatch_async(dispatch_get_main_queue(), ^{
 		[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveInteractionsDidUpdateNotification object:self.manifest];
 	});
+}
+
+- (void)processLoginResponse:(NSDictionary *)loginResponse {
+	if (self.activeConversation == nil && self.pendingLoggedInConversation != nil) {
+		_activeConversation = self.pendingLoggedInConversation;
+		self.pendingLoggedInConversation = nil;
+
+		[self updateActiveConversationWithResponse:loginResponse];
+	}
+
+	// TODO: use store key once encryption is ready.
+	// NSString *storeKey = loginResponse[@"store_key"];
+
+	[self createMessageManagerForConversation:self.activeConversation];
+
+	[self completeLoginSuccess:YES error:nil];
+}
+
+- (void)updateActiveConversationWithResponse:(NSDictionary *)conversationResponse {
+	NSString *token = conversationResponse[@"token"];
+	NSString *conversationID = conversationResponse[@"id"];
+	NSString *personID = conversationResponse[@"person_id"];
+	NSString *deviceID = conversationResponse[@"device_id"];
+
+	if (token != nil) {
+		[self.activeConversation setToken:token conversationID:conversationID personID:personID deviceID:deviceID];
+
+		self.messageManager.localUserIdentifier = personID;
+
+		if (self.activeConversation.state == ApptentiveConversationStateAnonymousPending) {
+			self.activeConversation.state = ApptentiveConversationStateAnonymous;
+		}
+
+		[self saveConversation];
+
+		[self handleConversationStateChange:self.activeConversation];
+	} else {
+		ApptentiveAssertTrue(NO, @"Conversation response did not include token.");
+	}
 }
 
 - (BOOL)saveConversation {

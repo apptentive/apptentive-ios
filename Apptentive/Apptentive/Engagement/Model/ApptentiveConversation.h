@@ -99,7 +99,7 @@ typedef NS_ENUM(NSInteger, ApptentiveConversationState) {
  The name of the directory that contains the conversation archive. Copied from the conversation
  metadata item. The conversation manager uses this to save the conversation.
  */
-@property (strong, nonatomic) NSString *directoryName;
+@property (readonly, nonatomic) NSString *directoryName;
 
 /**
  This method is called when a conversation request completes, which specifies

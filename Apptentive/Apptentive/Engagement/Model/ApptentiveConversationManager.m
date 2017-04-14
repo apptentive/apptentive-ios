@@ -129,7 +129,6 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	ApptentiveLogDebug(ApptentiveLogTagConversation, @"Can't load conversation: creating anonymous conversation...");
 	ApptentiveConversation *anonymousConversation = [[ApptentiveConversation alloc] init];
 	anonymousConversation.state = ApptentiveConversationStateAnonymousPending;
-	anonymousConversation.directoryName = [NSUUID UUID].UUIDString;
 
 	[self fetchConversationToken:anonymousConversation];
 	[self createMessageManagerForConversation:anonymousConversation];
@@ -140,7 +139,6 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 - (ApptentiveConversation *)loadConversation:(ApptentiveConversationMetadataItem *)item {
 	ApptentiveConversation *conversation = [NSKeyedUnarchiver unarchiveObjectWithFile:[self conversationArchivePathForDirectoryName:item.directoryName]];
 	conversation.state = item.state;
-	conversation.directoryName = item.directoryName;
 
 	[self createMessageManagerForConversation:conversation];
 

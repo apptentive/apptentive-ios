@@ -44,6 +44,8 @@ NSString *const ApptentiveConversationCreatedNotification = @"ApptentiveConversa
 NSString *const ApptentiveCustomDeviceDataPreferenceKey = @"ApptentiveCustomDeviceDataPreferenceKey";
 NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPersonDataPreferenceKey";
 
+NSString *const ApptentiveErrorDomain = @"com.apptentive";
+
 
 @interface Apptentive () <ApptentiveBannerViewControllerDelegate>
 @end
@@ -564,6 +566,10 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 #endif
 
 #pragma mark - Authentication
+
+- (void)logInWithToken:(NSString *)token completion:(void (^)(BOOL, NSError *_Nonnull))completion {
+	[self.backend.conversationManager logInWithToken:token completion:completion];
+}
 
 - (void)logOut {
 	[self.backend.conversationManager endActiveConversation];

@@ -23,6 +23,9 @@ static NSString *const ConversationMetadataFilename = @"conversation-v1.meta";
 static NSString *const ConversationFilename = @"conversation-v1.archive";
 static NSString *const ManifestFilename = @"manifest-v1.archive";
 
+static NSInteger ApptentiveInternalInconsistency = -201;
+static NSInteger ApptentiveAlreadyLoggedInErrorCode = -202;
+
 NSString *const ApptentiveConversationStateDidChangeNotification = @"ApptentiveConversationStateDidChangeNotification";
 NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation = @"conversation";
 
@@ -31,10 +34,15 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 @property (strong, nonatomic) ApptentiveConversationMetadata *conversationMetadata;
 
-@property (strong, nonatomic, nullable) ApptentiveRequestOperation *manifestOperation;
+@property (strong, nullable, nonatomic) ApptentiveRequestOperation *manifestOperation;
+@property (strong, nullable, nonatomic) ApptentiveRequestOperation *loginRequestOperation;
+
+@property (strong, nullable, nonatomic) ApptentiveConversation *pendingLoggedInConversation;
 
 @property (readonly, nonatomic) NSString *metadataPath;
 @property (readonly, nonatomic) NSString *manifestPath;
+
+@property (copy, nonatomic) void (^loginCompletionBlock)(BOOL success, NSError *error);
 
 @end
 
@@ -123,7 +131,6 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	ApptentiveLogDebug(ApptentiveLogTagConversation, @"Can't load conversation: creating anonymous conversation...");
 	ApptentiveConversation *anonymousConversation = [[ApptentiveConversation alloc] init];
 	anonymousConversation.state = ApptentiveConversationStateAnonymousPending;
-	anonymousConversation.directoryName = [NSUUID UUID].UUIDString;
 
 	[self fetchConversationToken:anonymousConversation];
 	[self createMessageManagerForConversation:anonymousConversation];
@@ -134,7 +141,6 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 - (ApptentiveConversation *)loadConversation:(ApptentiveConversationMetadataItem *)item {
 	ApptentiveConversation *conversation = [NSKeyedUnarchiver unarchiveObjectWithFile:[self conversationArchivePathForDirectoryName:item.directoryName]];
 	conversation.state = item.state;
-	conversation.directoryName = item.directoryName;
 
 	[self createMessageManagerForConversation:conversation];
 
@@ -247,6 +253,96 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	return [NSKeyedArchiver archiveRootObject:self.conversationMetadata toFile:self.metadataPath];
 }
 
+#pragma mark - Login/Logout
+
+- (void)logInWithToken:(NSString *)token completion:(void (^)(BOOL, NSError *_Nonnull))completion {
+	if (completion == nil) {
+		completion = ^void(BOOL success, NSError *error) {
+		};
+	}
+
+	self.loginCompletionBlock = [completion copy];
+
+	[self requestLoggedInConversationWithToken:token];
+}
+
+- (void)requestLoggedInConversationWithToken:(NSString *)token {
+	NSBlockOperation *loginOperation = [NSBlockOperation blockOperationWithBlock:^{
+		if (self.activeConversation == nil) {
+			[self sendLoginRequestWithToken:token];
+			return;
+		}
+
+		switch (self.activeConversation.state) {
+			case ApptentiveConversationStateAnonymousPending:
+				ApptentiveAssertTrue(NO, @"Login operation should not kick off until conversation fetch complete");
+				[self completeLoginSuccess:NO error:[self errorWithCode:ApptentiveInternalInconsistency failureReason:@"Login cannot proceed with Anonymous Pending conversation."]];
+				break;
+
+			case ApptentiveConversationStateAnonymous:
+				[self sendLoginRequestWithToken:token];
+				break;
+
+			case ApptentiveConversationStateLoggedIn:
+				[self completeLoginSuccess:NO error:[self errorWithCode:ApptentiveAlreadyLoggedInErrorCode failureReason:@"Unable to log in. A logged in conversation is active."]];
+				break;
+
+			default:
+				ApptentiveAssertTrue(NO, @"Unexpected conversation state when logging in: %ld", self.activeConversation.state);
+				[self completeLoginSuccess:NO error:[self errorWithCode:ApptentiveInternalInconsistency failureReason:@"Unexpected conversation state when logging in."]];
+				break;
+		}
+	}];
+
+	if (self.conversationOperation != nil) {
+		[loginOperation addDependency:self.conversationOperation];
+	}
+
+	[self.operationQueue addOperation:loginOperation];
+}
+
+- (void)sendLoginRequestWithToken:(NSString *)token {
+	NSString *path = @"/conversations";
+	NSMutableDictionary *payload = [NSMutableDictionary dictionary];
+
+	if (self.activeConversation != nil) {
+		ApptentiveAssertTrue(self.activeConversation.state == ApptentiveConversationStateAnonymous, @"Active conversation must be anonymous to log in.");
+
+		if (self.activeConversation.state != ApptentiveConversationStateAnonymous) {
+			[self completeLoginSuccess:NO error:[self errorWithCode:ApptentiveInternalInconsistency failureReason:@"Active conversation is not anonymous."]];
+			return;
+		}
+
+		path = [path stringByAppendingFormat:@"/%@/login", self.activeConversation.identifier];
+	} else {
+		self.pendingLoggedInConversation = [[ApptentiveConversation alloc] init];
+		self.pendingLoggedInConversation.state = ApptentiveConversationStateLoggedIn;
+
+		[payload addEntriesFromDictionary:self.pendingLoggedInConversation.conversationCreationJSON];
+
+		// Add the token to payload…
+		payload[@"token"] = token;
+
+		// …and use API key as the authToken
+		token = Apptentive.shared.APIKey;
+	}
+
+	self.loginRequestOperation = [[ApptentiveRequestOperation alloc] initWithPath:path method:@"POST" payload:payload authToken:token delegate:self dataSource:self.networkQueue];
+
+	[self.networkQueue addOperation:self.loginRequestOperation];
+}
+
+- (NSError *)errorWithCode:(NSInteger)code failureReason:(NSString *)failureReason {
+	NSDictionary *userInfo = failureReason != nil ? @{NSLocalizedFailureReasonErrorKey: failureReason} : @{};
+
+	return [NSError errorWithDomain:ApptentiveErrorDomain code:code userInfo:userInfo];
+}
+
+- (void)completeLoginSuccess:(BOOL)success error:(NSError *)error {
+	self.loginCompletionBlock(success, error);
+	self.loginCompletionBlock = nil;
+}
+
 #pragma mark - ApptentiveConversationDelegate
 
 /**
@@ -337,6 +433,10 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		[self processManifestResponse:(NSDictionary *)operation.responseObject cacheLifetime:operation.cacheLifetime];
 
 		self.manifestOperation = nil;
+	} else if (operation == self.loginRequestOperation) {
+		[self processLoginResponse:(NSDictionary *)operation.responseObject];
+
+		self.loginRequestOperation = nil;
 	}
 }
 
@@ -355,29 +455,21 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		// This is a permanent failure. We should basically disable the SDK at this point.
 		// TODO: disable the SDK until next launch
 		self.conversationOperation = nil;
+
+		[self.manifestOperation cancel];
+		[self.loginRequestOperation cancel];
 	} else if (operation == self.manifestOperation) {
 		self.manifestOperation = nil;
+	} else if (operation == self.loginRequestOperation) {
+		self.loginRequestOperation = nil;
+		self.pendingLoggedInConversation = nil;
+
+		[self completeLoginSuccess:NO error:error];
 	}
 }
 
 - (void)processConversationResponse:(NSDictionary *)conversationResponse {
-	NSString *token = conversationResponse[@"token"];
-	NSString *conversationID = conversationResponse[@"id"];
-	NSString *personID = conversationResponse[@"person_id"];
-	NSString *deviceID = conversationResponse[@"device_id"];
-
-	if (token != nil) {
-		[self.activeConversation setToken:token conversationID:conversationID personID:personID deviceID:deviceID];
-		self.messageManager.localUserIdentifier = personID;
-
-		if (self.activeConversation.state == ApptentiveConversationStateAnonymousPending) {
-			self.activeConversation.state = ApptentiveConversationStateAnonymous;
-		}
-
-		[self saveConversation];
-
-		[self handleConversationStateChange:self.activeConversation];
-	}
+	[self updateActiveConversationWithResponse:conversationResponse];
 }
 
 - (void)processManifestResponse:(NSDictionary *)manifestResponse cacheLifetime:(NSTimeInterval)cacheLifetime {
@@ -388,6 +480,48 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	dispatch_async(dispatch_get_main_queue(), ^{
 		[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveInteractionsDidUpdateNotification object:self.manifest];
 	});
+}
+
+- (void)processLoginResponse:(NSDictionary *)loginResponse {
+	if (self.activeConversation == nil && self.pendingLoggedInConversation != nil) {
+		_activeConversation = self.pendingLoggedInConversation;
+		self.pendingLoggedInConversation = nil;
+
+		if (![self updateActiveConversationWithResponse:loginResponse]) {
+			[self completeLoginSuccess:NO error:[self errorWithCode:ApptentiveInternalInconsistency failureReason:@"Conversation response did not include required information."]];
+			return;
+		}
+	}
+
+	[self createMessageManagerForConversation:self.activeConversation];
+
+	[self completeLoginSuccess:YES error:nil];
+}
+
+- (BOOL)updateActiveConversationWithResponse:(NSDictionary *)conversationResponse {
+	NSString *token = [conversationResponse valueForKey:@"token"];
+	NSString *conversationID = [conversationResponse valueForKey:@"id"];
+	NSString *personID = [conversationResponse valueForKey:@"person_id"];
+	NSString *deviceID = [conversationResponse valueForKey:@"device_id"];
+
+	if (token != nil && conversationID != nil && personID != nil && deviceID != nil) {
+		[self.activeConversation setToken:token conversationID:conversationID personID:personID deviceID:deviceID];
+
+		self.messageManager.localUserIdentifier = personID;
+
+		if (self.activeConversation.state == ApptentiveConversationStateAnonymousPending) {
+			self.activeConversation.state = ApptentiveConversationStateAnonymous;
+		}
+
+		[self saveConversation];
+
+		[self handleConversationStateChange:self.activeConversation];
+
+		return YES;
+	} else {
+		ApptentiveAssertTrue(NO, @"Conversation response did not include token, conversation identifier, device identifier and/or person identifier.");
+		return NO;
+	}
 }
 
 - (BOOL)saveConversation {

@@ -29,6 +29,7 @@ static NSString *const LastMessageIDKey = @"lastMessageID";
 static NSString *const MutableUserInfoKey = @"mutableUserInfo";
 static NSString *const ArchiveVersionKey = @"archiveVersion";
 static NSString *const IdentifierKey = @"identifier";
+static NSString *const DirectoryNameKey = @"directoryName";
 
 // Legacy keys
 static NSString *const ATCurrentConversationPreferenceKey = @"ATCurrentConversationPreferenceKey";
@@ -56,6 +57,8 @@ static NSString *const ATMessageCenterDidSkipProfileKey = @"ATMessageCenterDidSk
 		_device = [[ApptentiveDevice alloc] initWithCurrentDevice];
 		_engagement = [[ApptentiveEngagement alloc] init];
 		_mutableUserInfo = [[NSMutableDictionary alloc] init];
+
+		_directoryName = [NSUUID UUID].UUIDString;
 	}
 	return self;
 }
@@ -72,6 +75,7 @@ static NSString *const ATMessageCenterDidSkipProfileKey = @"ATMessageCenterDidSk
 		_lastMessageID = [coder decodeObjectOfClass:[NSString class] forKey:LastMessageIDKey];
 		_mutableUserInfo = [coder decodeObjectOfClass:[NSMutableDictionary class] forKey:MutableUserInfoKey];
 		_identifier = [coder decodeObjectOfClass:[NSString class] forKey:IdentifierKey];
+		_directoryName = [coder decodeObjectOfClass:[NSString class] forKey:DirectoryNameKey];
 	}
 	return self;
 }
@@ -87,6 +91,7 @@ static NSString *const ATMessageCenterDidSkipProfileKey = @"ATMessageCenterDidSk
 	[coder encodeObject:self.lastMessageID forKey:LastMessageIDKey];
 	[coder encodeObject:self.mutableUserInfo forKey:MutableUserInfoKey];
 	[coder encodeObject:self.identifier forKey:IdentifierKey];
+	[coder encodeObject:self.directoryName forKey:DirectoryNameKey];
 	[coder encodeObject:@1 forKey:ArchiveVersionKey];
 }
 

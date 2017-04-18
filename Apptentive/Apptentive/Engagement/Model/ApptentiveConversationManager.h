@@ -44,6 +44,7 @@ extern NSString *const ApptentiveConversationStateDidChangeNotificationKeyConver
  */
 - (BOOL)loadActiveConversation;
 - (BOOL)endActiveConversation;
+- (void)logInWithToken:(NSString *)token completion:(void (^)(BOOL success, NSError *error))completion;
 
 - (BOOL)saveMetadata;
 

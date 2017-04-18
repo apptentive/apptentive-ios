@@ -255,9 +255,10 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 #pragma mark - Login/Logout
 
-- (void)logInWithToken:(NSString *)token completion:(void (^)(BOOL, NSError * _Nonnull))completion {
+- (void)logInWithToken:(NSString *)token completion:(void (^)(BOOL, NSError *_Nonnull))completion {
 	if (completion == nil) {
-		completion = ^void(BOOL success, NSError *error) {};
+		completion = ^void(BOOL success, NSError *error) {
+		};
 	}
 
 	self.loginCompletionBlock = [completion copy];
@@ -332,7 +333,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 }
 
 - (NSError *)errorWithCode:(NSInteger)code failureReason:(NSString *)failureReason {
-	NSDictionary *userInfo = failureReason != nil ? @{ NSLocalizedFailureReasonErrorKey: failureReason } : @{};
+	NSDictionary *userInfo = failureReason != nil ? @{NSLocalizedFailureReasonErrorKey: failureReason} : @{};
 
 	return [NSError errorWithDomain:ApptentiveErrorDomain code:code userInfo:userInfo];
 }

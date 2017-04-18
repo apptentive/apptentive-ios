@@ -577,7 +577,7 @@ Returns a Boolean value indicating whether the given event will cause an Interac
  @param token An authorization token.
  @param completion A block that is called when the login attempt succeeds or fails.
  */
-- (void)logInWithToken:(NSString *)token completion:(void(^)(BOOL success, NSError *error))completion;
+- (void)logInWithToken:(NSString *)token completion:(void (^)(BOOL success, NSError *error))completion;
 
 /**
  Ends the current user session. The user session will be persisted in a logged-out state

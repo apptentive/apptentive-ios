@@ -46,6 +46,7 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 
 NSString *const ApptentiveErrorDomain = @"com.apptentive";
 
+
 @interface Apptentive () <ApptentiveBannerViewControllerDelegate>
 @end
 
@@ -566,7 +567,7 @@ NSString *const ApptentiveErrorDomain = @"com.apptentive";
 
 #pragma mark - Authentication
 
-- (void)logInWithToken:(NSString *)token completion:(void (^)(BOOL, NSError * _Nonnull))completion {
+- (void)logInWithToken:(NSString *)token completion:(void (^)(BOOL, NSError *_Nonnull))completion {
 	[self.backend.conversationManager logInWithToken:token completion:completion];
 }
 

@@ -267,8 +267,6 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 - (void)requestLoggedInConversationWithToken:(NSString *)token {
 	NSBlockOperation *loginOperation = [NSBlockOperation blockOperationWithBlock:^{
-		NSError *error;
-
 		if (self.activeConversation == nil) {
 			[self sendLoginRequestWithToken:token];
 			return;
@@ -277,6 +275,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		switch (self.activeConversation.state) {
 			case ApptentiveConversationStateAnonymousPending:
 				ApptentiveAssertTrue(NO, @"Login operation should not kick off until conversation fetch complete");
+				[self completeLoginSuccess:NO error:[self errorWithCode:ApptentiveInternalInconsistency failureReason:@"Login cannot proceed with Anonymous Pending conversation."]];
 				break;
 
 			case ApptentiveConversationStateAnonymous:
@@ -284,14 +283,12 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 				break;
 
 			case ApptentiveConversationStateLoggedIn:
-				error = [NSError errorWithDomain:ApptentiveErrorDomain code:ApptentiveAlreadyLoggedInErrorCode userInfo:@{ NSLocalizedFailureReasonErrorKey: @"Unable to log in. A logged in conversation is active." }];
-				[self completeLoginSuccess:NO error:error];
+				[self completeLoginSuccess:NO error:[self errorWithCode:ApptentiveAlreadyLoggedInErrorCode failureReason:@"Unable to log in. A logged in conversation is active."]];
 				break;
 
 			default:
 				ApptentiveAssertTrue(NO, @"Unexpected conversation state when logging in: %ld", self.activeConversation.state);
-				error = [NSError errorWithDomain:ApptentiveErrorDomain code:ApptentiveInternalInconsistency userInfo:@{ NSLocalizedFailureReasonErrorKey: @"Unexpected conversation state when logging in." }];
-				[self completeLoginSuccess:NO error:error];
+				[self completeLoginSuccess:NO error:[self errorWithCode:ApptentiveInternalInconsistency failureReason:@"Unexpected conversation state when logging in."]];
 				break;
 		}
 	}];
@@ -307,8 +304,13 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	NSString *path = @"/conversations";
 	NSMutableDictionary *payload = [NSMutableDictionary dictionary];
 
-	if (self.activeConversation) {
+	if (self.activeConversation != nil) {
 		ApptentiveAssertTrue(self.activeConversation.state == ApptentiveConversationStateAnonymous, @"Active conversation must be anonymous to log in.");
+
+		if (self.activeConversation.state != ApptentiveConversationStateAnonymous) {
+			[self completeLoginSuccess:NO error:[self errorWithCode:ApptentiveInternalInconsistency failureReason:@"Active conversation is not anonymous."]];
+			return;
+		}
 
 		path = [path stringByAppendingFormat:@"/%@/login", self.activeConversation.identifier];
 	} else {
@@ -316,14 +318,23 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		self.pendingLoggedInConversation.state = ApptentiveConversationStateLoggedIn;
 
 		[payload addEntriesFromDictionary:self.pendingLoggedInConversation.conversationCreationJSON];
+
+		// Add the token to payload…
 		payload[@"token"] = token;
 
+		// …and use API key as the authToken
 		token = Apptentive.shared.APIKey;
 	}
 
 	self.loginRequestOperation = [[ApptentiveRequestOperation alloc] initWithPath:path method:@"POST" payload:payload authToken:token delegate:self dataSource:self.networkQueue];
 
 	[self.networkQueue addOperation:self.loginRequestOperation];
+}
+
+- (NSError *)errorWithCode:(NSInteger)code failureReason:(NSString *)failureReason {
+	NSDictionary *userInfo = failureReason != nil ? @{ NSLocalizedFailureReasonErrorKey: failureReason } : @{};
+
+	return [NSError errorWithDomain:ApptentiveErrorDomain code:code userInfo:userInfo];
 }
 
 - (void)completeLoginSuccess:(BOOL)success error:(NSError *)error {
@@ -450,6 +461,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		self.manifestOperation = nil;
 	} else if (operation == self.loginRequestOperation) {
 		self.loginRequestOperation = nil;
+		self.pendingLoggedInConversation = nil;
 
 		[self completeLoginSuccess:NO error:error];
 	}
@@ -474,24 +486,24 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		_activeConversation = self.pendingLoggedInConversation;
 		self.pendingLoggedInConversation = nil;
 
-		[self updateActiveConversationWithResponse:loginResponse];
+		if (![self updateActiveConversationWithResponse:loginResponse]) {
+			[self completeLoginSuccess:NO error:[self errorWithCode:ApptentiveInternalInconsistency failureReason:@"Conversation response did not include required information."]];
+			return;
+		}
 	}
-
-	// TODO: use store key once encryption is ready.
-	// NSString *storeKey = loginResponse[@"store_key"];
 
 	[self createMessageManagerForConversation:self.activeConversation];
 
 	[self completeLoginSuccess:YES error:nil];
 }
 
-- (void)updateActiveConversationWithResponse:(NSDictionary *)conversationResponse {
-	NSString *token = conversationResponse[@"token"];
-	NSString *conversationID = conversationResponse[@"id"];
-	NSString *personID = conversationResponse[@"person_id"];
-	NSString *deviceID = conversationResponse[@"device_id"];
+- (BOOL)updateActiveConversationWithResponse:(NSDictionary *)conversationResponse {
+	NSString *token = [conversationResponse valueForKey:@"token"];
+	NSString *conversationID = [conversationResponse valueForKey:@"id"];
+	NSString *personID = [conversationResponse valueForKey:@"person_id"];
+	NSString *deviceID = [conversationResponse valueForKey:@"device_id"];
 
-	if (token != nil) {
+	if (token != nil && conversationID != nil && personID != nil && deviceID != nil) {
 		[self.activeConversation setToken:token conversationID:conversationID personID:personID deviceID:deviceID];
 
 		self.messageManager.localUserIdentifier = personID;
@@ -503,8 +515,11 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		[self saveConversation];
 
 		[self handleConversationStateChange:self.activeConversation];
+
+		return YES;
 	} else {
-		ApptentiveAssertTrue(NO, @"Conversation response did not include token.");
+		ApptentiveAssertTrue(NO, @"Conversation response did not include token, conversation identifier, device identifier and/or person identifier.");
+		return NO;
 	}
 }
 

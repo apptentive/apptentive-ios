@@ -92,6 +92,8 @@ NSString *const ApptentiveErrorDomain = @"com.apptentive";
 
 - (void)setAPIKey:(NSString *)APIKey baseURL:(NSURL *)baseURL {
 	if (![self.APIKey isEqualToString:APIKey] || ![baseURL isEqual:self.baseURL]) {
+		ApptentiveLogDebug(@"Apptentive API Key: %@", APIKey);
+
 		_APIKey = APIKey;
 		_baseURL = baseURL;
 		_backend = [[ApptentiveBackend alloc] initWithAPIKey:APIKey baseURL:baseURL storagePath:@"com.apptentive.feedback"];

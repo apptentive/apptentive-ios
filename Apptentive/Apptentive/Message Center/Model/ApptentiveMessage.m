@@ -78,7 +78,7 @@ static NSString *const CustomDataKey = @"customData";
 
 	if (self) {
 		_body = body;
-		_attachments = attachments;
+		_attachments = attachments ?: @[];
 		_sender = [[ApptentiveMessageSender alloc] initWithName:nil identifier:senderIdentifier profilePhotoURL:nil];
 		_automated = automated;
 		_customData = customData;

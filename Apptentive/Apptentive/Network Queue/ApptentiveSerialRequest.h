@@ -6,10 +6,10 @@
 //  Copyright © 2016 Apptentive, Inc. All rights reserved.
 //
 
+#import "ApptentiveRequestProtocol.h"
 #import <CoreData/CoreData.h>
 
-@class ApptentiveFileAttachment;
-@class ApptentiveConversation;
+@class ApptentiveConversation, ApptentivePayload;
 
 
 /**
@@ -23,7 +23,7 @@
  migrated requests (encoded to the previous version's specifications) should
  be sent with the matching API version.
  */
-@interface ApptentiveSerialRequest : NSManagedObject
+@interface ApptentiveSerialRequest : NSManagedObject <ApptentiveRequest>
 
 /**
  The API version for which the payload was encoded.
@@ -72,29 +72,15 @@
 @property (strong, nonatomic) NSData *payload;
 
 /**
- Creates an enqueues a request with the specified parameters.
+ Enqueues a payload with the given conversation information and
+ authorization token using the context.
 
- @param path The path to use to build the URL.
- @param method The HTTP request method to use.
- @param payload The data to be transmitted in the body of the HTTP request.
- @param attachments Any attachments that should be included in the request.
- @param identifier An optional string that identifies a request.
+ @param payload An subclass of ApptentivePayload
  @param conversation The conversation that is making the request.
  @param authToken The authorization token to use for the request.
  @param context The managed object context to use to create the request.
+ @return Whether the payload was successfull enqueued.
  */
-+ (BOOL)enqueueRequestWithPath:(NSString *)path method:(NSString *)method payload:(NSDictionary *)payload attachments:(NSArray *)attachments identifier:(NSString *)identifier conversation:(ApptentiveConversation *)conversation authToken:(NSString *)authToken inContext:(NSManagedObjectContext *)context;
-
-/**
- Creates an enqueues a request with the specified parameters, using the conversation's
- token for authorization.
-
- @param path The path to use to build the URL.
- @param method The HTTP request method to use.
- @param payload The data to be transmitted in the body of the HTTP request.
- @param conversation The conversation that is making the request.
- @param context The managed object context to use to create the request.
- */
-+ (BOOL)enqueueRequestWithPath:(NSString *)path method:(NSString *)method payload:(NSDictionary *)payload conversation:(ApptentiveConversation *)conversation inContext:(NSManagedObjectContext *)context;
++ (BOOL)enqueuePayload:(ApptentivePayload *)payload forConversation:(ApptentiveConversation *)conversation usingAuthToken:(NSString *)authToken inContext:(NSManagedObjectContext *)context;
 
 @end

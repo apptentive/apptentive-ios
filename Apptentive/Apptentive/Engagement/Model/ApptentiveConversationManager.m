@@ -18,6 +18,13 @@
 #import "ApptentiveSerialRequest.h"
 #import "ApptentiveMessageManager.h"
 #import "ApptentiveAppConfiguration.h"
+#import "ApptentiveLogoutPayload.h"
+#import "ApptentiveConversationPayload.h"
+#import "ApptentiveDevicePayload.h"
+#import "ApptentivePersonPayload.h"
+#import "ApptentiveConversationRequest.h"
+#import "ApptentiveLoginRequest.h"
+#import "ApptentiveInteractionsRequest.h"
 
 static NSString *const ConversationMetadataFilename = @"conversation-v1.meta";
 static NSString *const ConversationFilename = @"conversation-v1.archive";
@@ -162,10 +169,9 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		[self saveConversation];
 		[self handleConversationStateChange:self.activeConversation];
 
-		NSString *path = [NSString stringWithFormat:@"/conversations/%@/logout", self.activeConversation.identifier];
-		NSDictionary *payload = @{ @"token": self.activeConversation.token,
-			@"logout": @{} };
-		[ApptentiveSerialRequest enqueueRequestWithPath:path method:@"POST" payload:payload attachments:nil identifier:nil conversation:self.activeConversation authToken:Apptentive.shared.APIKey inContext:self.parentManagedObjectContext];
+		ApptentiveLogoutPayload *payload = [[ApptentiveLogoutPayload alloc] initWithConversationIdentifier:self.activeConversation.identifier Token:self.activeConversation.token];
+
+		[ApptentiveSerialRequest enqueuePayload:payload forConversation:self.activeConversation usingAuthToken:Apptentive.shared.APIKey inContext:self.parentManagedObjectContext];
 
 		_activeConversation = nil;
 
@@ -180,7 +186,9 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 #pragma mark - Conversation Token Fetching
 
 - (void)fetchConversationToken:(ApptentiveConversation *)conversation {
-	self.conversationOperation = [[ApptentiveRequestOperation alloc] initWithPath:@"conversation" method:@"POST" payload:conversation.conversationCreationJSON authToken:Apptentive.shared.APIKey delegate:self dataSource:self.networkQueue];
+	ApptentiveConversationRequest *request = [[ApptentiveConversationRequest alloc] initWithConversation:conversation];
+
+	self.conversationOperation = [[ApptentiveRequestOperation alloc] initWithRequest:request authToken:Apptentive.shared.APIKey delegate:self dataSource:self.networkQueue];
 
 	[self.networkQueue addOperation:self.conversationOperation];
 }
@@ -327,7 +335,9 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		token = Apptentive.shared.APIKey;
 	}
 
-	self.loginRequestOperation = [[ApptentiveRequestOperation alloc] initWithPath:path method:@"POST" payload:payload authToken:token delegate:self dataSource:self.networkQueue];
+	ApptentiveLoginRequest *request = [[ApptentiveLoginRequest alloc] initWithToken:token];
+
+	self.loginRequestOperation = [[ApptentiveRequestOperation alloc] initWithRequest:request authToken:token delegate:self dataSource:self.networkQueue];
 
 	[self.networkQueue addOperation:self.loginRequestOperation];
 }
@@ -358,10 +368,14 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 - (void)conversation:(ApptentiveConversation *)conversation appReleaseOrSDKDidChange:(NSDictionary *)payload {
 	NSBlockOperation *conversationDidChangeOperation = [NSBlockOperation blockOperationWithBlock:^{
 		NSManagedObjectContext *context = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+
+		// TODO: sort out which payload exactly we're talking about here
+		ApptentiveConversationPayload *payload = [[ApptentiveConversationPayload alloc] initWithConversation:self.activeConversation];
+
 		context.parentContext = self.parentManagedObjectContext;
 
 		[context performBlock:^{
-			[ApptentiveSerialRequest enqueueRequestWithPath:@"conversation" method:@"PUT" payload:payload conversation:self.activeConversation inContext:context];
+			[ApptentiveSerialRequest enqueuePayload:payload forConversation:self.activeConversation usingAuthToken:self.activeConversation.token inContext:context];
 		}];
 
 		[self saveConversation];
@@ -377,8 +391,10 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		NSManagedObjectContext *context = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
 		context.parentContext = self.parentManagedObjectContext;
 
+		ApptentivePersonPayload *payload = [[ApptentivePersonPayload alloc] initWithPersonDiffs:diffs];
+
 		[context performBlock:^{
-			[ApptentiveSerialRequest enqueueRequestWithPath:@"people" method:@"PUT" payload:diffs conversation:self.activeConversation inContext:context];
+			[ApptentiveSerialRequest enqueuePayload:payload forConversation:self.activeConversation usingAuthToken:self.activeConversation.token inContext:context];
 		}];
 
 		[self saveConversation];
@@ -392,8 +408,10 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		NSManagedObjectContext *context = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
 		context.parentContext = self.parentManagedObjectContext;
 
+		ApptentiveDevicePayload *payload = [[ApptentiveDevicePayload alloc] initWithDeviceDiffs:diffs];
+
 		[context performBlock:^{
-			[ApptentiveSerialRequest enqueueRequestWithPath:@"devices" method:@"PUT" payload:diffs conversation:self.activeConversation inContext:context];
+			[ApptentiveSerialRequest enqueuePayload:payload forConversation:self.activeConversation usingAuthToken:self.activeConversation.token inContext:context];
 		}];
 
 		[self saveConversation];
@@ -423,7 +441,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 #pragma mark Apptentive request operation delegate
 
 - (void)requestOperationDidFinish:(ApptentiveRequestOperation *)operation {
-	ApptentiveLogDebug(@"%@ %@ finished successfully.", operation.request.HTTPMethod, operation.request.URL.absoluteString);
+	ApptentiveLogDebug(@"%@ %@ finished successfully.", operation.URLRequest.HTTPMethod, operation.URLRequest.URL.absoluteString);
 
 	if (operation == self.conversationOperation) {
 		[self processConversationResponse:(NSDictionary *)operation.responseObject];
@@ -442,14 +460,14 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 - (void)requestOperationWillRetry:(ApptentiveRequestOperation *)operation withError:(NSError *)error {
 	if (error) {
-		ApptentiveLogError(@"%@ %@ failed with error: %@", operation.request.HTTPMethod, operation.request.URL.absoluteString, error);
+		ApptentiveLogError(@"%@ %@ failed with error: %@", operation.URLRequest.HTTPMethod, operation.URLRequest.URL.absoluteString, error);
 	}
 
-	ApptentiveLogInfo(@"%@ %@ will retry in %f seconds.", operation.request.HTTPMethod, operation.request.URL.absoluteString, self.networkQueue.backoffDelay);
+	ApptentiveLogInfo(@"%@ %@ will retry in %f seconds.", operation.URLRequest.HTTPMethod, operation.URLRequest.URL.absoluteString, self.networkQueue.backoffDelay);
 }
 
 - (void)requestOperation:(ApptentiveRequestOperation *)operation didFailWithError:(NSError *)error {
-	ApptentiveLogError(@"%@ %@ failed with error: %@. Not retrying.", operation.request.HTTPMethod, operation.request.URL.absoluteString, error);
+	ApptentiveLogError(@"%@ %@ failed with error: %@. Not retrying.", operation.URLRequest.HTTPMethod, operation.URLRequest.URL.absoluteString, error);
 
 	if (operation == self.conversationOperation) {
 		// This is a permanent failure. We should basically disable the SDK at this point.
@@ -555,7 +573,9 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		return;
 	}
 
-	self.manifestOperation = [[ApptentiveRequestOperation alloc] initWithPath:@"interactions" method:@"GET" payload:nil authToken:self.activeConversation.token delegate:self dataSource:self.networkQueue];
+	ApptentiveInteractionsRequest *request = [[ApptentiveInteractionsRequest alloc] init];
+
+	self.manifestOperation = [[ApptentiveRequestOperation alloc] initWithRequest:request authToken:self.activeConversation.token delegate:self dataSource:self.networkQueue];
 
 	if (!self.activeConversation.token && self.conversationOperation) {
 		[self.manifestOperation addDependency:self.conversationOperation];

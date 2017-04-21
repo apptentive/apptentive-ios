@@ -10,10 +10,12 @@
 #import "ApptentiveMessage.h"
 #import "ApptentiveMessageSender.h"
 #import "ApptentiveNetworkQueue.h"
-#import "ApptentiveSerialRequest+Record.h"
+#import "ApptentiveSerialRequest.h"
 #import "ApptentiveMessageStore.h"
 #import "Apptentive_Private.h"
 #import "ApptentiveBackend.h"
+#import "ApptentiveMessagePayload.h"
+#import "ApptentiveMessageGetRequest.h"
 
 static NSString *const MessageStoreFileName = @"messages-v1.archive";
 
@@ -79,7 +81,10 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 		path = [path stringByAppendingFormat:@"?after_id=%@", self.messageStore.lastMessageIdentifier];
 	}
 
-	self.messageOperation = [[ApptentiveRequestOperation alloc] initWithPath:path method:@"GET" payload:nil authToken:Apptentive.shared.backend.conversationManager.activeConversation.token delegate:self dataSource:self.networkQueue];
+	ApptentiveMessageGetRequest *request = [[ApptentiveMessageGetRequest alloc] init];
+	request.lastMessageIdentifier = self.messageStore.lastMessageIdentifier;
+
+	self.messageOperation = [[ApptentiveRequestOperation alloc] initWithRequest:request authToken:Apptentive.shared.backend.conversationManager.activeConversation.token delegate:self dataSource:self.networkQueue];
 
 	[self.networkQueue addOperation:self.messageOperation];
 }
@@ -207,17 +212,17 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 }
 
 - (void)requestOperation:(ApptentiveRequestOperation *)operation didFailWithError:(NSError *)error {
-	ApptentiveLogError(@"%@ %@ failed with error: %@. Not retrying.", operation.request.HTTPMethod, operation.request.URL.absoluteString, error);
+	ApptentiveLogError(@"%@ %@ failed with error: %@. Not retrying.", operation.URLRequest.HTTPMethod, operation.URLRequest.URL.absoluteString, error);
 
 	self.messageOperation = nil;
 }
 
 - (void)requestOperationWillRetry:(ApptentiveRequestOperation *)operation withError:(NSError *)error {
 	if (error) {
-		ApptentiveLogError(@"%@ %@ failed with error: %@", operation.request.HTTPMethod, operation.request.URL.absoluteString, error);
+		ApptentiveLogError(@"%@ %@ failed with error: %@", operation.URLRequest.HTTPMethod, operation.URLRequest.URL.absoluteString, error);
 	}
 
-	ApptentiveLogInfo(@"%@ %@ will retry in %f seconds.", operation.request.HTTPMethod, operation.request.URL.absoluteString, self.networkQueue.backoffDelay);
+	ApptentiveLogInfo(@"%@ %@ will retry in %f seconds.", operation.URLRequest.HTTPMethod, operation.URLRequest.URL.absoluteString, self.networkQueue.backoffDelay);
 }
 
 #pragma mark - Polling
@@ -248,8 +253,11 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 
 - (void)enqueueMessageForSending:(ApptentiveMessage *)message {
 	NSString *previousLocalIdentifier = message.localIdentifier;
+	ApptentiveConversation *conversation = Apptentive.shared.backend.conversationManager.activeConversation;
 
-	[ApptentiveSerialRequest enqueueMessage:message conversation:Apptentive.shared.backend.conversationManager.activeConversation inContext:Apptentive.shared.backend.managedObjectContext];
+	ApptentiveMessagePayload *payload = [[ApptentiveMessagePayload alloc] initWithMessage:message];
+
+	[ApptentiveSerialRequest enqueuePayload:payload forConversation:conversation usingAuthToken:conversation.token inContext:Apptentive.shared.backend.managedObjectContext];
 
 	[Apptentive.shared.backend processQueuedRecords];
 

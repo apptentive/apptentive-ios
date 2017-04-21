@@ -17,13 +17,14 @@
 #import "ApptentiveMessageCenterViewController.h"
 #import "ApptentiveAppConfiguration.h"
 #import "ApptentiveEngagementManifest.h"
-#import "ApptentiveSerialRequest+Record.h"
+#import "ApptentiveSerialRequest.h"
 #import "ApptentiveAppRelease.h"
 #import "ApptentiveSDK.h"
 #import "ApptentivePerson.h"
 #import "ApptentiveDevice.h"
 #import "ApptentiveVersion.h"
 #import "ApptentiveMessageManager.h"
+#import "ApptentiveConfigurationRequest.h"
 
 #import "ApptentiveLegacyEvent.h"
 #import "ApptentiveLegacySurveyResponse.h"
@@ -225,7 +226,9 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 		return;
 	}
 
-	self.configurationOperation = [[ApptentiveRequestOperation alloc] initWithPath:@"conversation/configuration" method:@"GET" payload:nil authToken:self.conversationManager.activeConversation.token delegate:self dataSource:self.networkQueue];
+	ApptentiveConfigurationRequest *request = [[ApptentiveConfigurationRequest alloc] init];
+
+	self.configurationOperation = [[ApptentiveRequestOperation alloc] initWithRequest:request authToken:self.conversationManager.activeConversation.token delegate:self dataSource:self.networkQueue];
 
 	if (!self.conversationManager.activeConversation && self.conversationManager.conversationOperation) {
 		[self.configurationOperation addDependency:self.conversationManager.conversationOperation];
@@ -320,7 +323,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 #pragma mark Apptentive request operation delegate
 
 - (void)requestOperationDidFinish:(ApptentiveRequestOperation *)operation {
-	ApptentiveLogDebug(@"%@ %@ finished successfully.", operation.request.HTTPMethod, operation.request.URL.absoluteString);
+	ApptentiveLogDebug(@"%@ %@ finished successfully.", operation.URLRequest.HTTPMethod, operation.URLRequest.URL.absoluteString);
 
 	if (operation == self.configurationOperation) {
 		[self processConfigurationResponse:(NSDictionary *)operation.responseObject cacheLifetime:operation.cacheLifetime];
@@ -331,14 +334,14 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 
 - (void)requestOperationWillRetry:(ApptentiveRequestOperation *)operation withError:(NSError *)error {
 	if (error) {
-		ApptentiveLogError(@"%@ %@ failed with error: %@", operation.request.HTTPMethod, operation.request.URL.absoluteString, error);
+		ApptentiveLogError(@"%@ %@ failed with error: %@", operation.URLRequest.HTTPMethod, operation.URLRequest.URL.absoluteString, error);
 	}
 
-	ApptentiveLogInfo(@"%@ %@ will retry in %f seconds.", operation.request.HTTPMethod, operation.request.URL.absoluteString, self.networkQueue.backoffDelay);
+	ApptentiveLogInfo(@"%@ %@ will retry in %f seconds.", operation.URLRequest.HTTPMethod, operation.URLRequest.URL.absoluteString, self.networkQueue.backoffDelay);
 }
 
 - (void)requestOperation:(ApptentiveRequestOperation *)operation didFailWithError:(NSError *)error {
-	ApptentiveLogError(@"%@ %@ failed with error: %@. Not retrying.", operation.request.HTTPMethod, operation.request.URL.absoluteString, error);
+	ApptentiveLogError(@"%@ %@ failed with error: %@. Not retrying.", operation.URLRequest.HTTPMethod, operation.URLRequest.URL.absoluteString, error);
 
 	if (operation == self.configurationOperation) {
 		self.configurationOperation = nil;

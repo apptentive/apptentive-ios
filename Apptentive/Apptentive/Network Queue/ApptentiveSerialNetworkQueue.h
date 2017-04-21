@@ -8,7 +8,6 @@
 
 #import "ApptentiveNetworkQueue.h"
 #import <CoreData/CoreData.h>
-#import "ApptentiveSerialRequestOperation.h"
 #import <UIKit/UIKit.h>
 
 typedef NS_ENUM(NSInteger, ApptentiveQueueStatus) {

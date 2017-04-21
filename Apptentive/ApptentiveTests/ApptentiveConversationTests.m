@@ -135,7 +135,7 @@
 		[person addCustomBool:YES withKey:@"yes"];
 	}];
 
-	NSDictionary *personDiffs = self.personDiffs[@"person"];
+	NSDictionary *personDiffs = self.personDiffs;
 	XCTAssertNotNil(personDiffs);
 	XCTAssertEqualObjects(personDiffs[@"name"], @"Testy McTesterson");
 	XCTAssertEqualObjects(personDiffs[@"email"], @"test@apptentive.com");
@@ -158,7 +158,7 @@
 		[person addCustomNumber:@(5) withKey:@"yes"];
 	}];
 
-	personDiffs = self.personDiffs[@"person"];
+	personDiffs = self.personDiffs;
 	XCTAssertNotNil(personDiffs);
 	XCTAssertEqualObjects(personDiffs[@"name"], [NSNull null]);
 	XCTAssertEqualObjects(personDiffs[@"email"], [NSNull null]);
@@ -185,7 +185,7 @@
 		[device addCustomBool:YES withKey:@"yes"];
 	}];
 
-	NSDictionary *deviceDiffs = self.deviceDiffs[@"device"];
+	NSDictionary *deviceDiffs = self.deviceDiffs;
 	XCTAssertNotNil(deviceDiffs);
 	XCTAssertEqualObjects(deviceDiffs[@"custom_data"][@"foo"], @"bar");
 	XCTAssertEqualObjects(deviceDiffs[@"custom_data"][@"five"], @5);
@@ -207,7 +207,7 @@
 		[device addCustomNumber:@(5) withKey:@"yes"];
 	}];
 
-	deviceDiffs = self.deviceDiffs[@"device"];
+	deviceDiffs = self.deviceDiffs;
 	XCTAssertNotNil(deviceDiffs);
 	XCTAssertEqualObjects(deviceDiffs[@"custom_data"][@"yes"], @5);
 

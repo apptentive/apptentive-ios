@@ -181,7 +181,7 @@ static NSString *const ATMessageCenterDidSkipProfileKey = @"ATMessageCenterDidSk
 			[self notifyConversationChanged];
 
 			if ([_delegate respondsToSelector:@selector(conversation:personDidChange:)]) {
-				[_delegate conversation:self personDidChange:@{ @"person": personDiffs }];
+				[_delegate conversation:self personDidChange:personDiffs];
 			}
 		}
 	}
@@ -207,7 +207,7 @@ static NSString *const ATMessageCenterDidSkipProfileKey = @"ATMessageCenterDidSk
 			[self notifyConversationChanged];
 
 			if ([_delegate respondsToSelector:@selector(conversation:deviceDidChange:)]) {
-				[_delegate conversation:self deviceDidChange:@{ @"device": deviceDiffs }];
+				[_delegate conversation:self deviceDidChange:deviceDiffs];
 			}
 		}
 	}

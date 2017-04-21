@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "ApptentiveRequestProtocol.h"
 
 @protocol ApptentiveRequestOperationDelegate
 , ApptentiveRequestOperationDataSource;
@@ -39,7 +40,7 @@ extern NSErrorDomain const ApptentiveHTTPErrorDomain;
 /**
  The HTTP request that the operation will make.
  */
-@property (readonly, nonatomic) NSURLRequest *request;
+@property (readonly, nonatomic) NSURLRequest *URLRequest;
 
 /**
  The data task used to make the HTTP request.
@@ -61,45 +62,10 @@ The API version that this version of the SDK targets.
  */
 @property (class, readonly, nonatomic) NSString *APIVersion;
 
-
 /**
- Initializes a request operation with the specified request, delegate and data
- source.
-
- @param request The HTTP request that the operation will perform.
- @param delegate The delegate that the operation will communicate with.
- @param dataSource The data source that the operation will use
- @return The newly-initialized operation.
+ The ApptentiveRequest-implementing object corresponding to this operation.
  */
-- (instancetype)initWithURLRequest:(NSURLRequest *)request delegate:(id<ApptentiveRequestOperationDelegate>)delegate dataSource:(id<ApptentiveRequestOperationDataSource>)dataSource;
-
-/**
- Initializes a request operation with a payload dictionary.
-
- @param path The path on the server the request will target.
- @param method The HTTP request method that the request will use.
- @param payload A dictonary that will be JSON encoded and transmitted in the
- body of the request.
- @param authToken The auth token for sending payloads
- @param delegate The delegate that the operation will communicate with.
- @param dataSource The data source that the operation will use
- @return The newly-initialized operation.
- */
-- (instancetype)initWithPath:(NSString *)path method:(NSString *)method payload:(NSDictionary *)payload authToken:(NSString *)authToken delegate:(id<ApptentiveRequestOperationDelegate>)delegate dataSource:(id<ApptentiveRequestOperationDataSource>)dataSource;
-
-/**
- Initializes a request operation with payload data.
-
- @param path The path on the server the request will target.
- @param method The HTTP request method that the request will use.
- @param payloadData The data to be transmitted in the request body.
- @param APIVersion The API version that the encoded data targets.
- @param authToken The auth token for sending payloads
- @param delegate The delegate that the operation will communicate with.
- @param dataSource The data source that the operation will use
- @return The newly-initialized operation.
- */
-- (instancetype)initWithPath:(NSString *)path method:(NSString *)method payloadData:(NSData *)payloadData APIVersion:(NSString *)APIVersion authToken:(NSString *)authToken delegate:(id<ApptentiveRequestOperationDelegate>)delegate dataSource:(id<ApptentiveRequestOperationDataSource>)dataSource;
+@property (readonly, nonatomic) id<ApptentiveRequest> request;
 
 /**
  An object that the request operation will communicate its status to.
@@ -111,6 +77,18 @@ The API version that this version of the SDK targets.
  required to make or retry the request.
  */
 @property (readonly, weak, nonatomic) id<ApptentiveRequestOperationDataSource> dataSource;
+
+/**
+ Initializes a request operation with the specified request, authorization token,
+ delegate and data source.
+
+ @param request The HTTP request that the operation will perform.
+ @param authToken The authorization token to use for the request.
+ @param delegate The delegate that the operation will communicate with.
+ @param dataSource The data source that the operation will use
+ @return The newly-initialized operation.
+ */
+- (instancetype)initWithRequest:(id<ApptentiveRequest>)request authToken:(NSString *)authToken delegate:(id<ApptentiveRequestOperationDelegate>)delegate dataSource:(id<ApptentiveRequestOperationDataSource>)dataSource;
 
 #pragma mark - Subclassing
 

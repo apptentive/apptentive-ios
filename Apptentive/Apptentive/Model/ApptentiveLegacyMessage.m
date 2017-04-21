@@ -11,9 +11,10 @@
 #import "ApptentiveBackend.h"
 #import "ApptentiveLegacyMessageSender.h"
 #import "ApptentiveLegacyFileAttachment.h"
-#import "ApptentiveSerialRequest+Record.h"
+#import "ApptentiveSerialRequest.h"
 #import "ApptentiveAttachment.h"
 #import "ApptentiveMessage.h"
+#import "ApptentiveMessagePayload.h"
 
 
 @implementation ApptentiveLegacyMessage
@@ -34,6 +35,8 @@
 @dynamic attachments;
 
 + (void)enqueueUnsentMessagesInContext:(NSManagedObjectContext *)context {
+	ApptentiveConversation *conversation = Apptentive.shared.backend.conversationManager.activeConversation;
+
 	NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"ATMessage"];
 	request.predicate = [NSPredicate predicateWithFormat:@"(pendingState == %d) || (pendingState == %d)", ATPendingMessageStateSending, ATPendingMessageStateError];
 
@@ -62,7 +65,9 @@
 
 		ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:legacyMessage.body attachments:attachments senderIdentifier:legacyMessage.sender.apptentiveID automated:legacyMessage.automated.boolValue customData:customData];
 
-		[ApptentiveSerialRequest enqueueMessage:message conversation:Apptentive.shared.backend.conversationManager.activeConversation inContext:context];
+		ApptentiveMessagePayload *payload = [[ApptentiveMessagePayload alloc] initWithMessage:message];
+
+		[ApptentiveSerialRequest enqueuePayload:payload forConversation:Apptentive.shared.backend.conversationManager.activeConversation usingAuthToken:conversation.token inContext:context];
 
 		[context deleteObject:legacyMessage];
 	}

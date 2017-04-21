@@ -7,7 +7,9 @@
 //
 
 #import "ApptentiveRequestOperation.h"
-
+#import "ApptentiveRequestProtocol.h"
+#import "ApptentiveSerialRequest.h"
+#import "ApptentiveMessageSendRequest.h"
 
 @interface ApptentiveRequestOperation ()
 
@@ -57,49 +59,31 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 	return _serverErrorStatusCodes;
 }
 
-- (instancetype)initWithPath:(NSString *)path method:(NSString *)method payload:(NSDictionary *)payload authToken:(NSString *)authToken delegate:(id<ApptentiveRequestOperationDelegate>)delegate dataSource:(id<ApptentiveRequestOperationDataSource>)dataSource {
-	NSData *payloadData = nil;
-
-	if (payload) {
-		NSError *error;
-		payloadData = [NSJSONSerialization dataWithJSONObject:payload options:0 error:&error];
-
-		if (!payloadData) {
-			NSLog(@"Error encoding payload: %@", error.localizedDescription);
-			return nil;
-		}
-	}
-
-	return [self initWithPath:path method:method payloadData:payloadData APIVersion:[[self class] APIVersion] authToken:authToken delegate:delegate dataSource:dataSource];
-}
-
-- (instancetype)initWithPath:(NSString *)path method:(NSString *)method payloadData:(NSData *)payloadData APIVersion:(NSString *)APIVersion authToken:(NSString *)authToken delegate:(id<ApptentiveRequestOperationDelegate>)delegate dataSource:(id<ApptentiveRequestOperationDataSource>)dataSource {
-	NSURL *URL = [NSURL URLWithString:path relativeToURL:dataSource.baseURL];
-
-	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:URL];
-	request.HTTPBody = payloadData;
-	request.HTTPMethod = method;
-	[request addValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-	[request addValue:APIVersion forHTTPHeaderField:@"X-API-Version"];
-	[request addValue:[@"OAuth " stringByAppendingString:authToken] forHTTPHeaderField:@"Authorization"];
-
-	return [self initWithURLRequest:request delegate:delegate dataSource:dataSource];
-}
-
-- (instancetype)initWithURLRequest:(NSURLRequest *)request delegate:(id<ApptentiveRequestOperationDelegate>)delegate dataSource:(id<ApptentiveRequestOperationDataSource>)dataSource {
+- (instancetype)initWithRequest:(id<ApptentiveRequest>)request authToken:(NSString *)authToken delegate:(id<ApptentiveRequestOperationDelegate>)delegate dataSource:(id<ApptentiveRequestOperationDataSource>)dataSource {
 	self = [super init];
 
 	if (self) {
 		_request = request;
 		_delegate = delegate;
 		_dataSource = dataSource;
+
+		NSURL *URL = [NSURL URLWithString:request.path relativeToURL:dataSource.baseURL];
+
+		NSMutableURLRequest *URLRequest = [NSMutableURLRequest requestWithURL:URL];
+		URLRequest.HTTPBody = request.payload;
+		URLRequest.HTTPMethod = request.method;
+		[URLRequest addValue:request.contentType forHTTPHeaderField:@"Content-Type"];
+		[URLRequest addValue:request.apiVersion forHTTPHeaderField:@"X-API-Version"];
+		[URLRequest addValue:[@"OAuth " stringByAppendingString:authToken] forHTTPHeaderField:@"Authorization"];
+
+		_URLRequest = URLRequest;
 	}
 
 	return self;
 }
 
 - (NSString *)name {
-	return self.request.URL.path;
+	return self.URLRequest.URL.path;
 }
 
 - (BOOL)isExecuting {
@@ -124,7 +108,7 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 	}
 
 	[self willChangeValueForKey:@"isExecuting"];
-	_task = [self.dataSource.URLSession dataTaskWithRequest:self.request completionHandler:^(NSData *_Nullable data, NSURLResponse *_Nullable response, NSError *_Nullable error) {
+	_task = [self.dataSource.URLSession dataTaskWithRequest:self.URLRequest completionHandler:^(NSData *_Nullable data, NSURLResponse *_Nullable response, NSError *_Nullable error) {
 		if (self.isCancelled) {
 			return;
 		} else if (!response) {
@@ -205,7 +189,7 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 		NSDictionary *userInfo = @{
 			NSLocalizedDescriptionKey: HTTPErrorTitle,
 			NSLocalizedFailureReasonErrorKey: HTTPErrorMessage,
-			NSURLErrorFailingURLErrorKey: self.request.URL
+			NSURLErrorFailingURLErrorKey: self.URLRequest.URL
 		};
 		error = [NSError errorWithDomain:ApptentiveHTTPErrorDomain code:response.statusCode userInfo:userInfo];
 	}
@@ -230,6 +214,8 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 }
 
 - (void)completeOperation {
+	[self deleteCorrespondingSerialRequestIfNeeded];
+
 	[self willChangeValueForKey:@"isFinished"];
 	[self willChangeValueForKey:@"isExecuting"];
 	_task = nil;
@@ -263,6 +249,25 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 	}
 
 	return maxAge;
+}
+
+- (void)deleteCorrespondingSerialRequestIfNeeded {
+	NSManagedObject *requestToDelete;
+
+	if ([self.request isKindOfClass:[ApptentiveSerialRequest class]]) {
+		requestToDelete = (ApptentiveSerialRequest *)self.request;
+	}
+
+	if ([self.request isKindOfClass:[ApptentiveMessageSendRequest class]]) {
+		// If this is a message send request, unwrap it to get the original ApptentiveSerialRequest object
+		requestToDelete = ((ApptentiveMessageSendRequest *)self.request).request;
+	}
+
+	if (requestToDelete != nil) {
+		[requestToDelete.managedObjectContext performBlockAndWait:^{
+			[requestToDelete.managedObjectContext deleteObject:requestToDelete];
+		}];
+	}
 }
 
 @end

@@ -8,12 +8,12 @@
 
 #import "ApptentiveSerialNetworkQueue.h"
 #import "ApptentiveSerialRequest.h"
-#import "ApptentiveSerialRequestOperation.h"
-#import "ApptentiveMessageRequestOperation.h"
 #import "ApptentiveMessageManager.h"
 #import "ApptentiveBackend.h"
 #import "Apptentive_Private.h"
 #import "ApptentiveConversationManager.h"
+#import "ApptentiveMessageSendRequest.h"
+#import "ApptentiveRequestOperation.h"
 
 
 @interface ApptentiveSerialNetworkQueue ()
@@ -75,7 +75,16 @@
 
 			// Add an operation for every record in the queue
 			for (ApptentiveSerialRequest *requestInfo in [queuedRequests copy]) {
-				ApptentiveSerialRequestOperation *operation = [ApptentiveSerialRequestOperation operationWithRequestInfo:requestInfo delegate:self];
+				id<ApptentiveRequest> request;
+
+				if ([requestInfo.path isEqualToString:@"messages"]) {
+					request = [[ApptentiveMessageSendRequest alloc] initWithRequest:requestInfo];
+				} else {
+					request = requestInfo;
+				}
+
+				ApptentiveRequestOperation *operation = [[ApptentiveRequestOperation alloc] initWithRequest:request authToken:requestInfo.authToken delegate:self dataSource:self];
+
 				[self addOperation:operation];
 			}
 		}];
@@ -128,10 +137,10 @@
 
 		[self updateMessageStatusForOperation:operation];
 
-		ApptentiveLogError(@"%@ %@ failed with error: %@", operation.request.HTTPMethod, operation.request.URL.absoluteString, error);
+		ApptentiveLogError(@"%@ %@ failed with error: %@", operation.URLRequest.HTTPMethod, operation.URLRequest.URL.absoluteString, error);
 	}
 
-	ApptentiveLogInfo(@"%@ %@ will retry in %f seconds.", operation.request.HTTPMethod, operation.request.URL.absoluteString, self.backoffDelay);
+	ApptentiveLogInfo(@"%@ %@ will retry in %f seconds.", operation.URLRequest.HTTPMethod, operation.URLRequest.URL.absoluteString, self.backoffDelay);
 
 	[self removeActiveOperation:operation];
 }
@@ -141,7 +150,7 @@
 
 	[self updateMessageStatusForOperation:operation];
 
-	ApptentiveLogDebug(@"%@ %@ finished successfully.", operation.request.HTTPMethod, operation.request.URL.absoluteString);
+	ApptentiveLogDebug(@"%@ %@ finished successfully.", operation.URLRequest.HTTPMethod, operation.URLRequest.URL.absoluteString);
 
 	[self removeActiveOperation:operation];
 }
@@ -151,7 +160,7 @@
 
 	[self updateMessageStatusForOperation:operation];
 
-	ApptentiveLogError(@"%@ %@ failed with error: %@. Not retrying.", operation.request.HTTPMethod, operation.request.URL.absoluteString, error);
+	ApptentiveLogError(@"%@ %@ failed with error: %@. Not retrying.", operation.URLRequest.HTTPMethod, operation.URLRequest.URL.absoluteString, error);
 
 	[self removeActiveOperation:operation];
 }
@@ -179,7 +188,7 @@
 }
 
 - (void)addActiveOperation:(ApptentiveRequestOperation *)operation {
-	if ([operation isKindOfClass:[ApptentiveMessageRequestOperation class]]) {
+	if ([operation.request isKindOfClass:[ApptentiveMessageSendRequest class]]) {
 		dispatch_async(dispatch_get_main_queue(), ^{
 			[self willChangeValueForKey:@"messageTaskCount"];
 			[self.activeTaskProgress setObject:@0 forKey:@(operation.task.taskIdentifier)];
@@ -203,15 +212,17 @@
 - (void)updateMessageStatusForOperation:(ApptentiveRequestOperation *)operation {
 	ApptentiveMessageManager *manager = Apptentive.shared.backend.conversationManager.messageManager;
 
-	for (NSOperation *op in self.operations) {
-		if ([op isKindOfClass:[ApptentiveMessageRequestOperation class]]) {
-			ApptentiveMessageRequestOperation *messageOperation = (ApptentiveMessageRequestOperation *)op;
+	for (NSOperation *operation in self.operations) {
+		if ([operation isKindOfClass:[ApptentiveRequestOperation class]] && [((ApptentiveRequestOperation *)operation).request isKindOfClass:[ApptentiveMessageSendRequest class]]) {
+			ApptentiveRequestOperation *messageOperation = (ApptentiveRequestOperation *)operation;
+			ApptentiveMessageSendRequest *messageSendRequest = messageOperation.request;
+
 			if (self.status == ApptentiveQueueStatusError) {
-				[manager setState:ApptentiveMessageStateFailedToSend forMessageWithLocalIdentifier:messageOperation.messageRequestInfo.identifier];
+				[manager setState:ApptentiveMessageStateFailedToSend forMessageWithLocalIdentifier:messageSendRequest.messageIdentifier];
 			} else if (messageOperation != operation) {
-				[manager setState:ApptentiveMessageStateSending forMessageWithLocalIdentifier:messageOperation.messageRequestInfo.identifier];
+				[manager setState:ApptentiveMessageStateSending forMessageWithLocalIdentifier:messageSendRequest.messageIdentifier];
 			} else {
-				[manager setState:ApptentiveMessageStateSent forMessageWithLocalIdentifier:messageOperation.messageRequestInfo.identifier];
+				[manager setState:ApptentiveMessageStateSent forMessageWithLocalIdentifier:messageSendRequest.messageIdentifier];
 			}
 		}
 	}

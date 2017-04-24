@@ -16,9 +16,6 @@
 @property (assign, nonatomic) BOOL wasCompleted;
 @property (assign, nonatomic) BOOL wasCancelled;
 
-@property (readonly, nonatomic) id<ApptentiveRequest> request;
-
-
 @end
 
 NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
@@ -202,8 +199,6 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 }
 
 - (void)completeOperation {
-	[self deleteCorrespondingSerialRequestIfNeeded];
-
 	[self willChangeValueForKey:@"isFinished"];
 	[self willChangeValueForKey:@"isExecuting"];
 	_task = nil;
@@ -237,25 +232,6 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 	}
 
 	return maxAge;
-}
-
-- (void)deleteCorrespondingSerialRequestIfNeeded {
-	NSManagedObject *requestToDelete;
-
-	if ([self.request isKindOfClass:[ApptentiveSerialRequest class]]) {
-		requestToDelete = (ApptentiveSerialRequest *)self.request;
-	}
-
-	if ([self.request isKindOfClass:[ApptentiveMessageSendRequest class]]) {
-		// If this is a message send request, unwrap it to get the original ApptentiveSerialRequest object
-		requestToDelete = ((ApptentiveMessageSendRequest *)self.request).request;
-	}
-
-	if (requestToDelete != nil) {
-		[requestToDelete.managedObjectContext performBlockAndWait:^{
-			[requestToDelete.managedObjectContext deleteObject:requestToDelete];
-		}];
-	}
 }
 
 @end

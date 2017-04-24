@@ -32,6 +32,7 @@
 	self = [super init];
 
 	if (self) {
+		_client = client;
 		_parentManagedObjectContext = parentManagedObjectContext;
 		_activeTaskProgress = [NSMutableDictionary dictionary];
 
@@ -85,7 +86,8 @@
 				}
 
 				ApptentiveRequestOperation *operation = [self.client requestOperationWithRequest:request authToken:requestInfo.authToken delegate:self];
-				operation.identifier = requestInfo.identifier;
+				
+				operation.request = request;
 
 				[self addOperation:operation];
 			}
@@ -150,6 +152,10 @@
 - (void)requestOperationDidFinish:(ApptentiveRequestOperation *)operation {
 	_status = ApptentiveQueueStatusGroovy;
 
+	if ([operation.request isKindOfClass:[ApptentiveSerialRequest class]]) {
+		[self deleteCompletedOrFailedRequest:(ApptentiveSerialRequest *)operation.request];
+	}
+
 	[self updateMessageStatusForOperation:operation];
 
 	ApptentiveLogDebug(@"%@ %@ finished successfully.", operation.URLRequest.HTTPMethod, operation.URLRequest.URL.absoluteString);
@@ -159,6 +165,10 @@
 
 - (void)requestOperation:(ApptentiveRequestOperation *)operation didFailWithError:(NSError *)error {
 	_status = ApptentiveQueueStatusError;
+
+	if ([operation.request isKindOfClass:[ApptentiveSerialRequest class]]) {
+		[self deleteCompletedOrFailedRequest:(ApptentiveSerialRequest *)operation.request];
+	}
 
 	[self updateMessageStatusForOperation:operation];
 
@@ -190,20 +200,22 @@
 }
 
 - (void)addActiveOperation:(ApptentiveRequestOperation *)operation {
-	if (operation.identifier != nil) {
+	if ([operation.request isKindOfClass:[ApptentiveMessageSendRequest class]]) {
 		dispatch_async(dispatch_get_main_queue(), ^{
 			[self willChangeValueForKey:@"messageTaskCount"];
-			[self.activeTaskProgress setObject:@0 forKey:operation.identifier];
+			[self.activeTaskProgress setObject:@0 forKey:@(operation.task.taskIdentifier)];
 			[self didChangeValueForKey:@"messageTaskCount"];
 		});
 	}
 }
 
 - (void)removeActiveOperation:(ApptentiveRequestOperation *)operation {
-	if (operation.identifier != nil) {
+	NSNumber *identifier = @(operation.task.taskIdentifier);
+
+	if (self.activeTaskProgress[identifier]) {
 		dispatch_async(dispatch_get_main_queue(), ^{
 			[self willChangeValueForKey:@"messageTaskCount"];
-			[self.activeTaskProgress removeObjectForKey:operation.identifier];
+			[self.activeTaskProgress removeObjectForKey:identifier];
 			[self didChangeValueForKey:@"messageTaskCount"];
 		});
 	}
@@ -213,19 +225,16 @@
 	ApptentiveMessageManager *manager = Apptentive.shared.backend.conversationManager.messageManager;
 
 	for (NSOperation *operation in self.operations) {
-		if ([operation isKindOfClass:[ApptentiveRequestOperation class]]) {
-			ApptentiveRequestOperation *requestOperation = (ApptentiveRequestOperation *)operation;
-
-			if (requestOperation.identifier == nil) {
-				continue;
-			}
+		if ([operation isKindOfClass:[ApptentiveRequestOperation class]] && [((ApptentiveRequestOperation *)operation).request isKindOfClass:[ApptentiveMessageSendRequest class]]) {
+			ApptentiveRequestOperation *messageOperation = (ApptentiveRequestOperation *)operation;
+			ApptentiveMessageSendRequest *messageSendRequest = messageOperation.request;
 
 			if (self.status == ApptentiveQueueStatusError) {
-				[manager setState:ApptentiveMessageStateFailedToSend forMessageWithLocalIdentifier:requestOperation.identifier];
-			} else if (requestOperation != operation) {
-				[manager setState:ApptentiveMessageStateSending forMessageWithLocalIdentifier:requestOperation.identifier];
+				[manager setState:ApptentiveMessageStateFailedToSend forMessageWithLocalIdentifier:messageSendRequest.messageIdentifier];
+			} else if (messageOperation != operation) {
+				[manager setState:ApptentiveMessageStateSending forMessageWithLocalIdentifier:messageSendRequest.messageIdentifier];
 			} else {
-				[manager setState:ApptentiveMessageStateSent forMessageWithLocalIdentifier:requestOperation.identifier];
+				[manager setState:ApptentiveMessageStateSent forMessageWithLocalIdentifier:messageSendRequest.messageIdentifier];
 			}
 		}
 	}
@@ -315,6 +324,21 @@
 		if (conversationId != nil) {
 			[self updateMissingConversationId:conversationId];
 		}
+	}
+}
+
+#pragma mark - Delete completed or failed requests
+
+- (void)deleteCompletedOrFailedRequest:(ApptentiveSerialRequest *)requestToDelete {
+	if ([requestToDelete isKindOfClass:[ApptentiveMessageSendRequest class]]) {
+		// If this is a message send request, unwrap it to get the original ApptentiveSerialRequest object
+		requestToDelete = ((ApptentiveMessageSendRequest *)requestToDelete).request;
+	}
+
+	if (requestToDelete != nil) {
+		[requestToDelete.managedObjectContext performBlockAndWait:^{
+			[requestToDelete.managedObjectContext deleteObject:requestToDelete];
+		}];
 	}
 }
 

@@ -286,6 +286,8 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 }
 
 - (void)finishStartupWithToken:(NSString *)token {
+	self.client.authToken = token;
+
 	self.state = ATBackendStateReady;
 	dispatch_async(dispatch_get_main_queue(), ^{
 		[ApptentiveLegacyFileAttachment addMissingExtensions];

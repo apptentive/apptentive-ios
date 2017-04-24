@@ -42,12 +42,6 @@ extern NSErrorDomain const ApptentiveHTTPErrorDomain;
  */
 @property (readonly, nonatomic) NSURLRequest *URLRequest;
 
-
-/**
- A user-defined identifier for the request operation.
- */
-@property (strong, nonatomic) NSString *identifier;
-
 /**
  The data task used to make the HTTP request.
  */
@@ -66,7 +60,7 @@ extern NSErrorDomain const ApptentiveHTTPErrorDomain;
 /**
  The ApptentiveRequest-implementing object corresponding to this operation.
  */
-//@property (readonly, nonatomic) id<ApptentiveRequest> request;
+@property (strong, nonatomic) id<ApptentiveRequest> request;
 
 /**
  An object that the request operation will communicate its status to.

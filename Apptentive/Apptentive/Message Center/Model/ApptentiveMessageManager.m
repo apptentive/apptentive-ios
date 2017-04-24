@@ -9,13 +9,13 @@
 #import "ApptentiveMessageManager.h"
 #import "ApptentiveMessage.h"
 #import "ApptentiveMessageSender.h"
-#import "ApptentiveNetworkQueue.h"
 #import "ApptentiveSerialRequest.h"
 #import "ApptentiveMessageStore.h"
 #import "Apptentive_Private.h"
 #import "ApptentiveBackend.h"
 #import "ApptentiveMessagePayload.h"
 #import "ApptentiveMessageGetRequest.h"
+#import "ApptentiveClient.h"
 
 static NSString *const MessageStoreFileName = @"messages-v1.archive";
 
@@ -36,12 +36,12 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 
 @implementation ApptentiveMessageManager
 
-- (instancetype)initWithStoragePath:(NSString *)storagePath networkQueue:(ApptentiveNetworkQueue *)networkQueue pollingInterval:(NSTimeInterval)pollingInterval localUserIdentifier:(NSString *)localUserIdentifier {
+- (instancetype)initWithStoragePath:(NSString *)storagePath client:(ApptentiveClient *)client pollingInterval:(NSTimeInterval)pollingInterval localUserIdentifier:(NSString *)localUserIdentifier {
 	self = [super init];
 
 	if (self) {
 		_storagePath = storagePath;
-		_networkQueue = networkQueue;
+		_client = client;
 		_localUserIdentifier = localUserIdentifier;
 
 		_messageIdentifierIndex = [NSMutableDictionary dictionary];
@@ -76,17 +76,12 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 		return;
 	}
 
-	NSString *path = @"conversation";
-	if (self.messageStore.lastMessageIdentifier != nil) {
-		path = [path stringByAppendingFormat:@"?after_id=%@", self.messageStore.lastMessageIdentifier];
-	}
-
 	ApptentiveMessageGetRequest *request = [[ApptentiveMessageGetRequest alloc] init];
 	request.lastMessageIdentifier = self.messageStore.lastMessageIdentifier;
 
-	self.messageOperation = [[ApptentiveRequestOperation alloc] initWithRequest:request authToken:Apptentive.shared.backend.conversationManager.activeConversation.token delegate:self dataSource:self.networkQueue];
+	self.messageOperation = [self.client requestOperationWithRequest:request delegate:self];
 
-	[self.networkQueue addOperation:self.messageOperation];
+	[self.client.operationQueue addOperation:self.messageOperation];
 }
 
 - (void)checkForMessagesInBackground:(void (^)(UIBackgroundFetchResult))completionHandler {
@@ -222,7 +217,7 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 		ApptentiveLogError(@"%@ %@ failed with error: %@", operation.URLRequest.HTTPMethod, operation.URLRequest.URL.absoluteString, error);
 	}
 
-	ApptentiveLogInfo(@"%@ %@ will retry in %f seconds.", operation.URLRequest.HTTPMethod, operation.URLRequest.URL.absoluteString, self.networkQueue.backoffDelay);
+	ApptentiveLogInfo(@"%@ %@ will retry in %f seconds.", operation.URLRequest.HTTPMethod, operation.URLRequest.URL.absoluteString, self.client.backoffDelay);
 }
 
 #pragma mark - Polling

@@ -10,14 +10,14 @@
 #import "ApptentiveRequestOperation.h"
 #import "ApptentiveMessage.h"
 
-@class ApptentiveNetworkQueue, ApptentiveMessageStore;
+@class ApptentiveMessageStore, ApptentiveClient;
 @protocol ApptentiveMessageManagerDelegate;
 
 
 @interface ApptentiveMessageManager : NSObject <ApptentiveRequestOperationDelegate>
 
 @property (readonly, nonatomic) NSString *storagePath;
-@property (readonly, nonatomic) ApptentiveNetworkQueue *networkQueue;
+@property (readonly, nonatomic) ApptentiveClient *client;
 @property (assign, nonatomic) NSTimeInterval pollingInterval;
 @property (copy, nonatomic) NSString *localUserIdentifier;
 
@@ -26,7 +26,7 @@
 
 @property (weak, nonatomic) id<ApptentiveMessageManagerDelegate> delegate;
 
-- (instancetype)initWithStoragePath:(NSString *)storagePath networkQueue:(ApptentiveNetworkQueue *)networkQueue pollingInterval:(NSTimeInterval)pollingInterval localUserIdentifier:(NSString *)localUserIdentifier;
+- (instancetype)initWithStoragePath:(NSString *)storagePath client:(ApptentiveClient *)client pollingInterval:(NSTimeInterval)pollingInterval localUserIdentifier:(NSString *)localUserIdentifier;
 
 - (void)checkForMessages;
 

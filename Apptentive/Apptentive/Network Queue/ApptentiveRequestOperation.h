@@ -42,6 +42,12 @@ extern NSErrorDomain const ApptentiveHTTPErrorDomain;
  */
 @property (readonly, nonatomic) NSURLRequest *URLRequest;
 
+
+/**
+ A user-defined identifier for the request operation.
+ */
+@property (strong, nonatomic) NSString *identifier;
+
 /**
  The data task used to make the HTTP request.
  */
@@ -60,7 +66,7 @@ extern NSErrorDomain const ApptentiveHTTPErrorDomain;
 /**
  The ApptentiveRequest-implementing object corresponding to this operation.
  */
-@property (readonly, nonatomic) id<ApptentiveRequest> request;
+//@property (readonly, nonatomic) id<ApptentiveRequest> request;
 
 /**
  An object that the request operation will communicate its status to.
@@ -74,16 +80,14 @@ extern NSErrorDomain const ApptentiveHTTPErrorDomain;
 @property (readonly, weak, nonatomic) id<ApptentiveRequestOperationDataSource> dataSource;
 
 /**
- Initializes a request operation with the specified request, authorization token,
- delegate and data source.
+ Initializes a request operation with the specified URL Request.
 
- @param request The HTTP request that the operation will perform.
- @param authToken The authorization token to use for the request.
+ @param URLRequest The URL request to perform.
  @param delegate The delegate that the operation will communicate with.
  @param dataSource The data source that the operation will use
  @return The newly-initialized operation.
  */
-- (instancetype)initWithRequest:(id<ApptentiveRequest>)request authToken:(NSString *)authToken delegate:(id<ApptentiveRequestOperationDelegate>)delegate dataSource:(id<ApptentiveRequestOperationDataSource>)dataSource;
+- (instancetype)initWithURLRequest:(NSURLRequest *)URLRequest delegate:(id<ApptentiveRequestOperationDelegate>)delegate dataSource:(id<ApptentiveRequestOperationDataSource>)dataSource;
 
 #pragma mark - Subclassing
 
@@ -147,11 +151,6 @@ extern NSErrorDomain const ApptentiveHTTPErrorDomain;
  operation can obtain additional data needed to make and retry requests.
  */
 @protocol ApptentiveRequestOperationDataSource <NSObject>
-
-/**
- The server base URL that requests should target.
- */
-@property (readonly, nonatomic) NSURL *baseURL;
 
 /**
  The `NSURLSession` object that should be used to create the HTTP request.

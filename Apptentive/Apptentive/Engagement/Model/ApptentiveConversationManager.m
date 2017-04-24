@@ -12,7 +12,7 @@
 #import "ApptentiveUtilities.h"
 #import "ApptentiveEngagementManifest.h"
 #import "Apptentive_Private.h"
-#import "ApptentiveNetworkQueue.h"
+#import "ApptentiveClient.h"
 #import "ApptentiveBackend.h"
 #import "ApptentivePerson.h"
 #import "ApptentiveSerialRequest.h"
@@ -56,13 +56,13 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 @implementation ApptentiveConversationManager
 
-- (instancetype)initWithStoragePath:(NSString *)storagePath operationQueue:(NSOperationQueue *)operationQueue networkQueue:(nonnull ApptentiveNetworkQueue *)networkQueue parentManagedObjectContext:(nonnull NSManagedObjectContext *)parentManagedObjectContext {
+- (instancetype)initWithStoragePath:(NSString *)storagePath operationQueue:(NSOperationQueue *)operationQueue client:(ApptentiveClient *)client parentManagedObjectContext:(NSManagedObjectContext *)parentManagedObjectContext {
 	self = [super init];
 
 	if (self) {
 		_storagePath = storagePath;
 		_operationQueue = operationQueue;
-		_networkQueue = networkQueue;
+		_client = client;
 		_parentManagedObjectContext = parentManagedObjectContext;
 	}
 
@@ -157,7 +157,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 - (void)createMessageManagerForConversation:(ApptentiveConversation *)conversation {
 	NSString *directoryPath = [self conversationContainerPathForDirectoryName:conversation.directoryName];
 
-	_messageManager = [[ApptentiveMessageManager alloc] initWithStoragePath:directoryPath networkQueue:self.networkQueue pollingInterval:Apptentive.shared.backend.configuration.messageCenter.backgroundPollingInterval localUserIdentifier:conversation.person.identifier];
+	_messageManager = [[ApptentiveMessageManager alloc] initWithStoragePath:directoryPath client:self.client pollingInterval:Apptentive.shared.backend.configuration.messageCenter.backgroundPollingInterval localUserIdentifier:conversation.person.identifier];
 }
 
 - (BOOL)endActiveConversation {
@@ -186,11 +186,9 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 #pragma mark - Conversation Token Fetching
 
 - (void)fetchConversationToken:(ApptentiveConversation *)conversation {
-	ApptentiveConversationRequest *request = [[ApptentiveConversationRequest alloc] initWithConversation:conversation];
+	self.conversationOperation = [self.client requestOperationWithRequest:[[ApptentiveConversationRequest alloc] initWithConversation:conversation] authToken:Apptentive.shared.APIKey delegate:self];
 
-	self.conversationOperation = [[ApptentiveRequestOperation alloc] initWithRequest:request authToken:Apptentive.shared.APIKey delegate:self dataSource:self.networkQueue];
-
-	[self.networkQueue addOperation:self.conversationOperation];
+	[self.client.operationQueue addOperation:self.conversationOperation];
 }
 
 - (void)handleConversationStateChange:(ApptentiveConversation *)conversation {
@@ -335,11 +333,9 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		token = Apptentive.shared.APIKey;
 	}
 
-	ApptentiveLoginRequest *request = [[ApptentiveLoginRequest alloc] initWithToken:token];
+	self.loginRequestOperation = [self.client requestOperationWithRequest:[[ApptentiveLoginRequest alloc] initWithToken:token] authToken:token delegate:self];
 
-	self.loginRequestOperation = [[ApptentiveRequestOperation alloc] initWithRequest:request authToken:token delegate:self dataSource:self.networkQueue];
-
-	[self.networkQueue addOperation:self.loginRequestOperation];
+	[self.client.operationQueue addOperation:self.loginRequestOperation];
 }
 
 - (NSError *)errorWithCode:(NSInteger)code failureReason:(NSString *)failureReason {
@@ -463,7 +459,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		ApptentiveLogError(@"%@ %@ failed with error: %@", operation.URLRequest.HTTPMethod, operation.URLRequest.URL.absoluteString, error);
 	}
 
-	ApptentiveLogInfo(@"%@ %@ will retry in %f seconds.", operation.URLRequest.HTTPMethod, operation.URLRequest.URL.absoluteString, self.networkQueue.backoffDelay);
+	ApptentiveLogInfo(@"%@ %@ will retry in %f seconds.", operation.URLRequest.HTTPMethod, operation.URLRequest.URL.absoluteString, self.client.backoffDelay);
 }
 
 - (void)requestOperation:(ApptentiveRequestOperation *)operation didFailWithError:(NSError *)error {
@@ -573,15 +569,13 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		return;
 	}
 
-	ApptentiveInteractionsRequest *request = [[ApptentiveInteractionsRequest alloc] init];
-
-	self.manifestOperation = [[ApptentiveRequestOperation alloc] initWithRequest:request authToken:self.activeConversation.token delegate:self dataSource:self.networkQueue];
+	self.manifestOperation = [self.client requestOperationWithRequest:[[ApptentiveInteractionsRequest alloc] init] delegate:self];
 
 	if (!self.activeConversation.token && self.conversationOperation) {
 		[self.manifestOperation addDependency:self.conversationOperation];
 	}
 
-	[self.networkQueue addOperation:self.manifestOperation];
+	[self.client.operationQueue addOperation:self.manifestOperation];
 }
 
 - (void)scheduleConversationSave {

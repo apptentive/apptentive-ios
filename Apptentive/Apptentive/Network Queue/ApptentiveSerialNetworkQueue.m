@@ -14,6 +14,7 @@
 #import "ApptentiveConversationManager.h"
 #import "ApptentiveMessageSendRequest.h"
 #import "ApptentiveRequestOperation.h"
+#import "ApptentiveClient.h"
 
 
 @interface ApptentiveSerialNetworkQueue ()
@@ -27,8 +28,8 @@
 
 @implementation ApptentiveSerialNetworkQueue
 
-- (instancetype)initWithBaseURL:(NSURL *)baseURL SDKVersion:(NSString *)SDKVersion platform:(NSString *)platform parentManagedObjectContext:(NSManagedObjectContext *)parentManagedObjectContext {
-	self = [super initWithBaseURL:baseURL SDKVersion:SDKVersion platform:platform];
+- (instancetype)initWithClient:(ApptentiveClient *)client parentManagedObjectContext:(NSManagedObjectContext *)parentManagedObjectContext {
+	self = [super init];
 
 	if (self) {
 		_parentManagedObjectContext = parentManagedObjectContext;
@@ -83,7 +84,8 @@
 					request = requestInfo;
 				}
 
-				ApptentiveRequestOperation *operation = [[ApptentiveRequestOperation alloc] initWithRequest:request authToken:requestInfo.authToken delegate:self dataSource:self];
+				ApptentiveRequestOperation *operation = [self.client requestOperationWithRequest:request authToken:requestInfo.authToken delegate:self];
+				operation.identifier = requestInfo.identifier;
 
 				[self addOperation:operation];
 			}
@@ -140,7 +142,7 @@
 		ApptentiveLogError(@"%@ %@ failed with error: %@", operation.URLRequest.HTTPMethod, operation.URLRequest.URL.absoluteString, error);
 	}
 
-	ApptentiveLogInfo(@"%@ %@ will retry in %f seconds.", operation.URLRequest.HTTPMethod, operation.URLRequest.URL.absoluteString, self.backoffDelay);
+	ApptentiveLogInfo(@"%@ %@ will retry in %f seconds.", operation.URLRequest.HTTPMethod, operation.URLRequest.URL.absoluteString, self.client.backoffDelay);
 
 	[self removeActiveOperation:operation];
 }
@@ -188,22 +190,20 @@
 }
 
 - (void)addActiveOperation:(ApptentiveRequestOperation *)operation {
-	if ([operation.request isKindOfClass:[ApptentiveMessageSendRequest class]]) {
+	if (operation.identifier != nil) {
 		dispatch_async(dispatch_get_main_queue(), ^{
 			[self willChangeValueForKey:@"messageTaskCount"];
-			[self.activeTaskProgress setObject:@0 forKey:@(operation.task.taskIdentifier)];
+			[self.activeTaskProgress setObject:@0 forKey:operation.identifier];
 			[self didChangeValueForKey:@"messageTaskCount"];
 		});
 	}
 }
 
 - (void)removeActiveOperation:(ApptentiveRequestOperation *)operation {
-	NSNumber *identifier = @(operation.task.taskIdentifier);
-
-	if (self.activeTaskProgress[identifier]) {
+	if (operation.identifier != nil) {
 		dispatch_async(dispatch_get_main_queue(), ^{
 			[self willChangeValueForKey:@"messageTaskCount"];
-			[self.activeTaskProgress removeObjectForKey:identifier];
+			[self.activeTaskProgress removeObjectForKey:operation.identifier];
 			[self didChangeValueForKey:@"messageTaskCount"];
 		});
 	}
@@ -213,16 +213,19 @@
 	ApptentiveMessageManager *manager = Apptentive.shared.backend.conversationManager.messageManager;
 
 	for (NSOperation *operation in self.operations) {
-		if ([operation isKindOfClass:[ApptentiveRequestOperation class]] && [((ApptentiveRequestOperation *)operation).request isKindOfClass:[ApptentiveMessageSendRequest class]]) {
-			ApptentiveRequestOperation *messageOperation = (ApptentiveRequestOperation *)operation;
-			ApptentiveMessageSendRequest *messageSendRequest = messageOperation.request;
+		if ([operation isKindOfClass:[ApptentiveRequestOperation class]]) {
+			ApptentiveRequestOperation *requestOperation = (ApptentiveRequestOperation *)operation;
+
+			if (requestOperation.identifier == nil) {
+				continue;
+			}
 
 			if (self.status == ApptentiveQueueStatusError) {
-				[manager setState:ApptentiveMessageStateFailedToSend forMessageWithLocalIdentifier:messageSendRequest.messageIdentifier];
-			} else if (messageOperation != operation) {
-				[manager setState:ApptentiveMessageStateSending forMessageWithLocalIdentifier:messageSendRequest.messageIdentifier];
+				[manager setState:ApptentiveMessageStateFailedToSend forMessageWithLocalIdentifier:requestOperation.identifier];
+			} else if (requestOperation != operation) {
+				[manager setState:ApptentiveMessageStateSending forMessageWithLocalIdentifier:requestOperation.identifier];
 			} else {
-				[manager setState:ApptentiveMessageStateSent forMessageWithLocalIdentifier:messageSendRequest.messageIdentifier];
+				[manager setState:ApptentiveMessageStateSent forMessageWithLocalIdentifier:requestOperation.identifier];
 			}
 		}
 	}

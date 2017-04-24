@@ -16,6 +16,9 @@
 @property (assign, nonatomic) BOOL wasCompleted;
 @property (assign, nonatomic) BOOL wasCancelled;
 
+@property (readonly, nonatomic) id<ApptentiveRequest> request;
+
+
 @end
 
 NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
@@ -55,24 +58,13 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 	return _serverErrorStatusCodes;
 }
 
-- (instancetype)initWithRequest:(id<ApptentiveRequest>)request authToken:(NSString *)authToken delegate:(id<ApptentiveRequestOperationDelegate>)delegate dataSource:(id<ApptentiveRequestOperationDataSource>)dataSource {
+- (instancetype)initWithURLRequest:(NSURLRequest *)URLRequest delegate:(id<ApptentiveRequestOperationDelegate>)delegate dataSource:(id<ApptentiveRequestOperationDataSource>)dataSource {
 	self = [super init];
 
 	if (self) {
-		_request = request;
+		_URLRequest = URLRequest;
 		_delegate = delegate;
 		_dataSource = dataSource;
-
-		NSURL *URL = [NSURL URLWithString:request.path relativeToURL:dataSource.baseURL];
-
-		NSMutableURLRequest *URLRequest = [NSMutableURLRequest requestWithURL:URL];
-		URLRequest.HTTPBody = request.payload;
-		URLRequest.HTTPMethod = request.method;
-		[URLRequest addValue:request.contentType forHTTPHeaderField:@"Content-Type"];
-		[URLRequest addValue:request.apiVersion forHTTPHeaderField:@"X-API-Version"];
-		[URLRequest addValue:[@"OAuth " stringByAppendingString:authToken] forHTTPHeaderField:@"Authorization"];
-
-		_URLRequest = URLRequest;
 	}
 
 	return self;

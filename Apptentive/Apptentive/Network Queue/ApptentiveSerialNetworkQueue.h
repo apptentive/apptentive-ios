@@ -6,9 +6,11 @@
 //  Copyright © 2016 Apptentive, Inc. All rights reserved.
 //
 
-#import "ApptentiveNetworkQueue.h"
 #import <CoreData/CoreData.h>
 #import <UIKit/UIKit.h>
+#import "ApptentiveRequestOperation.h"
+
+@class ApptentiveClient;
 
 typedef NS_ENUM(NSInteger, ApptentiveQueueStatus) {
 	ApptentiveQueueStatusUnknown,
@@ -48,20 +50,17 @@ typedef NS_ENUM(NSInteger, ApptentiveQueueStatus) {
  operation can complete as a background task after the app is moved to the
  background.
  */
-@interface ApptentiveSerialNetworkQueue : ApptentiveNetworkQueue <ApptentiveRequestOperationDelegate, NSURLSessionDelegate, NSURLSessionDataDelegate>
+@interface ApptentiveSerialNetworkQueue : NSOperationQueue <ApptentiveRequestOperationDelegate, NSURLSessionDelegate, NSURLSessionDataDelegate>
 
 /**
  Initializes a new serial network queue with the specified parameters.
 
- @param baseURL The URL on which to base HTTP requests.
- @param SDKVersion The SDK version (used to generate the user agent header).
- @param platform The platform string (used to generate the user agent header).
  @param parentManagedObjectContext The managed object context to use as a parent
  when creating a private managed object context for reading new request
  information from Core Data.
  @return The newly-initialzed serial queue.
  */
-- (instancetype)initWithBaseURL:(NSURL *)baseURL SDKVersion:(NSString *)SDKVersion platform:(NSString *)platform parentManagedObjectContext:(NSManagedObjectContext *)parentManagedObjectContext;
+- (instancetype)initWithClient:(ApptentiveClient *)client parentManagedObjectContext:(NSManagedObjectContext *)parentManagedObjectContext;
 
 /**
  Instructs the queue to read any pending request information from Core Data and
@@ -71,6 +70,7 @@ typedef NS_ENUM(NSInteger, ApptentiveQueueStatus) {
  */
 - (void)resume;
 
+@property (readonly, nonatomic) ApptentiveClient *client;
 
 /**
  A number representing the average progress across all message operations in the

@@ -24,12 +24,14 @@
 #import "ApptentiveDevice.h"
 #import "ApptentiveVersion.h"
 #import "ApptentiveMessageManager.h"
+#import "ApptentiveClient.h"
 #import "ApptentiveConfigurationRequest.h"
 
 #import "ApptentiveLegacyEvent.h"
 #import "ApptentiveLegacySurveyResponse.h"
 #import "ApptentiveLegacyMessage.h"
 #import "ApptentiveLegacyFileAttachment.h"
+
 
 typedef NS_ENUM(NSInteger, ATBackendState) {
 	ATBackendStateStarting,
@@ -40,7 +42,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 
 @interface ApptentiveBackend ()
 
-@property (readonly, strong, nonatomic) ApptentiveNetworkQueue *networkQueue;
+@property (readonly, strong, nonatomic) ApptentiveClient *client;
 @property (readonly, strong, nonatomic) ApptentiveSerialNetworkQueue *serialNetworkQueue;
 
 @property (strong, nonatomic) ApptentiveRequestOperation *configurationOperation;
@@ -188,8 +190,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 				[self fetchConfiguration];
 			}
 
-			[self.networkQueue resetBackoffDelay];
-			[self.serialNetworkQueue resetBackoffDelay];
+			[self.client resetBackoffDelay];
 
 			[self.conversationManager resume];
 
@@ -197,7 +198,6 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 		} else {
 			[self.conversationManager pause];
 
-			[self.networkQueue cancelAllOperations];
 			[self.serialNetworkQueue cancelAllOperations];
 
 			self.serialNetworkQueue.backgroundTaskIdentifier = [[UIApplication sharedApplication] beginBackgroundTaskWithName:@"SaveContext" expirationHandler:^{
@@ -226,15 +226,13 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 		return;
 	}
 
-	ApptentiveConfigurationRequest *request = [[ApptentiveConfigurationRequest alloc] init];
-
-	self.configurationOperation = [[ApptentiveRequestOperation alloc] initWithRequest:request authToken:self.conversationManager.activeConversation.token delegate:self dataSource:self.networkQueue];
+	self.configurationOperation = [self.client requestOperationWithRequest:[[ApptentiveConfigurationRequest alloc] init] delegate:self];
 
 	if (!self.conversationManager.activeConversation && self.conversationManager.conversationOperation) {
 		[self.configurationOperation addDependency:self.conversationManager.conversationOperation];
 	}
 
-	[self.networkQueue addOperation:self.configurationOperation];
+	[self.client.operationQueue addOperation:self.configurationOperation];
 }
 
 - (void)createSupportDirectoryIfNeeded {
@@ -247,13 +245,13 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 }
 
 - (void)startUp {
-	_networkQueue = [[ApptentiveNetworkQueue alloc] initWithBaseURL:self.baseURL SDKVersion:kApptentiveVersionString platform:@"iOS"];
-	_serialNetworkQueue = [[ApptentiveSerialNetworkQueue alloc] initWithBaseURL:self.baseURL SDKVersion:kApptentiveVersionString platform:@"iOS" parentManagedObjectContext:self.managedObjectContext];
+	_client = [[ApptentiveClient alloc] initWithBaseURL:self.baseURL operationQueue:self.operationQueue];
+	_serialNetworkQueue = [[ApptentiveSerialNetworkQueue alloc] initWithClient:self.client parentManagedObjectContext:self.managedObjectContext];
 
 	[self.serialNetworkQueue addObserver:self forKeyPath:@"messageSendProgress" options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew context:nil];
 	[self.serialNetworkQueue addObserver:self forKeyPath:@"messageTaskCount" options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew context:nil];
 
-	_conversationManager = [[ApptentiveConversationManager alloc] initWithStoragePath:_supportDirectoryPath operationQueue:_operationQueue networkQueue:_networkQueue parentManagedObjectContext:self.managedObjectContext];
+	_conversationManager = [[ApptentiveConversationManager alloc] initWithStoragePath:self.supportDirectoryPath operationQueue:self.operationQueue client:self.client parentManagedObjectContext:self.managedObjectContext];
 	self.conversationManager.delegate = self;
 
 	_imageCache = [[NSURLCache alloc] initWithMemoryCapacity:1 * 1024 * 1024 diskCapacity:10 * 1024 * 1024 diskPath:[self imageCachePath]];
@@ -337,7 +335,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 		ApptentiveLogError(@"%@ %@ failed with error: %@", operation.URLRequest.HTTPMethod, operation.URLRequest.URL.absoluteString, error);
 	}
 
-	ApptentiveLogInfo(@"%@ %@ will retry in %f seconds.", operation.URLRequest.HTTPMethod, operation.URLRequest.URL.absoluteString, self.networkQueue.backoffDelay);
+	ApptentiveLogInfo(@"%@ %@ will retry in %f seconds.", operation.URLRequest.HTTPMethod, operation.URLRequest.URL.absoluteString, self.client.backoffDelay);
 }
 
 - (void)requestOperation:(ApptentiveRequestOperation *)operation didFailWithError:(NSError *)error {

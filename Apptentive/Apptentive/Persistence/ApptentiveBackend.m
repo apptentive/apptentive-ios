@@ -323,8 +323,6 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 #pragma mark Apptentive request operation delegate
 
 - (void)requestOperationDidFinish:(ApptentiveRequestOperation *)operation {
-	ApptentiveLogDebug(@"%@ %@ finished successfully.", operation.URLRequest.HTTPMethod, operation.URLRequest.URL.absoluteString);
-
 	if (operation == self.configurationOperation) {
 		[self processConfigurationResponse:(NSDictionary *)operation.responseObject cacheLifetime:operation.cacheLifetime];
 
@@ -332,17 +330,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	}
 }
 
-- (void)requestOperationWillRetry:(ApptentiveRequestOperation *)operation withError:(NSError *)error {
-	if (error) {
-		ApptentiveLogError(@"%@ %@ failed with error: %@", operation.URLRequest.HTTPMethod, operation.URLRequest.URL.absoluteString, error);
-	}
-
-	ApptentiveLogInfo(@"%@ %@ will retry in %f seconds.", operation.URLRequest.HTTPMethod, operation.URLRequest.URL.absoluteString, self.client.backoffDelay);
-}
-
 - (void)requestOperation:(ApptentiveRequestOperation *)operation didFailWithError:(NSError *)error {
-	ApptentiveLogError(@"%@ %@ failed with error: %@. Not retrying.", operation.URLRequest.HTTPMethod, operation.URLRequest.URL.absoluteString, error);
-
 	if (operation == self.configurationOperation) {
 		self.configurationOperation = nil;
 	}

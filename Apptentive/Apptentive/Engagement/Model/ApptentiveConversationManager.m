@@ -437,8 +437,6 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 #pragma mark Apptentive request operation delegate
 
 - (void)requestOperationDidFinish:(ApptentiveRequestOperation *)operation {
-	ApptentiveLogDebug(@"%@ %@ finished successfully.", operation.URLRequest.HTTPMethod, operation.URLRequest.URL.absoluteString);
-
 	if (operation == self.conversationOperation) {
 		[self processConversationResponse:(NSDictionary *)operation.responseObject];
 
@@ -454,17 +452,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	}
 }
 
-- (void)requestOperationWillRetry:(ApptentiveRequestOperation *)operation withError:(NSError *)error {
-	if (error) {
-		ApptentiveLogError(@"%@ %@ failed with error: %@", operation.URLRequest.HTTPMethod, operation.URLRequest.URL.absoluteString, error);
-	}
-
-	ApptentiveLogInfo(@"%@ %@ will retry in %f seconds.", operation.URLRequest.HTTPMethod, operation.URLRequest.URL.absoluteString, self.client.backoffDelay);
-}
-
 - (void)requestOperation:(ApptentiveRequestOperation *)operation didFailWithError:(NSError *)error {
-	ApptentiveLogError(@"%@ %@ failed with error: %@. Not retrying.", operation.URLRequest.HTTPMethod, operation.URLRequest.URL.absoluteString, error);
-
 	if (operation == self.conversationOperation) {
 		// This is a permanent failure. We should basically disable the SDK at this point.
 		// TODO: disable the SDK until next launch

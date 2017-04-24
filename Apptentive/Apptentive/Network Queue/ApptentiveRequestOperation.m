@@ -145,6 +145,8 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 	_cacheLifetime = [self maxAgeFromResponse:response];
 	_responseObject = responseObject;
 
+	ApptentiveLogDebug(@"%@ %@ finished successfully.", self.URLRequest.HTTPMethod, self.URLRequest.URL.absoluteString);
+
 	if ([self.delegate respondsToSelector:@selector(requestOperationDidFinish:)]) {
 		[self.delegate requestOperationDidFinish:self];
 	}
@@ -187,6 +189,12 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 }
 
 - (void)retryTaskWithError:(NSError *)error {
+	if (error != nil) {
+		ApptentiveLogError(@"%@ %@ failed with error: %@", self.URLRequest.HTTPMethod, self.URLRequest.URL.absoluteString, error);
+	}
+
+	ApptentiveLogInfo(@"%@ %@ will retry in %f seconds.", self.URLRequest.HTTPMethod, self.URLRequest.URL.absoluteString, self.dataSource.backoffDelay);
+
 	if ([self.delegate respondsToSelector:@selector(requestOperationWillRetry:withError:)]) {
 		[self.delegate requestOperationWillRetry:self withError:error];
 	}
@@ -208,6 +216,8 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 }
 
 - (void)finishWithError:(NSError *)error {
+	ApptentiveLogError(@"%@ %@ failed with error: %@. Not retrying.", self.URLRequest.HTTPMethod, self.URLRequest.URL.absoluteString, error);
+
 	if ([self.delegate respondsToSelector:@selector(requestOperation:didFailWithError:)]) {
 		[self.delegate requestOperation:self didFailWithError:error];
 	}

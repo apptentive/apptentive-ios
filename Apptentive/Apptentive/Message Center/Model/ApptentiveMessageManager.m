@@ -207,17 +207,7 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 }
 
 - (void)requestOperation:(ApptentiveRequestOperation *)operation didFailWithError:(NSError *)error {
-	ApptentiveLogError(@"%@ %@ failed with error: %@. Not retrying.", operation.URLRequest.HTTPMethod, operation.URLRequest.URL.absoluteString, error);
-
 	self.messageOperation = nil;
-}
-
-- (void)requestOperationWillRetry:(ApptentiveRequestOperation *)operation withError:(NSError *)error {
-	if (error) {
-		ApptentiveLogError(@"%@ %@ failed with error: %@", operation.URLRequest.HTTPMethod, operation.URLRequest.URL.absoluteString, error);
-	}
-
-	ApptentiveLogInfo(@"%@ %@ will retry in %f seconds.", operation.URLRequest.HTTPMethod, operation.URLRequest.URL.absoluteString, self.client.backoffDelay);
 }
 
 #pragma mark - Polling

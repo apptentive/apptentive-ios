@@ -457,6 +457,15 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 		if (self.state != ATBackendStateReady) {
 			[self finishStartupWithToken:conversation.token];
 		}
+
+		if (conversation.state == ApptentiveConversationStateAnonymous) {
+			NSString *conversationId = conversation.identifier;
+			ApptentiveAssertNotNil(conversationId);
+
+			if (conversationId != nil) {
+				[self.serialNetworkQueue updateRequestsMissingConversationIdentifier:conversationId];
+			}
+		}
 	}
 }
 

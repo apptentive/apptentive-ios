@@ -70,6 +70,15 @@ typedef NS_ENUM(NSInteger, ApptentiveQueueStatus) {
  */
 - (void)resume;
 
+
+/**
+ Instructs the queue to update any 
+
+ @param conversationIdentifier The identifier for the conversation.
+ */
+- (void)updateRequestsMissingConversationIdentifier:(NSString *)conversationIdentifier;
+
+
 @property (readonly, nonatomic) ApptentiveClient *client;
 
 /**

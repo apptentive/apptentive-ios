@@ -38,15 +38,9 @@
 
 		self.maxConcurrentOperationCount = 1;
 		_backgroundTaskIdentifier = UIBackgroundTaskInvalid;
-
-		[self registerNotifications];
 	}
 
 	return self;
-}
-
-- (void)dealloc {
-	[self unregisterNotifications];
 }
 
 - (void)resume {
@@ -140,11 +134,7 @@
 		_status = ApptentiveQueueStatusError;
 
 		[self updateMessageStatusForOperation:operation];
-
-		ApptentiveLogError(@"%@ %@ failed with error: %@", operation.URLRequest.HTTPMethod, operation.URLRequest.URL.absoluteString, error);
 	}
-
-	ApptentiveLogInfo(@"%@ %@ will retry in %f seconds.", operation.URLRequest.HTTPMethod, operation.URLRequest.URL.absoluteString, self.client.backoffDelay);
 
 	[self removeActiveOperation:operation];
 }
@@ -158,8 +148,6 @@
 
 	[self updateMessageStatusForOperation:operation];
 
-	ApptentiveLogDebug(@"%@ %@ finished successfully.", operation.URLRequest.HTTPMethod, operation.URLRequest.URL.absoluteString);
-
 	[self removeActiveOperation:operation];
 }
 
@@ -171,8 +159,6 @@
 	}
 
 	[self updateMessageStatusForOperation:operation];
-
-	ApptentiveLogError(@"%@ %@ failed with error: %@. Not retrying.", operation.URLRequest.HTTPMethod, operation.URLRequest.URL.absoluteString, error);
 
 	[self removeActiveOperation:operation];
 }
@@ -247,7 +233,7 @@
 #pragma mark -
 #pragma mark Update missing conversation IDs
 
-- (void)updateMissingConversationId:(NSString *)conversationId {
+- (void)updateRequestsMissingConversationIdentifier:(NSString *)conversationIdentifier {
 	// create a child context on a private concurrent queue
 	NSManagedObjectContext *childContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
 
@@ -274,7 +260,7 @@
             
             // Set a new conversation identifier
             for (ApptentiveSerialRequest *requestInfo in queuedRequests) {
-                requestInfo.conversationIdentifier = conversationId;
+                requestInfo.conversationIdentifier = conversationIdentifier;
             }
             
             // save child context
@@ -297,34 +283,6 @@
             });
         }
 	}];
-}
-
-#pragma mark -
-#pragma mark Notifications
-
-- (void)registerNotifications {
-	[[NSNotificationCenter defaultCenter] addObserver:self
-											 selector:@selector(conversationStateDidChangeNotification:)
-												 name:ApptentiveConversationStateDidChangeNotification
-											   object:nil];
-}
-
-- (void)unregisterNotifications {
-	[[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
-- (void)conversationStateDidChangeNotification:(NSNotification *)notification {
-	ApptentiveConversation *conversation = notification.userInfo[ApptentiveConversationStateDidChangeNotificationKeyConversation];
-	ApptentiveAssertNotNil(conversation);
-
-	if (conversation.state == ApptentiveConversationStateAnonymous) {
-		NSString *conversationId = conversation.identifier;
-		ApptentiveAssertNotNil(conversationId);
-
-		if (conversationId != nil) {
-			[self updateMissingConversationId:conversationId];
-		}
-	}
 }
 
 #pragma mark - Delete completed or failed requests

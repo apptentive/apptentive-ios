@@ -58,7 +58,7 @@
 	request.method = payload.method;
 	request.identifier = payload.localIdentifier;
 	request.conversationIdentifier = conversation.identifier;
-	request.apiVersion = [ApptentiveRequestOperation APIVersion];
+	request.apiVersion = payload.apiVersion;
 	request.authToken = authToken;
 
 	NSError *error;

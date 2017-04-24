@@ -23,10 +23,6 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 
 @implementation ApptentiveRequestOperation
 
-+ (NSString *)APIVersion {
-	return @"7";
-}
-
 + (NSIndexSet *)okStatusCodes {
 	static NSIndexSet *_okStatusCodes;
 	static dispatch_once_t onceToken;

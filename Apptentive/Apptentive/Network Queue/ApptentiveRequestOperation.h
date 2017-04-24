@@ -58,11 +58,6 @@ extern NSErrorDomain const ApptentiveHTTPErrorDomain;
 @property (readonly, nonatomic) NSObject *responseObject;
 
 /**
-The API version that this version of the SDK targets.
- */
-@property (class, readonly, nonatomic) NSString *APIVersion;
-
-/**
  The ApptentiveRequest-implementing object corresponding to this operation.
  */
 @property (readonly, nonatomic) id<ApptentiveRequest> request;

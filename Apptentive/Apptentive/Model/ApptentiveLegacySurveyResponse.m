@@ -7,9 +7,10 @@
 //
 
 #import "ApptentiveLegacySurveyResponse.h"
-#import "ApptentiveSerialRequest+Record.h"
+#import "ApptentiveSerialRequest.h"
 #import "Apptentive_Private.h"
 #import "ApptentiveBackend.h"
+#import "ApptentiveSurveyResponsePayload.h"
 
 
 @implementation ApptentiveLegacySurveyResponse
@@ -32,7 +33,12 @@
 	}
 
 	for (ApptentiveLegacySurveyResponse *response in unsentSurveyResponses) {
-		[ApptentiveSerialRequest enqueueRequestWithPath:[NSString stringWithFormat:@"surveys/%@/respond", response.surveyID] method:@"POST" payload:response.apiJSON conversation:conversation inContext:context];
+		NSDictionary *JSON = response.apiJSON;
+
+		ApptentiveSurveyResponsePayload *payload = [[ApptentiveSurveyResponsePayload alloc] initWithAnswers:JSON[@"answers"] identifier:JSON[@"id"]];
+
+		[ApptentiveSerialRequest enqueuePayload:payload forConversation:conversation usingAuthToken:conversation.token inContext:context];
+
 		[context deleteObject:response];
 	}
 }

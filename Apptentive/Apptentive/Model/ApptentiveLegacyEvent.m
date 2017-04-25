@@ -7,9 +7,10 @@
 //
 
 #import "ApptentiveLegacyEvent.h"
-#import "ApptentiveSerialRequest+Record.h"
+#import "ApptentiveSerialRequest.h"
 #import "Apptentive_Private.h"
 #import "ApptentiveBackend.h"
+#import "ApptentiveEventPayload.h"
 
 
 @implementation ApptentiveLegacyEvent
@@ -31,7 +32,11 @@
 	}
 
 	for (ApptentiveLegacyEvent *event in unsentEvents) {
-		[ApptentiveSerialRequest enqueueRequestWithPath:@"events" method:@"POST" payload:event.apiJSON conversation:conversation inContext:context];
+		ApptentiveEventPayload *payload = [[ApptentiveEventPayload alloc] initWithLabel:event.label];
+
+		// TODO: Add custom data, extended data, and/or interaction ID?
+		[ApptentiveSerialRequest enqueuePayload:payload forConversation:conversation usingAuthToken:conversation.token inContext:context];
+
 		[context deleteObject:event];
 	}
 }

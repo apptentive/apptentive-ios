@@ -9,15 +9,16 @@
 #import <UIKit/UIKit.h>
 #import "ApptentiveRequestOperation.h"
 #import "ApptentiveMessage.h"
+#import "ApptentivePayloadSender.h"
 
-@class ApptentiveNetworkQueue, ApptentiveMessageStore;
+@class ApptentiveMessageStore, ApptentiveClient;
 @protocol ApptentiveMessageManagerDelegate;
 
 
-@interface ApptentiveMessageManager : NSObject <ApptentiveRequestOperationDelegate>
+@interface ApptentiveMessageManager : NSObject <ApptentiveRequestOperationDelegate, ApptentivePayloadSenderDelegate>
 
 @property (readonly, nonatomic) NSString *storagePath;
-@property (readonly, nonatomic) ApptentiveNetworkQueue *networkQueue;
+@property (readonly, nonatomic) ApptentiveClient *client;
 @property (assign, nonatomic) NSTimeInterval pollingInterval;
 @property (copy, nonatomic) NSString *localUserIdentifier;
 
@@ -26,7 +27,7 @@
 
 @property (weak, nonatomic) id<ApptentiveMessageManagerDelegate> delegate;
 
-- (instancetype)initWithStoragePath:(NSString *)storagePath networkQueue:(ApptentiveNetworkQueue *)networkQueue pollingInterval:(NSTimeInterval)pollingInterval localUserIdentifier:(NSString *)localUserIdentifier;
+- (instancetype)initWithStoragePath:(NSString *)storagePath client:(ApptentiveClient *)client pollingInterval:(NSTimeInterval)pollingInterval localUserIdentifier:(NSString *)localUserIdentifier;
 
 - (void)checkForMessages;
 
@@ -44,7 +45,7 @@
 - (void)appendMessage:(ApptentiveMessage *)message;
 - (void)removeMessage:(ApptentiveMessage *)message;
 
-- (void)setState:(ApptentiveMessageState)state forMessageWithLocalIdentifier:(NSString *)localIdentifier;
+//- (void)setState:(ApptentiveMessageState)state forMessageWithLocalIdentifier:(NSString *)localIdentifier;
 
 @property (readonly, nonatomic) NSString *attachmentDirectoryPath;
 
@@ -58,5 +59,7 @@
 - (void)messageManager:(ApptentiveMessageManager *)manager didInsertMessage:(ApptentiveMessage *)message atIndex:(NSInteger)index;
 - (void)messageManager:(ApptentiveMessageManager *)manager didUpdateMessage:(ApptentiveMessage *)message atIndex:(NSInteger)index;
 - (void)messageManager:(ApptentiveMessageManager *)manager didDeleteMessage:(ApptentiveMessage *)message atIndex:(NSInteger)index;
+
+- (void)messageManager:(ApptentiveMessageManager *)manager messageSendProgressDidUpdate:(float)progress;
 
 @end

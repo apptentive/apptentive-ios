@@ -10,7 +10,8 @@
 #import "Apptentive_Private.h"
 #import "ApptentiveBackend+Engagement.h"
 #import "ApptentiveAppConfiguration.h"
-#import "ApptentiveSerialRequest+Record.h"
+#import "ApptentiveSerialRequest.h"
+#import "ApptentiveEventPayload.h"
 
 // Engagement event labels
 
@@ -28,7 +29,13 @@ static NSString *ATInteractionAppEventLabelExit = @"exit";
 	}
 
 	dispatch_async(dispatch_get_main_queue(), ^{
-		[ApptentiveSerialRequest enqueueEventWithLabel:name interactionIdentifier:fromInteraction.identifier userInfo:userInfo customData:customData extendedData:extendedData conversation:conversation inContext:Apptentive.shared.backend.managedObjectContext];
+		ApptentiveEventPayload *payload = [[ApptentiveEventPayload alloc] initWithLabel:name];
+		payload.interactionIdentifier = fromInteraction.identifier;
+		payload.userInfo = userInfo;
+		payload.customData = customData;
+		payload.extendedData = extendedData;
+
+		[ApptentiveSerialRequest enqueuePayload:payload forConversation:conversation usingAuthToken:conversation.token inContext:self.managedObjectContext];
 	});
 
 	[self processQueuedRecords];

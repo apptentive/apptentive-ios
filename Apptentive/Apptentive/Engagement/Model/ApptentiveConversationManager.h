@@ -11,7 +11,7 @@
 #import "ApptentiveRequestOperation.h"
 #import <CoreData/CoreData.h>
 
-@class ApptentiveConversationMetadataItem, ApptentiveConversation, ApptentiveNetworkQueue, ApptentiveEngagementManifest, ApptentiveAppConfiguration, ApptentiveMessageManager;
+@class ApptentiveConversationMetadataItem, ApptentiveConversation, ApptentiveClient, ApptentiveEngagementManifest, ApptentiveAppConfiguration, ApptentiveMessageManager;
 
 @protocol ApptentiveConversationManagerDelegate;
 
@@ -25,7 +25,7 @@ extern NSString *const ApptentiveConversationStateDidChangeNotificationKeyConver
 
 @property (readonly, strong, nonatomic) NSString *storagePath;
 @property (readonly, strong, nonatomic) NSOperationQueue *operationQueue;
-@property (readonly, strong, nonatomic) ApptentiveNetworkQueue *networkQueue;
+@property (readonly, strong, nonatomic) ApptentiveClient *client;
 @property (strong, nullable, nonatomic) ApptentiveRequestOperation *conversationOperation;
 @property (readonly, strong, nullable, nonatomic) ApptentiveConversation *activeConversation;
 @property (readonly, strong, nullable, nonatomic) ApptentiveMessageManager *messageManager;
@@ -36,7 +36,7 @@ extern NSString *const ApptentiveConversationStateDidChangeNotificationKeyConver
 
 @property (readonly, strong, nonatomic) NSManagedObjectContext *parentManagedObjectContext;
 
-- (instancetype)initWithStoragePath:(NSString *)storagePath operationQueue:(NSOperationQueue *)operationQueue networkQueue:(ApptentiveNetworkQueue *)networkQueue parentManagedObjectContext:(NSManagedObjectContext *)parentManagedObjectContext;
+- (instancetype)initWithStoragePath:(NSString *)storagePath operationQueue:(NSOperationQueue *)operationQueue client:(ApptentiveClient *)client parentManagedObjectContext:(NSManagedObjectContext *)parentManagedObjectContext;
 
 /**
  * Attempts to load an active conversation.

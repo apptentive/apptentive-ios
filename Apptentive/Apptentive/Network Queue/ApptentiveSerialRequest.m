@@ -11,6 +11,7 @@
 #import "ApptentiveRequestOperation.h"
 #import "ApptentiveSerialRequestAttachment.h"
 #import "ApptentiveConversation.h"
+#import "ApptentivePayload.h"
 
 
 @implementation ApptentiveSerialRequest
@@ -25,7 +26,7 @@
 @dynamic path;
 @dynamic payload;
 
-+ (BOOL)enqueueRequestWithPath:(NSString *)path method:(NSString *)method payload:(NSDictionary *)payload attachments:(NSArray *)attachments identifier:(NSString *)identifier conversation:(ApptentiveConversation *)conversation authToken:(NSString *)authToken inContext:(NSManagedObjectContext *)context {
++ (BOOL)enqueuePayload:(ApptentivePayload *)payload forConversation:(ApptentiveConversation *)conversation usingAuthToken:(NSString *)authToken inContext:(NSManagedObjectContext *)context {
 	ApptentiveAssertNotNil(conversation);
 	if (conversation == nil) {
 		return NO;
@@ -47,28 +48,23 @@
 
 	ApptentiveAssertNotNil(request, @"Can't load managed request object");
 	if (request == nil) {
-		ApptentiveLogError(@"Unable encode enqueue request '%@': can't load managed request object", path);
+		ApptentiveLogError(@"Unable encode enqueue request '%@': can't load managed request object", payload.path);
 		return NO;
 	}
 
 	request.date = [NSDate date];
-	request.path = path;
-	request.method = method;
-	request.identifier = identifier;
+	request.path = payload.path;
+	request.method = payload.method;
+	request.identifier = payload.localIdentifier;
 	request.conversationIdentifier = conversation.identifier;
-	request.apiVersion = [ApptentiveRequestOperation APIVersion];
+	request.apiVersion = payload.apiVersion;
 	request.authToken = authToken;
 
 	NSError *error;
-	request.payload = [NSJSONSerialization dataWithJSONObject:payload options:0 error:&error];
+	request.payload = payload.payload;
 
-	if (!request.payload) {
-		ApptentiveLogError(@"Unable to encode payload for %@ request: %@", path, error);
-		return NO;
-	}
-
-	NSMutableArray *attachmentArray = [NSMutableArray arrayWithCapacity:attachments.count];
-	for (ApptentiveAttachment *attachment in attachments) {
+	NSMutableArray *attachmentArray = [NSMutableArray arrayWithCapacity:payload.attachments.count];
+	for (ApptentiveAttachment *attachment in payload.attachments) {
 		[attachmentArray addObject:[ApptentiveSerialRequestAttachment queuedAttachmentWithName:attachment.name path:attachment.fullLocalPath MIMEType:attachment.contentType inContext:context]];
 	}
 	request.attachments = [NSOrderedSet orderedSetWithArray:attachmentArray];
@@ -77,15 +73,21 @@
 	[context performBlock:^{
 		NSError *saveError;
 		if (![context save:&saveError]) {
-			ApptentiveLogError(@"Error saving request for %@ to queue: %@", path, error);
+			ApptentiveLogError(@"Error saving request for %@ to queue: %@", payload.path, error);
 		}
 	}];
 
 	return YES;
 }
 
-+ (BOOL)enqueueRequestWithPath:(NSString *)path method:(NSString *)method payload:(NSDictionary *)payload conversation:(ApptentiveConversation *)conversation inContext:(NSManagedObjectContext *)context {
-	return [self enqueueRequestWithPath:path method:method payload:payload attachments:nil identifier:nil conversation:conversation authToken:conversation.token inContext:context];
+- (NSString *)contentType {
+	return @"application/json";
+}
+
+- (void)awakeFromFetch {
+	if (self.conversationIdentifier.length > 0 && [self.path containsString:@"<cid>"]) {
+		self.path = [self.path stringByReplacingOccurrencesOfString:@"<cid>" withString:self.conversationIdentifier];
+	}
 }
 
 @end

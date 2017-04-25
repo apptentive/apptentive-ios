@@ -9,11 +9,13 @@
 #import "ApptentiveMessageManager.h"
 #import "ApptentiveMessage.h"
 #import "ApptentiveMessageSender.h"
-#import "ApptentiveNetworkQueue.h"
-#import "ApptentiveSerialRequest+Record.h"
+#import "ApptentiveSerialRequest.h"
 #import "ApptentiveMessageStore.h"
 #import "Apptentive_Private.h"
 #import "ApptentiveBackend.h"
+#import "ApptentiveMessagePayload.h"
+#import "ApptentiveMessageGetRequest.h"
+#import "ApptentiveClient.h"
 
 static NSString *const MessageStoreFileName = @"messages-v1.archive";
 
@@ -34,12 +36,12 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 
 @implementation ApptentiveMessageManager
 
-- (instancetype)initWithStoragePath:(NSString *)storagePath networkQueue:(ApptentiveNetworkQueue *)networkQueue pollingInterval:(NSTimeInterval)pollingInterval localUserIdentifier:(NSString *)localUserIdentifier {
+- (instancetype)initWithStoragePath:(NSString *)storagePath client:(ApptentiveClient *)client pollingInterval:(NSTimeInterval)pollingInterval localUserIdentifier:(NSString *)localUserIdentifier {
 	self = [super init];
 
 	if (self) {
 		_storagePath = storagePath;
-		_networkQueue = networkQueue;
+		_client = client;
 		_localUserIdentifier = localUserIdentifier;
 
 		_messageIdentifierIndex = [NSMutableDictionary dictionary];
@@ -74,14 +76,12 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 		return;
 	}
 
-	NSString *path = @"conversation";
-	if (self.messageStore.lastMessageIdentifier != nil) {
-		path = [path stringByAppendingFormat:@"?after_id=%@", self.messageStore.lastMessageIdentifier];
-	}
+	ApptentiveMessageGetRequest *request = [[ApptentiveMessageGetRequest alloc] init];
+	request.lastMessageIdentifier = self.messageStore.lastMessageIdentifier;
 
-	self.messageOperation = [[ApptentiveRequestOperation alloc] initWithPath:path method:@"GET" payload:nil authToken:Apptentive.shared.backend.conversationManager.activeConversation.token delegate:self dataSource:self.networkQueue];
+	self.messageOperation = [self.client requestOperationWithRequest:request delegate:self];
 
-	[self.networkQueue addOperation:self.messageOperation];
+	[self.client.operationQueue addOperation:self.messageOperation];
 }
 
 - (void)checkForMessagesInBackground:(void (^)(UIBackgroundFetchResult))completionHandler {
@@ -207,17 +207,7 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 }
 
 - (void)requestOperation:(ApptentiveRequestOperation *)operation didFailWithError:(NSError *)error {
-	ApptentiveLogError(@"%@ %@ failed with error: %@. Not retrying.", operation.request.HTTPMethod, operation.request.URL.absoluteString, error);
-
 	self.messageOperation = nil;
-}
-
-- (void)requestOperationWillRetry:(ApptentiveRequestOperation *)operation withError:(NSError *)error {
-	if (error) {
-		ApptentiveLogError(@"%@ %@ failed with error: %@", operation.request.HTTPMethod, operation.request.URL.absoluteString, error);
-	}
-
-	ApptentiveLogInfo(@"%@ %@ will retry in %f seconds.", operation.request.HTTPMethod, operation.request.URL.absoluteString, self.networkQueue.backoffDelay);
 }
 
 #pragma mark - Polling
@@ -248,8 +238,11 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 
 - (void)enqueueMessageForSending:(ApptentiveMessage *)message {
 	NSString *previousLocalIdentifier = message.localIdentifier;
+	ApptentiveConversation *conversation = Apptentive.shared.backend.conversationManager.activeConversation;
 
-	[ApptentiveSerialRequest enqueueMessage:message conversation:Apptentive.shared.backend.conversationManager.activeConversation inContext:Apptentive.shared.backend.managedObjectContext];
+	ApptentiveMessagePayload *payload = [[ApptentiveMessagePayload alloc] initWithMessage:message];
+
+	[ApptentiveSerialRequest enqueuePayload:payload forConversation:conversation usingAuthToken:conversation.token inContext:Apptentive.shared.backend.managedObjectContext];
 
 	[Apptentive.shared.backend processQueuedRecords];
 
@@ -263,7 +256,9 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 	message.state = ApptentiveMessageStateWaiting;
 }
 
-- (void)setState:(ApptentiveMessageState)state forMessageWithLocalIdentifier:(NSString *)localIdentifier {
+#pragma mark - Client message delelgate
+
+- (void)payloadSender:(ApptentivePayloadSender *)sender setState:(ApptentiveMessageState)state forMessageWithLocalIdentifier:(NSString *)localIdentifier {
 	ApptentiveAssertNotNil(localIdentifier, @"Missing localIdentifier when updating message");
 	if (localIdentifier == nil) {
 		return;
@@ -281,6 +276,10 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 			[self.delegate messageManagerDidEndUpdates:self];
 		});
 	}
+}
+
+- (void)payloadSenderProgressDidChange:(ApptentivePayloadSender *)sender {
+	[self.delegate messageManager:self messageSendProgressDidUpdate:sender.messageSendProgress];
 }
 
 - (void)appendMessage:(ApptentiveMessage *)message {

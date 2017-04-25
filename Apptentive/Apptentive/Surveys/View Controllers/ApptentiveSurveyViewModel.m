@@ -14,7 +14,8 @@
 #import "Apptentive_Private.h"
 #import "ApptentiveInteraction.h"
 #import "ApptentiveBackend.h"
-#import "ApptentiveSerialRequest+Record.h"
+#import "ApptentiveSerialRequest.h"
+#import "ApptentiveSurveyResponsePayload.h"
 
 NSString *const ApptentiveInteractionSurveyEventLabelQuestionResponse = @"question_response";
 NSString *const ApptentiveInteractionSurveyEventLabelSubmit = @"submit";
@@ -237,7 +238,9 @@ NSString *const ApptentiveInteractionSurveyEventLabelCancel = @"cancel";
 
 - (void)submit {
 	ApptentiveConversation *conversation = Apptentive.shared.backend.conversationManager.activeConversation;
-	[ApptentiveSerialRequest enqueueSurveyResponseWithAnswers:self.answers identifier:self.interaction.identifier conversation:conversation inContext:Apptentive.shared.backend.managedObjectContext];
+	ApptentiveSurveyResponsePayload *payload = [[ApptentiveSurveyResponsePayload alloc] initWithAnswers:self.answers identifier:self.interaction.identifier];
+
+	[ApptentiveSerialRequest enqueuePayload:payload forConversation:conversation usingAuthToken:conversation.token inContext:Apptentive.shared.backend.managedObjectContext];
 
 	[Apptentive.shared.backend processQueuedRecords];
 }

@@ -30,7 +30,6 @@
 	messageCenter.viewModel = viewModel;
 
 	Apptentive.shared.backend.presentedMessageCenterViewController = messageCenter;
-	Apptentive.shared.backend.messageDelegate = messageCenter.viewModel;
 
 	[viewController presentViewController:navigationController animated:YES completion:nil];
 }

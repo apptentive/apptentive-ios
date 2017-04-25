@@ -12,6 +12,8 @@
 #import "ApptentiveLogTag.h"
 
 #define ApptentiveLogTagConversation [ApptentiveLogTag conversationTag]
+#define ApptentiveLogTagNetworking [ApptentiveLogTag networkingTag]
+#define ApptentiveLogTagPayload [ApptentiveLogTag payloadTag]
 
 extern ApptentiveLogLevel ApptentiveLogGetLevel(void);
 extern void ApptentiveLogSetLevel(ApptentiveLogLevel level);

@@ -7,6 +7,9 @@
 //
 
 #import "ApptentiveRequestOperation.h"
+#import "ApptentiveRequestProtocol.h"
+#import "ApptentiveSerialRequest.h"
+#import "ApptentiveMessageSendRequest.h"
 
 
 @interface ApptentiveRequestOperation ()
@@ -20,10 +23,6 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 
 
 @implementation ApptentiveRequestOperation
-
-+ (NSString *)APIVersion {
-	return @"7";
-}
 
 + (NSIndexSet *)okStatusCodes {
 	static NSIndexSet *_okStatusCodes;
@@ -57,40 +56,11 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 	return _serverErrorStatusCodes;
 }
 
-- (instancetype)initWithPath:(NSString *)path method:(NSString *)method payload:(NSDictionary *)payload authToken:(NSString *)authToken delegate:(id<ApptentiveRequestOperationDelegate>)delegate dataSource:(id<ApptentiveRequestOperationDataSource>)dataSource {
-	NSData *payloadData = nil;
-
-	if (payload) {
-		NSError *error;
-		payloadData = [NSJSONSerialization dataWithJSONObject:payload options:0 error:&error];
-
-		if (!payloadData) {
-			NSLog(@"Error encoding payload: %@", error.localizedDescription);
-			return nil;
-		}
-	}
-
-	return [self initWithPath:path method:method payloadData:payloadData APIVersion:[[self class] APIVersion] authToken:authToken delegate:delegate dataSource:dataSource];
-}
-
-- (instancetype)initWithPath:(NSString *)path method:(NSString *)method payloadData:(NSData *)payloadData APIVersion:(NSString *)APIVersion authToken:(NSString *)authToken delegate:(id<ApptentiveRequestOperationDelegate>)delegate dataSource:(id<ApptentiveRequestOperationDataSource>)dataSource {
-	NSURL *URL = [NSURL URLWithString:path relativeToURL:dataSource.baseURL];
-
-	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:URL];
-	request.HTTPBody = payloadData;
-	request.HTTPMethod = method;
-	[request addValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-	[request addValue:APIVersion forHTTPHeaderField:@"X-API-Version"];
-	[request addValue:[@"OAuth " stringByAppendingString:authToken] forHTTPHeaderField:@"Authorization"];
-
-	return [self initWithURLRequest:request delegate:delegate dataSource:dataSource];
-}
-
-- (instancetype)initWithURLRequest:(NSURLRequest *)request delegate:(id<ApptentiveRequestOperationDelegate>)delegate dataSource:(id<ApptentiveRequestOperationDataSource>)dataSource {
+- (instancetype)initWithURLRequest:(NSURLRequest *)URLRequest delegate:(id<ApptentiveRequestOperationDelegate>)delegate dataSource:(id<ApptentiveRequestOperationDataSource>)dataSource {
 	self = [super init];
 
 	if (self) {
-		_request = request;
+		_URLRequest = URLRequest;
 		_delegate = delegate;
 		_dataSource = dataSource;
 	}
@@ -99,7 +69,7 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 }
 
 - (NSString *)name {
-	return self.request.URL.path;
+	return self.URLRequest.URL.path;
 }
 
 - (BOOL)isExecuting {
@@ -124,7 +94,7 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 	}
 
 	[self willChangeValueForKey:@"isExecuting"];
-	_task = [self.dataSource.URLSession dataTaskWithRequest:self.request completionHandler:^(NSData *_Nullable data, NSURLResponse *_Nullable response, NSError *_Nullable error) {
+	_task = [self.dataSource.URLSession dataTaskWithRequest:self.URLRequest completionHandler:^(NSData *_Nullable data, NSURLResponse *_Nullable response, NSError *_Nullable error) {
 		if (self.isCancelled) {
 			return;
 		} else if (!response) {
@@ -153,6 +123,9 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 	[self.task resume];
 	[self didChangeValueForKey:@"isExecuting"];
 
+	ApptentiveLogDebug(ApptentiveLogTagNetworking, @"%@ %@ started.", self.URLRequest.HTTPMethod, self.URLRequest.URL.absoluteString);
+	ApptentiveLogVerbose(ApptentiveLogTagNetworking, @"Headers: %@\nPayload:%@", self.URLRequest.allHTTPHeaderFields, [[NSString alloc] initWithData:self.URLRequest.HTTPBody encoding:NSUTF8StringEncoding]);
+
 	if ([self.delegate respondsToSelector:@selector(requestOperationDidStart:)]) {
 		[self.delegate requestOperationDidStart:self];
 	}
@@ -175,6 +148,8 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 - (void)processResponse:(NSHTTPURLResponse *)response withObject:(NSObject *)responseObject {
 	_cacheLifetime = [self maxAgeFromResponse:response];
 	_responseObject = responseObject;
+
+	ApptentiveLogDebug(@"%@ %@ finished successfully.", self.URLRequest.HTTPMethod, self.URLRequest.URL.absoluteString);
 
 	if ([self.delegate respondsToSelector:@selector(requestOperationDidFinish:)]) {
 		[self.delegate requestOperationDidFinish:self];
@@ -205,7 +180,7 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 		NSDictionary *userInfo = @{
 			NSLocalizedDescriptionKey: HTTPErrorTitle,
 			NSLocalizedFailureReasonErrorKey: HTTPErrorMessage,
-			NSURLErrorFailingURLErrorKey: self.request.URL
+			NSURLErrorFailingURLErrorKey: self.URLRequest.URL
 		};
 		error = [NSError errorWithDomain:ApptentiveHTTPErrorDomain code:response.statusCode userInfo:userInfo];
 	}
@@ -218,6 +193,12 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 }
 
 - (void)retryTaskWithError:(NSError *)error {
+	if (error != nil) {
+		ApptentiveLogError(@"%@ %@ failed with error: %@", self.URLRequest.HTTPMethod, self.URLRequest.URL.absoluteString, error);
+	}
+
+	ApptentiveLogInfo(@"%@ %@ will retry in %f seconds.", self.URLRequest.HTTPMethod, self.URLRequest.URL.absoluteString, self.dataSource.backoffDelay);
+
 	if ([self.delegate respondsToSelector:@selector(requestOperationWillRetry:withError:)]) {
 		[self.delegate requestOperationWillRetry:self withError:error];
 	}
@@ -239,6 +220,8 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 }
 
 - (void)finishWithError:(NSError *)error {
+	ApptentiveLogError(@"%@ %@ failed with error: %@. Not retrying.", self.URLRequest.HTTPMethod, self.URLRequest.URL.absoluteString, error);
+
 	if ([self.delegate respondsToSelector:@selector(requestOperation:didFailWithError:)]) {
 		[self.delegate requestOperation:self didFailWithError:error];
 	}

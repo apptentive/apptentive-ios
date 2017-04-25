@@ -24,6 +24,8 @@ typedef NS_ENUM(NSInteger, ApptentiveMessageState) {
 	ApptentiveMessageStateHidden
 };
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @interface ApptentiveMessage : NSObject <NSSecureCoding>
 
@@ -32,18 +34,20 @@ typedef NS_ENUM(NSInteger, ApptentiveMessageState) {
 @property (readonly, nonatomic) NSDate *sentDate;
 @property (readonly, nonatomic) NSArray *attachments;
 @property (readonly, nonatomic) ApptentiveMessageSender *sender;
-@property (readonly, nonatomic) NSString *body;
+@property (readonly, nullable, nonatomic) NSString *body;
 @property (assign, nonatomic) ApptentiveMessageState state;
 @property (readonly, nonatomic) BOOL automated;
-@property (readonly, nonatomic) NSDictionary *customData;
+@property (readonly, nullable, nonatomic) NSDictionary *customData;
 
 - (instancetype)initWithJSON:(NSDictionary *)JSON;
-- (instancetype)initWithBody:(NSString *)body attachments:(NSArray *)attachments senderIdentifier:(NSString *)senderIdentifier automated:(BOOL)automated customData:(NSDictionary *)customData;
+- (instancetype)initWithBody:(NSString *_Nullable)body attachments:(NSArray *_Nullable)attachments senderIdentifier:(NSString *)senderIdentifier automated:(BOOL)automated customData:(NSDictionary *_Nullable)customData;
 
 - (ApptentiveMessage *)mergedWith:(ApptentiveMessage *)messageFromServer;
 - (void)updateWithLocalIdentifier:(NSString *)localIdentifier;
 
 @end
+
+NS_ASSUME_NONNULL_END
 
 
 @interface ApptentiveMessage (QuickLook) <QLPreviewControllerDataSource>

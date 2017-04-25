@@ -16,10 +16,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (readonly, nonatomic) NSString *containerName;
 @property (readonly, nonatomic) NSDictionary *contents;
 
-//@property (readonly, nonatomic) NSString *path;
-//@property (readonly, nonatomic) NSString *HTTPMethod;
-//@property (readonly, nonatomic) NSDictionary *JSONDictionary;
-//
 @property (readonly, nullable, nonatomic) NSArray *attachments;
 @property (readonly, nullable, nonatomic) NSString *localIdentifier;
 

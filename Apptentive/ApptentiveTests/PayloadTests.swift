@@ -56,36 +56,53 @@ class PayloadTests: XCTestCase {
 		let message = ApptentiveMessage(body: "Hello", attachments: [], senderIdentifier: "56d49499c719925f3300000b", automated: false, customData: ["string": "foo", "number": 2, "bool": true])
 		let payload = ApptentiveMessagePayload(message: message)
 
-		if let contents = self.testBoilerplateForPayload(payload, containerName: "message"), let customData = contents["custom_data"] as? [String:Any] {
-			XCTAssertEqual(contents["body"] as? String, "Hello")
-			XCTAssertFalse(contents["automated"] as? Bool ?? true)
-			XCTAssertFalse(contents["hidden"] as? Bool ?? true)
+		do {
+			if let payloadData = payload.payload, let contents = try JSONSerialization.jsonObject(with: payloadData, options: []) as? [String: Any] {
+				XCTAssertNotNil(contents["nonce"])
+				XCTAssertGreaterThan(contents["client_created_at"] as? Double ?? 0, 1492712408)
+				XCTAssertEqual(contents["client_created_at_utc_offset"] as? Int, TimeZone.current.secondsFromGMT())
+				XCTAssertEqual(contents["body"] as? String, "Hello")
+				XCTAssertFalse(contents["automated"] as? Bool ?? true)
+				XCTAssertFalse(contents["hidden"] as? Bool ?? true)
 
-			XCTAssertEqual(customData["string"] as? String, "foo")
-			XCTAssertEqual(customData["number"] as? Int, 2)
-			XCTAssertEqual(customData["bool"] as? Bool, true)
+				if let customData = contents["custom_data"] as? [String:Any] {
+					XCTAssertEqual(customData["string"] as? String, "foo")
+					XCTAssertEqual(customData["number"] as? Int, 2)
+					XCTAssertEqual(customData["bool"] as? Bool, true)
+				}
+			}
+		} catch {
+			XCTFail("Invalid JSON data in payload")
 		}
 	}
 
 // MARK: Helper functions
 	
 	func testBoilerplateForPayload(_ payload: ApptentivePayload, containerName: String) -> [String: Any]? {
-		XCTAssertEqual(payload.jsonDictionary.count, 1)
-		XCTAssertNotNil(payload.jsonDictionary[containerName])
 		XCTAssertNotNil(payload.path);
-		XCTAssertNotNil(payload.httpMethod);
+		XCTAssertNotNil(payload.method);
 
-		if let contents = payload.jsonDictionary[containerName] as? [String: Any] {
-			XCTAssertNotNil(contents["nonce"])
-			XCTAssertGreaterThan(contents["client_created_at"] as? Double ?? 0, 1492712408)
-			XCTAssertEqual(contents["client_created_at_utc_offset"] as? Int, TimeZone.current.secondsFromGMT())
+		do {
+			if let payloadData = payload.payload, let jsonDictionary = try JSONSerialization.jsonObject(with: payloadData, options: []) as? [String: Any] {
+				XCTAssertEqual(jsonDictionary.count, 1)
+				XCTAssertNotNil(jsonDictionary[containerName])
 
-			return contents
-		} else {
-			XCTFail()
+				if let contents = jsonDictionary[containerName] as? [String: Any] {
+					XCTAssertNotNil(contents["nonce"])
+					XCTAssertGreaterThan(contents["client_created_at"] as? Double ?? 0, 1492712408)
+					XCTAssertEqual(contents["client_created_at_utc_offset"] as? Int, TimeZone.current.secondsFromGMT())
 
-			return nil
+					return contents
+				} else {
+					XCTFail()
+
+					return nil
+				}
+			}
+		} catch {
+			XCTFail("Invalid JSON data in payload")
 		}
-	}
 
+		return nil
+	}
 }

@@ -9,6 +9,8 @@
 #import "ApptentiveLogTag.h"
 
 static ApptentiveLogTag *_conversationTag;
+static ApptentiveLogTag *_networkingTag;
+static ApptentiveLogTag *_payloadTag;
 
 
 @implementation ApptentiveLogTag
@@ -17,6 +19,8 @@ static ApptentiveLogTag *_conversationTag;
 + (void)initialize {
 	if ([self class] == [ApptentiveLogTag class]) {
 		_conversationTag = [ApptentiveLogTag logTagWithName:@"CONVERSATION" enabled:YES];
+		_networkingTag = [ApptentiveLogTag logTagWithName:@"NETWORKING" enabled:YES];
+		_payloadTag = [ApptentiveLogTag logTagWithName:@"PAYLOAD" enabled:YES];
 	}
 }
 
@@ -38,6 +42,14 @@ static ApptentiveLogTag *_conversationTag;
 
 + (ApptentiveLogTag *)conversationTag {
 	return _conversationTag;
+}
+
++ (ApptentiveLogTag *)networkingTag {
+	return _networkingTag;
+}
+
++ (ApptentiveLogTag *)payloadTag {
+	return _payloadTag;
 }
 
 @end

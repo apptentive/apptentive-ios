@@ -123,6 +123,9 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 	[self.task resume];
 	[self didChangeValueForKey:@"isExecuting"];
 
+	ApptentiveLogDebug(ApptentiveLogTagNetworking, @"%@ %@ started.", self.URLRequest.HTTPMethod, self.URLRequest.URL.absoluteString);
+	ApptentiveLogVerbose(ApptentiveLogTagNetworking, @"Headers: %@\nPayload:%@", self.URLRequest.allHTTPHeaderFields, [[NSString alloc] initWithData:self.URLRequest.HTTPBody encoding:NSUTF8StringEncoding]);
+
 	if ([self.delegate respondsToSelector:@selector(requestOperationDidStart:)]) {
 		[self.delegate requestOperationDidStart:self];
 	}

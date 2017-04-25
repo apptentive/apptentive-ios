@@ -41,6 +41,7 @@
 - (void)cancelNetworkOperations {
 	[self.operationQueue cancelAllOperations];
 
+	ApptentiveLogVerbose(ApptentiveLogTagPayload, @"Clearing isResuming Flag");
 	self.isResuming = NO;
 }
 
@@ -48,9 +49,11 @@
 
 - (void)createOperationsForQueuedRequestsInContext:(NSManagedObjectContext *)context {
 	if (self.isResuming) {
+		ApptentiveLogVerbose(ApptentiveLogTagPayload, @"Already creating operations for queued payloads. Skipping.");
 		return;
 	}
 
+	ApptentiveLogVerbose(ApptentiveLogTagPayload, @"Setting isResuming Flag");
 	self.isResuming = YES;
 
 	NSBlockOperation *resumeBlock = [NSBlockOperation blockOperationWithBlock:^{
@@ -67,22 +70,24 @@
 			queuedRequests = [moc executeFetchRequest:fetchRequest error:&error];
 
 			if (queuedRequests == nil) {
-				ApptentiveLogError(@"Unable to fetch waiting network payloads.");
+				ApptentiveLogError(ApptentiveLogTagPayload, @"Unable to fetch waiting network payloads.");
 			}
 
-			ApptentiveLogDebug(@"Adding %d record operations", queuedRequests.count);
+			ApptentiveLogDebug(ApptentiveLogTagPayload, @"Adding %d record operations for queued payloads", queuedRequests.count);
 
 			// Add an operation for every record in the queue
 			for (ApptentiveSerialRequest *requestInfo in [queuedRequests copy]) {
 				id<ApptentiveRequest> request;
 
 				if ([requestInfo.path isEqualToString:@"messages"]) {
+					ApptentiveLogVerbose(ApptentiveLogTagPayload, @"Adding attachments to message payload");
 					request = [[ApptentiveMessageSendRequest alloc] initWithRequest:requestInfo];
 				} else {
 					request = requestInfo;
 				}
 
 				ApptentiveRequestOperation *operation = [self requestOperationWithRequest:request authToken:requestInfo.authToken delegate:self];
+				ApptentiveLogVerbose(ApptentiveLogTagPayload, @"Adding operation for %@ %@", operation.URLRequest.HTTPMethod, operation.URLRequest.URL.absoluteString);
 
 				operation.request = request;
 
@@ -93,6 +98,7 @@
 		if (queuedRequests.count) {
 			// Save the context after all enqueued records have been sent
 			NSBlockOperation *saveBlock = [NSBlockOperation blockOperationWithBlock:^{
+				ApptentiveLogVerbose(ApptentiveLogTagPayload, @"Saving Private Managed Object Context (with completed payloads deleted)");
 				[moc performBlockAndWait:^{
 					NSError *saveError;
 					if (![moc save:&saveError]) {
@@ -100,6 +106,7 @@
 					}
 				}];
 
+				ApptentiveLogVerbose(ApptentiveLogTagPayload, @"Saving Parent Managed Object Context (with completed payloads deleted)");
 				dispatch_async(dispatch_get_main_queue(), ^{
 					NSError *parentSaveError;
 					if (![moc.parentContext save:&parentSaveError]) {
@@ -116,6 +123,7 @@
 			[self.operationQueue addOperation:saveBlock];
 		}
 
+		ApptentiveLogVerbose(ApptentiveLogTagPayload, @"Clearing isResuming Flag");
 		self.isResuming = NO;
 	}];
 

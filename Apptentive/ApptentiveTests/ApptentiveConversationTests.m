@@ -83,15 +83,12 @@
 	XCTAssertEqualObjects(appRelease[@"debug"], isDebug);
 	XCTAssertEqualObjects(appRelease[@"overriding_styles"], @NO);
 	XCTAssertEqualObjects(appRelease[@"type"], @"ios");
-
-	NSDictionary *SDK = self.conversationPayload[@"sdk"];
-	XCTAssertNotNil(SDK);
-	XCTAssertEqualObjects(SDK[@"author_name"], @"Apptentive, Inc.");
-	XCTAssertEqualObjects(SDK[@"distribution"], @"source");
-	XCTAssertEqualObjects(SDK[@"distribution_version"], ApptentiveSDK.SDKVersion.versionString);
-	XCTAssertEqualObjects(SDK[@"platform"], @"iOS");
-	XCTAssertEqualObjects(SDK[@"programming_language"], @"Objective-C");
-	XCTAssertEqualObjects(SDK[@"version"], ApptentiveSDK.SDKVersion.versionString);
+    XCTAssertEqualObjects(appRelease[@"sdk_author_name"], @"Apptentive, Inc.");
+	XCTAssertEqualObjects(appRelease[@"sdk_distribution"], @"source");
+	XCTAssertEqualObjects(appRelease[@"sdk_distribution_version"], ApptentiveSDK.SDKVersion.versionString);
+	XCTAssertEqualObjects(appRelease[@"sdk_platform"], @"iOS");
+	XCTAssertEqualObjects(appRelease[@"sdk_programming_language"], @"Objective-C");
+	XCTAssertEqualObjects(appRelease[@"sdk_version"], ApptentiveSDK.SDKVersion.versionString);
 }
 
 - (void)testAppRelease {

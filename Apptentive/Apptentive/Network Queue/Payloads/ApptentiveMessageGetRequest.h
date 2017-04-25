@@ -8,6 +8,7 @@
 
 #import "ApptentiveRequest.h"
 
+
 @interface ApptentiveMessageGetRequest : ApptentiveRequest
 
 @property (strong, nullable, nonatomic) NSString *lastMessageIdentifier;

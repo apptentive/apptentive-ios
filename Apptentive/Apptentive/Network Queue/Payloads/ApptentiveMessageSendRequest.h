@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
  database that has attachments and convert its payload to a 
  multipart request payload. */
 
+
 @interface ApptentiveMessageSendRequest : ApptentiveRequest
 
 @property (readonly, nonatomic) ApptentiveSerialRequest *request;

@@ -11,11 +11,13 @@
 #import "ApptentiveSerialRequestAttachment.h"
 #import "ApptentiveUtilities.h"
 
+
 @interface ApptentiveMessageSendRequest ()
 
 @property (readonly, nonatomic) NSString *boundary;
 
 @end
+
 
 @implementation ApptentiveMessageSendRequest
 

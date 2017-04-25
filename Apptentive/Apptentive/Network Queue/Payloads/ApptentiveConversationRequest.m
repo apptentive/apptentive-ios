@@ -9,6 +9,7 @@
 #import "ApptentiveConversationRequest.h"
 #import "ApptentiveConversation.h"
 
+
 @implementation ApptentiveConversationRequest
 
 - (instancetype)initWithConversation:(ApptentiveConversation *)conversation {

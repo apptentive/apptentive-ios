@@ -15,9 +15,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (readonly, nonatomic) NSString *label;
 @property (strong, nullable, nonatomic) NSString *interactionIdentifier;
-@property (strong, nullable, nonatomic) NSDictionary <NSString *, id>*userInfo;
-@property (strong, nullable, nonatomic) NSDictionary <NSString *, id>*customData;
-@property (strong, nullable, nonatomic) NSArray <NSDictionary *>*extendedData;
+@property (strong, nullable, nonatomic) NSDictionary<NSString *, id> *userInfo;
+@property (strong, nullable, nonatomic) NSDictionary<NSString *, id> *customData;
+@property (strong, nullable, nonatomic) NSArray<NSDictionary *> *extendedData;
 
 - (instancetype)initWithLabel:(NSString *)label;
 

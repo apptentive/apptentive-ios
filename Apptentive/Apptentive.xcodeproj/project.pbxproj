@@ -888,7 +888,7 @@
 				01A2D0861E490A9700C2103A /* Metrics */,
 				01A2D0891E490A9700C2103A /* Misc */,
 				01A2D0941E490A9700C2103A /* Model */,
-				01A2D0B71E490A9700C2103A /* Network Queue */,
+				01A2D0B71E490A9700C2103A /* Networking */,
 				01A2D0C81E490A9700C2103A /* Persistence */,
 				01A2D0CD1E490A9700C2103A /* Reachability */,
 				01A2D0D01E490A9700C2103A /* Surveys */,
@@ -1381,7 +1381,7 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
-		01A2D0B71E490A9700C2103A /* Network Queue */ = {
+		01A2D0B71E490A9700C2103A /* Networking */ = {
 			isa = PBXGroup;
 			children = (
 				0174771D1EA92BDC00A0A949 /* Requests & Payloads */,
@@ -1396,6 +1396,7 @@
 				01798C001EAF94FD00633164 /* ApptentivePayloadSender.h */,
 				01798C011EAF94FD00633164 /* ApptentivePayloadSender.m */,
 			);
+			name = Networking;
 			path = "Network Queue";
 			sourceTree = "<group>";
 		};

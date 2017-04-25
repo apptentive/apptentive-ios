@@ -8,6 +8,7 @@
 
 #import "ApptentiveDevicePayload.h"
 
+
 @implementation ApptentiveDevicePayload
 
 - (instancetype)initWithDeviceDiffs:(NSDictionary *)deviceDiffs {

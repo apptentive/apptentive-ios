@@ -48,7 +48,7 @@
 }
 
 - (NSDictionary *)JSONDictionary {
-	return @{ self.containerName: self.contents };
+	return @{self.containerName: self.contents};
 }
 
 - (NSData *)payload {

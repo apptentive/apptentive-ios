@@ -8,6 +8,7 @@
 
 #import "ApptentiveMessageGetRequest.h"
 
+
 @implementation ApptentiveMessageGetRequest
 
 - (NSString *)path {

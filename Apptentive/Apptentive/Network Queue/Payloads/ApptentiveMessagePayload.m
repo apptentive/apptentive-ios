@@ -9,11 +9,13 @@
 #import "ApptentiveMessagePayload.h"
 #import "ApptentiveMessage.h"
 
+
 @interface ApptentiveMessagePayload ()
 
 @property (strong, nonatomic) NSDictionary *superContents;
 
 @end
+
 
 @implementation ApptentiveMessagePayload
 

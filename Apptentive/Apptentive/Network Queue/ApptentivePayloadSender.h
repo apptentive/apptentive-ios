@@ -72,4 +72,3 @@ typedef NS_ENUM(NSInteger, ApptentiveQueueStatus) {
 - (void)payloadSenderProgressDidChange:(ApptentivePayloadSender *)sender;
 
 @end
-

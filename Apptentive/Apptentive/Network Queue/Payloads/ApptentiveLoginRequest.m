@@ -8,6 +8,7 @@
 
 #import "ApptentiveLoginRequest.h"
 
+
 @implementation ApptentiveLoginRequest
 
 - (instancetype)initWithToken:(NSString *)token {
@@ -29,7 +30,7 @@
 }
 
 - (NSDictionary *)JSONDictionary {
-	return  @{ @"token": self.token };
+	return @{ @"token": self.token };
 }
 
 

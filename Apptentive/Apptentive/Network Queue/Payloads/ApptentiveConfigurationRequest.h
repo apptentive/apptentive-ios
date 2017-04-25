@@ -8,6 +8,7 @@
 
 #import "ApptentiveRequest.h"
 
+
 @interface ApptentiveConfigurationRequest : ApptentiveRequest
 
 @end

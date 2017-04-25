@@ -11,6 +11,7 @@
 #import "ApptentiveSerialRequest.h"
 #import "ApptentiveMessageSendRequest.h"
 
+
 @interface ApptentiveRequestOperation ()
 
 @property (assign, nonatomic) BOOL wasCompleted;

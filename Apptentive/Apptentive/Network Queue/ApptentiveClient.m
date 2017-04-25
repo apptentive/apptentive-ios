@@ -32,11 +32,11 @@
 
 		NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
 		configuration.HTTPAdditionalHeaders = @{
-												@"Accept": @"application/json",
-												@"Accept-Encoding": @"gzip",
-												@"Accept-Charset": @"utf-8",
-												@"User-Agent": [NSString stringWithFormat:@"ApptentiveConnect/%@ (iOS)", kApptentiveVersionString],
-												};
+			@"Accept": @"application/json",
+			@"Accept-Encoding": @"gzip",
+			@"Accept-Charset": @"utf-8",
+			@"User-Agent": [NSString stringWithFormat:@"ApptentiveConnect/%@ (iOS)", kApptentiveVersionString],
+		};
 
 		_URLSession = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:nil];
 

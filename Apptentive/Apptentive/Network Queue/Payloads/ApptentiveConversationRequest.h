@@ -12,6 +12,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+
 @interface ApptentiveConversationRequest : ApptentiveRequest
 
 @property (readonly, nonatomic) ApptentiveConversation *conversation;

@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "ApptentiveRequestProtocol.h"
 
+
 @interface ApptentiveRequest : NSObject <ApptentiveRequest>
 
 @end

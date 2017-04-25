@@ -8,6 +8,7 @@
 
 #import "ApptentiveEventPayload.h"
 
+
 @implementation ApptentiveEventPayload
 
 - (instancetype)initWithLabel:(NSString *)label {

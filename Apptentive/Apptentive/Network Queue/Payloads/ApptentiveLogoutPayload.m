@@ -8,6 +8,7 @@
 
 #import "ApptentiveLogoutPayload.h"
 
+
 @implementation ApptentiveLogoutPayload
 
 - (instancetype)initWithConversationIdentifier:(NSString *)conversationIdentifier Token:(NSString *)token {
@@ -26,7 +27,8 @@
 }
 
 - (NSDictionary *)JSONDictionary {
-	return  @{ @"token": self.token, @"logout": @{} };
+	return @{ @"token": self.token,
+		@"logout": @{} };
 }
 
 @end

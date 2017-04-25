@@ -8,6 +8,7 @@
 
 #import "ApptentiveSurveyResponsePayload.h"
 
+
 @implementation ApptentiveSurveyResponsePayload
 
 - (instancetype)initWithAnswers:(NSDictionary *)answers identifier:(NSString *)identifier {

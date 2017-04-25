@@ -11,12 +11,14 @@
 #import "ApptentiveSerialRequest.h"
 #import "ApptentiveMessageSendRequest.h"
 
+
 @interface ApptentivePayloadSender ()
 
 @property (strong, nonatomic) NSMutableDictionary *activeTaskProgress;
 @property (assign, atomic) BOOL isResuming;
 
 @end
+
 
 @implementation ApptentivePayloadSender
 
@@ -42,7 +44,7 @@
 	self.isResuming = NO;
 }
 
-#pragma mark - Serial network queue management
+#pragma mark - Creating network operations from queued payloads
 
 - (void)createOperationsForQueuedRequestsInContext:(NSManagedObjectContext *)context {
 	if (self.isResuming) {
@@ -120,7 +122,9 @@
 	[self.operationQueue addOperation:resumeBlock];
 }
 
-#pragma mark URL Session Data Delegate
+#pragma mark - Message send progress
+
+#pragma mark URL sesison delegate
 
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didSendBodyData:(int64_t)bytesSent totalBytesSent:(int64_t)totalBytesSent totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend {
 	if (self.activeTaskProgress[@(task.taskIdentifier)]) {
@@ -132,7 +136,7 @@
 }
 
 - (void)updateProgress {
-	float messageSendProgress =	[[self.activeTaskProgress.allValues valueForKeyPath:@"@avg.self"] floatValue];
+	float messageSendProgress = [[self.activeTaskProgress.allValues valueForKeyPath:@"@avg.self"] floatValue];
 
 	if (self.activeTaskProgress.count > 0 && messageSendProgress < 0.05) {
 		messageSendProgress = 0.05;
@@ -164,7 +168,6 @@
 - (void)updateMessageStatusForOperation:(ApptentiveRequestOperation *)operation {
 	for (NSOperation *operation in self.operationQueue.operations) {
 		if ([operation isKindOfClass:[ApptentiveRequestOperation class]] && [((ApptentiveRequestOperation *)operation).request isKindOfClass:[ApptentiveMessageSendRequest class]]) {
-
 			ApptentiveRequestOperation *messageOperation = (ApptentiveRequestOperation *)operation;
 			ApptentiveMessageSendRequest *messageSendRequest = messageOperation.request;
 			ApptentiveMessageState state;
@@ -224,8 +227,7 @@
 	[self removeActiveOperation:operation];
 }
 
-#pragma mark -
-#pragma mark Update missing conversation IDs
+#pragma mark - Update missing conversation IDs
 
 - (void)updateQueuedRequestsInContext:(NSManagedObjectContext *)context missingConversationIdentifier:(NSString *)conversationIdentifier {
 	// create a child context on a private concurrent queue

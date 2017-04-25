@@ -9,6 +9,7 @@
 #import "ApptentiveConversationPayload.h"
 #import "ApptentiveConversation.h"
 
+
 @implementation ApptentiveConversationPayload
 
 - (instancetype)initWithConversation:(ApptentiveConversation *)conversation {

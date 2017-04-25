@@ -8,6 +8,7 @@
 
 #import "ApptentivePersonPayload.h"
 
+
 @implementation ApptentivePersonPayload
 
 - (instancetype)initWithPersonDiffs:(NSDictionary *)personDiffs {

@@ -19,7 +19,7 @@
 #import "ApptentiveMessageManager.h"
 #import "ApptentiveAppConfiguration.h"
 #import "ApptentiveLogoutPayload.h"
-#import "ApptentiveConversationPayload.h"
+#import "ApptentiveSDKAppReleasePayload.h"
 #import "ApptentiveDevicePayload.h"
 #import "ApptentivePersonPayload.h"
 #import "ApptentiveConversationRequest.h"
@@ -171,7 +171,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		[self saveConversation];
 		[self handleConversationStateChange:self.activeConversation];
 
-		ApptentiveLogoutPayload *payload = [[ApptentiveLogoutPayload alloc] initWithConversationIdentifier:self.activeConversation.identifier Token:self.activeConversation.token];
+		ApptentiveLogoutPayload *payload = [[ApptentiveLogoutPayload alloc] initWithToken:self.activeConversation.token];
 
 		[ApptentiveSerialRequest enqueuePayload:payload forConversation:self.activeConversation usingAuthToken:Apptentive.shared.APIKey inContext:self.parentManagedObjectContext];
 
@@ -368,7 +368,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		NSManagedObjectContext *context = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
 
 		// TODO: sort out which payload exactly we're talking about here
-		ApptentiveConversationPayload *payload = [[ApptentiveConversationPayload alloc] initWithConversation:self.activeConversation];
+		ApptentiveSDKAppReleasePayload *payload = [[ApptentiveSDKAppReleasePayload alloc] initWithConversation:self.activeConversation];
 
 		context.parentContext = self.parentManagedObjectContext;
 

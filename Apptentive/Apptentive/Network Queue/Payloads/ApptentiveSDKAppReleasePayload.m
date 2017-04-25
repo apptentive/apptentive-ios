@@ -6,11 +6,11 @@
 //  Copyright © 2017 Apptentive, Inc. All rights reserved.
 //
 
-#import "ApptentiveConversationPayload.h"
+#import "ApptentiveSDKAppReleasePayload.h"
 #import "ApptentiveConversation.h"
 
 
-@implementation ApptentiveConversationPayload
+@implementation ApptentiveSDKAppReleasePayload
 
 - (instancetype)initWithConversation:(ApptentiveConversation *)conversation {
 	self = [super init];
@@ -23,7 +23,7 @@
 }
 
 - (NSString *)path {
-	return @"conversation";
+	return @"conversations/<cid>/sdkapprelease";
 }
 
 - (NSString *)method {

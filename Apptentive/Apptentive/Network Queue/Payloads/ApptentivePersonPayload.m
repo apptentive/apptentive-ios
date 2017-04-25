@@ -22,7 +22,7 @@
 }
 
 - (NSString *)path {
-	return @"people";
+	return @"conversation/<cid>/people";
 }
 
 - (NSString *)method {

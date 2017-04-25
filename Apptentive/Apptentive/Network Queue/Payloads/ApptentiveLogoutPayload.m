@@ -11,24 +11,26 @@
 
 @implementation ApptentiveLogoutPayload
 
-- (instancetype)initWithConversationIdentifier:(NSString *)conversationIdentifier Token:(NSString *)token {
+- (instancetype)initWithToken:(NSString *)token {
 	self = [super init];
 
 	if (self) {
-		_conversationIdentifier = conversationIdentifier;
 		_token = token;
 	}
 
 	return self;
 }
 
+- (NSString *)method {
+	return @"DELETE";
+}
+
 - (NSString *)path {
-	return [NSString stringWithFormat:@"/conversations/%@/logout", self.conversationIdentifier];
+	return @"conversations/<cid>/logout";
 }
 
 - (NSDictionary *)JSONDictionary {
-	return @{ @"token": self.token,
-		@"logout": @{} };
+	return @{ @"token": self.token };
 }
 
 @end

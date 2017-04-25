@@ -13,7 +13,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 
-@interface ApptentiveConversationPayload : ApptentivePayload
+@interface ApptentiveSDKAppReleasePayload : ApptentivePayload
 
 @property (readonly, nonatomic) ApptentiveConversation *conversation;
 

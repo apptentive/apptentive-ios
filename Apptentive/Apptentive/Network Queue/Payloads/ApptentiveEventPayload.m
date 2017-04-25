@@ -22,7 +22,7 @@
 }
 
 - (NSString *)path {
-	return @"events";
+	return @"conversation/<cid>/event";
 }
 
 - (NSString *)containerName {

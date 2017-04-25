@@ -84,4 +84,10 @@
 	return @"application/json";
 }
 
+- (void)awakeFromFetch {
+	if (self.conversationIdentifier.length > 0 && [self.path containsString:@"<cid>"]) {
+		self.path = [self.path stringByReplacingOccurrencesOfString:@"<cid>" withString:self.conversationIdentifier];
+	}
+}
+
 @end

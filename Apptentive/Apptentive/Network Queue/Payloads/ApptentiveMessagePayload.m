@@ -33,7 +33,7 @@
 }
 
 - (NSString *)path {
-	return @"messages";
+	return @"conversations/<cid>/messages";
 }
 
 - (NSDictionary *)JSONDictionary {

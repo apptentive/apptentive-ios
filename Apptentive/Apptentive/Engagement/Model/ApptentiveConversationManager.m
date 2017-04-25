@@ -312,9 +312,11 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 - (void)sendLoginRequestWithToken:(NSString *)token {
 	NSString *path = @"/conversations";
 	NSMutableDictionary *payload = [NSMutableDictionary dictionary];
+	NSString *conversationIdentifier = nil;
 
 	if (self.activeConversation != nil) {
 		ApptentiveAssertTrue(self.activeConversation.state == ApptentiveConversationStateAnonymous, @"Active conversation must be anonymous to log in.");
+		conversationIdentifier = self.activeConversation.identifier;
 
 		if (self.activeConversation.state != ApptentiveConversationStateAnonymous) {
 			[self completeLoginSuccess:NO error:[self errorWithCode:ApptentiveInternalInconsistency failureReason:@"Active conversation is not anonymous."]];
@@ -335,7 +337,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		token = Apptentive.shared.APIKey;
 	}
 
-	self.loginRequestOperation = [self.client requestOperationWithRequest:[[ApptentiveLoginRequest alloc] initWithToken:token] authToken:token delegate:self];
+	self.loginRequestOperation = [self.client requestOperationWithRequest:[[ApptentiveLoginRequest alloc] initWithConversationIdentifier:conversationIdentifier token:token] authToken:token delegate:self];
 
 	[self.client.operationQueue addOperation:self.loginRequestOperation];
 }

@@ -11,10 +11,11 @@
 
 @implementation ApptentiveLoginRequest
 
-- (instancetype)initWithToken:(NSString *)token {
+- (instancetype)initWithConversationIdentifier:(NSString *)conversationIdentifier token:(NSString *)token {
 	self = [super init];
 
 	if (self) {
+		_conversationIdentifier = conversationIdentifier;
 		_token = token;
 	}
 
@@ -26,7 +27,11 @@
 }
 
 - (NSString *)path {
-	return @"conversations/<cid>/session";
+	if (self.conversationIdentifier != nil) {
+		return [NSString stringWithFormat:@"conversations/%@/session", self.conversationIdentifier];
+	} else {
+		return @"conversations";
+	}
 }
 
 - (NSDictionary *)JSONDictionary {

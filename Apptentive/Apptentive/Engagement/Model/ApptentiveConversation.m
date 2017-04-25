@@ -36,7 +36,7 @@ static NSString *const ATCurrentConversationPreferenceKey = @"ATCurrentConversat
 static NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKey";
 static NSString *const ATMessageCenterDidSkipProfileKey = @"ATMessageCenterDidSkipProfileKey";
 
-static NSDictionary * combileAppReleaseAndSdk(NSDictionary *appReleaseJson, NSDictionary *sdkJson) {
+static NSDictionary * combineAppReleaseAndSdk(NSDictionary *appReleaseJson, NSDictionary *sdkJson) {
     NSMutableDictionary *result = [[NSMutableDictionary alloc] initWithDictionary:appReleaseJson];
     for (id key in sdkJson) {
         [result setObject:sdkJson[key] forKey:[NSString stringWithFormat:@"sdk_%@", key]];
@@ -272,7 +272,7 @@ static NSDictionary * combileAppReleaseAndSdk(NSDictionary *appReleaseJson, NSDi
 
 - (NSDictionary *)conversationCreationJSON {
     return @{
-		@"app_release": combileAppReleaseAndSdk(self.appRelease.JSONDictionary, self.SDK.JSONDictionary),
+		@"app_release": combineAppReleaseAndSdk(self.appRelease.JSONDictionary, self.SDK.JSONDictionary),
 		@"person": self.person.JSONDictionary,
 		@"device": self.device.JSONDictionary
 	};
@@ -280,7 +280,7 @@ static NSDictionary * combileAppReleaseAndSdk(NSDictionary *appReleaseJson, NSDi
 
 - (NSDictionary *)conversationUpdateJSON {
 	return @{
-		@"app_release": combileAppReleaseAndSdk(self.appRelease.JSONDictionary, self.SDK.JSONDictionary),
+		@"app_release": combineAppReleaseAndSdk(self.appRelease.JSONDictionary, self.SDK.JSONDictionary),
 	};
 }
 

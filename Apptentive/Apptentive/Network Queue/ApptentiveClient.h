@@ -8,19 +8,20 @@
 
 #import <Foundation/Foundation.h>
 #import "ApptentiveRequestOperation.h"
+#import "ApptentiveMessage.h"
 
 @class ApptentiveConversation;
 
 NS_ASSUME_NONNULL_BEGIN
 
 
-@interface ApptentiveClient : NSObject <NSURLSessionDelegate, ApptentiveRequestOperationDelegate, ApptentiveRequestOperationDataSource>
+@interface ApptentiveClient : NSObject <NSURLSessionDelegate, ApptentiveRequestOperationDataSource>
 
 @property (readonly, nonatomic) NSOperationQueue *operationQueue;
 @property (readonly, nonatomic) NSURL *baseURL;
 @property (strong, nullable, nonatomic) NSString *authToken;
 
-- (instancetype)initWithBaseURL:(NSURL *)baseURL operationQueue:(NSOperationQueue *)operationQueue;
+- (instancetype)initWithBaseURL:(NSURL *)baseURL;
 
 - (ApptentiveRequestOperation *)requestOperationWithRequest:(id<ApptentiveRequest>)request delegate:(id<ApptentiveRequestOperationDelegate>)delegate;
 

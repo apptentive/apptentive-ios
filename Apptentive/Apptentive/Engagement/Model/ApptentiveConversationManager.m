@@ -158,6 +158,8 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	NSString *directoryPath = [self conversationContainerPathForDirectoryName:conversation.directoryName];
 
 	_messageManager = [[ApptentiveMessageManager alloc] initWithStoragePath:directoryPath client:self.client pollingInterval:Apptentive.shared.backend.configuration.messageCenter.backgroundPollingInterval localUserIdentifier:conversation.person.identifier];
+
+	Apptentive.shared.backend.payloadSender.messageDelegate = self.messageManager;
 }
 
 - (BOOL)endActiveConversation {

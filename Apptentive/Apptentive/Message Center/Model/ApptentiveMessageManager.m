@@ -256,7 +256,9 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 	message.state = ApptentiveMessageStateWaiting;
 }
 
-- (void)setState:(ApptentiveMessageState)state forMessageWithLocalIdentifier:(NSString *)localIdentifier {
+#pragma mark - Client message delelgate
+
+- (void)payloadSender:(ApptentivePayloadSender *)sender setState:(ApptentiveMessageState)state forMessageWithLocalIdentifier:(NSString *)localIdentifier {
 	ApptentiveAssertNotNil(localIdentifier, @"Missing localIdentifier when updating message");
 	if (localIdentifier == nil) {
 		return;
@@ -274,6 +276,10 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 			[self.delegate messageManagerDidEndUpdates:self];
 		});
 	}
+}
+
+- (void)payloadSenderProgressDidChange:(ApptentivePayloadSender *)sender {
+	[self.delegate messageManager:self messageSendProgressDidUpdate:sender.messageSendProgress];
 }
 
 - (void)appendMessage:(ApptentiveMessage *)message {

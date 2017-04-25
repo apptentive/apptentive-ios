@@ -32,7 +32,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterMessageStatus) {
 @class ApptentiveInteraction;
 
 
-@interface ApptentiveMessageCenterViewModel : NSObject <NSURLSessionDownloadDelegate, ATBackendMessageDelegate, ApptentiveMessageManagerDelegate>
+@interface ApptentiveMessageCenterViewModel : NSObject <NSURLSessionDownloadDelegate, ApptentiveMessageManagerDelegate>
 
 @property (weak, nonatomic) NSObject<ApptentiveMessageCenterViewModelDelegate> *delegate;
 @property (readonly, nonatomic) NSDateFormatter *dateFormatter;

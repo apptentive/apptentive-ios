@@ -24,8 +24,8 @@
 #import "ApptentiveDevice.h"
 #import "ApptentiveVersion.h"
 #import "ApptentiveMessageManager.h"
-#import "ApptentiveClient.h"
 #import "ApptentiveConfigurationRequest.h"
+#import "ApptentivePayloadSender.h"
 
 #import "ApptentiveLegacyEvent.h"
 #import "ApptentiveLegacySurveyResponse.h"
@@ -41,9 +41,6 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 
 
 @interface ApptentiveBackend ()
-
-@property (readonly, strong, nonatomic) ApptentiveClient *client;
-@property (readonly, strong, nonatomic) ApptentiveSerialNetworkQueue *serialNetworkQueue;
 
 @property (strong, nonatomic) ApptentiveRequestOperation *configurationOperation;
 
@@ -122,12 +119,6 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	[self.messageRetrievalTimer invalidate];
 
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
-
-	@try {
-		[self.serialNetworkQueue removeObserver:self forKeyPath:@"messageTaskCount"];
-		[self.serialNetworkQueue removeObserver:self forKeyPath:@"messageSendProgress"];
-	} @catch (NSException *_) {
-	}
 }
 
 - (void)updateWorking {
@@ -198,9 +189,9 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 		} else {
 			[self.conversationManager pause];
 
-			[self.serialNetworkQueue cancelAllOperations];
+			[self.payloadSender cancelNetworkOperations];
 
-			self.serialNetworkQueue.backgroundTaskIdentifier = [[UIApplication sharedApplication] beginBackgroundTaskWithName:@"SaveContext" expirationHandler:^{
+			self.payloadSender.backgroundTaskIdentifier = [[UIApplication sharedApplication] beginBackgroundTaskWithName:@"SaveContext" expirationHandler:^{
 				ApptentiveLogWarning(@"Background task expired");
 			}];
 		}
@@ -245,14 +236,12 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 }
 
 - (void)startUp {
-	_client = [[ApptentiveClient alloc] initWithBaseURL:self.baseURL operationQueue:self.operationQueue];
-	_serialNetworkQueue = [[ApptentiveSerialNetworkQueue alloc] initWithClient:self.client parentManagedObjectContext:self.managedObjectContext];
-
-	[self.serialNetworkQueue addObserver:self forKeyPath:@"messageSendProgress" options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew context:nil];
-	[self.serialNetworkQueue addObserver:self forKeyPath:@"messageTaskCount" options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew context:nil];
+	_client = [[ApptentiveClient alloc] initWithBaseURL:self.baseURL];
 
 	_conversationManager = [[ApptentiveConversationManager alloc] initWithStoragePath:self.supportDirectoryPath operationQueue:self.operationQueue client:self.client parentManagedObjectContext:self.managedObjectContext];
 	self.conversationManager.delegate = self;
+
+	_payloadSender = [[ApptentivePayloadSender alloc] initWithBaseURL:self.baseURL managedObjectContext:self.managedObjectContext];
 
 	_imageCache = [[NSURLCache alloc] initWithMemoryCapacity:1 * 1024 * 1024 diskCapacity:10 * 1024 * 1024 diskPath:[self imageCachePath]];
 
@@ -338,7 +327,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 
 - (void)processQueuedRecords {
 	if (self.isReady && self.working && self.conversationManager.activeConversation.token != nil) {
-		[self.serialNetworkQueue resume];
+		[self.payloadSender createOperationsForQueuedRequestsInContext:self.managedObjectContext];
 	}
 }
 
@@ -459,50 +448,17 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 		}
 
 		if (conversation.state == ApptentiveConversationStateAnonymous) {
-			NSString *conversationId = conversation.identifier;
+			NSString *conversationIdentifier = conversation.identifier;
 			ApptentiveAssertNotNil(conversationId);
 
-			if (conversationId != nil) {
-				[self.serialNetworkQueue updateRequestsMissingConversationIdentifier:conversationId];
+			if (conversationIdentifier != nil) {
+				[self.payloadSender updateQueuedRequestsInContext:self.managedObjectContext missingConversationIdentifier:conversationIdentifier];
 			}
 		}
 	}
 }
 
-#pragma mark Message send progress
-
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey, id> *)change context:(void *)context {
-	if (object == self.serialNetworkQueue && ([keyPath isEqualToString:@"messageSendProgress"] || [keyPath isEqualToString:@"messageTaskCount"])) {
-		NSNumber *numberProgress = change[NSKeyValueChangeNewKey];
-		float progress = [numberProgress isKindOfClass:[NSNumber class]] ? numberProgress.floatValue : 0.0;
-
-		if (self.serialNetworkQueue.messageTaskCount > 0 && numberProgress.floatValue < 0.05) {
-			progress = 0.05;
-		} else if (self.serialNetworkQueue.messageTaskCount == 0) {
-			progress = 0;
-		}
-
-		[self.messageDelegate backend:self messageProgressDidChange:progress];
-	}
-}
-
 #pragma mark - Paths
-
-//- (NSString *)attachmentDirectoryPath {
-//	if (!self.supportDirectoryPath) {
-//		return nil;
-//	}
-//	NSString *newPath = [self.supportDirectoryPath stringByAppendingPathComponent:@"attachments"];
-//	NSFileManager *fm = [NSFileManager defaultManager];
-//	NSError *error = nil;
-//	BOOL result = [fm createDirectoryAtPath:newPath withIntermediateDirectories:YES attributes:nil error:&error];
-//	if (!result) {
-//		ApptentiveLogError(@"Failed to create attachments directory: %@", newPath);
-//		ApptentiveLogError(@"Error was: %@", error);
-//		return nil;
-//	}
-//	return newPath;
-//}
 
 - (NSString *)cacheDirectoryPath {
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);

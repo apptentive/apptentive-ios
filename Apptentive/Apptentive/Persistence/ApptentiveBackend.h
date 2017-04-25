@@ -10,13 +10,11 @@
 #import <CoreData/CoreData.h>
 
 #import "ApptentiveMessage.h"
-#import "ApptentiveSerialNetworkQueue.h"
 #import "ApptentiveConversationManager.h"
+#import "ApptentiveClient.h"
 
 
-@class ApptentiveConversation, ApptentiveEngagementManifest, ApptentiveAppConfiguration, ApptentiveMessageCenterViewController, ApptentiveMessageManager;
-
-@protocol ATBackendMessageDelegate;
+@class ApptentiveConversation, ApptentiveEngagementManifest, ApptentiveAppConfiguration, ApptentiveMessageCenterViewController, ApptentiveMessageManager, ApptentivePayloadSender;
 
 /**
  `ApptentiveBackend` contains the internals of the Apptentive SDK.
@@ -38,12 +36,12 @@
 @property (readonly, strong, nonatomic) ApptentiveConversationManager *conversationManager;
 @property (readonly, strong, nonatomic) ApptentiveAppConfiguration *configuration;
 @property (readonly, strong, nonatomic) NSOperationQueue *operationQueue;
+@property (readonly, strong, nonatomic) ApptentiveClient *client;
+@property (readonly, strong, nonatomic) ApptentivePayloadSender *payloadSender;
 
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (readonly, strong, nonatomic) NSString *supportDirectoryPath;
 @property (strong, nonatomic) UIViewController *presentedMessageCenterViewController;
-
-@property (weak, nonatomic) id<ATBackendMessageDelegate> messageDelegate;
 
 @property (readonly, nonatomic) NSURLCache *imageCache;
 
@@ -90,11 +88,5 @@
 - (BOOL)isReady;
 
 - (void)resetBackend;
-
-@end
-
-@protocol ATBackendMessageDelegate <NSObject>
-
-- (void)backend:(ApptentiveBackend *)backend messageProgressDidChange:(float)progress;
 
 @end

@@ -11,6 +11,9 @@
 #import "ApptentiveConfigurationRequest.h"
 #import "ApptentiveConversationRequest.h"
 
+#import "ApptentiveSerialRequest.h"
+#import "ApptentiveMessageSendRequest.h"
+
 #define APPTENTIVE_MIN_BACKOFF_DELAY 1.0
 #define APPTENTIVE_BACKOFF_MULTIPLIER 2.0
 
@@ -20,12 +23,12 @@
 @synthesize URLSession = _URLSession;
 @synthesize backoffDelay = _backoffDelay;
 
-- (instancetype)initWithBaseURL:(NSURL *)baseURL operationQueue:(NSOperationQueue *)operationQueue {
+- (instancetype)initWithBaseURL:(NSURL *)baseURL {
 	self = [super init];
 
 	if (self) {
 		_baseURL = baseURL;
-		_operationQueue = operationQueue;
+		_operationQueue = [[NSOperationQueue alloc] init];
 
 		NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
 		configuration.HTTPAdditionalHeaders = @{
@@ -43,6 +46,8 @@
 	return self;
 }
 
+#pragma mark - Request operation data source
+
 - (void)increaseBackoffDelay {
 	@synchronized(self) {
 		_backoffDelay *= APPTENTIVE_BACKOFF_MULTIPLIER;
@@ -54,6 +59,8 @@
 		_backoffDelay = APPTENTIVE_MIN_BACKOFF_DELAY;
 	}
 }
+
+#pragma mark - Creating request operations
 
 - (ApptentiveRequestOperation *)requestOperationWithRequest:(id<ApptentiveRequest>)request delegate:(id<ApptentiveRequestOperationDelegate>)delegate {
 	return [self requestOperationWithRequest:request authToken:self.authToken delegate:delegate];

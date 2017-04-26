@@ -149,7 +149,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 - (ApptentiveConversation *)loadConversation:(ApptentiveConversationMetadataItem *)item {
 	ApptentiveConversation *conversation = [NSKeyedUnarchiver unarchiveObjectWithFile:[self conversationArchivePathForDirectoryName:item.directoryName]];
 	conversation.state = item.state;
-    conversation.encryptionKey = item.encryptionKey;
+	conversation.encryptionKey = item.encryptionKey;
 
 	[self createMessageManagerForConversation:conversation];
 
@@ -225,11 +225,11 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 			}
 		}
 	}
-    
-    // delete all existing encryption keys
-    for (ApptentiveConversationMetadataItem *item in self.conversationMetadata.items) {
-        item.encryptionKey = nil;
-    }
+
+	// delete all existing encryption keys
+	for (ApptentiveConversationMetadataItem *item in self.conversationMetadata.items) {
+		item.encryptionKey = nil;
+	}
 
 	// update the state of the corresponding item
 	ApptentiveConversationMetadataItem *item = [self.conversationMetadata findItemFilter:^BOOL(ApptentiveConversationMetadataItem *item) {
@@ -241,10 +241,10 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	}
 
 	item.state = conversation.state;
-    if (item.state == ApptentiveConversationStateLoggedIn) {
-        ApptentiveAssertNotNil(conversation.encryptionKey);
-        item.encryptionKey = conversation.encryptionKey;
-    }
+	if (item.state == ApptentiveConversationStateLoggedIn) {
+		ApptentiveAssertNotNil(conversation.encryptionKey);
+		item.encryptionKey = conversation.encryptionKey;
+	}
 
 	[self saveMetadata];
 }
@@ -500,17 +500,17 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 }
 
 - (void)processLoginResponse:(NSDictionary *)loginResponse {
-    NSString *encryptionKey = ApptentiveDictionaryGetString(loginResponse, @"encryption_key");
-    if (encryptionKey == nil) {
-        [self completeLoginSuccess:NO error:[self errorWithCode:ApptentiveInternalInconsistency failureReason:@"Conversation response did not include encryption key."]];
-        return;
-    }
-    
-	if (self.activeConversation == nil && self.pendingLoggedInConversation != nil) {
-        // If we were previously logged out, there will be no active conversation, and we should have a pending logged in conversation.
+	NSString *encryptionKey = ApptentiveDictionaryGetString(loginResponse, @"encryption_key");
+	if (encryptionKey == nil) {
+		[self completeLoginSuccess:NO error:[self errorWithCode:ApptentiveInternalInconsistency failureReason:@"Conversation response did not include encryption key."]];
+		return;
+	}
 
-        // Make the pending conversation the active one.
-        _activeConversation = self.pendingLoggedInConversation;
+	if (self.activeConversation == nil && self.pendingLoggedInConversation != nil) {
+		// If we were previously logged out, there will be no active conversation, and we should have a pending logged in conversation.
+
+		// Make the pending conversation the active one.
+		_activeConversation = self.pendingLoggedInConversation;
 		self.pendingLoggedInConversation = nil;
 
 		if (![self updateActiveConversationWithResponse:loginResponse]) {
@@ -518,13 +518,13 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 			return;
 		}
 
-        [self createMessageManagerForConversation:self.activeConversation];
-    }
-    
-    _activeConversation.state = ApptentiveConversationStateLoggedIn;
-    _activeConversation.encryptionKey = encryptionKey;
-    
-    [self handleConversationStateChange:self.activeConversation];
+		[self createMessageManagerForConversation:self.activeConversation];
+	}
+
+	_activeConversation.state = ApptentiveConversationStateLoggedIn;
+	_activeConversation.encryptionKey = encryptionKey;
+
+	[self handleConversationStateChange:self.activeConversation];
 
 	[self completeLoginSuccess:YES error:nil];
 }

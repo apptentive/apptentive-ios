@@ -36,13 +36,14 @@ static NSString *const ATCurrentConversationPreferenceKey = @"ATCurrentConversat
 static NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKey";
 static NSString *const ATMessageCenterDidSkipProfileKey = @"ATMessageCenterDidSkipProfileKey";
 
-static NSDictionary * combineAppReleaseAndSdk(NSDictionary *appReleaseJson, NSDictionary *sdkJson) {
-    NSMutableDictionary *result = [[NSMutableDictionary alloc] initWithDictionary:appReleaseJson];
-    for (id key in sdkJson) {
-        [result setObject:sdkJson[key] forKey:[NSString stringWithFormat:@"sdk_%@", key]];
-    }
-    return result;
+static NSDictionary *combineAppReleaseAndSdk(NSDictionary *appReleaseJson, NSDictionary *sdkJson) {
+	NSMutableDictionary *result = [[NSMutableDictionary alloc] initWithDictionary:appReleaseJson];
+	for (id key in sdkJson) {
+		[result setObject:sdkJson[key] forKey:[NSString stringWithFormat:@"sdk_%@", key]];
+	}
+	return result;
 }
+
 
 @interface ApptentiveConversation ()
 
@@ -271,7 +272,7 @@ static NSDictionary * combineAppReleaseAndSdk(NSDictionary *appReleaseJson, NSDi
 }
 
 - (NSDictionary *)conversationCreationJSON {
-    return @{
+	return @{
 		@"app_release": combineAppReleaseAndSdk(self.appRelease.JSONDictionary, self.SDK.JSONDictionary),
 		@"person": self.person.JSONDictionary,
 		@"device": self.device.JSONDictionary

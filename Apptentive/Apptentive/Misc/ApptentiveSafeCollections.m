@@ -27,10 +27,10 @@ BOOL ApptentiveDictionaryTrySetKeyValue(NSMutableDictionary *dictionary, NSStrin
 }
 
 NSString *ApptentiveDictionaryGetString(NSDictionary *dictionary, NSString *key) {
-    ApptentiveAssertNotNil(key, @"Key is nil");
-    if (key != nil) {
-        id value = dictionary[key];
-        return [value isKindOfClass:[NSString class]] ? value : nil;
-    }
-    return nil;
+	ApptentiveAssertNotNil(key, @"Key is nil");
+	if (key != nil) {
+		id value = dictionary[key];
+		return [value isKindOfClass:[NSString class]] ? value : nil;
+	}
+	return nil;
 }

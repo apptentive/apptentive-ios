@@ -83,7 +83,7 @@
 	XCTAssertEqualObjects(appRelease[@"debug"], isDebug);
 	XCTAssertEqualObjects(appRelease[@"overriding_styles"], @NO);
 	XCTAssertEqualObjects(appRelease[@"type"], @"ios");
-    XCTAssertEqualObjects(appRelease[@"sdk_author_name"], @"Apptentive, Inc.");
+	XCTAssertEqualObjects(appRelease[@"sdk_author_name"], @"Apptentive, Inc.");
 	XCTAssertEqualObjects(appRelease[@"sdk_distribution"], @"source");
 	XCTAssertEqualObjects(appRelease[@"sdk_distribution_version"], ApptentiveSDK.SDKVersion.versionString);
 	XCTAssertEqualObjects(appRelease[@"sdk_platform"], @"iOS");

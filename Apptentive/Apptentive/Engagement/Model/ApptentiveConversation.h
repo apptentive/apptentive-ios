@@ -75,6 +75,11 @@ typedef NS_ENUM(NSInteger, ApptentiveConversationState) {
 @property (readonly, nonatomic) NSString *identifier;
 
 /**
+ Encryption key for sending payloads.
+ */
+@property (strong, nonatomic) NSString *encryptionKey;
+
+/**
  The identifier for the last message downloaded from the conversation.
  */
 @property (readonly, nonatomic) NSString *lastMessageID;

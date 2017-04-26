@@ -490,16 +490,22 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 - (void)processLoginResponse:(NSDictionary *)loginResponse {
 	if (self.activeConversation == nil && self.pendingLoggedInConversation != nil) {
-		_activeConversation = self.pendingLoggedInConversation;
+        // If we were previously logged out, there will be no active conversation, and we should have a pending logged in conversation.
+
+        // Make the pending conversation the active one.
+        _activeConversation = self.pendingLoggedInConversation;
 		self.pendingLoggedInConversation = nil;
 
 		if (![self updateActiveConversationWithResponse:loginResponse]) {
 			[self completeLoginSuccess:NO error:[self errorWithCode:ApptentiveInternalInconsistency failureReason:@"Conversation response did not include required information."]];
 			return;
 		}
-	}
 
-	[self createMessageManagerForConversation:self.activeConversation];
+        [self createMessageManagerForConversation:self.activeConversation];
+    }
+    
+    _activeConversation.state = ApptentiveConversationStateLoggedIn;
+    [self handleConversationStateChange:self.activeConversation];
 
 	[self completeLoginSuccess:YES error:nil];
 }

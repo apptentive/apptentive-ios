@@ -175,7 +175,7 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 		return;
 	}
 
-	if ([[UIApplication sharedApplication] applicationState] != UIApplicationStateActive) {
+	if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateBackground) {
 		// Only present interaction UI in Active state.
 		return;
 	}

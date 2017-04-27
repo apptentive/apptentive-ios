@@ -457,6 +457,7 @@ NSString *const ApptentiveErrorDomain = @"com.apptentive";
 
 - (BOOL)didReceiveRemoteNotification:(NSDictionary *)userInfo fromViewController:(UIViewController *)viewController fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
 	NSDictionary *apptentivePayload = [userInfo objectForKey:@"apptentive"];
+
 	if (apptentivePayload) {
 		BOOL shouldCallCompletionHandler = YES;
 
@@ -467,6 +468,20 @@ NSString *const ApptentiveErrorDomain = @"com.apptentive";
 					shouldCallCompletionHandler = NO;
 					[self.backend.conversationManager.messageManager checkForMessagesInBackground:completionHandler];
 				}
+
+				if (userInfo[@"aps"][@"alert"] == nil) {
+					UILocalNotification *localNotification = [[UILocalNotification alloc] init];
+					localNotification.alertTitle = [ApptentiveUtilities appName];
+					localNotification.alertBody = userInfo[@"apptentive"][@"alert"];
+					localNotification.userInfo = @{ @"apptentive": apptentivePayload };
+
+					if ([userInfo[@"apptentive"][@"sound"] isEqualToString:@"default"]) {
+						localNotification.soundName = UILocalNotificationDefaultSoundName;
+					}
+
+					[[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
+				}
+
 				break;
 			}
 			case UIApplicationStateInactive:
@@ -493,6 +508,22 @@ NSString *const ApptentiveErrorDomain = @"com.apptentive";
 	}
 
 	return (apptentivePayload != nil);
+}
+
+- (BOOL)didReceiveLocalNotification:(UILocalNotification *)notification fromViewController:(UIViewController *)viewController {
+	NSDictionary *apptentivePayload = [notification.userInfo objectForKey:@"apptentive"];
+
+	if (apptentivePayload) {
+		NSString *action = [apptentivePayload objectForKey:@"action"];
+		if ([action isEqualToString:@"pmc"]) {
+			[self presentMessageCenterFromViewController:viewController];
+		} else {
+			[self.backend checkForMessages];
+		}
+		return YES;
+	}
+
+	return NO;
 }
 
 - (void)dismissMessageCenterAnimated:(BOOL)animated completion:(void (^)(void))completion {

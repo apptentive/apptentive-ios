@@ -350,7 +350,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 }
 
 - (BOOL)presentMessageCenterFromViewController:(UIViewController *)viewController withCustomData:(NSDictionary *)customData {
-	if ([[UIApplication sharedApplication] applicationState] != UIApplicationStateActive) {
+	if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateBackground) {
 		// Only present Message Center UI in Active state.
 		return NO;
 	}

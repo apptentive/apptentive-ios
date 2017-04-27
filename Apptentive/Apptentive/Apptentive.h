@@ -282,6 +282,8 @@ Before calling any other methods on the shared `Apptentive` instance, set the AP
 
 - (BOOL)didReceiveRemoteNotification:(NSDictionary *)userInfo fromViewController:(UIViewController *)viewController fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler;
 
+- (BOOL)didReceiveLocalNotification:(UILocalNotification *)notification fromViewController:(UIViewController *)viewController;
+
 /**
 Returns a Boolean value indicating whether the given event will cause an Interaction to be shown.
 

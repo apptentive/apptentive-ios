@@ -458,53 +458,63 @@ NSString *const ApptentiveErrorDomain = @"com.apptentive";
 - (BOOL)didReceiveRemoteNotification:(NSDictionary *)userInfo fromViewController:(UIViewController *)viewController fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
 	NSDictionary *apptentivePayload = [userInfo objectForKey:@"apptentive"];
 
-	if (apptentivePayload) {
+	if (apptentivePayload != nil) {
 		BOOL shouldCallCompletionHandler = YES;
 
-		switch ([UIApplication sharedApplication].applicationState) {
-			case UIApplicationStateBackground: {
-				NSNumber *contentAvailable = userInfo[@"aps"][@"content-available"];
-				if (contentAvailable.boolValue) {
-					shouldCallCompletionHandler = NO;
-					[self.backend.conversationManager.messageManager checkForMessagesInBackground:completionHandler];
-				}
+		if ([apptentivePayload[@"conversationId"] isEqualToString:self.backend.conversationManager.activeConversation.identifier]) {
+			ApptentiveLogInfo(@"Push notification received for active conversation. userInfo: %@", userInfo);
 
-				if (userInfo[@"aps"][@"alert"] == nil) {
-					UILocalNotification *localNotification = [[UILocalNotification alloc] init];
-					localNotification.alertTitle = [ApptentiveUtilities appName];
-					localNotification.alertBody = userInfo[@"apptentive"][@"alert"];
-					localNotification.userInfo = @{ @"apptentive": apptentivePayload };
-
-					if ([userInfo[@"apptentive"][@"sound"] isEqualToString:@"default"]) {
-						localNotification.soundName = UILocalNotificationDefaultSoundName;
+			switch ([UIApplication sharedApplication].applicationState) {
+				case UIApplicationStateBackground: {
+					NSNumber *contentAvailable = userInfo[@"aps"][@"content-available"];
+					if (contentAvailable.boolValue) {
+						shouldCallCompletionHandler = NO;
+						[self.backend.conversationManager.messageManager checkForMessagesInBackground:completionHandler];
 					}
 
-					[[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
-				}
+					if (userInfo[@"aps"][@"alert"] == nil) {
+						ApptentiveLogInfo(@"Silent push notification received. Posting local notification");
 
-				break;
+						UILocalNotification *localNotification = [[UILocalNotification alloc] init];
+						localNotification.alertTitle = [ApptentiveUtilities appName];
+						localNotification.alertBody = userInfo[@"apptentive"][@"alert"];
+						localNotification.userInfo = @{ @"apptentive": apptentivePayload };
+
+						if ([userInfo[@"apptentive"][@"sound"] isEqualToString:@"default"]) {
+							localNotification.soundName = UILocalNotificationDefaultSoundName;
+						}
+
+						[[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
+					}
+
+					break;
+				}
+				case UIApplicationStateInactive:
+					// Present Apptentive UI later, when Application State is Active
+					self.pushUserInfo = userInfo;
+					self.pushViewController = viewController;
+					break;
+				case UIApplicationStateActive:
+					self.pushUserInfo = nil;
+					self.pushViewController = nil;
+
+					NSString *action = [apptentivePayload objectForKey:@"action"];
+					if ([action isEqualToString:@"pmc"]) {
+						[self presentMessageCenterFromViewController:viewController];
+					} else {
+						[self.backend.conversationManager.messageManager checkForMessages];
+					}
+					break;
 			}
-			case UIApplicationStateInactive:
-				// Present Apptentive UI later, when Application State is Active
-				self.pushUserInfo = userInfo;
-				self.pushViewController = viewController;
-				break;
-			case UIApplicationStateActive:
-				self.pushUserInfo = nil;
-				self.pushViewController = nil;
-
-				NSString *action = [apptentivePayload objectForKey:@"action"];
-				if ([action isEqualToString:@"pmc"]) {
-					[self presentMessageCenterFromViewController:viewController];
-				} else {
-					[self.backend.conversationManager.messageManager checkForMessages];
-				}
-				break;
+		} else {
+			ApptentiveLogInfo(@"Push notification received for conversation that is not active.");
 		}
 
 		if (shouldCallCompletionHandler && completionHandler) {
 			completionHandler(UIBackgroundFetchResultNoData);
 		}
+	} else {
+		ApptentiveLogInfo(@"Non-apptentive push notification received.");
 	}
 
 	return (apptentivePayload != nil);
@@ -513,7 +523,9 @@ NSString *const ApptentiveErrorDomain = @"com.apptentive";
 - (BOOL)didReceiveLocalNotification:(UILocalNotification *)notification fromViewController:(UIViewController *)viewController {
 	NSDictionary *apptentivePayload = [notification.userInfo objectForKey:@"apptentive"];
 
-	if (apptentivePayload) {
+	if (apptentivePayload != nil) {
+		ApptentiveLogInfo(@"Apptentive local notification received.");
+
 		NSString *action = [apptentivePayload objectForKey:@"action"];
 		if ([action isEqualToString:@"pmc"]) {
 			[self presentMessageCenterFromViewController:viewController];
@@ -522,6 +534,8 @@ NSString *const ApptentiveErrorDomain = @"com.apptentive";
 		}
 		return YES;
 	}
+
+	ApptentiveLogInfo(@"Non-apptentive local notification received.");
 
 	return NO;
 }

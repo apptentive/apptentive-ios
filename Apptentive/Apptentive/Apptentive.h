@@ -258,7 +258,7 @@ Before calling any other methods on the shared `Apptentive` instance, set the AP
 - (BOOL)didReceiveRemoteNotification:(NSDictionary *)userInfo fromViewController:(UIViewController *)viewController;
 
 /**
- Forwards a push notification from your application delegate to Apptentive Connect.
+ Forwards a push notification from your application delegate to Apptentive.
 
  If the push notification originated from Apptentive, Message Center will be presented from the view controller
  when the notification is tapped.
@@ -281,6 +281,15 @@ Before calling any other methods on the shared `Apptentive` instance, set the AP
  */
 
 - (BOOL)didReceiveRemoteNotification:(NSDictionary *)userInfo fromViewController:(UIViewController *)viewController fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler;
+
+/**
+ Forwards a local notification from your application delegate to Apptentive. 
+
+ @param notification The `UILocalNotification` object received by the application delegate.
+ @param viewController The view controller Message Center may be presented from.
+ @return `YES` if the notification was sent by Apptentive, `NO` otherwise.
+ */
+- (BOOL)didReceiveLocalNotification:(UILocalNotification *)notification fromViewController:(UIViewController *)viewController;
 
 /**
 Returns a Boolean value indicating whether the given event will cause an Interaction to be shown.

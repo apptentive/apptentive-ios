@@ -518,7 +518,7 @@ NSString *const ApptentiveErrorDomain = @"com.apptentive";
 		if ([action isEqualToString:@"pmc"]) {
 			[self presentMessageCenterFromViewController:viewController];
 		} else {
-			[self.backend checkForMessages];
+			[self.backend.conversationManager.messageManager checkForMessages];
 		}
 		return YES;
 	}

@@ -15,6 +15,7 @@
 
 - (instancetype)initWithConversationIdentifier:(NSString *)conversationIdentifier directoryName:(NSString *)filename;
 
+@property (strong, nonatomic) NSString *encryptionKey;
 @property (assign, nonatomic) ApptentiveConversationState state;
 @property (strong, nonatomic) NSString *conversationIdentifier;
 @property (strong, nonatomic) NSString *directoryName;

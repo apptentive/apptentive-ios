@@ -50,6 +50,15 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)presentInteractionAtIndex:(NSInteger)index fromViewController:(UIViewController *)viewController;
 - (void)presentInteractionWithJSON:(NSDictionary *)JSON fromViewController:(UIViewController *)viewController;
 
+#pragma mark - Conversation Metadata
+
+@property (readonly, nonatomic) NSInteger numberOfConversations;
+
+- (NSString *)conversationStateAtIndex:(NSInteger)index;
+- (NSString *)conversationDescriptionAtIndex:(NSInteger)index;
+- (BOOL)conversationIsActiveAtIndex:(NSInteger)index;
+- (void)deleteConversationAtIndex:(NSInteger)index;
+
 - (void)resetSDK;
 
 @end

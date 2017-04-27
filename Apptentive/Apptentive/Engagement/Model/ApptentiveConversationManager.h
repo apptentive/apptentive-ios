@@ -11,7 +11,7 @@
 #import "ApptentiveRequestOperation.h"
 #import <CoreData/CoreData.h>
 
-@class ApptentiveConversationMetadataItem, ApptentiveConversation, ApptentiveClient, ApptentiveEngagementManifest, ApptentiveAppConfiguration, ApptentiveMessageManager;
+@class ApptentiveConversationMetadata, ApptentiveConversationMetadataItem, ApptentiveConversation, ApptentiveClient, ApptentiveEngagementManifest, ApptentiveAppConfiguration, ApptentiveMessageManager;
 
 @protocol ApptentiveConversationManagerDelegate;
 
@@ -23,6 +23,7 @@ extern NSString *const ApptentiveConversationStateDidChangeNotificationKeyConver
 
 @interface ApptentiveConversationManager : NSObject <ApptentiveConversationDelegate, ApptentiveRequestOperationDelegate>
 
+@property (strong, nonatomic) ApptentiveConversationMetadata *conversationMetadata;
 @property (readonly, strong, nonatomic) NSString *storagePath;
 @property (readonly, strong, nonatomic) NSOperationQueue *operationQueue;
 @property (readonly, strong, nonatomic) ApptentiveClient *client;

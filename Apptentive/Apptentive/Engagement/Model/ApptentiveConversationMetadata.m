@@ -53,6 +53,12 @@ static NSString *const VersionKey = @"version";
 	[self.items addObject:item];
 }
 
+- (void)deleteItem:(ApptentiveConversationMetadataItem *)item {
+	ApptentiveAssertNotNil(item, @"Attempting to remove nil item from metadata");
+
+	[self.items removeObject:item];
+}
+
 #pragma mark - Filtering
 
 - (ApptentiveConversationMetadataItem *)findItemFilter:(ApptentiveConversationMetadataItemFilter)filter {

@@ -19,5 +19,6 @@ typedef BOOL (^ApptentiveConversationMetadataItemFilter)(ApptentiveConversationM
 
 - (ApptentiveConversationMetadataItem *)findItemFilter:(ApptentiveConversationMetadataItemFilter)filter;
 - (void)addItem:(ApptentiveConversationMetadataItem *)item;
+- (void)deleteItem:(ApptentiveConversationMetadataItem *)item;
 
 @end

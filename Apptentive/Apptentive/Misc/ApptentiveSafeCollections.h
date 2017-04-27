@@ -17,3 +17,8 @@ void ApptentiveDictionarySetKeyValue(NSMutableDictionary *dictionary, NSString *
  Tries to add nullable value into the dictionary
  */
 BOOL ApptentiveDictionaryTrySetKeyValue(NSMutableDictionary *dictionary, NSString *key, id value);
+
+/**
+ Safely retrieve string from a dictionary
+ */
+NSString *ApptentiveDictionaryGetString(NSDictionary *dictionary, NSString *key);

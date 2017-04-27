@@ -17,6 +17,10 @@
 #import "ApptentiveVersion.h"
 #import "ApptentiveEngagementManifest.h"
 
+#import "ApptentiveConversation.h"
+#import "ApptentiveConversationMetadata.h"
+#import "ApptentiveConversationMetadataItem.h"
+
 
 @implementation Apptentive (Debugging)
 
@@ -115,6 +119,52 @@
 
 - (NSDictionary *)customDeviceData {
 	return self.backend.conversationManager.activeConversation.device.customData ?: @{};
+}
+
+#pragma mark - Conversation metadata
+
+- (NSInteger)numberOfConversations {
+	return self.backend.conversationManager.conversationMetadata.items.count;
+}
+
+- (NSString *)conversationStateAtIndex:(NSInteger)index {
+	switch (((ApptentiveConversationMetadataItem *)self.backend.conversationManager.conversationMetadata.items[index]).state) {
+		case ApptentiveConversationStateAnonymous:
+			return @"Anonymous";
+		case ApptentiveConversationStateAnonymousPending:
+			return @"Anonoymous Pending";
+		case ApptentiveConversationStateLoggedIn:
+			return @"Logged In";
+		case ApptentiveConversationStateLoggedOut:
+			return @"Logged Out";
+		default:
+			return @"Undefined";
+	}
+}
+
+- (NSString *)conversationDescriptionAtIndex:(NSInteger)index {
+	ApptentiveConversationMetadataItem *item = self.backend.conversationManager.conversationMetadata.items[index];
+
+	NSString *result = [NSString stringWithFormat:@"ID: %@", item.conversationIdentifier];
+
+	if (item.encryptionKey != nil) {
+		result = [result stringByAppendingFormat:@" Key: %@", item.encryptionKey];
+	}
+
+	return result;
+}
+
+- (BOOL)conversationIsActiveAtIndex:(NSInteger)index {
+	NSString *activeConversationIdentifier = self.backend.conversationManager.activeConversation.identifier;
+	ApptentiveConversationMetadataItem *item = self.backend.conversationManager.conversationMetadata.items[index];
+
+	return [activeConversationIdentifier isEqualToString:item.conversationIdentifier];
+}
+
+- (void)deleteConversationAtIndex:(NSInteger)index {
+	ApptentiveConversationMetadataItem *item = self.backend.conversationManager.conversationMetadata.items[index];
+
+	[self.backend.conversationManager.conversationMetadata deleteItem:item];
 }
 
 @end

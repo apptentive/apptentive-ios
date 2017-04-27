@@ -40,8 +40,6 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 @interface ApptentiveConversationManager () <ApptentiveConversationDelegate>
 
-@property (strong, nonatomic) ApptentiveConversationMetadata *conversationMetadata;
-
 @property (strong, nullable, nonatomic) ApptentiveRequestOperation *manifestOperation;
 @property (strong, nullable, nonatomic) ApptentiveRequestOperation *loginRequestOperation;
 

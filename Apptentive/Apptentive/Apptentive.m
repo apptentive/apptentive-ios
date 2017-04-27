@@ -480,9 +480,12 @@ NSString *const ApptentiveErrorDomain = @"com.apptentive";
 						localNotification.alertBody = userInfo[@"apptentive"][@"alert"];
 						localNotification.userInfo = @{ @"apptentive": apptentivePayload };
 
-						if ([userInfo[@"apptentive"][@"sound"] isEqualToString:@"default"]) {
-							localNotification.soundName = UILocalNotificationDefaultSoundName;
+						NSString *soundName = userInfo[@"apptentive"][@"sound"];
+						if ([soundName isEqualToString:@"default"]) {
+							soundName = UILocalNotificationDefaultSoundName;
 						}
+
+						localNotification.soundName = soundName;
 
 						[[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
 					}

@@ -368,6 +368,7 @@
 		EF18123F1E807FC00053BD68 /* ApptentiveAssert.h in Headers */ = {isa = PBXBuildFile; fileRef = EF18123D1E807FC00053BD68 /* ApptentiveAssert.h */; };
 		EF18124B1E8084C80053BD68 /* ApptentiveSafeCollections.h in Headers */ = {isa = PBXBuildFile; fileRef = EF1812491E8084C80053BD68 /* ApptentiveSafeCollections.h */; };
 		EF18124D1E8084C80053BD68 /* ApptentiveSafeCollections.m in Sources */ = {isa = PBXBuildFile; fileRef = EF18124A1E8084C80053BD68 /* ApptentiveSafeCollections.m */; };
+		EF8EE39B1EB3FB120033E7A1 /* ApptentiveAssert.m in Sources */ = {isa = PBXBuildFile; fileRef = EF8EE39A1EB3FB120033E7A1 /* ApptentiveAssert.m */; };
 		EFC76AFB1E9C275C0077CF90 /* ATDataModel v5 to v6.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = EFC76AFA1E9C275C0077CF90 /* ATDataModel v5 to v6.xcmappingmodel */; };
 		EFC76AFC1E9C27A70077CF90 /* ATDataModel v5 to v6.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = EFC76AFA1E9C275C0077CF90 /* ATDataModel v5 to v6.xcmappingmodel */; };
 		EFF3FE3B1E8C2F05006AD2B4 /* ApptentiveLog.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF3FE3A1E8C2F05006AD2B4 /* ApptentiveLog.m */; };
@@ -778,6 +779,7 @@
 		EF18123D1E807FC00053BD68 /* ApptentiveAssert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveAssert.h; sourceTree = "<group>"; };
 		EF1812491E8084C80053BD68 /* ApptentiveSafeCollections.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveSafeCollections.h; sourceTree = "<group>"; };
 		EF18124A1E8084C80053BD68 /* ApptentiveSafeCollections.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveSafeCollections.m; sourceTree = "<group>"; };
+		EF8EE39A1EB3FB120033E7A1 /* ApptentiveAssert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveAssert.m; sourceTree = "<group>"; };
 		EFC76AFA1E9C275C0077CF90 /* ATDataModel v5 to v6.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = "ATDataModel v5 to v6.xcmappingmodel"; sourceTree = "<group>"; };
 		EFF3FE3A1E8C2F05006AD2B4 /* ApptentiveLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveLog.m; sourceTree = "<group>"; };
 		EFF3FE401E8C386E006AD2B4 /* ApptentiveLogTag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveLogTag.h; sourceTree = "<group>"; };
@@ -1334,6 +1336,7 @@
 			isa = PBXGroup;
 			children = (
 				EF18123D1E807FC00053BD68 /* ApptentiveAssert.h */,
+				EF8EE39A1EB3FB120033E7A1 /* ApptentiveAssert.m */,
 				01A2D08A1E490A9700C2103A /* ApptentiveConnect-Prefix.pch */,
 				01A2D08B1E490A9700C2103A /* ApptentiveJSONSerialization.h */,
 				01A2D08C1E490A9700C2103A /* ApptentiveJSONSerialization.m */,
@@ -2025,6 +2028,7 @@
 				01A2D0FE1E490A9700C2103A /* ApptentiveHUDViewController.m in Sources */,
 				EF18124D1E8084C80053BD68 /* ApptentiveSafeCollections.m in Sources */,
 				01A2D18F1E490A9700C2103A /* ApptentiveMessageCenterContextMessageCell.m in Sources */,
+				EF8EE39B1EB3FB120033E7A1 /* ApptentiveAssert.m in Sources */,
 				01A2D1FB1E490A9700C2103A /* ApptentiveSurveyQuestionView.m in Sources */,
 				01A2D1421E490A9700C2103A /* ApptentiveVersion.m in Sources */,
 				0140D5FF1E835420007B5130 /* ApptentiveAttachment.m in Sources */,

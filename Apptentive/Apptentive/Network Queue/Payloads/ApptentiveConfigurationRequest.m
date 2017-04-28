@@ -12,7 +12,7 @@
 @implementation ApptentiveConfigurationRequest
 
 - (NSString *)path {
-	return @"conversation/configuration";
+	return @"conversations/<cid>/configuration";
 }
 
 @end

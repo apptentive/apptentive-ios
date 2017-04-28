@@ -12,7 +12,7 @@
 @implementation ApptentiveInteractionsRequest
 
 - (NSString *)path {
-	return @"interactions";
+	return @"conversations/<cid>/interactions";
 }
 
 @end

@@ -16,11 +16,13 @@
 #import "ApptentiveMessagePayload.h"
 #import "ApptentiveMessageGetRequest.h"
 #import "ApptentiveClient.h"
+#import "ApptentivePerson.h"
 
 static NSString *const MessageStoreFileName = @"messages-v1.archive";
 
-
-@interface ApptentiveMessageManager ()
+@interface ApptentiveMessageManager () {
+    ApptentiveConversation * _conversation;
+}
 
 @property (strong, nonatomic) ApptentiveRequestOperation *messageOperation;
 @property (strong, nonatomic) NSTimer *messageFetchTimer;
@@ -36,13 +38,18 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 
 @implementation ApptentiveMessageManager
 
-- (instancetype)initWithStoragePath:(NSString *)storagePath client:(ApptentiveClient *)client pollingInterval:(NSTimeInterval)pollingInterval localUserIdentifier:(NSString *)localUserIdentifier {
+- (instancetype)initWithStoragePath:(NSString *)storagePath client:(ApptentiveClient *)client pollingInterval:(NSTimeInterval)pollingInterval conversation:(ApptentiveConversation *)conversation {
 	self = [super init];
 
 	if (self) {
+        ApptentiveAssertNotNil(storagePath, @"Storage path is nil");
+        ApptentiveAssertNotNil(conversation, @"Conversation is nil");
+        
+        // TODO: return nil if any of the params are nil
+        
+        _conversation = conversation;
 		_storagePath = storagePath;
-		_client = client;
-		_localUserIdentifier = localUserIdentifier;
+        _client = client;
 
 		_messageIdentifierIndex = [NSMutableDictionary dictionary];
 		_messageStore = [NSKeyedUnarchiver unarchiveObjectWithFile:self.messageStorePath] ?: [[ApptentiveMessageStore alloc] init];
@@ -76,7 +83,7 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 		return;
 	}
 
-	ApptentiveMessageGetRequest *request = [[ApptentiveMessageGetRequest alloc] init];
+	ApptentiveMessageGetRequest *request = [[ApptentiveMessageGetRequest alloc] initWithConversationId:self.conversationId];
 	request.lastMessageIdentifier = self.messageStore.lastMessageIdentifier;
 
 	self.messageOperation = [self.client requestOperationWithRequest:request delegate:self];
@@ -116,8 +123,8 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 	NSArray *messageListJSON = [operation.responseObject valueForKey:@"items"];
 	self.messageOperation = nil;
 
-	ApptentiveAssertNotNil(messageListJSON, @"Unexpected response from /messages endpoint");
 	if (messageListJSON == nil) {
+        ApptentiveLogError(@"Unexpected response from /messages endpoint");
 		return;
 	}
 
@@ -352,6 +359,17 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 
 		self.backgroundFetchBlock = nil;
 	}
+}
+
+#pragma mark -
+#pragma mark Properties
+
+- (NSString *)conversationId {
+    return _conversation.identifier;
+}
+
+- (NSString *)localUserIdentifier {
+    return _conversation.person.identifier;
 }
 
 @end

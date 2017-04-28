@@ -217,7 +217,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 		return;
 	}
 
-	self.configurationOperation = [self.client requestOperationWithRequest:[[ApptentiveConfigurationRequest alloc] init] delegate:self];
+	self.configurationOperation = [self.client requestOperationWithRequest:[[ApptentiveConfigurationRequest alloc] initWithConversationId:self.conversationManager.activeConversation.identifier] delegate:self];
 
 	if (!self.conversationManager.activeConversation && self.conversationManager.conversationOperation) {
 		[self.configurationOperation addDependency:self.conversationManager.conversationOperation];
@@ -449,7 +449,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 
 		if (conversation.state == ApptentiveConversationStateAnonymous) {
 			NSString *conversationIdentifier = conversation.identifier;
-			ApptentiveAssertNotNil(conversationId);
+			ApptentiveAssertNotNil(conversation, @"Conversation id is nil");
 
 			if (conversationIdentifier != nil) {
 				[self.payloadSender updateQueuedRequestsInContext:self.managedObjectContext missingConversationIdentifier:conversationIdentifier];

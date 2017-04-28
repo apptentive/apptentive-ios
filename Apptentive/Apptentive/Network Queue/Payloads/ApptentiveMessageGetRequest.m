@@ -12,7 +12,7 @@
 @implementation ApptentiveMessageGetRequest
 
 - (NSString *)path {
-	NSString *path = @"conversations/<cid>/messages";
+    NSString *path = [NSString stringWithFormat:@"conversations/%@/messages", self.conversationId];
 
 	if (self.lastMessageIdentifier != nil) {
 		path = [path stringByAppendingFormat:@"?after_id=%@", self.lastMessageIdentifier];

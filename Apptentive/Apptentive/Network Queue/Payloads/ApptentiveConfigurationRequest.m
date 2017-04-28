@@ -12,7 +12,7 @@
 @implementation ApptentiveConfigurationRequest
 
 - (NSString *)path {
-	return @"conversations/<cid>/configuration";
+	return [NSString stringWithFormat:@"conversations/%@/configuration", self.conversationId];
 }
 
 @end

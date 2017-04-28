@@ -52,7 +52,7 @@ static NSString *const CustomDataKey = @"customData";
 
 			_attachments = [mutableAttachments copy];
 		} else {
-			ApptentiveAssertNil(attachmentsJSON);
+			ApptentiveAssertNil(attachmentsJSON, @"Expected nit but was: %@", attachmentsJSON);
 		}
 
 		_sender = [[ApptentiveMessageSender alloc] initWithJSON:JSON[@"sender"]];

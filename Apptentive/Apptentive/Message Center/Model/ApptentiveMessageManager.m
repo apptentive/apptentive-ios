@@ -20,15 +20,14 @@
 
 static NSString *const MessageStoreFileName = @"messages-v1.archive";
 
-@interface ApptentiveMessageManager () {
-    ApptentiveConversation * _conversation;
-}
+@interface ApptentiveMessageManager ()
 
 @property (strong, nonatomic) ApptentiveRequestOperation *messageOperation;
 @property (strong, nonatomic) NSTimer *messageFetchTimer;
 @property (strong, nonatomic) NSDictionary *currentCustomData;
 @property (readonly, nonatomic) NSMutableDictionary *messageIdentifierIndex;
 @property (readonly, nonatomic) ApptentiveMessageStore *messageStore;
+@property (strong, nonatomic) ApptentiveConversation * conversation;
 
 @property (readonly, nonatomic) NSString *messageStorePath;
 @property (copy, nonatomic) void (^backgroundFetchBlock)(UIBackgroundFetchResult);
@@ -83,7 +82,7 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 		return;
 	}
 
-	ApptentiveMessageGetRequest *request = [[ApptentiveMessageGetRequest alloc] initWithConversationId:self.conversationId];
+	ApptentiveMessageGetRequest *request = [[ApptentiveMessageGetRequest alloc] initWithConversationId:self.conversationIdentifier];
 	request.lastMessageIdentifier = self.messageStore.lastMessageIdentifier;
 
 	self.messageOperation = [self.client requestOperationWithRequest:request delegate:self];
@@ -364,12 +363,12 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 #pragma mark -
 #pragma mark Properties
 
-- (NSString *)conversationId {
-    return _conversation.identifier;
+- (NSString *)conversationIdentifier {
+    return self.conversation.identifier;
 }
 
 - (NSString *)localUserIdentifier {
-    return _conversation.person.identifier;
+    return self.conversation.person.identifier;
 }
 
 @end

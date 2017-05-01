@@ -18,7 +18,7 @@
 @interface ApptentiveMessageManager : NSObject <ApptentiveRequestOperationDelegate, ApptentivePayloadSenderDelegate>
 
 @property (readonly, nonatomic) NSString *storagePath;
-@property (readonly, nonatomic) NSString *conversationId;
+@property (readonly, nonatomic) NSString *conversationIdentifier;
 @property (readonly, nonatomic) ApptentiveClient *client;
 @property (assign, nonatomic) NSTimeInterval pollingInterval;
 @property (copy, nonatomic) NSString *localUserIdentifier;

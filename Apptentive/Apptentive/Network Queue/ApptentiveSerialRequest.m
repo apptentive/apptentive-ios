@@ -12,6 +12,8 @@
 #import "ApptentiveSerialRequestAttachment.h"
 #import "ApptentiveConversation.h"
 #import "ApptentivePayload.h"
+#import "NSData+Encryption.h"
+#import "ApptentiveUtilities.h"
 
 
 @implementation ApptentiveSerialRequest
@@ -88,6 +90,44 @@
 	if (self.conversationIdentifier.length > 0 && [self.path containsString:@"<cid>"]) {
 		self.path = [self.path stringByReplacingOccurrencesOfString:@"<cid>" withString:self.conversationIdentifier];
 	}
+}
+
+- (BOOL)encryptWithKey:(NSData *)key {
+	NSError *error;
+	NSDictionary *JSONPayload = [NSJSONSerialization JSONObjectWithData:self.payload options:0 error:&error];
+
+	ApptentiveAssertNotNil(JSONPayload, @"Unable to read JSON-encoded payload data: %@", error);
+
+	if (JSONPayload == nil) {
+		return NO;
+	}
+
+	NSMutableDictionary *mutablePayload = [JSONPayload mutableCopy];
+	mutablePayload[@"token"] = self.authToken;
+
+	NSData *JSONPayloadWithToken = [NSJSONSerialization dataWithJSONObject:mutablePayload options:0 error:&error];
+
+	ApptentiveAssertNotNil(JSONPayloadWithToken, @"Unable to encode payload data as JSON: %@", error);
+
+	if (JSONPayloadWithToken == nil) {
+		return NO;
+	}
+
+	NSData *initializationVector = [ApptentiveUtilities secureRandomDataOfLength:16];
+
+	ApptentiveAssertTrue(initializationVector.length > 0, "Unable to generate random initialization vector.");
+
+	if (initializationVector == nil) {
+		return NO;
+	}
+
+	NSData *encryptedPayload = [JSONPayloadWithToken apptentive_dataEncryptedWithKey:key initializationVector:initializationVector];
+
+	ApptentiveAssertNotNil(encryptedPayload, @"Unable to encrypt payload");
+
+	self.payload = encryptedPayload;
+
+	return self.payload != nil;
 }
 
 @end

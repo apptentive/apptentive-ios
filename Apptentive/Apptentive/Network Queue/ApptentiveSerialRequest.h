@@ -72,7 +72,7 @@
 @property (strong, nonatomic) NSData *payload;
 
 /**
- The data that should be transmitted in the body of the HTTP request.
+ The MIME type of data in the body of the HTTP request.
  */
 @property (strong, nonatomic) NSString *contentType;
 

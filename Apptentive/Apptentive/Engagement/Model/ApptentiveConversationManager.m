@@ -26,6 +26,7 @@
 #import "ApptentiveLoginRequest.h"
 #import "ApptentiveInteractionsRequest.h"
 #import "ApptentiveSafeCollections.h"
+#import "NSData+Encryption.h"
 
 static NSString *const ConversationMetadataFilename = @"conversation-v1.meta";
 static NSString *const ConversationFilename = @"conversation-v1.archive";
@@ -157,7 +158,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 - (void)createMessageManagerForConversation:(ApptentiveConversation *)conversation {
 	NSString *directoryPath = [self conversationContainerPathForDirectoryName:conversation.directoryName];
 
-    _messageManager = [[ApptentiveMessageManager alloc] initWithStoragePath:directoryPath client:self.client pollingInterval:Apptentive.shared.backend.configuration.messageCenter.backgroundPollingInterval conversation:conversation];
+	_messageManager = [[ApptentiveMessageManager alloc] initWithStoragePath:directoryPath client:self.client pollingInterval:Apptentive.shared.backend.configuration.messageCenter.backgroundPollingInterval conversation:conversation];
 
 	Apptentive.shared.backend.payloadSender.messageDelegate = self.messageManager;
 }
@@ -520,7 +521,8 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	}
 
 	_activeConversation.state = ApptentiveConversationStateLoggedIn;
-	_activeConversation.encryptionKey = encryptionKey;
+
+	_activeConversation.encryptionKey = [NSData apptentive_dataWithHexString:encryptionKey];
 
 	[self handleConversationStateChange:self.activeConversation];
 

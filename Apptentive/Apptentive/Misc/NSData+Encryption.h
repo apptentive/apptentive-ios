@@ -31,4 +31,13 @@
  */
 - (NSData *)apptentive_dataDecryptedWithKey:(NSData *)key;
 
+
+/**
+ Initializes data based on the base-16 data passed in as a string.
+
+ @param string A series of characters in base-16 to be converted to data.
+ @return A newly-initialized data object.
+ */
++ (instancetype)apptentive_dataWithHexString:(NSString *)string;
+
 @end

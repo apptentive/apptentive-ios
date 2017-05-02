@@ -10,8 +10,8 @@
 
 @interface ApptentiveConversationBaseRequest : ApptentiveRequest
 
-@property (nonnull, readonly, copy) NSString *conversationId;
+@property (nonnull, readonly, copy) NSString *conversationIdentifier;
 
-- (nullable instancetype)initWithConversationId:( NSString * _Nonnull )conversationId;
+- (nullable instancetype)initWithConversationIdentifier:( NSString * _Nonnull )conversationIdentifier;
 
 @end

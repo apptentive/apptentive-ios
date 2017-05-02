@@ -82,7 +82,7 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 		return;
 	}
 
-	ApptentiveMessageGetRequest *request = [[ApptentiveMessageGetRequest alloc] initWithConversationId:self.conversationIdentifier];
+	ApptentiveMessageGetRequest *request = [[ApptentiveMessageGetRequest alloc] initWithConversationIdentifier:self.conversationIdentifier];
 	request.lastMessageIdentifier = self.messageStore.lastMessageIdentifier;
 
 	self.messageOperation = [self.client requestOperationWithRequest:request delegate:self];

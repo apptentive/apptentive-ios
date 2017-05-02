@@ -217,7 +217,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 		return;
 	}
 
-	self.configurationOperation = [self.client requestOperationWithRequest:[[ApptentiveConfigurationRequest alloc] initWithConversationId:self.conversationManager.activeConversation.identifier] delegate:self];
+	self.configurationOperation = [self.client requestOperationWithRequest:[[ApptentiveConfigurationRequest alloc] initWithConversationIdentifier:self.conversationManager.activeConversation.identifier] delegate:self];
 
 	if (!self.conversationManager.activeConversation && self.conversationManager.conversationOperation) {
 		[self.configurationOperation addDependency:self.conversationManager.conversationOperation];

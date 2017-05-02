@@ -15,14 +15,14 @@
     return nil;
 }
 
-- (nullable instancetype)initWithConversationId:( NSString * _Nonnull )conversationId {
+- (nullable instancetype)initWithConversationIdentifier:( NSString * _Nonnull )conversationIdentifier {
     self = [super init];
     if (self) {
-        ApptentiveAssertNotNil(conversationId, @"Conversation id is nil");
-        if (conversationId == nil) {
+        ApptentiveAssertNotNil(conversationIdentifier, @"Conversation identifier is nil");
+        if (conversationIdentifier == nil) {
             return nil;
         }
-        _conversationId = [conversationId copy];
+        _conversationIdentifier = [conversationIdentifier copy];
     }
     return self;
 }

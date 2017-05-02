@@ -72,6 +72,11 @@
 @property (strong, nonatomic) NSData *payload;
 
 /**
+ The data that should be transmitted in the body of the HTTP request.
+ */
+@property (strong, nonatomic) NSString *contentType;
+
+/**
  Enqueues a payload with the given conversation information and
  authorization token using the context.
 

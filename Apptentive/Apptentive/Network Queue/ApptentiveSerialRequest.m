@@ -20,6 +20,7 @@
 
 @dynamic apiVersion;
 @dynamic attachments;
+@dynamic contentType;
 @dynamic conversationIdentifier;
 @dynamic authToken;
 @dynamic date;
@@ -61,6 +62,7 @@
 	request.conversationIdentifier = conversation.identifier;
 	request.apiVersion = payload.apiVersion;
 	request.authToken = authToken;
+	request.contentType = @"application/json";
 
 	NSError *error;
 	request.payload = payload.payload;
@@ -86,10 +88,6 @@
 	}];
 
 	return YES;
-}
-
-- (NSString *)contentType {
-	return @"application/json";
 }
 
 - (void)awakeFromFetch {
@@ -132,6 +130,7 @@
 	ApptentiveAssertNotNil(encryptedPayload, @"Unable to encrypt payload");
 
 	self.payload = encryptedPayload;
+	self.contentType = @"application/octet-stream";
 
 	return self.payload != nil;
 }

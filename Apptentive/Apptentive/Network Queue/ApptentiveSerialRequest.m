@@ -71,6 +71,12 @@
 	}
 	request.attachments = [NSOrderedSet orderedSetWithArray:attachmentArray];
 
+	if (conversation.state == ApptentiveConversationStateLoggedIn) {
+		ApptentiveAssertNotNil(conversation.encryptionKey, @"Encryption key is nil for a logged-in conversation!");
+
+		[request encryptWithKey:conversation.encryptionKey];
+	}
+
 	// Doing this synchronously triggers Core Data's recursive save detection.
 	[context performBlock:^{
 		NSError *saveError;

@@ -348,10 +348,10 @@ UIViewController *topChildViewController(UIViewController *viewController) {
 	return isValid;
 }
 
-+ (NSData *)secureRandomDataOfLength:(NSUInteger)length {
-	NSMutableData *randomData = [[NSMutableData alloc] initWithLength:length];
++ (NSData *)secureRandomDataOfLength:(NSUInteger)numberOfBytes {
+	NSMutableData *randomData = [[NSMutableData alloc] initWithLength:numberOfBytes];
 
-	int result = SecRandomCopyBytes(kSecRandomDefault, length, randomData.mutableBytes);
+	int result = SecRandomCopyBytes(kSecRandomDefault, numberOfBytes, randomData.mutableBytes);
 	ApptentiveAssertTrue(result == 0, @"Unable to generate random data");
 
 	return (result == 0) ? randomData : nil;

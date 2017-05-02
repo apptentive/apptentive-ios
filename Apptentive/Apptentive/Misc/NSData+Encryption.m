@@ -15,6 +15,8 @@
 - (NSData *)apptentive_dataEncryptedWithKey:(NSData *)key initializationVector:(NSData *)initializationVector {
 	NSMutableData *result = [[NSMutableData alloc] initWithLength:self.length + kCCBlockSizeAES128];
 	size_t resultLength;
+	// kCCAlgorithmAES128 will use a 256-bit key (AES256) if one is supplied.
+	ApptentiveAssertTrue(key.length == 32, @"A 256-bit key is required.");
 	CCCryptorStatus err = CCCrypt(kCCEncrypt, kCCAlgorithmAES128, kCCOptionPKCS7Padding, key.bytes, key.length, initializationVector.bytes, self.bytes, self.length, result.mutableBytes, result.length, &resultLength);
 
 	if (err == kCCSuccess) {
@@ -24,7 +26,7 @@
 
 		return ciphertextData;
 	} else {
-		ApptentiveAssertTrue(NO, @"Failed to encrypt data (error code: %ld)", err);
+		ApptentiveLogError(@"Failed to encrypt data (error code: %ld)", err);
 		return nil;
 	}
 }
@@ -35,6 +37,8 @@
 
 	NSMutableData *result = [[NSMutableData alloc] initWithLength:inputData.length];
 	size_t resultLength;
+	// kCCAlgorithmAES128 will use a 256-bit key (AES256) if one is supplied.
+	ApptentiveAssertTrue(key.length == 32, @"A 256-bit key is required.");
 	CCCryptorStatus err = CCCrypt(kCCDecrypt, kCCAlgorithmAES128, kCCOptionPKCS7Padding, key.bytes, key.length, initializationVector.bytes, inputData.bytes, inputData.length, result.mutableBytes, result.length, &resultLength);
 
 	if (err == kCCSuccess) {
@@ -42,7 +46,7 @@
 
 		return result;
 	} else {
-		ApptentiveAssertTrue(NO, @"Failed to decrypt data (error code: %ld)", err);
+		ApptentiveLogError(@"Failed to decrypt data (error code: %ld)", err);
 		return nil;
 	}
 }

@@ -85,6 +85,9 @@
 @end
 
 
+// This is needed because NSManagedObject subclasses need to be initialized
+// in a certain way for their accessors to work. We're just alloc-initing
+// for testing purposes.
 @implementation ApptentiveMockSerialRequest
 
 @synthesize synthesizedPayload = _synthesizedPayload;

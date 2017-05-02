@@ -83,4 +83,6 @@
  */
 + (BOOL)enqueuePayload:(ApptentivePayload *)payload forConversation:(ApptentiveConversation *)conversation usingAuthToken:(NSString *)authToken inContext:(NSManagedObjectContext *)context;
 
+- (BOOL)encryptWithKey:(NSData *)key;
+
 @end

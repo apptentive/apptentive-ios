@@ -40,4 +40,6 @@
 
 + (BOOL)emailAddressIsValid:(NSString *)emailAddress;
 
++ (NSData *)secureRandomDataOfLength:(NSUInteger)length;
+
 @end

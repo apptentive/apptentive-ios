@@ -50,6 +50,9 @@
 		014508B21EAE5F71003326E7 /* ApptentiveClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 014508B01EAE5F71003326E7 /* ApptentiveClient.m */; };
 		015408A41E54D8810027E196 /* ApptentiveTableView.h in Headers */ = {isa = PBXBuildFile; fileRef = 015408A21E54D8810027E196 /* ApptentiveTableView.h */; };
 		015408A51E54D8810027E196 /* ApptentiveTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 015408A31E54D8810027E196 /* ApptentiveTableView.m */; };
+		01626EB91EB7D60C0064E73F /* NSData+Encryption.h in Headers */ = {isa = PBXBuildFile; fileRef = 01626EB71EB7D60C0064E73F /* NSData+Encryption.h */; };
+		01626EBA1EB7D60C0064E73F /* NSData+Encryption.m in Sources */ = {isa = PBXBuildFile; fileRef = 01626EB81EB7D60C0064E73F /* NSData+Encryption.m */; };
+		01626EBC1EB7E5B90064E73F /* ApptentiveEncryptionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 01626EBB1EB7E5B90064E73F /* ApptentiveEncryptionTests.m */; };
 		017477261EA92BED00A0A949 /* ApptentiveEventPayload.h in Headers */ = {isa = PBXBuildFile; fileRef = 0174771E1EA92BED00A0A949 /* ApptentiveEventPayload.h */; };
 		017477271EA92BED00A0A949 /* ApptentiveEventPayload.m in Sources */ = {isa = PBXBuildFile; fileRef = 0174771F1EA92BED00A0A949 /* ApptentiveEventPayload.m */; };
 		017477281EA92BED00A0A949 /* ApptentiveMessagePayload.h in Headers */ = {isa = PBXBuildFile; fileRef = 017477201EA92BED00A0A949 /* ApptentiveMessagePayload.h */; };
@@ -437,6 +440,9 @@
 		014508B01EAE5F71003326E7 /* ApptentiveClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveClient.m; sourceTree = "<group>"; };
 		015408A21E54D8810027E196 /* ApptentiveTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveTableView.h; sourceTree = "<group>"; };
 		015408A31E54D8810027E196 /* ApptentiveTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveTableView.m; sourceTree = "<group>"; };
+		01626EB71EB7D60C0064E73F /* NSData+Encryption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Encryption.h"; sourceTree = "<group>"; };
+		01626EB81EB7D60C0064E73F /* NSData+Encryption.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Encryption.m"; sourceTree = "<group>"; };
+		01626EBB1EB7E5B90064E73F /* ApptentiveEncryptionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveEncryptionTests.m; sourceTree = "<group>"; };
 		0174771E1EA92BED00A0A949 /* ApptentiveEventPayload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveEventPayload.h; sourceTree = "<group>"; };
 		0174771F1EA92BED00A0A949 /* ApptentiveEventPayload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveEventPayload.m; sourceTree = "<group>"; };
 		017477201EA92BED00A0A949 /* ApptentiveMessagePayload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveMessagePayload.h; sourceTree = "<group>"; };
@@ -926,6 +932,7 @@
 				01917D441E5E0B7400B37D82 /* ConversationManagerTests.swift */,
 				01917D431E5E0B7400B37D82 /* ApptentiveTests-Bridging-Header.h */,
 				0174772E1EA92D7C00A0A949 /* PayloadTests.swift */,
+				01626EBB1EB7E5B90064E73F /* ApptentiveEncryptionTests.m */,
 			);
 			path = ApptentiveTests;
 			sourceTree = "<group>";
@@ -1356,6 +1363,8 @@
 				01A2D0911E490A9700C2103A /* ApptentiveUtilities.m */,
 				01A2D0921E490A9700C2103A /* NSDictionary+Apptentive.h */,
 				01A2D0931E490A9700C2103A /* NSDictionary+ApptentiveAdditions.m */,
+				01626EB71EB7D60C0064E73F /* NSData+Encryption.h */,
+				01626EB81EB7D60C0064E73F /* NSData+Encryption.m */,
 			);
 			path = Misc;
 			sourceTree = "<group>";
@@ -1709,6 +1718,7 @@
 				0134EB1E1EA9930E00DA4925 /* ApptentivePersonPayload.h in Headers */,
 				01A2D11D1E490A9700C2103A /* ApptentiveInteractionUpgradeMessageViewController.h in Headers */,
 				01A2D1871E490A9700C2103A /* ApptentiveCompoundMessageCell.h in Headers */,
+				01626EB91EB7D60C0064E73F /* NSData+Encryption.h in Headers */,
 				01A2D1151E490A9700C2103A /* ApptentiveInteractionMessageCenterController.h in Headers */,
 				0140D6021E8354A9007B5130 /* ApptentiveMessageSender.h in Headers */,
 				014508A81EAABEDE003326E7 /* ApptentiveInteractionsRequest.h in Headers */,
@@ -1998,6 +2008,7 @@
 				01A2D1A21E490A9700C2103A /* ApptentiveJSONSerialization.m in Sources */,
 				01A2D19F1E490A9700C2103A /* ApptentiveBackend+Metrics.m in Sources */,
 				01A2D1931E490A9700C2103A /* ApptentiveMessageCenterInputView.m in Sources */,
+				01626EBA1EB7D60C0064E73F /* NSData+Encryption.m in Sources */,
 				EFC76AFB1E9C275C0077CF90 /* ATDataModel v5 to v6.xcmappingmodel in Sources */,
 				01A2D1771E490A9700C2103A /* ApptentiveMessageCenterViewModel.m in Sources */,
 				01A2D1001E490A9700C2103A /* ApptentiveNetworkImageIconView.m in Sources */,
@@ -2115,6 +2126,7 @@
 				01A2D29B1E4963A500C2103A /* ATDataModel v3 to v4.xcmappingmodel in Sources */,
 				0174772F1EA92D7D00A0A949 /* PayloadTests.swift in Sources */,
 				01A2D2451E4946D600C2103A /* ApptentiveMigrationTests.m in Sources */,
+				01626EBC1EB7E5B90064E73F /* ApptentiveEncryptionTests.m in Sources */,
 				01A2D29A1E4963A500C2103A /* ATDataModel v2 to v3.xcmappingmodel in Sources */,
 				01A2D2491E4946D600C2103A /* ApptentiveUtilitiesTests.m in Sources */,
 				01A2D2471E4946D600C2103A /* ApptentiveStyleSheetTests.m in Sources */,

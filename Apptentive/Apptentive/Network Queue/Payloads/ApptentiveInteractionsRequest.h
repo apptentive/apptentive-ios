@@ -6,9 +6,9 @@
 //  Copyright © 2017 Apptentive, Inc. All rights reserved.
 //
 
-#import "ApptentiveRequest.h"
+#import "ApptentiveConversationBaseRequest.h"
 
 
-@interface ApptentiveInteractionsRequest : ApptentiveRequest
+@interface ApptentiveInteractionsRequest : ApptentiveConversationBaseRequest
 
 @end

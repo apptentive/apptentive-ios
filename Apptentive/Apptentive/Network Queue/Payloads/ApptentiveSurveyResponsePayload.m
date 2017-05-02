@@ -23,7 +23,7 @@
 }
 
 - (NSString *)path {
-	return [NSString stringWithFormat:@"conversations/<cid>/surveys/%@/respond", self.identifier];
+	return [NSString stringWithFormat:@"conversations/<cid>/surveys/%@/responses", self.identifier];
 }
 
 - (NSString *)containerName {

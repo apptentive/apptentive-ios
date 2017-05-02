@@ -157,7 +157,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 - (void)createMessageManagerForConversation:(ApptentiveConversation *)conversation {
 	NSString *directoryPath = [self conversationContainerPathForDirectoryName:conversation.directoryName];
 
-	_messageManager = [[ApptentiveMessageManager alloc] initWithStoragePath:directoryPath client:self.client pollingInterval:Apptentive.shared.backend.configuration.messageCenter.backgroundPollingInterval localUserIdentifier:conversation.person.identifier];
+    _messageManager = [[ApptentiveMessageManager alloc] initWithStoragePath:directoryPath client:self.client pollingInterval:Apptentive.shared.backend.configuration.messageCenter.backgroundPollingInterval conversation:conversation];
 
 	Apptentive.shared.backend.payloadSender.messageDelegate = self.messageManager;
 }
@@ -194,7 +194,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 }
 
 - (void)handleConversationStateChange:(ApptentiveConversation *)conversation {
-	ApptentiveAssertNotNil(conversation);
+	ApptentiveAssertNotNil(conversation, @"Conversation is is nil");
 	if (conversation != nil) {
 		NSDictionary *userInfo = @{ApptentiveConversationStateDidChangeNotificationKeyConversation: conversation};
 		[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveConversationStateDidChangeNotification
@@ -240,7 +240,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 	item.state = conversation.state;
 	if (item.state == ApptentiveConversationStateLoggedIn) {
-		ApptentiveAssertNotNil(conversation.encryptionKey);
+		ApptentiveAssertNotNil(conversation.encryptionKey, @"Encryption key is nil");
 		item.encryptionKey = conversation.encryptionKey;
 	}
 
@@ -584,7 +584,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		return;
 	}
 
-	self.manifestOperation = [self.client requestOperationWithRequest:[[ApptentiveInteractionsRequest alloc] init] delegate:self];
+	self.manifestOperation = [self.client requestOperationWithRequest:[[ApptentiveInteractionsRequest alloc] initWithConversationIdentifier:self.activeConversation.identifier] delegate:self];
 
 	if (!self.activeConversation.token && self.conversationOperation) {
 		[self.manifestOperation addDependency:self.conversationOperation];

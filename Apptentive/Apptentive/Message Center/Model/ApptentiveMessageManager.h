@@ -18,6 +18,7 @@
 @interface ApptentiveMessageManager : NSObject <ApptentiveRequestOperationDelegate, ApptentivePayloadSenderDelegate>
 
 @property (readonly, nonatomic) NSString *storagePath;
+@property (readonly, nonatomic) NSString *conversationIdentifier;
 @property (readonly, nonatomic) ApptentiveClient *client;
 @property (assign, nonatomic) NSTimeInterval pollingInterval;
 @property (copy, nonatomic) NSString *localUserIdentifier;
@@ -27,7 +28,7 @@
 
 @property (weak, nonatomic) id<ApptentiveMessageManagerDelegate> delegate;
 
-- (instancetype)initWithStoragePath:(NSString *)storagePath client:(ApptentiveClient *)client pollingInterval:(NSTimeInterval)pollingInterval localUserIdentifier:(NSString *)localUserIdentifier;
+- (instancetype)initWithStoragePath:(NSString *)storagePath client:(ApptentiveClient *)client pollingInterval:(NSTimeInterval)pollingInterval conversation:(ApptentiveConversation *)conversation;
 
 - (void)checkForMessages;
 

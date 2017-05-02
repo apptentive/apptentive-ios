@@ -27,7 +27,7 @@
 @dynamic payload;
 
 + (BOOL)enqueuePayload:(ApptentivePayload *)payload forConversation:(ApptentiveConversation *)conversation usingAuthToken:(NSString *)authToken inContext:(NSManagedObjectContext *)context {
-	ApptentiveAssertNotNil(conversation);
+	ApptentiveAssertNotNil(conversation, @"Conversation id is nil");
 	if (conversation == nil) {
 		return NO;
 	}

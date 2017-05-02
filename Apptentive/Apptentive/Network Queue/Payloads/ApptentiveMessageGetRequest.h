@@ -6,10 +6,9 @@
 //  Copyright © 2017 Apptentive, Inc. All rights reserved.
 //
 
-#import "ApptentiveRequest.h"
+#import "ApptentiveConversationBaseRequest.h"
 
-
-@interface ApptentiveMessageGetRequest : ApptentiveRequest
+@interface ApptentiveMessageGetRequest : ApptentiveConversationBaseRequest
 
 @property (strong, nullable, nonatomic) NSString *lastMessageIdentifier;
 

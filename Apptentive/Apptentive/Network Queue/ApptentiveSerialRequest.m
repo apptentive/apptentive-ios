@@ -28,6 +28,7 @@
 @dynamic method;
 @dynamic path;
 @dynamic payload;
+@dynamic encrypted;
 
 + (BOOL)enqueuePayload:(ApptentivePayload *)payload forConversation:(ApptentiveConversation *)conversation usingAuthToken:(NSString *)authToken inContext:(NSManagedObjectContext *)context {
 	ApptentiveAssertNotNil(conversation, @"Conversation id is nil");
@@ -130,6 +131,7 @@
 	ApptentiveAssertNotNil(encryptedPayload, @"Unable to encrypt payload");
 
 	self.payload = encryptedPayload;
+    self.encrypted = YES;
 	self.contentType = @"application/octet-stream";
 
 	return self.payload != nil;

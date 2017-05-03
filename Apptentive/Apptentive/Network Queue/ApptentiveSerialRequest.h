@@ -72,6 +72,11 @@
 @property (strong, nonatomic) NSData *payload;
 
 /**
+ Indicates if payload is encrypted.
+ */
+@property (assign, nonatomic, getter=isEncrypted) BOOL encrypted;
+
+/**
  The MIME type of data in the body of the HTTP request.
  */
 @property (strong, nonatomic) NSString *contentType;

@@ -81,6 +81,9 @@
     if (authToken) {
         [URLRequest addValue:[@"OAuth " stringByAppendingString:authToken] forHTTPHeaderField:@"Authorization"];
     }
+    if (request.encrypted) {
+        [URLRequest addValue:@"true" forHTTPHeaderField:@"APPTENTIVE-ENCRYPTED"];
+    }
 
 	return [[ApptentiveRequestOperation alloc] initWithURLRequest:URLRequest delegate:delegate dataSource:self];
 }

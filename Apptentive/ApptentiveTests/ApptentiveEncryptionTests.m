@@ -131,7 +131,7 @@
     self.synthesizedEncrypted = encrypted;
 }
 
-- (BOOL)isEncrypted {
+- (BOOL)encrypted {
     return self.synthesizedEncrypted;
 }
 

@@ -46,4 +46,8 @@
 	return payloadData;
 }
 
+- (BOOL)encrypted {
+    return NO;
+}
+
 @end

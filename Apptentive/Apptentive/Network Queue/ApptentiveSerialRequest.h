@@ -74,7 +74,7 @@
 /**
  Indicates if payload is encrypted.
  */
-@property (assign, nonatomic, getter=isEncrypted) BOOL encrypted;
+@property (assign, nonatomic) BOOL encrypted;
 
 /**
  The MIME type of data in the body of the HTTP request.

@@ -17,6 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (readonly, nonatomic) NSString *method;
 @property (readonly, nonatomic) NSString *contentType;
 @property (readonly, nullable, nonatomic) NSData *payload;
+@property (readonly, nonatomic) BOOL encrypted;
 
 @end
 

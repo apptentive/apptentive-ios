@@ -467,8 +467,8 @@
 }
 
 - (void)testEnjoymentDialogCriteria {
-    ApptentiveConfiguration *configuration = [ApptentiveConfiguration configurationWithAppKey:@"app-key" appSignature:@"app-signature"];
-    [Apptentive registerWithConfiguration:configuration];
+	ApptentiveConfiguration *configuration = [ApptentiveConfiguration configurationWithAppKey:@"app-key" appSignature:@"app-signature"];
+	[Apptentive registerWithConfiguration:configuration];
 
 	XCTestExpectation *expectation = [self expectationWithDescription:@"Backend stood up"];
 
@@ -525,8 +525,8 @@
 
 - (void)testCanShowInteractionForEvent {
 	// TODO: create synchronous backend initializer
-    ApptentiveConfiguration *configuration = [ApptentiveConfiguration configurationWithAppKey:@"app-key" appSignature:@"app-signature"];
-    [Apptentive registerWithConfiguration:configuration]; // trigger creation of engagement backend
+	ApptentiveConfiguration *configuration = [ApptentiveConfiguration configurationWithAppKey:@"app-key" appSignature:@"app-signature"];
+	[Apptentive registerWithConfiguration:configuration]; // trigger creation of engagement backend
 
 	XCTestExpectation *expectation = [self expectationWithDescription:@"Backend stood up"];
 

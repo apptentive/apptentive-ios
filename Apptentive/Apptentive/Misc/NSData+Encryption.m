@@ -52,10 +52,10 @@
 }
 
 + (nullable instancetype)apptentive_dataWithHexString:(NSString *)string {
-    if (string.length % 2 != 0) {
-        ApptentiveLogError(@"Key length must be an even number of characters: '%@'", string);
-        return nil;
-    }
+	if (string.length % 2 != 0) {
+		ApptentiveLogError(@"Key length must be an even number of characters: '%@'", string);
+		return nil;
+	}
 
 	NSMutableData *result = [NSMutableData dataWithCapacity:(string.length / 2)];
 

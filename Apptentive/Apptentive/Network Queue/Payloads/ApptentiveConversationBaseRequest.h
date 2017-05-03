@@ -8,10 +8,11 @@
 
 #import "ApptentiveRequest.h"
 
+
 @interface ApptentiveConversationBaseRequest : ApptentiveRequest
 
 @property (nonnull, readonly, copy) NSString *conversationIdentifier;
 
-- (nullable instancetype)initWithConversationIdentifier:( NSString * _Nonnull )conversationIdentifier;
+- (nullable instancetype)initWithConversationIdentifier:(NSString *_Nonnull)conversationIdentifier;
 
 @end

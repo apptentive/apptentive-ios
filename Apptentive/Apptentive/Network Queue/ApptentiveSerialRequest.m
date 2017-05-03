@@ -131,7 +131,7 @@
 	ApptentiveAssertNotNil(encryptedPayload, @"Unable to encrypt payload");
 
 	self.payload = encryptedPayload;
-    self.encrypted = YES;
+	self.encrypted = YES;
 	self.contentType = @"application/octet-stream";
 
 	return self.payload != nil;

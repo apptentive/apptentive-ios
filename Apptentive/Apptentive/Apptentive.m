@@ -46,32 +46,33 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 
 NSString *const ApptentiveErrorDomain = @"com.apptentive";
 
-static Apptentive * _sharedInstance;
+static Apptentive *_sharedInstance;
+
 
 @implementation ApptentiveConfiguration
 
 + (nullable instancetype)configurationWithAppKey:(NSString *)appKey appSignature:(NSString *)appSignature {
-    return [[self alloc] initWithAppKey:appKey appSignature:appSignature];
+	return [[self alloc] initWithAppKey:appKey appSignature:appSignature];
 }
 
 - (nullable instancetype)initWithAppKey:(NSString *)appKey appSignature:(NSString *)appSignature {
-    self = [super init];
-    if (self) {
-        if (appKey.length == 0) {
-            ApptentiveLogError(@"Can't create Apptentive configuration: app key is nil or empty");
-            return nil;
-        }
-        
-        if (appSignature.length == 0) {
-            ApptentiveLogError(@"Can't create Apptentive configuration: app signature is nil or empty");
-            return nil;
-        }
-        
-        _appKey = [appKey copy];
-        _appSignature = [appSignature copy];
-        _baseURL = [NSURL URLWithString:@"https://api.apptentive.com/"];
-    }
-    return self;
+	self = [super init];
+	if (self) {
+		if (appKey.length == 0) {
+			ApptentiveLogError(@"Can't create Apptentive configuration: app key is nil or empty");
+			return nil;
+		}
+
+		if (appSignature.length == 0) {
+			ApptentiveLogError(@"Can't create Apptentive configuration: app signature is nil or empty");
+			return nil;
+		}
+
+		_appKey = [appKey copy];
+		_appSignature = [appSignature copy];
+		_baseURL = [NSURL URLWithString:@"https://api.apptentive.com/"];
+	}
+	return self;
 }
 
 @end
@@ -84,15 +85,16 @@ static Apptentive * _sharedInstance;
 
 @end
 
+
 @implementation Apptentive
 
 @synthesize style = _style;
 
 + (instancetype)sharedConnection {
-    if (_sharedInstance == nil) {
-        ApptentiveLogWarning(@"Apptentive instance is not initialized. Make sure you've registered it with your app key and signature");
-    }
-    return _sharedInstance;
+	if (_sharedInstance == nil) {
+		ApptentiveLogWarning(@"Apptentive instance is not initialized. Make sure you've registered it with your app key and signature");
+	}
+	return _sharedInstance;
 }
 
 + (instancetype)shared {
@@ -104,18 +106,18 @@ static Apptentive * _sharedInstance;
 
 	if (self) {
 		_style = [[ApptentiveStyleSheet alloc] init];
-        _appKey = configuration.appKey;
-        _appSignature = configuration.appSignature;
-        _baseURL = configuration.baseURL;
-        _backend = [[ApptentiveBackend alloc] initWithAppKey:_appKey
-                                                   signature:_appSignature
-                                                     baseURL:_baseURL
-                                                 storagePath:@"com.apptentive.feedback"];
-        
-        if (configuration.distributionName && configuration.distributionVersion) {
-            [ApptentiveSDK setDistributionName:configuration.distributionName];
-            [ApptentiveSDK setDistributionVersion:[[ApptentiveVersion alloc] initWithString:configuration.distributionVersion]];
-        }
+		_appKey = configuration.appKey;
+		_appSignature = configuration.appSignature;
+		_baseURL = configuration.baseURL;
+		_backend = [[ApptentiveBackend alloc] initWithAppKey:_appKey
+												   signature:_appSignature
+													 baseURL:_baseURL
+												 storagePath:@"com.apptentive.feedback"];
+
+		if (configuration.distributionName && configuration.distributionVersion) {
+			[ApptentiveSDK setDistributionName:configuration.distributionName];
+			[ApptentiveSDK setDistributionVersion:[[ApptentiveVersion alloc] initWithString:configuration.distributionVersion]];
+		}
 
 		ApptentiveLogInfo(@"Apptentive SDK Version %@", [ApptentiveSDK SDKVersion].versionString);
 	}
@@ -123,11 +125,11 @@ static Apptentive * _sharedInstance;
 }
 
 + (void)registerWithConfiguration:(ApptentiveConfiguration *)configuration {
-    if (_sharedInstance != nil) {
-        ApptentiveLogWarning(@"Apptentive instance is already initialized");
-        return;
-    }
-    _sharedInstance = [[Apptentive alloc] initWithConfiguration:configuration];
+	if (_sharedInstance != nil) {
+		ApptentiveLogWarning(@"Apptentive instance is already initialized");
+		return;
+	}
+	_sharedInstance = [[Apptentive alloc] initWithConfiguration:configuration];
 }
 
 - (id<ApptentiveStyle>)styleSheet {

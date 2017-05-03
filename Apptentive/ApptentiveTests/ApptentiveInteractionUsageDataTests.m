@@ -61,8 +61,8 @@
 }
 
 - (void)testSDKVersion {
-    ApptentiveConfiguration *configuration = [ApptentiveConfiguration configurationWithAppKey:@"app-key" appSignature:@"app-signature"];
-    [Apptentive registerWithConfiguration:configuration];
+	ApptentiveConfiguration *configuration = [ApptentiveConfiguration configurationWithAppKey:@"app-key" appSignature:@"app-signature"];
+	[Apptentive registerWithConfiguration:configuration];
 	sleep(1);
 	ApptentiveInteractionUsageData *usage = [[ApptentiveInteractionUsageData alloc] initWithConversation:[[ApptentiveConversation alloc] init]];
 

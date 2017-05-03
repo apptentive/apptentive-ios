@@ -69,7 +69,7 @@
 }
 
 - (BOOL)encrypted {
-    return NO;
+	return NO;
 }
 
 @end

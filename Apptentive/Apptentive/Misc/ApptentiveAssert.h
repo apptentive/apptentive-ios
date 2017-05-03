@@ -21,7 +21,8 @@
  * @param expression An expression of id type.
  * @param ... An optional supplementary description of the failure. A literal NSString, optionally with string format specifiers. This parameter can be completely omitted.
  */
-#define ApptentiveAssertNil(expression, ...) if (expression) __ApptentiveAssertHelper(#expression, __FILE__, __LINE__, __PRETTY_FUNCTION__, __VA_ARGS__)
+#define ApptentiveAssertNil(expression, ...) \
+	if (expression) __ApptentiveAssertHelper(#expression, __FILE__, __LINE__, __PRETTY_FUNCTION__, __VA_ARGS__)
 
 /*!
  * @define ApptentiveAssertNotNil(expression, ...)
@@ -29,7 +30,8 @@
  * @param expression An expression of id type.
  * @param ... An optional supplementary description of the failure. A literal NSString, optionally with string format specifiers. This parameter can be completely omitted.
  */
-#define ApptentiveAssertNotNil(expression, ...) if (!(expression)) __ApptentiveAssertHelper(#expression, __FILE__, __LINE__, __PRETTY_FUNCTION__, __VA_ARGS__)
+#define ApptentiveAssertNotNil(expression, ...) \
+	if (!(expression)) __ApptentiveAssertHelper(#expression, __FILE__, __LINE__, __PRETTY_FUNCTION__, __VA_ARGS__)
 
 /*!
  * @define ApptentiveAssertTrue(expression, ...)
@@ -37,7 +39,8 @@
  * @param expression An expression of boolean type.
  * @param ... An optional supplementary description of the failure. A literal NSString, optionally with string format specifiers. This parameter can be completely omitted.
  */
-#define ApptentiveAssertTrue(expression, ...) if (!(expression)) __ApptentiveAssertHelper(#expression, __FILE__, __LINE__, __PRETTY_FUNCTION__, __VA_ARGS__)
+#define ApptentiveAssertTrue(expression, ...) \
+	if (!(expression)) __ApptentiveAssertHelper(#expression, __FILE__, __LINE__, __PRETTY_FUNCTION__, __VA_ARGS__)
 
 /*!
  * @define ApptentiveAssertDispatchQueue(expression, ...)
@@ -47,4 +50,4 @@
  */
 #define ApptentiveAssertDispatchQueue(expression, ...)
 
-void __ApptentiveAssertHelper(const char* expression, const char* file, int line, const char* function, ...);
+void __ApptentiveAssertHelper(const char *expression, const char *file, int line, const char *function, ...);

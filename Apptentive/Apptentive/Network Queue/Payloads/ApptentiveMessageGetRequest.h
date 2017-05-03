@@ -8,6 +8,7 @@
 
 #import "ApptentiveConversationBaseRequest.h"
 
+
 @interface ApptentiveMessageGetRequest : ApptentiveConversationBaseRequest
 
 @property (strong, nullable, nonatomic) NSString *lastMessageIdentifier;

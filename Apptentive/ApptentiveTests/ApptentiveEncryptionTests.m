@@ -128,11 +128,11 @@
 }
 
 - (void)setEncrypted:(BOOL)encrypted {
-    self.synthesizedEncrypted = encrypted;
+	self.synthesizedEncrypted = encrypted;
 }
 
 - (BOOL)encrypted {
-    return self.synthesizedEncrypted;
+	return self.synthesizedEncrypted;
 }
 
 @end

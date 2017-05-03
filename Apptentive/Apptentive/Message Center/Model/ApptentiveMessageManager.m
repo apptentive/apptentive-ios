@@ -20,6 +20,7 @@
 
 static NSString *const MessageStoreFileName = @"messages-v1.archive";
 
+
 @interface ApptentiveMessageManager ()
 
 @property (strong, nonatomic) ApptentiveRequestOperation *messageOperation;
@@ -27,7 +28,7 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 @property (strong, nonatomic) NSDictionary *currentCustomData;
 @property (readonly, nonatomic) NSMutableDictionary *messageIdentifierIndex;
 @property (readonly, nonatomic) ApptentiveMessageStore *messageStore;
-@property (strong, nonatomic) ApptentiveConversation * conversation;
+@property (strong, nonatomic) ApptentiveConversation *conversation;
 
 @property (readonly, nonatomic) NSString *messageStorePath;
 @property (copy, nonatomic) void (^backgroundFetchBlock)(UIBackgroundFetchResult);
@@ -41,14 +42,14 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 	self = [super init];
 
 	if (self) {
-        ApptentiveAssertNotNil(storagePath, @"Storage path is nil");
-        ApptentiveAssertNotNil(conversation, @"Conversation is nil");
-        
-        // TODO: return nil if any of the params are nil
-        
-        _conversation = conversation;
+		ApptentiveAssertNotNil(storagePath, @"Storage path is nil");
+		ApptentiveAssertNotNil(conversation, @"Conversation is nil");
+
+		// TODO: return nil if any of the params are nil
+
+		_conversation = conversation;
 		_storagePath = storagePath;
-        _client = client;
+		_client = client;
 
 		_messageIdentifierIndex = [NSMutableDictionary dictionary];
 		_messageStore = [NSKeyedUnarchiver unarchiveObjectWithFile:self.messageStorePath] ?: [[ApptentiveMessageStore alloc] init];
@@ -123,7 +124,7 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 	self.messageOperation = nil;
 
 	if (messageListJSON == nil) {
-        ApptentiveLogError(@"Unexpected response from /messages endpoint");
+		ApptentiveLogError(@"Unexpected response from /messages endpoint");
 		return;
 	}
 
@@ -364,11 +365,11 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 #pragma mark Properties
 
 - (NSString *)conversationIdentifier {
-    return self.conversation.identifier;
+	return self.conversation.identifier;
 }
 
 - (NSString *)localUserIdentifier {
-    return self.conversation.person.identifier;
+	return self.conversation.person.identifier;
 }
 
 @end

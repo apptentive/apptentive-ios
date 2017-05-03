@@ -17,7 +17,6 @@
 #import "ApptentiveUtilities.h"
 #import "ApptentiveInteraction.h"
 #import "ApptentivePerson.h"
-#import "ApptentiveMutablePerson.h"
 #import "ApptentiveReachability.h"
 
 NSString *const ATMessageCenterServerErrorDomain = @"com.apptentive.MessageCenterServerError";
@@ -502,10 +501,8 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 }
 
 - (void)setPersonName:(NSString *)name emailAddress:(NSString *)emailAddress {
-	[Apptentive.shared.backend.conversationManager.activeConversation updatePerson:^(ApptentiveMutablePerson *person) {
-		person.name = name;
-		person.emailAddress = emailAddress;
-	}];
+	Apptentive.shared.backend.conversationManager.activeConversation.person.name = name;
+	Apptentive.shared.backend.conversationManager.activeConversation.person.emailAddress = emailAddress;
 }
 
 - (BOOL)networkIsReachable {

@@ -7,7 +7,6 @@
 //
 
 #import "ApptentivePerson.h"
-#import "ApptentiveMutablePerson.h"
 
 static NSString *const NameKey = @"name";
 static NSString *const EmailAddressKey = @"emailAddress";
@@ -68,17 +67,6 @@ static NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCus
 	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATPersonLastUpdateValuePreferenceKey];
 	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATCurrentPersonPreferenceKey];
 	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ApptentiveCustomPersonDataPreferenceKey];
-}
-
-- (instancetype)initWithMutablePerson:(ApptentiveMutablePerson *)mutablePerson {
-	self = [super initWithMutableCustomData:mutablePerson];
-
-	if (self) {
-		_name = mutablePerson.name;
-		_emailAddress = mutablePerson.emailAddress;
-	}
-
-	return self;
 }
 
 @end

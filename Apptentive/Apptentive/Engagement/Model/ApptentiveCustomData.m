@@ -7,7 +7,6 @@
 //
 
 #import "ApptentiveCustomData.h"
-#import "ApptentiveMutableCustomData.h"
 
 static NSString *const CustomDataKey = @"customData";
 static NSString *const IdentifierKey = @"identifier";
@@ -42,17 +41,6 @@ static NSString *const IdentifierKey = @"identifier";
 	return self;
 }
 
-- (instancetype)initWithMutableCustomData:(ApptentiveMutableCustomData *)mutableCustomDataContainer {
-	self = [super init];
-
-	if (self) {
-		_mutableCustomData = [mutableCustomDataContainer.customData mutableCopy];
-		_identifier = mutableCustomDataContainer.identifier;
-	}
-
-	return self;
-}
-
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
 	self = [super initWithCoder:aDecoder];
 
@@ -71,6 +59,38 @@ static NSString *const IdentifierKey = @"identifier";
 
 - (NSDictionary<NSString *, NSObject<NSCoding> *> *)customData {
 	return [self.mutableCustomData copy];
+}
+
+- (void)addCustomString:(NSString *)string withKey:(NSString *)key {
+	if (string != nil && key != nil) {
+		[self.mutableCustomData setObject:string forKey:key];
+	} else {
+		ApptentiveLogError(@"Attempting to add custom data string with nil key and/or value");
+	}
+}
+
+- (void)addCustomNumber:(NSNumber *)number withKey:(NSString *)key {
+	if (number != nil && key != nil) {
+		[self.mutableCustomData setObject:number forKey:key];
+	} else {
+		ApptentiveLogError(@"Attempting to add custom data number with nil key and/or value");
+	}
+}
+
+- (void)addCustomBool:(BOOL)boolValue withKey:(NSString *)key {
+	if (key != nil) {
+		[self.mutableCustomData setObject:@(boolValue) forKey:key];
+	} else {
+		ApptentiveLogError(@"Attempting to add custom data boolean with nil key");
+	}
+}
+
+- (void)removeCustomValueWithKey:(NSString *)key {
+	if (key != nil) {
+		[self.mutableCustomData removeObjectForKey:key];
+	} else {
+		ApptentiveLogError(@"Attempting to remove custom data with nil key");
+	}
 }
 
 @end

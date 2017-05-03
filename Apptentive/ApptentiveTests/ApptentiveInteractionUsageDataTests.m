@@ -17,7 +17,7 @@
 #import "ApptentiveAppRelease.h"
 #import "ApptentiveVersion.h"
 #import "ApptentiveBackend.h"
-#import "ApptentiveMutablePerson.h"
+#import "ApptentivePerson.h"
 
 
 @interface ApptentiveInteractionUsageDataTests : XCTestCase
@@ -97,19 +97,15 @@
 //TODO: Test for interaction last_invoked_at/total
 
 - (void)testPerson {
-	[self.usage.conversation updatePerson:^(ApptentiveMutablePerson *person) {
-		person.name = nil;
-		person.emailAddress = nil;
-	}];
+	self.usage.conversation.person.name = nil;
+	self.usage.conversation.person.emailAddress = nil;
 
 	NSDictionary *evaluationDictionary = [self.usage predicateEvaluationDictionary];
 	XCTAssertNil(evaluationDictionary[@"person/name"]);
 	XCTAssertNil(evaluationDictionary[@"person/email"]);
 
-	[self.usage.conversation updatePerson:^(ApptentiveMutablePerson *person) {
-		person.name = @"Andrew";
-		person.emailAddress = @"example@example.com";
-	}];
+	self.usage.conversation.person.name = @"Andrew";
+	self.usage.conversation.person.emailAddress = @"example@example.com";
 
 	NSDictionary *validEvaluationDictionary = [self.usage predicateEvaluationDictionary];
 	XCTAssertEqualObjects(validEvaluationDictionary[@"person/name"], @"Andrew");

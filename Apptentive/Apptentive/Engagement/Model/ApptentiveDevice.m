@@ -8,7 +8,6 @@
 
 #import "ApptentiveDevice.h"
 #import "ApptentiveVersion.h"
-#import "ApptentiveMutableDevice.h"
 
 #import <UIKit/UIKit.h>
 #import <CoreTelephony/CTTelephonyNetworkInfo.h>
@@ -123,17 +122,6 @@ static NSString *const ApptentiveCustomDeviceDataPreferenceKey = @"ApptentiveCus
 	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATDeviceLastUpdateValuePreferenceKey];
 	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATDeviceLastUpdatePreferenceKey];
 	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ApptentiveCustomDeviceDataPreferenceKey];
-}
-
-- (instancetype)initWithMutableDevice:(ApptentiveMutableDevice *)mutableDevice {
-	self = [self initWithMutableCustomData:mutableDevice];
-
-	if (self) {
-		_integrationConfiguration = mutableDevice.integrationConfiguration;
-		[self updateWithCurrentDeviceValues];
-	}
-
-	return self;
 }
 
 #pragma mark - Private

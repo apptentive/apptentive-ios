@@ -61,7 +61,8 @@
 }
 
 - (void)testSDKVersion {
-	Apptentive.shared.APIKey = @"foo";
+    ApptentiveConfiguration *configuration = [ApptentiveConfiguration configurationWithAppKey:@"app-key" appSignature:@"app-signature"];
+    [Apptentive registerWithConfiguration:configuration];
 	sleep(1);
 	ApptentiveInteractionUsageData *usage = [[ApptentiveInteractionUsageData alloc] initWithConversation:[[ApptentiveConversation alloc] init]];
 

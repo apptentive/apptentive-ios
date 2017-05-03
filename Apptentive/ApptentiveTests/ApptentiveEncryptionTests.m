@@ -27,6 +27,7 @@
 @property (strong, nonatomic) NSData *synthesizedPayload;
 @property (strong, nonatomic) NSString *synthesizedAuthToken;
 @property (strong, nonatomic) NSString *synthesizedContentType;
+@property (assign, nonatomic) BOOL synthesizedEncrypted;
 
 @end
 
@@ -100,6 +101,7 @@
 @synthesize synthesizedPayload = _synthesizedPayload;
 @synthesize synthesizedAuthToken = _synthesizedAuthToken;
 @synthesize synthesizedContentType = _synthesizedContentType;
+@synthesize synthesizedEncrypted = _synthesizedEncrypted;
 
 - (void)setAuthToken:(NSString *)authToken {
 	self.synthesizedAuthToken = authToken;
@@ -123,6 +125,14 @@
 
 - (NSString *)contentType {
 	return self.synthesizedContentType;
+}
+
+- (void)setEncrypted:(BOOL)encrypted {
+    self.synthesizedEncrypted = encrypted;
+}
+
+- (BOOL)isEncrypted {
+    return self.synthesizedEncrypted;
 }
 
 @end

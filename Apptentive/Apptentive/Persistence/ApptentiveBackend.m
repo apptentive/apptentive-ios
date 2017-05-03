@@ -61,11 +61,12 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 
 @synthesize supportDirectoryPath = _supportDirectoryPath;
 
-- (instancetype)initWithAPIKey:(NSString *)APIKey baseURL:(NSURL *)baseURL storagePath:(NSString *)storagePath {
+- (instancetype)initWithAppKey:(NSString *)appKey signature:(NSString *)signature baseURL:(NSURL *)baseURL storagePath:(NSString *)storagePath {
 	self = [super init];
 
 	if (self) {
-		_APIKey = APIKey;
+		_appKey = appKey;
+        _appSignature = signature;
 		_baseURL = baseURL;
 		_storagePath = storagePath;
 

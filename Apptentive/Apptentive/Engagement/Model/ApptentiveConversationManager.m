@@ -174,7 +174,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 		ApptentiveLogoutPayload *payload = [[ApptentiveLogoutPayload alloc] initWithToken:self.activeConversation.token];
 
-		[ApptentiveSerialRequest enqueuePayload:payload forConversation:self.activeConversation usingAuthToken:Apptentive.shared.APIKey inContext:self.parentManagedObjectContext];
+		[ApptentiveSerialRequest enqueuePayload:payload forConversation:self.activeConversation usingAuthToken:nil inContext:self.parentManagedObjectContext];
 
 		_activeConversation = nil;
 
@@ -189,7 +189,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 #pragma mark - Conversation Token Fetching
 
 - (void)fetchConversationToken:(ApptentiveConversation *)conversation {
-	self.conversationOperation = [self.client requestOperationWithRequest:[[ApptentiveConversationRequest alloc] initWithConversation:conversation] authToken:Apptentive.shared.APIKey delegate:self];
+	self.conversationOperation = [self.client requestOperationWithRequest:[[ApptentiveConversationRequest alloc] initWithConversation:conversation] authToken:nil delegate:self];
 
 	[self.client.operationQueue addOperation:self.conversationOperation];
 }
@@ -342,9 +342,6 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 		// Add the token to payload…
 		payload[@"token"] = token;
-
-		// …and use API key as the authToken
-		token = Apptentive.shared.APIKey;
 	}
 
 	self.loginRequestOperation = [self.client requestOperationWithRequest:[[ApptentiveLoginRequest alloc] initWithConversationIdentifier:conversationIdentifier token:token] authToken:token delegate:self];

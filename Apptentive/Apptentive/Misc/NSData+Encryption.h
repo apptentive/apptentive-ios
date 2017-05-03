@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface NSData (Encryption)
 
 
@@ -38,6 +40,8 @@
  @param string A series of characters in base-16 to be converted to data.
  @return A newly-initialized data object.
  */
-+ (instancetype)apptentive_dataWithHexString:(NSString *)string;
++ (nullable instancetype)apptentive_dataWithHexString:(NSString *)string;
 
 @end
+
+NS_ASSUME_NONNULL_END

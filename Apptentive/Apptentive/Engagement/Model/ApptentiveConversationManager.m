@@ -523,6 +523,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	_activeConversation.state = ApptentiveConversationStateLoggedIn;
 
 	_activeConversation.encryptionKey = [NSData apptentive_dataWithHexString:encryptionKey];
+    ApptentiveAssertNotNil(_activeConversation.encryptionKey, "Apptentive encryption key should be not nil");
 
 	[self handleConversationStateChange:self.activeConversation];
 

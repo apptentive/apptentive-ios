@@ -24,7 +24,7 @@ static NSString *ATInteractionAppEventLabelExit = @"exit";
 - (void)addMetricWithName:(NSString *)name fromInteraction:(ApptentiveInteraction *)fromInteraction info:(NSDictionary *)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData {
 	ApptentiveConversation *conversation = self.conversationManager.activeConversation;
 
-	if (self.configuration.metricsEnabled == NO || name == nil) {
+	if (self.configuration.metricsEnabled == NO || name == nil || conversation.state == ApptentiveConversationStateLoggedOut) {
 		return;
 	}
 

@@ -8,8 +8,8 @@
 
 #import "ApptentiveAssert.h"
 
-void __ApptentiveAssertHelper(const char* expression, const char* file, int line, const char* function, ...) {
-    // TODO: better implemetation
-    NSLog(@"Assertion failed: %s:%d", file, line);
-    abort();
+void __ApptentiveAssertHelper(const char *expression, const char *file, int line, const char *function, ...) {
+	// TODO: better implemetation
+	NSLog(@"Assertion failed: %s:%d", file, line);
+	abort();
 }

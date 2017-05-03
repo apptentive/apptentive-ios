@@ -8,6 +8,7 @@
 
 #import "ApptentiveConversationBaseRequest.h"
 
+
 @interface ApptentiveConfigurationRequest : ApptentiveConversationBaseRequest
 
 @end

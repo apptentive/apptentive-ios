@@ -405,6 +405,8 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		}];
 
 		[self saveConversation];
+
+		[self.delegate processQueuedRecords];
 	}];
 
 	[self.operationQueue addOperation:personDidChangeOperation];
@@ -422,6 +424,8 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		}];
 
 		[self saveConversation];
+
+		[self.delegate processQueuedRecords];
 
 		self.manifest.expiry = [NSDate distantPast];
 	}];

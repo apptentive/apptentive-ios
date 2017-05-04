@@ -12,8 +12,7 @@
 #import "ApptentiveConversation.h"
 #import "ApptentiveEngagement.h"
 #import "ApptentiveDevice.h"
-#import "ApptentiveMutableDevice.h"
-#import "ApptentiveMutablePerson.h"
+#import "ApptentivePerson.h"
 
 
 @interface CriteriaTest ()
@@ -49,12 +48,10 @@
 
 	self.data = [[ApptentiveConversation alloc] init];
 
-	[self.data updateDevice:^(ApptentiveMutableDevice *device) {
-		[device addCustomNumber:@5 withKey:@"number_5"];
-		[device addCustomString:@"qwerty" withKey:@"string_qwerty"];
-		[device addCustomString:@"string with spaces" withKey:@"string with spaces"];
-		[device removeCustomValueWithKey:@"key_with_null_value"];
-	}];
+	[self.data.device addCustomNumber:@5 withKey:@"number_5"];
+	[self.data.device addCustomString:@"qwerty" withKey:@"string_qwerty"];
+	[self.data.device addCustomString:@"string with spaces" withKey:@"string with spaces"];
+	[self.data.device removeCustomValueWithKey:@"key_with_null_value"];
 }
 
 @end
@@ -125,9 +122,7 @@
 @implementation OperatorContains
 
 - (void)testOperatorContains {
-	[self.data updatePerson:^(ApptentiveMutablePerson *person) {
-		person.emailAddress = @"test@example.com";
-	}];
+	self.data.person.emailAddress = @"test@example.com";
 
 	XCTAssertTrue([self.interaction criteriaAreMetForConversation:self.data]);
 }

@@ -89,6 +89,9 @@
 
 - (BOOL)isReady;
 
+- (void)schedulePersonUpdate;
+- (void)scheduleDeviceUpdate;
+
 - (void)resetBackend;
 
 @end

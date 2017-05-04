@@ -8,34 +8,12 @@
 
 #import "ApptentiveState.h"
 
-@class ApptentiveMutableCustomData;
-
 
 /**
  `ApptentiveCustomData` is an abstract base class used by the `ApptentivePerson`
  and `ApptentiveDevice` classes to manage the storage of custom data.
  */
 @interface ApptentiveCustomData : ApptentiveState
-
-/**
- The custom data dictionary.
- */
-@property (readonly, strong, nonatomic) NSDictionary<NSString *, NSObject<NSCoding> *> *customData;
-
-/**
- An identifier used to identify the person or device.
- */
-@property (strong, nonatomic) NSString *identifier;
-
-
-/**
- Initializes a new custom data container object based on a mutable container
- object.
-
- @param mutableCustomDataContainer The mutable container object to copy
- @return The newly-initialzed custom data container.
- */
-- (instancetype)initWithMutableCustomData:(ApptentiveMutableCustomData *)mutableCustomDataContainer;
 
 /**
  Initializes a new custom data container object with the specified custom data
@@ -45,5 +23,43 @@
  @return The newly-initialzed custom data container.
  */
 - (instancetype)initWithCustomData:(NSDictionary *)customData;
+
+/**
+ Adds a string to the custom data.
+ @param string The string to be added.
+ @param key The key corresponding to the string.
+ */
+- (void)addCustomString:(NSString *)string withKey:(NSString *)key NS_SWIFT_NAME(add(_:withKey:));
+
+/**
+ Adds a number to the custom data.
+ @param number The number to be added.
+ @param key The key corresponding to the number.
+ */
+- (void)addCustomNumber:(NSNumber *)number withKey:(NSString *)key NS_SWIFT_NAME(add(_:withKey:));
+
+/**
+ Adds a boolean value to the custom data.
+ @param boolValue The boolean value to add.
+ @param key The key corresponding to the boolean value.
+ */
+- (void)addCustomBool:(BOOL)boolValue withKey:(NSString *)key NS_SWIFT_NAME(add(_:withKey:));
+
+/**
+ Removes a value from the custom data.
+
+ @param key The key corresponding to the value.
+ */
+- (void)removeCustomValueWithKey:(NSString *)key NS_SWIFT_NAME(remove(withKey:));
+
+/**
+ A read-only copy of the custom data.
+ */
+@property (readonly, copy, nonatomic) NSDictionary *customData;
+
+/**
+ A string that identifies the person or device object.
+ */
+@property (strong, nonatomic) NSString *identifier;
 
 @end

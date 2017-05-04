@@ -399,6 +399,20 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	}
 }
 
+#pragma mark Person/Device management
+
+- (void)scheduleDeviceUpdate {
+	[self.operationQueue addOperationWithBlock:^{
+		[self.conversationManager.activeConversation checkForDeviceDiffs];
+	}];
+}
+
+- (void)schedulePersonUpdate {
+	[self.operationQueue addOperationWithBlock:^{
+		[self.conversationManager.activeConversation checkForPersonDiffs];
+	}];
+}
+
 #pragma mark Message Polling
 
 - (NSUInteger)unreadMessageCount {

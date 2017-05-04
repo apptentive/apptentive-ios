@@ -14,8 +14,6 @@
 #import "ApptentiveEngagement.h"
 #import "ApptentiveUtilities.h"
 #import "ApptentiveVersion.h"
-#import "ApptentiveMutablePerson.h"
-#import "ApptentiveMutableDevice.h"
 #import "ApptentiveConversationMetadataItem.h"
 
 static NSString *const AppReleaseKey = @"appRelease";
@@ -30,6 +28,9 @@ static NSString *const MutableUserInfoKey = @"mutableUserInfo";
 static NSString *const ArchiveVersionKey = @"archiveVersion";
 static NSString *const IdentifierKey = @"identifier";
 static NSString *const DirectoryNameKey = @"directoryName";
+static NSString *const LastSentDeviceKey = @"lastSentDevice";
+static NSString *const LastSentPersonKey = @"lastSentPerson";
+
 
 // Legacy keys
 static NSString *const ATCurrentConversationPreferenceKey = @"ATCurrentConversationPreferenceKey";
@@ -48,6 +49,8 @@ static NSDictionary *combineAppReleaseAndSdk(NSDictionary *appReleaseJson, NSDic
 @interface ApptentiveConversation ()
 
 @property (readonly, nonatomic) NSMutableDictionary *mutableUserInfo;
+@property (strong, nonatomic) NSDictionary *lastSentPerson;
+@property (strong, nonatomic) NSDictionary *lastSentDevice;
 
 @end
 
@@ -67,6 +70,9 @@ static NSDictionary *combineAppReleaseAndSdk(NSDictionary *appReleaseJson, NSDic
 		_mutableUserInfo = [[NSMutableDictionary alloc] init];
 
 		_directoryName = [NSUUID UUID].UUIDString;
+
+		_lastSentDevice = @{};
+		_lastSentPerson = @{};
 	}
 	return self;
 }
@@ -84,6 +90,8 @@ static NSDictionary *combineAppReleaseAndSdk(NSDictionary *appReleaseJson, NSDic
 		_mutableUserInfo = [coder decodeObjectOfClass:[NSMutableDictionary class] forKey:MutableUserInfoKey];
 		_identifier = [coder decodeObjectOfClass:[NSString class] forKey:IdentifierKey];
 		_directoryName = [coder decodeObjectOfClass:[NSString class] forKey:DirectoryNameKey];
+		_lastSentDevice = [coder decodeObjectOfClass:[NSDictionary class] forKey:LastSentDeviceKey];
+		_lastSentPerson = [coder decodeObjectOfClass:[NSDictionary class] forKey:LastSentPersonKey];
 	}
 	return self;
 }
@@ -100,6 +108,8 @@ static NSDictionary *combineAppReleaseAndSdk(NSDictionary *appReleaseJson, NSDic
 	[coder encodeObject:self.mutableUserInfo forKey:MutableUserInfoKey];
 	[coder encodeObject:self.identifier forKey:IdentifierKey];
 	[coder encodeObject:self.directoryName forKey:DirectoryNameKey];
+	[coder encodeObject:self.lastSentDevice forKey:LastSentDeviceKey];
+	[coder encodeObject:self.lastSentPerson forKey:LastSentPersonKey];
 	[coder encodeObject:@1 forKey:ArchiveVersionKey];
 }
 
@@ -127,9 +137,6 @@ static NSDictionary *combineAppReleaseAndSdk(NSDictionary *appReleaseJson, NSDic
 		}
 
 		ApptentiveSDK *currentSDK = [[ApptentiveSDK alloc] initWithCurrentSDK];
-
-		[self updateDevice:^(ApptentiveMutableDevice *device){
-		}];
 
 		BOOL conversationNeedsUpdate = NO;
 
@@ -166,58 +173,43 @@ static NSDictionary *combineAppReleaseAndSdk(NSDictionary *appReleaseJson, NSDic
 				[_delegate conversation:self appReleaseOrSDKDidChange:self.conversationUpdateJSON];
 			}
 		}
-	}
-}
 
-- (void)updatePerson:(void (^)(ApptentiveMutablePerson *))personUpdateBlock {
-	if (!personUpdateBlock) {
-		return;
-	}
+		// See if any of the non-custom device attributes have changed
+		ApptentiveDevice *device = [[ApptentiveDevice alloc] initWithCurrentDevice];
+		device.integrationConfiguration = self.device.integrationConfiguration;
 
-	@synchronized(self) {
-		ApptentiveMutablePerson *mutablePerson = [[ApptentiveMutablePerson alloc] initWithPerson:self.person];
-
-		personUpdateBlock(mutablePerson);
-
-		ApptentivePerson *newPerson = [[ApptentivePerson alloc] initWithMutablePerson:mutablePerson];
-
-		NSDictionary *personDiffs = [ApptentiveUtilities diffDictionary:newPerson.JSONDictionary againstDictionary:self.person.JSONDictionary];
-
-		if (personDiffs.count > 0) {
-			_person = newPerson;
-
-			[self notifyConversationChanged];
-
-			if ([_delegate respondsToSelector:@selector(conversation:personDidChange:)]) {
-				[_delegate conversation:self personDidChange:personDiffs];
-			}
-		}
-	}
-}
-
-- (void)updateDevice:(void (^)(ApptentiveMutableDevice *))deviceUpdateBlock {
-	if (!deviceUpdateBlock) {
-		return;
-	}
-
-	@synchronized(self) {
-		ApptentiveMutableDevice *mutableDevice = [[ApptentiveMutableDevice alloc] initWithDevice:self.device];
-
-		deviceUpdateBlock(mutableDevice);
-
-		ApptentiveDevice *newDevice = [[ApptentiveDevice alloc] initWithMutableDevice:mutableDevice];
-
-		NSDictionary *deviceDiffs = [ApptentiveUtilities diffDictionary:newDevice.JSONDictionary againstDictionary:self.device.JSONDictionary];
+		NSDictionary *deviceDiffs = [ApptentiveUtilities diffDictionary:device.JSONDictionary againstDictionary:self.device.JSONDictionary];
 
 		if (deviceDiffs.count > 0) {
-			_device = newDevice;
-
-			[self notifyConversationChanged];
-
-			if ([_delegate respondsToSelector:@selector(conversation:deviceDidChange:)]) {
-				[_delegate conversation:self deviceDidChange:deviceDiffs];
-			}
+			[self.delegate conversation:self deviceDidChange:deviceDiffs];
+			self.lastSentDevice = self.device.JSONDictionary;
 		}
+	}
+}
+
+- (void)checkForDeviceDiffs {
+	ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Diffing device");
+
+	NSDictionary *deviceDiffs = [ApptentiveUtilities diffDictionary:self.device.JSONDictionary againstDictionary:self.lastSentDevice];
+
+	if (deviceDiffs.count > 0) {
+		ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Device diffs found: %@", deviceDiffs);
+
+		[self.delegate conversation:self deviceDidChange:deviceDiffs];
+		self.lastSentDevice = self.device.JSONDictionary;
+	}
+}
+
+- (void)checkForPersonDiffs {
+	ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Diffing person");
+
+	NSDictionary *personDiffs = [ApptentiveUtilities diffDictionary:self.person.JSONDictionary againstDictionary:self.lastSentPerson];
+
+	if (personDiffs.count > 0) {
+		ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Person diffs found: %@", personDiffs);
+
+		[self.delegate conversation:self personDidChange:personDiffs];
+		self.lastSentPerson = self.person.JSONDictionary;
 	}
 }
 
@@ -321,6 +313,9 @@ static NSDictionary *combineAppReleaseAndSdk(NSDictionary *appReleaseJson, NSDic
 		}
 
 		[_mutableUserInfo setObject:@([[NSUserDefaults standardUserDefaults] boolForKey:ATMessageCenterDidSkipProfileKey]) forKey:ATMessageCenterDidSkipProfileKey];
+
+		_lastSentDevice = @{};
+		_lastSentPerson = @{};
 	}
 
 	return self;

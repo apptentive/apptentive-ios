@@ -120,7 +120,7 @@
 
 	NSData *initializationVector = [ApptentiveUtilities secureRandomDataOfLength:16];
 
-	ApptentiveAssertTrue(initializationVector.length > 0, "Unable to generate random initialization vector.");
+	ApptentiveAssertTrue(initializationVector.length > 0, @"Unable to generate random initialization vector.");
 
 	if (initializationVector == nil) {
 		return NO;

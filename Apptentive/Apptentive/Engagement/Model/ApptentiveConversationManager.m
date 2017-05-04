@@ -308,7 +308,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
         
         // Check if there is an active conversation
 		if (self.activeConversation == nil) {
-            ApptentiveLogDebug(ApptentiveLogTagConversation, "No active conversation. Performing login...");
+            ApptentiveLogDebug(ApptentiveLogTagConversation, @"No active conversation. Performing login...");
             
             // attempt to find previous logged out conversation
             ApptentiveConversationMetadataItem *conversationItem = [self.conversationMetadata findItemFilter:^BOOL(ApptentiveConversationMetadataItem *item) {
@@ -316,12 +316,12 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
             }];
             
             if (conversationItem == nil) {
-                ApptentiveLogError(ApptentiveLogTagConversation, "Unable to find an existing conversation with for user: '%@'", userId);
+                ApptentiveLogError(ApptentiveLogTagConversation, @"Unable to find an existing conversation with for user: '%@'", userId);
                 [self failLoginWithErrorCode:ApptentiveInternalInconsistency failureReason:@"No previous conversations found."];
                 return;
             }
             
-            ApptentiveAssertNotNil(conversationItem.conversationIdentifier, "Missing conversation identifier");
+            ApptentiveAssertNotNil(conversationItem.conversationIdentifier, @"Missing conversation identifier");
             
             [self sendLoginRequestWithToken:token conversationIdentifier:conversationItem.conversationIdentifier userId:userId];
 			return;
@@ -543,7 +543,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	self.activeConversation.state = ApptentiveConversationStateLoggedIn;
     self.activeConversation.userId = self.pendingLoggedInUserId;
 	self.activeConversation.encryptionKey = [NSData apptentive_dataWithHexString:encryptionKey];
-	ApptentiveAssertNotNil(self.activeConversation.encryptionKey, "Apptentive encryption key should be not nil");
+	ApptentiveAssertNotNil(self.activeConversation.encryptionKey, @"Apptentive encryption key should be not nil");
 
 	[self handleConversationStateChange:self.activeConversation];
 

@@ -16,6 +16,10 @@
 #import "ApptentiveSDKAppReleasePayload.h"
 #import "ApptentiveVersion.h"
 
+#import "ApptentiveConversationRequest.h"
+#import "ApptentivePerson.h"
+#import "ApptentiveDevice.h"
+
 #import "ApptentiveMessage.h"
 #import "ApptentiveAttachment.h"
 #import "ApptentiveMessageSender.h"

@@ -157,12 +157,12 @@ static ApptentiveVersion *_distributionVersion;
 
 + (NSDictionary *)JSONKeyPathMapping {
 	return @{
-		@"version": NSStringFromSelector(@selector(versionString)),
-		@"programming_language": NSStringFromSelector(@selector(programmingLanguage)),
-		@"author_name": NSStringFromSelector(@selector(authorName)),
-		@"platform": NSStringFromSelector(@selector(platform)),
-		@"distribution": NSStringFromSelector(@selector(distributionName)),
-		@"distribution_version": NSStringFromSelector(@selector(distributionVersionString))
+		@"sdk_version": NSStringFromSelector(@selector(versionString)),
+		@"sdk_programming_language": NSStringFromSelector(@selector(programmingLanguage)),
+		@"sdk_author_name": NSStringFromSelector(@selector(authorName)),
+		@"sdk_platform": NSStringFromSelector(@selector(platform)),
+		@"sdk_distribution": NSStringFromSelector(@selector(distributionName)),
+		@"sdk_distribution_version": NSStringFromSelector(@selector(distributionVersionString))
 	};
 }
 

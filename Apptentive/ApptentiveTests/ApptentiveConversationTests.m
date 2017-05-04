@@ -22,7 +22,6 @@
 @property (strong, nonatomic) ApptentiveConversation *conversation;
 @property (strong, nonatomic) NSDictionary *personDiffs;
 @property (strong, nonatomic) NSDictionary *deviceDiffs;
-@property (strong, nonatomic) NSDictionary *conversationPayload;
 @property (assign, nonatomic) BOOL userInfoChanged;
 @property (assign, nonatomic) BOOL engagementChanged;
 
@@ -62,8 +61,6 @@
 	[self.conversation removeUserInfoForKey:@"bar"];
 	XCTAssertNil(self.conversation.userInfo[@"bar"]);
 
-	XCTAssertNil(self.conversationPayload);
-
 	[self.conversation.appRelease setValue:ApptentiveSDK.SDKVersion forKey:@"version"];
 
 	[self.conversation checkForDiffs];
@@ -74,8 +71,7 @@
 	NSNumber *isDebug = @NO;
 #endif
 
-	XCTAssertNotNil(self.conversationPayload);
-	NSDictionary *appRelease = self.conversationPayload[@"app_release"];
+	NSDictionary *appRelease = self.conversation.appReleaseSDKJSON;
 	XCTAssertNotNil(appRelease);
 	XCTAssertEqualObjects(appRelease[@"app_store_receipt"][@"has_receipt"], @NO);
 	XCTAssertEqualObjects(appRelease[@"debug"], isDebug);
@@ -346,8 +342,7 @@
 	self.personDiffs = diffs;
 }
 
-- (void)conversation:(ApptentiveConversation *)conversation appReleaseOrSDKDidChange:(NSDictionary *)payload {
-	self.conversationPayload = payload;
+- (void)conversationAppReleaseOrSDKDidChange:(ApptentiveConversation *)conversation {
 }
 
 - (void)conversationUserInfoDidChange:(ApptentiveConversation *)conversation {

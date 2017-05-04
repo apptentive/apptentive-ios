@@ -321,7 +321,6 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 - (void)sendLoginRequestWithToken:(NSString *)token {
 	NSString *path = @"/conversations";
-	NSMutableDictionary *payload = [NSMutableDictionary dictionary];
 	NSString *conversationIdentifier = nil;
 
 	if (self.activeConversation != nil) {
@@ -337,11 +336,6 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	} else {
 		self.pendingLoggedInConversation = [[ApptentiveConversation alloc] init];
 		self.pendingLoggedInConversation.state = ApptentiveConversationStateLoggedIn;
-
-		[payload addEntriesFromDictionary:self.pendingLoggedInConversation.conversationCreationJSON];
-
-		// Add the token to payload…
-		payload[@"token"] = token;
 	}
 
 	self.loginRequestOperation = [self.client requestOperationWithRequest:[[ApptentiveLoginRequest alloc] initWithConversationIdentifier:conversationIdentifier token:token] authToken:token delegate:self];
@@ -372,11 +366,10 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	[self scheduleConversationSave];
 }
 
-- (void)conversation:(ApptentiveConversation *)conversation appReleaseOrSDKDidChange:(NSDictionary *)payload {
+- (void)conversationAppReleaseOrSDKDidChange:(ApptentiveConversation *)conversation {
 	NSBlockOperation *conversationDidChangeOperation = [NSBlockOperation blockOperationWithBlock:^{
 		NSManagedObjectContext *context = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
 
-		// TODO: sort out which payload exactly we're talking about here
 		ApptentiveSDKAppReleasePayload *payload = [[ApptentiveSDKAppReleasePayload alloc] initWithConversation:self.activeConversation];
 
 		context.parentContext = self.parentManagedObjectContext;

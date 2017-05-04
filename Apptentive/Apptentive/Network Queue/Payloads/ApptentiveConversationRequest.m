@@ -8,6 +8,8 @@
 
 #import "ApptentiveConversationRequest.h"
 #import "ApptentiveConversation.h"
+#import "ApptentivePerson.h"
+#import "ApptentiveDevice.h"
 
 
 @implementation ApptentiveConversationRequest
@@ -31,7 +33,11 @@
 }
 
 - (NSDictionary *)JSONDictionary {
-	return self.conversation.conversationCreationJSON;
+	return @{
+		@"app_release": self.conversation.appReleaseSDKJSON,
+		@"person": self.conversation.person.JSONDictionary,
+		@"device": self.conversation.device.JSONDictionary
+	};
 }
 
 @end

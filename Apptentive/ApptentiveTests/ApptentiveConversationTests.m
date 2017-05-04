@@ -15,8 +15,6 @@
 #import "ApptentiveEngagement.h"
 #import "ApptentiveVersion.h"
 #import "ApptentiveCount.h"
-#import "ApptentiveMutablePerson.h"
-#import "ApptentiveMutableDevice.h"
 
 
 @interface ApptentiveConversationTests : XCTestCase <ApptentiveConversationDelegate>
@@ -123,14 +121,14 @@
 	XCTAssertNil(self.conversation.person.emailAddress);
 	XCTAssertEqual(self.conversation.person.customData.count, (NSUInteger)0);
 
-	[self.conversation updatePerson:^(ApptentiveMutablePerson *person) {
-		person.name = @"Testy McTesterson";
-		person.emailAddress = @"test@apptentive.com";
+	self.conversation.person.name = @"Testy McTesterson";
+	self.conversation.person.emailAddress = @"test@apptentive.com";
 
-		[person addCustomString:@"bar" withKey:@"foo"];
-		[person addCustomNumber:@(5) withKey:@"five"];
-		[person addCustomBool:YES withKey:@"yes"];
-	}];
+	[self.conversation.person addCustomString:@"bar" withKey:@"foo"];
+	[self.conversation.person addCustomNumber:@(5) withKey:@"five"];
+	[self.conversation.person addCustomBool:YES withKey:@"yes"];
+
+	[self.conversation checkForPersonDiffs];
 
 	NSDictionary *personDiffs = self.personDiffs;
 	XCTAssertNotNil(personDiffs);
@@ -147,13 +145,13 @@
 	XCTAssertEqualObjects(self.conversation.person.customData[@"five"], @5);
 	XCTAssertEqualObjects(self.conversation.person.customData[@"yes"], @YES);
 
-	[self.conversation updatePerson:^(ApptentiveMutablePerson *person) {
-		person.name = nil;
-		person.emailAddress = nil;
+	self.conversation.person.name = nil;
+	self.conversation.person.emailAddress = nil;
 
-		[person removeCustomValueWithKey:@"foo"];
-		[person addCustomNumber:@(5) withKey:@"yes"];
-	}];
+	[self.conversation.person removeCustomValueWithKey:@"foo"];
+	[self.conversation.person addCustomNumber:@(5) withKey:@"yes"];
+
+	[self.conversation checkForPersonDiffs];
 
 	personDiffs = self.personDiffs;
 	XCTAssertNotNil(personDiffs);
@@ -176,11 +174,11 @@
 	XCTAssertEqual(self.conversation.device.UUID.UUIDString.length, (NSUInteger)36);
 	XCTAssertEqual(self.conversation.device.customData.count, (NSUInteger)0);
 
-	[self.conversation updateDevice:^(ApptentiveMutableDevice *device) {
-		[device addCustomString:@"bar" withKey:@"foo"];
-		[device addCustomNumber:@(5) withKey:@"five"];
-		[device addCustomBool:YES withKey:@"yes"];
-	}];
+	[self.conversation.device addCustomString:@"bar" withKey:@"foo"];
+	[self.conversation.device addCustomNumber:@(5) withKey:@"five"];
+	[self.conversation.device addCustomBool:YES withKey:@"yes"];
+
+	[self.conversation checkForDeviceDiffs];
 
 	NSDictionary *deviceDiffs = self.deviceDiffs;
 	XCTAssertNotNil(deviceDiffs);
@@ -199,10 +197,10 @@
 	XCTAssertEqualObjects(self.conversation.device.OSName, @"iOS");
 	XCTAssertEqual(self.conversation.device.UUID.UUIDString.length, (NSUInteger)36);
 
-	[self.conversation updateDevice:^(ApptentiveMutableDevice *device) {
-		[device removeCustomValueWithKey:@"foo"];
-		[device addCustomNumber:@(5) withKey:@"yes"];
-	}];
+	[self.conversation.device removeCustomValueWithKey:@"foo"];
+	[self.conversation.device addCustomNumber:@(5) withKey:@"yes"];
+
+	[self.conversation checkForDeviceDiffs];
 
 	deviceDiffs = self.deviceDiffs;
 	XCTAssertNotNil(deviceDiffs);
@@ -280,20 +278,16 @@
 
 	[self.conversation didOverrideStyles];
 
-	[self.conversation updatePerson:^(ApptentiveMutablePerson *person) {
-		person.name = @"Testy McTesterson";
-		person.emailAddress = @"test@apptentive.com";
+	self.conversation.person.name = @"Testy McTesterson";
+	self.conversation.person.emailAddress = @"test@apptentive.com";
 
-		[person addCustomString:@"bar" withKey:@"foo"];
-		[person addCustomNumber:@(5) withKey:@"five"];
-		[person addCustomBool:YES withKey:@"yes"];
-	}];
+	[self.conversation.person addCustomString:@"bar" withKey:@"foo"];
+	[self.conversation.person addCustomNumber:@(5) withKey:@"five"];
+	[self.conversation.person addCustomBool:YES withKey:@"yes"];
 
-	[self.conversation updateDevice:^(ApptentiveMutableDevice *device) {
-		[device addCustomString:@"bar" withKey:@"foo"];
-		[device addCustomNumber:@(5) withKey:@"five"];
-		[device addCustomBool:YES withKey:@"yes"];
-	}];
+	[self.conversation.device addCustomString:@"bar" withKey:@"foo"];
+	[self.conversation.device addCustomNumber:@(5) withKey:@"five"];
+	[self.conversation.device addCustomBool:YES withKey:@"yes"];
 
 	[self.conversation.engagement engageCodePoint:@"test.code.point"];
 	[self.conversation.engagement engageInteraction:@"test.interaction"];

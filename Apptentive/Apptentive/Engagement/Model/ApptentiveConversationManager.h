@@ -63,6 +63,7 @@ extern NSString *const ApptentiveConversationStateDidChangeNotificationKeyConver
 @protocol ApptentiveConversationManagerDelegate <NSObject>
 
 - (void)conversationManager:(ApptentiveConversationManager *)manager conversationDidChangeState:(ApptentiveConversation *)conversation;
+- (void)processQueuedRecords;
 
 @end
 

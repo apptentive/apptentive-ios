@@ -20,8 +20,6 @@
 #import "ApptentiveAppConfiguration.h"
 #import "ApptentivePerson.h"
 #import "ApptentiveDevice.h"
-#import "ApptentiveMutablePerson.h"
-#import "ApptentiveMutableDevice.h"
 #import "ApptentiveSDK.h"
 #import "ApptentiveVersion.h"
 #import "ApptentiveMessageManager.h"
@@ -149,9 +147,8 @@ static Apptentive *_sharedInstance;
 }
 
 - (void)setPersonName:(NSString *)personName {
-	[self.backend.conversationManager.activeConversation updatePerson:^(ApptentiveMutablePerson *person) {
-		person.name = personName;
-	}];
+	self.backend.conversationManager.activeConversation.person.name = personName;
+	[self.backend schedulePersonUpdate];
 }
 
 - (NSString *)personEmailAddress {
@@ -159,9 +156,8 @@ static Apptentive *_sharedInstance;
 }
 
 - (void)setPersonEmailAddress:(NSString *)personEmailAddress {
-	[self.backend.conversationManager.activeConversation updatePerson:^(ApptentiveMutablePerson *person) {
-		person.emailAddress = personEmailAddress;
-	}];
+	self.backend.conversationManager.activeConversation.person.emailAddress = personEmailAddress;
+	[self.backend schedulePersonUpdate];
 }
 
 - (void)sendAttachmentText:(NSString *)text {
@@ -187,39 +183,33 @@ static Apptentive *_sharedInstance;
 }
 
 - (void)addCustomDeviceDataString:(NSString *)string withKey:(NSString *)key {
-	[self.backend.conversationManager.activeConversation updateDevice:^(ApptentiveMutableDevice *device) {
-		[device addCustomString:string withKey:key];
-	}];
+	[self.backend.conversationManager.activeConversation.device addCustomString:string withKey:key];
+	[self.backend scheduleDeviceUpdate];
 }
 
 - (void)addCustomDeviceDataNumber:(NSNumber *)number withKey:(NSString *)key {
-	[self.backend.conversationManager.activeConversation updateDevice:^(ApptentiveMutableDevice *device) {
-		[device addCustomNumber:number withKey:key];
-	}];
+	[self.backend.conversationManager.activeConversation.device addCustomNumber:number withKey:key];
+	[self.backend scheduleDeviceUpdate];
 }
 
 - (void)addCustomDeviceDataBool:(BOOL)boolValue withKey:(NSString *)key {
-	[self.backend.conversationManager.activeConversation updateDevice:^(ApptentiveMutableDevice *device) {
-		[device addCustomBool:boolValue withKey:key];
-	}];
+	[self.backend.conversationManager.activeConversation.device addCustomBool:boolValue withKey:key];
+	[self.backend scheduleDeviceUpdate];
 }
 
 - (void)addCustomPersonDataString:(NSString *)string withKey:(NSString *)key {
-	[self.backend.conversationManager.activeConversation updatePerson:^(ApptentiveMutablePerson *person) {
-		[person addCustomString:string withKey:key];
-	}];
+	[self.backend.conversationManager.activeConversation.person addCustomString:string withKey:key];
+	[self.backend schedulePersonUpdate];
 }
 
 - (void)addCustomPersonDataNumber:(NSNumber *)number withKey:(NSString *)key {
-	[self.backend.conversationManager.activeConversation updatePerson:^(ApptentiveMutablePerson *person) {
-		[person addCustomNumber:number withKey:key];
-	}];
+	[self.backend.conversationManager.activeConversation.person addCustomNumber:number withKey:key];
+	[self.backend schedulePersonUpdate];
 }
 
 - (void)addCustomPersonDataBool:(BOOL)boolValue withKey:(NSString *)key {
-	[self.backend.conversationManager.activeConversation updatePerson:^(ApptentiveMutablePerson *person) {
-		[person addCustomBool:boolValue withKey:key];
-	}];
+	[self.backend.conversationManager.activeConversation.person addCustomBool:boolValue withKey:key];
+	[self.backend schedulePersonUpdate];
 }
 
 + (NSDictionary *)versionObjectWithVersion:(NSString *)version {
@@ -259,15 +249,13 @@ static Apptentive *_sharedInstance;
 }
 
 - (void)removeCustomPersonDataWithKey:(NSString *)key {
-	[self.backend.conversationManager.activeConversation updatePerson:^(ApptentiveMutablePerson *person) {
-		[person removeCustomValueWithKey:key];
-	}];
+	[self.backend.conversationManager.activeConversation.person removeCustomValueWithKey:key];
+	[self.backend schedulePersonUpdate];
 }
 
 - (void)removeCustomDeviceDataWithKey:(NSString *)key {
-	[self.backend.conversationManager.activeConversation updateDevice:^(ApptentiveMutableDevice *device) {
-		[device removeCustomValueWithKey:key];
-	}];
+	[self.backend.conversationManager.activeConversation.device removeCustomValueWithKey:key];
+	[self.backend scheduleDeviceUpdate];
 }
 
 - (void)openAppStore {
@@ -300,18 +288,17 @@ static Apptentive *_sharedInstance;
 								ntohl(tokenBytes[3]), ntohl(tokenBytes[4]), ntohl(tokenBytes[5]),
 								ntohl(tokenBytes[6]), ntohl(tokenBytes[7])];
 
-	[self.backend.conversationManager.activeConversation updateDevice:^(ApptentiveMutableDevice *device) {
-		NSMutableDictionary *integrationConfiguration = [device.integrationConfiguration mutableCopy];
+	NSMutableDictionary *integrationConfiguration = [self.backend.conversationManager.activeConversation.device.integrationConfiguration mutableCopy];
 
-		[integrationConfiguration removeObjectForKey:[self integrationKeyForPushProvider:ApptentivePushProviderApptentive]];
-		[integrationConfiguration removeObjectForKey:[self integrationKeyForPushProvider:ApptentivePushProviderUrbanAirship]];
-		[integrationConfiguration removeObjectForKey:[self integrationKeyForPushProvider:ApptentivePushProviderAmazonSNS]];
-		[integrationConfiguration removeObjectForKey:[self integrationKeyForPushProvider:ApptentivePushProviderParse]];
+	[integrationConfiguration removeObjectForKey:[self integrationKeyForPushProvider:ApptentivePushProviderApptentive]];
+	[integrationConfiguration removeObjectForKey:[self integrationKeyForPushProvider:ApptentivePushProviderUrbanAirship]];
+	[integrationConfiguration removeObjectForKey:[self integrationKeyForPushProvider:ApptentivePushProviderAmazonSNS]];
+	[integrationConfiguration removeObjectForKey:[self integrationKeyForPushProvider:ApptentivePushProviderParse]];
 
-		[integrationConfiguration setObject:@{ @"token": token } forKey:[self integrationKeyForPushProvider:pushProvider]];
+	[integrationConfiguration setObject:@{ @"token": token } forKey:[self integrationKeyForPushProvider:pushProvider]];
 
-		device.integrationConfiguration = integrationConfiguration;
-	}];
+	self.backend.conversationManager.activeConversation.device.integrationConfiguration = integrationConfiguration;
+	[self.backend scheduleDeviceUpdate];
 }
 
 - (NSString *)integrationKeyForPushProvider:(ApptentivePushProvider)pushProvider {
@@ -330,19 +317,17 @@ static Apptentive *_sharedInstance;
 }
 
 - (void)addIntegration:(NSString *)integration withConfiguration:(NSDictionary *)configuration {
-	[self.backend.conversationManager.activeConversation updateDevice:^(ApptentiveMutableDevice *device) {
-		NSMutableDictionary *integrationConfiguration = [device.integrationConfiguration mutableCopy];
-		[integrationConfiguration setObject:configuration forKey:integration];
-		device.integrationConfiguration = integrationConfiguration;
-	}];
+	NSMutableDictionary *integrationConfiguration = [self.backend.conversationManager.activeConversation.device.integrationConfiguration mutableCopy];
+	[integrationConfiguration setObject:configuration forKey:integration];
+	self.backend.conversationManager.activeConversation.device.integrationConfiguration = integrationConfiguration;
+	[self.backend scheduleDeviceUpdate];
 }
 
 - (void)removeIntegration:(NSString *)integration {
-	[self.backend.conversationManager.activeConversation updateDevice:^(ApptentiveMutableDevice *device) {
-		NSMutableDictionary *integrationConfiguration = [device.integrationConfiguration mutableCopy];
-		[integrationConfiguration removeObjectForKey:integration];
-		device.integrationConfiguration = integrationConfiguration;
-	}];
+	NSMutableDictionary *integrationConfiguration = [self.backend.conversationManager.activeConversation.device.integrationConfiguration mutableCopy];
+	[integrationConfiguration removeObjectForKey:integration];
+	self.backend.conversationManager.activeConversation.device.integrationConfiguration = integrationConfiguration;
+	[self.backend scheduleDeviceUpdate];
 }
 
 - (BOOL)canShowInteractionForEvent:(NSString *)event {

@@ -33,4 +33,11 @@
 	return @"person";
 }
 
+- (NSDictionary *)contents {
+	NSMutableDictionary *contents = [super.contents mutableCopy];
+	[contents addEntriesFromDictionary:self.personDiffs];
+
+	return contents;
+}
+
 @end

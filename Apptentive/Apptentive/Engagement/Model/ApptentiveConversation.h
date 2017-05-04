@@ -16,7 +16,7 @@ typedef NS_ENUM(NSInteger, ApptentiveConversationState) {
 	ApptentiveConversationStateLoggedOut
 };
 
-@class ApptentivePerson, ApptentiveDevice, ApptentiveSDK, ApptentiveAppRelease, ApptentiveEngagement, ApptentiveMutablePerson, ApptentiveMutableDevice, ApptentiveVersion, ApptentiveConversationMetadataItem;
+@class ApptentivePerson, ApptentiveDevice, ApptentiveSDK, ApptentiveAppRelease, ApptentiveEngagement, ApptentiveVersion, ApptentiveConversationMetadataItem;
 @protocol ApptentiveConversationDelegate;
 
 /**
@@ -134,28 +134,17 @@ typedef NS_ENUM(NSInteger, ApptentiveConversationState) {
  */
 - (void)checkForDiffs;
 
+/**
+ Checks to see if the device differs from the last sent version, and notifies
+ the delegate if so.
+ */
+- (void)checkForDeviceDiffs;
 
 /**
- Makes a batch of changes to the conversation's person object.
- The updated person object is then compared to the previous version, and the
- delegate is notified of any differences.
-
- @param personUpdateBlock A block accepting a `ApptentiveMutablePerson`
- parameter which it modifies before returning.
+ Checks to see if the person differs from the last sent version, and notifies
+ the delegate if so.
  */
-- (void)updatePerson:(void (^)(ApptentiveMutablePerson *))personUpdateBlock;
-
-
-/**
- Makes a batch of changes to the conversation's device object.
- The updated device object is then compared to the previous version, and the
- delegate is notified of any differences.
-
- @param deviceUpdateBlock A block accepting a `ApptentiveMutableDevice`
- parameter which it modifies before returning.
- */
-- (void)updateDevice:(void (^)(ApptentiveMutableDevice *))deviceUpdateBlock;
-
+- (void)checkForPersonDiffs;
 
 /**
  Adds the specified code point to the engagement history, having zero

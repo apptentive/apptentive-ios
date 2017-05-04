@@ -120,7 +120,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 	// check if we have a 'pending' anonymous conversation
 	item = [self.conversationMetadata findItemFilter:^BOOL(ApptentiveConversationMetadataItem *item) {
-		return item.state == item.state == ApptentiveConversationStateAnonymousPending;
+		return item.state == ApptentiveConversationStateAnonymousPending;
 	}];
 	if (item != nil) {
 		ApptentiveConversation *conversation = [self loadConversation:item];
@@ -165,16 +165,16 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 - (BOOL)endActiveConversation {
 	if (self.activeConversation != nil) {
+		ApptentiveLogoutPayload *payload = [[ApptentiveLogoutPayload alloc] initWithToken:self.activeConversation.token];
+
+		[ApptentiveSerialRequest enqueuePayload:payload forConversation:self.activeConversation usingAuthToken:nil inContext:self.parentManagedObjectContext];
+
 		self.activeConversation.state = ApptentiveConversationStateLoggedOut;
 		[self.messageManager saveMessageStore];
 		_messageManager = nil;
 
 		[self saveConversation];
 		[self handleConversationStateChange:self.activeConversation];
-
-		ApptentiveLogoutPayload *payload = [[ApptentiveLogoutPayload alloc] initWithToken:self.activeConversation.token];
-
-		[ApptentiveSerialRequest enqueuePayload:payload forConversation:self.activeConversation usingAuthToken:nil inContext:self.parentManagedObjectContext];
 
 		_activeConversation = nil;
 

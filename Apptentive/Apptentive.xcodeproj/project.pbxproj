@@ -376,6 +376,8 @@
 		EF8EE39B1EB3FB120033E7A1 /* ApptentiveAssert.m in Sources */ = {isa = PBXBuildFile; fileRef = EF8EE39A1EB3FB120033E7A1 /* ApptentiveAssert.m */; };
 		EF8EE3A31EBA79EC0033E7A1 /* ATDataModel v5 to v6.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = EF8EE3A21EBA79EC0033E7A1 /* ATDataModel v5 to v6.xcmappingmodel */; };
 		EF8EE3A61EBA81880033E7A1 /* ATDataModel v5 to v6.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = EF8EE3A21EBA79EC0033E7A1 /* ATDataModel v5 to v6.xcmappingmodel */; };
+		EF8EE3AB1EBBA5D00033E7A1 /* ApptentiveJWT.h in Headers */ = {isa = PBXBuildFile; fileRef = EF8EE3A91EBBA5D00033E7A1 /* ApptentiveJWT.h */; };
+		EF8EE3AC1EBBA5D00033E7A1 /* ApptentiveJWT.m in Sources */ = {isa = PBXBuildFile; fileRef = EF8EE3AA1EBBA5D00033E7A1 /* ApptentiveJWT.m */; };
 		EFF3FE3B1E8C2F05006AD2B4 /* ApptentiveLog.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF3FE3A1E8C2F05006AD2B4 /* ApptentiveLog.m */; };
 		EFF3FE421E8C386E006AD2B4 /* ApptentiveLogTag.h in Headers */ = {isa = PBXBuildFile; fileRef = EFF3FE401E8C386E006AD2B4 /* ApptentiveLogTag.h */; };
 		EFF3FE431E8C386E006AD2B4 /* ApptentiveLogTag.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF3FE411E8C386E006AD2B4 /* ApptentiveLogTag.m */; };
@@ -791,6 +793,8 @@
 		EF8EE3971EB3F37B0033E7A1 /* ApptentiveConversationBaseRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveConversationBaseRequest.m; sourceTree = "<group>"; };
 		EF8EE39A1EB3FB120033E7A1 /* ApptentiveAssert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveAssert.m; sourceTree = "<group>"; };
 		EF8EE3A21EBA79EC0033E7A1 /* ATDataModel v5 to v6.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = "ATDataModel v5 to v6.xcmappingmodel"; sourceTree = "<group>"; };
+		EF8EE3A91EBBA5D00033E7A1 /* ApptentiveJWT.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveJWT.h; sourceTree = "<group>"; };
+		EF8EE3AA1EBBA5D00033E7A1 /* ApptentiveJWT.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveJWT.m; sourceTree = "<group>"; };
 		EFF3FE3A1E8C2F05006AD2B4 /* ApptentiveLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveLog.m; sourceTree = "<group>"; };
 		EFF3FE401E8C386E006AD2B4 /* ApptentiveLogTag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveLogTag.h; sourceTree = "<group>"; };
 		EFF3FE411E8C386E006AD2B4 /* ApptentiveLogTag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveLogTag.m; sourceTree = "<group>"; };
@@ -1365,6 +1369,8 @@
 				01A2D0931E490A9700C2103A /* NSDictionary+ApptentiveAdditions.m */,
 				01626EB71EB7D60C0064E73F /* NSData+Encryption.h */,
 				01626EB81EB7D60C0064E73F /* NSData+Encryption.m */,
+				EF8EE3A91EBBA5D00033E7A1 /* ApptentiveJWT.h */,
+				EF8EE3AA1EBBA5D00033E7A1 /* ApptentiveJWT.m */,
 			);
 			path = Misc;
 			sourceTree = "<group>";
@@ -1642,6 +1648,7 @@
 				01A2D1351E490A9700C2103A /* ApptentiveMutableDevice.h in Headers */,
 				01F1DFF81E5BBFBD009AB3D2 /* ApptentiveConversationMetadata.h in Headers */,
 				01A2D1AA1E490A9700C2103A /* ApptentiveAppConfiguration.h in Headers */,
+				EF8EE3AB1EBBA5D00033E7A1 /* ApptentiveJWT.h in Headers */,
 				01A2D1D81E490A9700C2103A /* ApptentiveDataManager.h in Headers */,
 				01A2D0FF1E490A9700C2103A /* ApptentiveNetworkImageIconView.h in Headers */,
 				0174772C1EA92BED00A0A949 /* ApptentiveSurveyResponsePayload.h in Headers */,
@@ -2015,6 +2022,7 @@
 				01A2D1281E490A9700C2103A /* ApptentiveEngagement.m in Sources */,
 				015408A51E54D8810027E196 /* ApptentiveTableView.m in Sources */,
 				01A2D12C1E490A9700C2103A /* ApptentiveInteraction.m in Sources */,
+				EF8EE3AC1EBBA5D00033E7A1 /* ApptentiveJWT.m in Sources */,
 				EFF3FE431E8C386E006AD2B4 /* ApptentiveLogTag.m in Sources */,
 				01A2D1C11E490A9700C2103A /* ATDataModel v2 to v3.xcmappingmodel in Sources */,
 				01A2D1021E490A9700C2103A /* ApptentiveNetworkImageView.m in Sources */,

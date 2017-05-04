@@ -46,6 +46,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 @property (strong, nullable, nonatomic) ApptentiveRequestOperation *loginRequestOperation;
 
 @property (strong, nullable, nonatomic) ApptentiveConversation *pendingLoggedInConversation;
+@property (strong, nullable, nonatomic) NSString *pendingLoggedInUserId; // FIXME: get rid off properties
 
 @property (readonly, nonatomic) NSString *metadataPath;
 @property (readonly, nonatomic) NSString *manifestPath;
@@ -150,7 +151,10 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	ApptentiveConversation *conversation = [NSKeyedUnarchiver unarchiveObjectWithFile:[self conversationArchivePathForDirectoryName:item.directoryName]];
 	conversation.state = item.state;
 	conversation.encryptionKey = item.encryptionKey;
+	conversation.userId = item.userId;
 
+	// TODO: check data consistency
+    
 	[self createMessageManagerForConversation:conversation];
 
 	return conversation;
@@ -244,6 +248,8 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	if (item.state == ApptentiveConversationStateLoggedIn) {
 		ApptentiveAssertNotNil(conversation.encryptionKey, @"Encryption key is nil");
 		item.encryptionKey = conversation.encryptionKey;
+		ApptentiveAssertNotNil(conversation.userId, @"User id is nil");
+		item.userId = conversation.userId;
 	}
 
 	[self saveMetadata];
@@ -311,7 +317,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
                 return;
             }
             
-			[self sendLoginRequestWithToken:token];
+			[self sendLoginRequestWithToken:token userId:userId];
 			return;
 		}
 
@@ -322,7 +328,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 				break;
 
 			case ApptentiveConversationStateAnonymous:
-				[self sendLoginRequestWithToken:token];
+				[self sendLoginRequestWithToken:token userId:userId];
 				break;
 
 			case ApptentiveConversationStateLoggedIn:
@@ -343,7 +349,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	[self.operationQueue addOperation:loginOperation];
 }
 
-- (void)sendLoginRequestWithToken:(NSString *)token {
+- (void)sendLoginRequestWithToken:(NSString *)token userId:(NSString *)userId {
 	NSString *path = @"/conversations";
 	NSMutableDictionary *payload = [NSMutableDictionary dictionary];
 	NSString *conversationIdentifier = nil;
@@ -368,6 +374,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		payload[@"token"] = token;
 	}
 
+	self.pendingLoggedInUserId = userId;
 	self.loginRequestOperation = [self.client requestOperationWithRequest:[[ApptentiveLoginRequest alloc] initWithConversationIdentifier:conversationIdentifier token:token] authToken:token delegate:self];
 
 	[self.client.operationQueue addOperation:self.loginRequestOperation];
@@ -510,6 +517,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	} else if (operation == self.loginRequestOperation) {
 		self.loginRequestOperation = nil;
 		self.pendingLoggedInConversation = nil;
+		self.pendingLoggedInUserId = nil;
 
 		[self completeLoginSuccess:NO error:error];
 	}
@@ -535,26 +543,41 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
         [self failLoginWithErrorCode:ApptentiveInternalInconsistency failureReason:@"Conversation response did not include encryption key."];
 		return;
 	}
-
-	if (self.activeConversation == nil && self.pendingLoggedInConversation != nil) {
-		// If we were previously logged out, there will be no active conversation, and we should have a pending logged in conversation.
-
-		// Make the pending conversation the active one.
-		_activeConversation = self.pendingLoggedInConversation;
-		self.pendingLoggedInConversation = nil;
-
-		if (![self updateActiveConversationWithResponse:loginResponse]) {
+    
+    ApptentiveAssertNotNil(self.pendingLoggedInUserId, @"Missing user id");
+    if (self.pendingLoggedInUserId == nil) {
+        [self failLoginWithErrorCode:ApptentiveInternalInconsistency failureReason:@"Missing user id"];
+        return;
+    }
+    
+    // if we were previously logged out we might end up with no active conversation
+    if (self.activeConversation == nil) {
+        ApptentiveConversationMetadataItem *conversationItem = [self.conversationMetadata findItemFilter:^BOOL(ApptentiveConversationMetadataItem *item) {
+            return [item.userId isEqualToString:self.pendingLoggedInUserId];
+        }];
+        
+        if (conversationItem == nil) {
+            [self failLoginWithErrorCode:ApptentiveInternalInconsistency failureReason:@"Unable to find an existing conversation with for user: '%@'", self.pendingLoggedInUserId];
+            return;
+        }
+        
+        _activeConversation = [self loadConversation:conversationItem];
+    } else if (self.pendingLoggedInConversation != nil) {
+        _activeConversation = self.pendingLoggedInConversation;
+        self.pendingLoggedInConversation = nil;
+        
+        if (![self updateActiveConversationWithResponse:loginResponse]) {
             [self failLoginWithErrorCode:ApptentiveInternalInconsistency failureReason:@"Conversation response did not include required information."];
-			return;
-		}
+            return;
+        }
+        
+        [self createMessageManagerForConversation:self.activeConversation];
+    }
 
-		[self createMessageManagerForConversation:self.activeConversation];
-	}
-
-	_activeConversation.state = ApptentiveConversationStateLoggedIn;
-
-	_activeConversation.encryptionKey = [NSData apptentive_dataWithHexString:encryptionKey];
-	ApptentiveAssertNotNil(_activeConversation.encryptionKey, "Apptentive encryption key should be not nil");
+	self.activeConversation.state = ApptentiveConversationStateLoggedIn;
+    self.activeConversation.userId = self.pendingLoggedInUserId;
+	self.activeConversation.encryptionKey = [NSData apptentive_dataWithHexString:encryptionKey];
+	ApptentiveAssertNotNil(self.activeConversation.encryptionKey, "Apptentive encryption key should be not nil");
 
 	[self handleConversationStateChange:self.activeConversation];
 

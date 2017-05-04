@@ -50,14 +50,16 @@
 /**
  Initializes a new backend object.
 
- @param APIKey The Apptentive API key for the application.
+ @param appKey The Apptentive App key for the application.
+ @param signature The Apptentive App signature for the application.
  @param baseURL The base URL of the server with which the SDK communicates.
  @param storagePath The path (relative to the App's Application Support directory) to use for storage.
  @return The newly-initialized backend.
  */
-- (instancetype)initWithAPIKey:(NSString *)APIKey baseURL:(NSURL *)baseURL storagePath:(NSString *)storagePath;
+- (instancetype)initWithAppKey:(NSString *)appKey signature:(NSString *)signature baseURL:(NSURL *)baseURL storagePath:(NSString *)storagePath;
 
-@property (readonly, strong, nonatomic) NSString *APIKey;
+@property (readonly, strong, nonatomic) NSString *appKey;
+@property (readonly, strong, nonatomic) NSString *appSignature;
 @property (readonly, strong, nonatomic) NSURL *baseURL;
 @property (readonly, strong, nonatomic) NSString *storagePath;
 

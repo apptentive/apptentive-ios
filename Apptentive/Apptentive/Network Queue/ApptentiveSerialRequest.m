@@ -20,6 +20,7 @@
 
 @dynamic apiVersion;
 @dynamic attachments;
+@dynamic contentType;
 @dynamic conversationIdentifier;
 @dynamic authToken;
 @dynamic date;
@@ -27,6 +28,7 @@
 @dynamic method;
 @dynamic path;
 @dynamic payload;
+@dynamic encrypted;
 
 + (BOOL)enqueuePayload:(ApptentivePayload *)payload forConversation:(ApptentiveConversation *)conversation usingAuthToken:(NSString *)authToken inContext:(NSManagedObjectContext *)context {
 	ApptentiveAssertNotNil(conversation, @"Conversation id is nil");
@@ -61,6 +63,7 @@
 	request.conversationIdentifier = conversation.identifier;
 	request.apiVersion = payload.apiVersion;
 	request.authToken = authToken;
+	request.contentType = @"application/json";
 
 	NSError *error;
 	request.payload = payload.payload;
@@ -71,6 +74,12 @@
 	}
 	request.attachments = [NSOrderedSet orderedSetWithArray:attachmentArray];
 
+	if (conversation.state == ApptentiveConversationStateLoggedIn) {
+		ApptentiveAssertNotNil(conversation.encryptionKey, @"Encryption key is nil for a logged-in conversation!");
+
+		[request encryptWithKey:conversation.encryptionKey];
+	}
+
 	// Doing this synchronously triggers Core Data's recursive save detection.
 	[context performBlock:^{
 		NSError *saveError;
@@ -80,10 +89,6 @@
 	}];
 
 	return YES;
-}
-
-- (NSString *)contentType {
-	return @"application/json";
 }
 
 - (void)awakeFromFetch {
@@ -126,6 +131,8 @@
 	ApptentiveAssertNotNil(encryptedPayload, @"Unable to encrypt payload");
 
 	self.payload = encryptedPayload;
+	self.encrypted = YES;
+	self.contentType = @"application/octet-stream";
 
 	return self.payload != nil;
 }

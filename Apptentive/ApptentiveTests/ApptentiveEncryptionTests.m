@@ -26,6 +26,8 @@
 
 @property (strong, nonatomic) NSData *synthesizedPayload;
 @property (strong, nonatomic) NSString *synthesizedAuthToken;
+@property (strong, nonatomic) NSString *synthesizedContentType;
+@property (assign, nonatomic) BOOL synthesizedEncrypted;
 
 @end
 
@@ -82,6 +84,12 @@
 	XCTAssertEqualObjects(decryptedJSON[@"event"][@"label"], @"test_event");
 }
 
+- (void)testKeyParsing {
+	NSData *hexKeyData = [NSData apptentive_dataWithHexString:@"1234567890ABCDEF1234567890ABCDEF"];
+
+	XCTAssertEqualObjects(hexKeyData.description, @"<12345678 90abcdef 12345678 90abcdef>");
+}
+
 @end
 
 
@@ -92,6 +100,8 @@
 
 @synthesize synthesizedPayload = _synthesizedPayload;
 @synthesize synthesizedAuthToken = _synthesizedAuthToken;
+@synthesize synthesizedContentType = _synthesizedContentType;
+@synthesize synthesizedEncrypted = _synthesizedEncrypted;
 
 - (void)setAuthToken:(NSString *)authToken {
 	self.synthesizedAuthToken = authToken;
@@ -107,6 +117,22 @@
 
 - (NSData *)payload {
 	return self.synthesizedPayload;
+}
+
+- (void)setContentType:(NSString *)contentType {
+	self.synthesizedContentType = contentType;
+}
+
+- (NSString *)contentType {
+	return self.synthesizedContentType;
+}
+
+- (void)setEncrypted:(BOOL)encrypted {
+	self.synthesizedEncrypted = encrypted;
+}
+
+- (BOOL)encrypted {
+	return self.synthesizedEncrypted;
 }
 
 @end

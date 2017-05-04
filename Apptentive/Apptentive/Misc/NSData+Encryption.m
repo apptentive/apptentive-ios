@@ -51,4 +51,24 @@
 	}
 }
 
++ (nullable instancetype)apptentive_dataWithHexString:(NSString *)string {
+	if (string.length % 2 != 0) {
+		ApptentiveLogError(@"Key length must be an even number of characters: '%@'", string);
+		return nil;
+	}
+
+	NSMutableData *result = [NSMutableData dataWithCapacity:(string.length / 2)];
+
+	for (NSInteger i = 0; i < string.length; i += 2) {
+		NSString *substring = [string substringWithRange:NSMakeRange(i, 2)];
+		NSScanner *scanner = [NSScanner scannerWithString:substring];
+		unsigned int byte;
+		[scanner scanHexInt:&byte];
+
+		[result appendBytes:&byte length:1];
+	}
+
+	return result;
+}
+
 @end

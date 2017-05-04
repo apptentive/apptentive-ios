@@ -19,7 +19,7 @@ Pod::Spec.new do |s|
 		'Apptentive/Apptentive.storyboard'
 		] }
   s.weak_frameworks = 'StoreKit', 'CoreTelephony'
-  s.prefix_header_contents = '#import "ApptentiveLog.h"'
+  s.prefix_header_contents = '#import "ApptentiveLog.h"', '#import "ApptentiveAssert.h"', '#import "ApptentiveSafeCollections.h"'
   s.pod_target_xcconfig = { "GCC_PREPROCESSOR_DEFINITIONS[config=Debug]" => "APPTENTIVE_LOGGING_LEVEL_DEBUG=1 APPTENTIVE_LOGGING_LEVEL_INFO=1 APPTENTIVE_LOGGING_LEVEL_WARNING=1 APPTENTIVE_LOGGING_LEVEL_ERROR=1 APPTENTIVE_COCOAPODS=1 APPTENTIVE_DEBUG=1",
   "GCC_PREPROCESSOR_DEFINITIONS[config=Release]" => "APPTENTIVE_LOGGING_LEVEL_INFO=1 APPTENTIVE_LOGGING_LEVEL_WARNING=1 APPTENTIVE_LOGGING_LEVEL_ERROR=1 APPTENTIVE_COCOAPODS=1" }
   s.public_header_files = 'Apptentive/Apptentive/Apptentive.h', 'Apptentive/Apptentive/ApptentiveStyleSheet.h'

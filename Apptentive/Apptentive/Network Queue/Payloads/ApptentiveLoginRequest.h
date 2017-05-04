@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (readonly, nonatomic) NSString *conversationIdentifier;
 @property (readonly, nonatomic) NSString *token;
 
-- (instancetype)initWithConversationIdentifier:(NSString *_Nullable)conversationIdentifier token:(NSString *)token;
+- (nullable instancetype)initWithConversationIdentifier:(NSString *)conversationIdentifier token:(NSString *)token;
 
 @end
 

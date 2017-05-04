@@ -68,4 +68,8 @@
 	return nil;
 }
 
+- (BOOL)encrypted {
+	return NO;
+}
+
 @end

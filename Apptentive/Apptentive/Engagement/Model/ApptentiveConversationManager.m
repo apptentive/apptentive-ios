@@ -26,6 +26,7 @@
 #import "ApptentiveLoginRequest.h"
 #import "ApptentiveInteractionsRequest.h"
 #import "ApptentiveSafeCollections.h"
+#import "NSData+Encryption.h"
 
 static NSString *const ConversationMetadataFilename = @"conversation-v1.meta";
 static NSString *const ConversationFilename = @"conversation-v1.archive";
@@ -119,7 +120,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 	// check if we have a 'pending' anonymous conversation
 	item = [self.conversationMetadata findItemFilter:^BOOL(ApptentiveConversationMetadataItem *item) {
-		return item.state == item.state == ApptentiveConversationStateAnonymousPending;
+		return item.state == ApptentiveConversationStateAnonymousPending;
 	}];
 	if (item != nil) {
 		ApptentiveConversation *conversation = [self loadConversation:item];
@@ -164,16 +165,16 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 - (BOOL)endActiveConversation {
 	if (self.activeConversation != nil) {
+		ApptentiveLogoutPayload *payload = [[ApptentiveLogoutPayload alloc] initWithToken:self.activeConversation.token];
+
+		[ApptentiveSerialRequest enqueuePayload:payload forConversation:self.activeConversation usingAuthToken:nil inContext:self.parentManagedObjectContext];
+
 		self.activeConversation.state = ApptentiveConversationStateLoggedOut;
 		[self.messageManager saveMessageStore];
 		_messageManager = nil;
 
 		[self saveConversation];
 		[self handleConversationStateChange:self.activeConversation];
-
-		ApptentiveLogoutPayload *payload = [[ApptentiveLogoutPayload alloc] initWithToken:self.activeConversation.token];
-
-		[ApptentiveSerialRequest enqueuePayload:payload forConversation:self.activeConversation usingAuthToken:Apptentive.shared.APIKey inContext:self.parentManagedObjectContext];
 
 		_activeConversation = nil;
 
@@ -188,7 +189,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 #pragma mark - Conversation Token Fetching
 
 - (void)fetchConversationToken:(ApptentiveConversation *)conversation {
-	self.conversationOperation = [self.client requestOperationWithRequest:[[ApptentiveConversationRequest alloc] initWithConversation:conversation] authToken:Apptentive.shared.APIKey delegate:self];
+	self.conversationOperation = [self.client requestOperationWithRequest:[[ApptentiveConversationRequest alloc] initWithConversation:conversation] authToken:nil delegate:self];
 
 	[self.client.operationQueue addOperation:self.conversationOperation];
 }
@@ -341,9 +342,6 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 		// Add the token to payload…
 		payload[@"token"] = token;
-
-		// …and use API key as the authToken
-		token = Apptentive.shared.APIKey;
 	}
 
 	self.loginRequestOperation = [self.client requestOperationWithRequest:[[ApptentiveLoginRequest alloc] initWithConversationIdentifier:conversationIdentifier token:token] authToken:token delegate:self];
@@ -520,7 +518,9 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	}
 
 	_activeConversation.state = ApptentiveConversationStateLoggedIn;
-	_activeConversation.encryptionKey = encryptionKey;
+
+	_activeConversation.encryptionKey = [NSData apptentive_dataWithHexString:encryptionKey];
+	ApptentiveAssertNotNil(_activeConversation.encryptionKey, "Apptentive encryption key should be not nil");
 
 	[self handleConversationStateChange:self.activeConversation];
 

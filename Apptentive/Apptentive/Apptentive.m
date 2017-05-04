@@ -46,8 +46,43 @@ NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPers
 
 NSString *const ApptentiveErrorDomain = @"com.apptentive";
 
+static Apptentive *_sharedInstance;
+
+
+@implementation ApptentiveConfiguration
+
++ (nullable instancetype)configurationWithAppKey:(NSString *)appKey appSignature:(NSString *)appSignature {
+	return [[self alloc] initWithAppKey:appKey appSignature:appSignature];
+}
+
+- (nullable instancetype)initWithAppKey:(NSString *)appKey appSignature:(NSString *)appSignature {
+	self = [super init];
+	if (self) {
+		if (appKey.length == 0) {
+			ApptentiveLogError(@"Can't create Apptentive configuration: app key is nil or empty");
+			return nil;
+		}
+
+		if (appSignature.length == 0) {
+			ApptentiveLogError(@"Can't create Apptentive configuration: app signature is nil or empty");
+			return nil;
+		}
+
+		_appKey = [appKey copy];
+		_appSignature = [appSignature copy];
+		_baseURL = [NSURL URLWithString:@"https://api.apptentive.com/"];
+	}
+	return self;
+}
+
+@end
+
 
 @interface Apptentive () <ApptentiveBannerViewControllerDelegate>
+
+@property (copy, nonatomic) NSString *appKey;
+@property (copy, nonatomic) NSString *appSignature;
+
 @end
 
 
@@ -56,56 +91,45 @@ NSString *const ApptentiveErrorDomain = @"com.apptentive";
 @synthesize style = _style;
 
 + (instancetype)sharedConnection {
-	static Apptentive *sharedConnection = nil;
-	static dispatch_once_t onceToken;
-	dispatch_once(&onceToken, ^{
-		sharedConnection = [[Apptentive alloc] init];
-	});
-	return sharedConnection;
+	if (_sharedInstance == nil) {
+		ApptentiveLogWarning(@"Apptentive instance is not initialized. Make sure you've registered it with your app key and signature");
+	}
+	return _sharedInstance;
 }
 
 + (instancetype)shared {
 	return [self sharedConnection];
 }
 
-- (id)init {
+- (id)initWithConfiguration:(ApptentiveConfiguration *)configuration {
 	self = [super init];
 
 	if (self) {
 		_style = [[ApptentiveStyleSheet alloc] init];
+		_appKey = configuration.appKey;
+		_appSignature = configuration.appSignature;
+		_baseURL = configuration.baseURL;
+		_backend = [[ApptentiveBackend alloc] initWithAppKey:_appKey
+												   signature:_appSignature
+													 baseURL:_baseURL
+												 storagePath:@"com.apptentive.feedback"];
+
+		if (configuration.distributionName && configuration.distributionVersion) {
+			[ApptentiveSDK setDistributionName:configuration.distributionName];
+			[ApptentiveSDK setDistributionVersion:[[ApptentiveVersion alloc] initWithString:configuration.distributionVersion]];
+		}
 
 		ApptentiveLogInfo(@"Apptentive SDK Version %@", [ApptentiveSDK SDKVersion].versionString);
 	}
 	return self;
 }
 
-- (void)setAPIKey:(NSString *)APIKey {
-	[self setAPIKey:APIKey baseURL:[NSURL URLWithString:@"https://api.apptentive.com/"]];
-}
-
-- (void)setAPIKey:(NSString *)APIKey distributionName:(NSString *)distributionName distributionVersion:(NSString *)distributionVersionString {
-	[ApptentiveSDK setDistributionName:distributionName];
-	[ApptentiveSDK setDistributionVersion:[[ApptentiveVersion alloc] initWithString:distributionVersionString]];
-
-	self.APIKey = APIKey;
-}
-
-- (void)setAPIKey:(NSString *)APIKey baseURL:(NSURL *)baseURL {
-	if (![self.APIKey isEqualToString:APIKey] || ![baseURL isEqual:self.baseURL]) {
-		ApptentiveLogDebug(@"Apptentive API Key: %@", APIKey);
-
-		_APIKey = APIKey;
-		_baseURL = baseURL;
-		_backend = [[ApptentiveBackend alloc] initWithAPIKey:APIKey baseURL:baseURL storagePath:@"com.apptentive.feedback"];
++ (void)registerWithConfiguration:(ApptentiveConfiguration *)configuration {
+	if (_sharedInstance != nil) {
+		ApptentiveLogWarning(@"Apptentive instance is already initialized");
+		return;
 	}
-}
-
-- (NSString *)apiKey {
-	return self.APIKey;
-}
-
-- (void)setApiKey:(NSString *)apiKey {
-	self.APIKey = apiKey;
+	_sharedInstance = [[Apptentive alloc] initWithConfiguration:configuration];
 }
 
 - (id<ApptentiveStyle>)styleSheet {

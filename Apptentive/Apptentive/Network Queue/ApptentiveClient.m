@@ -23,11 +23,13 @@
 @synthesize URLSession = _URLSession;
 @synthesize backoffDelay = _backoffDelay;
 
-- (instancetype)initWithBaseURL:(NSURL *)baseURL {
+- (instancetype)initWithBaseURL:(NSURL *)baseURL appKey:(nonnull NSString *)appKey appSignature:(nonnull NSString *)appSignature {
 	self = [super init];
 
 	if (self) {
 		_baseURL = baseURL;
+		_appKey = appKey;
+		_appSignature = appSignature;
 		_operationQueue = [[NSOperationQueue alloc] init];
 
 		NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
@@ -74,7 +76,14 @@
 	URLRequest.HTTPMethod = request.method;
 	[URLRequest addValue:request.contentType forHTTPHeaderField:@"Content-Type"];
 	[URLRequest addValue:request.apiVersion forHTTPHeaderField:@"X-API-Version"];
-	[URLRequest addValue:[@"OAuth " stringByAppendingString:authToken] forHTTPHeaderField:@"Authorization"];
+	[URLRequest addValue:_appKey forHTTPHeaderField:@"APPTENTIVE-APP-KEY"];
+	[URLRequest addValue:_appSignature forHTTPHeaderField:@"APPTENTIVE-APP-SIGNATURE"];
+	if (authToken) {
+		[URLRequest addValue:[@"OAuth " stringByAppendingString:authToken] forHTTPHeaderField:@"Authorization"];
+	}
+	if (request.encrypted) {
+		[URLRequest addValue:@"true" forHTTPHeaderField:@"APPTENTIVE-ENCRYPTED"];
+	}
 
 	return [[ApptentiveRequestOperation alloc] initWithURLRequest:URLRequest delegate:delegate dataSource:self];
 }

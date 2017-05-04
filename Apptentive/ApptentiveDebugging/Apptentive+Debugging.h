@@ -33,7 +33,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (readonly, nonatomic) NSURL *_Nullable baseURL;
 @property (readonly, nonatomic) NSString *storagePath;
 @property (readonly, nonatomic) NSString *SDKVersion;
-@property (readonly, nonatomic) NSString *_Nullable APIKey;
 @property (readonly, nonatomic) UIView *_Nullable unreadAccessoryView;
 @property (readonly, nonatomic) NSString *_Nullable manifestJSON;
 @property (readonly, nonatomic) NSDictionary<NSString *, NSObject *> *deviceInfo;

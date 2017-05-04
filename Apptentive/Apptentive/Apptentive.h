@@ -76,14 +76,41 @@ typedef NS_ENUM(NSUInteger, ApptentiveLogLevel) {
 	ApptentiveLogLevelVerbose = 5
 };
 
+/*
+ * Configuration options for Apptentive. When Apptentive instance 
+ * is created, a copy of the configuration object is made -
+ * you cannot modify the configuration of a Apptentive instance after 
+ * it has been created.
+ */
+@interface ApptentiveConfiguration : NSObject
+
+/** Application key */
+@property (copy, nonatomic, readonly) NSString *appKey;
+
+/** Application signature */
+@property (copy, nonatomic, readonly) NSString *appSignature;
+
+/** Backend URL */
+@property (copy, nonatomic) NSURL *baseURL;
+
+/** The name of the distribution that includes the Apptentive SDK. For example "Cordova". */
+@property (copy, nonatomic, nullable) NSString *distributionName;
+
+/** The version of the distribution that includes the Apptentive SDK. */
+@property (copy, nonatomic, nullable) NSString *distributionVersion;
+
++ (nullable instancetype)configurationWithAppKey:(NSString *)appKey appSignature:(NSString *)appSignature;
+
+@end
+
 /**
  `Apptentive` is a singleton which is used as the main point of entry for the Apptentive service.
 
  ## Configuration
 
-Before calling any other methods on the shared `Apptentive` instance, set the API key:
-
-     [[Apptentive sharedConnection].APIKey = @"your API key here";
+Before calling any other methods on the shared `Apptentive` instance, register you app key and signature:
+     ApptentiveConfiguration *configuration = [ApptentiveConfiguration configurationWithAppKey:@"your APP key here" appSignature:@"your APP signature here"];
+     [Apptentive registerWithConfiguration:configuration];
 
 ## Engagement Events
 
@@ -128,31 +155,8 @@ Before calling any other methods on the shared `Apptentive` instance, set the AP
 @property (class, readonly, nonatomic) Apptentive *shared;
 #endif
 
-/**
- The API key for Apptentive.
-
- This key is found on the Apptentive website under Settings, API & Development.
- */
-@property (copy, nonatomic, nullable) NSString *APIKey;
-
-/**
- Sets the API key along with distribution name and distribution version.
- This is used when the Apptentive SDK is bundled into another SDK for
- distribution, for example Apache Cordova.
- 
- @param APIKey The API key to use for the first connection to the Apptentive API.
- @param distributionName The name of the distribution that includes the Apptentive SDK. For example "Cordova".
- @param distributionVersion The version of the distribution that includes the Apptentive SDK.
- */
-- (void)setAPIKey:(NSString *)APIKey distributionName:(NSString *)distributionName distributionVersion:(NSString *)distributionVersion;
-
-/**
-  APIKey property with legacy capitalization.
-
- @deprecated Capitalize `API` in the property/setter name.
- */
-
-@property (copy, nonatomic, nullable) NSString *apiKey __deprecated_msg("Use 'APIKey' instead.") APPTENTIVE_SWIFT_UNAVAILABLE("Creates ambiguous name when translated to Swift 3.");
+/** Initializes Apptentive instance with a given configuration */
++ (void)registerWithConfiguration:(ApptentiveConfiguration *)configuration;
 
 /**
  The app's iTunes App ID.

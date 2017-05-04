@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable instancetype)initWithAlg:(NSString *)alg type:(NSString *)type payload:(NSDictionary *)payload;
 
-+ (nullable instancetype)JWTWithContentOfString:(NSString *)string;
++ (nullable instancetype)JWTWithContentOfString:(NSString *)string error:(NSError **)error;
 
 @end
 

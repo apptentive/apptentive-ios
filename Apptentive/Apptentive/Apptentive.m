@@ -298,6 +298,7 @@ static Apptentive *_sharedInstance;
 	[integrationConfiguration setObject:@{ @"token": token } forKey:[self integrationKeyForPushProvider:pushProvider]];
 
 	self.backend.conversationManager.activeConversation.device.integrationConfiguration = integrationConfiguration;
+	[self.backend scheduleDeviceUpdate];
 }
 
 - (NSString *)integrationKeyForPushProvider:(ApptentivePushProvider)pushProvider {
@@ -319,12 +320,14 @@ static Apptentive *_sharedInstance;
 	NSMutableDictionary *integrationConfiguration = [self.backend.conversationManager.activeConversation.device.integrationConfiguration mutableCopy];
 	[integrationConfiguration setObject:configuration forKey:integration];
 	self.backend.conversationManager.activeConversation.device.integrationConfiguration = integrationConfiguration;
+	[self.backend scheduleDeviceUpdate];
 }
 
 - (void)removeIntegration:(NSString *)integration {
 	NSMutableDictionary *integrationConfiguration = [self.backend.conversationManager.activeConversation.device.integrationConfiguration mutableCopy];
 	[integrationConfiguration removeObjectForKey:integration];
 	self.backend.conversationManager.activeConversation.device.integrationConfiguration = integrationConfiguration;
+	[self.backend scheduleDeviceUpdate];
 }
 
 - (BOOL)canShowInteractionForEvent:(NSString *)event {

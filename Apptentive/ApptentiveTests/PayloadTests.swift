@@ -76,6 +76,68 @@ class PayloadTests: XCTestCase {
 		}
 	}
 
+	func testDevicePayload() {
+		let payload = ApptentiveDevicePayload(deviceDiffs: ["custom_data": ["foo": true]])
+
+		if let contents = self.testBoilerplateForPayload(payload, containerName: "device"), let customData = contents["custom_data"] as? [String:Any] {
+			XCTAssertEqual(customData["foo"] as? Bool, true)
+		} else {
+			XCTFail()
+		}
+	}
+
+	func testPersonPayload() {
+		let payload = ApptentivePersonPayload(personDiffs: ["custom_data": ["foo": true], "name": "Frank"]);
+
+		if let contents = self.testBoilerplateForPayload(payload, containerName: "person"), let customData = contents["custom_data"] as? [String:Any] {
+			XCTAssertEqual(contents["name"] as? String, "Frank")
+			XCTAssertEqual(customData["foo"] as? Bool, true)
+		} else {
+			XCTFail()
+		}
+	}
+
+	func testLogoutPayload() {
+		let payload = ApptentiveLogoutPayload(token: "abc123")
+
+		do {
+			if let JSONDictionary = try JSONSerialization.jsonObject(with: payload.payload!, options: []) as? [String: Any] {
+				XCTAssertEqual(JSONDictionary["token"] as? String, "abc123")
+			} else {
+				XCTFail("can't decode JSON")
+			}
+		} catch {
+			XCTFail("can't decode JSON")
+		}
+	}
+
+	func testSDKAppReleasePayload() {
+		let conversation = ApptentiveConversation()
+		let payload = ApptentiveSDKAppReleasePayload(conversation: conversation)
+
+		do {
+			if let JSONDictionary = try JSONSerialization.jsonObject(with: payload.payload!, options: []) as? [String: Any], let appRelease = JSONDictionary["app_release"] as? [String: Any] {
+				XCTAssertEqual(appRelease["type"] as? String, "ios")
+				XCTAssertEqual(appRelease["cf_bundle_short_version_string"] as? String, conversation.appRelease.version.versionString)
+				XCTAssertEqual(appRelease["cf_bundle_version"] as? String, conversation.appRelease.build.versionString)
+				XCTAssertEqual((appRelease["app_store_receipt"] as? [String: Any])?["has_receipt"] as? Bool, conversation.appRelease.hasAppStoreReceipt)
+				XCTAssertEqual(appRelease["debug"] as? Bool, conversation.appRelease.isDebugBuild)
+				XCTAssertEqual(appRelease["overriding_styles"] as? Bool, conversation.appRelease.isOverridingStyles)
+
+				XCTAssertEqual(appRelease["sdk_version"] as? String, kApptentiveVersionString)
+				XCTAssertEqual(appRelease["sdk_programming_language"] as? String, "Objective-C")
+				XCTAssertEqual(appRelease["sdk_author_name"] as? String, "Apptentive, Inc.")
+				XCTAssertEqual(appRelease["sdk_platform"] as? String, "iOS")
+				XCTAssertEqual(appRelease["sdk_distribution"] as? String, "source")
+				XCTAssertEqual(appRelease["sdk_distribution_version"] as? String, kApptentiveVersionString)
+			} else {
+				XCTFail("can't decode JSON")
+			}
+		} catch {
+			XCTFail("can't decode JSON")
+		}
+	}
+
 // MARK: Helper functions
 	
 	func testBoilerplateForPayload(_ payload: ApptentivePayload, containerName: String) -> [String: Any]? {

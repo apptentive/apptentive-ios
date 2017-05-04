@@ -6,8 +6,15 @@
 #import "ApptentiveConversationManager.h"
 
 #import "ApptentiveEventPayload.h"
+#import "ApptentiveAppRelease.h"
+#import "ApptentiveSDK.h"
 #import "ApptentiveMessagePayload.h"
 #import "ApptentiveSurveyResponsePayload.h"
+#import "ApptentiveDevicePayload.h"
+#import "ApptentivePersonPayload.h"
+#import "ApptentiveLogoutPayload.h"
+#import "ApptentiveSDKAppReleasePayload.h"
+#import "ApptentiveVersion.h"
 
 #import "ApptentiveMessage.h"
 #import "ApptentiveAttachment.h"

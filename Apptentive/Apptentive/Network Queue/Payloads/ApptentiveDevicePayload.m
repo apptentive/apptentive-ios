@@ -33,4 +33,11 @@
 	return @"device";
 }
 
+- (NSDictionary *)contents {
+	NSMutableDictionary *contents = [super.contents mutableCopy];
+	[contents addEntriesFromDictionary:self.deviceDiffs];
+
+	return contents;
+}
+
 @end

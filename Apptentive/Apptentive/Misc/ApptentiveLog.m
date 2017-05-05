@@ -82,8 +82,6 @@ static void _ApptentiveLogHelper(ApptentiveLogLevel level, id arg, va_list ap) {
 		NSString *threadName = getCurrentThreadName();
 		NSString *message = [[NSString alloc] initWithFormat:format arguments:ap];
 
-		va_end(ap);
-
 		NSMutableString *fullMessage = [[NSMutableString alloc] initWithFormat:@"%s/Apptentive: ", _logLevelNameLookup[level]];
 		if (threadName != nil) {
 			[fullMessage appendFormat:@"[%@] ", threadName];

@@ -19,5 +19,6 @@
 @property (assign, nonatomic) ApptentiveConversationState state;
 @property (strong, nonatomic) NSString *conversationIdentifier;
 @property (strong, nonatomic) NSString *directoryName;
+@property (strong, nonatomic) NSString *userId;
 
 @end

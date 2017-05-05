@@ -395,11 +395,10 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	[self scheduleConversationSave];
 }
 
-- (void)conversation:(ApptentiveConversation *)conversation appReleaseOrSDKDidChange:(NSDictionary *)payload {
+- (void)conversationAppReleaseOrSDKDidChange:(ApptentiveConversation *)conversation {
 	NSBlockOperation *conversationDidChangeOperation = [NSBlockOperation blockOperationWithBlock:^{
 		NSManagedObjectContext *context = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
 
-		// TODO: sort out which payload exactly we're talking about here
 		ApptentiveSDKAppReleasePayload *payload = [[ApptentiveSDKAppReleasePayload alloc] initWithConversation:self.activeConversation];
 
 		context.parentContext = self.parentManagedObjectContext;

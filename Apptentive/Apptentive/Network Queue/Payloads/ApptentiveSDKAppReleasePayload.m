@@ -31,7 +31,9 @@
 }
 
 - (NSDictionary *)JSONDictionary {
-	return self.conversation.conversationUpdateJSON;
+	return @{
+		@"app_release": self.conversation.appReleaseSDKJSON,
+	};
 }
 
 @end

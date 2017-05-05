@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0116D5271E92F516001DA5CF /* ApptentiveMessageStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 0116D5251E92F516001DA5CF /* ApptentiveMessageStore.h */; };
 		0116D5281E92F516001DA5CF /* ApptentiveMessageStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 0116D5261E92F516001DA5CF /* ApptentiveMessageStore.m */; };
+		01216C501EBBB53E0062BD0D /* RequestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01216C4F1EBBB53E0062BD0D /* RequestTests.swift */; };
 		012285481E4A81AD00DD2F58 /* Apptentive_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2CFAB1E490A9600C2103A /* Apptentive_Private.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		012285491E4A831500DD2F58 /* Apptentive.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01A2CF911E49062700C2103A /* Apptentive.framework */; };
 		0134EB121EA991AE00DA4925 /* ApptentiveLogoutPayload.h in Headers */ = {isa = PBXBuildFile; fileRef = 0134EB101EA991AE00DA4925 /* ApptentiveLogoutPayload.h */; };
@@ -397,6 +398,7 @@
 /* Begin PBXFileReference section */
 		0116D5251E92F516001DA5CF /* ApptentiveMessageStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveMessageStore.h; sourceTree = "<group>"; };
 		0116D5261E92F516001DA5CF /* ApptentiveMessageStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveMessageStore.m; sourceTree = "<group>"; };
+		01216C4F1EBBB53E0062BD0D /* RequestTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestTests.swift; sourceTree = "<group>"; };
 		0134EB101EA991AE00DA4925 /* ApptentiveLogoutPayload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveLogoutPayload.h; sourceTree = "<group>"; };
 		0134EB111EA991AE00DA4925 /* ApptentiveLogoutPayload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveLogoutPayload.m; sourceTree = "<group>"; };
 		0134EB141EA992F900DA4925 /* ApptentiveSDKAppReleasePayload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveSDKAppReleasePayload.h; sourceTree = "<group>"; };
@@ -925,6 +927,7 @@
 				01917D431E5E0B7400B37D82 /* ApptentiveTests-Bridging-Header.h */,
 				0174772E1EA92D7C00A0A949 /* PayloadTests.swift */,
 				01626EBB1EB7E5B90064E73F /* ApptentiveEncryptionTests.m */,
+				01216C4F1EBBB53E0062BD0D /* RequestTests.swift */,
 			);
 			path = ApptentiveTests;
 			sourceTree = "<group>";
@@ -2118,6 +2121,7 @@
 				01A2D24B1E4946D600C2103A /* CriteriaTests.m in Sources */,
 				01A2D2461E4946D600C2103A /* ApptentiveConversationTests.m in Sources */,
 				EF8EE3A61EBA81880033E7A1 /* ATDataModel v5 to v6.xcmappingmodel in Sources */,
+				01216C501EBBB53E0062BD0D /* RequestTests.swift in Sources */,
 				01A2D2981E49638A00C2103A /* ATDataModel.xcdatamodeld in Sources */,
 				01A2D2971E49614A00C2103A /* Apptentive+Debugging.m in Sources */,
 				01A2D2401E4946D600C2103A /* ApptentiveConnectTests.m in Sources */,

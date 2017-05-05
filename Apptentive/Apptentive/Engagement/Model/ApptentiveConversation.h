@@ -197,16 +197,10 @@ typedef NS_ENUM(NSInteger, ApptentiveConversationState) {
 
 
 /**
- A dictionary representing the data needed to create a conversation object in
+ A dictionary representing the app release and SDK objects in
  a format suitable for encoding in JSON.
  */
-@property (readonly, nonatomic) NSDictionary *conversationCreationJSON;
-
-/**
- A dictionary representing the data needed to update a conversation object in
- a format suitable for encoding in JSON.
- */
-@property (readonly, nonatomic) NSDictionary *conversationUpdateJSON;
+@property (readonly, nonatomic) NSDictionary *appReleaseSDKJSON;
 
 
 /**
@@ -279,10 +273,9 @@ typedef NS_ENUM(NSInteger, ApptentiveConversationState) {
  objects) has changed.
 
  @param conversation The conversation associated with the change.
- @param payload A dictionary suitable for encoding as JSON and sending to the
  server.
  */
-- (void)conversation:(ApptentiveConversation *)conversation appReleaseOrSDKDidChange:(NSDictionary *)payload;
+- (void)conversationAppReleaseOrSDKDidChange:(ApptentiveConversation *)conversation;
 
 
 /**

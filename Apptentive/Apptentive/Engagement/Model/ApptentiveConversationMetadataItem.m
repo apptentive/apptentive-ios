@@ -15,6 +15,7 @@ static NSString *const ConversationIdentifierKey = @"conversationIdentifier";
 static NSString *const FileNameKey = @"fileName";
 static NSString *const EncryptionKeyKey = @"encryptionKey";
 static NSString *const VersionKey = @"version";
+static NSString *const UserIdKey = @"userId";
 
 
 @implementation ApptentiveConversationMetadataItem
@@ -42,6 +43,7 @@ static NSString *const VersionKey = @"version";
 		_conversationIdentifier = [coder decodeObjectOfClass:[NSString class] forKey:ConversationIdentifierKey];
 		_directoryName = [coder decodeObjectOfClass:[NSString class] forKey:FileNameKey];
 		_encryptionKey = [coder decodeObjectOfClass:[NSData class] forKey:EncryptionKeyKey];
+        _userId = [coder decodeObjectOfClass:[NSString class] forKey:UserIdKey];
 	}
 
 	return self;
@@ -52,6 +54,7 @@ static NSString *const VersionKey = @"version";
 	[coder encodeObject:self.conversationIdentifier forKey:ConversationIdentifierKey];
 	[coder encodeObject:self.directoryName forKey:FileNameKey];
 	[coder encodeObject:self.encryptionKey forKey:EncryptionKeyKey];
+    [coder encodeObject:self.userId forKey:UserIdKey];
 	[coder encodeInteger:VERSION forKey:VersionKey];
 }
 

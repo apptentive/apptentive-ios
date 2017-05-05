@@ -180,18 +180,26 @@ static NSString *const ATMessageCenterDidSkipProfileKey = @"ATMessageCenterDidSk
 }
 
 - (void)checkForDeviceDiffs {
+	ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Diffing device");
+
 	NSDictionary *deviceDiffs = [ApptentiveUtilities diffDictionary:self.device.JSONDictionary againstDictionary:self.lastSentDevice];
 
 	if (deviceDiffs.count > 0) {
+		ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Device diffs found: %@", deviceDiffs);
+
 		[self.delegate conversation:self deviceDidChange:deviceDiffs];
 		self.lastSentDevice = self.device.JSONDictionary;
 	}
 }
 
 - (void)checkForPersonDiffs {
+	ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Diffing person");
+
 	NSDictionary *personDiffs = [ApptentiveUtilities diffDictionary:self.person.JSONDictionary againstDictionary:self.lastSentPerson];
 
 	if (personDiffs.count > 0) {
+		ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Person diffs found: %@", personDiffs);
+
 		[self.delegate conversation:self personDidChange:personDiffs];
 		self.lastSentPerson = self.person.JSONDictionary;
 	}

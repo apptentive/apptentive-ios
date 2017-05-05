@@ -75,6 +75,11 @@ typedef NS_ENUM(NSInteger, ApptentiveConversationState) {
 @property (readonly, nonatomic) NSString *identifier;
 
 /**
+ Optional user id for logged-in conversations.
+ */
+@property (strong, nonatomic) NSString *userId;
+
+/**
  Encryption key for sending payloads.
  */
 @property (strong, nonatomic) NSData *encryptionKey;

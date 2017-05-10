@@ -376,6 +376,7 @@
 		EFF3FE3B1E8C2F05006AD2B4 /* ApptentiveLog.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF3FE3A1E8C2F05006AD2B4 /* ApptentiveLog.m */; };
 		EFF3FE421E8C386E006AD2B4 /* ApptentiveLogTag.h in Headers */ = {isa = PBXBuildFile; fileRef = EFF3FE401E8C386E006AD2B4 /* ApptentiveLogTag.h */; };
 		EFF3FE431E8C386E006AD2B4 /* ApptentiveLogTag.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF3FE411E8C386E006AD2B4 /* ApptentiveLogTag.m */; };
+		EFF4D2A71EC37FB800FD4EFE /* 3.5.0.xcappdata in Resources */ = {isa = PBXBuildFile; fileRef = EFF4D2A61EC37FB800FD4EFE /* 3.5.0.xcappdata */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -788,6 +789,7 @@
 		EFF3FE3A1E8C2F05006AD2B4 /* ApptentiveLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveLog.m; sourceTree = "<group>"; };
 		EFF3FE401E8C386E006AD2B4 /* ApptentiveLogTag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveLogTag.h; sourceTree = "<group>"; };
 		EFF3FE411E8C386E006AD2B4 /* ApptentiveLogTag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveLogTag.m; sourceTree = "<group>"; };
+		EFF4D2A61EC37FB800FD4EFE /* 3.5.0.xcappdata */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = 3.5.0.xcappdata; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1505,6 +1507,7 @@
 				01A2D2131E4946D500C2103A /* ATDataModelv4.sqlite */,
 				01A2D2141E4946D500C2103A /* ATDataModelv5.sqlite */,
 				01A2D2151E4946D500C2103A /* ATDataModelv6.sqlite */,
+				EFF4D2A51EC37F0A00FD4EFE /* containers */,
 				01A2D2161E4946D500C2103A /* criteria */,
 				01A2D22C1E4946D600C2103A /* Survey.json */,
 				01A2D22D1E4946D600C2103A /* testInteractions.json */,
@@ -1584,6 +1587,14 @@
 				0116D5261E92F516001DA5CF /* ApptentiveMessageStore.m */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		EFF4D2A51EC37F0A00FD4EFE /* containers */ = {
+			isa = PBXGroup;
+			children = (
+				EFF4D2A61EC37FB800FD4EFE /* 3.5.0.xcappdata */,
+			);
+			path = containers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1950,6 +1961,7 @@
 				01A2D2681E4946D600C2103A /* testInteractions.json in Resources */,
 				01A2D25E1E4946D600C2103A /* testOperatorGreaterThan.json in Resources */,
 				01A2D25A1E4946D600C2103A /* testOperatorBefore.json in Resources */,
+				EFF4D2A71EC37FB800FD4EFE /* 3.5.0.xcappdata in Resources */,
 				01A2D2641E4946D600C2103A /* testPredicateParsing.json in Resources */,
 				01A2D2671E4946D600C2103A /* Survey.json in Resources */,
 				01A2D26D1E4946D600C2103A /* testJsonDiffing.2.old.json in Resources */,

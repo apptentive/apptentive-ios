@@ -51,10 +51,8 @@ static inline NSDate *dateFromString(NSString *date) {
     XCTAssertEqualObjects(conversation.appRelease.timeAtInstallVersion, dateFromString(@"04/02/2017 12:00:00 PM"));
     XCTAssertEqualObjects(conversation.appRelease.timeAtInstallBuild, dateFromString(@"04/01/2017 12:00:00 PM"));
     
-    XCTAssertEqualObjects(conversation.device.customData, @{});
     
 	XCTAssertNotNil(conversation.SDK);
-	XCTAssertNotNil(conversation.person);
 	
 	XCTAssertNotNil(conversation.engagement);
     XCTAssertEqualObjects(conversation.engagement.interactions[@"interaction_1"].lastInvoked, dateFromString(@"03/01/2017 12:00:00 PM"));
@@ -66,18 +64,31 @@ static inline NSDate *dateFromString(NSString *date) {
     XCTAssertEqual(conversation.engagement.interactions[@"interaction_1"].versionCount, 5);
     XCTAssertEqual(conversation.engagement.interactions[@"interaction_2"].versionCount, 6);
 
-	XCTAssertNotNil(conversation.appRelease.timeAtInstallTotal);
-	XCTAssertNotNil(conversation.appRelease.timeAtInstallVersion);
-	XCTAssertNotNil(conversation.appRelease.timeAtInstallBuild);
-
 	XCTAssertNotNil(conversation.person.customData);
 
-	XCTAssertNotNil(conversation.device.customData);
+    NSDictionary *expectedDeviceData = @{
+     @"string" : @"Test String",
+     @"number" : @42,
+     @"boolean1" : @NO,
+     @"boolean2" : @YES
+    };
+    [self assertDictionary:conversation.device.customData isEqualToDictionary:expectedDeviceData];
 
 	XCTAssertEqualObjects([conversation.engagement.codePoints[@"local#app#event_1"] lastInvoked], dateFromString(@"02/01/2017 12:00:00 PM"));
     XCTAssertEqual([conversation.engagement.codePoints[@"local#app#event_1"] buildCount], 1);
     XCTAssertEqual([conversation.engagement.codePoints[@"local#app#event_1"] versionCount], 2);
     XCTAssertEqual([conversation.engagement.codePoints[@"local#app#event_1"] totalCount], 3);
+}
+
+#pragma mark -
+#pragma mark Helpers
+
+- (void)assertDictionary:(NSDictionary *)dict1 isEqualToDictionary:(NSDictionary *)dict2 {
+    // TODO: figure out why isEqualToDictionary: didn't work
+    XCTAssertEqual(dict1.count, dict2.count);
+    for (id key in dict1) {
+        XCTAssertEqualObjects(dict1[key], dict2[key]);
+    }
 }
 
 @end

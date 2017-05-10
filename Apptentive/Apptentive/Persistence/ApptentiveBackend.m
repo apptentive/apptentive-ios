@@ -286,7 +286,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 
 - (void)migrateLegacyCoreDataAndTaskQueueForConversation:(ApptentiveConversation *)conversation {
 	ApptentiveAssertNotNil(conversation, @"Trying to migrate nil conversation");
-	ApptentiveAssertTrue(conversation.state == ApptentiveConversationStateLegacyPending, @"Trying to migrate conversation that is not a legacy conversation (%ld)", conversation.state);
+	ApptentiveAssertTrue(conversation.state == ApptentiveConversationStateLegacyPending, @"Trying to migrate conversation that is not a legacy conversation (%@)", NSStringFromApptentiveConversationState(conversation.state));
 
 	if (conversation.state != ApptentiveConversationStateLegacyPending) {
 		return;

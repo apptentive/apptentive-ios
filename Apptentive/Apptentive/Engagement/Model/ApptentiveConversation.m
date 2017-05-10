@@ -37,6 +37,24 @@ static NSString *const ATCurrentConversationPreferenceKey = @"ATCurrentConversat
 static NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKey";
 static NSString *const ATMessageCenterDidSkipProfileKey = @"ATMessageCenterDidSkipProfileKey";
 
+NSString * NSStringFromApptentiveConversationState(ApptentiveConversationState state) {
+    switch (state) {
+        case ApptentiveConversationStateUndefined:
+            return @"undefined";
+        case ApptentiveConversationStateAnonymousPending:
+            return @"anonymous Pending";
+        case ApptentiveConversationStateLegacyPending:
+            return @"legacy Pending";
+        case ApptentiveConversationStateAnonymous:
+            return @"anonymous";
+        case ApptentiveConversationStateLoggedIn:
+            return @"logged-in";
+        case ApptentiveConversationStateLoggedOut:
+            return @"logged-out";
+    }
+    
+    return @"unknown";
+}
 
 @interface ApptentiveConversation ()
 

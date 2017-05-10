@@ -351,8 +351,8 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 				break;
 
 			default:
-				ApptentiveAssertTrue(NO, @"Unexpected conversation state when logging in: %ld", self.activeConversation.state);
-                [self failLoginWithErrorCode:ApptentiveInternalInconsistency failureReason:@"Unexpected conversation state when logging in: %ld", self.activeConversation.state];
+				ApptentiveAssertTrue(NO, @"Unexpected conversation state when logging in: %@", NSStringFromApptentiveConversationState(self.activeConversation.state));
+                [self failLoginWithErrorCode:ApptentiveInternalInconsistency failureReason:@"Unexpected conversation state when logging in: %@", NSStringFromApptentiveConversationState(self.activeConversation.state)];
 				break;
 		}
 	}];

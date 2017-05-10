@@ -32,11 +32,12 @@
 
 + (BOOL)enqueuePayload:(ApptentivePayload *)payload forConversation:(ApptentiveConversation *)conversation usingAuthToken:(NSString *)authToken inContext:(NSManagedObjectContext *)context {
 	ApptentiveAssertNotNil(conversation, @"Conversation id is nil");
+	ApptentiveAssertNotNil(conversation, @"Attempted to enqueue payload with nil conversation: %@", payload);
 	if (conversation == nil) {
 		return NO;
 	}
 
-	ApptentiveAssertTrue(conversation.state != ApptentiveConversationStateUndefined && conversation.state != ApptentiveConversationStateLoggedOut, @"Unexpected conversation state: %ld", conversation.state);
+	ApptentiveAssertTrue(conversation.state != ApptentiveConversationStateUndefined && conversation.state != ApptentiveConversationStateLoggedOut, @"Attempted to enqueue payload with wrong conversation state (%@): %@", NSStringFromApptentiveConversationState(conversation.state), payload);
 	if (conversation.state == ApptentiveConversationStateUndefined ||
 		conversation.state == ApptentiveConversationStateLoggedOut) {
 		return NO;

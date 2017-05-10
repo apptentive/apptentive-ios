@@ -57,6 +57,14 @@ static inline NSDate *dateFromString(NSString *date) {
 	XCTAssertNotNil(conversation.person);
 	
 	XCTAssertNotNil(conversation.engagement);
+    XCTAssertEqualObjects(conversation.engagement.interactions[@"interaction_1"].lastInvoked, dateFromString(@"03/01/2017 12:00:00 PM"));
+    XCTAssertEqualObjects(conversation.engagement.interactions[@"interaction_2"].lastInvoked, dateFromString(@"03/02/2017 12:00:00 PM"));
+    XCTAssertEqual(conversation.engagement.interactions[@"interaction_1"].buildCount, 1);
+    XCTAssertEqual(conversation.engagement.interactions[@"interaction_2"].buildCount, 2);
+    XCTAssertEqual(conversation.engagement.interactions[@"interaction_1"].totalCount, 3);
+    XCTAssertEqual(conversation.engagement.interactions[@"interaction_2"].totalCount, 4);
+    XCTAssertEqual(conversation.engagement.interactions[@"interaction_1"].versionCount, 5);
+    XCTAssertEqual(conversation.engagement.interactions[@"interaction_2"].versionCount, 6);
 
 	XCTAssertNotNil(conversation.appRelease.timeAtInstallTotal);
 	XCTAssertNotNil(conversation.appRelease.timeAtInstallVersion);

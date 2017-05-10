@@ -25,3 +25,10 @@
 @property (copy, nonatomic) NSString *emailAddress;
 
 @end
+
+@interface ApptentiveLegacyPerson : NSObject
+
+@property (copy, nonatomic) NSString *name;
+@property (copy, nonatomic) NSString *emailAddress;
+
+@end

@@ -38,17 +38,29 @@ static NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCus
 }
 
 - (instancetype)initAndMigrate {
+	NSData *personData = [[NSUserDefaults standardUserDefaults] objectForKey:ATCurrentPersonPreferenceKey];
 	NSString *name;
 	NSString *emailAddress;
 	NSDictionary *customData;
 
+	if (personData) {
+		[NSKeyedUnarchiver setClass:[ApptentiveLegacyPerson class] forClassName:@"ApptentivePersonInfo"];
+		[NSKeyedUnarchiver setClass:[ApptentiveLegacyPerson class] forClassName:@"ATPersonInfo"];
+
+		ApptentiveLegacyPerson *person = [NSKeyedUnarchiver unarchiveObjectWithData:personData];
+
+		name = person.name;
+		emailAddress = person.emailAddress;
+	}
+
+	customData = [[NSUserDefaults standardUserDefaults] objectForKey:ApptentiveCustomPersonDataPreferenceKey];
+
+	// If custom data was stored in a version where custom data persistence was broken, look in the last update value
 	NSData *data = [[NSUserDefaults standardUserDefaults] dataForKey:ATPersonLastUpdateValuePreferenceKey];
 
 	if (data) {
 		NSDictionary *person = [[NSKeyedUnarchiver unarchiveObjectWithData:data] valueForKey:@"person"];
 		if ([person isKindOfClass:[NSDictionary class]]) {
-			name = person[@"name"];
-			emailAddress = person[@"email"];
 			customData = person[@"custom_data"];
 		}
 	}
@@ -83,3 +95,20 @@ static NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCus
 }
 
 @end
+
+@implementation ApptentiveLegacyPerson
+
+- (id)initWithCoder:(NSCoder *)coder {
+	self = [super init];
+
+	if (self) {
+		self.name = (NSString *)[coder decodeObjectForKey:@"name"];
+		self.emailAddress = (NSString *)[coder decodeObjectForKey:@"emailAddress"];
+	}
+
+	return self;
+}
+
+@end
+
+

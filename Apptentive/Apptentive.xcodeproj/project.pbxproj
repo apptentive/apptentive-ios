@@ -378,6 +378,7 @@
 		EFF3FE431E8C386E006AD2B4 /* ApptentiveLogTag.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF3FE411E8C386E006AD2B4 /* ApptentiveLogTag.m */; };
 		EFF4D2A71EC37FB800FD4EFE /* 3.5.0.xcappdata in Resources */ = {isa = PBXBuildFile; fileRef = EFF4D2A61EC37FB800FD4EFE /* 3.5.0.xcappdata */; };
 		EFF4D2A91EC3806300FD4EFE /* ApptentiveConversationMigrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF4D2A81EC3806300FD4EFE /* ApptentiveConversationMigrationTests.m */; };
+		EFF4D2AC1EC39EC000FD4EFE /* ApptentiveAppDataContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF4D2AB1EC39EC000FD4EFE /* ApptentiveAppDataContainer.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -792,6 +793,8 @@
 		EFF3FE411E8C386E006AD2B4 /* ApptentiveLogTag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveLogTag.m; sourceTree = "<group>"; };
 		EFF4D2A61EC37FB800FD4EFE /* 3.5.0.xcappdata */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = 3.5.0.xcappdata; sourceTree = "<group>"; };
 		EFF4D2A81EC3806300FD4EFE /* ApptentiveConversationMigrationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveConversationMigrationTests.m; sourceTree = "<group>"; };
+		EFF4D2AA1EC39EC000FD4EFE /* ApptentiveAppDataContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveAppDataContainer.h; sourceTree = "<group>"; };
+		EFF4D2AB1EC39EC000FD4EFE /* ApptentiveAppDataContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveAppDataContainer.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -933,6 +936,8 @@
 				01A2CFA11E49062800C2103A /* Info.plist */,
 				0174772E1EA92D7C00A0A949 /* PayloadTests.swift */,
 				01216C4F1EBBB53E0062BD0D /* RequestTests.swift */,
+				EFF4D2AA1EC39EC000FD4EFE /* ApptentiveAppDataContainer.h */,
+				EFF4D2AB1EC39EC000FD4EFE /* ApptentiveAppDataContainer.m */,
 			);
 			path = ApptentiveTests;
 			sourceTree = "<group>";
@@ -2122,6 +2127,7 @@
 			files = (
 				01A2D2411E4946D600C2103A /* ApptentiveEngagementTests.m in Sources */,
 				01A2D2421E4946D600C2103A /* ApptentiveInteractionInvocationTests.m in Sources */,
+				EFF4D2AC1EC39EC000FD4EFE /* ApptentiveAppDataContainer.m in Sources */,
 				01A2D24A1E4946D600C2103A /* CodePointAndInteractionTests.m in Sources */,
 				01A2D2481E4946D600C2103A /* ApptentiveSurveyTests.m in Sources */,
 				01A2D29B1E4963A500C2103A /* ATDataModel v3 to v4.xcmappingmodel in Sources */,

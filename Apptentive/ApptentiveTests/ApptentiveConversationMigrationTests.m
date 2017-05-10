@@ -9,6 +9,12 @@
 #import <XCTest/XCTest.h>
 
 #import "ApptentiveConversation.h"
+#import "ApptentiveAppRelease.h"
+#import "ApptentivePerson.h"
+#import "ApptentiveDevice.h"
+#import "ApptentiveEngagement.h"
+#import "ApptentiveCount.h"
+#import "ApptentiveAppDataContainer.h"
 
 @interface ApptentiveConversationMigrationTests : XCTestCase
 
@@ -27,10 +33,26 @@
 }
 
 - (void)testConversationMigration {
-    NSLog(@"%@", [[NSUserDefaults standardUserDefaults] dictionaryRepresentation]);
+    [ApptentiveAppDataContainer pushDataContainerWithName:@"3.5.0"];
     
     ApptentiveConversation *conversation = [[ApptentiveConversation alloc] initAndMigrate];
     XCTAssertNotNil(conversation);
+
+	XCTAssertNotNil(conversation.appRelease);
+	XCTAssertNotNil(conversation.SDK);
+	XCTAssertNotNil(conversation.person);
+	XCTAssertNotNil(conversation.device);
+	XCTAssertNotNil(conversation.engagement);
+
+	XCTAssertNotNil(conversation.appRelease.timeAtInstallTotal);
+	XCTAssertNotNil(conversation.appRelease.timeAtInstallVersion);
+	XCTAssertNotNil(conversation.appRelease.timeAtInstallBuild);
+
+	XCTAssertNotNil(conversation.person.customData);
+
+	XCTAssertNotNil(conversation.device.customData);
+
+	XCTAssertEqual([conversation.engagement.codePoints[@"local#app#event_1"] totalCount], 1);
 }
 
 @end

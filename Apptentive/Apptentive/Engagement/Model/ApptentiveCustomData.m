@@ -35,7 +35,7 @@ static NSString *const IdentifierKey = @"identifier";
 	self = [super init];
 
 	if (self) {
-		_mutableCustomData = [customData mutableCopy];
+		_mutableCustomData = [customData mutableCopy] ?: [[NSMutableDictionary alloc] init];
 	}
 
 	return self;

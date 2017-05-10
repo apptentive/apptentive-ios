@@ -49,7 +49,7 @@ static inline NSDate *dateFromString(NSString *date) {
 
 	XCTAssertEqualObjects(conversation.appRelease.timeAtInstallTotal, dateFromString(@"04/01/2017 12:00:00 PM"));
     XCTAssertEqualObjects(conversation.appRelease.timeAtInstallVersion, dateFromString(@"04/02/2017 12:00:00 PM"));
-    XCTAssertEqualObjects(conversation.appRelease.timeAtInstallBuild, dateFromString(@"04/01/2017 12:00:00 PM"));
+    XCTAssertEqualObjects(conversation.appRelease.timeAtInstallBuild, dateFromString(@"04/02/2017 12:00:00 PM"));
     
     
 	XCTAssertNotNil(conversation.SDK);
@@ -64,31 +64,22 @@ static inline NSDate *dateFromString(NSString *date) {
     XCTAssertEqual(conversation.engagement.interactions[@"interaction_1"].versionCount, 5);
     XCTAssertEqual(conversation.engagement.interactions[@"interaction_2"].versionCount, 6);
 
+    XCTAssertEqualObjects(conversation.person.name, @"Testy McTesterson");
+    XCTAssertEqualObjects(conversation.person.emailAddress, @"test@apptentive.com");
 	XCTAssertNotNil(conversation.person.customData);
 
     NSDictionary *expectedDeviceData = @{
      @"string" : @"Test String",
      @"number" : @42,
-     @"boolean1" : @NO,
-     @"boolean2" : @YES
+     @"boolean1" : @YES,
+     @"boolean2" : @NO
     };
-    [self assertDictionary:conversation.device.customData isEqualToDictionary:expectedDeviceData];
+    XCTAssertEqualObjects(conversation.device.customData, expectedDeviceData);
 
 	XCTAssertEqualObjects([conversation.engagement.codePoints[@"local#app#event_1"] lastInvoked], dateFromString(@"02/01/2017 12:00:00 PM"));
     XCTAssertEqual([conversation.engagement.codePoints[@"local#app#event_1"] buildCount], 1);
     XCTAssertEqual([conversation.engagement.codePoints[@"local#app#event_1"] versionCount], 2);
     XCTAssertEqual([conversation.engagement.codePoints[@"local#app#event_1"] totalCount], 3);
-}
-
-#pragma mark -
-#pragma mark Helpers
-
-- (void)assertDictionary:(NSDictionary *)dict1 isEqualToDictionary:(NSDictionary *)dict2 {
-    // TODO: figure out why isEqualToDictionary: didn't work
-    XCTAssertEqual(dict1.count, dict2.count);
-    for (id key in dict1) {
-        XCTAssertEqualObjects(dict1[key], dict2[key]);
-    }
 }
 
 @end

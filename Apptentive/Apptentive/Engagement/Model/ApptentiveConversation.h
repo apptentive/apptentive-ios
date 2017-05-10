@@ -11,6 +11,7 @@
 typedef NS_ENUM(NSInteger, ApptentiveConversationState) {
 	ApptentiveConversationStateUndefined = 0,
 	ApptentiveConversationStateAnonymousPending,
+	ApptentiveConversationStateLegacyPending,
 	ApptentiveConversationStateAnonymous,
 	ApptentiveConversationStateLoggedIn,
 	ApptentiveConversationStateLoggedOut

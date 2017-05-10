@@ -47,9 +47,9 @@ static inline NSDate *dateFromString(NSString *date) {
     XCTAssertEqualObjects(conversation.person.identifier, @"59124f8d09e3da650e000037");
     XCTAssertEqualObjects(conversation.device.identifier, @"59124f8d09e3da650e000035");
 
-	XCTAssertEqualObjects(conversation.appRelease.timeAtInstallTotal, dateFromString(@"01/01/2017 12:00:00 PM"));
-    XCTAssertEqualObjects(conversation.appRelease.timeAtInstallVersion, dateFromString(@"01/01/2017 12:00:00 PM"));
-    XCTAssertEqualObjects(conversation.appRelease.timeAtInstallBuild, dateFromString(@"01/01/2017 12:00:00 PM"));
+	XCTAssertEqualObjects(conversation.appRelease.timeAtInstallTotal, dateFromString(@"04/01/2017 12:00:00 PM"));
+    XCTAssertEqualObjects(conversation.appRelease.timeAtInstallVersion, dateFromString(@"04/02/2017 12:00:00 PM"));
+    XCTAssertEqualObjects(conversation.appRelease.timeAtInstallBuild, dateFromString(@"04/01/2017 12:00:00 PM"));
     
     XCTAssertEqualObjects(conversation.device.customData, @{});
     

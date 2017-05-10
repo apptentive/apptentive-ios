@@ -56,12 +56,14 @@ static NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCus
 	customData = [[NSUserDefaults standardUserDefaults] objectForKey:ApptentiveCustomPersonDataPreferenceKey];
 
 	// If custom data was stored in a version where custom data persistence was broken, look in the last update value
-	NSData *data = [[NSUserDefaults standardUserDefaults] dataForKey:ATPersonLastUpdateValuePreferenceKey];
+	if (customData == nil) {
+		NSData *data = [[NSUserDefaults standardUserDefaults] dataForKey:ATPersonLastUpdateValuePreferenceKey];
 
-	if (data) {
-		NSDictionary *person = [[NSKeyedUnarchiver unarchiveObjectWithData:data] valueForKey:@"person"];
-		if ([person isKindOfClass:[NSDictionary class]]) {
-			customData = person[@"custom_data"];
+		if (data) {
+			NSDictionary *person = [[NSKeyedUnarchiver unarchiveObjectWithData:data] valueForKey:@"person"];
+			if ([person isKindOfClass:[NSDictionary class]]) {
+				customData = person[@"custom_data"];
+			}
 		}
 	}
 

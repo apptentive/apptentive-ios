@@ -16,6 +16,9 @@
 #import "ApptentiveCount.h"
 #import "ApptentiveAppDataContainer.h"
 
+#import "ApptentiveDataManager.h"
+
+
 static inline NSDate *dateFromString(NSString *date) {
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     formatter.dateFormat = @"MM/dd/yyyy HH:mm:ss aa";
@@ -64,9 +67,16 @@ static inline NSDate *dateFromString(NSString *date) {
     XCTAssertEqual(conversation.engagement.interactions[@"interaction_1"].versionCount, 5);
     XCTAssertEqual(conversation.engagement.interactions[@"interaction_2"].versionCount, 6);
 
+	NSDictionary *expectedPersonData = @{
+		@"string" : @"String Test",
+		@"number" : @22,
+		@"boolean1" : @NO,
+		@"boolean2" : @YES
+	};
+
     XCTAssertEqualObjects(conversation.person.name, @"Testy McTesterson");
     XCTAssertEqualObjects(conversation.person.emailAddress, @"test@apptentive.com");
-	XCTAssertNotNil(conversation.person.customData);
+	XCTAssertEqualObjects(conversation.person.customData, expectedPersonData);
 
     NSDictionary *expectedDeviceData = @{
      @"string" : @"Test String",
@@ -75,6 +85,7 @@ static inline NSDate *dateFromString(NSString *date) {
      @"boolean2" : @NO
     };
     XCTAssertEqualObjects(conversation.device.customData, expectedDeviceData);
+	XCTAssertEqualObjects(conversation.device.integrationConfiguration, @{ @"apptentive_push": @{ @"token": @"abcdef123456"} });
 
 	XCTAssertEqualObjects([conversation.engagement.codePoints[@"local#app#event_1"] lastInvoked], dateFromString(@"02/01/2017 12:00:00 PM"));
     XCTAssertEqual([conversation.engagement.codePoints[@"local#app#event_1"] buildCount], 1);

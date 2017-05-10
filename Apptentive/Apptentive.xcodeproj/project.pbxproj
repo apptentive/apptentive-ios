@@ -377,6 +377,7 @@
 		EFF3FE421E8C386E006AD2B4 /* ApptentiveLogTag.h in Headers */ = {isa = PBXBuildFile; fileRef = EFF3FE401E8C386E006AD2B4 /* ApptentiveLogTag.h */; };
 		EFF3FE431E8C386E006AD2B4 /* ApptentiveLogTag.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF3FE411E8C386E006AD2B4 /* ApptentiveLogTag.m */; };
 		EFF4D2A71EC37FB800FD4EFE /* 3.5.0.xcappdata in Resources */ = {isa = PBXBuildFile; fileRef = EFF4D2A61EC37FB800FD4EFE /* 3.5.0.xcappdata */; };
+		EFF4D2A91EC3806300FD4EFE /* ApptentiveConversationMigrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF4D2A81EC3806300FD4EFE /* ApptentiveConversationMigrationTests.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -790,6 +791,7 @@
 		EFF3FE401E8C386E006AD2B4 /* ApptentiveLogTag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveLogTag.h; sourceTree = "<group>"; };
 		EFF3FE411E8C386E006AD2B4 /* ApptentiveLogTag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveLogTag.m; sourceTree = "<group>"; };
 		EFF4D2A61EC37FB800FD4EFE /* 3.5.0.xcappdata */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = 3.5.0.xcappdata; sourceTree = "<group>"; };
+		EFF4D2A81EC3806300FD4EFE /* ApptentiveConversationMigrationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveConversationMigrationTests.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -911,24 +913,25 @@
 			children = (
 				01A2D2011E4946D500C2103A /* ApptentiveConnectTests-Prefix.pch */,
 				01A2D2021E4946D500C2103A /* ApptentiveConnectTests.m */,
+				EFF4D2A81EC3806300FD4EFE /* ApptentiveConversationMigrationTests.m */,
+				01A2D2081E4946D500C2103A /* ApptentiveConversationTests.m */,
+				01626EBB1EB7E5B90064E73F /* ApptentiveEncryptionTests.m */,
 				01A2D2031E4946D500C2103A /* ApptentiveEngagementTests.m */,
 				01A2D2041E4946D500C2103A /* ApptentiveInteractionInvocationTests.m */,
 				01A2D2051E4946D500C2103A /* ApptentiveInteractionUsageDataTests.m */,
 				01A2D2061E4946D500C2103A /* ApptentiveMetricsTests.m */,
 				01A2D2071E4946D500C2103A /* ApptentiveMigrationTests.m */,
-				01A2D2081E4946D500C2103A /* ApptentiveConversationTests.m */,
 				01A2D2091E4946D500C2103A /* ApptentiveStyleSheetTests.m */,
 				01A2D20A1E4946D500C2103A /* ApptentiveSurveyTests.m */,
+				01917D431E5E0B7400B37D82 /* ApptentiveTests-Bridging-Header.h */,
 				01A2D20B1E4946D500C2103A /* ApptentiveUtilitiesTests.m */,
 				01A2D20C1E4946D500C2103A /* CodePointAndInteractionTests.m */,
+				01917D441E5E0B7400B37D82 /* ConversationManagerTests.swift */,
 				01A2D20D1E4946D500C2103A /* CriteriaTests.h */,
 				01A2D20E1E4946D500C2103A /* CriteriaTests.m */,
 				01A2D20F1E4946D500C2103A /* data */,
 				01A2CFA11E49062800C2103A /* Info.plist */,
-				01917D441E5E0B7400B37D82 /* ConversationManagerTests.swift */,
-				01917D431E5E0B7400B37D82 /* ApptentiveTests-Bridging-Header.h */,
 				0174772E1EA92D7C00A0A949 /* PayloadTests.swift */,
-				01626EBB1EB7E5B90064E73F /* ApptentiveEncryptionTests.m */,
 				01216C4F1EBBB53E0062BD0D /* RequestTests.swift */,
 			);
 			path = ApptentiveTests;
@@ -2134,6 +2137,7 @@
 				01A2D2461E4946D600C2103A /* ApptentiveConversationTests.m in Sources */,
 				EF8EE3A61EBA81880033E7A1 /* ATDataModel v5 to v6.xcmappingmodel in Sources */,
 				01216C501EBBB53E0062BD0D /* RequestTests.swift in Sources */,
+				EFF4D2A91EC3806300FD4EFE /* ApptentiveConversationMigrationTests.m in Sources */,
 				01A2D2981E49638A00C2103A /* ATDataModel.xcdatamodeld in Sources */,
 				01A2D2971E49614A00C2103A /* Apptentive+Debugging.m in Sources */,
 				01A2D2401E4946D600C2103A /* ApptentiveConnectTests.m in Sources */,

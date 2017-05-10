@@ -6,6 +6,7 @@
 //  Copyright © 2017 Apptentive, Inc. All rights reserved.
 //
 
+#import "ApptentiveConversation.h"
 #import "ApptentiveLegacyEvent.h"
 #import "ApptentiveSerialRequest.h"
 #import "Apptentive_Private.h"
@@ -20,22 +21,28 @@
 @dynamic label;
 
 + (void)enqueueUnsentEventsInContext:(NSManagedObjectContext *)context {
+    ApptentiveAssertNotNil(context, @"Context is nil");
+    
 	NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"ATEvent"];
 	ApptentiveConversation *conversation = Apptentive.shared.backend.conversationManager.activeConversation;
+    ApptentiveAssertNotNil(conversation, @"Conversation is nil");
 
 	NSError *error;
 	NSArray *unsentEvents = [context executeFetchRequest:request error:&error];
 
-	if (unsentEvents == nil) {
+    if (unsentEvents == nil) {
 		ApptentiveLogError(@"Unable to retrieve unsent events: %@", error);
 		return;
 	}
 
 	for (ApptentiveLegacyEvent *event in unsentEvents) {
 		ApptentiveEventPayload *payload = [[ApptentiveEventPayload alloc] initWithLabel:event.label];
+        ApptentiveAssertNotNil(payload, @"Failed to create a payload");
 
 		// TODO: Add custom data, extended data, and/or interaction ID?
-		[ApptentiveSerialRequest enqueuePayload:payload forConversation:conversation usingAuthToken:conversation.token inContext:context];
+        if (payload != nil) {
+            [ApptentiveSerialRequest enqueuePayload:payload forConversation:conversation usingAuthToken:conversation.token inContext:context];
+        }
 
 		[context deleteObject:event];
 	}

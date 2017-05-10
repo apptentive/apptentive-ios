@@ -11,10 +11,15 @@
 
 @implementation ApptentiveEventPayload
 
-- (instancetype)initWithLabel:(NSString *)label {
+- (nullable instancetype)initWithLabel:(NSString *)label {
 	self = [super init];
 
 	if (self) {
+        if (label.length == 0) {
+            ApptentiveLogError(@"Event label is nil");
+            return nil;
+        }
+        
 		_label = label;
 	}
 

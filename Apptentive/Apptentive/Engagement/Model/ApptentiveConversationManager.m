@@ -134,6 +134,14 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		ApptentiveLogDebug(ApptentiveLogTagConversation, @"Can't load conversation: only 'logged-out' conversations available");
 		return nil;
 	}
+    
+    // attempt to load a legacy conversation
+    ApptentiveConversation *legacyCoversation = [[ApptentiveConversation alloc] initAndMigrate];
+    if (legacyCoversation != nil) {
+        
+        [self createMessageManagerForConversation:legacyCoversation];
+        return legacyCoversation;
+    }
 
 	// no conversation available: create a new one
 	ApptentiveLogDebug(ApptentiveLogTagConversation, @"Can't load conversation: creating anonymous conversation...");

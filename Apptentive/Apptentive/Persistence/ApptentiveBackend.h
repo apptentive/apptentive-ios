@@ -68,6 +68,8 @@
  */
 - (void)processQueuedRecords;
 
+- (void)migrateLegacyCoreDataAndTaskQueueForConversation:(ApptentiveConversation *)conversation;
+
 
 /**
  Presents Message Center using the modal presentation style from the specified view controller.

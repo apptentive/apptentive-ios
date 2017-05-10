@@ -20,29 +20,28 @@
 @dynamic dictionaryData;
 @dynamic label;
 
-+ (void)enqueueUnsentEventsInContext:(NSManagedObjectContext *)context {
-    ApptentiveAssertNotNil(context, @"Context is nil");
-    
++ (void)enqueueUnsentEventsInContext:(NSManagedObjectContext *)context forConversation:(ApptentiveConversation *)conversation {
+	ApptentiveAssertNotNil(context, @"Context is nil");
+	ApptentiveAssertNotNil(conversation, @"Conversation is nil");
+
 	NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"ATEvent"];
-	ApptentiveConversation *conversation = Apptentive.shared.backend.conversationManager.activeConversation;
-    ApptentiveAssertNotNil(conversation, @"Conversation is nil");
 
 	NSError *error;
 	NSArray *unsentEvents = [context executeFetchRequest:request error:&error];
 
-    if (unsentEvents == nil) {
+	if (unsentEvents == nil) {
 		ApptentiveLogError(@"Unable to retrieve unsent events: %@", error);
 		return;
 	}
 
 	for (ApptentiveLegacyEvent *event in unsentEvents) {
 		ApptentiveEventPayload *payload = [[ApptentiveEventPayload alloc] initWithLabel:event.label];
-        ApptentiveAssertNotNil(payload, @"Failed to create a payload");
+		ApptentiveAssertNotNil(payload, @"Failed to create an event payload");
 
 		// TODO: Add custom data, extended data, and/or interaction ID?
-        if (payload != nil) {
-            [ApptentiveSerialRequest enqueuePayload:payload forConversation:conversation usingAuthToken:conversation.token inContext:context];
-        }
+		if (payload != nil) {
+			[ApptentiveSerialRequest enqueuePayload:payload forConversation:conversation usingAuthToken:conversation.token inContext:context];
+		}
 
 		[context deleteObject:event];
 	}

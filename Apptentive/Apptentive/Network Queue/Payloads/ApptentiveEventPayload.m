@@ -15,11 +15,11 @@
 	self = [super init];
 
 	if (self) {
-        if (label.length == 0) {
-            ApptentiveLogError(@"Event label is nil");
-            return nil;
-        }
-        
+		if (label.length == 0) {
+			ApptentiveLogError(@"Event label is nil");
+			return nil;
+		}
+
 		_label = label;
 	}
 

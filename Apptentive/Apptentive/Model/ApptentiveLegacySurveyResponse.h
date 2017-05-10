@@ -8,6 +8,8 @@
 
 #import "ApptentiveRecord.h"
 
+@class ApptentiveConversation;
+
 
 /**
  Used to represent legacy survey responses waiting to be sent in Core Data.
@@ -25,6 +27,6 @@
 
  @param context The managed object context to use to migrate survey responses.
  */
-+ (void)enqueueUnsentSurveyResponsesInContext:(NSManagedObjectContext *)context;
++ (void)enqueueUnsentSurveyResponsesInContext:(NSManagedObjectContext *)context forConversation:(ApptentiveConversation *)conversation;
 
 @end

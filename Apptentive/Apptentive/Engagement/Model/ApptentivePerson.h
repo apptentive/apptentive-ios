@@ -26,6 +26,7 @@
 
 @end
 
+
 @interface ApptentiveLegacyPerson : NSObject
 
 @property (copy, nonatomic) NSString *name;

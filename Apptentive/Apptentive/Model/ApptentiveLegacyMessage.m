@@ -34,8 +34,9 @@
 @dynamic body;
 @dynamic attachments;
 
-+ (void)enqueueUnsentMessagesInContext:(NSManagedObjectContext *)context {
-	ApptentiveConversation *conversation = Apptentive.shared.backend.conversationManager.activeConversation;
++ (void)enqueueUnsentMessagesInContext:(NSManagedObjectContext *)context forConversation:(ApptentiveConversation *)conversation {
+	ApptentiveAssertNotNil(context, @"Context is nil");
+	ApptentiveAssertNotNil(conversation, @"Conversation is nil");
 
 	NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"ATMessage"];
 	request.predicate = [NSPredicate predicateWithFormat:@"(pendingState == %d) || (pendingState == %d)", ATPendingMessageStateSending, ATPendingMessageStateError];
@@ -66,8 +67,11 @@
 		ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:legacyMessage.body attachments:attachments senderIdentifier:legacyMessage.sender.apptentiveID automated:legacyMessage.automated.boolValue customData:customData];
 
 		ApptentiveMessagePayload *payload = [[ApptentiveMessagePayload alloc] initWithMessage:message];
+		ApptentiveAssertNotNil(payload, @"Failed to create a message payload");
 
-		[ApptentiveSerialRequest enqueuePayload:payload forConversation:Apptentive.shared.backend.conversationManager.activeConversation usingAuthToken:conversation.token inContext:context];
+		if (payload != nil) {
+			[ApptentiveSerialRequest enqueuePayload:payload forConversation:Apptentive.shared.backend.conversationManager.activeConversation usingAuthToken:conversation.token inContext:context];
+		}
 
 		[context deleteObject:legacyMessage];
 	}

@@ -15,16 +15,16 @@
 	self = [super init];
 
 	if (self) {
-        if (conversationIdentifier.length == 0) {
-            ApptentiveLogError(@"Unable to create %@: conversation identifier is nil or empty", [self class]);
-            return nil;
-        }
-        
-        if (token.length == 0) {
-            ApptentiveLogError(@"Unable to create %@: conversation token is nil or empty", [self class]);
-            return nil;
-        }
-        
+		if (conversationIdentifier.length == 0) {
+			ApptentiveLogError(@"Unable to create %@: conversation identifier is nil or empty", [self class]);
+			return nil;
+		}
+
+		if (token.length == 0) {
+			ApptentiveLogError(@"Unable to create %@: conversation token is nil or empty", [self class]);
+			return nil;
+		}
+
 		_conversationIdentifier = conversationIdentifier;
 		_token = token;
 	}
@@ -37,7 +37,7 @@
 }
 
 - (NSString *)path {
-    return [NSString stringWithFormat:@"conversations/%@/session", self.conversationIdentifier];
+	return [NSString stringWithFormat:@"conversations/%@/session", self.conversationIdentifier];
 }
 
 - (NSDictionary *)JSONDictionary {

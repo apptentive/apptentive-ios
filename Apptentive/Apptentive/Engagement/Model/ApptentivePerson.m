@@ -98,6 +98,7 @@ static NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCus
 
 @end
 
+
 @implementation ApptentiveLegacyPerson
 
 - (id)initWithCoder:(NSCoder *)coder {
@@ -112,5 +113,3 @@ static NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCus
 }
 
 @end
-
-

@@ -279,12 +279,18 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	self.client.authToken = token;
 
 	self.state = ATBackendStateReady;
-	dispatch_async(dispatch_get_main_queue(), ^{
-		[ApptentiveLegacyFileAttachment addMissingExtensions];
-	});
 
 	[self networkStatusChanged:nil];
 	[self startMonitoringAppLifecycleMetrics];
+}
+
+- (void)migrateLegacyCoreDataAndTaskQueueForConversation:(ApptentiveConversation *)conversation {
+	ApptentiveAssertNotNil(conversation, @"Trying to migrate nil conversation");
+	ApptentiveAssertTrue(conversation.state == ApptentiveConversationStateLegacyPending, @"Trying to migrate conversation that is not a legacy conversation (%ld)", conversation.state);
+
+	if (conversation.state != ApptentiveConversationStateLegacyPending) {
+		return;
+	}
 
 	NSString *legacyTaskPath = [self.supportDirectoryPath stringByAppendingPathComponent:@"tasks.objects"];
 	NSError *error;
@@ -297,9 +303,10 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	migrationContext.parentContext = self.managedObjectContext;
 
 	[migrationContext performBlockAndWait:^{
-		[ApptentiveLegacyMessage enqueueUnsentMessagesInContext:migrationContext];
-		[ApptentiveLegacyEvent enqueueUnsentEventsInContext:migrationContext];
-		[ApptentiveLegacySurveyResponse enqueueUnsentSurveyResponsesInContext:migrationContext];
+		[ApptentiveLegacyFileAttachment addMissingExtensionsInContext:migrationContext];
+		[ApptentiveLegacyMessage enqueueUnsentMessagesInContext:migrationContext forConversation:conversation];
+		[ApptentiveLegacyEvent enqueueUnsentEventsInContext:migrationContext forConversation:conversation];
+		[ApptentiveLegacySurveyResponse enqueueUnsentSurveyResponsesInContext:migrationContext forConversation:conversation];
 
 		NSError *coreDataError;
 		if (![migrationContext save:&coreDataError]) {

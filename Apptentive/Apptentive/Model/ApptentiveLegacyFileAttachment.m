@@ -22,11 +22,23 @@
 @dynamic remoteURL;
 @dynamic remoteThumbnailURL;
 
-+ (void)addMissingExtensions {
-	NSArray *allAttachments = [ApptentiveData findEntityNamed:@"ATFileAttachment" withPredicate:[NSPredicate predicateWithValue:YES]];
++ (void)addMissingExtensionsInContext:(NSManagedObjectContext *)context {
+	ApptentiveAssertNotNil(context, @"Nil context when trying to add missing file extensions");
 
+	NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ATFileAttachment"];
+
+	NSError *error;
+	NSArray *allAttachments = [context executeFetchRequest:fetchRequest error:&error];
+
+	if (allAttachments == nil) {
+		ApptentiveLogError(@"Unable to fetch file attachments: %@", error);
+		return;
+	}
+
+#warning This needs to be looked at again
+#warning The paths are probably no longer valid
 	for (ApptentiveLegacyFileAttachment *attachment in allAttachments) {
-		if (attachment.localPath.length && attachment.localPath.pathExtension.length == 0 && attachment.mimeType.length > 0) {
+		if (attachment.localPath.length > 0 && attachment.localPath.pathExtension.length == 0 && attachment.mimeType.length > 0) {
 			NSString *newPath = [attachment.localPath stringByAppendingPathExtension:attachment.extension];
 			NSError *error;
 			if ([[NSFileManager defaultManager] moveItemAtPath:[self fullLocalPathForFilename:attachment.localPath] toPath:[self fullLocalPathForFilename:newPath] error:&error]) {

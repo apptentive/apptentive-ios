@@ -20,9 +20,11 @@
 @dynamic surveyID;
 @dynamic pendingState;
 
-+ (void)enqueueUnsentSurveyResponsesInContext:(NSManagedObjectContext *)context {
++ (void)enqueueUnsentSurveyResponsesInContext:(NSManagedObjectContext *)context forConversation:(ApptentiveConversation *)conversation {
+	ApptentiveAssertNotNil(context, @"Context is nil");
+	ApptentiveAssertNotNil(conversation, @"Conversation is nil");
+
 	NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"ATSurveyResponse"];
-	ApptentiveConversation *conversation = Apptentive.shared.backend.conversationManager.activeConversation;
 
 	NSError *error;
 	NSArray *unsentSurveyResponses = [context executeFetchRequest:request error:&error];
@@ -36,8 +38,11 @@
 		NSDictionary *JSON = response.apiJSON;
 
 		ApptentiveSurveyResponsePayload *payload = [[ApptentiveSurveyResponsePayload alloc] initWithAnswers:JSON[@"answers"] identifier:JSON[@"id"]];
+		ApptentiveAssertNotNil(payload, @"Failed to create a survey response payload");
 
-		[ApptentiveSerialRequest enqueuePayload:payload forConversation:conversation usingAuthToken:conversation.token inContext:context];
+		if (payload != nil) {
+			[ApptentiveSerialRequest enqueuePayload:payload forConversation:conversation usingAuthToken:conversation.token inContext:context];
+		}
 
 		[context deleteObject:response];
 	}

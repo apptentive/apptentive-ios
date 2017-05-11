@@ -75,12 +75,7 @@ static NSString *const RemoteURLKey = @"remoteURL";
             return nil;
         }
         
-        if (name.length == 0) {
-            ApptentiveLogError(@"Can't init %@: name is nil or empty", NSStringFromClass([self class]));
-            return nil;
-        }
-
-		_fileName = path;
+        _fileName = path;
 		_contentType = contentType;
 		_name = name;
 	}

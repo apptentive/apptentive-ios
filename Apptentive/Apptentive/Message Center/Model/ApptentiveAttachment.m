@@ -38,8 +38,13 @@ static NSString *const RemoteURLKey = @"remoteURL";
 			return nil;
 		}
 
-		_name = JSON[@"original_name"];
-		_contentType = JSON[@"content_type"];
+		_name = ApptentiveDictionaryGetString(JSON, @"original_name");
+        
+		_contentType = ApptentiveDictionaryGetString(JSON, @"content_type");
+        if (_contentType.length == 0) {
+            ApptentiveLogError(@"Can't init %@: content type is nil or empty", NSStringFromClass([self class]));
+            return nil;
+        }
 
 		NSNumber *sizeNumber = JSON[@"size"];
 		if ([sizeNumber isKindOfClass:[NSNumber class]]) {

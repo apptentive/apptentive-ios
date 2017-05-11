@@ -72,7 +72,7 @@ static NSString *const CustomDataKey = @"customData";
 			_state = ApptentiveMessageStateSent;
 		}
 
-		_identifier = JSON[@"id"];
+		_identifier = ApptentiveDictionaryGetString(JSON, @"id");
 	}
 
 	return self;

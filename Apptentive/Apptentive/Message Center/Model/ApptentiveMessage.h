@@ -28,10 +28,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ApptentiveMessage : NSObject <NSSecureCoding>
 
-@property (readonly, nonatomic) NSString *identifier;
+@property (readonly, nullable, nonatomic) NSString *identifier;
 @property (readonly, nonatomic) NSString *localIdentifier;
 @property (readonly, nonatomic) NSDate *sentDate;
-@property (readonly, nonatomic) NSArray *attachments;
+@property (readonly, nullable, nonatomic) NSArray *attachments;
 @property (readonly, nonatomic) ApptentiveMessageSender *sender;
 @property (readonly, nullable, nonatomic) NSString *body;
 @property (assign, nonatomic) ApptentiveMessageState state;

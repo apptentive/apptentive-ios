@@ -28,10 +28,6 @@ static NSString *const ProfilePhotoURLKey = @"profilePhotoURL";
 		}
 
 		_name = ApptentiveDictionaryGetString(JSON, @"name");
-        if (_name == nil) {
-            ApptentiveLogError(@"Can't init %@: name is nil", NSStringFromClass([self class]));
-            return nil;
-        }
         
 		_identifier = ApptentiveDictionaryGetString(JSON, @"id");
         if (_identifier.length == 0) {
@@ -52,6 +48,11 @@ static NSString *const ProfilePhotoURLKey = @"profilePhotoURL";
 	self = [super init];
 
 	if (self) {
+        if (identifier.length == 0) {
+            ApptentiveLogError(@"Can't init %@: identifier is nil or empty", NSStringFromClass([self class]));
+            return nil;
+        }
+        
 		_name = name;
 		_identifier = identifier;
 		_profilePhotoURL = profilePhotoURL;

@@ -19,10 +19,15 @@
 
 @implementation ApptentiveMessagePayload
 
-- (instancetype)initWithMessage:(ApptentiveMessage *)message {
+- (nullable instancetype)initWithMessage:(ApptentiveMessage *)message {
 	self = [super init];
 
 	if (self) {
+        if (message == nil) {
+            ApptentiveLogError(@"Can't init %@: message is nil", NSStringFromClass([self class]));
+            return nil;
+        }
+        
 		_message = message;
 		_superContents = super.contents;
 

@@ -24,6 +24,9 @@
 
 + (void)addMissingExtensionsInContext:(NSManagedObjectContext *)context {
 	ApptentiveAssertNotNil(context, @"Nil context when trying to add missing file extensions");
+    if (context == nil) {
+        return;
+    }
 
 	NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ATFileAttachment"];
 
@@ -82,7 +85,7 @@
 	if (!filename) {
 		return nil;
 	}
-	return [[[Apptentive sharedConnection].backend.conversationManager.messageManager attachmentDirectoryPath] stringByAppendingPathComponent:filename];
+	return [[[Apptentive sharedConnection].backend.conversationManager.messageManager attachmentDirectoryPath] stringByAppendingPathComponent:filename]; // FIXME: remove tight coupling here
 }
 
 @end

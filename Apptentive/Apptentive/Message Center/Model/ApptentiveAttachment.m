@@ -86,6 +86,7 @@ static NSString *const RemoteURLKey = @"remoteURL";
 - (instancetype)initWithData:(NSData *)data contentType:(NSString *)contentType name:(NSString *)name {
 	self = [super init];
 
+    // TODO: check input data
 	if (self) {
 		_contentType = contentType;
 		_name = name;

@@ -167,11 +167,24 @@ static Apptentive *_sharedInstance;
 }
 
 - (void)sendAttachmentImage:(UIImage *)image {
-	ApptentiveAttachment *attachment = [[ApptentiveAttachment alloc] initWithData:UIImageJPEGRepresentation(image, 0.95) contentType:@"image/jpeg" name:nil];
+    if (image == nil) {
+        ApptentiveLogError(@"Unable to send image attachment: image is nil");
+        return;
+    }
+    
+    NSData *imageData = UIImageJPEGRepresentation(image, 0.95);
+    if (imageData == nil) {
+        ApptentiveLogError(@"Unable to send image attachment: image data is invalid");
+        return;
+    }
+    
+	ApptentiveAttachment *attachment = [[ApptentiveAttachment alloc] initWithData:imageData contentType:@"image/jpeg" name:nil];
+    ApptentiveAssertNotNil(attachment, @"Attachment is nil");
+    if (attachment != nil) {
+        ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:nil attachments:@[attachment] senderIdentifier:self.backend.conversationManager.messageManager.localUserIdentifier automated:NO customData:nil];
 
-	ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:nil attachments:@[attachment] senderIdentifier:self.backend.conversationManager.messageManager.localUserIdentifier automated:NO customData:nil];
-
-	[self.backend.conversationManager.messageManager enqueueMessageForSending:message];
+        [self.backend.conversationManager.messageManager enqueueMessageForSending:message];
+    }
 }
 
 - (void)sendAttachmentFile:(NSData *)fileData withMimeType:(NSString *)mimeType {

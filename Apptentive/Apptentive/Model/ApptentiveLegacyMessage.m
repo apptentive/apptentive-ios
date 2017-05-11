@@ -54,7 +54,7 @@
 		for (ApptentiveLegacyFileAttachment *legacyAttachment in legacyMessage.attachments) {
 			ApptentiveAttachment *attachment = [[ApptentiveAttachment alloc] initWithPath:legacyAttachment.localPath contentType:legacyAttachment.mimeType name:legacyAttachment.name];
 
-			if (attachment) {
+			if (attachment != nil) {
 				[attachments addObject:attachment];
 			}
 		}

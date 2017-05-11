@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (readonly, nonatomic) NSURL *profilePhotoURL;
 
 - (nullable instancetype)initWithJSON:(NSDictionary *)JSON;
-- (nullable instancetype)initWithName:(NSString *)name identifier:(NSString *)identifier profilePhotoURL:(nullable NSURL *)profilePhotoURL;
+- (nullable instancetype)initWithName:(nullable NSString *)name identifier:(NSString *)identifier profilePhotoURL:(nullable NSURL *)profilePhotoURL;
 
 @end
 

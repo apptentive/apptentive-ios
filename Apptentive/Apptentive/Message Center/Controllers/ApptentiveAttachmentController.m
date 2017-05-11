@@ -103,7 +103,10 @@ NSString *const ATInteractionMessageCenterEventLabelAttachmentDelete = @"attachm
 			ApptentiveAttachment *attachment = [[ApptentiveAttachment alloc] initWithData:UIImageJPEGRepresentation(image, 0.6) contentType:@"image/jpeg" name:name];
 
 			index++;
-			[attachments addObject:attachment];
+            ApptentiveAssertNotNil(attachment, @"Attachment is nil");
+            if (attachment != nil) {
+                [attachments addObject:attachment];
+            }
 		}
 		_attachments = attachments;
 	}

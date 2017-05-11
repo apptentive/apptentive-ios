@@ -188,11 +188,24 @@ static Apptentive *_sharedInstance;
 }
 
 - (void)sendAttachmentFile:(NSData *)fileData withMimeType:(NSString *)mimeType {
+    if (fileData == nil) {
+        ApptentiveLogError(@"Unable to send attachment file: file data is nil");
+        return;
+    }
+    
+    if (mimeType.length == 0) {
+        ApptentiveLogError(@"Unable to send attachment file: mime-type is nil or empty");
+        return;
+    }
+    
 	ApptentiveAttachment *attachment = [[ApptentiveAttachment alloc] initWithData:fileData contentType:mimeType name:nil];
+    ApptentiveAssertNotNil(attachment, @"Attachment is nil");
 
-	ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:nil attachments:@[attachment] senderIdentifier:self.backend.conversationManager.messageManager.localUserIdentifier automated:NO customData:nil];
+    if (attachment != nil) {
+        ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:nil attachments:@[attachment] senderIdentifier:self.backend.conversationManager.messageManager.localUserIdentifier automated:NO customData:nil];
 
-	[self.backend.conversationManager.messageManager enqueueMessageForSending:message];
+        [self.backend.conversationManager.messageManager enqueueMessageForSending:message];
+    }
 }
 
 - (void)addCustomDeviceDataString:(NSString *)string withKey:(NSString *)key {

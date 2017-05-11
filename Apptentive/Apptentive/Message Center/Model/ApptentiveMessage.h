@@ -39,7 +39,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (readonly, nullable, nonatomic) NSDictionary *customData;
 
 - (nullable instancetype)initWithJSON:(NSDictionary *)JSON;
-- (nullable instancetype)initWithBody:(NSString *_Nullable)body attachments:(NSArray *_Nullable)attachments senderIdentifier:(NSString *)senderIdentifier automated:(BOOL)automated customData:(NSDictionary *_Nullable)customData;
+- (nullable instancetype)initWithBody:(nullable NSString *)body attachments:(nullable NSArray *)attachments senderIdentifier:(NSString *)senderIdentifier automated:(BOOL)automated customData:(NSDictionary *_Nullable)customData;
 
 - (ApptentiveMessage *)mergedWith:(ApptentiveMessage *)messageFromServer;
 - (void)updateWithLocalIdentifier:(NSString *)localIdentifier;

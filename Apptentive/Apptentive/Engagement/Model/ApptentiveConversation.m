@@ -42,9 +42,9 @@ NSString * NSStringFromApptentiveConversationState(ApptentiveConversationState s
         case ApptentiveConversationStateUndefined:
             return @"undefined";
         case ApptentiveConversationStateAnonymousPending:
-            return @"anonymous Pending";
+            return @"anonymous pending";
         case ApptentiveConversationStateLegacyPending:
-            return @"legacy Pending";
+            return @"legacy pending";
         case ApptentiveConversationStateAnonymous:
             return @"anonymous";
         case ApptentiveConversationStateLoggedIn:

@@ -82,6 +82,11 @@ static NSString *const CustomDataKey = @"customData";
 	self = [super init];
 
 	if (self) {
+        if (senderIdentifier.length == 0) {
+            ApptentiveLogError(@"Can't init %@: sender identifier is nil or empty", NSStringFromClass([self class]));
+            return nil;
+        }
+        
 		_body = body;
 		_attachments = attachments ?: @[];
 		_sender = [[ApptentiveMessageSender alloc] initWithName:nil identifier:senderIdentifier profilePhotoURL:nil];

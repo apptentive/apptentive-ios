@@ -162,8 +162,11 @@ static Apptentive *_sharedInstance;
 
 - (void)sendAttachmentText:(NSString *)text {
 	ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:text attachments:nil senderIdentifier:self.backend.conversationManager.messageManager.localUserIdentifier automated:NO customData:nil];
+    ApptentiveAssertNotNil(message, @"Message is nil");
 
-	[self.backend.conversationManager.messageManager enqueueMessageForSending:message];
+    if (message != nil) {
+        [self.backend.conversationManager.messageManager enqueueMessageForSending:message];
+    }
 }
 
 - (void)sendAttachmentImage:(UIImage *)image {
@@ -182,8 +185,11 @@ static Apptentive *_sharedInstance;
     ApptentiveAssertNotNil(attachment, @"Attachment is nil");
     if (attachment != nil) {
         ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:nil attachments:@[attachment] senderIdentifier:self.backend.conversationManager.messageManager.localUserIdentifier automated:NO customData:nil];
+        ApptentiveAssertNotNil(message, @"Message is nil");
 
-        [self.backend.conversationManager.messageManager enqueueMessageForSending:message];
+        if (message != nil) {
+            [self.backend.conversationManager.messageManager enqueueMessageForSending:message];
+        }
     }
 }
 
@@ -204,7 +210,10 @@ static Apptentive *_sharedInstance;
     if (attachment != nil) {
         ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:nil attachments:@[attachment] senderIdentifier:self.backend.conversationManager.messageManager.localUserIdentifier automated:NO customData:nil];
 
-        [self.backend.conversationManager.messageManager enqueueMessageForSending:message];
+        ApptentiveAssertNotNil(message, @"Message is nil");
+        if (message != nil) {
+            [self.backend.conversationManager.messageManager enqueueMessageForSending:message];
+        }
     }
 }
 

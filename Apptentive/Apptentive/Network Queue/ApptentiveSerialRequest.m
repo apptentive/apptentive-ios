@@ -31,6 +31,11 @@
 @dynamic encrypted;
 
 + (BOOL)enqueuePayload:(ApptentivePayload *)payload forConversation:(ApptentiveConversation *)conversation usingAuthToken:(nullable NSString *)authToken inContext:(NSManagedObjectContext *)context {
+    ApptentiveAssertNotNil(payload, @"Attempted to enqueue nil payload");
+    if (payload == nil) {
+        return NO;
+    }
+    
 	ApptentiveAssertNotNil(conversation, @"Attempted to enqueue payload with nil conversation: %@", payload);
 	if (conversation == nil) {
 		return NO;

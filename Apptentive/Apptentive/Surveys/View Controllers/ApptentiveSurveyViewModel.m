@@ -239,10 +239,13 @@ NSString *const ApptentiveInteractionSurveyEventLabelCancel = @"cancel";
 - (void)submit {
 	ApptentiveConversation *conversation = Apptentive.shared.backend.conversationManager.activeConversation;
 	ApptentiveSurveyResponsePayload *payload = [[ApptentiveSurveyResponsePayload alloc] initWithAnswers:self.answers identifier:self.interaction.identifier];
+    ApptentiveAssertNotNil(payload, @"Unable to create Apptentive survey response payload");
 
-	[ApptentiveSerialRequest enqueuePayload:payload forConversation:conversation usingAuthToken:conversation.token inContext:Apptentive.shared.backend.managedObjectContext];
+    if (payload != nil) {
+        [ApptentiveSerialRequest enqueuePayload:payload forConversation:conversation usingAuthToken:conversation.token inContext:Apptentive.shared.backend.managedObjectContext];
 
-	[Apptentive.shared.backend processQueuedRecords];
+        [Apptentive.shared.backend processQueuedRecords];
+    }
 }
 
 #pragma mark - Validation & Output

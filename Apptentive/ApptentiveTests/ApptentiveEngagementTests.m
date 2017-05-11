@@ -19,6 +19,7 @@
 #import "ApptentiveVersion.h"
 #import "ApptentiveEngagement.h"
 #import "ApptentiveBackend+Engagement.h"
+#import "ApptentiveUtilities.h"
 
 
 @interface ApptentiveEngagementTests : XCTestCase
@@ -52,6 +53,14 @@
  interactions.interaction_instance_id.invokes.total - The number of times the Interaction Instance with id interaction_instance_id has been invoked (irrespective of app version) (integer)
  interactions.interaction_instance_id.invokes.version  - The number of times the Interaction Instance with id interaction_instance_id has been invoked within the current version of the app (integer)
  */
+
+- (void)setUp {
+	[super setUp];
+
+	NSString *path = [[[ApptentiveUtilities applicationSupportPath] stringByAppendingPathComponent:@"com.apptentive.feedback"] stringByAppendingPathComponent:@"conversation-v1.meta"];
+
+	[[NSFileManager defaultManager] removeItemAtPath:path error:NULL];
+}
 
 - (void)testEventLabelsContainingCodePointSeparatorCharacters {
 	//Escape "%", "/", and "#".
@@ -469,6 +478,8 @@
 - (void)testEnjoymentDialogCriteria {
 	ApptentiveConfiguration *configuration = [ApptentiveConfiguration configurationWithAppKey:@"app-key" appSignature:@"app-signature"];
 	[Apptentive registerWithConfiguration:configuration];
+
+	Apptentive.shared.logLevel = ApptentiveLogLevelVerbose;
 
 	XCTestExpectation *expectation = [self expectationWithDescription:@"Backend stood up"];
 

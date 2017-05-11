@@ -54,7 +54,7 @@ class PayloadTests: XCTestCase {
 
 	func testMessagePayload() {
 		let message = ApptentiveMessage(body: "Hello", attachments: [], senderIdentifier: "56d49499c719925f3300000b", automated: false, customData: ["string": "foo", "number": 2, "bool": true])
-		let payload = ApptentiveMessagePayload(message: message!)
+		let payload = ApptentiveMessagePayload(message: message!)!
 
 		do {
 			if let payloadData = payload.payload, let contents = try JSONSerialization.jsonObject(with: payloadData, options: []) as? [String: Any] {

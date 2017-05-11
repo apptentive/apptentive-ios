@@ -9,8 +9,9 @@
 #import "ApptentiveRequestProtocol.h"
 #import <CoreData/CoreData.h>
 
-@class ApptentiveConversation, ApptentivePayload;
+NS_ASSUME_NONNULL_BEGIN
 
+@class ApptentiveConversation, ApptentivePayload;
 
 /**
  An `ApptentiveSerialRequest` instance encapsulates the data used to make a
@@ -91,8 +92,10 @@
  @param context The managed object context to use to create the request.
  @return Whether the payload was successfull enqueued.
  */
-+ (BOOL)enqueuePayload:(ApptentivePayload *)payload forConversation:(ApptentiveConversation *)conversation usingAuthToken:(NSString *)authToken inContext:(NSManagedObjectContext *)context;
++ (BOOL)enqueuePayload:(ApptentivePayload *)payload forConversation:(ApptentiveConversation *)conversation usingAuthToken:(nullable NSString *)authToken inContext:(NSManagedObjectContext *)context;
 
 - (BOOL)encryptWithKey:(NSData *)key;
 
 @end
+
+NS_ASSUME_NONNULL_END

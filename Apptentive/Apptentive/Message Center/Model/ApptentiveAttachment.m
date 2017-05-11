@@ -59,10 +59,26 @@ static NSString *const RemoteURLKey = @"remoteURL";
 	self = [super init];
 
 	if (self) {
+        if (path.length == 0) {
+            ApptentiveLogError(@"Can't init %@: path is nil or empty", NSStringFromClass([self class]));
+            return nil;
+        }
+        
 		BOOL isDirectory;
 		if (![[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isDirectory] || isDirectory) {
+            ApptentiveLogError(@"Can't init %@: file does not exist: %@", NSStringFromClass([self class]), path);
 			return nil;
 		}
+        
+        if (contentType.length == 0) {
+            ApptentiveLogError(@"Can't init %@: content type is nil or empty", NSStringFromClass([self class]));
+            return nil;
+        }
+        
+        if (name.length == 0) {
+            ApptentiveLogError(@"Can't init %@: name is nil or empty", NSStringFromClass([self class]));
+            return nil;
+        }
 
 		_fileName = path;
 		_contentType = contentType;

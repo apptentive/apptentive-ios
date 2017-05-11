@@ -19,6 +19,11 @@ void ApptentiveDictionarySetKeyValue(NSMutableDictionary *dictionary, NSString *
 BOOL ApptentiveDictionaryTrySetKeyValue(NSMutableDictionary *dictionary, NSString *key, id value);
 
 /**
- Safely retrieve string from a dictionary
+ Safely retrieves string from a dictionary (or returns nil if failed)
  */
 NSString *ApptentiveDictionaryGetString(NSDictionary *dictionary, NSString *key);
+
+/**
+ Safely retrieves array from a dictionary (or returns nil if failed)
+ */
+NSArray *ApptentiveDictionaryGetArray(NSDictionary *dictionary, NSString *key);

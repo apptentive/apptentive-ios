@@ -30,8 +30,7 @@
 @dynamic payload;
 @dynamic encrypted;
 
-+ (BOOL)enqueuePayload:(ApptentivePayload *)payload forConversation:(ApptentiveConversation *)conversation usingAuthToken:(NSString *)authToken inContext:(NSManagedObjectContext *)context {
-	ApptentiveAssertNotNil(conversation, @"Conversation id is nil");
++ (BOOL)enqueuePayload:(ApptentivePayload *)payload forConversation:(ApptentiveConversation *)conversation usingAuthToken:(nullable NSString *)authToken inContext:(NSManagedObjectContext *)context {
 	ApptentiveAssertNotNil(conversation, @"Attempted to enqueue payload with nil conversation: %@", payload);
 	if (conversation == nil) {
 		return NO;

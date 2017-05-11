@@ -9,7 +9,6 @@
 #import <Foundation/Foundation.h>
 #import <QuickLook/QuickLook.h>
 
-
 @class ApptentiveMessageSender;
 
 typedef NS_ENUM(NSInteger, ApptentiveMessageState) {
@@ -39,8 +38,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (readonly, nonatomic) BOOL automated;
 @property (readonly, nullable, nonatomic) NSDictionary *customData;
 
-- (instancetype)initWithJSON:(NSDictionary *)JSON;
-- (instancetype)initWithBody:(NSString *_Nullable)body attachments:(NSArray *_Nullable)attachments senderIdentifier:(NSString *)senderIdentifier automated:(BOOL)automated customData:(NSDictionary *_Nullable)customData;
+- (nullable instancetype)initWithJSON:(NSDictionary *)JSON;
+- (nullable instancetype)initWithBody:(NSString *_Nullable)body attachments:(NSArray *_Nullable)attachments senderIdentifier:(NSString *)senderIdentifier automated:(BOOL)automated customData:(NSDictionary *_Nullable)customData;
 
 - (ApptentiveMessage *)mergedWith:(ApptentiveMessage *)messageFromServer;
 - (void)updateWithLocalIdentifier:(NSString *)localIdentifier;

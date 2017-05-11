@@ -37,10 +37,6 @@ static NSString *const CustomDataKey = @"customData";
 		}
 
 		_body = ApptentiveDictionaryGetString(JSON, @"body");
-        if (_body == nil) {
-            ApptentiveLogError(@"Can't init %@: invalid json: %@", NSStringFromClass([self class]), JSON);
-            return nil;
-        }
 
 		NSArray *attachmentsArray = ApptentiveDictionaryGetArray(JSON, @"attachments");
 		if (attachmentsArray.count > 0) {
@@ -61,6 +57,10 @@ static NSString *const CustomDataKey = @"customData";
 		}
 
 		_sender = [[ApptentiveMessageSender alloc] initWithJSON:JSON[@"sender"]];
+        if (_sender == nil) {
+            ApptentiveLogError(@"Can't init %@: sender can't be created", NSStringFromClass([self class]));
+            return nil;
+        }
 
 		_sentDate = [NSDate dateWithTimeIntervalSince1970:[JSON[@"created_at"] doubleValue]];
 		_localIdentifier = JSON[@"nonce"];
@@ -90,6 +90,8 @@ static NSString *const CustomDataKey = @"customData";
 		_body = body;
 		_attachments = attachments ?: @[];
 		_sender = [[ApptentiveMessageSender alloc] initWithName:nil identifier:senderIdentifier profilePhotoURL:nil];
+        ApptentiveAssertNotNil(_sender, @"Apptentive message sender is nil");
+        
 		_automated = automated;
 		_customData = customData;
 

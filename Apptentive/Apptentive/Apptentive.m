@@ -69,6 +69,7 @@ static Apptentive *_sharedInstance;
 		_appKey = [appKey copy];
 		_appSignature = [appSignature copy];
 		_baseURL = [NSURL URLWithString:@"https://api.apptentive.com/"];
+        _logLevel = ApptentiveLogLevelInfo;
 	}
 	return self;
 }
@@ -103,6 +104,8 @@ static Apptentive *_sharedInstance;
 	self = [super init];
 
 	if (self) {
+        ApptentiveLogSetLevel(configuration.logLevel);
+        
 		_style = [[ApptentiveStyleSheet alloc] init];
 		_appKey = configuration.appKey;
 		_appSignature = configuration.appSignature;

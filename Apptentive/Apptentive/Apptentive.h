@@ -90,6 +90,9 @@ typedef NS_ENUM(NSUInteger, ApptentiveLogLevel) {
 /** Application signature */
 @property (copy, nonatomic, readonly) NSString *appSignature;
 
+/** Apptentive SDK log level (defaults to 'info') */
+@property (assign, nonatomic) ApptentiveLogLevel logLevel;
+
 /** Backend URL */
 @property (copy, nonatomic) NSURL *baseURL;
 

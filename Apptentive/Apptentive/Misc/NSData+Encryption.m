@@ -9,10 +9,19 @@
 #import "NSData+Encryption.h"
 #import <CommonCrypto/CommonCrypto.h>
 
-
 @implementation NSData (Encryption)
 
 - (NSData *)apptentive_dataEncryptedWithKey:(NSData *)key initializationVector:(NSData *)initializationVector {
+    if (key == nil) {
+        ApptentiveLogError(@"Unable to encrypt data: encryption key is nil");
+        return nil;
+    }
+    
+    if (initializationVector.length == 0) {
+        ApptentiveLogError(@"Unable to encrypt data: initialization vector is nil or empty");
+        return nil;
+    }
+    
 	NSMutableData *result = [[NSMutableData alloc] initWithLength:self.length + kCCBlockSizeAES128];
 	size_t resultLength;
 	// kCCAlgorithmAES128 will use a 256-bit key (AES256) if one is supplied.

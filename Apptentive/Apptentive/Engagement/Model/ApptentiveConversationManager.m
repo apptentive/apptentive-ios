@@ -28,6 +28,7 @@
 #import "ApptentiveSafeCollections.h"
 #import "NSData+Encryption.h"
 #import "ApptentiveJWT.h"
+#import "ApptentiveStopWatch.h"
 
 static NSString *const ConversationMetadataFilename = @"conversation-v1.meta";
 static NSString *const ConversationFilename = @"conversation-v1.archive";
@@ -156,7 +157,41 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 }
 
 - (ApptentiveConversation *)loadConversation:(ApptentiveConversationMetadataItem *)item {
-	ApptentiveConversation *conversation = [NSKeyedUnarchiver unarchiveObjectWithFile:[self conversationArchivePathForDirectoryName:item.directoryName]];
+    ApptentiveAssertNotNil(item, @"Conversation metadata item is nil");
+    if (item == nil) {
+        return nil;
+    }
+    
+    NSString *file = [self conversationArchivePathForDirectoryName:item.directoryName];
+    ApptentiveAssertNotNil(file, @"Conversation data file is nil: %@", item.directoryName);
+    if (file == nil) {
+        return nil;
+    }
+    
+    NSData *conversationData = [[NSData alloc] initWithContentsOfFile:file];
+    ApptentiveAssertNotNil(conversationData, @"Conversation data is nil: %@", file);
+    if (conversationData == nil) {
+        return nil;
+    }
+    
+    if (item.state == ApptentiveConversationStateLoggedIn) {
+        ApptentiveStopWatch *decryptionStopWatch = [ApptentiveStopWatch new];
+        
+        ApptentiveAssertNotNil(item.encryptionKey, @"Missing encryption key");
+        if (item.encryptionKey == nil) {
+            return nil;
+        }
+        
+        conversationData = [conversationData apptentive_dataDecryptedWithKey:item.encryptionKey];
+        ApptentiveAssertNotNil(item.encryptionKey, @"Can't decrypt conversation data");
+        if (conversationData == nil) {
+            return nil;
+        }
+        
+        ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Conversation decrypted (took %g ms)", decryptionStopWatch.elapsedMilliseconds);
+    }
+    
+	ApptentiveConversation *conversation = [NSKeyedUnarchiver unarchiveObjectWithData:conversationData];
 	conversation.state = item.state;
 	conversation.encryptionKey = item.encryptionKey;
 	conversation.userId = item.userId;
@@ -557,6 +592,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	self.activeConversation.encryptionKey = [NSData apptentive_dataWithHexString:encryptionKey];
 	ApptentiveAssertNotNil(self.activeConversation.encryptionKey, @"Apptentive encryption key should be not nil");
 
+    [self saveConversation];
 	[self handleConversationStateChange:self.activeConversation];
 
 	[self completeLoginSuccess:YES error:nil];
@@ -589,6 +625,13 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 }
 
 - (BOOL)saveConversation {
+    ApptentiveStopWatch *saveStopWatch = [[ApptentiveStopWatch alloc] init];
+    
+    ApptentiveAssertNotNil(self.activeConversation, @"Missing active conversation");
+    if (self.activeConversation == nil) {
+        return NO;
+    }
+    
 	@synchronized(self.activeConversation) {
 		NSString *conversationDirectoryPath = [self conversationContainerPathForDirectoryName:self.activeConversation.directoryName];
 
@@ -601,8 +644,50 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 				return NO;
 			}
 		}
-
-		return [NSKeyedArchiver archiveRootObject:self.activeConversation toFile:[self conversationArchivePathForDirectoryName:self.activeConversation.directoryName]];
+        
+        NSString *file = [self conversationArchivePathForDirectoryName:self.activeConversation.directoryName];
+        ApptentiveAssertTrue(file.length != 0, @"Conversation file is nil or empty");
+        
+        if (file.length == 0) {
+            return NO;
+        }
+        
+        NSData *conversationData = [NSKeyedArchiver archivedDataWithRootObject:self.activeConversation];
+        ApptentiveAssertNotNil(conversationData, @"Conversation data serialization failed");
+        
+        if (conversationData == nil) {
+            return NO;
+        }
+        
+        if (self.activeConversation.state == ApptentiveConversationStateLoggedIn) {
+            ApptentiveStopWatch *encryptionStopWatch = [[ApptentiveStopWatch alloc] init];
+            
+            ApptentiveAssertNotNil(self.activeConversation.encryptionKey, @"Missing encryption key");
+            if (self.activeConversation.encryptionKey == nil) {
+                return NO;
+            }
+            
+            NSData *initializationVector = [ApptentiveUtilities secureRandomDataOfLength:16];
+            ApptentiveAssertTrue(initializationVector.length > 0, @"Unable to generate random initialization vector.");
+            
+            if (initializationVector == nil) {
+                return NO;
+            }
+            
+            conversationData = [conversationData apptentive_dataEncryptedWithKey:self.activeConversation.encryptionKey
+                                                  initializationVector:initializationVector];
+            if (conversationData == nil) {
+                ApptentiveLogError(@"Unable to save conversation data: encryption failed");
+                return NO;
+            }
+            
+            ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Conversation data encrypted (took %g ms)", encryptionStopWatch.elapsedMilliseconds);
+        }
+        
+        BOOL succeed = [conversationData writeToFile:file atomically:YES];
+        ApptentiveLogDebug(ApptentiveLogTagConversation, @"Conversation data %@saved (took %g ms): location=%@", succeed ? @"" : @"NOT ", saveStopWatch.elapsedMilliseconds, file);
+        
+        return succeed;
 	}
 }
 

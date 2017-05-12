@@ -49,14 +49,14 @@ static Apptentive *_sharedInstance;
 
 @implementation ApptentiveConfiguration
 
-+ (nullable instancetype)configurationWithAppKey:(NSString *)appKey appSignature:(NSString *)appSignature {
-	return [[self alloc] initWithAppKey:appKey appSignature:appSignature];
++ (nullable instancetype)configurationWithApptentiveKey:(NSString *)apptentiveKey appSignature:(NSString *)appSignature {
+	return [[self alloc] initWithApptentiveKey:apptentiveKey appSignature:appSignature];
 }
 
-- (nullable instancetype)initWithAppKey:(NSString *)appKey appSignature:(NSString *)appSignature {
+- (nullable instancetype)initWithApptentiveKey:(NSString *)apptentiveKey appSignature:(NSString *)appSignature {
 	self = [super init];
 	if (self) {
-		if (appKey.length == 0) {
+		if (apptentiveKey.length == 0) {
 			ApptentiveLogError(@"Can't create Apptentive configuration: app key is nil or empty");
 			return nil;
 		}
@@ -66,7 +66,7 @@ static Apptentive *_sharedInstance;
 			return nil;
 		}
 
-		_appKey = [appKey copy];
+		_apptentiveKey = [apptentiveKey copy];
 		_appSignature = [appSignature copy];
 		_baseURL = [NSURL URLWithString:@"https://api.apptentive.com/"];
 	}
@@ -78,7 +78,7 @@ static Apptentive *_sharedInstance;
 
 @interface Apptentive () <ApptentiveBannerViewControllerDelegate>
 
-@property (copy, nonatomic) NSString *appKey;
+@property (copy, nonatomic) NSString *apptentiveKey;
 @property (copy, nonatomic) NSString *appSignature;
 
 @end
@@ -104,13 +104,13 @@ static Apptentive *_sharedInstance;
 
 	if (self) {
 		_style = [[ApptentiveStyleSheet alloc] init];
-		_appKey = configuration.appKey;
+		_apptentiveKey = configuration.apptentiveKey;
 		_appSignature = configuration.appSignature;
 		_baseURL = configuration.baseURL;
-		_backend = [[ApptentiveBackend alloc] initWithAppKey:_appKey
-												   signature:_appSignature
-													 baseURL:_baseURL
-												 storagePath:@"com.apptentive.feedback"];
+		_backend = [[ApptentiveBackend alloc] initWithApptentiveKey:_apptentiveKey
+                                                          signature:_appSignature
+                                                            baseURL:_baseURL
+                                                        storagePath:@"com.apptentive.feedback"];
 
 		if (configuration.distributionName && configuration.distributionVersion) {
 			[ApptentiveSDK setDistributionName:configuration.distributionName];

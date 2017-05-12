@@ -19,11 +19,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (readonly, nonatomic) NSOperationQueue *operationQueue;
 @property (readonly, nonatomic) NSURL *baseURL;
-@property (readonly, nonatomic) NSString *appKey;
+@property (readonly, nonatomic) NSString *apptentiveKey;
 @property (readonly, nonatomic) NSString *appSignature;
 @property (strong, nullable, nonatomic) NSString *authToken;
 
-- (instancetype)initWithBaseURL:(NSURL *)baseURL appKey:(NSString *)appKey appSignature:(NSString *)appSignature;
+- (instancetype)initWithBaseURL:(NSURL *)baseURL apptentiveKey:(NSString *)apptentiveKey appSignature:(NSString *)appSignature;
 
 - (ApptentiveRequestOperation *)requestOperationWithRequest:(id<ApptentiveRequest>)request delegate:(id<ApptentiveRequestOperationDelegate>)delegate;
 

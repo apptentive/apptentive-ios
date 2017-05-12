@@ -23,7 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param initializationVector A 16-byte initialization vector.
  @return The encrypted data with the initialization vector prepended, or nil if there was an error.
  */
-- (NSData *)apptentive_dataEncryptedWithKey:(NSData *)key initializationVector:(NSData *)initializationVector;
+- (nullable NSData *)apptentive_dataEncryptedWithKey:(NSData *)key initializationVector:(NSData *)initializationVector;
 
 /**
  For testing purposes, decrypts the data (with a prepended initialization vector)
@@ -32,7 +32,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param key A 32-byte key used to decrypt the data.
  @return The decrypted data, or nil if there was an error.
  */
-- (NSData *)apptentive_dataDecryptedWithKey:(NSData *)key;
+- (nullable NSData *)apptentive_dataDecryptedWithKey:(NSData *)key;
 
 
 /**

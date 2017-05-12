@@ -22,11 +22,11 @@
 @dynamic remoteURL;
 @dynamic remoteThumbnailURL;
 
-+ (void)addMissingExtensionsInContext:(NSManagedObjectContext *)context {
++ (void)addMissingExtensionsInContext:(NSManagedObjectContext *)context andMoveToDirectory:(NSString *)newDirectory {
 	ApptentiveAssertNotNil(context, @"Nil context when trying to add missing file extensions");
-    if (context == nil) {
-        return;
-    }
+	if (context == nil) {
+		return;
+	}
 
 	NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ATFileAttachment"];
 
@@ -38,16 +38,40 @@
 		return;
 	}
 
-#warning This needs to be looked at again
-#warning The paths are probably no longer valid
+	NSString *legacyDirectory = [Apptentive.shared.backend.supportDirectoryPath stringByAppendingPathComponent:@"attachments"];
+
 	for (ApptentiveLegacyFileAttachment *attachment in allAttachments) {
-		if (attachment.localPath.length > 0 && attachment.localPath.pathExtension.length == 0 && attachment.mimeType.length > 0) {
-			NSString *newPath = [attachment.localPath stringByAppendingPathExtension:attachment.extension];
+		if (attachment.localPath.length > 0) {
+			NSString *legacyFilename = attachment.localPath;
+			NSString *legacyPath = [legacyDirectory stringByAppendingString:legacyFilename];
+
+			NSString *newFilename = legacyFilename;
+
+			if (attachment.localPath.pathExtension.length == 0 && attachment.mimeType.length > 0) {
+				[attachment.localPath stringByAppendingPathExtension:attachment.extension];
+			}
+
+			NSString *newPath = [newDirectory stringByAppendingPathComponent:newFilename];
+
 			NSError *error;
-			if ([[NSFileManager defaultManager] moveItemAtPath:[self fullLocalPathForFilename:attachment.localPath] toPath:[self fullLocalPathForFilename:newPath] error:&error]) {
-				attachment.localPath = newPath;
+
+			ApptentiveAssertNotNil(legacyPath, @"Legacy path must not be nil");
+			ApptentiveAssertNotNil(newPath, @"New path must not be nil");
+
+			if (legacyPath == nil) {
+				ApptentiveLogError(@"Legacy path is nil for attachment %@", attachment);
+				continue;
+			}
+
+			if (newPath == nil) {
+				ApptentiveLogError(@"New path is nil for attachment %@", attachment);
+				continue;
+			}
+
+			if ([[NSFileManager defaultManager] moveItemAtPath:legacyPath toPath:newPath error:&error]) {
+				attachment.localPath = newFilename;
 			} else {
-				ApptentiveLogError(@"Unable to append extension to file %@ (error: %@)", newPath, error);
+				ApptentiveLogError(@"Unable to move attachment file %@ (error: %@)", newFilename, error);
 			}
 		}
 	}
@@ -79,13 +103,6 @@
 	}
 
 	return _extension;
-}
-
-+ (NSString *)fullLocalPathForFilename:(NSString *)filename {
-	if (!filename) {
-		return nil;
-	}
-	return [[[Apptentive sharedConnection].backend.conversationManager.messageManager attachmentDirectoryPath] stringByAppendingPathComponent:filename]; // FIXME: remove tight coupling here
 }
 
 @end

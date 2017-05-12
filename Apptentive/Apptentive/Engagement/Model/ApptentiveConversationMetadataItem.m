@@ -43,7 +43,7 @@ static NSString *const UserIdKey = @"userId";
 		_conversationIdentifier = [coder decodeObjectOfClass:[NSString class] forKey:ConversationIdentifierKey];
 		_directoryName = [coder decodeObjectOfClass:[NSString class] forKey:FileNameKey];
 		_encryptionKey = [coder decodeObjectOfClass:[NSData class] forKey:EncryptionKeyKey];
-        _userId = [coder decodeObjectOfClass:[NSString class] forKey:UserIdKey];
+		_userId = [coder decodeObjectOfClass:[NSString class] forKey:UserIdKey];
 	}
 
 	return self;
@@ -54,7 +54,7 @@ static NSString *const UserIdKey = @"userId";
 	[coder encodeObject:self.conversationIdentifier forKey:ConversationIdentifierKey];
 	[coder encodeObject:self.directoryName forKey:FileNameKey];
 	[coder encodeObject:self.encryptionKey forKey:EncryptionKeyKey];
-    [coder encodeObject:self.userId forKey:UserIdKey];
+	[coder encodeObject:self.userId forKey:UserIdKey];
 	[coder encodeInteger:VERSION forKey:VersionKey];
 }
 

@@ -11,10 +11,13 @@
 typedef NS_ENUM(NSInteger, ApptentiveConversationState) {
 	ApptentiveConversationStateUndefined = 0,
 	ApptentiveConversationStateAnonymousPending,
+	ApptentiveConversationStateLegacyPending,
 	ApptentiveConversationStateAnonymous,
 	ApptentiveConversationStateLoggedIn,
 	ApptentiveConversationStateLoggedOut
 };
+
+extern NSString * NSStringFromApptentiveConversationState(ApptentiveConversationState state);
 
 @class ApptentivePerson, ApptentiveDevice, ApptentiveSDK, ApptentiveAppRelease, ApptentiveEngagement, ApptentiveVersion, ApptentiveConversationMetadataItem;
 @protocol ApptentiveConversationDelegate;

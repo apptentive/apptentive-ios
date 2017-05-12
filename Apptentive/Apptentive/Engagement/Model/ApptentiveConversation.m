@@ -37,6 +37,25 @@ static NSString *const ATCurrentConversationPreferenceKey = @"ATCurrentConversat
 static NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKey";
 static NSString *const ATMessageCenterDidSkipProfileKey = @"ATMessageCenterDidSkipProfileKey";
 
+NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState state) {
+	switch (state) {
+		case ApptentiveConversationStateUndefined:
+			return @"undefined";
+		case ApptentiveConversationStateAnonymousPending:
+			return @"anonymous pending";
+		case ApptentiveConversationStateLegacyPending:
+			return @"legacy pending";
+		case ApptentiveConversationStateAnonymous:
+			return @"anonymous";
+		case ApptentiveConversationStateLoggedIn:
+			return @"logged-in";
+		case ApptentiveConversationStateLoggedOut:
+			return @"logged-out";
+	}
+
+	return @"unknown";
+}
+
 
 @interface ApptentiveConversation ()
 
@@ -279,6 +298,7 @@ static NSString *const ATMessageCenterDidSkipProfileKey = @"ATMessageCenterDidSk
 		NSData *legacyConversationData = [[NSUserDefaults standardUserDefaults] dataForKey:ATCurrentConversationPreferenceKey];
 
 		[NSKeyedUnarchiver setClass:[ApptentiveLegacyConversation class] forClassName:@"ApptentiveConversation"];
+		[NSKeyedUnarchiver setClass:[ApptentiveLegacyConversation class] forClassName:@"ATConversation"];
 
 		ApptentiveLegacyConversation *legacyConversation = (ApptentiveLegacyConversation *)[NSKeyedUnarchiver unarchiveObjectWithData:legacyConversationData];
 
@@ -299,8 +319,22 @@ static NSString *const ATMessageCenterDidSkipProfileKey = @"ATMessageCenterDidSk
 
 		[_mutableUserInfo setObject:@([[NSUserDefaults standardUserDefaults] boolForKey:ATMessageCenterDidSkipProfileKey]) forKey:ATMessageCenterDidSkipProfileKey];
 
-		_lastSentDevice = @{};
-		_lastSentPerson = @{};
+		// Migrate last sent device if available
+		_lastSentDevice = [[NSUserDefaults standardUserDefaults] dictionaryForKey:ATDeviceLastUpdateValuePreferenceKey][@"device"] ?: @{};
+
+		// Migrate last sent person if available
+		NSData *lastSentPersondata = [[NSUserDefaults standardUserDefaults] dataForKey:ATPersonLastUpdateValuePreferenceKey];
+
+		if (lastSentPersondata) {
+			NSDictionary *person = [NSKeyedUnarchiver unarchiveObjectWithData:lastSentPersondata];
+			if ([person isKindOfClass:[NSDictionary class]]) {
+				_lastSentPerson = person[@"person"];
+			} else {
+				_lastSentPerson = @{};
+			}
+		} else {
+			_lastSentPerson = @{};
+		}
 	}
 
 	return self;

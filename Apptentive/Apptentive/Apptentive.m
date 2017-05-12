@@ -162,24 +162,59 @@ static Apptentive *_sharedInstance;
 
 - (void)sendAttachmentText:(NSString *)text {
 	ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:text attachments:nil senderIdentifier:self.backend.conversationManager.messageManager.localUserIdentifier automated:NO customData:nil];
+    ApptentiveAssertNotNil(message, @"Message is nil");
 
-	[self.backend.conversationManager.messageManager enqueueMessageForSending:message];
+    if (message != nil) {
+        [self.backend.conversationManager.messageManager enqueueMessageForSending:message];
+    }
 }
 
 - (void)sendAttachmentImage:(UIImage *)image {
-	ApptentiveAttachment *attachment = [[ApptentiveAttachment alloc] initWithData:UIImageJPEGRepresentation(image, 0.95) contentType:@"image/jpeg" name:nil];
+    if (image == nil) {
+        ApptentiveLogError(@"Unable to send image attachment: image is nil");
+        return;
+    }
+    
+    NSData *imageData = UIImageJPEGRepresentation(image, 0.95);
+    if (imageData == nil) {
+        ApptentiveLogError(@"Unable to send image attachment: image data is invalid");
+        return;
+    }
+    
+	ApptentiveAttachment *attachment = [[ApptentiveAttachment alloc] initWithData:imageData contentType:@"image/jpeg" name:nil];
+    ApptentiveAssertNotNil(attachment, @"Attachment is nil");
+    if (attachment != nil) {
+        ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:nil attachments:@[attachment] senderIdentifier:self.backend.conversationManager.messageManager.localUserIdentifier automated:NO customData:nil];
+        ApptentiveAssertNotNil(message, @"Message is nil");
 
-	ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:nil attachments:@[attachment] senderIdentifier:self.backend.conversationManager.messageManager.localUserIdentifier automated:NO customData:nil];
-
-	[self.backend.conversationManager.messageManager enqueueMessageForSending:message];
+        if (message != nil) {
+            [self.backend.conversationManager.messageManager enqueueMessageForSending:message];
+        }
+    }
 }
 
 - (void)sendAttachmentFile:(NSData *)fileData withMimeType:(NSString *)mimeType {
+    if (fileData == nil) {
+        ApptentiveLogError(@"Unable to send attachment file: file data is nil");
+        return;
+    }
+    
+    if (mimeType.length == 0) {
+        ApptentiveLogError(@"Unable to send attachment file: mime-type is nil or empty");
+        return;
+    }
+    
 	ApptentiveAttachment *attachment = [[ApptentiveAttachment alloc] initWithData:fileData contentType:mimeType name:nil];
+    ApptentiveAssertNotNil(attachment, @"Attachment is nil");
 
-	ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:nil attachments:@[attachment] senderIdentifier:self.backend.conversationManager.messageManager.localUserIdentifier automated:NO customData:nil];
+    if (attachment != nil) {
+        ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:nil attachments:@[attachment] senderIdentifier:self.backend.conversationManager.messageManager.localUserIdentifier automated:NO customData:nil];
 
-	[self.backend.conversationManager.messageManager enqueueMessageForSending:message];
+        ApptentiveAssertNotNil(message, @"Message is nil");
+        if (message != nil) {
+            [self.backend.conversationManager.messageManager enqueueMessageForSending:message];
+        }
+    }
 }
 
 - (void)addCustomDeviceDataString:(NSString *)string withKey:(NSString *)key {

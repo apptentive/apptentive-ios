@@ -11,7 +11,7 @@ import XCTest
 class PayloadTests: XCTestCase {
     
 	func testEventPayload() {
-		let payload = ApptentiveEventPayload(label: "event_1")
+		let payload = ApptentiveEventPayload(label: "event_1")!
 		payload.interactionIdentifier = "abc123def456ghi789"
 		payload.customData = ["string": "foo", "number": 2, "bool": true]
 
@@ -41,7 +41,7 @@ class PayloadTests: XCTestCase {
 	}
 
 	func testSurveyPayload() {
-		let payload = ApptentiveSurveyResponsePayload(answers: ["56d49499c719925f3300000b":["id": "56d49499c719925f3300000b", "value": "Other Text"]], identifier: "56d49499c719925f3300000a")
+		let payload = ApptentiveSurveyResponsePayload(answers: ["56d49499c719925f3300000b":["id": "56d49499c719925f3300000b", "value": "Other Text"]], identifier: "56d49499c719925f3300000a")!
 
 		if let contents = self.testBoilerplateForPayload(payload, containerName: "survey"), let answers = contents["answers"] as? [String:Any], let answer = answers["56d49499c719925f3300000b"] as? [String:String] {
 			XCTAssertEqual(contents["id"] as? String, "56d49499c719925f3300000a")
@@ -54,7 +54,7 @@ class PayloadTests: XCTestCase {
 
 	func testMessagePayload() {
 		let message = ApptentiveMessage(body: "Hello", attachments: [], senderIdentifier: "56d49499c719925f3300000b", automated: false, customData: ["string": "foo", "number": 2, "bool": true])
-		let payload = ApptentiveMessagePayload(message: message)
+		let payload = ApptentiveMessagePayload(message: message!)!
 
 		do {
 			if let payloadData = payload.payload, let contents = try JSONSerialization.jsonObject(with: payloadData, options: []) as? [String: Any] {

@@ -10,6 +10,8 @@
 #import <UIKit/UIKit.h>
 #import <QuickLook/QuickLook.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @interface ApptentiveAttachment : NSObject <NSSecureCoding>
 
@@ -21,14 +23,14 @@
 
 @property (readonly, nonatomic) NSString *fullLocalPath;
 
-- (instancetype)initWithJSON:(NSDictionary *)JSON;
-- (instancetype)initWithPath:(NSString *)path contentType:(NSString *)contentType name:(NSString *)name;
-- (instancetype)initWithData:(NSData *)data contentType:(NSString *)contentType name:(NSString *)name;
+- (nullable instancetype)initWithJSON:(NSDictionary *)JSON;
+- (nullable instancetype)initWithPath:(NSString *)path contentType:(NSString *)contentType name:(nullable NSString *)name;
+- (nullable instancetype)initWithData:(NSData *)data contentType:(NSString *)contentType name:(nullable NSString *)name;
 
 @property (readonly, nonatomic) NSString *extension;
 @property (readonly, nonatomic) BOOL canCreateThumbnail;
 
-- (UIImage *)thumbnailOfSize:(CGSize)size;
+- (nullable UIImage *)thumbnailOfSize:(CGSize)size;
 
 /** Can be called from background thread. */
 - (NSURL *)permanentLocation;
@@ -41,3 +43,5 @@
 
 @interface ApptentiveAttachment (QuickLook) <QLPreviewItem>
 @end
+
+NS_ASSUME_NONNULL_END

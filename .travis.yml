@@ -1,6 +1,6 @@
 language: objective-c
-osx_image: xcode8.2
+osx_image: xcode8.3
 xcode_project: Apptentive/Apptentive.xcodeproj
 xcode_scheme: Apptentive
 script:
-    - xcodebuild clean test -sdk iphonesimulator -project Apptentive/Apptentive.xcodeproj -scheme Apptentive -destination platform="iOS Simulator,name=iPhone SE,OS=10.2" CODE_SIGNING_REQUIRED=NO
+    - xcodebuild clean test -sdk iphonesimulator -project Apptentive/Apptentive.xcodeproj -scheme Apptentive -destination platform="iOS Simulator,name=iPhone SE,OS=10.3" CODE_SIGNING_REQUIRED=NO

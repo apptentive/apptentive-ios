@@ -19,7 +19,7 @@ typedef NS_ENUM(NSInteger, ATPendingMessageState) {
 	ATPendingMessageStateError
 };
 
-@class ATMessageDisplayType, ApptentiveLegacyMessageSender;
+@class ATMessageDisplayType, ApptentiveLegacyMessageSender, ApptentiveConversation;
 
 
 @interface ApptentiveLegacyMessage : ApptentiveRecord
@@ -39,6 +39,6 @@ typedef NS_ENUM(NSInteger, ATPendingMessageState) {
 @property (copy, nonatomic) NSString *title;
 @property (strong, nonatomic) NSOrderedSet *attachments;
 
-+ (void)enqueueUnsentMessagesInContext:(NSManagedObjectContext *)context;
++ (void)enqueueUnsentMessagesInContext:(NSManagedObjectContext *)context forConversation:(ApptentiveConversation *)conversation;
 
 @end

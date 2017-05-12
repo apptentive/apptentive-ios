@@ -27,35 +27,40 @@ static NSString *const CustomDataKey = @"customData";
 	return YES;
 }
 
-- (instancetype)initWithJSON:(NSDictionary *)JSON {
+- (nullable instancetype)initWithJSON:(NSDictionary *)JSON {
 	self = [super init];
 
 	if (self) {
-		ApptentiveAssertTrue([JSON isKindOfClass:[NSDictionary class]], @"Unexpected JSON when creating message");
-
 		if (![JSON isKindOfClass:[NSDictionary class]]) {
+            ApptentiveLogError(@"Can't init %@: invalid json: %@", NSStringFromClass([self class]), JSON);
 			return nil;
 		}
 
-		_body = JSON[@"body"];
+		_body = ApptentiveDictionaryGetString(JSON, @"body");
 
-		NSArray *attachmentsJSON = JSON[@"attachments"];
-		if ([attachmentsJSON isKindOfClass:[NSArray class]]) {
-			NSMutableArray *mutableAttachments = [NSMutableArray arrayWithCapacity:attachmentsJSON.count];
+		NSArray *attachmentsArray = ApptentiveDictionaryGetArray(JSON, @"attachments");
+		if (attachmentsArray.count > 0) {
+			NSMutableArray *attachments = [NSMutableArray arrayWithCapacity:attachmentsArray.count];
 
-			for (NSDictionary *attachmentJSON in attachmentsJSON) {
-				ApptentiveAttachment *attachment = [[ApptentiveAttachment alloc] initWithJSON:attachmentJSON];
+			for (id attachmentDict in attachmentsArray) {
+                if (![attachmentDict isKindOfClass:[NSDictionary class]]) {
+                    continue;
+                }
+                
+				ApptentiveAttachment *attachment = [[ApptentiveAttachment alloc] initWithJSON:attachmentDict];
 				if (attachment != nil) {
-					[mutableAttachments addObject:attachment];
+					[attachments addObject:attachment];
 				}
 			}
 
-			_attachments = [mutableAttachments copy];
-		} else {
-			ApptentiveAssertNil(attachmentsJSON, @"Expected nil but was: %@", attachmentsJSON);
+			_attachments = attachments;
 		}
 
 		_sender = [[ApptentiveMessageSender alloc] initWithJSON:JSON[@"sender"]];
+        if (_sender == nil) {
+            ApptentiveLogError(@"Can't init %@: sender can't be created", NSStringFromClass([self class]));
+            return nil;
+        }
 
 		_sentDate = [NSDate dateWithTimeIntervalSince1970:[JSON[@"created_at"] doubleValue]];
 		_localIdentifier = JSON[@"nonce"];
@@ -67,19 +72,26 @@ static NSString *const CustomDataKey = @"customData";
 			_state = ApptentiveMessageStateSent;
 		}
 
-		_identifier = JSON[@"id"];
+		_identifier = ApptentiveDictionaryGetString(JSON, @"id");
 	}
 
 	return self;
 }
 
-- (instancetype)initWithBody:(NSString *)body attachments:(NSArray *)attachments senderIdentifier:(NSString *)senderIdentifier automated:(BOOL)automated customData:(NSDictionary *)customData {
+- (nullable instancetype)initWithBody:(NSString *)body attachments:(NSArray *)attachments senderIdentifier:(NSString *)senderIdentifier automated:(BOOL)automated customData:(NSDictionary *)customData {
 	self = [super init];
 
 	if (self) {
+        if (senderIdentifier.length == 0) {
+            ApptentiveLogError(@"Can't init %@: sender identifier is nil or empty", NSStringFromClass([self class]));
+            return nil;
+        }
+        
 		_body = body;
 		_attachments = attachments ?: @[];
 		_sender = [[ApptentiveMessageSender alloc] initWithName:nil identifier:senderIdentifier profilePhotoURL:nil];
+        ApptentiveAssertNotNil(_sender, @"Apptentive message sender is nil");
+        
 		_automated = automated;
 		_customData = customData;
 

@@ -11,7 +11,17 @@
 
 @implementation ApptentiveSurveyResponsePayload
 
-- (instancetype)initWithAnswers:(NSDictionary *)answers identifier:(NSString *)identifier {
+- (nullable instancetype)initWithAnswers:(NSDictionary *)answers identifier:(NSString *)identifier {
+	if (answers.count == 0) {
+		ApptentiveLogError(@"Attempting to create survey response without answers");
+		return nil;
+	}
+
+	if (identifier.length == 0) {
+		ApptentiveLogError(@"Attempting to create survey response without identifier");
+		return nil;
+	}
+
 	self = [super init];
 
 	if (self) {

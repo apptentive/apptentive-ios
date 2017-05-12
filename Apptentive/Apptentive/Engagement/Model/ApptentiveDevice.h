@@ -8,6 +8,8 @@
 
 #import "ApptentiveCustomData.h"
 
+extern NSString *const ATDeviceLastUpdateValuePreferenceKey;
+
 @class ApptentiveVersion;
 
 

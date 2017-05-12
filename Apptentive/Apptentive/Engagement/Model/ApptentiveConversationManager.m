@@ -135,6 +135,15 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		return nil;
 	}
 
+	// attempt to load a legacy conversation
+	ApptentiveConversation *legacyConversation = [[ApptentiveConversation alloc] initAndMigrate];
+	if (legacyConversation != nil) {
+		legacyConversation.state = ApptentiveConversationStateLegacyPending;
+		[Apptentive.shared.backend migrateLegacyCoreDataAndTaskQueueForConversation:legacyConversation];
+		[self createMessageManagerForConversation:legacyConversation];
+		return legacyConversation;
+	}
+
 	// no conversation available: create a new one
 	ApptentiveLogDebug(ApptentiveLogTagConversation, @"Can't load conversation: creating anonymous conversation...");
 	ApptentiveConversation *anonymousConversation = [[ApptentiveConversation alloc] init];
@@ -153,7 +162,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	conversation.userId = item.userId;
 
 	// TODO: check data consistency
-    
+
 	[self createMessageManagerForConversation:conversation];
 
 	return conversation;
@@ -342,8 +351,8 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 				break;
 
 			default:
-				ApptentiveAssertTrue(NO, @"Unexpected conversation state when logging in: %ld", self.activeConversation.state);
-                [self failLoginWithErrorCode:ApptentiveInternalInconsistency failureReason:@"Unexpected conversation state when logging in: %ld", self.activeConversation.state];
+				ApptentiveAssertTrue(NO, @"Unexpected conversation state when logging in: %@", NSStringFromApptentiveConversationState(self.activeConversation.state));
+                [self failLoginWithErrorCode:ApptentiveInternalInconsistency failureReason:@"Unexpected conversation state when logging in: %@", NSStringFromApptentiveConversationState(self.activeConversation.state)];
 				break;
 		}
 	}];
@@ -369,15 +378,15 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 }
 
 - (void)failLoginWithErrorCode:(NSInteger)errorCode failureReason:(NSString *)format, ... {
-    va_list ap;
-    va_start(ap, format);
-    NSString *failureReason = [[NSString alloc] initWithFormat:format arguments:ap];
-    va_end(ap);
-    
-    NSError *error = [self errorWithCode:errorCode failureReason:failureReason];
-    [self completeLoginSuccess:NO error:error];
+	va_list ap;
+	va_start(ap, format);
+	NSString *failureReason = [[NSString alloc] initWithFormat:format arguments:ap];
+	va_end(ap);
+
+	NSError *error = [self errorWithCode:errorCode failureReason:failureReason];
+	[self completeLoginSuccess:NO error:error];
 }
-        
+
 - (void)completeLoginSuccess:(BOOL)success error:(NSError *)error {
 	self.loginCompletionBlock(success, error);
 	self.loginCompletionBlock = nil;
@@ -483,9 +492,9 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 		self.manifestOperation = nil;
 	} else if (operation == self.loginRequestOperation) {
-        ApptentiveAssertNotNil(self.pendingLoggedInUserId, @"Missing pending user_id");
-        [self processLoginResponse:(NSDictionary *)operation.responseObject userId:self.pendingLoggedInUserId];
-        self.pendingLoggedInUserId = nil;
+		ApptentiveAssertNotNil(self.pendingLoggedInUserId, @"Missing pending user_id");
+		[self processLoginResponse:(NSDictionary *)operation.responseObject userId:self.pendingLoggedInUserId];
+		self.pendingLoggedInUserId = nil;
 		self.loginRequestOperation = nil;
 	}
 }
@@ -525,26 +534,26 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 - (void)processLoginResponse:(NSDictionary *)loginResponse userId:(NSString *)userId {
 	NSString *encryptionKey = ApptentiveDictionaryGetString(loginResponse, @"encryption_key");
 	if (encryptionKey == nil) {
-        [self failLoginWithErrorCode:ApptentiveInternalInconsistency failureReason:@"Conversation response did not include encryption key."];
+		[self failLoginWithErrorCode:ApptentiveInternalInconsistency failureReason:@"Conversation response did not include encryption key."];
 		return;
 	}
-    
-    // if we were previously logged out we might end up with no active conversation
-    if (self.activeConversation == nil) {
-        ApptentiveConversationMetadataItem *conversationItem = [self.conversationMetadata findItemFilter:^BOOL(ApptentiveConversationMetadataItem *item) {
+
+	// if we were previously logged out we might end up with no active conversation
+	if (self.activeConversation == nil) {
+		ApptentiveConversationMetadataItem *conversationItem = [self.conversationMetadata findItemFilter:^BOOL(ApptentiveConversationMetadataItem *item) {
             return [item.userId isEqualToString:self.pendingLoggedInUserId];
-        }];
-        
-        if (conversationItem == nil) {
-            [self failLoginWithErrorCode:ApptentiveInternalInconsistency failureReason:@"Unable to find an existing conversation with for user: '%@'", self.pendingLoggedInUserId];
-            return;
-        }
-        
-        _activeConversation = [self loadConversation:conversationItem];
-    }
+		}];
+
+		if (conversationItem == nil) {
+			[self failLoginWithErrorCode:ApptentiveInternalInconsistency failureReason:@"Unable to find an existing conversation with for user: '%@'", self.pendingLoggedInUserId];
+			return;
+		}
+
+		_activeConversation = [self loadConversation:conversationItem];
+	}
 
 	self.activeConversation.state = ApptentiveConversationStateLoggedIn;
-    self.activeConversation.userId = self.pendingLoggedInUserId;
+	self.activeConversation.userId = self.pendingLoggedInUserId;
 	self.activeConversation.encryptionKey = [NSData apptentive_dataWithHexString:encryptionKey];
 	ApptentiveAssertNotNil(self.activeConversation.encryptionKey, @"Apptentive encryption key should be not nil");
 

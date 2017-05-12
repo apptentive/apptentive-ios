@@ -376,6 +376,9 @@
 		EFF3FE3B1E8C2F05006AD2B4 /* ApptentiveLog.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF3FE3A1E8C2F05006AD2B4 /* ApptentiveLog.m */; };
 		EFF3FE421E8C386E006AD2B4 /* ApptentiveLogTag.h in Headers */ = {isa = PBXBuildFile; fileRef = EFF3FE401E8C386E006AD2B4 /* ApptentiveLogTag.h */; };
 		EFF3FE431E8C386E006AD2B4 /* ApptentiveLogTag.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF3FE411E8C386E006AD2B4 /* ApptentiveLogTag.m */; };
+		EFF4D2A71EC37FB800FD4EFE /* 3.5.0.xcappdata in Resources */ = {isa = PBXBuildFile; fileRef = EFF4D2A61EC37FB800FD4EFE /* 3.5.0.xcappdata */; };
+		EFF4D2A91EC3806300FD4EFE /* ApptentiveConversationMigrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF4D2A81EC3806300FD4EFE /* ApptentiveConversationMigrationTests.m */; };
+		EFF4D2AC1EC39EC000FD4EFE /* ApptentiveAppDataContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF4D2AB1EC39EC000FD4EFE /* ApptentiveAppDataContainer.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -788,6 +791,10 @@
 		EFF3FE3A1E8C2F05006AD2B4 /* ApptentiveLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveLog.m; sourceTree = "<group>"; };
 		EFF3FE401E8C386E006AD2B4 /* ApptentiveLogTag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveLogTag.h; sourceTree = "<group>"; };
 		EFF3FE411E8C386E006AD2B4 /* ApptentiveLogTag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveLogTag.m; sourceTree = "<group>"; };
+		EFF4D2A61EC37FB800FD4EFE /* 3.5.0.xcappdata */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = 3.5.0.xcappdata; sourceTree = "<group>"; };
+		EFF4D2A81EC3806300FD4EFE /* ApptentiveConversationMigrationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveConversationMigrationTests.m; sourceTree = "<group>"; };
+		EFF4D2AA1EC39EC000FD4EFE /* ApptentiveAppDataContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveAppDataContainer.h; sourceTree = "<group>"; };
+		EFF4D2AB1EC39EC000FD4EFE /* ApptentiveAppDataContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveAppDataContainer.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -909,25 +916,28 @@
 			children = (
 				01A2D2011E4946D500C2103A /* ApptentiveConnectTests-Prefix.pch */,
 				01A2D2021E4946D500C2103A /* ApptentiveConnectTests.m */,
+				EFF4D2A81EC3806300FD4EFE /* ApptentiveConversationMigrationTests.m */,
+				01A2D2081E4946D500C2103A /* ApptentiveConversationTests.m */,
+				01626EBB1EB7E5B90064E73F /* ApptentiveEncryptionTests.m */,
 				01A2D2031E4946D500C2103A /* ApptentiveEngagementTests.m */,
 				01A2D2041E4946D500C2103A /* ApptentiveInteractionInvocationTests.m */,
 				01A2D2051E4946D500C2103A /* ApptentiveInteractionUsageDataTests.m */,
 				01A2D2061E4946D500C2103A /* ApptentiveMetricsTests.m */,
 				01A2D2071E4946D500C2103A /* ApptentiveMigrationTests.m */,
-				01A2D2081E4946D500C2103A /* ApptentiveConversationTests.m */,
 				01A2D2091E4946D500C2103A /* ApptentiveStyleSheetTests.m */,
 				01A2D20A1E4946D500C2103A /* ApptentiveSurveyTests.m */,
+				01917D431E5E0B7400B37D82 /* ApptentiveTests-Bridging-Header.h */,
 				01A2D20B1E4946D500C2103A /* ApptentiveUtilitiesTests.m */,
 				01A2D20C1E4946D500C2103A /* CodePointAndInteractionTests.m */,
+				01917D441E5E0B7400B37D82 /* ConversationManagerTests.swift */,
 				01A2D20D1E4946D500C2103A /* CriteriaTests.h */,
 				01A2D20E1E4946D500C2103A /* CriteriaTests.m */,
 				01A2D20F1E4946D500C2103A /* data */,
 				01A2CFA11E49062800C2103A /* Info.plist */,
-				01917D441E5E0B7400B37D82 /* ConversationManagerTests.swift */,
-				01917D431E5E0B7400B37D82 /* ApptentiveTests-Bridging-Header.h */,
 				0174772E1EA92D7C00A0A949 /* PayloadTests.swift */,
-				01626EBB1EB7E5B90064E73F /* ApptentiveEncryptionTests.m */,
 				01216C4F1EBBB53E0062BD0D /* RequestTests.swift */,
+				EFF4D2AA1EC39EC000FD4EFE /* ApptentiveAppDataContainer.h */,
+				EFF4D2AB1EC39EC000FD4EFE /* ApptentiveAppDataContainer.m */,
 			);
 			path = ApptentiveTests;
 			sourceTree = "<group>";
@@ -1505,6 +1515,7 @@
 				01A2D2131E4946D500C2103A /* ATDataModelv4.sqlite */,
 				01A2D2141E4946D500C2103A /* ATDataModelv5.sqlite */,
 				01A2D2151E4946D500C2103A /* ATDataModelv6.sqlite */,
+				EFF4D2A51EC37F0A00FD4EFE /* containers */,
 				01A2D2161E4946D500C2103A /* criteria */,
 				01A2D22C1E4946D600C2103A /* Survey.json */,
 				01A2D22D1E4946D600C2103A /* testInteractions.json */,
@@ -1584,6 +1595,14 @@
 				0116D5261E92F516001DA5CF /* ApptentiveMessageStore.m */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		EFF4D2A51EC37F0A00FD4EFE /* containers */ = {
+			isa = PBXGroup;
+			children = (
+				EFF4D2A61EC37FB800FD4EFE /* 3.5.0.xcappdata */,
+			);
+			path = containers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1950,6 +1969,7 @@
 				01A2D2681E4946D600C2103A /* testInteractions.json in Resources */,
 				01A2D25E1E4946D600C2103A /* testOperatorGreaterThan.json in Resources */,
 				01A2D25A1E4946D600C2103A /* testOperatorBefore.json in Resources */,
+				EFF4D2A71EC37FB800FD4EFE /* 3.5.0.xcappdata in Resources */,
 				01A2D2641E4946D600C2103A /* testPredicateParsing.json in Resources */,
 				01A2D2671E4946D600C2103A /* Survey.json in Resources */,
 				01A2D26D1E4946D600C2103A /* testJsonDiffing.2.old.json in Resources */,
@@ -2107,6 +2127,7 @@
 			files = (
 				01A2D2411E4946D600C2103A /* ApptentiveEngagementTests.m in Sources */,
 				01A2D2421E4946D600C2103A /* ApptentiveInteractionInvocationTests.m in Sources */,
+				EFF4D2AC1EC39EC000FD4EFE /* ApptentiveAppDataContainer.m in Sources */,
 				01A2D24A1E4946D600C2103A /* CodePointAndInteractionTests.m in Sources */,
 				01A2D2481E4946D600C2103A /* ApptentiveSurveyTests.m in Sources */,
 				01A2D29B1E4963A500C2103A /* ATDataModel v3 to v4.xcmappingmodel in Sources */,
@@ -2122,6 +2143,7 @@
 				01A2D2461E4946D600C2103A /* ApptentiveConversationTests.m in Sources */,
 				EF8EE3A61EBA81880033E7A1 /* ATDataModel v5 to v6.xcmappingmodel in Sources */,
 				01216C501EBBB53E0062BD0D /* RequestTests.swift in Sources */,
+				EFF4D2A91EC3806300FD4EFE /* ApptentiveConversationMigrationTests.m in Sources */,
 				01A2D2981E49638A00C2103A /* ATDataModel.xcdatamodeld in Sources */,
 				01A2D2971E49614A00C2103A /* Apptentive+Debugging.m in Sources */,
 				01A2D2401E4946D600C2103A /* ApptentiveConnectTests.m in Sources */,

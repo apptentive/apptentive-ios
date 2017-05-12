@@ -30,13 +30,18 @@
 @dynamic payload;
 @dynamic encrypted;
 
-+ (BOOL)enqueuePayload:(ApptentivePayload *)payload forConversation:(ApptentiveConversation *)conversation usingAuthToken:(NSString *)authToken inContext:(NSManagedObjectContext *)context {
-	ApptentiveAssertNotNil(conversation, @"Conversation id is nil");
++ (BOOL)enqueuePayload:(ApptentivePayload *)payload forConversation:(ApptentiveConversation *)conversation usingAuthToken:(nullable NSString *)authToken inContext:(NSManagedObjectContext *)context {
+    ApptentiveAssertNotNil(payload, @"Attempted to enqueue nil payload");
+    if (payload == nil) {
+        return NO;
+    }
+    
+	ApptentiveAssertNotNil(conversation, @"Attempted to enqueue payload with nil conversation: %@", payload);
 	if (conversation == nil) {
 		return NO;
 	}
 
-	ApptentiveAssertTrue(conversation.state != ApptentiveConversationStateUndefined && conversation.state != ApptentiveConversationStateLoggedOut, @"Unexpected conversation state: %ld", conversation.state);
+	ApptentiveAssertTrue(conversation.state != ApptentiveConversationStateUndefined && conversation.state != ApptentiveConversationStateLoggedOut, @"Attempted to enqueue payload with wrong conversation state (%@): %@", NSStringFromApptentiveConversationState(conversation.state), payload);
 	if (conversation.state == ApptentiveConversationStateUndefined ||
 		conversation.state == ApptentiveConversationStateLoggedOut) {
 		return NO;

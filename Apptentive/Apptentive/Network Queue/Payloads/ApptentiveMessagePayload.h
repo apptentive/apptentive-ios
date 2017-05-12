@@ -12,12 +12,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-
 @interface ApptentiveMessagePayload : ApptentivePayload
 
 @property (readonly, nonatomic) ApptentiveMessage *message;
 
-- (instancetype)initWithMessage:(ApptentiveMessage *)message;
+- (nullable instancetype)initWithMessage:(ApptentiveMessage *)message;
 
 @end
 

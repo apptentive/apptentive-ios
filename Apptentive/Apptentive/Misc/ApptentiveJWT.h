@@ -10,11 +10,12 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+
 @interface ApptentiveJWT : NSObject
 
-@property (copy, nonatomic, readonly) NSString     * alg;
-@property (copy, nonatomic, readonly) NSString     * type;
-@property (copy, nonatomic, readonly) NSDictionary * payload;
+@property (copy, nonatomic, readonly) NSString *alg;
+@property (copy, nonatomic, readonly) NSString *type;
+@property (copy, nonatomic, readonly) NSDictionary *payload;
 
 - (nullable instancetype)initWithAlg:(NSString *)alg type:(NSString *)type payload:(NSDictionary *)payload;
 

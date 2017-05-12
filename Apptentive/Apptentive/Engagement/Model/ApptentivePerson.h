@@ -9,6 +9,8 @@
 #import "ApptentiveCustomData.h"
 
 
+extern NSString *const ATPersonLastUpdateValuePreferenceKey;
+
 /**
  An `ApptentivePerson` object represents a person using the Apptentive SDK.
  */
@@ -22,6 +24,14 @@
 /**
  The email address associated with the person.
  */
+@property (copy, nonatomic) NSString *emailAddress;
+
+@end
+
+
+@interface ApptentiveLegacyPerson : NSObject
+
+@property (copy, nonatomic) NSString *name;
 @property (copy, nonatomic) NSString *emailAddress;
 
 @end

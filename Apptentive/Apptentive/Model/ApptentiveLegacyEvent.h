@@ -8,6 +8,8 @@
 
 #import "ApptentiveRecord.h"
 
+@class ApptentiveConversation;
+
 
 /**
  Represents legacy event objects waiting to be sent in Core Data.
@@ -24,6 +26,5 @@
 
  @param context The managed object context to use to migrate events.
  */
-+ (void)enqueueUnsentEventsInContext:(NSManagedObjectContext *)context;
-
++ (void)enqueueUnsentEventsInContext:(NSManagedObjectContext *)context forConversation:(ApptentiveConversation *)conversation;
 @end

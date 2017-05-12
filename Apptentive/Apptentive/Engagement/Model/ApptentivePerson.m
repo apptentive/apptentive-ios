@@ -12,7 +12,7 @@ static NSString *const NameKey = @"name";
 static NSString *const EmailAddressKey = @"emailAddress";
 
 // Legacy keys
-static NSString *const ATPersonLastUpdateValuePreferenceKey = @"ATPersonLastUpdateValuePreferenceKey";
+NSString *const ATPersonLastUpdateValuePreferenceKey = @"ATPersonLastUpdateValuePreferenceKey";
 static NSString *const ATCurrentPersonPreferenceKey = @"ATCurrentPersonPreferenceKey";
 static NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPersonDataPreferenceKey";
 

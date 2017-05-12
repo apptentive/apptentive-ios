@@ -30,7 +30,7 @@ static NSString *const UTCOffsetKey = @"UTCOffset";
 static NSString *const IntegrationConfigurationKey = @"integrationConfiguration";
 
 // Legacy keys
-static NSString *const ATDeviceLastUpdateValuePreferenceKey = @"ATDeviceLastUpdateValuePreferenceKey";
+NSString *const ATDeviceLastUpdateValuePreferenceKey = @"ATDeviceLastUpdateValuePreferenceKey";
 static NSString *const ATDeviceLastUpdatePreferenceKey = @"ATDeviceLastUpdatePreferenceKey";
 static NSString *const ApptentiveCustomDeviceDataPreferenceKey = @"ApptentiveCustomDeviceDataPreferenceKey";
 

@@ -9,6 +9,8 @@
 #import "ApptentiveCustomData.h"
 
 
+extern NSString *const ATPersonLastUpdateValuePreferenceKey;
+
 /**
  An `ApptentivePerson` object represents a person using the Apptentive SDK.
  */

@@ -49,25 +49,25 @@ static Apptentive *_sharedInstance;
 
 @implementation ApptentiveConfiguration
 
-+ (nullable instancetype)configurationWithApptentiveKey:(NSString *)apptentiveKey appSignature:(NSString *)appSignature {
-	return [[self alloc] initWithApptentiveKey:apptentiveKey appSignature:appSignature];
++ (nullable instancetype)configurationWithApptentiveKey:(NSString *)apptentiveKey apptentiveSignature:(NSString *)apptentiveSignature {
+	return [[self alloc] initWithApptentiveKey:apptentiveKey apptentiveSignature:apptentiveSignature];
 }
 
-- (nullable instancetype)initWithApptentiveKey:(NSString *)apptentiveKey appSignature:(NSString *)appSignature {
+- (nullable instancetype)initWithApptentiveKey:(NSString *)apptentiveKey apptentiveSignature:(NSString *)apptentiveSignature {
 	self = [super init];
 	if (self) {
 		if (apptentiveKey.length == 0) {
-			ApptentiveLogError(@"Can't create Apptentive configuration: app key is nil or empty");
+			ApptentiveLogError(@"Can't create Apptentive configuration: key is nil or empty");
 			return nil;
 		}
 
-		if (appSignature.length == 0) {
-			ApptentiveLogError(@"Can't create Apptentive configuration: app signature is nil or empty");
+		if (apptentiveSignature.length == 0) {
+			ApptentiveLogError(@"Can't create Apptentive configuration: signature is nil or empty");
 			return nil;
 		}
 
 		_apptentiveKey = [apptentiveKey copy];
-		_appSignature = [appSignature copy];
+		_apptentiveSignature = [apptentiveSignature copy];
 		_baseURL = [NSURL URLWithString:@"https://api.apptentive.com/"];
 	}
 	return self;
@@ -79,7 +79,7 @@ static Apptentive *_sharedInstance;
 @interface Apptentive () <ApptentiveBannerViewControllerDelegate>
 
 @property (copy, nonatomic) NSString *apptentiveKey;
-@property (copy, nonatomic) NSString *appSignature;
+@property (copy, nonatomic) NSString *apptentiveSignature;
 
 @end
 
@@ -105,10 +105,10 @@ static Apptentive *_sharedInstance;
 	if (self) {
 		_style = [[ApptentiveStyleSheet alloc] init];
 		_apptentiveKey = configuration.apptentiveKey;
-		_appSignature = configuration.appSignature;
+		_apptentiveSignature = configuration.apptentiveSignature;
 		_baseURL = configuration.baseURL;
 		_backend = [[ApptentiveBackend alloc] initWithApptentiveKey:_apptentiveKey
-                                                          signature:_appSignature
+                                                          signature:_apptentiveSignature
                                                             baseURL:_baseURL
                                                         storagePath:@"com.apptentive.feedback"];
 

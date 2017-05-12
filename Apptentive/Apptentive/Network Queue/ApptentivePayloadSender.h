@@ -24,7 +24,7 @@ typedef NS_ENUM(NSInteger, ApptentiveQueueStatus) {
 
 @property (weak, nonatomic) id<ApptentivePayloadSenderDelegate> messageDelegate;
 
-- (instancetype)initWithBaseURL:(NSURL *)baseURL apptentiveKey:(NSString *)apptentiveKey appSignature:(NSString *)appSignature managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+- (instancetype)initWithBaseURL:(NSURL *)baseURL apptentiveKey:(NSString *)apptentiveKey apptentiveSignature:(NSString *)apptentiveSignature managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 - (void)cancelNetworkOperations;
 
 #pragma mark - Serial network queue

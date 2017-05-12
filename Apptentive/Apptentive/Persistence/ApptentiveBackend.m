@@ -66,7 +66,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 
 	if (self) {
 		_apptentiveKey = apptentiveKey;
-		_appSignature = signature;
+		_apptentiveSignature = signature;
 		_baseURL = baseURL;
 		_storagePath = storagePath;
 
@@ -237,12 +237,12 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 }
 
 - (void)startUp {
-	_client = [[ApptentiveClient alloc] initWithBaseURL:self.baseURL apptentiveKey:self.apptentiveKey appSignature:self.appSignature];
+	_client = [[ApptentiveClient alloc] initWithBaseURL:self.baseURL apptentiveKey:self.apptentiveKey apptentiveSignature:self.apptentiveSignature];
 
 	_conversationManager = [[ApptentiveConversationManager alloc] initWithStoragePath:self.supportDirectoryPath operationQueue:self.operationQueue client:self.client parentManagedObjectContext:self.managedObjectContext];
 	self.conversationManager.delegate = self;
 
-	_payloadSender = [[ApptentivePayloadSender alloc] initWithBaseURL:self.baseURL apptentiveKey:self.apptentiveKey appSignature:self.appSignature managedObjectContext:self.managedObjectContext];
+	_payloadSender = [[ApptentivePayloadSender alloc] initWithBaseURL:self.baseURL apptentiveKey:self.apptentiveKey apptentiveSignature:self.apptentiveSignature managedObjectContext:self.managedObjectContext];
 
 	_imageCache = [[NSURLCache alloc] initWithMemoryCapacity:1 * 1024 * 1024 diskCapacity:10 * 1024 * 1024 diskPath:[self imageCachePath]];
 

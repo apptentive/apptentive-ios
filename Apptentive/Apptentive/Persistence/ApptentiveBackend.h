@@ -59,7 +59,7 @@
 - (instancetype)initWithApptentiveKey:(NSString *)apptentiveKey signature:(NSString *)signature baseURL:(NSURL *)baseURL storagePath:(NSString *)storagePath;
 
 @property (readonly, strong, nonatomic) NSString *apptentiveKey;
-@property (readonly, strong, nonatomic) NSString *appSignature;
+@property (readonly, strong, nonatomic) NSString *apptentiveSignature;
 @property (readonly, strong, nonatomic) NSURL *baseURL;
 @property (readonly, strong, nonatomic) NSString *storagePath;
 

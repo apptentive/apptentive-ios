@@ -79,7 +79,7 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 }
 
 - (void)checkForMessages {
-	if (self.messageOperation != nil) {
+	if (self.messageOperation != nil || self.conversationIdentifier == nil) {
 		return;
 	}
 
@@ -168,10 +168,10 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 			[mutableMessageIdentifierIndex setObject:message forKey:message.localIdentifier];
 
 			lastDownloadedMessageIdentifier = message.identifier;
-        } else {
-            ApptentiveLogError(@"Unable to create message from JSON: %@", messageJSON);
-        }
-    }
+		} else {
+			ApptentiveLogError(@"Unable to create message from JSON: %@", messageJSON);
+		}
+	}
 
 	if (addedMessages.count + updatedMessages.count > 0) {
 		// Add local messages that aren't yet on server's list

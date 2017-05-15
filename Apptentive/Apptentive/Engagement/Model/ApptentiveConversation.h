@@ -7,6 +7,7 @@
 //
 
 #import "ApptentiveState.h"
+#import "Apptentive.h"
 
 typedef NS_ENUM(NSInteger, ApptentiveConversationState) {
 	ApptentiveConversationStateUndefined = 0,
@@ -221,6 +222,11 @@ extern NSString * NSStringFromApptentiveConversationState(ApptentiveConversation
  @param key The key representing the object.
  */
 - (void)removeUserInfoForKey:(NSString *)key;
+
+/**
+ Updates push token and push provider.
+ */
+- (void)setPushToken:(NSString *)pushToken provider:(ApptentivePushProvider)pushProvider;
 
 @end
 

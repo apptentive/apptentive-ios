@@ -19,6 +19,9 @@ extern NSString *const ApptentiveConversationCreatedNotification;
 extern NSString *const ApptentiveCustomDeviceDataPreferenceKey;
 extern NSString *const ApptentiveCustomPersonDataPreferenceKey;
 
+extern NSString *const ApptentivePushProviderPreferenceKey;
+extern NSString *const ApptentivePushTokenPreferenceKey;
+
 @class ApptentiveMessage, ApptentiveBackend;
 
 

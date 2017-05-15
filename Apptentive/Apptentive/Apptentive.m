@@ -42,6 +42,9 @@ NSString *const ApptentiveConversationCreatedNotification = @"ApptentiveConversa
 NSString *const ApptentiveCustomDeviceDataPreferenceKey = @"ApptentiveCustomDeviceDataPreferenceKey";
 NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPersonDataPreferenceKey";
 
+NSString *const ApptentivePushProviderPreferenceKey = @"ApptentivePushProviderPreferenceKey";
+NSString *const ApptentivePushTokenPreferenceKey = @"ApptentivePushTokenPreferenceKey";
+
 NSString *const ApptentiveErrorDomain = @"com.apptentive";
 
 static Apptentive *_sharedInstance;
@@ -325,33 +328,15 @@ static Apptentive *_sharedInstance;
 								ntohl(tokenBytes[0]), ntohl(tokenBytes[1]), ntohl(tokenBytes[2]),
 								ntohl(tokenBytes[3]), ntohl(tokenBytes[4]), ntohl(tokenBytes[5]),
 								ntohl(tokenBytes[6]), ntohl(tokenBytes[7])];
-
-	NSMutableDictionary *integrationConfiguration = [self.backend.conversationManager.activeConversation.device.integrationConfiguration mutableCopy];
-
-	[integrationConfiguration removeObjectForKey:[self integrationKeyForPushProvider:ApptentivePushProviderApptentive]];
-	[integrationConfiguration removeObjectForKey:[self integrationKeyForPushProvider:ApptentivePushProviderUrbanAirship]];
-	[integrationConfiguration removeObjectForKey:[self integrationKeyForPushProvider:ApptentivePushProviderAmazonSNS]];
-	[integrationConfiguration removeObjectForKey:[self integrationKeyForPushProvider:ApptentivePushProviderParse]];
-
-	[integrationConfiguration setObject:@{ @"token": token } forKey:[self integrationKeyForPushProvider:pushProvider]];
-
-	self.backend.conversationManager.activeConversation.device.integrationConfiguration = integrationConfiguration;
-	[self.backend scheduleDeviceUpdate];
-}
-
-- (NSString *)integrationKeyForPushProvider:(ApptentivePushProvider)pushProvider {
-	switch (pushProvider) {
-		case ApptentivePushProviderApptentive:
-			return @"apptentive_push";
-		case ApptentivePushProviderUrbanAirship:
-			return @"urban_airship";
-		case ApptentivePushProviderAmazonSNS:
-			return @"aws_sns";
-		case ApptentivePushProviderParse:
-			return @"parse";
-		default:
-			return @"UNKNOWN_PUSH_PROVIDER";
-	}
+    
+    // save push token and provider in user defaults
+    [[NSUserDefaults standardUserDefaults] setInteger:pushProvider forKey:ApptentivePushProviderPreferenceKey];
+    [[NSUserDefaults standardUserDefaults] setObject:token forKey:ApptentivePushTokenPreferenceKey];
+    
+    if (self.backend.conversationManager.activeConversation) {
+        [self.backend.conversationManager.activeConversation setPushToken:token provider:pushProvider];
+        [self.backend scheduleDeviceUpdate];
+    }
 }
 
 - (void)addIntegration:(NSString *)integration withConfiguration:(NSDictionary *)configuration {

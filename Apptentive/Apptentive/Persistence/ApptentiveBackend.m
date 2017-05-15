@@ -61,12 +61,12 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 
 @synthesize supportDirectoryPath = _supportDirectoryPath;
 
-- (instancetype)initWithAppKey:(NSString *)appKey signature:(NSString *)signature baseURL:(NSURL *)baseURL storagePath:(NSString *)storagePath {
+- (instancetype)initWithApptentiveKey:(NSString *)apptentiveKey signature:(NSString *)signature baseURL:(NSURL *)baseURL storagePath:(NSString *)storagePath {
 	self = [super init];
 
 	if (self) {
-		_appKey = appKey;
-		_appSignature = signature;
+		_apptentiveKey = apptentiveKey;
+		_apptentiveSignature = signature;
 		_baseURL = baseURL;
 		_storagePath = storagePath;
 
@@ -237,12 +237,12 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 }
 
 - (void)startUp {
-	_client = [[ApptentiveClient alloc] initWithBaseURL:self.baseURL appKey:self.appKey appSignature:self.appSignature];
+	_client = [[ApptentiveClient alloc] initWithBaseURL:self.baseURL apptentiveKey:self.apptentiveKey apptentiveSignature:self.apptentiveSignature];
 
 	_conversationManager = [[ApptentiveConversationManager alloc] initWithStoragePath:self.supportDirectoryPath operationQueue:self.operationQueue client:self.client parentManagedObjectContext:self.managedObjectContext];
 	self.conversationManager.delegate = self;
 
-	_payloadSender = [[ApptentivePayloadSender alloc] initWithBaseURL:self.baseURL appKey:self.appKey appSignature:self.appSignature managedObjectContext:self.managedObjectContext];
+	_payloadSender = [[ApptentivePayloadSender alloc] initWithBaseURL:self.baseURL apptentiveKey:self.apptentiveKey apptentiveSignature:self.apptentiveSignature managedObjectContext:self.managedObjectContext];
 
 	_imageCache = [[NSURLCache alloc] initWithMemoryCapacity:1 * 1024 * 1024 diskCapacity:10 * 1024 * 1024 diskPath:[self imageCachePath]];
 

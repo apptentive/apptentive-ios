@@ -49,25 +49,25 @@ static Apptentive *_sharedInstance;
 
 @implementation ApptentiveConfiguration
 
-+ (nullable instancetype)configurationWithAppKey:(NSString *)appKey appSignature:(NSString *)appSignature {
-	return [[self alloc] initWithAppKey:appKey appSignature:appSignature];
++ (nullable instancetype)configurationWithApptentiveKey:(NSString *)apptentiveKey apptentiveSignature:(NSString *)apptentiveSignature {
+	return [[self alloc] initWithApptentiveKey:apptentiveKey apptentiveSignature:apptentiveSignature];
 }
 
-- (nullable instancetype)initWithAppKey:(NSString *)appKey appSignature:(NSString *)appSignature {
+- (nullable instancetype)initWithApptentiveKey:(NSString *)apptentiveKey apptentiveSignature:(NSString *)apptentiveSignature {
 	self = [super init];
 	if (self) {
-		if (appKey.length == 0) {
-			ApptentiveLogError(@"Can't create Apptentive configuration: app key is nil or empty");
+		if (apptentiveKey.length == 0) {
+			ApptentiveLogError(@"Can't create Apptentive configuration: key is nil or empty");
 			return nil;
 		}
 
-		if (appSignature.length == 0) {
-			ApptentiveLogError(@"Can't create Apptentive configuration: app signature is nil or empty");
+		if (apptentiveSignature.length == 0) {
+			ApptentiveLogError(@"Can't create Apptentive configuration: signature is nil or empty");
 			return nil;
 		}
 
-		_appKey = [appKey copy];
-		_appSignature = [appSignature copy];
+		_apptentiveKey = [apptentiveKey copy];
+		_apptentiveSignature = [apptentiveSignature copy];
 		_baseURL = [NSURL URLWithString:@"https://api.apptentive.com/"];
         _logLevel = ApptentiveLogLevelInfo;
 	}
@@ -79,8 +79,8 @@ static Apptentive *_sharedInstance;
 
 @interface Apptentive () <ApptentiveBannerViewControllerDelegate>
 
-@property (copy, nonatomic) NSString *appKey;
-@property (copy, nonatomic) NSString *appSignature;
+@property (copy, nonatomic) NSString *apptentiveKey;
+@property (copy, nonatomic) NSString *apptentiveSignature;
 
 @end
 
@@ -107,13 +107,13 @@ static Apptentive *_sharedInstance;
         ApptentiveLogSetLevel(configuration.logLevel);
         
 		_style = [[ApptentiveStyleSheet alloc] init];
-		_appKey = configuration.appKey;
-		_appSignature = configuration.appSignature;
+		_apptentiveKey = configuration.apptentiveKey;
+		_apptentiveSignature = configuration.apptentiveSignature;
 		_baseURL = configuration.baseURL;
-		_backend = [[ApptentiveBackend alloc] initWithAppKey:_appKey
-												   signature:_appSignature
-													 baseURL:_baseURL
-												 storagePath:@"com.apptentive.feedback"];
+		_backend = [[ApptentiveBackend alloc] initWithApptentiveKey:_apptentiveKey
+                                                          signature:_apptentiveSignature
+                                                            baseURL:_baseURL
+                                                        storagePath:@"com.apptentive.feedback"];
 
 		if (configuration.distributionName && configuration.distributionVersion) {
 			[ApptentiveSDK setDistributionName:configuration.distributionName];

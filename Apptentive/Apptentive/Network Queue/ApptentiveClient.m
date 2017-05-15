@@ -23,13 +23,13 @@
 @synthesize URLSession = _URLSession;
 @synthesize backoffDelay = _backoffDelay;
 
-- (instancetype)initWithBaseURL:(NSURL *)baseURL appKey:(nonnull NSString *)appKey appSignature:(nonnull NSString *)appSignature {
+- (instancetype)initWithBaseURL:(NSURL *)baseURL apptentiveKey:(nonnull NSString *)apptentiveKey apptentiveSignature:(nonnull NSString *)apptentiveSignature {
 	self = [super init];
 
 	if (self) {
 		_baseURL = baseURL;
-		_appKey = appKey;
-		_appSignature = appSignature;
+		_apptentiveKey = apptentiveKey;
+		_apptentiveSignature = apptentiveSignature;
 		_operationQueue = [[NSOperationQueue alloc] init];
 
 		NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
@@ -76,8 +76,8 @@
 	URLRequest.HTTPMethod = request.method;
 	[URLRequest addValue:request.contentType forHTTPHeaderField:@"Content-Type"];
 	[URLRequest addValue:request.apiVersion forHTTPHeaderField:@"X-API-Version"];
-	[URLRequest addValue:_appKey forHTTPHeaderField:@"APPTENTIVE-APP-KEY"];
-	[URLRequest addValue:_appSignature forHTTPHeaderField:@"APPTENTIVE-APP-SIGNATURE"];
+	[URLRequest addValue:_apptentiveKey forHTTPHeaderField:@"APPTENTIVE-KEY"];
+	[URLRequest addValue:_apptentiveSignature forHTTPHeaderField:@"APPTENTIVE-SIGNATURE"];
 	if (authToken) {
 		[URLRequest addValue:[@"OAuth " stringByAppendingString:authToken] forHTTPHeaderField:@"Authorization"];
 	}

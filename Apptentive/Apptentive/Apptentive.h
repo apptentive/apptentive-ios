@@ -84,11 +84,11 @@ typedef NS_ENUM(NSUInteger, ApptentiveLogLevel) {
  */
 @interface ApptentiveConfiguration : NSObject
 
-/** Application key */
-@property (copy, nonatomic, readonly) NSString *appKey;
+/** Apptentive key */
+@property (copy, nonatomic, readonly) NSString *apptentiveKey;
 
-/** Application signature */
-@property (copy, nonatomic, readonly) NSString *appSignature;
+/** Apptentive signature */
+@property (copy, nonatomic, readonly) NSString *apptentiveSignature;
 
 /** Apptentive SDK log level (defaults to 'info') */
 @property (assign, nonatomic) ApptentiveLogLevel logLevel;
@@ -102,7 +102,7 @@ typedef NS_ENUM(NSUInteger, ApptentiveLogLevel) {
 /** The version of the distribution that includes the Apptentive SDK. */
 @property (copy, nonatomic, nullable) NSString *distributionVersion;
 
-+ (nullable instancetype)configurationWithAppKey:(NSString *)appKey appSignature:(NSString *)appSignature;
++ (nullable instancetype)configurationWithApptentiveKey:(NSString *)apptentiveKey apptentiveSignature:(NSString *)apptentiveSignature;
 
 @end
 
@@ -112,7 +112,7 @@ typedef NS_ENUM(NSUInteger, ApptentiveLogLevel) {
  ## Configuration
 
 Before calling any other methods on the shared `Apptentive` instance, register you app key and signature:
-     ApptentiveConfiguration *configuration = [ApptentiveConfiguration configurationWithAppKey:@"your APP key here" appSignature:@"your APP signature here"];
+     ApptentiveConfiguration *configuration = [ApptentiveConfiguration configurationWithApptentiveKey:@"your APP key here" apptentiveSignature:@"your APP signature here"];
      [Apptentive registerWithConfiguration:configuration];
 
 ## Engagement Events

@@ -22,8 +22,8 @@
 
 @implementation ApptentivePayloadSender
 
-- (instancetype)initWithBaseURL:(NSURL *)baseURL appKey:(NSString *)appKey appSignature:(NSString *)appSignature managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
-	self = [super initWithBaseURL:baseURL appKey:appKey appSignature:appSignature];
+- (instancetype)initWithBaseURL:(NSURL *)baseURL apptentiveKey:(NSString *)apptentiveKey apptentiveSignature:(NSString *)apptentiveSignature managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+	self = [super initWithBaseURL:baseURL apptentiveKey:apptentiveKey apptentiveSignature:apptentiveSignature];
 
 	if (self) {
 		_managedObjectContext = managedObjectContext;

@@ -373,6 +373,8 @@
 		EF8EE3A61EBA81880033E7A1 /* ATDataModel v5 to v6.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = EF8EE3A21EBA79EC0033E7A1 /* ATDataModel v5 to v6.xcmappingmodel */; };
 		EF8EE3AB1EBBA5D00033E7A1 /* ApptentiveJWT.h in Headers */ = {isa = PBXBuildFile; fileRef = EF8EE3A91EBBA5D00033E7A1 /* ApptentiveJWT.h */; };
 		EF8EE3AC1EBBA5D00033E7A1 /* ApptentiveJWT.m in Sources */ = {isa = PBXBuildFile; fileRef = EF8EE3AA1EBBA5D00033E7A1 /* ApptentiveJWT.m */; };
+		EFC308D21EC52915006B6D36 /* ApptentiveStopWatch.h in Headers */ = {isa = PBXBuildFile; fileRef = EFC308D01EC52915006B6D36 /* ApptentiveStopWatch.h */; };
+		EFC308D31EC52915006B6D36 /* ApptentiveStopWatch.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC308D11EC52915006B6D36 /* ApptentiveStopWatch.m */; };
 		EFF3FE3B1E8C2F05006AD2B4 /* ApptentiveLog.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF3FE3A1E8C2F05006AD2B4 /* ApptentiveLog.m */; };
 		EFF3FE421E8C386E006AD2B4 /* ApptentiveLogTag.h in Headers */ = {isa = PBXBuildFile; fileRef = EFF3FE401E8C386E006AD2B4 /* ApptentiveLogTag.h */; };
 		EFF3FE431E8C386E006AD2B4 /* ApptentiveLogTag.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF3FE411E8C386E006AD2B4 /* ApptentiveLogTag.m */; };
@@ -788,6 +790,8 @@
 		EF8EE3A21EBA79EC0033E7A1 /* ATDataModel v5 to v6.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = "ATDataModel v5 to v6.xcmappingmodel"; sourceTree = "<group>"; };
 		EF8EE3A91EBBA5D00033E7A1 /* ApptentiveJWT.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveJWT.h; sourceTree = "<group>"; };
 		EF8EE3AA1EBBA5D00033E7A1 /* ApptentiveJWT.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveJWT.m; sourceTree = "<group>"; };
+		EFC308D01EC52915006B6D36 /* ApptentiveStopWatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveStopWatch.h; sourceTree = "<group>"; };
+		EFC308D11EC52915006B6D36 /* ApptentiveStopWatch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveStopWatch.m; sourceTree = "<group>"; };
 		EFF3FE3A1E8C2F05006AD2B4 /* ApptentiveLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveLog.m; sourceTree = "<group>"; };
 		EFF3FE401E8C386E006AD2B4 /* ApptentiveLogTag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveLogTag.h; sourceTree = "<group>"; };
 		EFF3FE411E8C386E006AD2B4 /* ApptentiveLogTag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveLogTag.m; sourceTree = "<group>"; };
@@ -1358,6 +1362,8 @@
 				EFF3FE411E8C386E006AD2B4 /* ApptentiveLogTag.m */,
 				EF1812491E8084C80053BD68 /* ApptentiveSafeCollections.h */,
 				EF18124A1E8084C80053BD68 /* ApptentiveSafeCollections.m */,
+				EFC308D01EC52915006B6D36 /* ApptentiveStopWatch.h */,
+				EFC308D11EC52915006B6D36 /* ApptentiveStopWatch.m */,
 				01A2D0901E490A9700C2103A /* ApptentiveUtilities.h */,
 				01A2D0911E490A9700C2103A /* ApptentiveUtilities.m */,
 				01A2D0921E490A9700C2103A /* NSDictionary+Apptentive.h */,
@@ -1721,6 +1727,7 @@
 				01A2D1961E490A9700C2103A /* ApptentiveMessageCenterProfileView.h in Headers */,
 				01A2D1BE1E490A9700C2103A /* ApptentiveRecord.h in Headers */,
 				01A2D13D1E490A9700C2103A /* ApptentiveConversation.h in Headers */,
+				EFC308D21EC52915006B6D36 /* ApptentiveStopWatch.h in Headers */,
 				01A2D1051E490A9700C2103A /* ApptentiveUnreadMessagesBadgeView.h in Headers */,
 				01A2D11F1E490A9700C2103A /* ApptentiveAppRelease.h in Headers */,
 				0134EB1E1EA9930E00DA4925 /* ApptentivePersonPayload.h in Headers */,
@@ -2100,6 +2107,7 @@
 				01A2D1161E490A9700C2103A /* ApptentiveInteractionMessageCenterController.m in Sources */,
 				014508991EAAAF84003326E7 /* ApptentiveMessageGetRequest.m in Sources */,
 				017477271EA92BED00A0A949 /* ApptentiveEventPayload.m in Sources */,
+				EFC308D31EC52915006B6D36 /* ApptentiveStopWatch.m in Sources */,
 				01A2D1261E490A9700C2103A /* ApptentiveDevice.m in Sources */,
 				01A2D1AB1E490A9700C2103A /* ApptentiveAppConfiguration.m in Sources */,
 				01A2D1D11E490A9700C2103A /* ApptentiveSerialRequest.m in Sources */,

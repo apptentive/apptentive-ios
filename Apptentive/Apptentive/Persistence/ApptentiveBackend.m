@@ -478,6 +478,18 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 			}
 		}
 	}
+    
+    if (conversation.state == ApptentiveConversationStateAnonymous ||
+        conversation.state == ApptentiveConversationStateLoggedIn) {
+        // Update conversation with push configuration changes that happened while it wasn't active.
+        if ([[NSUserDefaults standardUserDefaults] objectForKey:ApptentivePushProviderPreferenceKey] &&
+            [[NSUserDefaults standardUserDefaults] objectForKey:ApptentivePushTokenPreferenceKey]) {
+            ApptentivePushProvider pushProvider = [[NSUserDefaults standardUserDefaults] integerForKey:ApptentivePushProviderPreferenceKey];
+            NSString *pushToken = [[NSUserDefaults standardUserDefaults] objectForKey:ApptentivePushTokenPreferenceKey];
+            [conversation setPushToken:pushToken provider:pushProvider];
+            [self scheduleDeviceUpdate];
+        }
+    }
 }
 
 #pragma mark - Paths

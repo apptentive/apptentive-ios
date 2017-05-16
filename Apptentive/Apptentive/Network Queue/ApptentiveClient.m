@@ -85,7 +85,9 @@
 		[URLRequest addValue:@"true" forHTTPHeaderField:@"APPTENTIVE-ENCRYPTED"];
 	}
 
-	return [[ApptentiveRequestOperation alloc] initWithURLRequest:URLRequest delegate:delegate dataSource:self];
+	ApptentiveRequestOperation *operation = [[ApptentiveRequestOperation alloc] initWithURLRequest:URLRequest delegate:delegate dataSource:self];
+    operation.request = request;
+    return operation;
 }
 
 @end

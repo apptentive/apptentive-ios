@@ -23,12 +23,14 @@
 #import "ApptentiveDevicePayload.h"
 #import "ApptentivePersonPayload.h"
 #import "ApptentiveConversationRequest.h"
+#import "ApptentiveLegacyConversationRequest.h"
 #import "ApptentiveLoginRequest.h"
 #import "ApptentiveInteractionsRequest.h"
 #import "ApptentiveSafeCollections.h"
 #import "NSData+Encryption.h"
 #import "ApptentiveJWT.h"
 #import "ApptentiveStopWatch.h"
+#import "ApptentiveSafeCollections.h"
 
 static NSString *const ConversationMetadataFilename = @"conversation-v1.meta";
 static NSString *const ConversationFilename = @"conversation-v1.archive";
@@ -141,6 +143,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	if (legacyConversation != nil) {
 		legacyConversation.state = ApptentiveConversationStateLegacyPending;
 		[Apptentive.shared.backend migrateLegacyCoreDataAndTaskQueueForConversation:legacyConversation];
+        [self fetchLegacyConversation:legacyConversation];
 		[self createMessageManagerForConversation:legacyConversation];
 		return legacyConversation;
 	}
@@ -195,6 +198,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	conversation.state = item.state;
 	conversation.encryptionKey = item.encryptionKey;
 	conversation.userId = item.userId;
+    conversation.JWT = item.JWT;
 
 	// TODO: check data consistency
 
@@ -242,8 +246,19 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	[self.client.operationQueue addOperation:self.conversationOperation];
 }
 
+- (void)fetchLegacyConversation:(ApptentiveConversation *)conversation {
+    ApptentiveAssertNotNil(conversation, @"Conversation is nil");
+    ApptentiveAssertTrue(conversation.token > 0, @"Conversation token is nil or empty");
+    
+    if (conversation != nil && conversation.token.length > 0) {
+        self.conversationOperation = [self.client requestOperationWithRequest:[[ApptentiveLegacyConversationRequest alloc] initWithConversation:conversation] authToken:conversation.token delegate:self];
+    
+        [self.client.operationQueue addOperation:self.conversationOperation];
+    }
+}
+
 - (void)handleConversationStateChange:(ApptentiveConversation *)conversation {
-	ApptentiveAssertNotNil(conversation, @"Conversation is is nil");
+	ApptentiveAssertNotNil(conversation, @"Conversation is nil");
 	if (conversation != nil) {
 		NSDictionary *userInfo = @{ApptentiveConversationStateDidChangeNotificationKeyConversation: conversation};
 		[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveConversationStateDidChangeNotification
@@ -259,8 +274,9 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 }
 
 - (void)updateMetadataItems:(ApptentiveConversation *)conversation {
-	if (conversation.state == ApptentiveConversationStateAnonymousPending) {
-		ApptentiveLogDebug(@"Skipping updating metadata since conversation is anonymous and pending");
+	if (conversation.state == ApptentiveConversationStateAnonymousPending ||
+        conversation.state == ApptentiveConversationStateLegacyPending) {
+		ApptentiveLogDebug(@"Skipping updating metadata since conversation is %@", NSStringFromApptentiveConversationState(conversation.state));
 		return;
 	}
 
@@ -288,6 +304,8 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	}
 
 	item.state = conversation.state;
+    item.JWT = conversation.JWT; // TODO: check nil for 'active' conversations
+    
 	if (item.state == ApptentiveConversationStateLoggedIn) {
 		ApptentiveAssertNotNil(conversation.encryptionKey, @"Encryption key is nil");
 		item.encryptionKey = conversation.encryptionKey;
@@ -373,6 +391,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 		switch (self.activeConversation.state) {
 			case ApptentiveConversationStateAnonymousPending:
+            case ApptentiveConversationStateLegacyPending:
 				ApptentiveAssertTrue(NO, @"Login operation should not kick off until conversation fetch complete");
                 [self failLoginWithErrorCode:ApptentiveInternalInconsistency failureReason:@"Login cannot proceed with Anonymous Pending conversation."];
 				break;
@@ -519,7 +538,13 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 - (void)requestOperationDidFinish:(ApptentiveRequestOperation *)operation {
 	if (operation == self.conversationOperation) {
-		[self processConversationResponse:(NSDictionary *)operation.responseObject];
+        if ([operation.request isKindOfClass:[ApptentiveConversationRequest class]]) {
+            [self processConversationResponse:(NSDictionary *)operation.responseObject];
+        } else if ([operation.request isKindOfClass:[ApptentiveLegacyConversationRequest class]]) {
+            [self processLegacyConversationResponse:(NSDictionary *)operation.responseObject];
+        } else {
+            ApptentiveAssertFail(@"Unexpected request type: %@", NSStringFromClass([operation.request class]));
+        }
 
 		self.conversationOperation = nil;
 	} else if (operation == self.manifestOperation) {
@@ -554,6 +579,10 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 - (void)processConversationResponse:(NSDictionary *)conversationResponse {
 	[self updateActiveConversationWithResponse:conversationResponse];
+}
+
+- (void)processLegacyConversationResponse:(NSDictionary *)conversationResponse {
+    [self updateLegacyConversationWithResponse:conversationResponse];
 }
 
 - (void)processManifestResponse:(NSDictionary *)manifestResponse cacheLifetime:(NSTimeInterval)cacheLifetime {
@@ -622,6 +651,36 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		ApptentiveAssertTrue(NO, @"Conversation response did not include token, conversation identifier, device identifier and/or person identifier.");
 		return NO;
 	}
+}
+
+- (BOOL)updateLegacyConversationWithResponse:(NSDictionary *)conversationResponse {
+    ApptentiveAssertNotNil(self.activeConversation, @"Active conversation is nil");
+    if (self.activeConversation == nil) {
+        return NO;
+    }
+    
+    ApptentiveAssertTrue(self.activeConversation.state == ApptentiveConversationStateLegacyPending, @"Unexpected conversation state: %@", NSStringFromApptentiveConversationState(self.activeConversation.state));
+    
+    NSString *JWT = ApptentiveDictionaryGetString(conversationResponse, @"anonymous_jwt_token");
+    NSString *conversationIdentifier = ApptentiveDictionaryGetString(conversationResponse, @"conversation_id");
+    
+    if (JWT.length > 0 && conversationIdentifier.length > 0) {
+        self.activeConversation.state = ApptentiveConversationStateLegacyPending;
+        [self.activeConversation setConversationIdentifier:conversationIdentifier JWT:JWT];
+        
+        // TODO: figure out why we need this check
+        if (self.activeConversation.state == ApptentiveConversationStateLegacyPending) {
+            self.activeConversation.state = ApptentiveConversationStateAnonymous;
+        }
+        
+        [self saveConversation];
+        [self handleConversationStateChange:self.activeConversation];
+        
+        return YES;
+    }
+    
+    ApptentiveLogError(ApptentiveLogTagConversation, @"Conversation response did not include conversation identifier and/or JWT.");
+    return NO;
 }
 
 - (BOOL)saveConversation {

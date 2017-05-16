@@ -128,18 +128,8 @@
 }
 
 - (NSString *)conversationStateAtIndex:(NSInteger)index {
-	switch (((ApptentiveConversationMetadataItem *)self.backend.conversationManager.conversationMetadata.items[index]).state) {
-		case ApptentiveConversationStateAnonymous:
-			return @"Anonymous";
-		case ApptentiveConversationStateAnonymousPending:
-			return @"Anonoymous Pending";
-		case ApptentiveConversationStateLoggedIn:
-			return @"Logged In";
-		case ApptentiveConversationStateLoggedOut:
-			return @"Logged Out";
-		default:
-			return @"Undefined";
-	}
+    ApptentiveConversationState state = ((ApptentiveConversationMetadataItem *)self.backend.conversationManager.conversationMetadata.items[index]).state;
+    return NSStringFromApptentiveConversationState(state);
 }
 
 - (NSString *)conversationDescriptionAtIndex:(NSInteger)index {

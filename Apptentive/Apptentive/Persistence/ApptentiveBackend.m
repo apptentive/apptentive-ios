@@ -464,7 +464,8 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 
 - (void)conversationManager:(ApptentiveConversationManager *)manager conversationDidChangeState:(ApptentiveConversation *)conversation {
 	// Anonymous pending conversations will not yet have a token, so we can't finish starting up yet in that case.
-	if (conversation.state != ApptentiveConversationStateAnonymousPending) {
+	if (conversation.state != ApptentiveConversationStateAnonymousPending &&
+        conversation.state != ApptentiveConversationStateLegacyPending) {
 		if (self.state != ATBackendStateReady) {
 			[self finishStartupWithToken:conversation.token];
 		}

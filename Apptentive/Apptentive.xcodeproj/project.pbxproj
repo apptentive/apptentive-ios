@@ -375,6 +375,8 @@
 		EF8EE3AC1EBBA5D00033E7A1 /* ApptentiveJWT.m in Sources */ = {isa = PBXBuildFile; fileRef = EF8EE3AA1EBBA5D00033E7A1 /* ApptentiveJWT.m */; };
 		EFC308D21EC52915006B6D36 /* ApptentiveStopWatch.h in Headers */ = {isa = PBXBuildFile; fileRef = EFC308D01EC52915006B6D36 /* ApptentiveStopWatch.h */; };
 		EFC308D31EC52915006B6D36 /* ApptentiveStopWatch.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC308D11EC52915006B6D36 /* ApptentiveStopWatch.m */; };
+		EFC308D71ECA6692006B6D36 /* ApptentiveLegacyConversationRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = EFC308D51ECA6692006B6D36 /* ApptentiveLegacyConversationRequest.h */; };
+		EFC308D81ECA6692006B6D36 /* ApptentiveLegacyConversationRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC308D61ECA6692006B6D36 /* ApptentiveLegacyConversationRequest.m */; };
 		EFF3FE3B1E8C2F05006AD2B4 /* ApptentiveLog.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF3FE3A1E8C2F05006AD2B4 /* ApptentiveLog.m */; };
 		EFF3FE421E8C386E006AD2B4 /* ApptentiveLogTag.h in Headers */ = {isa = PBXBuildFile; fileRef = EFF3FE401E8C386E006AD2B4 /* ApptentiveLogTag.h */; };
 		EFF3FE431E8C386E006AD2B4 /* ApptentiveLogTag.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF3FE411E8C386E006AD2B4 /* ApptentiveLogTag.m */; };
@@ -792,6 +794,8 @@
 		EF8EE3AA1EBBA5D00033E7A1 /* ApptentiveJWT.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveJWT.m; sourceTree = "<group>"; };
 		EFC308D01EC52915006B6D36 /* ApptentiveStopWatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveStopWatch.h; sourceTree = "<group>"; };
 		EFC308D11EC52915006B6D36 /* ApptentiveStopWatch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveStopWatch.m; sourceTree = "<group>"; };
+		EFC308D51ECA6692006B6D36 /* ApptentiveLegacyConversationRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveLegacyConversationRequest.h; sourceTree = "<group>"; };
+		EFC308D61ECA6692006B6D36 /* ApptentiveLegacyConversationRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveLegacyConversationRequest.m; sourceTree = "<group>"; };
 		EFF3FE3A1E8C2F05006AD2B4 /* ApptentiveLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveLog.m; sourceTree = "<group>"; };
 		EFF3FE401E8C386E006AD2B4 /* ApptentiveLogTag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveLogTag.h; sourceTree = "<group>"; };
 		EFF3FE411E8C386E006AD2B4 /* ApptentiveLogTag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveLogTag.m; sourceTree = "<group>"; };
@@ -843,6 +847,8 @@
 				0174771F1EA92BED00A0A949 /* ApptentiveEventPayload.m */,
 				014508A61EAABEDE003326E7 /* ApptentiveInteractionsRequest.h */,
 				014508A71EAABEDE003326E7 /* ApptentiveInteractionsRequest.m */,
+				EFC308D51ECA6692006B6D36 /* ApptentiveLegacyConversationRequest.h */,
+				EFC308D61ECA6692006B6D36 /* ApptentiveLegacyConversationRequest.m */,
 				014508A21EAAB382003326E7 /* ApptentiveLoginRequest.h */,
 				014508A31EAAB382003326E7 /* ApptentiveLoginRequest.m */,
 				0134EB101EA991AE00DA4925 /* ApptentiveLogoutPayload.h */,
@@ -1621,6 +1627,7 @@
 				01A2D1031E490A9700C2103A /* ApptentivePassThroughWindow.h in Headers */,
 				01A2D1391E490A9700C2103A /* ApptentivePerson.h in Headers */,
 				01A2D13F1E490A9700C2103A /* ApptentiveState.h in Headers */,
+				EFC308D71ECA6692006B6D36 /* ApptentiveLegacyConversationRequest.h in Headers */,
 				01A2D1781E490A9700C2103A /* ApptentiveAboutViewController.h in Headers */,
 				01A2D17E1E490A9700C2103A /* ApptentiveMessageCenterErrorViewController.h in Headers */,
 				EFF3FE421E8C386E006AD2B4 /* ApptentiveLogTag.h in Headers */,
@@ -2047,6 +2054,7 @@
 				01A2D1841E490A9700C2103A /* ApptentiveAttachButton.m in Sources */,
 				017477291EA92BED00A0A949 /* ApptentiveMessagePayload.m in Sources */,
 				01A2D1121E490A9700C2103A /* ApptentiveInteractionAppStoreController.m in Sources */,
+				EFC308D81ECA6692006B6D36 /* ApptentiveLegacyConversationRequest.m in Sources */,
 				01A2D12E1E490A9700C2103A /* ApptentiveInteractionInvocation.m in Sources */,
 				01A2D1041E490A9700C2103A /* ApptentivePassThroughWindow.m in Sources */,
 				0134EB171EA992F900DA4925 /* ApptentiveSDKAppReleasePayload.m in Sources */,

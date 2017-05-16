@@ -20,5 +20,6 @@
 @property (strong, nonatomic) NSString *conversationIdentifier;
 @property (strong, nonatomic) NSString *directoryName;
 @property (strong, nonatomic) NSString *userId;
+@property (strong, nonatomic) NSString *JWT;
 
 @end

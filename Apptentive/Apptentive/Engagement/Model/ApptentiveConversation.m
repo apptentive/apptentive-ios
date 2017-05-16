@@ -131,6 +131,11 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 	self.device.identifier = deviceID;
 }
 
+- (void)setConversationIdentifier:(NSString *)identifier JWT:(NSString *)JWT {
+    _identifier = [identifier copy];
+    _JWT = [JWT copy];
+}
+
 - (void)setToken:(NSString *)token {
 	if (token == nil) {
 		ApptentiveLogError(ApptentiveLogTagConversation, @"Attempting to set token to nil. Ignoring.");
@@ -305,7 +310,7 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 		[NSKeyedUnarchiver setClass:[self class] forClassName:@"ApptentiveConversation"];
 
 		_token = legacyConversation.token;
-		_identifier = @"legacy_conversation";
+		_identifier = nil; // we should fetch conversation identifier separately
 		_person.identifier = legacyConversation.personID;
 		_device.identifier = legacyConversation.deviceID;
 

@@ -79,6 +79,11 @@ extern NSString * NSStringFromApptentiveConversationState(ApptentiveConversation
 @property (readonly, nonatomic) NSString *identifier;
 
 /**
+ Optional JWT for active conversations.
+ */
+@property (strong, nonatomic) NSString *JWT;
+
+/**
  Optional user id for logged-in conversations.
  */
 @property (strong, nonatomic) NSString *userId;
@@ -126,6 +131,11 @@ extern NSString * NSStringFromApptentiveConversationState(ApptentiveConversation
  */
 - (void)setToken:(NSString *)token conversationID:(NSString *)conversationID personID:(NSString *)personID deviceID:(NSString *)deviceID;
 
+/**
+ This method is called when a conversation request completes, which specifies
+ the conversation identifier along with JWT to authorize subsequent network requests.
+ */
+- (void)setConversationIdentifier:(NSString *)identifier JWT:(NSString *)JWT;
 
 /**
  This method will compare the current app release, SDK, and device information

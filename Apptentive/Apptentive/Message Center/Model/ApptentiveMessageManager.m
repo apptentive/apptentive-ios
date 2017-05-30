@@ -120,7 +120,7 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 #pragma mark Request Operation Delegate
 
 - (void)requestOperationDidFinish:(ApptentiveRequestOperation *)operation {
-	NSArray *messageListJSON = [operation.responseObject valueForKey:@"items"];
+	NSArray *messageListJSON = [operation.responseObject valueForKey:@"messages"];
 	self.messageOperation = nil;
 
 	if (messageListJSON == nil) {

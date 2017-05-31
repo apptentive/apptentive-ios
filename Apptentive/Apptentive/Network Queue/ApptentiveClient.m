@@ -79,7 +79,7 @@
 	[URLRequest addValue:_apptentiveKey forHTTPHeaderField:@"APPTENTIVE-KEY"];
 	[URLRequest addValue:_apptentiveSignature forHTTPHeaderField:@"APPTENTIVE-SIGNATURE"];
 	if (authToken) {
-		[URLRequest addValue:[@"OAuth " stringByAppendingString:authToken] forHTTPHeaderField:@"Authorization"];
+		[URLRequest addValue:[@"Bearer " stringByAppendingString:authToken] forHTTPHeaderField:@"Authorization"];
 	}
 	if (request.encrypted) {
 		[URLRequest addValue:@"true" forHTTPHeaderField:@"APPTENTIVE-ENCRYPTED"];

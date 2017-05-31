@@ -12,10 +12,13 @@
 #import "ApptentiveMessageSendRequest.h"
 
 
-@interface ApptentiveRequestOperation ()
+@interface ApptentiveRequestOperation () {
+    NSDate * _startDate;
+}
 
 @property (assign, nonatomic) BOOL wasCompleted;
 @property (assign, nonatomic) BOOL wasCancelled;
+@property (readonly, nonatomic) NSTimeInterval duration;
 
 @end
 
@@ -89,6 +92,8 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 }
 
 - (void)startTask {
+    _startDate = [[NSDate alloc] init];
+    
 	if (self.cancelled) {
 		return;
 	}
@@ -149,8 +154,8 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 	_cacheLifetime = [self maxAgeFromResponse:response];
 	_responseObject = responseObject;
 
-	ApptentiveLogDebug(@"%@ %@ finished successfully.", self.URLRequest.HTTPMethod, self.URLRequest.URL.absoluteString);
-    ApptentiveLogVerbose(@"Response object:\n%@.", responseObject);
+	ApptentiveLogDebug(ApptentiveLogTagNetwork, @"%@ %@ finished successfully (took %g sec).", self.URLRequest.HTTPMethod, self.URLRequest.URL.absoluteString, self.duration);
+    ApptentiveLogVerbose(ApptentiveLogTagNetwork, @"Response object:\n%@.", responseObject);
 
 	if ([self.delegate respondsToSelector:@selector(requestOperationDidFinish:)]) {
 		[self.delegate requestOperationDidFinish:self];
@@ -221,7 +226,7 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 }
 
 - (void)finishWithError:(NSError *)error {
-	ApptentiveLogError(ApptentiveLogTagNetwork, @"%@ %@ failed with error: %@. Not retrying.", self.URLRequest.HTTPMethod, self.URLRequest.URL.absoluteString, error);
+	ApptentiveLogError(ApptentiveLogTagNetwork, @"%@ %@ failed with error (took %g sec): %@. Not retrying.", self.URLRequest.HTTPMethod, self.URLRequest.URL.absoluteString, self.duration, error);
 
 	if ([self.delegate respondsToSelector:@selector(requestOperation:didFailWithError:)]) {
 		[self.delegate requestOperation:self didFailWithError:error];
@@ -247,6 +252,10 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 	}
 
 	return maxAge;
+}
+
+- (NSTimeInterval)duration {
+    return -[_startDate timeIntervalSinceNow];
 }
 
 @end

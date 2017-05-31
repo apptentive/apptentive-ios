@@ -786,6 +786,7 @@
 		EF18123D1E807FC00053BD68 /* ApptentiveAssert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveAssert.h; sourceTree = "<group>"; };
 		EF1812491E8084C80053BD68 /* ApptentiveSafeCollections.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveSafeCollections.h; sourceTree = "<group>"; };
 		EF18124A1E8084C80053BD68 /* ApptentiveSafeCollections.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveSafeCollections.m; sourceTree = "<group>"; };
+		EF37099C1EDE19F300CFC5E5 /* ApptentiveDefines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ApptentiveDefines.h; sourceTree = "<group>"; };
 		EF8EE3961EB3F37B0033E7A1 /* ApptentiveConversationBaseRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveConversationBaseRequest.h; sourceTree = "<group>"; };
 		EF8EE3971EB3F37B0033E7A1 /* ApptentiveConversationBaseRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveConversationBaseRequest.m; sourceTree = "<group>"; };
 		EF8EE39A1EB3FB120033E7A1 /* ApptentiveAssert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveAssert.m; sourceTree = "<group>"; };
@@ -1360,6 +1361,7 @@
 				EF18123D1E807FC00053BD68 /* ApptentiveAssert.h */,
 				EF8EE39A1EB3FB120033E7A1 /* ApptentiveAssert.m */,
 				01A2D08A1E490A9700C2103A /* ApptentiveConnect-Prefix.pch */,
+				EF37099C1EDE19F300CFC5E5 /* ApptentiveDefines.h */,
 				01A2D08B1E490A9700C2103A /* ApptentiveJSONSerialization.h */,
 				01A2D08C1E490A9700C2103A /* ApptentiveJSONSerialization.m */,
 				01A2D08D1E490A9700C2103A /* ApptentiveLog.h */,

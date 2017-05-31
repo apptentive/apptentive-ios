@@ -150,6 +150,7 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 	_responseObject = responseObject;
 
 	ApptentiveLogDebug(@"%@ %@ finished successfully.", self.URLRequest.HTTPMethod, self.URLRequest.URL.absoluteString);
+    ApptentiveLogVerbose(@"Response object:\n%@.", responseObject);
 
 	if ([self.delegate respondsToSelector:@selector(requestOperationDidFinish:)]) {
 		[self.delegate requestOperationDidFinish:self];

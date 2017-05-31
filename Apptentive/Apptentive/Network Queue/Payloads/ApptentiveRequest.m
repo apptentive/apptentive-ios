@@ -12,7 +12,7 @@
 @implementation ApptentiveRequest
 
 - (NSString *)apiVersion {
-	return @"8";
+	return @"9";
 }
 
 - (NSString *)path {

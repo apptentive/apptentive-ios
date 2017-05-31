@@ -20,5 +20,7 @@
 + (ApptentiveLogTag *)conversationTag;
 + (ApptentiveLogTag *)networkingTag;
 + (ApptentiveLogTag *)payloadTag;
++ (ApptentiveLogTag *)utilityTag;
++ (ApptentiveLogTag *)storageTag;
 
 @end

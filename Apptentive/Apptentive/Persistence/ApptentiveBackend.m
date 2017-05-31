@@ -253,12 +253,12 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 
 // Note: must be called on main thread
 - (void)setUpCoreData {
-	ApptentiveLogDebug(@"Setting up data manager");
+	ApptentiveLogVerbose(ApptentiveLogTagStorage, @"Setting up data manager");
 	self.dataManager = [[ApptentiveDataManager alloc] initWithModelName:@"ATDataModel" inBundle:[ApptentiveUtilities resourceBundle] storagePath:[self supportDirectoryPath]];
 	if (![self.dataManager setupAndVerify]) {
-		ApptentiveLogError(@"Unable to setup and verify data manager.");
+		ApptentiveLogError(ApptentiveLogTagStorage, @"Unable to setup and verify data manager.");
 	} else if (![self.dataManager persistentStoreCoordinator]) {
-		ApptentiveLogError(@"There was a problem setting up the persistent store coordinator!");
+		ApptentiveLogError(ApptentiveLogTagStorage, @"There was a problem setting up the persistent store coordinator!");
 	}
 }
 

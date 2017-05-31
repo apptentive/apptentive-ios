@@ -124,7 +124,7 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 	[self didChangeValueForKey:@"isExecuting"];
 
 	ApptentiveLogDebug(ApptentiveLogTagNetworking, @"%@ %@ started.", self.URLRequest.HTTPMethod, self.URLRequest.URL.absoluteString);
-	ApptentiveLogVerbose(ApptentiveLogTagNetworking, @"Headers: %@\nPayload:%@", self.URLRequest.allHTTPHeaderFields, [[NSString alloc] initWithData:self.URLRequest.HTTPBody encoding:NSUTF8StringEncoding]);
+	ApptentiveLogVerbose(ApptentiveLogTagNetworking, @"Headers: %@\nPayload:\n-----------\n%@\n-----------", self.URLRequest.allHTTPHeaderFields, [[NSString alloc] initWithData:self.URLRequest.HTTPBody encoding:NSUTF8StringEncoding]);
 
 	if ([self.delegate respondsToSelector:@selector(requestOperationDidStart:)]) {
 		[self.delegate requestOperationDidStart:self];
@@ -194,7 +194,7 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 
 - (void)retryTaskWithError:(NSError *)error {
 	if (error != nil) {
-		ApptentiveLogError(@"%@ %@ failed with error: %@", self.URLRequest.HTTPMethod, self.URLRequest.URL.absoluteString, error);
+		ApptentiveLogError(ApptentiveLogTagNetworking, @"%@ %@ failed with error: %@", self.URLRequest.HTTPMethod, self.URLRequest.URL.absoluteString, error);
 	}
 
 	ApptentiveLogInfo(@"%@ %@ will retry in %f seconds.", self.URLRequest.HTTPMethod, self.URLRequest.URL.absoluteString, self.dataSource.backoffDelay);
@@ -220,7 +220,7 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 }
 
 - (void)finishWithError:(NSError *)error {
-	ApptentiveLogError(@"%@ %@ failed with error: %@. Not retrying.", self.URLRequest.HTTPMethod, self.URLRequest.URL.absoluteString, error);
+	ApptentiveLogError(ApptentiveLogTagNetworking, @"%@ %@ failed with error: %@. Not retrying.", self.URLRequest.HTTPMethod, self.URLRequest.URL.absoluteString, error);
 
 	if ([self.delegate respondsToSelector:@selector(requestOperation:didFailWithError:)]) {
 		[self.delegate requestOperation:self didFailWithError:error];

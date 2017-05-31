@@ -276,7 +276,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 - (void)updateMetadataItems:(ApptentiveConversation *)conversation {
 	if (conversation.state == ApptentiveConversationStateAnonymousPending ||
         conversation.state == ApptentiveConversationStateLegacyPending) {
-		ApptentiveLogDebug(@"Skipping updating metadata since conversation is %@", NSStringFromApptentiveConversationState(conversation.state));
+		ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Skipping updating metadata since conversation is %@", NSStringFromApptentiveConversationState(conversation.state));
 		return;
 	}
 

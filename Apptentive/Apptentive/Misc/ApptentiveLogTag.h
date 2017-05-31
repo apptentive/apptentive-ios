@@ -18,7 +18,7 @@
 - (instancetype)initWithName:(NSString *)name enabled:(BOOL)enabled;
 
 + (ApptentiveLogTag *)conversationTag;
-+ (ApptentiveLogTag *)networkingTag;
++ (ApptentiveLogTag *)networkTag;
 + (ApptentiveLogTag *)payloadTag;
 + (ApptentiveLogTag *)utilityTag;
 + (ApptentiveLogTag *)storageTag;

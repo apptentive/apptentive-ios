@@ -9,7 +9,7 @@
 #import "ApptentiveLogTag.h"
 
 static ApptentiveLogTag * _conversationTag;
-static ApptentiveLogTag * _networkingTag;
+static ApptentiveLogTag * _networkTag;
 static ApptentiveLogTag * _payloadTag;
 static ApptentiveLogTag * _utilityTag;
 static ApptentiveLogTag * _storageTag;
@@ -20,7 +20,7 @@ static ApptentiveLogTag * _storageTag;
 + (void)initialize {
 	if ([self class] == [ApptentiveLogTag class]) {
 		_conversationTag = [ApptentiveLogTag logTagWithName:@"CONVERSATION" enabled:YES];
-		_networkingTag = [ApptentiveLogTag logTagWithName:@"NETWORKING" enabled:YES];
+		_networkTag = [ApptentiveLogTag logTagWithName:@"NETWORKING" enabled:YES];
 		_payloadTag = [ApptentiveLogTag logTagWithName:@"PAYLOAD" enabled:YES];
         _utilityTag = [ApptentiveLogTag logTagWithName:@"UTILITY" enabled:YES];
         _storageTag = [ApptentiveLogTag logTagWithName:@"STORAGE" enabled:YES];
@@ -47,8 +47,8 @@ static ApptentiveLogTag * _storageTag;
 	return _conversationTag;
 }
 
-+ (ApptentiveLogTag *)networkingTag {
-	return _networkingTag;
++ (ApptentiveLogTag *)networkTag {
+	return _networkTag;
 }
 
 + (ApptentiveLogTag *)payloadTag {

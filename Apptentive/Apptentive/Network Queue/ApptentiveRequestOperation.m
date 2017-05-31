@@ -123,8 +123,8 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 	[self.task resume];
 	[self didChangeValueForKey:@"isExecuting"];
 
-	ApptentiveLogDebug(ApptentiveLogTagNetworking, @"%@ %@ started.", self.URLRequest.HTTPMethod, self.URLRequest.URL.absoluteString);
-    ApptentiveLogVerbose(ApptentiveLogTagNetworking, @"Headers: %@%@", self.URLRequest.allHTTPHeaderFields, self.URLRequest.HTTPBody.length > 0 ? [NSString stringWithFormat:@"\n-----------PAYLOAD BEGIN-----------\n%@\n-----------PAYLOAD END-----------", [[NSString alloc] initWithData:self.URLRequest.HTTPBody encoding:NSUTF8StringEncoding]] : @"");
+	ApptentiveLogDebug(ApptentiveLogTagNetwork, @"%@ %@ started.", self.URLRequest.HTTPMethod, self.URLRequest.URL.absoluteString);
+    ApptentiveLogVerbose(ApptentiveLogTagNetwork, @"Headers: %@%@", self.URLRequest.allHTTPHeaderFields, self.URLRequest.HTTPBody.length > 0 ? [NSString stringWithFormat:@"\n-----------PAYLOAD BEGIN-----------\n%@\n-----------PAYLOAD END-----------", [[NSString alloc] initWithData:self.URLRequest.HTTPBody encoding:NSUTF8StringEncoding]] : @"");
 
 	if ([self.delegate respondsToSelector:@selector(requestOperationDidStart:)]) {
 		[self.delegate requestOperationDidStart:self];
@@ -195,7 +195,7 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 
 - (void)retryTaskWithError:(NSError *)error {
 	if (error != nil) {
-		ApptentiveLogError(ApptentiveLogTagNetworking, @"%@ %@ failed with error: %@", self.URLRequest.HTTPMethod, self.URLRequest.URL.absoluteString, error);
+		ApptentiveLogError(ApptentiveLogTagNetwork, @"%@ %@ failed with error: %@", self.URLRequest.HTTPMethod, self.URLRequest.URL.absoluteString, error);
 	}
 
 	ApptentiveLogInfo(@"%@ %@ will retry in %f seconds.", self.URLRequest.HTTPMethod, self.URLRequest.URL.absoluteString, self.dataSource.backoffDelay);
@@ -221,7 +221,7 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 }
 
 - (void)finishWithError:(NSError *)error {
-	ApptentiveLogError(ApptentiveLogTagNetworking, @"%@ %@ failed with error: %@. Not retrying.", self.URLRequest.HTTPMethod, self.URLRequest.URL.absoluteString, error);
+	ApptentiveLogError(ApptentiveLogTagNetwork, @"%@ %@ failed with error: %@. Not retrying.", self.URLRequest.HTTPMethod, self.URLRequest.URL.absoluteString, error);
 
 	if ([self.delegate respondsToSelector:@selector(requestOperation:didFailWithError:)]) {
 		[self.delegate requestOperation:self didFailWithError:error];

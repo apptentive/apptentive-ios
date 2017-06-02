@@ -79,7 +79,7 @@
 			for (ApptentiveSerialRequest *requestInfo in [queuedRequests copy]) {
 				id<ApptentiveRequest> request;
 
-				if ([requestInfo.path isEqualToString:@"messages"]) {
+				if (requestInfo.attachments.count > 0) { // FIXME: figure out a better approach
 					ApptentiveLogVerbose(ApptentiveLogTagPayload, @"Adding attachments to message payload");
 					request = [[ApptentiveMessageSendRequest alloc] initWithRequest:requestInfo];
 				} else {

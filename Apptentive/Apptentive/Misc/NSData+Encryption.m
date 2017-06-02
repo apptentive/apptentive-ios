@@ -6,10 +6,23 @@
 //  Copyright © 2017 Apptentive, Inc. All rights reserved.
 //
 
-#import "NSData+Encryption.h"
 #import <CommonCrypto/CommonCrypto.h>
 
+#import "NSData+Encryption.h"
+#import "ApptentiveUtilities.h"
+
 @implementation NSData (Encryption)
+
+- (nullable NSData *)apptentive_dataEncryptedWithKey:(NSData *)key {
+    NSData *initializationVector = [ApptentiveUtilities secureRandomDataOfLength:16];
+    ApptentiveAssertTrue(initializationVector.length > 0, @"Unable to generate random initialization vector.");
+    
+    if (initializationVector == nil) {
+        return nil;
+    }
+    
+    return [self apptentive_dataEncryptedWithKey:key initializationVector:initializationVector];
+}
 
 - (NSData *)apptentive_dataEncryptedWithKey:(NSData *)key initializationVector:(NSData *)initializationVector {
     if (key == nil) {

@@ -52,46 +52,62 @@
 		ApptentiveLogError(@"Unable encode enqueue request: managed object context is nil");
 		return NO;
 	}
-
-	ApptentiveSerialRequest *request = (ApptentiveSerialRequest *)[[NSManagedObject alloc] initWithEntity:[NSEntityDescription entityForName:@"QueuedRequest" inManagedObjectContext:context] insertIntoManagedObjectContext:context];
-
-	ApptentiveAssertNotNil(request, @"Can't load managed request object");
-	if (request == nil) {
-		ApptentiveLogError(@"Unable encode enqueue request '%@': can't load managed request object", payload.path);
-		return NO;
-	}
-
-	request.date = [NSDate date];
-	request.path = payload.path;
-	request.method = payload.method;
-	request.identifier = payload.localIdentifier;
-	request.conversationIdentifier = conversation.identifier;
-	request.apiVersion = payload.apiVersion;
-	request.authToken = authToken;
-	request.contentType = @"application/json";
-
-	NSError *error;
-	request.payload = payload.payload;
-
-	NSMutableArray *attachmentArray = [NSMutableArray arrayWithCapacity:payload.attachments.count];
-	for (ApptentiveAttachment *attachment in payload.attachments) {
-		[attachmentArray addObject:[ApptentiveSerialRequestAttachment queuedAttachmentWithName:attachment.name path:attachment.fullLocalPath MIMEType:attachment.contentType inContext:context]];
-	}
-	request.attachments = [NSOrderedSet orderedSetWithArray:attachmentArray];
-
-	if (conversation.state == ApptentiveConversationStateLoggedIn) {
-		ApptentiveAssertNotNil(conversation.encryptionKey, @"Encryption key is nil for a logged-in conversation!");
-
-		[request encryptWithKey:conversation.encryptionKey];
-	}
-
-	// Doing this synchronously triggers Core Data's recursive save detection.
-	[context performBlock:^{
-		NSError *saveError;
-		if (![context save:&saveError]) {
-			ApptentiveLogError(@"Error saving request for %@ to queue: %@", payload.path, error);
-		}
-	}];
+    
+    // create a child context on a private concurrent queue
+    NSManagedObjectContext *childContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+    
+    // set parent context
+    [childContext setParentContext:context];
+    
+    // execute the block on a background thread (this call returns immediatelly)
+    [childContext performBlock:^{
+        
+        ApptentiveSerialRequest *request = (ApptentiveSerialRequest *)[[NSManagedObject alloc] initWithEntity:[NSEntityDescription entityForName:@"QueuedRequest" inManagedObjectContext:context] insertIntoManagedObjectContext:context];
+        
+        ApptentiveAssertNotNil(request, @"Can't load managed request object");
+        if (request == nil) {
+            ApptentiveLogError(@"Unable encode enqueue request '%@': can't load managed request object", payload.path);
+            return;
+        }
+        
+        request.date = [NSDate date];
+        request.path = payload.path;
+        request.method = payload.method;
+        request.identifier = payload.localIdentifier;
+        request.conversationIdentifier = conversation.identifier;
+        request.apiVersion = payload.apiVersion;
+        request.authToken = authToken;
+        request.contentType = @"application/json";
+        request.payload = payload.payload;
+        
+        NSMutableArray *attachmentArray = [NSMutableArray arrayWithCapacity:payload.attachments.count];
+        for (ApptentiveAttachment *attachment in payload.attachments) {
+            [attachmentArray addObject:[ApptentiveSerialRequestAttachment queuedAttachmentWithName:attachment.name path:attachment.fullLocalPath MIMEType:attachment.contentType inContext:childContext]];
+        }
+        request.attachments = [NSOrderedSet orderedSetWithArray:attachmentArray];
+        
+        if (conversation.state == ApptentiveConversationStateLoggedIn) {
+            ApptentiveAssertNotNil(conversation.encryptionKey, @"Encryption key is nil for a logged-in conversation!");
+            
+            [request encryptWithKey:conversation.encryptionKey];
+        }
+        
+        // save child context
+        [childContext performBlockAndWait:^{
+            NSError *saveError;
+            if (![childContext save:&saveError]) {
+                ApptentiveLogError(@"Unable to save temporary managed object context: %@", saveError);
+            }
+        }];
+        
+        // save parent context on the main thread
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSError *parentSaveError;
+            if (![childContext.parentContext save:&parentSaveError]) {
+                ApptentiveLogError(@"Unable to save parent managed object context: %@", parentSaveError);
+            }
+        });
+    }];
 
 	return YES;
 }
@@ -123,22 +139,56 @@
 		return NO;
 	}
 
-	NSData *initializationVector = [ApptentiveUtilities secureRandomDataOfLength:16];
-	ApptentiveAssertTrue(initializationVector.length > 0, @"Unable to generate random initialization vector.");
-
-	if (initializationVector == nil) {
-		return NO;
-	}
-
-	NSData *encryptedPayload = [JSONPayloadWithToken apptentive_dataEncryptedWithKey:key initializationVector:initializationVector];
+	NSData *encryptedPayload = [JSONPayloadWithToken apptentive_dataEncryptedWithKey:key];
 
 	ApptentiveAssertNotNil(encryptedPayload, @"Unable to encrypt payload");
+    
+    // encrypt each attachments and write to a file in a form of a part of the multi-part request
+    if (self.attachments.count > 0) {
+        NSMutableArray *encryptedAttachments = [[NSMutableArray alloc] initWithCapacity:self.attachments.count];
+        for (ApptentiveAttachment *attachment in self.attachments) {
+            ApptentiveAttachment *encryptedAttachment = [self encryptedAttachment:attachment usingKey:key];
+            ApptentiveAssertNotNil(encryptedAttachment, @"Unable to encrypt attachment: %@", attachment.name);
+            
+            if (encryptedAttachment != nil) {
+                [encryptedAttachments addObject:encryptedAttachment];
+            }
+        }
+        self.attachments = [NSOrderedSet orderedSetWithArray:encryptedAttachments];
+    }
 
 	self.payload = encryptedPayload;
 	self.encrypted = YES;
 	self.contentType = @"application/octet-stream";
 
 	return self.payload != nil;
+}
+
+- (ApptentiveAttachment *)encryptedAttachment:(ApptentiveAttachment *)attachment usingKey:(NSData *)key {
+    NSError *error;
+    NSData *fileData = [NSData dataWithContentsOfFile:attachment.fullLocalPath options:0 error:&error];
+    if (error) {
+        ApptentiveLogError(@"Unable to read attachment data: %@", error);
+        return nil;
+    }
+    
+    NSMutableString *multipartHeader = [NSMutableString string];
+    [multipartHeader appendString:[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"; filename=\"%@\"\r\n", @"file[]", attachment.name]];
+    [multipartHeader appendString:[NSString stringWithFormat:@"Content-Type: %@\r\n", attachment.contentType]];
+    
+    NSMutableData *multipartData = [NSMutableData new];
+    [multipartData appendData:[multipartHeader dataUsingEncoding:NSUTF8StringEncoding]];
+    [multipartData appendData:fileData];
+    
+    NSData *multipartEncryptedData = [multipartData apptentive_dataEncryptedWithKey:key];
+    ApptentiveAssertNotNil(multipartEncryptedData, @"Unable to encrypt attachment multipart data");
+    if (multipartEncryptedData == nil) {
+        return nil;
+    }
+    
+    #warning Delete the un-encrypted file?
+    
+    return [[ApptentiveAttachment alloc] initWithData:multipartEncryptedData contentType:@"application/octet-stream" name:attachment.name];
 }
 
 @end

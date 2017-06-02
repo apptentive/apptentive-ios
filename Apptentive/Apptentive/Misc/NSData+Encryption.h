@@ -14,6 +14,16 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface NSData (Encryption)
 
+/**
+ Encrypts the data using a AES with a 256-bit key.
+ It then prepends the initialization vector to the encrypted data. A random 16-byte initialization vector
+ would be used.
+ 
+ @param key A 32-byte key to use to encrypt the data
+ @return The encrypted data with the initialization vector prepended, or nil if there was an error.
+ */
+- (nullable NSData *)apptentive_dataEncryptedWithKey:(NSData *)key;
+
 
 /**
  Encrypts the data using a AES with a 256-bit key. 

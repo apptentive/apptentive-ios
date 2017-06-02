@@ -62,7 +62,7 @@
     // execute the block on a background thread (this call returns immediatelly)
     [childContext performBlock:^{
         
-        ApptentiveSerialRequest *request = (ApptentiveSerialRequest *)[[NSManagedObject alloc] initWithEntity:[NSEntityDescription entityForName:@"QueuedRequest" inManagedObjectContext:context] insertIntoManagedObjectContext:context];
+        ApptentiveSerialRequest *request = (ApptentiveSerialRequest *)[[NSManagedObject alloc] initWithEntity:[NSEntityDescription entityForName:@"QueuedRequest" inManagedObjectContext:childContext] insertIntoManagedObjectContext:childContext];
         
         ApptentiveAssertNotNil(request, @"Can't load managed request object");
         if (request == nil) {
@@ -93,20 +93,18 @@
         }
         
         // save child context
-        [childContext performBlockAndWait:^{
-            NSError *saveError;
-            if (![childContext save:&saveError]) {
-                ApptentiveLogError(@"Unable to save temporary managed object context: %@", saveError);
-            }
-        }];
+        NSError *saveError;
+        if (![childContext save:&saveError]) {
+            ApptentiveLogError(@"Unable to save temporary managed object context: %@", saveError);
+        }
         
-        // save parent context on the main thread
-        dispatch_async(dispatch_get_main_queue(), ^{
+        // save parent context
+        [context performBlockAndWait:^{
             NSError *parentSaveError;
-            if (![childContext.parentContext save:&parentSaveError]) {
+            if (![context save:&parentSaveError]) {
                 ApptentiveLogError(@"Unable to save parent managed object context: %@", parentSaveError);
             }
-        });
+        }];
     }];
 
 	return YES;

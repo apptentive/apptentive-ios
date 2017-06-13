@@ -1,3 +1,7 @@
+2017-06-13 frankus, weeeBox v3.5.1
+-------------------------
+Version 3.5.1 avoids use of blocks when displaying SKStoreReviewController in a effort to fix a possible crash. 
+
 2017-04-05 frankus, weeeBox v3.5.0
 -------------------------
 Version 3.5.0 adds the ability to request the display of an SKStoreReviewController. 
@@ -7,10 +11,6 @@ Version 3.5.0 adds the ability to request the display of an SKStoreReviewControl
 Version 3.4.3 fixes a bug where push notifications could stop working after a cold relaunch. 
 
 2017-03-03 frankus, weeeBox v3.4.2
--------------------------
-Version 3.4.2 fixes the retry logic for certain network requests. 
-
-2017-01-06 frankus, weeeBox v3.4.2
 -------------------------
 Version 3.4.2 fixes the retry logic for certain network requests. 
 

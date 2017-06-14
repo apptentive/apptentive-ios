@@ -420,7 +420,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 - (void)sendLoginRequestWithToken:(NSString *)token conversationIdentifier:(NSString *)conversationIdentifier userId:(NSString *)userId {
 	self.pendingLoggedInUserId = userId;
-	self.loginRequestOperation = [self.client requestOperationWithRequest:[[ApptentiveLoginRequest alloc] initWithConversationIdentifier:conversationIdentifier token:token] authToken:token delegate:self];
+	self.loginRequestOperation = [self.client requestOperationWithRequest:[[ApptentiveLoginRequest alloc] initWithConversationIdentifier:conversationIdentifier token:token] authToken:nil delegate:self];
 
 	[self.client.operationQueue addOperation:self.loginRequestOperation];
 }

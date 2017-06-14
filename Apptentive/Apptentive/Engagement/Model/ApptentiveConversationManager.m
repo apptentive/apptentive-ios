@@ -362,7 +362,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
             return;
         }
         
-        NSString *userId = jwt.payload[@"user_id"];
+        NSString *userId = jwt.payload[@"sub"];
         if (userId.length == 0) {
             [self failLoginWithErrorCode:ApptentiveInternalInconsistency failureReason:@"'user_id' is nil or empty."];
             return;

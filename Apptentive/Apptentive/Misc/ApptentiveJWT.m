@@ -21,7 +21,13 @@ inline static NSError *_createError(NSString *format, ...) {
 }
 
 static NSDictionary *_Nullable _decodeBase64Json(NSString *string, NSError **error) {
-	NSData *data = [[NSData alloc] initWithBase64EncodedString:string options:0];
+    // HACK: NSData will be nil if base64-encoded string is not properly padded
+    if (string.length % 4 != 0) {
+        NSString *padding = [NSString stringWithFormat:@"%*s", (int)(4 - string.length % 4), "="];
+        string = [string stringByAppendingString:padding];
+    }
+    
+	NSData *data = [[NSData alloc] initWithBase64EncodedString:string options:NSDataBase64DecodingIgnoreUnknownCharacters];
 	if (data == nil) {
 		if (error) {
 			*error = _createError(@"Invalid base64 string: '%@'", string);

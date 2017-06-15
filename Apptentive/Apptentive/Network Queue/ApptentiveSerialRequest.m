@@ -70,6 +70,14 @@
             return;
         }
         
+        payload.token = authToken;
+        
+        #warning Do not modify payload
+        if (conversation.state == ApptentiveConversationStateLoggedIn) {
+            ApptentiveAssertNotNil(conversation.encryptionKey, @"Encryption key is nil for a logged-in conversation!");
+            payload.encryptionKey = conversation.encryptionKey;
+        }
+        
         request.date = [NSDate date];
         request.path = payload.path;
         request.method = payload.method;
@@ -77,7 +85,8 @@
         request.conversationIdentifier = conversation.identifier;
         request.apiVersion = payload.apiVersion;
         request.authToken = authToken;
-        request.contentType = @"application/json";
+        request.contentType = payload.contentType;
+        request.encrypted = payload.encrypted;
         request.payload = payload.payload;
         
         NSMutableArray *attachmentArray = [NSMutableArray arrayWithCapacity:payload.attachments.count];
@@ -85,12 +94,6 @@
             [attachmentArray addObject:[ApptentiveSerialRequestAttachment queuedAttachmentWithName:attachment.name path:attachment.fullLocalPath MIMEType:attachment.contentType inContext:childContext]];
         }
         request.attachments = [NSOrderedSet orderedSetWithArray:attachmentArray];
-        
-        if (conversation.state == ApptentiveConversationStateLoggedIn) {
-            ApptentiveAssertNotNil(conversation.encryptionKey, @"Encryption key is nil for a logged-in conversation!");
-            
-            [request encryptWithKey:conversation.encryptionKey];
-        }
         
         // save child context
         NSError *saveError;
@@ -114,79 +117,6 @@
 	if (self.conversationIdentifier.length > 0 && [self.path containsString:@"<cid>"]) {
 		self.path = [self.path stringByReplacingOccurrencesOfString:@"<cid>" withString:self.conversationIdentifier];
 	}
-}
-
-- (BOOL)encryptWithKey:(NSData *)key {
-	NSError *error;
-	NSDictionary *JSONPayload = [NSJSONSerialization JSONObjectWithData:self.payload options:0 error:&error];
-
-	ApptentiveAssertNotNil(JSONPayload, @"Unable to read JSON-encoded payload data: %@", error);
-
-	if (JSONPayload == nil) {
-		return NO;
-	}
-
-	NSMutableDictionary *mutablePayload = [JSONPayload mutableCopy];
-	mutablePayload[@"token"] = self.authToken;
-
-	NSData *JSONPayloadWithToken = [NSJSONSerialization dataWithJSONObject:mutablePayload options:0 error:&error];
-
-	ApptentiveAssertNotNil(JSONPayloadWithToken, @"Unable to encode payload data as JSON: %@", error);
-
-	if (JSONPayloadWithToken == nil) {
-		return NO;
-	}
-
-	NSData *encryptedPayload = [JSONPayloadWithToken apptentive_dataEncryptedWithKey:key];
-
-	ApptentiveAssertNotNil(encryptedPayload, @"Unable to encrypt payload");
-    
-    // encrypt each attachments and write to a file in a form of a part of the multi-part request
-    if (self.attachments.count > 0) {
-        NSMutableArray *encryptedAttachments = [[NSMutableArray alloc] initWithCapacity:self.attachments.count];
-        for (ApptentiveAttachment *attachment in self.attachments) {
-            ApptentiveAttachment *encryptedAttachment = [self encryptedAttachment:attachment usingKey:key];
-            ApptentiveAssertNotNil(encryptedAttachment, @"Unable to encrypt attachment: %@", attachment.name);
-            
-            if (encryptedAttachment != nil) {
-                [encryptedAttachments addObject:encryptedAttachment];
-            }
-        }
-        self.attachments = [NSOrderedSet orderedSetWithArray:encryptedAttachments];
-    }
-
-	self.payload = encryptedPayload;
-	self.encrypted = YES;
-	self.contentType = @"application/octet-stream";
-
-	return self.payload != nil;
-}
-
-- (ApptentiveAttachment *)encryptedAttachment:(ApptentiveAttachment *)attachment usingKey:(NSData *)key {
-    NSError *error;
-    NSData *fileData = [NSData dataWithContentsOfFile:attachment.fullLocalPath options:0 error:&error];
-    if (error) {
-        ApptentiveLogError(@"Unable to read attachment data: %@", error);
-        return nil;
-    }
-    
-    NSMutableString *multipartHeader = [NSMutableString string];
-    [multipartHeader appendString:[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"; filename=\"%@\"\r\n", @"file[]", attachment.name]];
-    [multipartHeader appendString:[NSString stringWithFormat:@"Content-Type: %@\r\n", attachment.contentType]];
-    
-    NSMutableData *multipartData = [NSMutableData new];
-    [multipartData appendData:[multipartHeader dataUsingEncoding:NSUTF8StringEncoding]];
-    [multipartData appendData:fileData];
-    
-    NSData *multipartEncryptedData = [multipartData apptentive_dataEncryptedWithKey:key];
-    ApptentiveAssertNotNil(multipartEncryptedData, @"Unable to encrypt attachment multipart data");
-    if (multipartEncryptedData == nil) {
-        return nil;
-    }
-    
-    #warning Delete the un-encrypted file?
-    
-    return [[ApptentiveAttachment alloc] initWithData:multipartEncryptedData contentType:@"application/octet-stream" name:attachment.name];
 }
 
 @end

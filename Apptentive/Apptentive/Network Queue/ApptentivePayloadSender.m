@@ -76,17 +76,8 @@
 			ApptentiveLogDebug(ApptentiveLogTagPayload, @"Adding %d record operations for queued payloads", queuedRequests.count);
 
 			// Add an operation for every record in the queue
-			for (ApptentiveSerialRequest *requestInfo in [queuedRequests copy]) {
-				id<ApptentiveRequest> request;
-
-				if (requestInfo.attachments.count > 0) { // FIXME: figure out a better approach
-					ApptentiveLogVerbose(ApptentiveLogTagPayload, @"Adding attachments to message payload");
-					request = [[ApptentiveMessageSendRequest alloc] initWithRequest:requestInfo];
-				} else {
-					request = requestInfo;
-				}
-
-				ApptentiveRequestOperation *operation = [self requestOperationWithRequest:request authToken:requestInfo.authToken delegate:self];
+			for (ApptentiveSerialRequest *request in [queuedRequests copy]) { // FIXME: why do we need a copy?
+				ApptentiveRequestOperation *operation = [self requestOperationWithRequest:request authToken:request.authToken delegate:self];
 				ApptentiveLogVerbose(ApptentiveLogTagPayload, @"Adding operation for %@ %@", operation.URLRequest.HTTPMethod, operation.URLRequest.URL.absoluteString);
 
 				operation.request = request;

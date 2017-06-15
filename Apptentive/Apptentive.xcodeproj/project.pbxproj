@@ -366,6 +366,8 @@
 		EF18123F1E807FC00053BD68 /* ApptentiveAssert.h in Headers */ = {isa = PBXBuildFile; fileRef = EF18123D1E807FC00053BD68 /* ApptentiveAssert.h */; };
 		EF18124B1E8084C80053BD68 /* ApptentiveSafeCollections.h in Headers */ = {isa = PBXBuildFile; fileRef = EF1812491E8084C80053BD68 /* ApptentiveSafeCollections.h */; };
 		EF18124D1E8084C80053BD68 /* ApptentiveSafeCollections.m in Sources */ = {isa = PBXBuildFile; fileRef = EF18124A1E8084C80053BD68 /* ApptentiveSafeCollections.m */; };
+		EF49AC941EF2C50B00E2187F /* NSMutableData+Types.h in Headers */ = {isa = PBXBuildFile; fileRef = EF49AC921EF2C50B00E2187F /* NSMutableData+Types.h */; };
+		EF49AC951EF2C50B00E2187F /* NSMutableData+Types.m in Sources */ = {isa = PBXBuildFile; fileRef = EF49AC931EF2C50B00E2187F /* NSMutableData+Types.m */; };
 		EF8EE3981EB3F37B0033E7A1 /* ApptentiveConversationBaseRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = EF8EE3961EB3F37B0033E7A1 /* ApptentiveConversationBaseRequest.h */; };
 		EF8EE3991EB3F37B0033E7A1 /* ApptentiveConversationBaseRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EF8EE3971EB3F37B0033E7A1 /* ApptentiveConversationBaseRequest.m */; };
 		EF8EE39B1EB3FB120033E7A1 /* ApptentiveAssert.m in Sources */ = {isa = PBXBuildFile; fileRef = EF8EE39A1EB3FB120033E7A1 /* ApptentiveAssert.m */; };
@@ -787,6 +789,8 @@
 		EF1812491E8084C80053BD68 /* ApptentiveSafeCollections.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveSafeCollections.h; sourceTree = "<group>"; };
 		EF18124A1E8084C80053BD68 /* ApptentiveSafeCollections.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveSafeCollections.m; sourceTree = "<group>"; };
 		EF37099C1EDE19F300CFC5E5 /* ApptentiveDefines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ApptentiveDefines.h; sourceTree = "<group>"; };
+		EF49AC921EF2C50B00E2187F /* NSMutableData+Types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableData+Types.h"; sourceTree = "<group>"; };
+		EF49AC931EF2C50B00E2187F /* NSMutableData+Types.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableData+Types.m"; sourceTree = "<group>"; };
 		EF8EE3961EB3F37B0033E7A1 /* ApptentiveConversationBaseRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveConversationBaseRequest.h; sourceTree = "<group>"; };
 		EF8EE3971EB3F37B0033E7A1 /* ApptentiveConversationBaseRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveConversationBaseRequest.m; sourceTree = "<group>"; };
 		EF8EE39A1EB3FB120033E7A1 /* ApptentiveAssert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveAssert.m; sourceTree = "<group>"; };
@@ -1380,6 +1384,8 @@
 				01626EB81EB7D60C0064E73F /* NSData+Encryption.m */,
 				EF8EE3A91EBBA5D00033E7A1 /* ApptentiveJWT.h */,
 				EF8EE3AA1EBBA5D00033E7A1 /* ApptentiveJWT.m */,
+				EF49AC921EF2C50B00E2187F /* NSMutableData+Types.h */,
+				EF49AC931EF2C50B00E2187F /* NSMutableData+Types.m */,
 			);
 			path = Misc;
 			sourceTree = "<group>";
@@ -1674,6 +1680,7 @@
 				01A2D1D01E490A9700C2103A /* ApptentiveSerialRequest.h in Headers */,
 				01A2D1D61E490A9700C2103A /* ApptentiveBackend.h in Headers */,
 				01A2D1411E490A9700C2103A /* ApptentiveVersion.h in Headers */,
+				EF49AC941EF2C50B00E2187F /* NSMutableData+Types.h in Headers */,
 				01A2D1271E490A9700C2103A /* ApptentiveEngagement.h in Headers */,
 				014508B11EAE5F71003326E7 /* ApptentiveClient.h in Headers */,
 				01A2D1EC1E490A9700C2103A /* ApptentiveSurveyChoiceCell.h in Headers */,
@@ -2078,6 +2085,7 @@
 				0140D5FF1E835420007B5130 /* ApptentiveAttachment.m in Sources */,
 				01A2D1E71E490A9700C2103A /* ApptentiveSurveyViewController.m in Sources */,
 				01A2D1221E490A9700C2103A /* ApptentiveCount.m in Sources */,
+				EF49AC951EF2C50B00E2187F /* NSMutableData+Types.m in Sources */,
 				0174772B1EA92BED00A0A949 /* ApptentivePayload.m in Sources */,
 				01A2D1AF1E490A9700C2103A /* ApptentiveData.m in Sources */,
 				01A2D1141E490A9700C2103A /* ApptentiveInteractionEnjoymentDialogController.m in Sources */,

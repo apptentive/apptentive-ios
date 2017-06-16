@@ -96,6 +96,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BOOL)encryptWithKey:(NSData *)key;
 
+@property (readonly, nonatomic, getter=isMessageRequest) BOOL messageRequest;
+
 @end
 
 NS_ASSUME_NONNULL_END

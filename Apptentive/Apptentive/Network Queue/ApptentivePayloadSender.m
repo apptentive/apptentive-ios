@@ -9,7 +9,6 @@
 #import "ApptentivePayloadSender.h"
 #import "ApptentiveClient.h"
 #import "ApptentiveSerialRequest.h"
-#import "ApptentiveMessageSendRequest.h"
 
 
 @interface ApptentivePayloadSender ()
@@ -151,14 +150,14 @@
 }
 
 - (void)addActiveOperation:(ApptentiveRequestOperation *)operation {
-	if ([operation.request isKindOfClass:[ApptentiveMessageSendRequest class]]) {
+	if (((ApptentiveSerialRequest *)operation.request).messageRequest) {
 		[self.activeTaskProgress setObject:@0 forKey:@(operation.task.taskIdentifier)];
 		[self updateProgress];
 	}
 }
 
 - (void)removeActiveOperation:(ApptentiveRequestOperation *)operation {
-	if ([operation.request isKindOfClass:[ApptentiveMessageSendRequest class]]) {
+	if (((ApptentiveSerialRequest *)operation.request).messageRequest) {
 		[self.activeTaskProgress removeObjectForKey:@(operation.task.taskIdentifier)];
 		[self updateProgress];
 	}
@@ -166,9 +165,9 @@
 
 - (void)updateMessageStatusForOperation:(ApptentiveRequestOperation *)operation {
 	for (NSOperation *operation in self.operationQueue.operations) {
-		if ([operation isKindOfClass:[ApptentiveRequestOperation class]] && [((ApptentiveRequestOperation *)operation).request isKindOfClass:[ApptentiveMessageSendRequest class]]) {
+		if ([operation isKindOfClass:[ApptentiveRequestOperation class]] && [((ApptentiveRequestOperation *)operation).request isKindOfClass:[ApptentiveSerialRequest class]] && ((ApptentiveSerialRequest *)((ApptentiveRequestOperation *)operation).request).messageRequest) {
 			ApptentiveRequestOperation *messageOperation = (ApptentiveRequestOperation *)operation;
-			ApptentiveMessageSendRequest *messageSendRequest = messageOperation.request;
+			ApptentiveSerialRequest *messageSendRequest = (ApptentiveSerialRequest *)messageOperation.request;
 			ApptentiveMessageState state;
 
 			if (self.status == ApptentiveQueueStatusError) {
@@ -180,7 +179,7 @@
 			}
 
 			dispatch_async(dispatch_get_main_queue(), ^{
-				[self.messageDelegate payloadSender:self setState:state forMessageWithLocalIdentifier:messageSendRequest.messageIdentifier];
+				[self.messageDelegate payloadSender:self setState:state forMessageWithLocalIdentifier:messageSendRequest.identifier];
 			});
 		}
 	}
@@ -205,7 +204,7 @@
 - (void)requestOperationDidFinish:(ApptentiveRequestOperation *)operation {
 	_status = ApptentiveQueueStatusGroovy;
 
-	if ([operation.request isKindOfClass:[ApptentiveSerialRequest class]] || [operation.request isKindOfClass:[ApptentiveMessageSendRequest class]]) {
+	if ([operation.request isKindOfClass:[ApptentiveSerialRequest class]] || ((ApptentiveSerialRequest *)operation.request).messageRequest) {
 		[self deleteCompletedOrFailedRequest:(ApptentiveSerialRequest *)operation.request];
 	}
 
@@ -217,7 +216,7 @@
 - (void)requestOperation:(ApptentiveRequestOperation *)operation didFailWithError:(NSError *)error {
 	_status = ApptentiveQueueStatusError;
 
-	if ([operation.request isKindOfClass:[ApptentiveSerialRequest class]] || [operation.request isKindOfClass:[ApptentiveMessageSendRequest class]]) {
+	if ([operation.request isKindOfClass:[ApptentiveSerialRequest class]] || ((ApptentiveSerialRequest *)operation.request).messageRequest) {
 		[self deleteCompletedOrFailedRequest:(ApptentiveSerialRequest *)operation.request];
 	}
 
@@ -283,11 +282,6 @@
 #pragma mark - Delete completed or failed requests
 
 - (void)deleteCompletedOrFailedRequest:(ApptentiveSerialRequest *)requestToDelete {
-	if ([requestToDelete isKindOfClass:[ApptentiveMessageSendRequest class]]) {
-		// If this is a message send request, unwrap it to get the original ApptentiveSerialRequest object
-		requestToDelete = ((ApptentiveMessageSendRequest *)requestToDelete).request;
-	}
-
 	if (requestToDelete != nil) {
 		[requestToDelete.managedObjectContext performBlockAndWait:^{
 			[requestToDelete.managedObjectContext deleteObject:requestToDelete];

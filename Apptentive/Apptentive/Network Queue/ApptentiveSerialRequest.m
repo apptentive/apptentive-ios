@@ -31,11 +31,11 @@
 @dynamic encrypted;
 
 + (BOOL)enqueuePayload:(ApptentivePayload *)payload forConversation:(ApptentiveConversation *)conversation usingAuthToken:(nullable NSString *)authToken inContext:(NSManagedObjectContext *)context {
-    ApptentiveAssertNotNil(payload, @"Attempted to enqueue nil payload");
-    if (payload == nil) {
-        return NO;
-    }
-    
+	ApptentiveAssertNotNil(payload, @"Attempted to enqueue nil payload");
+	if (payload == nil) {
+		return NO;
+	}
+
 	ApptentiveAssertNotNil(conversation, @"Attempted to enqueue payload with nil conversation: %@", payload);
 	if (conversation == nil) {
 		return NO;
@@ -52,15 +52,15 @@
 		ApptentiveLogError(@"Unable encode enqueue request: managed object context is nil");
 		return NO;
 	}
-    
-    // create a child context on a private concurrent queue
-    NSManagedObjectContext *childContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-    
-    // set parent context
-    [childContext setParentContext:context];
-    
-    // execute the block on a background thread (this call returns immediatelly)
-    [childContext performBlock:^{
+
+	// create a child context on a private concurrent queue
+	NSManagedObjectContext *childContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+
+	// set parent context
+	[childContext setParentContext:context];
+
+	// execute the block on a background thread (this call returns immediatelly)
+	[childContext performBlock:^{
         
         ApptentiveSerialRequest *request = (ApptentiveSerialRequest *)[[NSManagedObject alloc] initWithEntity:[NSEntityDescription entityForName:@"QueuedRequest" inManagedObjectContext:childContext] insertIntoManagedObjectContext:childContext];
         
@@ -71,8 +71,8 @@
         }
         
         payload.token = authToken;
-        
-        #warning Do not modify payload
+
+#warning Do not modify payload
         if (conversation.state == ApptentiveConversationStateLoggedIn) {
             ApptentiveAssertNotNil(conversation.encryptionKey, @"Encryption key is nil for a logged-in conversation!");
             payload.encryptionKey = conversation.encryptionKey;
@@ -108,7 +108,7 @@
                 ApptentiveLogError(@"Unable to save parent managed object context: %@", parentSaveError);
             }
         }];
-    }];
+	}];
 
 	return YES;
 }
@@ -117,6 +117,11 @@
 	if (self.conversationIdentifier.length > 0 && [self.path containsString:@"<cid>"]) {
 		self.path = [self.path stringByReplacingOccurrencesOfString:@"<cid>" withString:self.conversationIdentifier];
 	}
+}
+
+- (BOOL)isMessageRequest {
+	// FIXME: replace with something less stupid.
+	return [self.path containsString:@"message"] && [self.method isEqualToString:@"POST"];
 }
 
 @end

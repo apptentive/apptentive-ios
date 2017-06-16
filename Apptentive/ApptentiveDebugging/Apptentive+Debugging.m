@@ -128,8 +128,8 @@
 }
 
 - (NSString *)conversationStateAtIndex:(NSInteger)index {
-    ApptentiveConversationState state = ((ApptentiveConversationMetadataItem *)self.backend.conversationManager.conversationMetadata.items[index]).state;
-    return NSStringFromApptentiveConversationState(state);
+	ApptentiveConversationState state = ((ApptentiveConversationMetadataItem *)self.backend.conversationManager.conversationMetadata.items[index]).state;
+	return NSStringFromApptentiveConversationState(state);
 }
 
 - (NSString *)conversationDescriptionAtIndex:(NSInteger)index {

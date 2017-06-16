@@ -18,7 +18,7 @@ typedef NS_ENUM(NSInteger, ApptentiveConversationState) {
 	ApptentiveConversationStateLoggedOut
 };
 
-extern NSString * NSStringFromApptentiveConversationState(ApptentiveConversationState state);
+extern NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState state);
 
 @class ApptentivePerson, ApptentiveDevice, ApptentiveSDK, ApptentiveAppRelease, ApptentiveEngagement, ApptentiveVersion, ApptentiveConversationMetadataItem;
 @protocol ApptentiveConversationDelegate;

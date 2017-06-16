@@ -8,25 +8,26 @@
 
 #import "NSMutableData+Types.h"
 
+
 @implementation NSMutableData (Types)
 
 - (void)apptentive_appendString:(NSString *)string {
-    ApptentiveAssertNotNil(string, @"Attempted to append nil string");
-    if (string != nil) {
-        [self appendData:[string dataUsingEncoding:NSUTF8StringEncoding]];
-    }
+	ApptentiveAssertNotNil(string, @"Attempted to append nil string");
+	if (string != nil) {
+		[self appendData:[string dataUsingEncoding:NSUTF8StringEncoding]];
+	}
 }
 
 - (void)apptentive_appendFormat:(NSString *)format, ... {
-    ApptentiveAssertNotNil(format, @"Format is nil");
-    if (format != nil) {
-        va_list ap;
-        va_start(ap, format);
-        NSString *string = [[NSString alloc] initWithFormat:format arguments:ap];
-        va_end(ap);
-        
-        [self apptentive_appendString:string];
-    }
+	ApptentiveAssertNotNil(format, @"Format is nil");
+	if (format != nil) {
+		va_list ap;
+		va_start(ap, format);
+		NSString *string = [[NSString alloc] initWithFormat:format arguments:ap];
+		va_end(ap);
+
+		[self apptentive_appendString:string];
+	}
 }
 
 @end

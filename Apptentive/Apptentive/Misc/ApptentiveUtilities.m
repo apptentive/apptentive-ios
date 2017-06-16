@@ -38,11 +38,11 @@ UIViewController *topChildViewController(UIViewController *viewController) {
 }
 
 + (BOOL)deleteFileAtPath:(NSString *)path {
-    return [self deleteFileAtPath:path error:NULL];
+	return [self deleteFileAtPath:path error:NULL];
 }
 
 + (BOOL)deleteFileAtPath:(NSString *)path error:(NSError **)error {
-    return path != nil && [[NSFileManager defaultManager] removeItemAtPath:path error:error];
+	return path != nil && [[NSFileManager defaultManager] removeItemAtPath:path error:error];
 }
 
 + (NSString *)applicationSupportPath {
@@ -366,12 +366,12 @@ UIViewController *topChildViewController(UIViewController *viewController) {
 }
 
 + (NSData *)dictionaryToJsonData:(NSDictionary *)dictionary {
-    return dictionary != nil ? [NSJSONSerialization dataWithJSONObject:dictionary options:0 error:NULL] : nil;
+	return dictionary != nil ? [NSJSONSerialization dataWithJSONObject:dictionary options:0 error:NULL] : nil;
 }
 
 + (NSString *)dictionaryToJsonString:(NSDictionary *)dictionary {
-    NSData *data = [self dictionaryToJsonData:dictionary];
-    return data != nil ? [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] : nil;
+	NSData *data = [self dictionaryToJsonData:dictionary];
+	return data != nil ? [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] : nil;
 }
 
 @end

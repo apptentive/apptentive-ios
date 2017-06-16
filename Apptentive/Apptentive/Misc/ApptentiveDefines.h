@@ -11,16 +11,16 @@
 
 #import "ApptentiveLog.h"
 
-#define APPTENTIVE_CHECK_INIT_NOT_NIL_ARG(ARG) \
-if ((ARG) == nil) { \
-    ApptentiveLogError(@"Can't init %@: '" #ARG "' is nil", NSStringFromClass([self class])); \
-    return nil; \
-}
+#define APPTENTIVE_CHECK_INIT_NOT_NIL_ARG(ARG)                                                    \
+	if ((ARG) == nil) {                                                                           \
+		ApptentiveLogError(@"Can't init %@: '" #ARG "' is nil", NSStringFromClass([self class])); \
+		return nil;                                                                               \
+	}
 
-#define APPTENTIVE_CHECK_INIT_NOT_EMPTY_ARG(ARG) \
-if ((ARG).length == 0) { \
-    ApptentiveLogError(@"Can't init %@: '" #ARG "' is nil or empty", NSStringFromClass([self class])); \
-    return nil; \
-}
+#define APPTENTIVE_CHECK_INIT_NOT_EMPTY_ARG(ARG)                                                           \
+	if ((ARG).length == 0) {                                                                               \
+		ApptentiveLogError(@"Can't init %@: '" #ARG "' is nil or empty", NSStringFromClass([self class])); \
+		return nil;                                                                                        \
+	}
 
 #endif /* ApptentiveDefines_h */

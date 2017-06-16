@@ -8,11 +8,12 @@
 
 #import "ApptentiveLogTag.h"
 
-static ApptentiveLogTag * _conversationTag;
-static ApptentiveLogTag * _networkTag;
-static ApptentiveLogTag * _payloadTag;
-static ApptentiveLogTag * _utilityTag;
-static ApptentiveLogTag * _storageTag;
+static ApptentiveLogTag *_conversationTag;
+static ApptentiveLogTag *_networkTag;
+static ApptentiveLogTag *_payloadTag;
+static ApptentiveLogTag *_utilityTag;
+static ApptentiveLogTag *_storageTag;
+
 
 @implementation ApptentiveLogTag
 
@@ -22,8 +23,8 @@ static ApptentiveLogTag * _storageTag;
 		_conversationTag = [ApptentiveLogTag logTagWithName:@"CONVERSATION" enabled:YES];
 		_networkTag = [ApptentiveLogTag logTagWithName:@"NETWORKING" enabled:YES];
 		_payloadTag = [ApptentiveLogTag logTagWithName:@"PAYLOAD" enabled:YES];
-        _utilityTag = [ApptentiveLogTag logTagWithName:@"UTILITY" enabled:YES];
-        _storageTag = [ApptentiveLogTag logTagWithName:@"STORAGE" enabled:YES];
+		_utilityTag = [ApptentiveLogTag logTagWithName:@"UTILITY" enabled:YES];
+		_storageTag = [ApptentiveLogTag logTagWithName:@"STORAGE" enabled:YES];
 	}
 }
 
@@ -56,11 +57,11 @@ static ApptentiveLogTag * _storageTag;
 }
 
 + (ApptentiveLogTag *)utilityTag {
-    return _utilityTag;
+	return _utilityTag;
 }
 
 + (ApptentiveLogTag *)storageTag {
-    return _storageTag;
+	return _storageTag;
 }
 
 @end

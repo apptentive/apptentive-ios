@@ -43,7 +43,7 @@
 }
 
 - (NSString *)contentType {
-    return [[NSString alloc] initWithFormat:@"%@;boundary=%@", self.encryptionKey != nil ? @"multipart/encrypted" : @"multipart/mixed", self.boundary];
+    return [[NSString alloc] initWithFormat:@"%@;boundary=%@", self.encrypted ? @"multipart/encrypted" : @"multipart/mixed", self.boundary];
 }
 
 - (NSString *)path {
@@ -71,8 +71,8 @@
 }
 
 - (NSData *)payload {
-    BOOL encrypted = self.encryptionKey != nil;
-    
+	BOOL encrypted = self.encrypted;
+	
     NSString *boundary = self.boundary;
     NSMutableData *data = [NSMutableData new];
     

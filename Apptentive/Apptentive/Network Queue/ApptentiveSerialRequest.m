@@ -72,7 +72,7 @@
         
         payload.token = authToken;
 
-#warning Do not modify payload
+        // FIXME: don't modify payload here
         if (conversation.state == ApptentiveConversationStateLoggedIn) {
             ApptentiveAssertNotNil(conversation.encryptionKey, @"Encryption key is nil for a logged-in conversation!");
             payload.encryptionKey = conversation.encryptionKey;

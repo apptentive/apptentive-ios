@@ -12,7 +12,6 @@
 #import "ApptentiveConversationRequest.h"
 
 #import "ApptentiveSerialRequest.h"
-#import "ApptentiveMessageSendRequest.h"
 
 #define APPTENTIVE_MIN_BACKOFF_DELAY 1.0
 #define APPTENTIVE_BACKOFF_MULTIPLIER 2.0
@@ -86,8 +85,8 @@
 	}
 
 	ApptentiveRequestOperation *operation = [[ApptentiveRequestOperation alloc] initWithURLRequest:URLRequest delegate:delegate dataSource:self];
-    operation.request = request;
-    return operation;
+	operation.request = request;
+	return operation;
 }
 
 @end

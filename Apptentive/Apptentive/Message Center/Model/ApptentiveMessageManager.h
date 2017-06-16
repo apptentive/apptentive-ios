@@ -46,8 +46,6 @@
 - (void)appendMessage:(ApptentiveMessage *)message;
 - (void)removeMessage:(ApptentiveMessage *)message;
 
-//- (void)setState:(ApptentiveMessageState)state forMessageWithLocalIdentifier:(NSString *)localIdentifier;
-
 @property (readonly, nonatomic) NSString *attachmentDirectoryPath;
 
 @end

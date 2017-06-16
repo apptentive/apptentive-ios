@@ -9,11 +9,10 @@
 #import "ApptentiveRequestOperation.h"
 #import "ApptentiveRequestProtocol.h"
 #import "ApptentiveSerialRequest.h"
-#import "ApptentiveMessageSendRequest.h"
 
 
 @interface ApptentiveRequestOperation () {
-    NSDate * _startDate;
+	NSDate *_startDate;
 }
 
 @property (assign, nonatomic) BOOL wasCompleted;
@@ -92,8 +91,8 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 }
 
 - (void)startTask {
-    _startDate = [[NSDate alloc] init];
-    
+	_startDate = [[NSDate alloc] init];
+
 	if (self.cancelled) {
 		return;
 	}
@@ -129,7 +128,7 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 	[self didChangeValueForKey:@"isExecuting"];
 
 	ApptentiveLogDebug(ApptentiveLogTagNetwork, @"%@ %@ started.", self.URLRequest.HTTPMethod, self.URLRequest.URL.absoluteString);
-    ApptentiveLogVerbose(ApptentiveLogTagNetwork, @"Headers: %@%@", self.URLRequest.allHTTPHeaderFields, self.URLRequest.HTTPBody.length > 0 ? [NSString stringWithFormat:@"\n-----------PAYLOAD BEGIN-----------\n%@\n-----------PAYLOAD END-----------", [[NSString alloc] initWithData:self.URLRequest.HTTPBody encoding:NSUTF8StringEncoding]] : @"");
+	ApptentiveLogVerbose(ApptentiveLogTagNetwork, @"Headers: %@%@", self.URLRequest.allHTTPHeaderFields, self.URLRequest.HTTPBody.length > 0 ? [NSString stringWithFormat:@"\n-----------PAYLOAD BEGIN-----------\n%@\n-----------PAYLOAD END-----------", [[NSString alloc] initWithData:self.URLRequest.HTTPBody encoding:NSUTF8StringEncoding]] : @"");
 
 	if ([self.delegate respondsToSelector:@selector(requestOperationDidStart:)]) {
 		[self.delegate requestOperationDidStart:self];
@@ -155,7 +154,7 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 	_responseObject = responseObject;
 
 	ApptentiveLogDebug(ApptentiveLogTagNetwork, @"%@ %@ finished successfully (took %g sec).", self.URLRequest.HTTPMethod, self.URLRequest.URL.absoluteString, self.duration);
-    ApptentiveLogVerbose(ApptentiveLogTagNetwork, @"Response object:\n%@.", responseObject);
+	ApptentiveLogVerbose(ApptentiveLogTagNetwork, @"Response object:\n%@.", responseObject);
 
 	if ([self.delegate respondsToSelector:@selector(requestOperationDidFinish:)]) {
 		[self.delegate requestOperationDidFinish:self];
@@ -255,7 +254,7 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 }
 
 - (NSTimeInterval)duration {
-    return -[_startDate timeIntervalSinceNow];
+	return -[_startDate timeIntervalSinceNow];
 }
 
 @end

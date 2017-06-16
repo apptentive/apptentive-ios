@@ -21,12 +21,9 @@ inline static NSError *_createError(NSString *format, ...) {
 }
 
 static NSDictionary *_Nullable _decodeBase64Json(NSString *string, NSError **error) {
-    // HACK: NSData will be nil if base64-encoded string is not properly padded
-    if (string.length % 4 != 0) {
-        NSString *padding = [NSString stringWithFormat:@"%*s", (int)(4 - string.length % 4), "="];
-        string = [string stringByAppendingString:padding];
-    }
-    
+	NSUInteger lengthRoundedUpToNextMultipleOfFour = ceil(string.length / 4.0) * 4;
+	string = [string stringByPaddingToLength:lengthRoundedUpToNextMultipleOfFour withString:@"=" startingAtIndex:0];
+
 	NSData *data = [[NSData alloc] initWithBase64EncodedString:string options:NSDataBase64DecodingIgnoreUnknownCharacters];
 	if (data == nil) {
 		if (error) {

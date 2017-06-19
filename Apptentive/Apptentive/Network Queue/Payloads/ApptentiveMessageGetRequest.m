@@ -14,8 +14,9 @@
 - (NSString *)path {
 	NSString *path = [NSString stringWithFormat:@"conversations/%@/messages", self.conversationIdentifier];
 
+	// TODO: Move to separate query method
 	if (self.lastMessageIdentifier != nil) {
-		path = [path stringByAppendingFormat:@"?after_id=%@", self.lastMessageIdentifier];
+		path = [path stringByAppendingFormat:@"?starts_after=%@", self.lastMessageIdentifier];
 	}
 
 	return path;

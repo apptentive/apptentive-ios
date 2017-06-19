@@ -26,11 +26,11 @@
 }
 
 - (NSString *)method {
-	return @"POST";
+	return @"GET";
 }
 
 - (NSString *)path {
-	return @"conversation/login";
+	return @"conversation/token";
 }
 
 - (NSDictionary *)JSONDictionary {

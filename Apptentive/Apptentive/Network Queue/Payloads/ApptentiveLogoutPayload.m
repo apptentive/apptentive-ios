@@ -15,7 +15,7 @@
 	self = [super init];
 
 	if (self) {
-		_token = token;
+		self.token = token;
 	}
 
 	return self;

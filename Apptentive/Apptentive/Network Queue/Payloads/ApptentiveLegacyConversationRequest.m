@@ -8,32 +8,33 @@
 
 #import "ApptentiveLegacyConversationRequest.h"
 
+
 @implementation ApptentiveLegacyConversationRequest
 
 - (instancetype)initWithConversation:(ApptentiveConversation *)conversation {
-    self = [super init];
-    
-    if (self) {
-        if (conversation == nil) {
-            ApptentiveLogError(@"Can't init %@: conversation is nil");
-            return nil;
-        }
-        _conversation = conversation;
-    }
-    
-    return self;
+	self = [super init];
+
+	if (self) {
+		if (conversation == nil) {
+			ApptentiveLogError(@"Can't init %@: conversation is nil");
+			return nil;
+		}
+		_conversation = conversation;
+	}
+
+	return self;
 }
 
 - (NSString *)method {
-    return @"POST";
+	return @"POST";
 }
 
 - (NSString *)path {
-    return @"conversation/login";
+	return @"conversation/login";
 }
 
 - (NSDictionary *)JSONDictionary {
-    return @{}; // TODO: pass params?
+	return @{}; // TODO: pass params?
 }
 
 

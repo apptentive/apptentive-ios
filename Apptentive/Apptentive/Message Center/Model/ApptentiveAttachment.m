@@ -39,12 +39,12 @@ static NSString *const RemoteURLKey = @"remoteURL";
 		}
 
 		_name = ApptentiveDictionaryGetString(JSON, @"original_name");
-        
+
 		_contentType = ApptentiveDictionaryGetString(JSON, @"content_type");
-        if (_contentType.length == 0) {
-            ApptentiveLogError(@"Can't init %@: content type is nil or empty", NSStringFromClass([self class]));
-            return nil;
-        }
+		if (_contentType.length == 0) {
+			ApptentiveLogError(@"Can't init %@: content type is nil or empty", NSStringFromClass([self class]));
+			return nil;
+		}
 
 		NSNumber *sizeNumber = JSON[@"size"];
 		if ([sizeNumber isKindOfClass:[NSNumber class]]) {
@@ -64,23 +64,23 @@ static NSString *const RemoteURLKey = @"remoteURL";
 	self = [super init];
 
 	if (self) {
-        if (path.length == 0) {
-            ApptentiveLogError(@"Can't init %@: path is nil or empty", NSStringFromClass([self class]));
-            return nil;
-        }
-        
-		BOOL isDirectory;
-		if (![[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isDirectory] || isDirectory) {
-            ApptentiveLogError(@"Can't init %@: file does not exist: %@", NSStringFromClass([self class]), path);
+		if (path.length == 0) {
+			ApptentiveLogError(@"Can't init %@: path is nil or empty", NSStringFromClass([self class]));
 			return nil;
 		}
-        
-        if (contentType.length == 0) {
-            ApptentiveLogError(@"Can't init %@: content type is nil or empty", NSStringFromClass([self class]));
-            return nil;
-        }
-        
-        _fileName = path;
+
+		BOOL isDirectory;
+		if (![[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isDirectory] || isDirectory) {
+			ApptentiveLogError(@"Can't init %@: file does not exist: %@", NSStringFromClass([self class]), path);
+			return nil;
+		}
+
+		if (contentType.length == 0) {
+			ApptentiveLogError(@"Can't init %@: content type is nil or empty", NSStringFromClass([self class]));
+			return nil;
+		}
+
+		_fileName = path;
 		_contentType = contentType;
 		_name = name;
 	}
@@ -91,7 +91,7 @@ static NSString *const RemoteURLKey = @"remoteURL";
 - (instancetype)initWithData:(NSData *)data contentType:(NSString *)contentType name:(NSString *)name {
 	self = [super init];
 
-    // TODO: check input data
+	// TODO: check input data
 	if (self) {
 		_contentType = contentType;
 		_name = name;

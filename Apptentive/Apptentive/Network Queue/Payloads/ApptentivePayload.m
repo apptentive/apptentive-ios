@@ -7,6 +7,8 @@
 //
 
 #import "ApptentivePayload.h"
+#import "ApptentiveUtilities.h"
+#import "NSData+Encryption.h"
 
 
 @implementation ApptentivePayload
@@ -30,7 +32,7 @@
 }
 
 - (NSString *)apiVersion {
-	return @"8";
+	return @"9";
 }
 
 - (NSString *)path {
@@ -44,7 +46,11 @@
 }
 
 - (NSString *)contentType {
-	return @"application/json";
+	if (self.encryptionKey != nil) {
+		return @"application/octet-stream";
+	} else {
+		return @"application/json";
+	}
 }
 
 - (NSDictionary *)JSONDictionary {
@@ -52,11 +58,28 @@
 }
 
 - (NSData *)payload {
+	NSData *payloadData = [self marshalForSending];
+	if (self.encryptionKey != nil) {
+		return [payloadData apptentive_dataEncryptedWithKey:self.encryptionKey];
+	}
+	return payloadData;
+}
+
+- (NSData *)marshalForSending {
+	NSDictionary *payloadJson = self.JSONDictionary;
+	ApptentiveAssertNotNil(payloadJson, @"JSONDictionary is nil");
+
+	if (self.encryptionKey != nil) {
+		ApptentiveAssertNotNil(self.token, @"Token is nil");
+		NSMutableDictionary *temp = [[NSMutableDictionary alloc] initWithDictionary:payloadJson];
+		[temp setObject:self.token forKey:@"token"];
+		payloadJson = temp;
+	}
+
 	NSError *error;
-	NSData *payloadData = [NSJSONSerialization dataWithJSONObject:self.JSONDictionary options:0 error:&error];
+	NSData *payloadData = [NSJSONSerialization dataWithJSONObject:payloadJson options:0 error:&error];
 
-	ApptentiveAssertNotNil(payloadData, @"JSONDictionary was not serializable into JSON data (%@)", error);
-
+	ApptentiveAssertNotNil(payloadData, @"JSONDictionary was not serializable into JSON data: %@", error);
 	return payloadData;
 }
 
@@ -69,7 +92,7 @@
 }
 
 - (BOOL)encrypted {
-	return NO;
+	return self.encryptionKey != nil;
 }
 
 @end

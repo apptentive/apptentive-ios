@@ -6,22 +6,36 @@
 //  Copyright © 2017 Apptentive, Inc. All rights reserved.
 //
 
-#import "NSData+Encryption.h"
 #import <CommonCrypto/CommonCrypto.h>
+
+#import "NSData+Encryption.h"
+#import "ApptentiveUtilities.h"
+
 
 @implementation NSData (Encryption)
 
+- (nullable NSData *)apptentive_dataEncryptedWithKey:(NSData *)key {
+	NSData *initializationVector = [ApptentiveUtilities secureRandomDataOfLength:16];
+	ApptentiveAssertTrue(initializationVector.length > 0, @"Unable to generate random initialization vector.");
+
+	if (initializationVector == nil) {
+		return nil;
+	}
+
+	return [self apptentive_dataEncryptedWithKey:key initializationVector:initializationVector];
+}
+
 - (NSData *)apptentive_dataEncryptedWithKey:(NSData *)key initializationVector:(NSData *)initializationVector {
-    if (key == nil) {
-        ApptentiveLogError(@"Unable to encrypt data: encryption key is nil");
-        return nil;
-    }
-    
-    if (initializationVector.length == 0) {
-        ApptentiveLogError(@"Unable to encrypt data: initialization vector is nil or empty");
-        return nil;
-    }
-    
+	if (key == nil) {
+		ApptentiveLogError(@"Unable to encrypt data: encryption key is nil");
+		return nil;
+	}
+
+	if (initializationVector.length == 0) {
+		ApptentiveLogError(@"Unable to encrypt data: initialization vector is nil or empty");
+		return nil;
+	}
+
 	NSMutableData *result = [[NSMutableData alloc] initWithLength:self.length + kCCBlockSizeAES128];
 	size_t resultLength;
 	// kCCAlgorithmAES128 will use a 256-bit key (AES256) if one is supplied.

@@ -62,28 +62,6 @@
 	XCTAssertEqualObjects(decryptedCipherText, self.plaintext);
 }
 
-- (void)testPayload {
-	ApptentiveMockSerialRequest *request = [[ApptentiveMockSerialRequest alloc] init];
-	ApptentiveEventPayload *payload = [[ApptentiveEventPayload alloc] initWithLabel:@"test_event"];
-
-	request.authToken = @"11A74C0146AE457EA20B516A302171E6";
-	request.payload = payload.payload;
-
-	[request encryptWithKey:self.key];
-
-	NSData *encryptedPayload = request.payload;
-
-	NSData *decryptedPayload = [encryptedPayload apptentive_dataDecryptedWithKey:self.key];
-
-	NSError *error;
-	NSDictionary *decryptedJSON = [NSJSONSerialization JSONObjectWithData:decryptedPayload options:0 error:&error];
-
-	XCTAssertNotNil(decryptedJSON, @"Error decrypting JSON: %@", error);
-
-	XCTAssertEqualObjects(decryptedJSON[@"token"], request.authToken);
-	XCTAssertEqualObjects(decryptedJSON[@"event"][@"label"], @"test_event");
-}
-
 - (void)testKeyParsing {
 	NSData *hexKeyData = [NSData apptentive_dataWithHexString:@"1234567890ABCDEF1234567890ABCDEF"];
 

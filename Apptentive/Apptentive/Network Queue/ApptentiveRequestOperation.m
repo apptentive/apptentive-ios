@@ -9,13 +9,15 @@
 #import "ApptentiveRequestOperation.h"
 #import "ApptentiveRequestProtocol.h"
 #import "ApptentiveSerialRequest.h"
-#import "ApptentiveMessageSendRequest.h"
 
 
-@interface ApptentiveRequestOperation ()
+@interface ApptentiveRequestOperation () {
+	NSDate *_startDate;
+}
 
 @property (assign, nonatomic) BOOL wasCompleted;
 @property (assign, nonatomic) BOOL wasCancelled;
+@property (readonly, nonatomic) NSTimeInterval duration;
 
 @end
 
@@ -89,6 +91,8 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 }
 
 - (void)startTask {
+	_startDate = [[NSDate alloc] init];
+
 	if (self.cancelled) {
 		return;
 	}
@@ -123,8 +127,8 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 	[self.task resume];
 	[self didChangeValueForKey:@"isExecuting"];
 
-	ApptentiveLogDebug(ApptentiveLogTagNetworking, @"%@ %@ started.", self.URLRequest.HTTPMethod, self.URLRequest.URL.absoluteString);
-	ApptentiveLogVerbose(ApptentiveLogTagNetworking, @"Headers: %@\nPayload:%@", self.URLRequest.allHTTPHeaderFields, [[NSString alloc] initWithData:self.URLRequest.HTTPBody encoding:NSUTF8StringEncoding]);
+	ApptentiveLogDebug(ApptentiveLogTagNetwork, @"%@ %@ started.", self.URLRequest.HTTPMethod, self.URLRequest.URL.absoluteString);
+	ApptentiveLogVerbose(ApptentiveLogTagNetwork, @"Headers: %@%@", self.URLRequest.allHTTPHeaderFields, self.URLRequest.HTTPBody.length > 0 ? [NSString stringWithFormat:@"\n-----------PAYLOAD BEGIN-----------\n%@\n-----------PAYLOAD END-----------", [[NSString alloc] initWithData:self.URLRequest.HTTPBody encoding:NSUTF8StringEncoding]] : @"");
 
 	if ([self.delegate respondsToSelector:@selector(requestOperationDidStart:)]) {
 		[self.delegate requestOperationDidStart:self];
@@ -149,7 +153,8 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 	_cacheLifetime = [self maxAgeFromResponse:response];
 	_responseObject = responseObject;
 
-	ApptentiveLogDebug(@"%@ %@ finished successfully.", self.URLRequest.HTTPMethod, self.URLRequest.URL.absoluteString);
+	ApptentiveLogDebug(ApptentiveLogTagNetwork, @"%@ %@ finished successfully (took %g sec).", self.URLRequest.HTTPMethod, self.URLRequest.URL.absoluteString, self.duration);
+	ApptentiveLogVerbose(ApptentiveLogTagNetwork, @"Response object:\n%@.", responseObject);
 
 	if ([self.delegate respondsToSelector:@selector(requestOperationDidFinish:)]) {
 		[self.delegate requestOperationDidFinish:self];
@@ -194,7 +199,7 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 
 - (void)retryTaskWithError:(NSError *)error {
 	if (error != nil) {
-		ApptentiveLogError(@"%@ %@ failed with error: %@", self.URLRequest.HTTPMethod, self.URLRequest.URL.absoluteString, error);
+		ApptentiveLogError(ApptentiveLogTagNetwork, @"%@ %@ failed with error: %@", self.URLRequest.HTTPMethod, self.URLRequest.URL.absoluteString, error);
 	}
 
 	ApptentiveLogInfo(@"%@ %@ will retry in %f seconds.", self.URLRequest.HTTPMethod, self.URLRequest.URL.absoluteString, self.dataSource.backoffDelay);
@@ -220,7 +225,7 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 }
 
 - (void)finishWithError:(NSError *)error {
-	ApptentiveLogError(@"%@ %@ failed with error: %@. Not retrying.", self.URLRequest.HTTPMethod, self.URLRequest.URL.absoluteString, error);
+	ApptentiveLogError(ApptentiveLogTagNetwork, @"%@ %@ failed with error (took %g sec): %@. Not retrying.", self.URLRequest.HTTPMethod, self.URLRequest.URL.absoluteString, self.duration, error);
 
 	if ([self.delegate respondsToSelector:@selector(requestOperation:didFailWithError:)]) {
 		[self.delegate requestOperation:self didFailWithError:error];
@@ -246,6 +251,10 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 	}
 
 	return maxAge;
+}
+
+- (NSTimeInterval)duration {
+	return -[_startDate timeIntervalSinceNow];
 }
 
 @end

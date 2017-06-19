@@ -72,7 +72,7 @@ static Apptentive *_sharedInstance;
 		_apptentiveKey = [apptentiveKey copy];
 		_apptentiveSignature = [apptentiveSignature copy];
 		_baseURL = [NSURL URLWithString:@"https://api.apptentive.com/"];
-        _logLevel = ApptentiveLogLevelInfo;
+		_logLevel = ApptentiveLogLevelInfo;
 	}
 	return self;
 }
@@ -107,16 +107,16 @@ static Apptentive *_sharedInstance;
 	self = [super init];
 
 	if (self) {
-        ApptentiveLogSetLevel(configuration.logLevel);
-        
+		ApptentiveLogSetLevel(configuration.logLevel);
+
 		_style = [[ApptentiveStyleSheet alloc] init];
 		_apptentiveKey = configuration.apptentiveKey;
 		_apptentiveSignature = configuration.apptentiveSignature;
 		_baseURL = configuration.baseURL;
 		_backend = [[ApptentiveBackend alloc] initWithApptentiveKey:_apptentiveKey
-                                                          signature:_apptentiveSignature
-                                                            baseURL:_baseURL
-                                                        storagePath:@"com.apptentive.feedback"];
+														  signature:_apptentiveSignature
+															baseURL:_baseURL
+														storagePath:@"com.apptentive.feedback"];
 
 		if (configuration.distributionName && configuration.distributionVersion) {
 			[ApptentiveSDK setDistributionName:configuration.distributionName];
@@ -168,59 +168,59 @@ static Apptentive *_sharedInstance;
 
 - (void)sendAttachmentText:(NSString *)text {
 	ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:text attachments:nil senderIdentifier:self.backend.conversationManager.messageManager.localUserIdentifier automated:NO customData:nil];
-    ApptentiveAssertNotNil(message, @"Message is nil");
+	ApptentiveAssertNotNil(message, @"Message is nil");
 
-    if (message != nil) {
-        [self.backend.conversationManager.messageManager enqueueMessageForSending:message];
-    }
+	if (message != nil) {
+		[self.backend.conversationManager.messageManager enqueueMessageForSending:message];
+	}
 }
 
 - (void)sendAttachmentImage:(UIImage *)image {
-    if (image == nil) {
-        ApptentiveLogError(@"Unable to send image attachment: image is nil");
-        return;
-    }
-    
-    NSData *imageData = UIImageJPEGRepresentation(image, 0.95);
-    if (imageData == nil) {
-        ApptentiveLogError(@"Unable to send image attachment: image data is invalid");
-        return;
-    }
-    
-	ApptentiveAttachment *attachment = [[ApptentiveAttachment alloc] initWithData:imageData contentType:@"image/jpeg" name:nil];
-    ApptentiveAssertNotNil(attachment, @"Attachment is nil");
-    if (attachment != nil) {
-        ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:nil attachments:@[attachment] senderIdentifier:self.backend.conversationManager.messageManager.localUserIdentifier automated:NO customData:nil];
-        ApptentiveAssertNotNil(message, @"Message is nil");
+	if (image == nil) {
+		ApptentiveLogError(@"Unable to send image attachment: image is nil");
+		return;
+	}
 
-        if (message != nil) {
-            [self.backend.conversationManager.messageManager enqueueMessageForSending:message];
-        }
-    }
+	NSData *imageData = UIImageJPEGRepresentation(image, 0.95);
+	if (imageData == nil) {
+		ApptentiveLogError(@"Unable to send image attachment: image data is invalid");
+		return;
+	}
+
+	ApptentiveAttachment *attachment = [[ApptentiveAttachment alloc] initWithData:imageData contentType:@"image/jpeg" name:nil];
+	ApptentiveAssertNotNil(attachment, @"Attachment is nil");
+	if (attachment != nil) {
+		ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:nil attachments:@[attachment] senderIdentifier:self.backend.conversationManager.messageManager.localUserIdentifier automated:NO customData:nil];
+		ApptentiveAssertNotNil(message, @"Message is nil");
+
+		if (message != nil) {
+			[self.backend.conversationManager.messageManager enqueueMessageForSending:message];
+		}
+	}
 }
 
 - (void)sendAttachmentFile:(NSData *)fileData withMimeType:(NSString *)mimeType {
-    if (fileData == nil) {
-        ApptentiveLogError(@"Unable to send attachment file: file data is nil");
-        return;
-    }
-    
-    if (mimeType.length == 0) {
-        ApptentiveLogError(@"Unable to send attachment file: mime-type is nil or empty");
-        return;
-    }
-    
+	if (fileData == nil) {
+		ApptentiveLogError(@"Unable to send attachment file: file data is nil");
+		return;
+	}
+
+	if (mimeType.length == 0) {
+		ApptentiveLogError(@"Unable to send attachment file: mime-type is nil or empty");
+		return;
+	}
+
 	ApptentiveAttachment *attachment = [[ApptentiveAttachment alloc] initWithData:fileData contentType:mimeType name:nil];
-    ApptentiveAssertNotNil(attachment, @"Attachment is nil");
+	ApptentiveAssertNotNil(attachment, @"Attachment is nil");
 
-    if (attachment != nil) {
-        ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:nil attachments:@[attachment] senderIdentifier:self.backend.conversationManager.messageManager.localUserIdentifier automated:NO customData:nil];
+	if (attachment != nil) {
+		ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:nil attachments:@[attachment] senderIdentifier:self.backend.conversationManager.messageManager.localUserIdentifier automated:NO customData:nil];
 
-        ApptentiveAssertNotNil(message, @"Message is nil");
-        if (message != nil) {
-            [self.backend.conversationManager.messageManager enqueueMessageForSending:message];
-        }
-    }
+		ApptentiveAssertNotNil(message, @"Message is nil");
+		if (message != nil) {
+			[self.backend.conversationManager.messageManager enqueueMessageForSending:message];
+		}
+	}
 }
 
 - (void)addCustomDeviceDataString:(NSString *)string withKey:(NSString *)key {
@@ -328,15 +328,15 @@ static Apptentive *_sharedInstance;
 								ntohl(tokenBytes[0]), ntohl(tokenBytes[1]), ntohl(tokenBytes[2]),
 								ntohl(tokenBytes[3]), ntohl(tokenBytes[4]), ntohl(tokenBytes[5]),
 								ntohl(tokenBytes[6]), ntohl(tokenBytes[7])];
-    
-    // save push token and provider in user defaults
-    [[NSUserDefaults standardUserDefaults] setInteger:pushProvider forKey:ApptentivePushProviderPreferenceKey];
-    [[NSUserDefaults standardUserDefaults] setObject:token forKey:ApptentivePushTokenPreferenceKey];
-    
-    if (self.backend.conversationManager.activeConversation) {
-        [self.backend.conversationManager.activeConversation setPushToken:token provider:pushProvider];
-        [self.backend scheduleDeviceUpdate];
-    }
+
+	// save push token and provider in user defaults
+	[[NSUserDefaults standardUserDefaults] setInteger:pushProvider forKey:ApptentivePushProviderPreferenceKey];
+	[[NSUserDefaults standardUserDefaults] setObject:token forKey:ApptentivePushTokenPreferenceKey];
+
+	if (self.backend.conversationManager.activeConversation) {
+		[self.backend.conversationManager.activeConversation setPushToken:token provider:pushProvider];
+		[self.backend scheduleDeviceUpdate];
+	}
 }
 
 - (void)addIntegration:(NSString *)integration withConfiguration:(NSDictionary *)configuration {

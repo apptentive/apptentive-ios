@@ -132,8 +132,8 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 }
 
 - (void)setConversationIdentifier:(NSString *)identifier JWT:(NSString *)JWT {
-    _identifier = [identifier copy];
-    _JWT = [JWT copy];
+	_identifier = [identifier copy];
+	_JWT = [JWT copy];
 }
 
 - (void)setToken:(NSString *)token {
@@ -382,31 +382,31 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 }
 
 - (void)setPushToken:(NSString *)pushToken provider:(ApptentivePushProvider)pushProvider {
-    NSMutableDictionary *integrationConfiguration = [self.device.integrationConfiguration mutableCopy];
-    
-    [integrationConfiguration removeObjectForKey:[self integrationKeyForPushProvider:ApptentivePushProviderApptentive]];
-    [integrationConfiguration removeObjectForKey:[self integrationKeyForPushProvider:ApptentivePushProviderUrbanAirship]];
-    [integrationConfiguration removeObjectForKey:[self integrationKeyForPushProvider:ApptentivePushProviderAmazonSNS]];
-    [integrationConfiguration removeObjectForKey:[self integrationKeyForPushProvider:ApptentivePushProviderParse]];
-    
-    [integrationConfiguration setObject:@{ @"token": pushToken } forKey:[self integrationKeyForPushProvider:pushProvider]];
-    
-    self.device.integrationConfiguration = integrationConfiguration;
+	NSMutableDictionary *integrationConfiguration = [self.device.integrationConfiguration mutableCopy];
+
+	[integrationConfiguration removeObjectForKey:[self integrationKeyForPushProvider:ApptentivePushProviderApptentive]];
+	[integrationConfiguration removeObjectForKey:[self integrationKeyForPushProvider:ApptentivePushProviderUrbanAirship]];
+	[integrationConfiguration removeObjectForKey:[self integrationKeyForPushProvider:ApptentivePushProviderAmazonSNS]];
+	[integrationConfiguration removeObjectForKey:[self integrationKeyForPushProvider:ApptentivePushProviderParse]];
+
+	[integrationConfiguration setObject:@{ @"token": pushToken } forKey:[self integrationKeyForPushProvider:pushProvider]];
+
+	self.device.integrationConfiguration = integrationConfiguration;
 }
 
 - (NSString *)integrationKeyForPushProvider:(ApptentivePushProvider)pushProvider {
-    switch (pushProvider) {
-        case ApptentivePushProviderApptentive:
-            return @"apptentive_push";
-        case ApptentivePushProviderUrbanAirship:
-            return @"urban_airship";
-        case ApptentivePushProviderAmazonSNS:
-            return @"aws_sns";
-        case ApptentivePushProviderParse:
-            return @"parse";
-        default:
-            return @"UNKNOWN_PUSH_PROVIDER";
-    }
+	switch (pushProvider) {
+		case ApptentivePushProviderApptentive:
+			return @"apptentive_push";
+		case ApptentivePushProviderUrbanAirship:
+			return @"urban_airship";
+		case ApptentivePushProviderAmazonSNS:
+			return @"aws_sns";
+		case ApptentivePushProviderParse:
+			return @"parse";
+		default:
+			return @"UNKNOWN_PUSH_PROVIDER";
+	}
 }
 
 @end

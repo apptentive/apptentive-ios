@@ -31,11 +31,11 @@
 @dynamic encrypted;
 
 + (BOOL)enqueuePayload:(ApptentivePayload *)payload forConversation:(ApptentiveConversation *)conversation usingAuthToken:(nullable NSString *)authToken inContext:(NSManagedObjectContext *)context {
-    ApptentiveAssertNotNil(payload, @"Attempted to enqueue nil payload");
-    if (payload == nil) {
-        return NO;
-    }
-    
+	ApptentiveAssertNotNil(payload, @"Attempted to enqueue nil payload");
+	if (payload == nil) {
+		return NO;
+	}
+
 	ApptentiveAssertNotNil(conversation, @"Attempted to enqueue payload with nil conversation: %@", payload);
 	if (conversation == nil) {
 		return NO;
@@ -53,44 +53,61 @@
 		return NO;
 	}
 
-	ApptentiveSerialRequest *request = (ApptentiveSerialRequest *)[[NSManagedObject alloc] initWithEntity:[NSEntityDescription entityForName:@"QueuedRequest" inManagedObjectContext:context] insertIntoManagedObjectContext:context];
+	// create a child context on a private concurrent queue
+	NSManagedObjectContext *childContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
 
-	ApptentiveAssertNotNil(request, @"Can't load managed request object");
-	if (request == nil) {
-		ApptentiveLogError(@"Unable encode enqueue request '%@': can't load managed request object", payload.path);
-		return NO;
-	}
+	// set parent context
+	[childContext setParentContext:context];
 
-	request.date = [NSDate date];
-	request.path = payload.path;
-	request.method = payload.method;
-	request.identifier = payload.localIdentifier;
-	request.conversationIdentifier = conversation.identifier;
-	request.apiVersion = payload.apiVersion;
-	request.authToken = authToken;
-	request.contentType = @"application/json";
+	// execute the block on a background thread (this call returns immediatelly)
+	[childContext performBlock:^{
+        
+        ApptentiveSerialRequest *request = (ApptentiveSerialRequest *)[[NSManagedObject alloc] initWithEntity:[NSEntityDescription entityForName:@"QueuedRequest" inManagedObjectContext:childContext] insertIntoManagedObjectContext:childContext];
+        
+        ApptentiveAssertNotNil(request, @"Can't load managed request object");
+        if (request == nil) {
+            ApptentiveLogError(@"Unable encode enqueue request '%@': can't load managed request object", payload.path);
+            return;
+        }
+        
+        payload.token = authToken;
 
-	NSError *error;
-	request.payload = payload.payload;
-
-	NSMutableArray *attachmentArray = [NSMutableArray arrayWithCapacity:payload.attachments.count];
-	for (ApptentiveAttachment *attachment in payload.attachments) {
-		[attachmentArray addObject:[ApptentiveSerialRequestAttachment queuedAttachmentWithName:attachment.name path:attachment.fullLocalPath MIMEType:attachment.contentType inContext:context]];
-	}
-	request.attachments = [NSOrderedSet orderedSetWithArray:attachmentArray];
-
-	if (conversation.state == ApptentiveConversationStateLoggedIn) {
-		ApptentiveAssertNotNil(conversation.encryptionKey, @"Encryption key is nil for a logged-in conversation!");
-
-		[request encryptWithKey:conversation.encryptionKey];
-	}
-
-	// Doing this synchronously triggers Core Data's recursive save detection.
-	[context performBlock:^{
-		NSError *saveError;
-		if (![context save:&saveError]) {
-			ApptentiveLogError(@"Error saving request for %@ to queue: %@", payload.path, error);
-		}
+        // FIXME: don't modify payload here
+        if (conversation.state == ApptentiveConversationStateLoggedIn) {
+            ApptentiveAssertNotNil(conversation.encryptionKey, @"Encryption key is nil for a logged-in conversation!");
+            payload.encryptionKey = conversation.encryptionKey;
+        }
+        
+        request.date = [NSDate date];
+        request.path = payload.path;
+        request.method = payload.method;
+        request.identifier = payload.localIdentifier;
+        request.conversationIdentifier = conversation.identifier;
+        request.apiVersion = payload.apiVersion;
+        request.authToken = authToken;
+        request.contentType = payload.contentType;
+        request.encrypted = payload.encrypted;
+        request.payload = payload.payload;
+        
+        NSMutableArray *attachmentArray = [NSMutableArray arrayWithCapacity:payload.attachments.count];
+        for (ApptentiveAttachment *attachment in payload.attachments) {
+            [attachmentArray addObject:[ApptentiveSerialRequestAttachment queuedAttachmentWithName:attachment.name path:attachment.fullLocalPath MIMEType:attachment.contentType inContext:childContext]];
+        }
+        request.attachments = [NSOrderedSet orderedSetWithArray:attachmentArray];
+        
+        // save child context
+        NSError *saveError;
+        if (![childContext save:&saveError]) {
+            ApptentiveLogError(@"Unable to save temporary managed object context: %@", saveError);
+        }
+        
+        // save parent context
+        [context performBlockAndWait:^{
+            NSError *parentSaveError;
+            if (![context save:&parentSaveError]) {
+                ApptentiveLogError(@"Unable to save parent managed object context: %@", parentSaveError);
+            }
+        }];
 	}];
 
 	return YES;
@@ -102,43 +119,9 @@
 	}
 }
 
-- (BOOL)encryptWithKey:(NSData *)key {
-	NSError *error;
-	NSDictionary *JSONPayload = [NSJSONSerialization JSONObjectWithData:self.payload options:0 error:&error];
-
-	ApptentiveAssertNotNil(JSONPayload, @"Unable to read JSON-encoded payload data: %@", error);
-
-	if (JSONPayload == nil) {
-		return NO;
-	}
-
-	NSMutableDictionary *mutablePayload = [JSONPayload mutableCopy];
-	mutablePayload[@"token"] = self.authToken;
-
-	NSData *JSONPayloadWithToken = [NSJSONSerialization dataWithJSONObject:mutablePayload options:0 error:&error];
-
-	ApptentiveAssertNotNil(JSONPayloadWithToken, @"Unable to encode payload data as JSON: %@", error);
-
-	if (JSONPayloadWithToken == nil) {
-		return NO;
-	}
-
-	NSData *initializationVector = [ApptentiveUtilities secureRandomDataOfLength:16];
-	ApptentiveAssertTrue(initializationVector.length > 0, @"Unable to generate random initialization vector.");
-
-	if (initializationVector == nil) {
-		return NO;
-	}
-
-	NSData *encryptedPayload = [JSONPayloadWithToken apptentive_dataEncryptedWithKey:key initializationVector:initializationVector];
-
-	ApptentiveAssertNotNil(encryptedPayload, @"Unable to encrypt payload");
-
-	self.payload = encryptedPayload;
-	self.encrypted = YES;
-	self.contentType = @"application/octet-stream";
-
-	return self.payload != nil;
+- (BOOL)isMessageRequest {
+	// FIXME: replace with something less stupid.
+	return [self.path containsString:@"message"] && [self.method isEqualToString:@"POST"];
 }
 
 @end

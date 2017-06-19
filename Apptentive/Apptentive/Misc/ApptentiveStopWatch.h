@@ -10,6 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+
 @interface ApptentiveStopWatch : NSObject
 
 @property (nonatomic, readonly) NSTimeInterval elapsedSeconds;

@@ -149,4 +149,12 @@
 	XCTAssertEqualObjects(result, newPerson);
 }
 
+- (void)testPaddingBase64String {
+	NSString *base64ThatNeedsPadding = @"abc123";
+	XCTAssertEqualObjects([ApptentiveUtilities stringByPaddingBase64:base64ThatNeedsPadding], @"abc123==");
+
+	NSString *base64ThatDoesntNeedPadding = @"abcd1234";
+	XCTAssertEqualObjects([ApptentiveUtilities stringByPaddingBase64:base64ThatDoesntNeedPadding], base64ThatDoesntNeedPadding);
+}
+
 @end

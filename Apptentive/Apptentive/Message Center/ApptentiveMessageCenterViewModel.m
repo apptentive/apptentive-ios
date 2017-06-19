@@ -67,8 +67,8 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 
 	if (self.contextMessageBody) {
 		self.contextMessage = [[ApptentiveMessage alloc] initWithBody:self.contextMessageBody attachments:@[] senderIdentifier:self.messageManager.localUserIdentifier automated:YES customData:nil];
-        ApptentiveAssertNotNil(self.contextMessage, @"Context message is nil");
-        
+		ApptentiveAssertNotNil(self.contextMessage, @"Context message is nil");
+
 		[self.contextMessage updateWithLocalIdentifier:@"context-message"];
 
 		[self.messageManager appendMessage:self.contextMessage];
@@ -496,11 +496,11 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 	}
 
 	ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:messageText attachments:attachments senderIdentifier:self.messageManager.localUserIdentifier automated:NO customData:Apptentive.shared.backend.currentCustomData];
-    
-    ApptentiveAssertNotNil(message, @"Message is nil");
-    if (message != nil) {
-        [self.messageManager sendMessage:message];
-    }
+
+	ApptentiveAssertNotNil(message, @"Message is nil");
+	if (message != nil) {
+		[self.messageManager sendMessage:message];
+	}
 
 	Apptentive.shared.backend.currentCustomData = nil;
 }

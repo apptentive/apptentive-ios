@@ -29,7 +29,7 @@
 }
 
 - (NSString *)path {
-	return @"conversation";
+	return @"conversations";
 }
 
 - (NSDictionary *)JSONDictionary {

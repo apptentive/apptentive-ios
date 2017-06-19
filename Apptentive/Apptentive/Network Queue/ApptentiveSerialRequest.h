@@ -94,7 +94,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (BOOL)enqueuePayload:(ApptentivePayload *)payload forConversation:(ApptentiveConversation *)conversation usingAuthToken:(nullable NSString *)authToken inContext:(NSManagedObjectContext *)context;
 
-- (BOOL)encryptWithKey:(NSData *)key;
+@property (readonly, nonatomic, getter=isMessageRequest) BOOL messageRequest;
 
 @end
 

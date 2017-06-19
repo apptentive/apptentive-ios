@@ -36,10 +36,10 @@ NSString *ApptentiveDictionaryGetString(NSDictionary *dictionary, NSString *key)
 }
 
 NSArray *ApptentiveDictionaryGetArray(NSDictionary *dictionary, NSString *key) {
-    ApptentiveAssertNotNil(key, @"Key is nil");
-    if (key != nil) {
-        id value = dictionary[key];
-        return [value isKindOfClass:[NSArray class]] ? value : nil;
-    }
-    return nil;
+	ApptentiveAssertNotNil(key, @"Key is nil");
+	if (key != nil) {
+		id value = dictionary[key];
+		return [value isKindOfClass:[NSArray class]] ? value : nil;
+	}
+	return nil;
 }

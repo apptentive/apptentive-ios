@@ -45,7 +45,7 @@ static NSString *const JWTKey = @"JWT";
 		_directoryName = [coder decodeObjectOfClass:[NSString class] forKey:FileNameKey];
 		_encryptionKey = [coder decodeObjectOfClass:[NSData class] forKey:EncryptionKeyKey];
 		_userId = [coder decodeObjectOfClass:[NSString class] forKey:UserIdKey];
-        _JWT = [coder decodeObjectOfClass:[NSString class] forKey:JWTKey];
+		_JWT = [coder decodeObjectOfClass:[NSString class] forKey:JWTKey];
 	}
 
 	return self;
@@ -57,7 +57,7 @@ static NSString *const JWTKey = @"JWT";
 	[coder encodeObject:self.directoryName forKey:FileNameKey];
 	[coder encodeObject:self.encryptionKey forKey:EncryptionKeyKey];
 	[coder encodeObject:self.userId forKey:UserIdKey];
-    [coder encodeObject:self.JWT forKey:JWTKey];
+	[coder encodeObject:self.JWT forKey:JWTKey];
 	[coder encodeInteger:VERSION forKey:VersionKey];
 }
 

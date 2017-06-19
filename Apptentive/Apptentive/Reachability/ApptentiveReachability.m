@@ -66,7 +66,7 @@ static void ATReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkRea
 	} else if (status == ApptentiveNetworkWWANReachable) {
 		statusString = @"WWAN";
 	}
-	ApptentiveLogDebug(@"Apptentive Reachability changed: %@", statusString);
+	ApptentiveLogVerbose(ApptentiveLogTagUtility, @"Apptentive Reachability changed: %@", statusString);
 }
 
 - (void)dealloc {

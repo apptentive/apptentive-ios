@@ -7,6 +7,7 @@
 //
 
 #import "ApptentiveJWT.h"
+#import "ApptentiveUtilities.h"
 
 static NSString *const kApptentiveErrorDomain = @"com.apptentive";
 
@@ -21,7 +22,9 @@ inline static NSError *_createError(NSString *format, ...) {
 }
 
 static NSDictionary *_Nullable _decodeBase64Json(NSString *string, NSError **error) {
-	NSData *data = [[NSData alloc] initWithBase64EncodedString:string options:0];
+	string = [ApptentiveUtilities stringByPaddingBase64:string];
+
+	NSData *data = [[NSData alloc] initWithBase64EncodedString:string options:NSDataBase64DecodingIgnoreUnknownCharacters];
 	if (data == nil) {
 		if (error) {
 			*error = _createError(@"Invalid base64 string: '%@'", string);

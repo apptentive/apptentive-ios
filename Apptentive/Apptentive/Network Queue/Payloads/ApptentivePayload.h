@@ -19,6 +19,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (readonly, nullable, nonatomic) NSArray *attachments;
 @property (readonly, nullable, nonatomic) NSString *localIdentifier;
 
+@property (nullable, nonatomic) NSData *encryptionKey;
+@property (nullable, nonatomic) NSString *token;
+
+- (NSData *)marshalForSending;
+
 @end
 
 NS_ASSUME_NONNULL_END

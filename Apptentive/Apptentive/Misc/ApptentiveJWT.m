@@ -7,6 +7,7 @@
 //
 
 #import "ApptentiveJWT.h"
+#import "ApptentiveUtilities.h"
 
 static NSString *const kApptentiveErrorDomain = @"com.apptentive";
 
@@ -21,8 +22,7 @@ inline static NSError *_createError(NSString *format, ...) {
 }
 
 static NSDictionary *_Nullable _decodeBase64Json(NSString *string, NSError **error) {
-	NSUInteger lengthRoundedUpToNextMultipleOfFour = ceil(string.length / 4.0) * 4;
-	string = [string stringByPaddingToLength:lengthRoundedUpToNextMultipleOfFour withString:@"=" startingAtIndex:0];
+	string = [ApptentiveUtilities stringByPaddingBase64:string];
 
 	NSData *data = [[NSData alloc] initWithBase64EncodedString:string options:NSDataBase64DecodingIgnoreUnknownCharacters];
 	if (data == nil) {

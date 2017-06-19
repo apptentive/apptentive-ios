@@ -374,4 +374,10 @@ UIViewController *topChildViewController(UIViewController *viewController) {
 	return data != nil ? [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] : nil;
 }
 
++ (NSString *)stringByPaddingBase64:(NSString *)base64String {
+	NSUInteger lengthRoundedUpToNextMultipleOfFour = ceil(base64String.length / 4.0) * 4;
+
+	return [base64String stringByPaddingToLength:lengthRoundedUpToNextMultipleOfFour withString:@"=" startingAtIndex:0];
+}
+
 @end

@@ -161,6 +161,12 @@ Before calling any other methods on the shared `Apptentive` instance, register y
 /** Initializes Apptentive instance with a given configuration */
 + (void)registerWithConfiguration:(ApptentiveConfiguration *)configuration;
 
+/** The key copied from the configuration object. */
+@property (readonly, nonatomic) NSString *apptentiveKey;
+
+/** The signature copied from the configuration object. */
+@property (readonly, nonatomic) NSString *apptentiveSignature;
+
 /**
  The app's iTunes App ID.
 

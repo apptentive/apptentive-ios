@@ -27,7 +27,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (ApptentiveRequestOperation *)requestOperationWithRequest:(id<ApptentiveRequest>)request delegate:(id<ApptentiveRequestOperationDelegate>)delegate;
 
-- (ApptentiveRequestOperation *)requestOperationWithRequest:(id<ApptentiveRequest>)request authToken:(NSString *_Nullable)authToken delegate:(id<ApptentiveRequestOperationDelegate>)delegate;
+- (ApptentiveRequestOperation *)requestOperationWithRequest:(id<ApptentiveRequest>)request token:(NSString *_Nullable)token delegate:(id<ApptentiveRequestOperationDelegate>)delegate;
+- (ApptentiveRequestOperation *)requestOperationWithRequest:(id<ApptentiveRequest>)request legacyToken:(NSString *_Nullable)token delegate:(id<ApptentiveRequestOperationDelegate>)delegate;
 
 @end
 

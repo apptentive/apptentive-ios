@@ -81,10 +81,6 @@ static Apptentive *_sharedInstance;
 
 
 @interface Apptentive () <ApptentiveBannerViewControllerDelegate>
-
-@property (copy, nonatomic) NSString *apptentiveKey;
-@property (copy, nonatomic) NSString *apptentiveSignature;
-
 @end
 
 

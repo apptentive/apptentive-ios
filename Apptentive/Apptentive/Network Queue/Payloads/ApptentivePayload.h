@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ApptentivePayload : NSObject <ApptentiveRequest>
 
+@property (readonly, nonatomic) NSString *type;
 @property (readonly, nonatomic) NSString *containerName;
 @property (readonly, nonatomic) NSDictionary *contents;
 

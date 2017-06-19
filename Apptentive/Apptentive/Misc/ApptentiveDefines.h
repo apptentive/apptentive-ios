@@ -23,4 +23,7 @@
 		return nil;                                                                                        \
 	}
 
+#define APPTENTIVE_ABSTRACT_METHOD_CALLED																   \
+	ApptentiveAssertFail(@"Abstract method called: %@.%@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
+
 #endif /* ApptentiveDefines_h */

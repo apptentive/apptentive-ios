@@ -12,6 +12,7 @@ static NSString *const NameKey = @"name";
 static NSString *const IdentifierKey = @"identifier";
 static NSString *const ProfilePhotoURLKey = @"profilePhotoURL";
 
+
 @implementation ApptentiveMessageSender
 
 + (BOOL)supportsSecureCoding {
@@ -23,17 +24,17 @@ static NSString *const ProfilePhotoURLKey = @"profilePhotoURL";
 
 	if (self) {
 		if (![JSON isKindOfClass:[NSDictionary class]]) {
-            ApptentiveLogError(@"Can't init %@: invalid json object class: %@", NSStringFromClass([self class]), NSStringFromClass([JSON class]));
+			ApptentiveLogError(@"Can't init %@: invalid json object class: %@", NSStringFromClass([self class]), NSStringFromClass([JSON class]));
 			return nil;
 		}
 
 		_name = ApptentiveDictionaryGetString(JSON, @"name");
-        
+
 		_identifier = ApptentiveDictionaryGetString(JSON, @"id");
-        if (_identifier.length == 0) {
-            ApptentiveLogError(@"Can't init %@: identifier is nil or empty", NSStringFromClass([self class]));
-            return nil;
-        }
+		if (_identifier.length == 0) {
+			ApptentiveLogError(@"Can't init %@: identifier is nil or empty", NSStringFromClass([self class]));
+			return nil;
+		}
 
 		NSString *profilePhotoURLString = ApptentiveDictionaryGetString(JSON, @"profile_photo");
 		if (profilePhotoURLString.length > 0) {
@@ -48,11 +49,11 @@ static NSString *const ProfilePhotoURLKey = @"profilePhotoURL";
 	self = [super init];
 
 	if (self) {
-        if (identifier.length == 0) {
-            ApptentiveLogError(@"Can't init %@: identifier is nil or empty", NSStringFromClass([self class]));
-            return nil;
-        }
-        
+		if (identifier.length == 0) {
+			ApptentiveLogError(@"Can't init %@: identifier is nil or empty", NSStringFromClass([self class]));
+			return nil;
+		}
+
 		_name = name;
 		_identifier = identifier;
 		_profilePhotoURL = profilePhotoURL;

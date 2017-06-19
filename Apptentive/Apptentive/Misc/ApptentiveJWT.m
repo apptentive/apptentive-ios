@@ -7,6 +7,7 @@
 //
 
 #import "ApptentiveJWT.h"
+#import "ApptentiveUtilities.h"
 
 static NSString *const kApptentiveErrorDomain = @"com.apptentive";
 
@@ -21,12 +22,8 @@ inline static NSError *_createError(NSString *format, ...) {
 }
 
 static NSDictionary *_Nullable _decodeBase64Json(NSString *string, NSError **error) {
-    // HACK: NSData will be nil if base64-encoded string is not properly padded
-    if (string.length % 4 != 0) {
-        NSString *padding = [NSString stringWithFormat:@"%*s", (int)(4 - string.length % 4), "="];
-        string = [string stringByAppendingString:padding];
-    }
-    
+	string = [ApptentiveUtilities stringByPaddingBase64:string];
+
 	NSData *data = [[NSData alloc] initWithBase64EncodedString:string options:NSDataBase64DecodingIgnoreUnknownCharacters];
 	if (data == nil) {
 		if (error) {

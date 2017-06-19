@@ -10,6 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+
 @interface NSMutableData (Strings)
 
 - (void)apptentive_appendString:(NSString *)string;

@@ -143,7 +143,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	if (legacyConversation != nil) {
 		legacyConversation.state = ApptentiveConversationStateLegacyPending;
 		[Apptentive.shared.backend migrateLegacyCoreDataAndTaskQueueForConversation:legacyConversation];
-        [self fetchLegacyConversation:legacyConversation];
+		[self fetchLegacyConversation:legacyConversation];
 		[self createMessageManagerForConversation:legacyConversation];
 		return legacyConversation;
 	}
@@ -160,45 +160,45 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 }
 
 - (ApptentiveConversation *)loadConversation:(ApptentiveConversationMetadataItem *)item {
-    ApptentiveAssertNotNil(item, @"Conversation metadata item is nil");
-    if (item == nil) {
-        return nil;
-    }
-    
-    NSString *file = [self conversationArchivePathForDirectoryName:item.directoryName];
-    ApptentiveAssertNotNil(file, @"Conversation data file is nil: %@", item.directoryName);
-    if (file == nil) {
-        return nil;
-    }
-    
-    NSData *conversationData = [[NSData alloc] initWithContentsOfFile:file];
-    ApptentiveAssertNotNil(conversationData, @"Conversation data is nil: %@", file);
-    if (conversationData == nil) {
-        return nil;
-    }
-    
-    if (item.state == ApptentiveConversationStateLoggedIn) {
-        ApptentiveStopWatch *decryptionStopWatch = [ApptentiveStopWatch new];
-        
-        ApptentiveAssertNotNil(item.encryptionKey, @"Missing encryption key");
-        if (item.encryptionKey == nil) {
-            return nil;
-        }
-        
-        conversationData = [conversationData apptentive_dataDecryptedWithKey:item.encryptionKey];
-        ApptentiveAssertNotNil(item.encryptionKey, @"Can't decrypt conversation data");
-        if (conversationData == nil) {
-            return nil;
-        }
-        
-        ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Conversation decrypted (took %g ms)", decryptionStopWatch.elapsedMilliseconds);
-    }
-    
+	ApptentiveAssertNotNil(item, @"Conversation metadata item is nil");
+	if (item == nil) {
+		return nil;
+	}
+
+	NSString *file = [self conversationArchivePathForDirectoryName:item.directoryName];
+	ApptentiveAssertNotNil(file, @"Conversation data file is nil: %@", item.directoryName);
+	if (file == nil) {
+		return nil;
+	}
+
+	NSData *conversationData = [[NSData alloc] initWithContentsOfFile:file];
+	ApptentiveAssertNotNil(conversationData, @"Conversation data is nil: %@", file);
+	if (conversationData == nil) {
+		return nil;
+	}
+
+	if (item.state == ApptentiveConversationStateLoggedIn) {
+		ApptentiveStopWatch *decryptionStopWatch = [ApptentiveStopWatch new];
+
+		ApptentiveAssertNotNil(item.encryptionKey, @"Missing encryption key");
+		if (item.encryptionKey == nil) {
+			return nil;
+		}
+
+		conversationData = [conversationData apptentive_dataDecryptedWithKey:item.encryptionKey];
+		ApptentiveAssertNotNil(item.encryptionKey, @"Can't decrypt conversation data");
+		if (conversationData == nil) {
+			return nil;
+		}
+
+		ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Conversation decrypted (took %g ms)", decryptionStopWatch.elapsedMilliseconds);
+	}
+
 	ApptentiveConversation *conversation = [NSKeyedUnarchiver unarchiveObjectWithData:conversationData];
 	conversation.state = item.state;
 	conversation.encryptionKey = item.encryptionKey;
 	conversation.userId = item.userId;
-    conversation.JWT = item.JWT;
+	conversation.JWT = item.JWT;
 
 	// TODO: check data consistency
 
@@ -247,14 +247,14 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 }
 
 - (void)fetchLegacyConversation:(ApptentiveConversation *)conversation {
-    ApptentiveAssertNotNil(conversation, @"Conversation is nil");
-    ApptentiveAssertTrue(conversation.token > 0, @"Conversation token is nil or empty");
-    
-    if (conversation != nil && conversation.token.length > 0) {
-        self.conversationOperation = [self.client requestOperationWithRequest:[[ApptentiveLegacyConversationRequest alloc] initWithConversation:conversation] authToken:conversation.token delegate:self];
-    
-        [self.client.operationQueue addOperation:self.conversationOperation];
-    }
+	ApptentiveAssertNotNil(conversation, @"Conversation is nil");
+	ApptentiveAssertTrue(conversation.token > 0, @"Conversation token is nil or empty");
+
+	if (conversation != nil && conversation.token.length > 0) {
+		self.conversationOperation = [self.client requestOperationWithRequest:[[ApptentiveLegacyConversationRequest alloc] initWithConversation:conversation] authToken:conversation.token delegate:self];
+
+		[self.client.operationQueue addOperation:self.conversationOperation];
+	}
 }
 
 - (void)handleConversationStateChange:(ApptentiveConversation *)conversation {
@@ -275,7 +275,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 - (void)updateMetadataItems:(ApptentiveConversation *)conversation {
 	if (conversation.state == ApptentiveConversationStateAnonymousPending ||
-        conversation.state == ApptentiveConversationStateLegacyPending) {
+		conversation.state == ApptentiveConversationStateLegacyPending) {
 		ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Skipping updating metadata since conversation is %@", NSStringFromApptentiveConversationState(conversation.state));
 		return;
 	}
@@ -304,8 +304,8 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	}
 
 	item.state = conversation.state;
-    item.JWT = conversation.JWT; // TODO: check nil for 'active' conversations
-    
+	item.JWT = conversation.JWT; // TODO: check nil for 'active' conversations
+
 	if (item.state == ApptentiveConversationStateLoggedIn) {
 		ApptentiveAssertNotNil(conversation.encryptionKey, @"Encryption key is nil");
 		item.encryptionKey = conversation.encryptionKey;
@@ -538,13 +538,13 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 - (void)requestOperationDidFinish:(ApptentiveRequestOperation *)operation {
 	if (operation == self.conversationOperation) {
-        if ([operation.request isKindOfClass:[ApptentiveConversationRequest class]]) {
-            [self processConversationResponse:(NSDictionary *)operation.responseObject];
-        } else if ([operation.request isKindOfClass:[ApptentiveLegacyConversationRequest class]]) {
-            [self processLegacyConversationResponse:(NSDictionary *)operation.responseObject];
-        } else {
-            ApptentiveAssertFail(@"Unexpected request type: %@", NSStringFromClass([operation.request class]));
-        }
+		if ([operation.request isKindOfClass:[ApptentiveConversationRequest class]]) {
+			[self processConversationResponse:(NSDictionary *)operation.responseObject];
+		} else if ([operation.request isKindOfClass:[ApptentiveLegacyConversationRequest class]]) {
+			[self processLegacyConversationResponse:(NSDictionary *)operation.responseObject];
+		} else {
+			ApptentiveAssertFail(@"Unexpected request type: %@", NSStringFromClass([operation.request class]));
+		}
 
 		self.conversationOperation = nil;
 	} else if (operation == self.manifestOperation) {
@@ -582,7 +582,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 }
 
 - (void)processLegacyConversationResponse:(NSDictionary *)conversationResponse {
-    [self updateLegacyConversationWithResponse:conversationResponse];
+	[self updateLegacyConversationWithResponse:conversationResponse];
 }
 
 - (void)processManifestResponse:(NSDictionary *)manifestResponse cacheLifetime:(NSTimeInterval)cacheLifetime {
@@ -621,7 +621,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	self.activeConversation.encryptionKey = [NSData apptentive_dataWithHexString:encryptionKey];
 	ApptentiveAssertNotNil(self.activeConversation.encryptionKey, @"Apptentive encryption key should be not nil");
 
-    [self saveConversation];
+	[self saveConversation];
 	[self handleConversationStateChange:self.activeConversation];
 
 	[self completeLoginSuccess:YES error:nil];
@@ -654,43 +654,43 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 }
 
 - (BOOL)updateLegacyConversationWithResponse:(NSDictionary *)conversationResponse {
-    ApptentiveAssertNotNil(self.activeConversation, @"Active conversation is nil");
-    if (self.activeConversation == nil) {
-        return NO;
-    }
-    
-    ApptentiveAssertTrue(self.activeConversation.state == ApptentiveConversationStateLegacyPending, @"Unexpected conversation state: %@", NSStringFromApptentiveConversationState(self.activeConversation.state));
-    
-    NSString *JWT = ApptentiveDictionaryGetString(conversationResponse, @"anonymous_jwt_token");
-    NSString *conversationIdentifier = ApptentiveDictionaryGetString(conversationResponse, @"conversation_id");
-    
-    if (JWT.length > 0 && conversationIdentifier.length > 0) {
-        self.activeConversation.state = ApptentiveConversationStateLegacyPending;
-        [self.activeConversation setConversationIdentifier:conversationIdentifier JWT:JWT];
-        
-        // TODO: figure out why we need this check
-        if (self.activeConversation.state == ApptentiveConversationStateLegacyPending) {
-            self.activeConversation.state = ApptentiveConversationStateAnonymous;
-        }
-        
-        [self saveConversation];
-        [self handleConversationStateChange:self.activeConversation];
-        
-        return YES;
-    }
-    
-    ApptentiveLogError(ApptentiveLogTagConversation, @"Conversation response did not include conversation identifier and/or JWT.");
-    return NO;
+	ApptentiveAssertNotNil(self.activeConversation, @"Active conversation is nil");
+	if (self.activeConversation == nil) {
+		return NO;
+	}
+
+	ApptentiveAssertTrue(self.activeConversation.state == ApptentiveConversationStateLegacyPending, @"Unexpected conversation state: %@", NSStringFromApptentiveConversationState(self.activeConversation.state));
+
+	NSString *JWT = ApptentiveDictionaryGetString(conversationResponse, @"anonymous_jwt_token");
+	NSString *conversationIdentifier = ApptentiveDictionaryGetString(conversationResponse, @"conversation_id");
+
+	if (JWT.length > 0 && conversationIdentifier.length > 0) {
+		self.activeConversation.state = ApptentiveConversationStateLegacyPending;
+		[self.activeConversation setConversationIdentifier:conversationIdentifier JWT:JWT];
+
+		// TODO: figure out why we need this check
+		if (self.activeConversation.state == ApptentiveConversationStateLegacyPending) {
+			self.activeConversation.state = ApptentiveConversationStateAnonymous;
+		}
+
+		[self saveConversation];
+		[self handleConversationStateChange:self.activeConversation];
+
+		return YES;
+	}
+
+	ApptentiveLogError(ApptentiveLogTagConversation, @"Conversation response did not include conversation identifier and/or JWT.");
+	return NO;
 }
 
 - (BOOL)saveConversation {
-    ApptentiveStopWatch *saveStopWatch = [[ApptentiveStopWatch alloc] init];
-    
-    ApptentiveAssertNotNil(self.activeConversation, @"Missing active conversation");
-    if (self.activeConversation == nil) {
-        return NO;
-    }
-    
+	ApptentiveStopWatch *saveStopWatch = [[ApptentiveStopWatch alloc] init];
+
+	ApptentiveAssertNotNil(self.activeConversation, @"Missing active conversation");
+	if (self.activeConversation == nil) {
+		return NO;
+	}
+
 	@synchronized(self.activeConversation) {
 		NSString *conversationDirectoryPath = [self conversationContainerPathForDirectoryName:self.activeConversation.directoryName];
 
@@ -703,50 +703,50 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 				return NO;
 			}
 		}
-        
-        NSString *file = [self conversationArchivePathForDirectoryName:self.activeConversation.directoryName];
-        ApptentiveAssertTrue(file.length != 0, @"Conversation file is nil or empty");
-        
-        if (file.length == 0) {
-            return NO;
-        }
-        
-        NSData *conversationData = [NSKeyedArchiver archivedDataWithRootObject:self.activeConversation];
-        ApptentiveAssertNotNil(conversationData, @"Conversation data serialization failed");
-        
-        if (conversationData == nil) {
-            return NO;
-        }
-        
-        if (self.activeConversation.state == ApptentiveConversationStateLoggedIn) {
-            ApptentiveStopWatch *encryptionStopWatch = [[ApptentiveStopWatch alloc] init];
-            
-            ApptentiveAssertNotNil(self.activeConversation.encryptionKey, @"Missing encryption key");
-            if (self.activeConversation.encryptionKey == nil) {
-                return NO;
-            }
-            
-            NSData *initializationVector = [ApptentiveUtilities secureRandomDataOfLength:16];
-            ApptentiveAssertTrue(initializationVector.length > 0, @"Unable to generate random initialization vector.");
-            
-            if (initializationVector == nil) {
-                return NO;
-            }
-            
-            conversationData = [conversationData apptentive_dataEncryptedWithKey:self.activeConversation.encryptionKey
-                                                  initializationVector:initializationVector];
-            if (conversationData == nil) {
-                ApptentiveLogError(@"Unable to save conversation data: encryption failed");
-                return NO;
-            }
-            
-            ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Conversation data encrypted (took %g ms)", encryptionStopWatch.elapsedMilliseconds);
-        }
-        
-        BOOL succeed = [conversationData writeToFile:file atomically:YES];
-        ApptentiveLogDebug(ApptentiveLogTagConversation, @"Conversation data %@saved (took %g ms): location=%@", succeed ? @"" : @"NOT ", saveStopWatch.elapsedMilliseconds, file);
-        
-        return succeed;
+
+		NSString *file = [self conversationArchivePathForDirectoryName:self.activeConversation.directoryName];
+		ApptentiveAssertTrue(file.length != 0, @"Conversation file is nil or empty");
+
+		if (file.length == 0) {
+			return NO;
+		}
+
+		NSData *conversationData = [NSKeyedArchiver archivedDataWithRootObject:self.activeConversation];
+		ApptentiveAssertNotNil(conversationData, @"Conversation data serialization failed");
+
+		if (conversationData == nil) {
+			return NO;
+		}
+
+		if (self.activeConversation.state == ApptentiveConversationStateLoggedIn) {
+			ApptentiveStopWatch *encryptionStopWatch = [[ApptentiveStopWatch alloc] init];
+
+			ApptentiveAssertNotNil(self.activeConversation.encryptionKey, @"Missing encryption key");
+			if (self.activeConversation.encryptionKey == nil) {
+				return NO;
+			}
+
+			NSData *initializationVector = [ApptentiveUtilities secureRandomDataOfLength:16];
+			ApptentiveAssertTrue(initializationVector.length > 0, @"Unable to generate random initialization vector.");
+
+			if (initializationVector == nil) {
+				return NO;
+			}
+
+			conversationData = [conversationData apptentive_dataEncryptedWithKey:self.activeConversation.encryptionKey
+															initializationVector:initializationVector];
+			if (conversationData == nil) {
+				ApptentiveLogError(@"Unable to save conversation data: encryption failed");
+				return NO;
+			}
+
+			ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Conversation data encrypted (took %g ms)", encryptionStopWatch.elapsedMilliseconds);
+		}
+
+		BOOL succeed = [conversationData writeToFile:file atomically:YES];
+		ApptentiveLogDebug(ApptentiveLogTagConversation, @"Conversation data %@saved (took %g ms): location=%@", succeed ? @"" : @"NOT ", saveStopWatch.elapsedMilliseconds, file);
+
+		return succeed;
 	}
 }
 

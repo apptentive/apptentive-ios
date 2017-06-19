@@ -10,6 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+
 @interface ApptentiveMessageSender : NSObject <NSSecureCoding>
 
 @property (readonly, nonatomic) NSString *name;

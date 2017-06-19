@@ -8,32 +8,34 @@
 
 #import "ApptentiveStopWatch.h"
 
+
 @interface ApptentiveStopWatch ()
 
-@property (nonatomic, strong) NSDate * startDate;
+@property (nonatomic, strong) NSDate *startDate;
 
 @end
+
 
 @implementation ApptentiveStopWatch
 
 + (instancetype)stopWatch {
-    return [[self alloc] init];
+	return [[self alloc] init];
 }
 
 - (instancetype)init {
-    self = [super init];
-    if (self) {
-        _startDate = [[NSDate alloc] init];
-    }
-    return self;
+	self = [super init];
+	if (self) {
+		_startDate = [[NSDate alloc] init];
+	}
+	return self;
 }
 
 - (NSTimeInterval)elapsedSeconds {
-    return -[self.startDate timeIntervalSinceNow];
+	return -[self.startDate timeIntervalSinceNow];
 }
 
 - (NSTimeInterval)elapsedMilliseconds {
-    return [self elapsedSeconds] * 1000;
+	return [self elapsedSeconds] * 1000;
 }
 
 @end

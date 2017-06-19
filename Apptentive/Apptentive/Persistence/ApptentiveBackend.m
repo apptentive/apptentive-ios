@@ -465,7 +465,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 - (void)conversationManager:(ApptentiveConversationManager *)manager conversationDidChangeState:(ApptentiveConversation *)conversation {
 	// Anonymous pending conversations will not yet have a token, so we can't finish starting up yet in that case.
 	if (conversation.state != ApptentiveConversationStateAnonymousPending &&
-        conversation.state != ApptentiveConversationStateLegacyPending) {
+		conversation.state != ApptentiveConversationStateLegacyPending) {
 		if (self.state != ATBackendStateReady) {
 			[self finishStartupWithToken:conversation.token];
 		}
@@ -479,18 +479,18 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 			}
 		}
 	}
-    
-    if (conversation.state == ApptentiveConversationStateAnonymous ||
-        conversation.state == ApptentiveConversationStateLoggedIn) {
-        // Update conversation with push configuration changes that happened while it wasn't active.
-        if ([[NSUserDefaults standardUserDefaults] objectForKey:ApptentivePushProviderPreferenceKey] &&
-            [[NSUserDefaults standardUserDefaults] objectForKey:ApptentivePushTokenPreferenceKey]) {
-            ApptentivePushProvider pushProvider = [[NSUserDefaults standardUserDefaults] integerForKey:ApptentivePushProviderPreferenceKey];
-            NSString *pushToken = [[NSUserDefaults standardUserDefaults] objectForKey:ApptentivePushTokenPreferenceKey];
-            [conversation setPushToken:pushToken provider:pushProvider];
-            [self scheduleDeviceUpdate];
-        }
-    }
+
+	if (conversation.state == ApptentiveConversationStateAnonymous ||
+		conversation.state == ApptentiveConversationStateLoggedIn) {
+		// Update conversation with push configuration changes that happened while it wasn't active.
+		if ([[NSUserDefaults standardUserDefaults] objectForKey:ApptentivePushProviderPreferenceKey] &&
+			[[NSUserDefaults standardUserDefaults] objectForKey:ApptentivePushTokenPreferenceKey]) {
+			ApptentivePushProvider pushProvider = [[NSUserDefaults standardUserDefaults] integerForKey:ApptentivePushProviderPreferenceKey];
+			NSString *pushToken = [[NSUserDefaults standardUserDefaults] objectForKey:ApptentivePushTokenPreferenceKey];
+			[conversation setPushToken:pushToken provider:pushProvider];
+			[self scheduleDeviceUpdate];
+		}
+	}
 }
 
 #pragma mark - Paths

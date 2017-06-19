@@ -89,6 +89,7 @@
         request.contentType = payload.contentType;
         request.encrypted = payload.encrypted;
         request.payload = payload.payload;
+		request.type = payload.type;
         
         NSMutableArray *attachmentArray = [NSMutableArray arrayWithCapacity:payload.attachments.count];
         for (ApptentiveAttachment *attachment in payload.attachments) {
@@ -121,8 +122,7 @@
 }
 
 - (BOOL)isMessageRequest {
-	// FIXME: replace with something less stupid.
-	return [self.path containsString:@"message"] && [self.method isEqualToString:@"POST"];
+	return [self.type isEqualToString:@"message"]; // TODO: get rid of literal string
 }
 
 @end

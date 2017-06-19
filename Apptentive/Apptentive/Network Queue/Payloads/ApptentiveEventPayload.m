@@ -26,6 +26,10 @@
 	return self;
 }
 
+- (NSString *)type {
+	return @"event";
+}
+
 - (NSString *)path {
 	return @"conversations/<cid>/events";
 }

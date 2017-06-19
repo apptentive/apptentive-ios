@@ -21,6 +21,10 @@
 	return self;
 }
 
+- (NSString *)type {
+	return @"logout";
+}
+
 - (NSString *)method {
 	return @"DELETE";
 }

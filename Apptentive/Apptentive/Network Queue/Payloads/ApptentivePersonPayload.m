@@ -21,6 +21,10 @@
 	return self;
 }
 
+- (NSString *)type {
+	return @"person";
+}
+
 - (NSString *)path {
 	return @"conversations/<cid>/person";
 }

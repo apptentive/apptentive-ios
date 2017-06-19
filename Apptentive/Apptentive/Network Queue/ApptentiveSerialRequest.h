@@ -32,6 +32,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) NSString *apiVersion;
 
 /**
+ Payload type of the request.
+ */
+@property (strong, nonatomic) NSString *type;
+
+/**
  The attachments (used for some messages) that should be included with the
  request.
  */

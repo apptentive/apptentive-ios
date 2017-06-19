@@ -20,6 +20,7 @@
 
 @dynamic apiVersion;
 @dynamic attachments;
+@dynamic type;
 @dynamic contentType;
 @dynamic conversationIdentifier;
 @dynamic authToken;

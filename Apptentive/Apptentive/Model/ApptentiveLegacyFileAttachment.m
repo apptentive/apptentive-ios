@@ -43,7 +43,7 @@
 	for (ApptentiveLegacyFileAttachment *attachment in allAttachments) {
 		if (attachment.localPath.length > 0) {
 			NSString *legacyFilename = attachment.localPath;
-			NSString *legacyPath = [legacyDirectory stringByAppendingString:legacyFilename];
+			NSString *legacyPath = [legacyDirectory stringByAppendingPathComponent:legacyFilename];
 
 			NSString *newFilename = legacyFilename;
 

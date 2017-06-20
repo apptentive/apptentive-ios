@@ -15,6 +15,7 @@
 #import "ApptentiveAttachment.h"
 #import "ApptentiveMessage.h"
 #import "ApptentiveMessagePayload.h"
+#import "ApptentivePerson.h"
 
 
 @implementation ApptentiveLegacyMessage
@@ -39,7 +40,6 @@
 	ApptentiveAssertNotNil(conversation, @"Conversation is nil");
 
 	NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"ATMessage"];
-	request.predicate = [NSPredicate predicateWithFormat:@"(pendingState == %d) || (pendingState == %d)", ATPendingMessageStateSending, ATPendingMessageStateError];
 
 	NSError *error;
 	NSArray *unsentMessages = [context executeFetchRequest:request error:&error];
@@ -50,31 +50,49 @@
 	}
 
 	for (ApptentiveLegacyMessage *legacyMessage in unsentMessages) {
-		NSMutableArray *attachments = [NSMutableArray arrayWithCapacity:legacyMessage.attachments.count];
-		for (ApptentiveLegacyFileAttachment *legacyAttachment in legacyMessage.attachments) {
-			ApptentiveAttachment *attachment = [[ApptentiveAttachment alloc] initWithPath:legacyAttachment.localPath contentType:legacyAttachment.mimeType name:legacyAttachment.name];
+        NSInteger pendingState = legacyMessage.pendingState.integerValue;
+        
+        // only migrate 'sending' and 'failed' messages (delete the rest)
+        if (pendingState == ATPendingMessageStateSending || pendingState == ATPendingMessageStateError) {
+            NSMutableArray *attachments = [NSMutableArray arrayWithCapacity:legacyMessage.attachments.count];
+            for (ApptentiveLegacyFileAttachment *legacyAttachment in legacyMessage.attachments) {
+                NSString *oldPath = [[self legacyDirectory] stringByAppendingPathComponent:legacyAttachment.localPath];
+#warning fix extension if needed.
+                NSString *newPath = [[[Apptentive.shared.backend.supportDirectoryPath stringByAppendingPathComponent:conversation.directoryName] stringByAppendingPathComponent:@"Attachments"] stringByAppendingPathComponent:oldPath.lastPathComponent];
+                
+                if (![[NSFileManager defaultManager] moveItemAtPath:oldPath toPath:newPath error:&error]) {
+                    ApptentiveLogError(@"Unable to move attachment file to %@: %@", newPath, error);
+                    continue;
+                }
+                
+                ApptentiveAttachment *attachment = [[ApptentiveAttachment alloc] initWithPath:newPath contentType:legacyAttachment.mimeType name:legacyAttachment.name];
 
-			if (attachment != nil) {
-				[attachments addObject:attachment];
-			}
-		}
+                if (attachment != nil) {
+                    [attachments addObject:attachment];
+                }
+            }
 
-		NSDictionary *customData = @{};
-		if (legacyMessage.customData) {
-			customData = [NSKeyedUnarchiver unarchiveObjectWithData:legacyMessage.customData];
-		};
+            NSDictionary *customData = @{};
+            if (legacyMessage.customData) {
+                customData = [NSKeyedUnarchiver unarchiveObjectWithData:legacyMessage.customData];
+            };
+            
+            ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:legacyMessage.body attachments:attachments automated:legacyMessage.automated.boolValue customData:customData];
 
-		ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:legacyMessage.body attachments:attachments senderIdentifier:legacyMessage.sender.apptentiveID automated:legacyMessage.automated.boolValue customData:customData];
+            ApptentiveMessagePayload *payload = [[ApptentiveMessagePayload alloc] initWithMessage:message];
+            ApptentiveAssertNotNil(payload, @"Failed to create a message payload");
 
-		ApptentiveMessagePayload *payload = [[ApptentiveMessagePayload alloc] initWithMessage:message];
-		ApptentiveAssertNotNil(payload, @"Failed to create a message payload");
+            if (payload != nil) {
+                [ApptentiveSerialRequest enqueuePayload:payload forConversation:conversation usingAuthToken:conversation.token inContext:context];
+            }
+        }
 
-		if (payload != nil) {
-			[ApptentiveSerialRequest enqueuePayload:payload forConversation:Apptentive.shared.backend.conversationManager.activeConversation usingAuthToken:conversation.token inContext:context];
-		}
-
-		[context deleteObject:legacyMessage];
+		//[context deleteObject:legacyMessage];
 	}
+}
+
++ (NSString *)legacyDirectory {
+    return [Apptentive.shared.backend.supportDirectoryPath stringByAppendingPathComponent:@"attachments"];
 }
 
 @end

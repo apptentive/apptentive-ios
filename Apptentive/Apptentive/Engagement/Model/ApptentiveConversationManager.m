@@ -246,15 +246,20 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	[self.client.operationQueue addOperation:self.conversationOperation];
 }
 
-- (void)fetchLegacyConversation:(ApptentiveConversation *)conversation {
+- (BOOL)fetchLegacyConversation:(ApptentiveConversation *)conversation {
 	ApptentiveAssertNotNil(conversation, @"Conversation is nil");
-	ApptentiveAssertTrue(conversation.token > 0, @"Conversation token is nil or empty");
+    ApptentiveAssertNil(conversation.token, @"Conversation token already exists");
+	ApptentiveAssertTrue(conversation.legacyToken > 0, @"Conversation legacy token is nil or empty");
 
-	if (conversation != nil && conversation.token.length > 0) {
-		self.conversationOperation = [self.client requestOperationWithRequest:[[ApptentiveLegacyConversationRequest alloc] initWithConversation:conversation] legacyToken:conversation.token delegate:self];
+	if (conversation != nil && conversation.legacyToken.length > 0) {
+        
+		self.conversationOperation = [self.client requestOperationWithRequest:[[ApptentiveLegacyConversationRequest alloc] initWithConversation:conversation] legacyToken:conversation.legacyToken delegate:self];
 
 		[self.client.operationQueue addOperation:self.conversationOperation];
+        return YES;
 	}
+    
+    return NO;
 }
 
 - (void)handleConversationStateChange:(ApptentiveConversation *)conversation {

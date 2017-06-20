@@ -9,7 +9,9 @@
 #import "ApptentiveClient.h"
 
 @protocol ApptentivePayloadSenderDelegate;
+
 @class ApptentiveClient;
+@class ApptentiveConversation;
 
 typedef NS_ENUM(NSInteger, ApptentiveQueueStatus) {
 	ApptentiveQueueStatusUnknown,
@@ -40,12 +42,12 @@ typedef NS_ENUM(NSInteger, ApptentiveQueueStatus) {
 - (void)createOperationsForQueuedRequestsInContext:(NSManagedObjectContext *)context;
 
 /**
- Adds a conversation identifier to pending requests that are missing one.
+ Adds a conversation identifier and token to pending requests that are missing them.
 
  @param context The managed object context in which to look for pending network payloads.
- @param conversationIdentifier The value to use for the conversationIdentifier property of the queued requests.
+ @param conversation The conversation to use for the queued requests.
  */
-- (void)updateQueuedRequestsInContext:(NSManagedObjectContext *)context missingConversationIdentifier:(NSString *)conversationIdentifier;
+- (void)updateQueuedRequestsInContext:(NSManagedObjectContext *)context withConversation:(ApptentiveConversation *)conversation;
 
 /**
  A number representing the average progress across all message operations in the

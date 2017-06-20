@@ -303,7 +303,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	migrationContext.parentContext = self.managedObjectContext;
 
 	[migrationContext performBlockAndWait:^{
-		[ApptentiveLegacyFileAttachment addMissingExtensionsInContext:migrationContext andMoveToDirectory:self.conversationManager.messageManager.attachmentDirectoryPath];
+		[ApptentiveLegacyFileAttachment deleteCachedAttachmentsInContext:migrationContext];
 		[ApptentiveLegacyMessage enqueueUnsentMessagesInContext:migrationContext forConversation:conversation];
 		[ApptentiveLegacyEvent enqueueUnsentEventsInContext:migrationContext forConversation:conversation];
 		[ApptentiveLegacySurveyResponse enqueueUnsentSurveyResponsesInContext:migrationContext forConversation:conversation];

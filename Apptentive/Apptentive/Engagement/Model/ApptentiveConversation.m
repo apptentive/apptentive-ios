@@ -287,6 +287,8 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 		_person = [[ApptentivePerson alloc] initAndMigrate];
 		_device = [[ApptentiveDevice alloc] initAndMigrate];
 		_engagement = [[ApptentiveEngagement alloc] initAndMigrate];
+        
+        _directoryName = [NSUUID UUID].UUIDString;
 
 		NSData *legacyConversationData = [[NSUserDefaults standardUserDefaults] dataForKey:ATCurrentConversationPreferenceKey];
 

@@ -142,9 +142,9 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	ApptentiveConversation *legacyConversation = [[ApptentiveConversation alloc] initAndMigrate];
 	if (legacyConversation != nil) {
 		legacyConversation.state = ApptentiveConversationStateLegacyPending;
-		[Apptentive.shared.backend migrateLegacyCoreDataAndTaskQueueForConversation:legacyConversation];
 		[self fetchLegacyConversation:legacyConversation];
 		[self createMessageManagerForConversation:legacyConversation];
+		[Apptentive.shared.backend migrateLegacyCoreDataAndTaskQueueForConversation:legacyConversation];
 		return legacyConversation;
 	}
 
@@ -198,7 +198,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	conversation.state = item.state;
 	conversation.encryptionKey = item.encryptionKey;
 	conversation.userId = item.userId;
-	conversation.JWT = item.JWT;
+	conversation.token = item.JWT;
 
 	// TODO: check data consistency
 
@@ -241,7 +241,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 #pragma mark - Conversation Token Fetching
 
 - (void)fetchConversationToken:(ApptentiveConversation *)conversation {
-	self.conversationOperation = [self.client requestOperationWithRequest:[[ApptentiveConversationRequest alloc] initWithConversation:conversation] authToken:nil delegate:self];
+	self.conversationOperation = [self.client requestOperationWithRequest:[[ApptentiveConversationRequest alloc] initWithConversation:conversation] token:nil delegate:self];
 
 	[self.client.operationQueue addOperation:self.conversationOperation];
 }
@@ -251,7 +251,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	ApptentiveAssertTrue(conversation.token > 0, @"Conversation token is nil or empty");
 
 	if (conversation != nil && conversation.token.length > 0) {
-		self.conversationOperation = [self.client requestOperationWithRequest:[[ApptentiveLegacyConversationRequest alloc] initWithConversation:conversation] authToken:conversation.token delegate:self];
+		self.conversationOperation = [self.client requestOperationWithRequest:[[ApptentiveLegacyConversationRequest alloc] initWithConversation:conversation] legacyToken:conversation.token delegate:self];
 
 		[self.client.operationQueue addOperation:self.conversationOperation];
 	}
@@ -304,7 +304,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	}
 
 	item.state = conversation.state;
-	item.JWT = conversation.JWT; // TODO: check nil for 'active' conversations
+	item.JWT = conversation.token; // TODO: check nil for 'active' conversations
 
 	if (item.state == ApptentiveConversationStateLoggedIn) {
 		ApptentiveAssertNotNil(conversation.encryptionKey, @"Encryption key is nil");
@@ -420,7 +420,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 - (void)sendLoginRequestWithToken:(NSString *)token conversationIdentifier:(NSString *)conversationIdentifier userId:(NSString *)userId {
 	self.pendingLoggedInUserId = userId;
-	self.loginRequestOperation = [self.client requestOperationWithRequest:[[ApptentiveLoginRequest alloc] initWithConversationIdentifier:conversationIdentifier token:token] authToken:nil delegate:self];
+	self.loginRequestOperation = [self.client requestOperationWithRequest:[[ApptentiveLoginRequest alloc] initWithConversationIdentifier:conversationIdentifier token:token] token:nil delegate:self];
 
 	[self.client.operationQueue addOperation:self.loginRequestOperation];
 }

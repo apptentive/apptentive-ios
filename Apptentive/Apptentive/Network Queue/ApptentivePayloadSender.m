@@ -76,7 +76,7 @@
 
 			// Add an operation for every record in the queue
 			for (ApptentiveSerialRequest *request in [queuedRequests copy]) { // FIXME: why do we need a copy?
-				ApptentiveRequestOperation *operation = [self requestOperationWithRequest:request authToken:request.authToken delegate:self];
+				ApptentiveRequestOperation *operation = [self requestOperationWithRequest:request token:request.authToken delegate:self];
 				ApptentiveLogVerbose(ApptentiveLogTagPayload, @"Adding operation for %@ %@", operation.URLRequest.HTTPMethod, operation.URLRequest.URL.absoluteString);
 
 				operation.request = request;

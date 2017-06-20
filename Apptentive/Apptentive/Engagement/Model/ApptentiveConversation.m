@@ -297,8 +297,8 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 
 		[NSKeyedUnarchiver setClass:[self class] forClassName:@"ApptentiveConversation"];
 
-		_token = legacyConversation.token;
-		_identifier = nil; // we should fetch conversation identifier separately
+        // we only need a legacy token here: jwt-token and conversation id would be fetched later
+		_legacyToken = legacyConversation.token;
 		_person.identifier = legacyConversation.personID;
 		_device.identifier = legacyConversation.deviceID;
 

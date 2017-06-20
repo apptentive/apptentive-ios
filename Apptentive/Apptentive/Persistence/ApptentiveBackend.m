@@ -471,12 +471,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 		}
 
 		if (conversation.state == ApptentiveConversationStateAnonymous) {
-			NSString *conversationIdentifier = conversation.identifier;
-			ApptentiveAssertNotNil(conversation, @"Conversation id is nil");
-
-			if (conversationIdentifier != nil) {
-				[self.payloadSender updateQueuedRequestsInContext:self.managedObjectContext missingConversationIdentifier:conversationIdentifier];
-			}
+            [self.payloadSender updateQueuedRequestsInContext:self.managedObjectContext withConversation:conversation];
 		}
 	}
 

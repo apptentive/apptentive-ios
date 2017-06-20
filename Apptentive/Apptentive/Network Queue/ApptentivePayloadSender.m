@@ -9,6 +9,7 @@
 #import "ApptentivePayloadSender.h"
 #import "ApptentiveClient.h"
 #import "ApptentiveSerialRequest.h"
+#import "ApptentiveConversation.h"
 
 
 @interface ApptentivePayloadSender ()
@@ -75,7 +76,9 @@
 			ApptentiveLogDebug(ApptentiveLogTagPayload, @"Adding %d record operations for queued payloads", queuedRequests.count);
 
 			// Add an operation for every record in the queue
-			for (ApptentiveSerialRequest *request in [queuedRequests copy]) { // FIXME: why do we need a copy?
+			for (ApptentiveSerialRequest *request in queuedRequests) {
+                ApptentiveAssertNotNil(request.authToken, @"Attempted to send a request without a token: %@", request);
+                
 				ApptentiveRequestOperation *operation = [self requestOperationWithRequest:request token:request.authToken delegate:self];
 				ApptentiveLogVerbose(ApptentiveLogTagPayload, @"Adding operation for %@ %@", operation.URLRequest.HTTPMethod, operation.URLRequest.URL.absoluteString);
 
@@ -227,7 +230,19 @@
 
 #pragma mark - Update missing conversation IDs
 
-- (void)updateQueuedRequestsInContext:(NSManagedObjectContext *)context missingConversationIdentifier:(NSString *)conversationIdentifier {
+- (void)updateQueuedRequestsInContext:(NSManagedObjectContext *)context withConversation:(ApptentiveConversation *)conversation {
+    ApptentiveAssertNotNil(conversation, @"Conversation is nil");
+    
+    NSString *conversationToken = conversation.token;
+    ApptentiveAssertTrue(conversationToken.length > 0, @"Conversation token is nil or empty");
+    
+    NSString *conversationIdentifier = conversation.identifier;
+    ApptentiveAssertTrue(conversationIdentifier.length > 0, @"Conversation identifier is nil or empty");
+    
+    if (conversationToken.length == 0 || conversationIdentifier.length == 0) {
+        return;
+    }
+    
 	// create a child context on a private concurrent queue
 	NSManagedObjectContext *childContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
 
@@ -254,6 +269,9 @@
 
 			// Set a new conversation identifier
 			for (ApptentiveSerialRequest *requestInfo in queuedRequests) {
+                ApptentiveAssertNil(requestInfo.authToken, @"Conversation token already set");
+                
+                requestInfo.authToken = conversationToken;
 				requestInfo.conversationIdentifier = conversationIdentifier;
 			}
 

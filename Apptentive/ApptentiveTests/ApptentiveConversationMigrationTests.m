@@ -48,7 +48,7 @@ static inline NSDate *dateFromString(NSString *date) {
 
 	ApptentiveConversation *conversation = [[ApptentiveConversation alloc] initAndMigrate];
 	XCTAssertNotNil(conversation);
-	XCTAssertEqualObjects(conversation.token, @"1c496320bd0dbca0aad7e774f4eb3ec595f620e1df7a4afc9da37e5536bd5851");
+	XCTAssertEqualObjects(conversation.legacyToken, @"1c496320bd0dbca0aad7e774f4eb3ec595f620e1df7a4afc9da37e5536bd5851");
 	XCTAssertEqualObjects(conversation.person.identifier, @"59124f8d09e3da650e000037");
 	XCTAssertEqualObjects(conversation.device.identifier, @"59124f8d09e3da650e000035");
 

@@ -697,7 +697,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	}
 
 	@synchronized(self.activeConversation) {
-		NSString *conversationDirectoryPath = [self conversationContainerPathForDirectoryName:self.activeConversation.directoryName];
+		NSString *conversationDirectoryPath = [self activeConversationContainerPath];
 
 		BOOL isDirectory = NO;
 		if (![[NSFileManager defaultManager] fileExistsAtPath:conversationDirectoryPath isDirectory:&isDirectory] || !isDirectory) {
@@ -801,6 +801,14 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 - (NSString *)conversationContainerPathForDirectoryName:(NSString *)directoryName {
 	return [self.storagePath stringByAppendingPathComponent:directoryName];
+}
+
+- (NSString *)activeConversationContainerPath {
+	if (self.activeConversation == nil) {
+		return nil;
+	}
+
+	return [self conversationContainerPathForDirectoryName:self.activeConversation.directoryName];
 }
 
 #pragma mark - Metadata

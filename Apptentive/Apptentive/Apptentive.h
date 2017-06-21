@@ -30,7 +30,22 @@ FOUNDATION_EXPORT const unsigned char ApptentiveVersionString[];
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef void(^ApptentiveAuthenticationFailureCallback)(NSInteger code, NSString *errorMessage);
+typedef enum : NSUInteger {
+    ApptentiveAuthenticationFailureReasonUnknown,
+    ApptentiveAuthenticationFailureReasonInvalidAlgorithm,
+    ApptentiveAuthenticationFailureReasonMalformedToken,
+    ApptentiveAuthenticationFailureReasonInvalidToken,
+    ApptentiveAuthenticationFailureReasonMissingSubClaim,
+    ApptentiveAuthenticationFailureReasonMismatchedSubClaim,
+    ApptentiveAuthenticationFailureReasonInvalidSubClaim,
+    ApptentiveAuthenticationFailureReasonExpiredToken,
+    ApptentiveAuthenticationFailureReasonRevokedToken,
+    ApptentiveAuthenticationFailureReasonMissingAppKey,
+    ApptentiveAuthenticationFailureReasonMissingAppSignature,
+    ApptentiveAuthenticationFailureReasonInvalidKeySignaturePair
+} ApptentiveAuthenticationFailureReason;
+
+typedef void(^ApptentiveAuthenticationFailureCallback)(ApptentiveAuthenticationFailureReason reason, NSString *errorMessage);
 
 @protocol ApptentiveDelegate
 , ApptentiveStyle;

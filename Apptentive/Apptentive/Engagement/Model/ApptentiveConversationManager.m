@@ -145,6 +145,9 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		[self fetchLegacyConversation:legacyConversation];
 		[self createMessageManagerForConversation:legacyConversation];
 		[Apptentive.shared.backend migrateLegacyCoreDataAndTaskQueueForConversation:legacyConversation];
+
+		[self migrateEngagementManifest];
+
 		return legacyConversation;
 	}
 
@@ -696,7 +699,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	}
 
 	@synchronized(self.activeConversation) {
-		NSString *conversationDirectoryPath = [self activeConversationContainerPath];
+		NSString *conversationDirectoryPath = [self conversationContainerPathForDirectoryName:self.activeConversation.directoryName];
 
 		BOOL isDirectory = NO;
 		if (![[NSFileManager defaultManager] fileExistsAtPath:conversationDirectoryPath isDirectory:&isDirectory] || !isDirectory) {
@@ -776,6 +779,14 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	[self.client.operationQueue addOperation:self.manifestOperation];
 }
 
+- (void)migrateEngagementManifest {
+	_manifest = [[ApptentiveEngagementManifest alloc] initWithCachePath:self.storagePath userDefaults:[NSUserDefaults standardUserDefaults]];
+
+	if (self.manifest) {
+		[ApptentiveEngagementManifest deleteMigratedDataFromCachePath:self.storagePath];
+	}
+}
+
 - (void)scheduleConversationSave {
 	[self.operationQueue addOperationWithBlock:^{
 		if (![self saveConversation]) {
@@ -800,14 +811,6 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 - (NSString *)conversationContainerPathForDirectoryName:(NSString *)directoryName {
 	return [self.storagePath stringByAppendingPathComponent:directoryName];
-}
-
-- (NSString *)activeConversationContainerPath {
-	if (self.activeConversation == nil) {
-		return nil;
-	}
-
-	return [self conversationContainerPathForDirectoryName:self.activeConversation.directoryName];
 }
 
 #pragma mark - Metadata

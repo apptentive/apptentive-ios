@@ -78,22 +78,12 @@ static NSString *const CustomDataKey = @"customData";
 	return self;
 }
 
-- (nullable instancetype)initWithBody:(NSString *)body attachments:(NSArray *)attachments senderIdentifier:(NSString *)senderIdentifier automated:(BOOL)automated customData:(NSDictionary *)customData {
-	ApptentiveMessageSender *sender = nil;
-	if (senderIdentifier != nil) {
-		sender = [[ApptentiveMessageSender alloc] initWithName:nil identifier:senderIdentifier profilePhotoURL:nil];
-	}
-
-	return [self initWithBody:body attachments:attachments sender:sender automated:automated customData:customData];
-}
-
-- (instancetype)initWithBody:(NSString *)body attachments:(NSArray *)attachments sender:(ApptentiveMessageSender *)sender automated:(BOOL)automated customData:(NSDictionary *)customData {
+- (nullable instancetype)initWithBody:(NSString *)body attachments:(NSArray *)attachments automated:(BOOL)automated customData:(NSDictionary *)customData {
 	self = [super init];
 
 	if (self) {
 		_body = body;
 		_attachments = attachments ?: @[];
-		_sender = sender;
 
 		_automated = automated;
 		_customData = customData;

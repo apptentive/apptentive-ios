@@ -9,6 +9,7 @@
 #import "ApptentivePayloadSender.h"
 #import "ApptentiveClient.h"
 #import "ApptentiveSerialRequest.h"
+#import "ApptentiveConversation.h"
 
 
 @interface ApptentivePayloadSender ()
@@ -56,17 +57,17 @@
 	self.isResuming = YES;
 
 	NSBlockOperation *resumeBlock = [NSBlockOperation blockOperationWithBlock:^{
-		NSManagedObjectContext *moc = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-		[moc setParentContext:context];
+		NSManagedObjectContext *childContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+		[childContext setParentContext:context];
 
 		__block NSArray *queuedRequests;
-		[moc performBlockAndWait:^{
+		[childContext performBlockAndWait:^{
 			NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"QueuedRequest"];
 			fetchRequest.sortDescriptors = @[ [NSSortDescriptor sortDescriptorWithKey:@"date" ascending:YES] ];
 			fetchRequest.predicate = [NSPredicate predicateWithFormat:@"conversationIdentifier != nil"]; // make sure we don't include "anonymous" conversation here
 
 			NSError *error;
-			queuedRequests = [moc executeFetchRequest:fetchRequest error:&error];
+			queuedRequests = [childContext executeFetchRequest:fetchRequest error:&error];
 
 			if (queuedRequests == nil) {
 				ApptentiveLogError(ApptentiveLogTagPayload, @"Unable to fetch waiting network payloads.");
@@ -75,8 +76,10 @@
 			ApptentiveLogDebug(ApptentiveLogTagPayload, @"Adding %d record operations for queued payloads", queuedRequests.count);
 
 			// Add an operation for every record in the queue
-			for (ApptentiveSerialRequest *request in [queuedRequests copy]) { // FIXME: why do we need a copy?
-				ApptentiveRequestOperation *operation = [self requestOperationWithRequest:request authToken:request.authToken delegate:self];
+			for (ApptentiveSerialRequest *request in queuedRequests) {
+                ApptentiveAssertNotNil(request.authToken, @"Attempted to send a request without a token: %@", request);
+                
+				ApptentiveRequestOperation *operation = [self requestOperationWithRequest:request token:request.authToken delegate:self];
 				ApptentiveLogVerbose(ApptentiveLogTagPayload, @"Adding operation for %@ %@", operation.URLRequest.HTTPMethod, operation.URLRequest.URL.absoluteString);
 
 				operation.request = request;
@@ -89,25 +92,25 @@
 			// Save the context after all enqueued records have been sent
 			NSBlockOperation *saveBlock = [NSBlockOperation blockOperationWithBlock:^{
 				ApptentiveLogVerbose(ApptentiveLogTagPayload, @"Saving Private Managed Object Context (with completed payloads deleted)");
-				[moc performBlockAndWait:^{
+				[childContext performBlockAndWait:^{
 					NSError *saveError;
-					if (![moc save:&saveError]) {
+					if (![childContext save:&saveError]) {
 						ApptentiveLogError(@"Unable to save temporary managed object context: %@", saveError);
 					}
+                    
+                    ApptentiveLogVerbose(ApptentiveLogTagPayload, @"Saving Parent Managed Object Context (with completed payloads deleted)");
+                    [context performBlockAndWait:^{
+                        NSError *parentSaveError;
+                        if (![context save:&parentSaveError]) {
+                            ApptentiveLogError(@"Unable to save parent managed object context: %@", parentSaveError);
+                        }
+                        
+                        if (self.backgroundTaskIdentifier != UIBackgroundTaskInvalid) {
+                            [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTaskIdentifier];
+                            self.backgroundTaskIdentifier = UIBackgroundTaskInvalid;
+                        }
+                    }];
 				}];
-
-				ApptentiveLogVerbose(ApptentiveLogTagPayload, @"Saving Parent Managed Object Context (with completed payloads deleted)");
-				dispatch_async(dispatch_get_main_queue(), ^{
-					NSError *parentSaveError;
-					if (![moc.parentContext save:&parentSaveError]) {
-						ApptentiveLogError(@"Unable to save parent managed object context: %@", parentSaveError);
-					}
-
-					if (self.backgroundTaskIdentifier != UIBackgroundTaskInvalid) {
-						[[UIApplication sharedApplication] endBackgroundTask:self.backgroundTaskIdentifier];
-						self.backgroundTaskIdentifier = UIBackgroundTaskInvalid;
-					}
-				});
 			}];
 
 			[self.operationQueue addOperation:saveBlock];
@@ -227,7 +230,19 @@
 
 #pragma mark - Update missing conversation IDs
 
-- (void)updateQueuedRequestsInContext:(NSManagedObjectContext *)context missingConversationIdentifier:(NSString *)conversationIdentifier {
+- (void)updateQueuedRequestsInContext:(NSManagedObjectContext *)context withConversation:(ApptentiveConversation *)conversation {
+	ApptentiveAssertNotNil(conversation, @"Conversation is nil");
+
+	NSString *conversationToken = conversation.token;
+	ApptentiveAssertTrue(conversationToken.length > 0, @"Conversation token is nil or empty");
+
+	NSString *conversationIdentifier = conversation.identifier;
+	ApptentiveAssertTrue(conversationIdentifier.length > 0, @"Conversation identifier is nil or empty");
+
+	if (conversationToken.length == 0 || conversationIdentifier.length == 0) {
+		return;
+	}
+
 	// create a child context on a private concurrent queue
 	NSManagedObjectContext *childContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
 
@@ -254,27 +269,27 @@
 
 			// Set a new conversation identifier
 			for (ApptentiveSerialRequest *requestInfo in queuedRequests) {
+                ApptentiveAssertNil(requestInfo.authToken, @"Conversation token already set");
+                
+                requestInfo.authToken = conversationToken;
 				requestInfo.conversationIdentifier = conversationIdentifier;
 			}
 
 			// save child context
-			[childContext performBlockAndWait:^{
-				NSError *saveError;
-				if (![childContext save:&saveError]) {
-					ApptentiveLogError(@"Unable to save temporary managed object context: %@", saveError);
-				}
-			}];
-
-			// save parent context on the main thread
-			dispatch_async(dispatch_get_main_queue(), ^{
-				NSError *parentSaveError;
-				if (![childContext.parentContext save:&parentSaveError]) {
-					ApptentiveLogError(@"Unable to save parent managed object context: %@", parentSaveError);
-				}
-
-				// we call -createOperationsForQueuedRequestsInContext: to send everything
-				[self createOperationsForQueuedRequestsInContext:context];
-			});
+            NSError *saveError;
+            if (![childContext save:&saveError]) {
+                ApptentiveLogError(@"Unable to save temporary managed object context: %@", saveError);
+            }
+            
+            [context performBlockAndWait:^{
+                NSError *parentSaveError;
+                if (![context save:&parentSaveError]) {
+                    ApptentiveLogError(@"Unable to save parent managed object context: %@", parentSaveError);
+                }
+                
+                // we call -createOperationsForQueuedRequestsInContext: to send everything
+                [self createOperationsForQueuedRequestsInContext:context];
+            }];
 		}
 	}];
 }

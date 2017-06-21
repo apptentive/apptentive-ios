@@ -68,8 +68,6 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 
 @implementation ApptentiveConversation
 
-@synthesize token = _token;
-
 - (instancetype)init {
 	self = [super init];
 	if (self) {
@@ -125,24 +123,14 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 }
 
 - (void)setToken:(NSString *)token conversationID:(NSString *)conversationID personID:(NSString *)personID deviceID:(NSString *)deviceID {
-	self.token = token;
-	_identifier = conversationID;
+	[self setConversationIdentifier:conversationID JWT:token];
 	self.person.identifier = personID;
 	self.device.identifier = deviceID;
 }
 
 - (void)setConversationIdentifier:(NSString *)identifier JWT:(NSString *)JWT {
 	_identifier = [identifier copy];
-	_JWT = [JWT copy];
-}
-
-- (void)setToken:(NSString *)token {
-	if (token == nil) {
-		ApptentiveLogError(ApptentiveLogTagConversation, @"Attempting to set token to nil. Ignoring.");
-		return;
-	}
-
-	_token = token;
+	_token = [JWT copy];
 }
 
 - (void)checkForDiffs {
@@ -300,6 +288,8 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 		_device = [[ApptentiveDevice alloc] initAndMigrate];
 		_engagement = [[ApptentiveEngagement alloc] initAndMigrate];
 
+		_directoryName = [NSUUID UUID].UUIDString;
+
 		NSData *legacyConversationData = [[NSUserDefaults standardUserDefaults] dataForKey:ATCurrentConversationPreferenceKey];
 
 		[NSKeyedUnarchiver setClass:[ApptentiveLegacyConversation class] forClassName:@"ApptentiveConversation"];
@@ -309,8 +299,8 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 
 		[NSKeyedUnarchiver setClass:[self class] forClassName:@"ApptentiveConversation"];
 
-		_token = legacyConversation.token;
-		_identifier = nil; // we should fetch conversation identifier separately
+		// we only need a legacy token here: jwt-token and conversation id would be fetched later
+		_legacyToken = legacyConversation.token;
 		_person.identifier = legacyConversation.personID;
 		_device.identifier = legacyConversation.deviceID;
 

@@ -42,6 +42,10 @@
 	return self;
 }
 
+- (NSString *)type {
+	return @"message";
+}
+
 - (NSString *)contentType {
 	return [[NSString alloc] initWithFormat:@"%@;boundary=%@", self.encrypted ? @"multipart/encrypted" : @"multipart/mixed", self.boundary];
 }

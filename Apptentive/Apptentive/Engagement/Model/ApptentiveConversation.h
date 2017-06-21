@@ -71,7 +71,7 @@ extern NSString *NSStringFromApptentiveConversationState(ApptentiveConversationS
 /**
  The authorization token obtained when creating the conversation.
  */
-@property (readonly, nonatomic) NSString *token;
+@property (strong, nonatomic) NSString *token;
 
 /**
  The identifier (obtained from server) for the conversation.
@@ -79,9 +79,9 @@ extern NSString *NSStringFromApptentiveConversationState(ApptentiveConversationS
 @property (readonly, nonatomic) NSString *identifier;
 
 /**
- Optional JWT for active conversations.
+ The authorization token obtained when creating the conversation (for a legacy request)
  */
-@property (strong, nonatomic) NSString *JWT;
+@property (strong, nonatomic) NSString *legacyToken;
 
 /**
  Optional user id for logged-in conversations.

@@ -64,10 +64,32 @@
 #pragma mark - Creating request operations
 
 - (ApptentiveRequestOperation *)requestOperationWithRequest:(id<ApptentiveRequest>)request delegate:(id<ApptentiveRequestOperationDelegate>)delegate {
-	return [self requestOperationWithRequest:request authToken:self.authToken delegate:delegate];
+	return [self requestOperationWithRequest:request token:self.authToken delegate:delegate];
 }
 
-- (ApptentiveRequestOperation *)requestOperationWithRequest:(id<ApptentiveRequest>)request authToken:(NSString *)authToken delegate:(id<ApptentiveRequestOperationDelegate>)delegate {
+- (ApptentiveRequestOperation *)requestOperationWithRequest:(id<ApptentiveRequest>)request token:(NSString *)token delegate:(id<ApptentiveRequestOperationDelegate>)delegate {
+	NSMutableURLRequest *URLRequest = [self URLRequestWithRequest:request];
+	if (token) {
+		[URLRequest addValue:[@"Bearer " stringByAppendingString:token] forHTTPHeaderField:@"Authorization"];
+	}
+
+	ApptentiveRequestOperation *operation = [[ApptentiveRequestOperation alloc] initWithURLRequest:URLRequest delegate:delegate dataSource:self];
+	operation.request = request;
+	return operation;
+}
+
+- (ApptentiveRequestOperation *)requestOperationWithRequest:(id<ApptentiveRequest>)request legacyToken:(NSString *_Nullable)token delegate:(id<ApptentiveRequestOperationDelegate>)delegate {
+	NSMutableURLRequest *URLRequest = [self URLRequestWithRequest:request];
+	if (token) {
+		[URLRequest addValue:[@"OAuth " stringByAppendingString:token] forHTTPHeaderField:@"Authorization"];
+	}
+
+	ApptentiveRequestOperation *operation = [[ApptentiveRequestOperation alloc] initWithURLRequest:URLRequest delegate:delegate dataSource:self];
+	operation.request = request;
+	return operation;
+}
+
+- (NSMutableURLRequest *)URLRequestWithRequest:(id<ApptentiveRequest>)request {
 	NSURL *URL = [NSURL URLWithString:request.path relativeToURL:self.baseURL];
 
 	NSMutableURLRequest *URLRequest = [NSMutableURLRequest requestWithURL:URL];
@@ -77,16 +99,10 @@
 	[URLRequest addValue:request.apiVersion forHTTPHeaderField:@"X-API-Version"];
 	[URLRequest addValue:_apptentiveKey forHTTPHeaderField:@"APPTENTIVE-KEY"];
 	[URLRequest addValue:_apptentiveSignature forHTTPHeaderField:@"APPTENTIVE-SIGNATURE"];
-	if (authToken) {
-		[URLRequest addValue:[@"Bearer " stringByAppendingString:authToken] forHTTPHeaderField:@"Authorization"];
-	}
 	if (request.encrypted) {
 		[URLRequest addValue:@"true" forHTTPHeaderField:@"APPTENTIVE-ENCRYPTED"];
 	}
-
-	ApptentiveRequestOperation *operation = [[ApptentiveRequestOperation alloc] initWithURLRequest:URLRequest delegate:delegate dataSource:self];
-	operation.request = request;
-	return operation;
+	return URLRequest;
 }
 
 @end

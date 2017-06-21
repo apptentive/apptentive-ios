@@ -80,7 +80,7 @@ static NSString *const RemoteURLKey = @"remoteURL";
 			return nil;
 		}
 
-		_fileName = path;
+		_fileName = path.lastPathComponent;
 		_contentType = contentType;
 		_name = name;
 	}

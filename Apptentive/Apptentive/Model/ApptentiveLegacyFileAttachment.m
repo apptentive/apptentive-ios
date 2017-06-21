@@ -7,10 +7,9 @@
 //
 
 #import "ApptentiveLegacyFileAttachment.h"
-#import "ApptentiveBackend.h"
-#import "ApptentiveData.h"
+#import "ApptentiveLegacyMessage.h"
 #import "Apptentive_Private.h"
-#import "ApptentiveMessageManager.h"
+#import "ApptentiveBackend.h"
 #import <MobileCoreServices/MobileCoreServices.h>
 
 
@@ -21,61 +20,6 @@
 @dynamic message;
 @dynamic remoteURL;
 @dynamic remoteThumbnailURL;
-
-+ (void)addMissingExtensionsInContext:(NSManagedObjectContext *)context andMoveToDirectory:(NSString *)newDirectory {
-	ApptentiveAssertNotNil(context, @"Nil context when trying to add missing file extensions");
-	if (context == nil) {
-		return;
-	}
-
-	NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ATFileAttachment"];
-
-	NSError *error;
-	NSArray *allAttachments = [context executeFetchRequest:fetchRequest error:&error];
-
-	if (allAttachments == nil) {
-		ApptentiveLogError(@"Unable to fetch file attachments: %@", error);
-		return;
-	}
-
-	NSString *legacyDirectory = [Apptentive.shared.backend.supportDirectoryPath stringByAppendingPathComponent:@"attachments"];
-
-	for (ApptentiveLegacyFileAttachment *attachment in allAttachments) {
-		if (attachment.localPath.length > 0) {
-			NSString *legacyFilename = attachment.localPath;
-			NSString *legacyPath = [legacyDirectory stringByAppendingString:legacyFilename];
-
-			NSString *newFilename = legacyFilename;
-
-			if (attachment.localPath.pathExtension.length == 0 && attachment.mimeType.length > 0) {
-				[attachment.localPath stringByAppendingPathExtension:attachment.extension];
-			}
-
-			NSString *newPath = [newDirectory stringByAppendingPathComponent:newFilename];
-
-			NSError *error;
-
-			ApptentiveAssertNotNil(legacyPath, @"Legacy path must not be nil");
-			ApptentiveAssertNotNil(newPath, @"New path must not be nil");
-
-			if (legacyPath == nil) {
-				ApptentiveLogError(@"Legacy path is nil for attachment %@", attachment);
-				continue;
-			}
-
-			if (newPath == nil) {
-				ApptentiveLogError(@"New path is nil for attachment %@", attachment);
-				continue;
-			}
-
-			if ([[NSFileManager defaultManager] moveItemAtPath:legacyPath toPath:newPath error:&error]) {
-				attachment.localPath = newFilename;
-			} else {
-				ApptentiveLogError(@"Unable to move attachment file %@ (error: %@)", newFilename, error);
-			}
-		}
-	}
-}
 
 - (NSString *)extension {
 	NSString *_extension = nil;

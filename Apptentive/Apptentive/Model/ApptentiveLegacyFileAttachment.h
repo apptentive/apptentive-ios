@@ -20,6 +20,6 @@
 @property (strong, nonatomic) NSURL *remoteThumbnailURL;
 @property (strong, nonatomic) ApptentiveLegacyMessage *message;
 
-+ (void)addMissingExtensionsInContext:(NSManagedObjectContext *)context andMoveToDirectory:(NSString *)newDirectory;
+@property (readonly, nonatomic) NSString *extension;
 
 @end

@@ -22,6 +22,10 @@
 	return self;
 }
 
+- (NSString *)type {
+	return @"sdk_app_release";
+}
+
 - (NSString *)path {
 	return @"conversations/<cid>/app_release";
 }

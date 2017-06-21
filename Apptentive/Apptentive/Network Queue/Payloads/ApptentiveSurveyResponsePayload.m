@@ -32,6 +32,10 @@
 	return self;
 }
 
+- (NSString *)type {
+	return @"survey";
+}
+
 - (NSString *)path {
 	return [NSString stringWithFormat:@"conversations/<cid>/surveys/%@/responses", self.identifier];
 }

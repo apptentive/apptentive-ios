@@ -9,6 +9,7 @@
 #import "ApptentivePayload.h"
 #import "ApptentiveUtilities.h"
 #import "NSData+Encryption.h"
+#import "ApptentiveDefines.h"
 
 
 @implementation ApptentivePayload
@@ -25,8 +26,14 @@
 	return self;
 }
 
+- (NSString *)type {
+	APPTENTIVE_ABSTRACT_METHOD_CALLED
+
+	return @"";
+}
+
 - (NSString *)containerName {
-	ApptentiveAssertTrue(NO, @"Abstract method called");
+	APPTENTIVE_ABSTRACT_METHOD_CALLED
 
 	return @"";
 }
@@ -36,7 +43,7 @@
 }
 
 - (NSString *)path {
-	ApptentiveAssertTrue(NO, @"Abstract method called");
+	APPTENTIVE_ABSTRACT_METHOD_CALLED
 
 	return @"";
 }

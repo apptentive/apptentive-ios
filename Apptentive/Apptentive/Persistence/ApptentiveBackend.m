@@ -303,7 +303,6 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	migrationContext.parentContext = self.managedObjectContext;
 
 	[migrationContext performBlockAndWait:^{
-		[ApptentiveLegacyFileAttachment addMissingExtensionsInContext:migrationContext andMoveToDirectory:self.conversationManager.messageManager.attachmentDirectoryPath];
 		[ApptentiveLegacyMessage enqueueUnsentMessagesInContext:migrationContext forConversation:conversation];
 		[ApptentiveLegacyEvent enqueueUnsentEventsInContext:migrationContext forConversation:conversation];
 		[ApptentiveLegacySurveyResponse enqueueUnsentSurveyResponsesInContext:migrationContext forConversation:conversation];
@@ -471,12 +470,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 		}
 
 		if (conversation.state == ApptentiveConversationStateAnonymous) {
-			NSString *conversationIdentifier = conversation.identifier;
-			ApptentiveAssertNotNil(conversation, @"Conversation id is nil");
-
-			if (conversationIdentifier != nil) {
-				[self.payloadSender updateQueuedRequestsInContext:self.managedObjectContext missingConversationIdentifier:conversationIdentifier];
-			}
+			[self.payloadSender updateQueuedRequestsInContext:self.managedObjectContext withConversation:conversation];
 		}
 	}
 
@@ -521,7 +515,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 }
 
 - (NSString *)configurationPath {
-	return [self.supportDirectoryPath stringByAppendingPathComponent:@"configuration"];
+	return [self.supportDirectoryPath stringByAppendingPathComponent:@"configuration-v1.archive"];
 }
 
 #pragma mark - Debugging

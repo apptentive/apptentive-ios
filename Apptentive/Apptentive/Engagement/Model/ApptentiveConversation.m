@@ -287,8 +287,8 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 		_person = [[ApptentivePerson alloc] initAndMigrate];
 		_device = [[ApptentiveDevice alloc] initAndMigrate];
 		_engagement = [[ApptentiveEngagement alloc] initAndMigrate];
-        
-        _directoryName = [NSUUID UUID].UUIDString;
+
+		_directoryName = [NSUUID UUID].UUIDString;
 
 		NSData *legacyConversationData = [[NSUserDefaults standardUserDefaults] dataForKey:ATCurrentConversationPreferenceKey];
 
@@ -299,7 +299,7 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 
 		[NSKeyedUnarchiver setClass:[self class] forClassName:@"ApptentiveConversation"];
 
-        // we only need a legacy token here: jwt-token and conversation id would be fetched later
+		// we only need a legacy token here: jwt-token and conversation id would be fetched later
 		_legacyToken = legacyConversation.token;
 		_person.identifier = legacyConversation.personID;
 		_device.identifier = legacyConversation.deviceID;

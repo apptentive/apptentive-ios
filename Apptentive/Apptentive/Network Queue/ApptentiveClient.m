@@ -72,28 +72,26 @@
 	if (token) {
 		[URLRequest addValue:[@"Bearer " stringByAppendingString:token] forHTTPHeaderField:@"Authorization"];
 	}
-	
+
 	ApptentiveRequestOperation *operation = [[ApptentiveRequestOperation alloc] initWithURLRequest:URLRequest delegate:delegate dataSource:self];
 	operation.request = request;
 	return operation;
 }
 
 - (ApptentiveRequestOperation *)requestOperationWithRequest:(id<ApptentiveRequest>)request legacyToken:(NSString *_Nullable)token delegate:(id<ApptentiveRequestOperationDelegate>)delegate {
-	
 	NSMutableURLRequest *URLRequest = [self URLRequestWithRequest:request];
 	if (token) {
 		[URLRequest addValue:[@"OAuth " stringByAppendingString:token] forHTTPHeaderField:@"Authorization"];
 	}
-	
+
 	ApptentiveRequestOperation *operation = [[ApptentiveRequestOperation alloc] initWithURLRequest:URLRequest delegate:delegate dataSource:self];
 	operation.request = request;
 	return operation;
-	
 }
 
 - (NSMutableURLRequest *)URLRequestWithRequest:(id<ApptentiveRequest>)request {
 	NSURL *URL = [NSURL URLWithString:request.path relativeToURL:self.baseURL];
-	
+
 	NSMutableURLRequest *URLRequest = [NSMutableURLRequest requestWithURL:URL];
 	URLRequest.HTTPBody = request.payload;
 	URLRequest.HTTPMethod = request.method;

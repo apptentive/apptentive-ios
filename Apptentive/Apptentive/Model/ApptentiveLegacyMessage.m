@@ -57,13 +57,13 @@
 	ApptentiveAssertNotNil(messageManager, @"Need an active message manager to migrate");
 
 	for (ApptentiveLegacyMessage *legacyMessage in unsentMessages) {
-        NSInteger pendingState = legacyMessage.pendingState.integerValue;
-        
-        // only migrate 'sending' and 'failed' messages (delete the rest)
-        if (pendingState == ATPendingMessageStateSending || pendingState == ATPendingMessageStateError) {
-            NSMutableArray *attachments = [NSMutableArray arrayWithCapacity:legacyMessage.attachments.count];
-            for (ApptentiveLegacyFileAttachment *legacyAttachment in legacyMessage.attachments) {
- 			// Move the file from its current location into the conversation's container.
+		NSInteger pendingState = legacyMessage.pendingState.integerValue;
+
+		// only migrate 'sending' and 'failed' messages (delete the rest)
+		if (pendingState == ATPendingMessageStateSending || pendingState == ATPendingMessageStateError) {
+			NSMutableArray *attachments = [NSMutableArray arrayWithCapacity:legacyMessage.attachments.count];
+			for (ApptentiveLegacyFileAttachment *legacyAttachment in legacyMessage.attachments) {
+				// Move the file from its current location into the conversation's container.
 				NSString *oldPath = [legacyAttachmentDirectoryPath stringByAppendingPathComponent:legacyAttachment.localPath];
 
 				// QLPreviewController needs a valid extension. Try to add one if it's missing.
@@ -78,28 +78,28 @@
 					ApptentiveLogError(@"Unable to move attachment file to %@: %@", newPath, error);
 					continue;
 				}
-				
-                ApptentiveAttachment *attachment = [[ApptentiveAttachment alloc] initWithPath:newPath contentType:legacyAttachment.mimeType name:legacyAttachment.name];
 
-                if (attachment != nil) {
-                    [attachments addObject:attachment];
-                }
-            }
+				ApptentiveAttachment *attachment = [[ApptentiveAttachment alloc] initWithPath:newPath contentType:legacyAttachment.mimeType name:legacyAttachment.name];
 
-            NSDictionary *customData = @{};
-            if (legacyMessage.customData) {
-                customData = [NSKeyedUnarchiver unarchiveObjectWithData:legacyMessage.customData];
-            };
-            
-            ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:legacyMessage.body attachments:attachments automated:legacyMessage.automated.boolValue customData:customData];
+				if (attachment != nil) {
+					[attachments addObject:attachment];
+				}
+			}
 
-            ApptentiveMessagePayload *payload = [[ApptentiveMessagePayload alloc] initWithMessage:message];
-            ApptentiveAssertNotNil(payload, @"Failed to create a message payload");
+			NSDictionary *customData = @{};
+			if (legacyMessage.customData) {
+				customData = [NSKeyedUnarchiver unarchiveObjectWithData:legacyMessage.customData];
+			};
 
-            if (payload != nil) {
-                [ApptentiveSerialRequest enqueuePayload:payload forConversation:conversation usingAuthToken:conversation.token inContext:context];
-            }
-        }
+			ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:legacyMessage.body attachments:attachments automated:legacyMessage.automated.boolValue customData:customData];
+
+			ApptentiveMessagePayload *payload = [[ApptentiveMessagePayload alloc] initWithMessage:message];
+			ApptentiveAssertNotNil(payload, @"Failed to create a message payload");
+
+			if (payload != nil) {
+				[ApptentiveSerialRequest enqueuePayload:payload forConversation:conversation usingAuthToken:conversation.token inContext:context];
+			}
+		}
 
 		[context deleteObject:legacyMessage];
 	}

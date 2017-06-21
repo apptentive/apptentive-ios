@@ -227,6 +227,8 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 	return self.interaction.configuration[@"profile"][@"edit"][@"save_button"];
 }
 
+#pragma mark - Messages
+
 - (BOOL)hasNonContextMessages {
 	if (self.numberOfMessageGroups == 0 || [self numberOfMessagesInGroup:0] == 0) {
 		return NO;

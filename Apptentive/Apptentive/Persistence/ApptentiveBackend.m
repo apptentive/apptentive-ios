@@ -470,7 +470,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 		}
 
 		if (conversation.state == ApptentiveConversationStateAnonymous) {
-            [self.payloadSender updateQueuedRequestsInContext:self.managedObjectContext withConversation:conversation];
+			[self.payloadSender updateQueuedRequestsInContext:self.managedObjectContext withConversation:conversation];
 		}
 	}
 

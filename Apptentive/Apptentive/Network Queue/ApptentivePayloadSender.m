@@ -231,18 +231,18 @@
 #pragma mark - Update missing conversation IDs
 
 - (void)updateQueuedRequestsInContext:(NSManagedObjectContext *)context withConversation:(ApptentiveConversation *)conversation {
-    ApptentiveAssertNotNil(conversation, @"Conversation is nil");
-    
-    NSString *conversationToken = conversation.token;
-    ApptentiveAssertTrue(conversationToken.length > 0, @"Conversation token is nil or empty");
-    
-    NSString *conversationIdentifier = conversation.identifier;
-    ApptentiveAssertTrue(conversationIdentifier.length > 0, @"Conversation identifier is nil or empty");
-    
-    if (conversationToken.length == 0 || conversationIdentifier.length == 0) {
-        return;
-    }
-    
+	ApptentiveAssertNotNil(conversation, @"Conversation is nil");
+
+	NSString *conversationToken = conversation.token;
+	ApptentiveAssertTrue(conversationToken.length > 0, @"Conversation token is nil or empty");
+
+	NSString *conversationIdentifier = conversation.identifier;
+	ApptentiveAssertTrue(conversationIdentifier.length > 0, @"Conversation identifier is nil or empty");
+
+	if (conversationToken.length == 0 || conversationIdentifier.length == 0) {
+		return;
+	}
+
 	// create a child context on a private concurrent queue
 	NSManagedObjectContext *childContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
 

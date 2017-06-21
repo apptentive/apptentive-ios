@@ -28,7 +28,7 @@
 
 - (NSString *)type {
 	APPTENTIVE_ABSTRACT_METHOD_CALLED
-	
+
 	return @"";
 }
 

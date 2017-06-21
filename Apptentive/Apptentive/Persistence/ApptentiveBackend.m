@@ -515,7 +515,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 }
 
 - (NSString *)configurationPath {
-	return [self.supportDirectoryPath stringByAppendingPathComponent:@"configuration"];
+	return [self.supportDirectoryPath stringByAppendingPathComponent:@"configuration-v1.archive"];
 }
 
 #pragma mark - Debugging

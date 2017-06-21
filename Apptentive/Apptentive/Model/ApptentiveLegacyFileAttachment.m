@@ -10,6 +10,7 @@
 #import "ApptentiveLegacyMessage.h"
 #import "Apptentive_Private.h"
 #import "ApptentiveBackend.h"
+#import <MobileCoreServices/MobileCoreServices.h>
 
 
 @implementation ApptentiveLegacyFileAttachment
@@ -20,49 +21,32 @@
 @dynamic remoteURL;
 @dynamic remoteThumbnailURL;
 
-+ (void)deleteCachedAttachmentsInContext:(NSManagedObjectContext *)context {
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"ATFileAttachment"];
+- (NSString *)extension {
+	NSString *_extension = nil;
 
-    NSError *error;
-    NSArray *cachedAttachments = [context executeFetchRequest:request error:&error];
-    
-    ApptentiveAssertNotNil(cachedAttachments, @"Error fetching cached attachments: %@", error);
-    
-    NSMutableSet *filesToSave = [NSMutableSet set];
-    for (ApptentiveLegacyFileAttachment *attachment in cachedAttachments) {
-        NSInteger pendingState = attachment.message.pendingState.integerValue;
-        
-        if (pendingState == ATPendingMessageStateSending || pendingState == ATPendingMessageStateError) {
-            [filesToSave addObject:attachment.localPath];
-        } else {
-            [context deleteObject:attachment];
-        }
-    }
-    
-    NSArray *cachedAttachmentFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:[self legacyDirectory] error:&error];
-    
-    ApptentiveAssertNotNil(cachedAttachmentFiles, @"Unable to get contents of attachments directory (%@): %@", [self legacyDirectory], error);
-    
-    for (NSString *attachmentFile in cachedAttachmentFiles) {
-        if ([filesToSave containsObject:attachmentFile]) {
-            continue;
-        }
-        
-        NSString *fullPath = [[self legacyDirectory] stringByAppendingPathComponent:attachmentFile];
-        if (![[NSFileManager defaultManager] removeItemAtPath:fullPath error:&error]) {
-            ApptentiveLogError(@"Unable to remove cached attachment file (%@): %@", fullPath, error);
-        }
-    }
-    
-    NSString *draftAttachmentsPath = [Apptentive.shared.backend.supportDirectoryPath stringByAppendingPathComponent:@"DraftAttachments"];
+	if (self.mimeType) {
+		CFStringRef uti = UTTypeCreatePreferredIdentifierForTag(kUTTagClassMIMEType, (__bridge CFStringRef _Nonnull)(self.mimeType), NULL);
+		CFStringRef cf_extension = UTTypeCopyPreferredTagWithClass(uti, kUTTagClassFilenameExtension);
+		CFRelease(uti);
+		if (cf_extension) {
+			_extension = [(__bridge NSString *)cf_extension copy];
+			CFRelease(cf_extension);
+		}
+	}
 
-    if (![[NSFileManager defaultManager] removeItemAtPath:draftAttachmentsPath error:&error]) {
-        ApptentiveLogError(@"Unable to delete draft attachments file (%@): %@", draftAttachmentsPath, error);
-    }
-}
+	if (_extension.length == 0 && self.name) {
+		_extension = self.name.pathExtension;
+	}
 
-+ (NSString *)legacyDirectory {
-    return [Apptentive.shared.backend.supportDirectoryPath stringByAppendingPathComponent:@"attachments"];
+	if (_extension.length == 0 && self.remoteURL) {
+		_extension = self.remoteURL.pathExtension;
+	}
+
+	if (_extension.length == 0) {
+		_extension = @"file";
+	}
+
+	return _extension;
 }
 
 @end

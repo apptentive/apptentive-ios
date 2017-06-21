@@ -20,6 +20,6 @@
 @property (strong, nonatomic) NSURL *remoteThumbnailURL;
 @property (strong, nonatomic) ApptentiveLegacyMessage *message;
 
-+ (void)deleteCachedAttachmentsInContext:(NSManagedObjectContext *)context;
+@property (readonly, nonatomic) NSString *extension;
 
 @end

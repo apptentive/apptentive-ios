@@ -46,6 +46,7 @@
 @property (readonly, nonatomic) NSURLCache *imageCache;
 
 @property (copy, nonatomic) NSDictionary *currentCustomData;
+@property (copy, nonatomic) ApptentiveAuthenticationFailureCallback authenticationFailureCallback;
 
 /**
  Initializes a new backend object.

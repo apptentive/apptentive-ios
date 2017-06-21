@@ -30,6 +30,8 @@ FOUNDATION_EXPORT const unsigned char ApptentiveVersionString[];
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef void(^ApptentiveAuthenticationFailureCallback)(NSInteger code, NSString *errorMessage);
+
 @protocol ApptentiveDelegate
 , ApptentiveStyle;
 
@@ -606,6 +608,9 @@ Returns a Boolean value indicating whether the given event will cause an Interac
  so that it can be resumed using the logIn: method.
  */
 - (void)logOut;
+
+/** TBD  */
+@property (copy, nonatomic) ApptentiveAuthenticationFailureCallback authenticationFailureCallback;
 
 ///---------------------------------
 /// @name Logging System

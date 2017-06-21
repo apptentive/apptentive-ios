@@ -653,6 +653,14 @@ static Apptentive *_sharedInstance;
 	[self.backend.conversationManager endActiveConversation];
 }
 
+- (ApptentiveAuthenticationFailureCallback)authenticationFailureCallback {
+    return self.backend.authenticationFailureCallback;
+}
+
+- (void)setAuthenticationFailureCallback:(ApptentiveAuthenticationFailureCallback)authenticationFailureCallback {
+    self.backend.authenticationFailureCallback = authenticationFailureCallback;
+}
+
 #pragma mark -
 #pragma mark Logging System
 

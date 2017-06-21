@@ -7,7 +7,7 @@
 //
 
 #import "ApptentiveLegacyConversationRequest.h"
-
+#import "ApptentiveConversation.h"
 
 @implementation ApptentiveLegacyConversationRequest
 
@@ -37,5 +37,8 @@
 	return @{}; // TODO: pass params?
 }
 
+- (NSString *)conversationIdentifier {
+    return @"#INVALID"; // FIXME: we need a not-nil value to keep logic consistent
+}
 
 @end

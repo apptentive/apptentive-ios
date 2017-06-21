@@ -40,4 +40,8 @@
 	};
 }
 
+- (NSString *)conversationIdentifier {
+    return _conversation.identifier;
+}
+
 @end

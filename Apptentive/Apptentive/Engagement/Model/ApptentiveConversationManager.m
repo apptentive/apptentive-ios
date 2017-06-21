@@ -145,6 +145,9 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		[self fetchLegacyConversation:legacyConversation];
 		[self createMessageManagerForConversation:legacyConversation];
 		[Apptentive.shared.backend migrateLegacyCoreDataAndTaskQueueForConversation:legacyConversation];
+
+		[self migrateEngagementManifest];
+
 		return legacyConversation;
 	}
 
@@ -775,6 +778,14 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	}
 
 	[self.client.operationQueue addOperation:self.manifestOperation];
+}
+
+- (void)migrateEngagementManifest {
+	_manifest = [[ApptentiveEngagementManifest alloc] initWithCachePath:self.storagePath userDefaults:[NSUserDefaults standardUserDefaults]];
+
+	if (self.manifest) {
+		[ApptentiveEngagementManifest deleteMigratedDataFromCachePath:self.storagePath];
+	}
 }
 
 - (void)scheduleConversationSave {

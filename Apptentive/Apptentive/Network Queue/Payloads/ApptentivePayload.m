@@ -14,6 +14,8 @@
 
 @implementation ApptentivePayload
 
+@synthesize conversationIdentifier = _conversationIdentifier;
+
 - (instancetype)init {
 	self = [super init];
 	if (self) {

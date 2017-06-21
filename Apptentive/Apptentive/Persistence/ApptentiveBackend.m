@@ -36,6 +36,7 @@
 NSString *const ApptentiveAuthentificationDidFailNotification = @"ApptentiveAuthentificationDidFailNotification";
 NSString *const ApptentiveAuthentificationDidFailNotificationKeyErrorType = @"errorType";
 NSString *const ApptentiveAuthentificationDidFailNotificationKeyErrorMessage = @"errorMessage";
+NSString *const ApptentiveAuthentificationDidFailNotificationKeyConversationIdentifier = @"conversationIdentifier";
 
 
 typedef NS_ENUM(NSInteger, ATBackendState) {
@@ -498,6 +499,14 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 
 - (void)authentificationDidFailNotification:(NSNotification *)notification {
     if (self.conversationManager.activeConversation.state == ApptentiveConversationStateLoggedIn && self.authenticationFailureCallback) {
+        
+        NSString *conversationIdentifier = ApptentiveDictionaryGetString(notification.userInfo, ApptentiveAuthentificationDidFailNotificationKeyConversationIdentifier);
+        
+        if (![conversationIdentifier isEqualToString:self.conversationManager.activeConversation.identifier]) {
+            ApptentiveLogDebug(@"Conversation identifier mismatch");
+            return;
+        }
+        
         NSString *errorType = ApptentiveDictionaryGetString(notification.userInfo, ApptentiveAuthentificationDidFailNotificationKeyErrorType);
         NSString *errorMessage = ApptentiveDictionaryGetString(notification.userInfo, ApptentiveAuthentificationDidFailNotificationKeyErrorMessage);
         ApptentiveAuthenticationFailureReason reason = parseAuthenticationFailureReason(errorType);

@@ -11,6 +11,8 @@
 
 @implementation ApptentiveConversationBaseRequest
 
+@synthesize conversationIdentifier = _conversationIdentifier;
+
 - (nullable instancetype)init {
 	ApptentiveAssertFail(@"Attempted to create an instance of ApptentiveConversationBaseRequest without specifying a conversation id");
 	return nil;

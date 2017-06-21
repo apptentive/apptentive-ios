@@ -7,6 +7,7 @@
 //
 
 #import "ApptentiveRequest.h"
+#import "ApptentiveDefines.h"
 
 
 @implementation ApptentiveRequest
@@ -16,7 +17,7 @@
 }
 
 - (NSString *)path {
-	ApptentiveAssertTrue(NO, @"Abstract method called");
+	APPTENTIVE_ABSTRACT_METHOD_CALLED
 
 	return @"";
 }
@@ -48,6 +49,11 @@
 
 - (BOOL)encrypted {
 	return NO;
+}
+
+- (NSString *)conversationIdentifier {
+    APPTENTIVE_ABSTRACT_METHOD_CALLED
+    return nil;
 }
 
 @end

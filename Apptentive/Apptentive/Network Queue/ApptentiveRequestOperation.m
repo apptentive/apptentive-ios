@@ -236,12 +236,19 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
         return;
     }
     
+    NSString *conversationIdentifier = self.request.conversationIdentifier;
+    ApptentiveAssertTrue(conversationIdentifier.length > 0, @"Conversation identifier is nil or empty");
+    if (conversationIdentifier.length == 0) {
+        return;
+    }
+    
     NSString *errorType = ApptentiveDictionaryGetString(jsonObject, @"error_type") ?: @"UNKNOWN";
     NSString *errorMessage = ApptentiveDictionaryGetString(jsonObject, @"error") ?: @"Unknown error";
     
     [[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveAuthentificationDidFailNotification object:nil userInfo:@{
            ApptentiveAuthentificationDidFailNotificationKeyErrorType : errorType,
-           ApptentiveAuthentificationDidFailNotificationKeyErrorMessage : errorMessage
+           ApptentiveAuthentificationDidFailNotificationKeyErrorMessage : errorMessage,
+           ApptentiveAuthentificationDidFailNotificationKeyConversationIdentifier : conversationIdentifier
     }];
 }
 

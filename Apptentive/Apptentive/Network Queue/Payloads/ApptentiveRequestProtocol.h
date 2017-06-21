@@ -18,6 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (readonly, nonatomic) NSString *contentType;
 @property (readonly, nullable, nonatomic) NSData *payload;
 @property (readonly, nonatomic) BOOL encrypted;
+@property (readonly, nonatomic) NSString *conversationIdentifier;
 
 @end
 

@@ -17,6 +17,7 @@
 #import "ApptentiveMessagePayload.h"
 #import "ApptentivePerson.h"
 #import "ApptentiveMessageManager.h"
+#import "ApptentiveMessageSender.h"
 
 
 @implementation ApptentiveLegacyMessage
@@ -86,7 +87,22 @@
 			customData = [NSKeyedUnarchiver unarchiveObjectWithData:legacyMessage.customData];
 		};
 
-		ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:legacyMessage.body attachments:attachments senderIdentifier:messageManager.localUserIdentifier automated:legacyMessage.automated.boolValue customData:customData];
+		NSString *senderName = nil;
+		NSString *senderIdentifier = nil;
+		NSURL *profilePhotoURL = nil;
+
+		if (legacyMessage.sender) {
+			senderName = legacyMessage.sender.name;
+			senderIdentifier = legacyMessage.sender.apptentiveID;
+			profilePhotoURL = profilePhotoURL != nil ? [NSURL URLWithString:legacyMessage.sender.profilePhotoURL] : nil;
+		} else if (legacyMessage.sentByUser) {
+			senderIdentifier = messageManager.localUserIdentifier;
+		}
+
+
+		ApptentiveMessageSender *sender = [[ApptentiveMessageSender alloc] initWithName:senderName identifier:senderIdentifier profilePhotoURL:profilePhotoURL];
+
+		ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:legacyMessage.body attachments:attachments sender:sender automated:legacyMessage.automated.boolValue customData:customData];
 		[message updateWithLocalIdentifier:legacyMessage.pendingMessageID];
 
 		[messageManager appendMessage:message];

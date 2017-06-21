@@ -78,12 +78,19 @@ static NSString *const CustomDataKey = @"customData";
 	return self;
 }
 
-- (nullable instancetype)initWithBody:(NSString *)body attachments:(NSArray *)attachments automated:(BOOL)automated customData:(NSDictionary *)customData {
+- (nullable instancetype)initWithBody:(NSString *)body attachments:(NSArray *)attachments senderIdentifier:(NSString *)senderIdentifier automated:(BOOL)automated customData:(NSDictionary *)customData {
 	self = [super init];
 
 	if (self) {
+		if (senderIdentifier.length == 0) {
+			ApptentiveLogError(@"Can't init %@: sender identifier is nil or empty", NSStringFromClass([self class]));
+			return nil;
+		}
+
 		_body = body;
 		_attachments = attachments ?: @[];
+		_sender = [[ApptentiveMessageSender alloc] initWithName:nil identifier:senderIdentifier profilePhotoURL:nil];
+		ApptentiveAssertNotNil(_sender, @"Apptentive message sender is nil");
 
 		_automated = automated;
 		_customData = customData;

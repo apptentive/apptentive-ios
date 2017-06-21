@@ -55,6 +55,8 @@ extern NSString *const ApptentivePushTokenPreferenceKey;
  localized strings out of the resource bundle. */
 extern NSString *ApptentiveLocalizedString(NSString *key, NSString *comment);
 
+extern ApptentiveAuthenticationFailureReason parseAuthenticationFailureReason(NSString *reason);
+
 
 @interface ApptentiveNavigationController (AboutView)
 

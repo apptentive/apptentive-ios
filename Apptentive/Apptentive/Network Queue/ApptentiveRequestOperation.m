@@ -9,6 +9,9 @@
 #import "ApptentiveRequestOperation.h"
 #import "ApptentiveRequestProtocol.h"
 #import "ApptentiveSerialRequest.h"
+#import "ApptentiveJSONSerialization.h"
+#import "ApptentiveSafeCollections.h"
+#import "ApptentiveBackend.h"
 
 
 @interface ApptentiveRequestOperation () {
@@ -121,6 +124,11 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 			} else {
 				[self processHTTPError:error withResponse:URLResponse responseData:data];
 			}
+            
+            // check if request failed due to an authentification failure
+            if (URLResponse.statusCode == 401) {
+                [self processAuthentificationFailureResponseData:data];
+            }
 		}
 	}];
 
@@ -213,6 +221,28 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(self.dataSource.backoffDelay * NSEC_PER_SEC)), dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0), ^{
 		[self startTask];
 	});
+}
+
+- (void)processAuthentificationFailureResponseData:(NSData *)data {
+    NSError *error;
+    id jsonObject = [ApptentiveJSONSerialization JSONObjectWithData:data error:&error];
+    if (error) {
+        ApptentiveLogError(@"Error while parsing JSON: %@", error);
+        return;
+    }
+    
+    if (![jsonObject isKindOfClass:[NSDictionary class]]) {
+        ApptentiveLogError(@"Unexpected JSON object: %@", jsonObject);
+        return;
+    }
+    
+    NSString *errorType = ApptentiveDictionaryGetString(jsonObject, @"error_type") ?: @"UNKNOWN";
+    NSString *errorMessage = ApptentiveDictionaryGetString(jsonObject, @"error") ?: @"Unknown error";
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveAuthentificationDidFailNotification object:nil userInfo:@{
+           ApptentiveAuthentificationDidFailNotificationKeyErrorType : errorType,
+           ApptentiveAuthentificationDidFailNotificationKeyErrorMessage : errorMessage
+    }];
 }
 
 - (void)completeOperation {

@@ -26,11 +26,16 @@
 #import "ApptentiveMessageManager.h"
 #import "ApptentiveConfigurationRequest.h"
 #import "ApptentivePayloadSender.h"
+#import "ApptentiveSafeCollections.h"
 
 #import "ApptentiveLegacyEvent.h"
 #import "ApptentiveLegacySurveyResponse.h"
 #import "ApptentiveLegacyMessage.h"
 #import "ApptentiveLegacyFileAttachment.h"
+
+NSString *const ApptentiveAuthentificationDidFailNotification = @"ApptentiveAuthentificationDidFailNotification";
+NSString *const ApptentiveAuthentificationDidFailNotificationKeyErrorType = @"errorType";
+NSString *const ApptentiveAuthentificationDidFailNotificationKeyErrorMessage = @"errorMessage";
 
 
 typedef NS_ENUM(NSInteger, ATBackendState) {
@@ -99,6 +104,8 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkStatusChanged:) name:ApptentiveReachabilityStatusChanged object:nil];
 
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateMessageCheckingTimer) name:ApptentiveInteractionsDidUpdateNotification object:nil];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(authentificationDidFailNotification:) name:ApptentiveAuthentificationDidFailNotification object:nil];
 
 		[_operationQueue addOperationWithBlock:^{
 			[self createSupportDirectoryIfNeeded];
@@ -485,6 +492,17 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 			[self scheduleDeviceUpdate];
 		}
 	}
+}
+
+#pragma mark - Authentification
+
+- (void)authentificationDidFailNotification:(NSNotification *)notification {
+    if (self.conversationManager.activeConversation.state == ApptentiveConversationStateLoggedIn && self.authenticationFailureCallback) {
+        NSString *errorType = ApptentiveDictionaryGetString(notification.userInfo, ApptentiveAuthentificationDidFailNotificationKeyErrorType);
+        NSString *errorMessage = ApptentiveDictionaryGetString(notification.userInfo, ApptentiveAuthentificationDidFailNotificationKeyErrorMessage);
+        ApptentiveAuthenticationFailureReason reason = parseAuthenticationFailureReason(errorType);
+        self.authenticationFailureCallback(reason, errorMessage);
+    }
 }
 
 #pragma mark - Paths

@@ -703,3 +703,40 @@ NSString *ApptentiveLocalizedString(NSString *key, NSString *comment) {
 	NSString *result = [bundle localizedStringForKey:key value:key table:nil];
 	return result;
 }
+
+ApptentiveAuthenticationFailureReason parseAuthenticationFailureReason(NSString *reason) {
+    if ([reason isEqualToString:@"INVALID_ALGORITHM"]) {
+        return ApptentiveAuthenticationFailureReasonInvalidAlgorithm;
+    }
+    if ([reason isEqualToString:@"MALFORMED_TOKEN"]) {
+        return ApptentiveAuthenticationFailureReasonMalformedToken;
+    }
+    if ([reason isEqualToString:@"INVALID_TOKEN"]) {
+        return ApptentiveAuthenticationFailureReasonInvalidToken;
+    }
+    if ([reason isEqualToString:@"MISSING_SUB_CLAIM"]) {
+        return ApptentiveAuthenticationFailureReasonMissingSubClaim;
+    }
+    if ([reason isEqualToString:@"MISMATCHED_SUB_CLAIM"]) {
+        return ApptentiveAuthenticationFailureReasonMismatchedSubClaim;
+    }
+    if ([reason isEqualToString:@"INVALID_SUB_CLAIM"]) {
+        return ApptentiveAuthenticationFailureReasonInvalidSubClaim;
+    }
+    if ([reason isEqualToString:@"EXPIRED_TOKEN"]) {
+        return ApptentiveAuthenticationFailureReasonExpiredToken;
+    }
+    if ([reason isEqualToString:@"REVOKED_TOKEN"]) {
+        return ApptentiveAuthenticationFailureReasonRevokedToken;
+    }
+    if ([reason isEqualToString:@"MISSING_APP_KEY"]) {
+        return ApptentiveAuthenticationFailureReasonMissingAppKey;
+    }
+    if ([reason isEqualToString:@"MISSING_APP_SIGNATURE"]) {
+        return ApptentiveAuthenticationFailureReasonMissingAppSignature;
+    }
+    if ([reason isEqualToString:@"INVALID_KEY_SIGNATURE_PAIR"]) {
+        return ApptentiveAuthenticationFailureReasonInvalidKeySignaturePair;
+    }
+    return ApptentiveAuthenticationFailureReasonUnknown;
+}

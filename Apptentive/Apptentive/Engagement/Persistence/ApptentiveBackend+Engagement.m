@@ -113,9 +113,14 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 
 - (BOOL)engageCodePoint:(NSString *)codePoint fromInteraction:(ApptentiveInteraction *)fromInteraction userInfo:(NSDictionary *)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData fromViewController:(UIViewController *)viewController {
 	ApptentiveLogInfo(@"Engage Apptentive event: %@", codePoint);
-	if (![self isReady]) {
+    if (![self isReady]) {
 		return NO;
 	}
+    
+    if (self.conversationManager.activeConversation == nil) {
+        ApptentiveLogWarning(@"Attempting to engage event with no active conversation.");
+        return NO;
+    }
 
 	[self addMetricWithName:codePoint fromInteraction:fromInteraction info:userInfo customData:customData extendedData:extendedData];
 

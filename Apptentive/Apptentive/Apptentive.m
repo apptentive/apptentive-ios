@@ -163,6 +163,11 @@ static Apptentive *_sharedInstance;
 }
 
 - (void)sendAttachmentText:(NSString *)text {
+    if (self.backend.conversationManager.activeConversation == nil) {
+        ApptentiveLogError(@"Attempting to send message with no active conversation.");
+        return;
+    }
+    
 	ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:text attachments:nil automated:NO customData:nil];
 	ApptentiveAssertNotNil(message, @"Message is nil");
 
@@ -172,7 +177,12 @@ static Apptentive *_sharedInstance;
 }
 
 - (void)sendAttachmentImage:(UIImage *)image {
-	if (image == nil) {
+    if (self.backend.conversationManager.activeConversation == nil) {
+        ApptentiveLogError(@"Attempting to send message with no active conversation.");
+        return;
+    }
+
+    if (image == nil) {
 		ApptentiveLogError(@"Unable to send image attachment: image is nil");
 		return;
 	}
@@ -196,7 +206,12 @@ static Apptentive *_sharedInstance;
 }
 
 - (void)sendAttachmentFile:(NSData *)fileData withMimeType:(NSString *)mimeType {
-	if (fileData == nil) {
+    if (self.backend.conversationManager.activeConversation == nil) {
+        ApptentiveLogError(@"Attempting to send message with no active conversation.");
+        return;
+    }
+
+    if (fileData == nil) {
 		ApptentiveLogError(@"Unable to send attachment file: file data is nil");
 		return;
 	}

@@ -74,10 +74,10 @@ class PayloadTests: XCTestCase {
 	}
 
 	func testLogoutPayload() {
-		let payload = ApptentiveLogoutPayload(token: "abc123")
+		let payload = ApptentiveLogoutPayload(conversationToken: "abc123")
 
 		do {
-			if let JSONDictionary = try JSONSerialization.jsonObject(with: payload.payload!, options: []) as? [String: Any] {
+			if let JSONDictionary = try JSONSerialization.jsonObject(with: (payload?.payload!)!, options: []) as? [String: Any] {
 				XCTAssertEqual(JSONDictionary["token"] as? String, "abc123")
 			} else {
 				XCTFail("can't decode JSON")

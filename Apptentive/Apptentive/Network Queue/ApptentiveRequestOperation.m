@@ -125,9 +125,9 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 				[self processHTTPError:error withResponse:URLResponse responseData:data];
 			}
             
-            // check if request failed due to an authentification failure
+            // check if request failed due to an authentication failure
             if (URLResponse.statusCode == 401) {
-                [self processAuthentificationFailureResponseData:data];
+                [self processAuthenticationFailureResponseData:data];
             }
 		}
 	}];
@@ -223,7 +223,7 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 	});
 }
 
-- (void)processAuthentificationFailureResponseData:(NSData *)data {
+- (void)processAuthenticationFailureResponseData:(NSData *)data {
     NSError *error;
     id jsonObject = [ApptentiveJSONSerialization JSONObjectWithData:data error:&error];
     if (error) {
@@ -245,10 +245,10 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
     NSString *errorType = ApptentiveDictionaryGetString(jsonObject, @"error_type") ?: @"UNKNOWN";
     NSString *errorMessage = ApptentiveDictionaryGetString(jsonObject, @"error") ?: @"Unknown error";
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveAuthentificationDidFailNotification object:nil userInfo:@{
-           ApptentiveAuthentificationDidFailNotificationKeyErrorType : errorType,
-           ApptentiveAuthentificationDidFailNotificationKeyErrorMessage : errorMessage,
-           ApptentiveAuthentificationDidFailNotificationKeyConversationIdentifier : conversationIdentifier
+    [[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveAuthenticationDidFailNotification object:nil userInfo:@{
+           ApptentiveAuthenticationDidFailNotificationKeyErrorType : errorType,
+           ApptentiveAuthenticationDidFailNotificationKeyErrorMessage : errorMessage,
+           ApptentiveAuthenticationDidFailNotificationKeyConversationIdentifier : conversationIdentifier
     }];
 }
 

@@ -13,10 +13,10 @@
 #import "ApptentiveConversationManager.h"
 #import "ApptentiveClient.h"
 
-extern NSString *const ApptentiveAuthentificationDidFailNotification;
-extern NSString *const ApptentiveAuthentificationDidFailNotificationKeyErrorType;
-extern NSString *const ApptentiveAuthentificationDidFailNotificationKeyErrorMessage;
-extern NSString *const ApptentiveAuthentificationDidFailNotificationKeyConversationIdentifier;
+extern NSString *const ApptentiveAuthenticationDidFailNotification;
+extern NSString *const ApptentiveAuthenticationDidFailNotificationKeyErrorType;
+extern NSString *const ApptentiveAuthenticationDidFailNotificationKeyErrorMessage;
+extern NSString *const ApptentiveAuthenticationDidFailNotificationKeyConversationIdentifier;
 
 @class ApptentiveConversation, ApptentiveEngagementManifest, ApptentiveAppConfiguration, ApptentiveMessageCenterViewController, ApptentiveMessageManager, ApptentivePayloadSender;
 

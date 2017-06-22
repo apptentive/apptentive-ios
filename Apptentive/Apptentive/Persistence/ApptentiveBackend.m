@@ -33,10 +33,10 @@
 #import "ApptentiveLegacyMessage.h"
 #import "ApptentiveLegacyFileAttachment.h"
 
-NSString *const ApptentiveAuthentificationDidFailNotification = @"ApptentiveAuthentificationDidFailNotification";
-NSString *const ApptentiveAuthentificationDidFailNotificationKeyErrorType = @"errorType";
-NSString *const ApptentiveAuthentificationDidFailNotificationKeyErrorMessage = @"errorMessage";
-NSString *const ApptentiveAuthentificationDidFailNotificationKeyConversationIdentifier = @"conversationIdentifier";
+NSString *const ApptentiveAuthenticationDidFailNotification = @"ApptentiveAuthenticationDidFailNotification";
+NSString *const ApptentiveAuthenticationDidFailNotificationKeyErrorType = @"errorType";
+NSString *const ApptentiveAuthenticationDidFailNotificationKeyErrorMessage = @"errorMessage";
+NSString *const ApptentiveAuthenticationDidFailNotificationKeyConversationIdentifier = @"conversationIdentifier";
 
 
 typedef NS_ENUM(NSInteger, ATBackendState) {
@@ -106,7 +106,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateMessageCheckingTimer) name:ApptentiveInteractionsDidUpdateNotification object:nil];
         
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(authentificationDidFailNotification:) name:ApptentiveAuthentificationDidFailNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(authenticationDidFailNotification:) name:ApptentiveAuthenticationDidFailNotification object:nil];
 
 		[_operationQueue addOperationWithBlock:^{
 			[self createSupportDirectoryIfNeeded];
@@ -495,20 +495,20 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	}
 }
 
-#pragma mark - Authentification
+#pragma mark - Authentication
 
-- (void)authentificationDidFailNotification:(NSNotification *)notification {
+- (void)authenticationDidFailNotification:(NSNotification *)notification {
     if (self.conversationManager.activeConversation.state == ApptentiveConversationStateLoggedIn && self.authenticationFailureCallback) {
         
-        NSString *conversationIdentifier = ApptentiveDictionaryGetString(notification.userInfo, ApptentiveAuthentificationDidFailNotificationKeyConversationIdentifier);
+        NSString *conversationIdentifier = ApptentiveDictionaryGetString(notification.userInfo, ApptentiveAuthenticationDidFailNotificationKeyConversationIdentifier);
         
         if (![conversationIdentifier isEqualToString:self.conversationManager.activeConversation.identifier]) {
             ApptentiveLogDebug(@"Conversation identifier mismatch");
             return;
         }
         
-        NSString *errorType = ApptentiveDictionaryGetString(notification.userInfo, ApptentiveAuthentificationDidFailNotificationKeyErrorType);
-        NSString *errorMessage = ApptentiveDictionaryGetString(notification.userInfo, ApptentiveAuthentificationDidFailNotificationKeyErrorMessage);
+        NSString *errorType = ApptentiveDictionaryGetString(notification.userInfo, ApptentiveAuthenticationDidFailNotificationKeyErrorType);
+        NSString *errorMessage = ApptentiveDictionaryGetString(notification.userInfo, ApptentiveAuthenticationDidFailNotificationKeyErrorMessage);
         ApptentiveAuthenticationFailureReason reason = parseAuthenticationFailureReason(errorType);
         self.authenticationFailureCallback(reason, errorMessage);
     }

@@ -107,6 +107,10 @@
 	return Apptentive.shared.backend.conversationManager.activeConversation.token;
 }
 
+- (NSString *)conversationStateName {
+    return NSStringFromApptentiveConversationState(Apptentive.shared.backend.conversationManager.activeConversation.state);
+}
+
 - (void)resetSDK {
 	[self.backend resetBackend];
 

@@ -69,7 +69,7 @@
 
 - (ApptentiveRequestOperation *)requestOperationWithRequest:(id<ApptentiveRequest>)request token:(NSString *)token delegate:(id<ApptentiveRequestOperationDelegate>)delegate {
 	NSMutableURLRequest *URLRequest = [self URLRequestWithRequest:request];
-	if (token) {
+	if (token && !request.encrypted) {
 		[URLRequest addValue:[@"Bearer " stringByAppendingString:token] forHTTPHeaderField:@"Authorization"];
 	}
 

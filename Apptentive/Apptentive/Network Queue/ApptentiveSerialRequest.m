@@ -48,7 +48,7 @@
 		return NO;
 	}
 
-	ApptentiveAssertNotNil(context, @"Managed object context is nill");
+	ApptentiveAssertNotNil(context, @"Managed object context is nil");
 	if (context == nil) {
 		ApptentiveLogError(@"Unable encode enqueue request: managed object context is nil");
 		return NO;

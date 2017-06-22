@@ -6,10 +6,10 @@
 //  Copyright © 2017 Apptentive, Inc. All rights reserved.
 //
 
-#import "ApptentiveLoginRequest.h"
+#import "ApptentiveExistingLoginRequest.h"
 
 
-@implementation ApptentiveLoginRequest
+@implementation ApptentiveExistingLoginRequest
 
 @synthesize conversationIdentifier = _conversationIdentifier;
 

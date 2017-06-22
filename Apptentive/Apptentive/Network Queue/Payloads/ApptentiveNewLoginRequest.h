@@ -11,11 +11,11 @@
 NS_ASSUME_NONNULL_BEGIN
 
 
-@interface ApptentiveLoginRequest : ApptentiveRequest
+@interface ApptentiveNewLoginRequest : ApptentiveRequest
 
 @property (readonly, nonatomic) NSString *token;
 
-- (nullable instancetype)initWithConversationIdentifier:(NSString *)conversationIdentifier token:(NSString *)token;
+- (nullable instancetype)initWithToken:(NSString *)token;
 
 @end
 

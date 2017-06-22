@@ -11,17 +11,6 @@
 
 @implementation ApptentiveLogoutPayload
 
-- (instancetype)initWithConversationToken:(NSString *)token {
-	self = [super init];
-
-	if (self) {
-        APPTENTIVE_CHECK_INIT_NOT_EMPTY_ARG(token);
-        _conversationToken = token;
-	}
-
-	return self;
-}
-
 - (NSString *)type {
 	return @"logout";
 }
@@ -35,7 +24,7 @@
 }
 
 - (NSDictionary *)JSONDictionary {
-	return @{ @"token": self.conversationToken };
+    return @{};
 }
 
 @end

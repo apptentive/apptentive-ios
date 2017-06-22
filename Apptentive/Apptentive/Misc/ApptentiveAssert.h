@@ -34,6 +34,15 @@
 	if (!(expression)) __ApptentiveAssertHelper(#expression, __FILE__, __LINE__, __PRETTY_FUNCTION__, __VA_ARGS__)
 
 /*!
+ * @define ApptentiveAssertNotEmpty(expression, ...)
+ * Generates a failure when ((\a expression).length == 0).
+ * @param expression An expression of NSString type.
+ * @param ... An optional supplementary description of the failure. A literal NSString, optionally with string format specifiers. This parameter can be completely omitted.
+ */
+#define ApptentiveAssertNotEmpty(expression, ...) \
+if (expression.length == 0) __ApptentiveAssertHelper(#expression, __FILE__, __LINE__, __PRETTY_FUNCTION__, __VA_ARGS__)
+
+/*!
  * @define ApptentiveAssertTrue(expression, ...)
  * Generates a failure when ((\a expression) == false).
  * @param expression An expression of boolean type.

@@ -31,8 +31,6 @@ extern NSString *const ApptentiveConversationStateDidChangeNotificationKeyConver
 @property (readonly, strong, nullable, nonatomic) ApptentiveConversation *activeConversation;
 @property (readonly, strong, nullable, nonatomic) ApptentiveMessageManager *messageManager;
 
-@property (readonly, strong, nullable, nonatomic) NSString *activeConversationContainerPath;
-
 @property (weak, nonatomic) id<ApptentiveConversationManagerDelegate> delegate;
 
 @property (readonly, strong, nonatomic) ApptentiveEngagementManifest *manifest;

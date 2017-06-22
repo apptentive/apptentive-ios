@@ -624,7 +624,9 @@ Returns a Boolean value indicating whether the given event will cause an Interac
  */
 - (void)logOut;
 
-/** TBD  */
+/**
+ A block that is called when a logged-in conversation's request fails due to a problem with the user's JWT.
+ */
 @property (copy, nonatomic) ApptentiveAuthenticationFailureCallback authenticationFailureCallback;
 
 ///---------------------------------

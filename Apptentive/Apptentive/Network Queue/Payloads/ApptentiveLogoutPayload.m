@@ -7,15 +7,16 @@
 //
 
 #import "ApptentiveLogoutPayload.h"
-
+#import "ApptentiveDefines.h"
 
 @implementation ApptentiveLogoutPayload
 
-- (instancetype)initWithToken:(NSString *)token {
+- (instancetype)initWithConversationToken:(NSString *)token {
 	self = [super init];
 
 	if (self) {
-		self.token = token;
+        APPTENTIVE_CHECK_INIT_NOT_EMPTY_ARG(token);
+        _conversationToken = token;
 	}
 
 	return self;
@@ -30,11 +31,11 @@
 }
 
 - (NSString *)path {
-	return @"conversations/<cid>/logout";
+	return @"conversations/<cid>/session";
 }
 
 - (NSDictionary *)JSONDictionary {
-	return @{ @"token": self.token };
+	return @{ @"token": self.conversationToken };
 }
 
 @end

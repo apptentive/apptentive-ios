@@ -10,10 +10,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-
 @interface ApptentiveLogoutPayload : ApptentivePayload
 
-- (instancetype)initWithToken:(NSString *)token;
+@property (readonly, nonatomic) NSString *conversationToken;
+
+- (nullable instancetype)initWithConversationToken:(NSString *)token;
 
 @end
 

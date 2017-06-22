@@ -220,7 +220,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 - (BOOL)endActiveConversation {
 	if (self.activeConversation != nil) {
-		ApptentiveLogoutPayload *payload = [[ApptentiveLogoutPayload alloc] initWithToken:self.activeConversation.token];
+		ApptentiveLogoutPayload *payload = [[ApptentiveLogoutPayload alloc] initWithConversationToken:self.activeConversation.token];
 
 		[ApptentiveSerialRequest enqueuePayload:payload forConversation:self.activeConversation usingAuthToken:nil inContext:self.parentManagedObjectContext];
 

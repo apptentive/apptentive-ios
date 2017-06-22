@@ -9,6 +9,9 @@
 #import "ApptentiveRequestOperation.h"
 #import "ApptentiveRequestProtocol.h"
 #import "ApptentiveSerialRequest.h"
+#import "ApptentiveJSONSerialization.h"
+#import "ApptentiveSafeCollections.h"
+#import "ApptentiveBackend.h"
 
 
 @interface ApptentiveRequestOperation () {
@@ -121,6 +124,11 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 			} else {
 				[self processHTTPError:error withResponse:URLResponse responseData:data];
 			}
+            
+            // check if request failed due to an authentication failure
+            if (URLResponse.statusCode == 401) {
+                [self processAuthenticationFailureResponseData:data];
+            }
 		}
 	}];
 
@@ -213,6 +221,35 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(self.dataSource.backoffDelay * NSEC_PER_SEC)), dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0), ^{
 		[self startTask];
 	});
+}
+
+- (void)processAuthenticationFailureResponseData:(NSData *)data {
+    NSError *error;
+    id jsonObject = [ApptentiveJSONSerialization JSONObjectWithData:data error:&error];
+    if (error) {
+        ApptentiveLogError(@"Error while parsing JSON: %@", error);
+        return;
+    }
+    
+    if (![jsonObject isKindOfClass:[NSDictionary class]]) {
+        ApptentiveLogError(@"Unexpected JSON object: %@", jsonObject);
+        return;
+    }
+    
+    NSString *conversationIdentifier = self.request.conversationIdentifier;
+    ApptentiveAssertTrue(conversationIdentifier.length > 0, @"Conversation identifier is nil or empty");
+    if (conversationIdentifier.length == 0) {
+        return;
+    }
+    
+    NSString *errorType = ApptentiveDictionaryGetString(jsonObject, @"error_type") ?: @"UNKNOWN";
+    NSString *errorMessage = ApptentiveDictionaryGetString(jsonObject, @"error") ?: @"Unknown error";
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveAuthenticationDidFailNotification object:nil userInfo:@{
+           ApptentiveAuthenticationDidFailNotificationKeyErrorType : errorType,
+           ApptentiveAuthenticationDidFailNotificationKeyErrorMessage : errorMessage,
+           ApptentiveAuthenticationDidFailNotificationKeyConversationIdentifier : conversationIdentifier
+    }];
 }
 
 - (void)completeOperation {

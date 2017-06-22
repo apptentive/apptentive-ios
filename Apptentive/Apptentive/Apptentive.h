@@ -30,6 +30,23 @@ FOUNDATION_EXPORT const unsigned char ApptentiveVersionString[];
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef enum : NSUInteger {
+    ApptentiveAuthenticationFailureReasonUnknown,
+    ApptentiveAuthenticationFailureReasonInvalidAlgorithm,
+    ApptentiveAuthenticationFailureReasonMalformedToken,
+    ApptentiveAuthenticationFailureReasonInvalidToken,
+    ApptentiveAuthenticationFailureReasonMissingSubClaim,
+    ApptentiveAuthenticationFailureReasonMismatchedSubClaim,
+    ApptentiveAuthenticationFailureReasonInvalidSubClaim,
+    ApptentiveAuthenticationFailureReasonExpiredToken,
+    ApptentiveAuthenticationFailureReasonRevokedToken,
+    ApptentiveAuthenticationFailureReasonMissingAppKey,
+    ApptentiveAuthenticationFailureReasonMissingAppSignature,
+    ApptentiveAuthenticationFailureReasonInvalidKeySignaturePair
+} ApptentiveAuthenticationFailureReason;
+
+typedef void(^ApptentiveAuthenticationFailureCallback)(ApptentiveAuthenticationFailureReason reason, NSString *errorMessage);
+
 @protocol ApptentiveDelegate
 , ApptentiveStyle;
 
@@ -606,6 +623,11 @@ Returns a Boolean value indicating whether the given event will cause an Interac
  so that it can be resumed using the logIn: method.
  */
 - (void)logOut;
+
+/**
+ A block that is called when a logged-in conversation's request fails due to a problem with the user's JWT.
+ */
+@property (copy, nonatomic) ApptentiveAuthenticationFailureCallback authenticationFailureCallback;
 
 ///---------------------------------
 /// @name Logging System

@@ -11,6 +11,8 @@
 
 @implementation ApptentiveLoginRequest
 
+@synthesize conversationIdentifier = _conversationIdentifier;
+
 - (instancetype)initWithConversationIdentifier:(NSString *)conversationIdentifier token:(NSString *)token {
 	self = [super init];
 

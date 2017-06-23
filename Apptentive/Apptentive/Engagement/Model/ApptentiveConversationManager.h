@@ -21,7 +21,7 @@ extern NSString *const ApptentiveConversationStateDidChangeNotification;
 extern NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation;
 
 
-@interface ApptentiveConversationManager : NSObject <ApptentiveConversationDelegate, ApptentiveRequestOperationDelegate>
+@interface ApptentiveConversationManager : NSObject <ApptentiveConversationDelegate>
 
 @property (strong, nonatomic) ApptentiveConversationMetadata *conversationMetadata;
 @property (readonly, strong, nonatomic) NSString *storagePath;

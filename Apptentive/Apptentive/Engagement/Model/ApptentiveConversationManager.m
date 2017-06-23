@@ -267,7 +267,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
     
 	self.conversationOperation = [self.client requestOperationWithRequest:[[ApptentiveConversationRequest alloc] initWithConversation:conversation] token:nil delegate:delegate];
 
-	[self.client.operationQueue addOperation:self.conversationOperation];
+	[self.client.networkQueue addOperation:self.conversationOperation];
 }
 
 - (BOOL)fetchLegacyConversation:(ApptentiveConversation *)conversation {
@@ -290,7 +290,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	if (conversation != nil && conversation.legacyToken.length > 0) {
 		self.conversationOperation = [self.client requestOperationWithRequest:[[ApptentiveLegacyConversationRequest alloc] initWithConversation:conversation] legacyToken:conversation.legacyToken delegate:delegate];
 
-		[self.client.operationQueue addOperation:self.conversationOperation];
+		[self.client.networkQueue addOperation:self.conversationOperation];
 		return YES;
 	}
 
@@ -456,7 +456,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		[loginOperation addDependency:self.conversationOperation];
 	}
 
-	[self.operationQueue addOperation:loginOperation];
+	[self.client.networkQueue addOperation:loginOperation];
 }
 
 - (void)sendLoginRequestWithToken:(NSString *)token conversationIdentifier:(nullable NSString *)conversationIdentifier userId:(NSString *)userId {
@@ -478,7 +478,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
         [[ApptentiveNewLoginRequest alloc] initWithToken:token];
 	self.loginRequestOperation = [self.client requestOperationWithRequest:request token:nil delegate:delegate];
 
-	[self.client.operationQueue addOperation:self.loginRequestOperation];
+	[self.client.networkQueue addOperation:self.loginRequestOperation];
 }
 
 - (NSError *)errorWithCode:(NSInteger)code failureReason:(NSString *)failureReason {
@@ -531,7 +531,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		self.manifest.expiry = [NSDate distantPast];
 	}];
 
-	[self.operationQueue addOperation:conversationDidChangeOperation];
+	[self.client.networkQueue addOperation:conversationDidChangeOperation];
 }
 
 - (void)conversation:(ApptentiveConversation *)conversation personDidChange:(NSDictionary *)diffs {
@@ -550,7 +550,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		[self.delegate processQueuedRecords];
 	}];
 
-	[self.operationQueue addOperation:personDidChangeOperation];
+	[self.client.networkQueue addOperation:personDidChangeOperation];
 }
 
 - (void)conversation:(ApptentiveConversation *)conversation deviceDidChange:(NSDictionary *)diffs {
@@ -571,7 +571,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		self.manifest.expiry = [NSDate distantPast];
 	}];
 
-	[self.operationQueue addOperation:deviceDidChangeOperation];
+	[self.client.networkQueue addOperation:deviceDidChangeOperation];
 }
 
 - (void)conversationUserInfoDidChange:(ApptentiveConversation *)conversation {
@@ -579,7 +579,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
         [self saveConversation:conversation];
 	}];
 
-	[self.operationQueue addOperation:conversationSaveOperation];
+	[self.client.networkQueue addOperation:conversationSaveOperation];
 }
 
 - (void)conversationEngagementDidChange:(ApptentiveConversation *)conversation {
@@ -587,23 +587,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
         [self saveConversation:conversation];
 	}];
 
-	[self.operationQueue addOperation:conversationSaveOperation];
-}
-
-#pragma mark Apptentive request operation delegate
-
-- (void)requestOperationDidFinish:(ApptentiveRequestOperation *)operation {
-	if (operation == self.manifestOperation) {
-		[self processManifestResponse:(NSDictionary *)operation.responseObject cacheLifetime:operation.cacheLifetime];
-
-		self.manifestOperation = nil;
-	}
-}
-
-- (void)requestOperation:(ApptentiveRequestOperation *)operation didFailWithError:(NSError *)error {
-	if (operation == self.manifestOperation) {
-		self.manifestOperation = nil;
-	}
+	[self.client.networkQueue addOperation:conversationSaveOperation];
 }
 
 - (void)conversation:(ApptentiveConversation *)conversation processFetchResponse:(NSDictionary *)conversationResponse {
@@ -830,14 +814,23 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	if (self.manifestOperation != nil) {
 		return;
 	}
+    
+    ApptentiveRequestOperationCallback *callback = [ApptentiveRequestOperationCallback new];
+    callback.operationFinishCallback = ^(ApptentiveRequestOperation *operation) {
+        [self processManifestResponse:(NSDictionary *)operation.responseObject cacheLifetime:operation.cacheLifetime];
+        self.manifestOperation = nil;
+    };
+    callback.operationFailCallback = ^(ApptentiveRequestOperation *operation, NSError *error) {
+        self.manifestOperation = nil;
+    };
 
-	self.manifestOperation = [self.client requestOperationWithRequest:[[ApptentiveInteractionsRequest alloc] initWithConversationIdentifier:self.activeConversation.identifier] delegate:self];
+	self.manifestOperation = [self.client requestOperationWithRequest:[[ApptentiveInteractionsRequest alloc] initWithConversationIdentifier:self.activeConversation.identifier] delegate:callback];
 
 	if (!self.activeConversation.token && self.conversationOperation) {
 		[self.manifestOperation addDependency:self.conversationOperation];
 	}
 
-	[self.client.operationQueue addOperation:self.manifestOperation];
+	[self.client.networkQueue addOperation:self.manifestOperation];
 }
 
 - (void)migrateEngagementManifest {

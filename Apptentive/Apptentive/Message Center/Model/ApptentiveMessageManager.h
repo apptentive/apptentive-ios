@@ -15,7 +15,7 @@
 @protocol ApptentiveMessageManagerDelegate;
 
 
-@interface ApptentiveMessageManager : NSObject <ApptentiveRequestOperationDelegate, ApptentivePayloadSenderDelegate>
+@interface ApptentiveMessageManager : NSObject <ApptentivePayloadSenderDelegate>
 
 @property (readonly, nonatomic) NSString *storagePath;
 @property (readonly, nonatomic) NSString *conversationIdentifier;

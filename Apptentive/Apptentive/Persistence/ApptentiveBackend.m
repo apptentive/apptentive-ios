@@ -223,14 +223,23 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	if (self.configurationOperation != nil || !self.working) {
 		return;
 	}
+    
+    ApptentiveRequestOperationCallback *callback = [ApptentiveRequestOperationCallback new];
+    callback.operationFinishCallback = ^(ApptentiveRequestOperation *operation) {
+        [self processConfigurationResponse:(NSDictionary *)operation.responseObject cacheLifetime:operation.cacheLifetime];
+        self.configurationOperation = nil;
+    };
+    callback.operationFailCallback = ^(ApptentiveRequestOperation *operation, NSError *error) {
+        self.configurationOperation = nil;
+    };
 
-	self.configurationOperation = [self.client requestOperationWithRequest:[[ApptentiveConfigurationRequest alloc] initWithConversationIdentifier:self.conversationManager.activeConversation.identifier] delegate:self];
+	self.configurationOperation = [self.client requestOperationWithRequest:[[ApptentiveConfigurationRequest alloc] initWithConversationIdentifier:self.conversationManager.activeConversation.identifier] delegate:callback];
 
 	if (!self.conversationManager.activeConversation && self.conversationManager.conversationOperation) {
 		[self.configurationOperation addDependency:self.conversationManager.conversationOperation];
 	}
 
-	[self.client.operationQueue addOperation:self.configurationOperation];
+	[self.client.networkQueue addOperation:self.configurationOperation];
 }
 
 - (void)createSupportDirectoryIfNeeded {
@@ -245,12 +254,12 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 - (void)startUp {
     ApptentiveAssertOperationQueue(self.operationQueue);
     
-	_client = [[ApptentiveClient alloc] initWithBaseURL:self.baseURL apptentiveKey:self.apptentiveKey apptentiveSignature:self.apptentiveSignature operationQueue:self.operationQueue];
+	_client = [[ApptentiveClient alloc] initWithBaseURL:self.baseURL apptentiveKey:self.apptentiveKey apptentiveSignature:self.apptentiveSignature delegateQueue:self.operationQueue];
 
 	_conversationManager = [[ApptentiveConversationManager alloc] initWithStoragePath:self.supportDirectoryPath operationQueue:self.operationQueue client:self.client parentManagedObjectContext:self.managedObjectContext];
 	self.conversationManager.delegate = self;
 
-	_payloadSender = [[ApptentivePayloadSender alloc] initWithBaseURL:self.baseURL apptentiveKey:self.apptentiveKey apptentiveSignature:self.apptentiveSignature managedObjectContext:self.managedObjectContext operationQueue:self.operationQueue];
+	_payloadSender = [[ApptentivePayloadSender alloc] initWithBaseURL:self.baseURL apptentiveKey:self.apptentiveKey apptentiveSignature:self.apptentiveSignature managedObjectContext:self.managedObjectContext delegateQueue:self.operationQueue];
 
 	_imageCache = [[NSURLCache alloc] initWithMemoryCapacity:1 * 1024 * 1024 diskCapacity:10 * 1024 * 1024 diskPath:[self imageCachePath]];
 
@@ -322,22 +331,6 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	}];
 
 	[self processQueuedRecords];
-}
-
-#pragma mark Apptentive request operation delegate
-
-- (void)requestOperationDidFinish:(ApptentiveRequestOperation *)operation {
-	if (operation == self.configurationOperation) {
-		[self processConfigurationResponse:(NSDictionary *)operation.responseObject cacheLifetime:operation.cacheLifetime];
-
-		self.configurationOperation = nil;
-	}
-}
-
-- (void)requestOperation:(ApptentiveRequestOperation *)operation didFailWithError:(NSError *)error {
-	if (operation == self.configurationOperation) {
-		self.configurationOperation = nil;
-	}
 }
 
 - (void)processQueuedRecords {

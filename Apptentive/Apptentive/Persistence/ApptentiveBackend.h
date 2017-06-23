@@ -35,7 +35,7 @@ extern NSString *const ApptentiveAuthenticationDidFailNotificationKeyConversatio
  used for PUT and POST requests (person/device updates, events, messages,
  and survey responses).
  */
-@interface ApptentiveBackend : NSObject <NSFetchedResultsControllerDelegate, ApptentiveConversationManagerDelegate, ApptentiveRequestOperationDelegate>
+@interface ApptentiveBackend : NSObject <NSFetchedResultsControllerDelegate, ApptentiveConversationManagerDelegate>
 
 @property (readonly, strong, nonatomic) ApptentiveConversationManager *conversationManager;
 @property (readonly, strong, nonatomic) ApptentiveAppConfiguration *configuration;

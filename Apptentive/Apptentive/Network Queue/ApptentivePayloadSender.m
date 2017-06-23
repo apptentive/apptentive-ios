@@ -17,7 +17,6 @@
 /*!
  * This private serial queue is used for sending payloads one-by-one (also retrying)
  */
-@property (readonly, nonatomic) NSOperationQueue *payloadQueue;
 
 @property (strong, nonatomic) NSMutableDictionary *activeTaskProgress;
 @property (assign, atomic) BOOL isResuming;
@@ -27,13 +26,12 @@
 
 @implementation ApptentivePayloadSender
 
-- (instancetype)initWithBaseURL:(NSURL *)baseURL apptentiveKey:(NSString *)apptentiveKey apptentiveSignature:(NSString *)apptentiveSignature managedObjectContext:(NSManagedObjectContext *)managedObjectContext operationQueue:(NSOperationQueue *)operationQueue {
-	self = [super initWithBaseURL:baseURL apptentiveKey:apptentiveKey apptentiveSignature:apptentiveSignature operationQueue:operationQueue];
+- (instancetype)initWithBaseURL:(NSURL *)baseURL apptentiveKey:(NSString *)apptentiveKey apptentiveSignature:(NSString *)apptentiveSignature managedObjectContext:(NSManagedObjectContext *)managedObjectContext delegateQueue:(NSOperationQueue *)delegateQueue {
+	self = [super initWithBaseURL:baseURL apptentiveKey:apptentiveKey apptentiveSignature:apptentiveSignature delegateQueue:delegateQueue];
 
 	if (self) {
-        _payloadQueue = [[NSOperationQueue alloc] init];
-        _payloadQueue.maxConcurrentOperationCount = 1;
-        _payloadQueue.name = @"Payload Queue";
+        self.networkQueue.maxConcurrentOperationCount = 1;
+        self.networkQueue.name = @"Payload Queue";
         
 		_managedObjectContext = managedObjectContext;
 		_activeTaskProgress = [[NSMutableDictionary alloc] init];
@@ -45,7 +43,7 @@
 #pragma mark - Cancelling network operations
 
 - (void)cancelNetworkOperations {
-	[self.payloadQueue cancelAllOperations];
+	[self.networkQueue cancelAllOperations];
 
 	ApptentiveLogVerbose(ApptentiveLogTagPayload, @"Clearing isResuming Flag");
 	self.isResuming = NO;
@@ -84,13 +82,26 @@
 			// Add an operation for every record in the queue
 			for (ApptentiveSerialRequest *request in queuedRequests) {
                 ApptentiveAssertNotNil(request.authToken, @"Attempted to send a request without a token: %@", request);
+                ApptentiveRequestOperationCallback *callback = [ApptentiveRequestOperationCallback new];
+                callback.operationStartCallback = ^(ApptentiveRequestOperation *operation) {
+                    [self requestOperationDidStart:operation];
+                };
+                callback.operationFinishCallback = ^(ApptentiveRequestOperation *operation) {
+                    [self requestOperationDidFinish:operation];
+                };
+                callback.operationFailCallback = ^(ApptentiveRequestOperation *operation, NSError *error) {
+                    [self requestOperation:operation didFailWithError:error];
+                };
+                callback.operationRetryCallback = ^(ApptentiveRequestOperation *operation, NSError *error) {
+                    [self requestOperationWillRetry:operation withError:error];
+                };
                 
-				ApptentiveRequestOperation *operation = [self requestOperationWithRequest:request token:request.authToken delegate:self];
+				ApptentiveRequestOperation *operation = [self requestOperationWithRequest:request token:request.authToken delegate:callback];
 				ApptentiveLogVerbose(ApptentiveLogTagPayload, @"Adding operation for %@ %@", operation.URLRequest.HTTPMethod, operation.URLRequest.URL.absoluteString);
 
 				operation.request = request;
 
-				[self.payloadQueue addOperation:operation];
+				[self.networkQueue addOperation:operation];
 			}
 		}];
 
@@ -119,14 +130,14 @@
 				}];
 			}];
 
-			[self.payloadQueue addOperation:saveBlock];
+			[self.networkQueue addOperation:saveBlock];
 		}
 
 		ApptentiveLogVerbose(ApptentiveLogTagPayload, @"Clearing isResuming Flag");
 		self.isResuming = NO;
 	}];
 
-	[self.payloadQueue addOperation:resumeBlock];
+	[self.networkQueue addOperation:resumeBlock];
 }
 
 #pragma mark - Message send progress
@@ -173,7 +184,7 @@
 }
 
 - (void)updateMessageStatusForOperation:(ApptentiveRequestOperation *)operation {
-	for (NSOperation *operation in self.payloadQueue.operations) {
+	for (NSOperation *operation in self.networkQueue.operations) {
 		if ([operation isKindOfClass:[ApptentiveRequestOperation class]] && [((ApptentiveRequestOperation *)operation).request isKindOfClass:[ApptentiveSerialRequest class]] && ((ApptentiveSerialRequest *)((ApptentiveRequestOperation *)operation).request).messageRequest) {
 			ApptentiveRequestOperation *messageOperation = (ApptentiveRequestOperation *)operation;
 			ApptentiveSerialRequest *messageSendRequest = (ApptentiveSerialRequest *)messageOperation.request;

@@ -22,14 +22,14 @@
 @synthesize URLSession = _URLSession;
 @synthesize backoffDelay = _backoffDelay;
 
-- (instancetype)initWithBaseURL:(NSURL *)baseURL apptentiveKey:(nonnull NSString *)apptentiveKey apptentiveSignature:(nonnull NSString *)apptentiveSignature operationQueue:(NSOperationQueue *)operationQueue {
+- (instancetype)initWithBaseURL:(NSURL *)baseURL apptentiveKey:(nonnull NSString *)apptentiveKey apptentiveSignature:(nonnull NSString *)apptentiveSignature delegateQueue:(NSOperationQueue *)delegateQueue {
 	self = [super init];
 
 	if (self) {
 		_baseURL = baseURL;
 		_apptentiveKey = apptentiveKey;
 		_apptentiveSignature = apptentiveSignature;
-        _operationQueue = operationQueue;
+        _networkQueue = [NSOperationQueue new];
 
 		NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
 		configuration.HTTPAdditionalHeaders = @{
@@ -39,7 +39,7 @@
 			@"User-Agent": [NSString stringWithFormat:@"ApptentiveConnect/%@ (iOS)", kApptentiveVersionString],
 		};
 
-		_URLSession = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:operationQueue];
+		_URLSession = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:delegateQueue];
 
 		[self resetBackoffDelay];
 	}
@@ -63,11 +63,11 @@
 
 #pragma mark - Creating request operations
 
-- (ApptentiveRequestOperation *)requestOperationWithRequest:(id<ApptentiveRequest>)request delegate:(id<ApptentiveRequestOperationDelegate>)delegate {
+- (ApptentiveRequestOperation *)requestOperationWithRequest:(id<ApptentiveRequest>)request delegate:(ApptentiveRequestOperationCallback *)delegate {
 	return [self requestOperationWithRequest:request token:self.authToken delegate:delegate];
 }
 
-- (ApptentiveRequestOperation *)requestOperationWithRequest:(id<ApptentiveRequest>)request token:(NSString *)token delegate:(id<ApptentiveRequestOperationDelegate>)delegate {
+- (ApptentiveRequestOperation *)requestOperationWithRequest:(id<ApptentiveRequest>)request token:(NSString *)token delegate:(ApptentiveRequestOperationCallback *)delegate {
 	NSMutableURLRequest *URLRequest = [self URLRequestWithRequest:request];
 	if (token && !request.encrypted) {
 		[URLRequest addValue:[@"Bearer " stringByAppendingString:token] forHTTPHeaderField:@"Authorization"];
@@ -78,7 +78,7 @@
 	return operation;
 }
 
-- (ApptentiveRequestOperation *)requestOperationWithRequest:(id<ApptentiveRequest>)request legacyToken:(NSString *_Nullable)token delegate:(id<ApptentiveRequestOperationDelegate>)delegate {
+- (ApptentiveRequestOperation *)requestOperationWithRequest:(id<ApptentiveRequest>)request legacyToken:(NSString *_Nullable)token delegate:(ApptentiveRequestOperationCallback *)delegate {
 	NSMutableURLRequest *URLRequest = [self URLRequestWithRequest:request];
 	if (token) {
 		[URLRequest addValue:[@"OAuth " stringByAppendingString:token] forHTTPHeaderField:@"Authorization"];

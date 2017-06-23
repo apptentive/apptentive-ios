@@ -82,13 +82,22 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 	if (self.messageOperation != nil || self.conversationIdentifier == nil) {
 		return;
 	}
+    
+    ApptentiveRequestOperationCallback *callback = [ApptentiveRequestOperationCallback new];
+    callback.operationFinishCallback = ^(ApptentiveRequestOperation *operation) {
+        self.messageOperation = nil;
+        [self processMessageOperationResponse:operation];
+    };
+    callback.operationFailCallback = ^(ApptentiveRequestOperation *operation, NSError *error) {
+        self.messageOperation = nil;
+    };
 
 	ApptentiveMessageGetRequest *request = [[ApptentiveMessageGetRequest alloc] initWithConversationIdentifier:self.conversationIdentifier];
 	request.lastMessageIdentifier = self.messageStore.lastMessageIdentifier;
 
-	self.messageOperation = [self.client requestOperationWithRequest:request delegate:self];
+	self.messageOperation = [self.client requestOperationWithRequest:request delegate:callback];
 
-	[self.client.operationQueue addOperation:self.messageOperation];
+	[self.client.networkQueue addOperation:self.messageOperation];
 }
 
 - (void)checkForMessagesInBackground:(void (^)(UIBackgroundFetchResult))completionHandler {
@@ -119,9 +128,8 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 
 #pragma mark Request Operation Delegate
 
-- (void)requestOperationDidFinish:(ApptentiveRequestOperation *)operation {
+- (void)processMessageOperationResponse:(ApptentiveRequestOperation *)operation {
 	NSArray *messageListJSON = [operation.responseObject valueForKey:@"messages"];
-	self.messageOperation = nil;
 
 	if (messageListJSON == nil) {
 		ApptentiveLogError(@"Unexpected response from /messages endpoint");
@@ -213,10 +221,6 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 	} else {
 		[self messageFetchCompleted:NO];
 	}
-}
-
-- (void)requestOperation:(ApptentiveRequestOperation *)operation didFailWithError:(NSError *)error {
-	self.messageOperation = nil;
 }
 
 #pragma mark - Polling

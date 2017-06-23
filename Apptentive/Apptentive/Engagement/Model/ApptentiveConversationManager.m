@@ -221,21 +221,22 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 - (BOOL)endActiveConversation {
 	if (self.activeConversation != nil) {
+        ApptentiveMutableConversation *conversation = [[ApptentiveMutableConversation alloc] initWithConversation:self.activeConversation];
+        
 		ApptentiveLogoutPayload *payload = [[ApptentiveLogoutPayload alloc] init];
 
-		[ApptentiveSerialRequest enqueuePayload:payload forConversation:self.activeConversation usingAuthToken:self.activeConversation.token inContext:self.parentManagedObjectContext];
+		[ApptentiveSerialRequest enqueuePayload:payload forConversation:conversation usingAuthToken:conversation.token inContext:self.parentManagedObjectContext];
         
         [Apptentive.shared.backend processQueuedRecords];
 
-		self.activeConversation.state = ApptentiveConversationStateLoggedOut;
+		conversation.state = ApptentiveConversationStateLoggedOut;
 		[self.messageManager saveMessageStore];
 		_messageManager = nil;
 
-#warning FIXME: Don't pass global conversation object
-        [self saveConversation:self.activeConversation];
-		[self handleConversationStateChange:self.activeConversation];
+        [self saveConversation:conversation];
+		[self handleConversationStateChange:conversation];
 
-		_activeConversation = nil;
+		self.activeConversation = nil;
 
 		return YES;
 	} else {

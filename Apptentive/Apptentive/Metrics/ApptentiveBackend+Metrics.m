@@ -22,23 +22,23 @@ static NSString *ATInteractionAppEventLabelExit = @"exit";
 @implementation ApptentiveBackend (Metrics)
 
 - (void)addMetricWithName:(NSString *)name fromInteraction:(ApptentiveInteraction *)fromInteraction info:(NSDictionary *)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData {
+    ApptentiveAssertOperationQueue(self.operationQueue);
+    
 	ApptentiveConversation *conversation = self.conversationManager.activeConversation;
 
 	if (self.configuration.metricsEnabled == NO || name == nil || conversation.state == ApptentiveConversationStateLoggedOut) {
 		return;
 	}
+    
+    ApptentiveEventPayload *payload = [[ApptentiveEventPayload alloc] initWithLabel:name];
+    payload.interactionIdentifier = fromInteraction.identifier;
+    payload.userInfo = userInfo;
+    payload.customData = customData;
+    payload.extendedData = extendedData;
+    
+    [ApptentiveSerialRequest enqueuePayload:payload forConversation:conversation usingAuthToken:conversation.token inContext:self.managedObjectContext];
 
-	dispatch_async(dispatch_get_main_queue(), ^{
-		ApptentiveEventPayload *payload = [[ApptentiveEventPayload alloc] initWithLabel:name];
-		payload.interactionIdentifier = fromInteraction.identifier;
-		payload.userInfo = userInfo;
-		payload.customData = customData;
-		payload.extendedData = extendedData;
-
-		[ApptentiveSerialRequest enqueuePayload:payload forConversation:conversation usingAuthToken:conversation.token inContext:self.managedObjectContext];
-	});
-
-	[self processQueuedRecords];
+    [self processQueuedRecords];
 }
 
 - (void)startMonitoringAppLifecycleMetrics {

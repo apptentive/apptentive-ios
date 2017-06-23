@@ -122,7 +122,9 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
         return NO;
     }
 
-	[self addMetricWithName:codePoint fromInteraction:fromInteraction info:userInfo customData:customData extendedData:extendedData];
+    [self.operationQueue addOperationWithBlock:^{
+        [self addMetricWithName:codePoint fromInteraction:fromInteraction info:userInfo customData:customData extendedData:extendedData];
+    }];
 
 	[self codePointWasSeen:codePoint];
 	[self codePointWasEngaged:codePoint];

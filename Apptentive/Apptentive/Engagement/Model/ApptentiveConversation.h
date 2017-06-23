@@ -327,8 +327,6 @@ extern NSString *NSStringFromApptentiveConversationState(ApptentiveConversationS
 @property (strong, nonatomic) NSString *userId;
 @property (strong, nonatomic) NSData *encryptionKey;
 
-- (instancetype)initWithConversation:(ApptentiveConversation *)conversation;
-
 /**
  This method is called when a conversation request completes, which specifies
  the identifiers for the person and device along with the token that will be

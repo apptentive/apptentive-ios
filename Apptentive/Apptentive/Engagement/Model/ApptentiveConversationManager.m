@@ -203,7 +203,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
     }
     
     // TODO: do we need a mutable conversation here or can we just load it from the archive
-    ApptentiveMutableConversation *mutableConversation = [[ApptentiveMutableConversation alloc] initWithConversation:conversation];
+    ApptentiveMutableConversation *mutableConversation = [conversation mutableCopy];
     
 	mutableConversation.state = item.state;
 	mutableConversation.encryptionKey = item.encryptionKey;
@@ -227,7 +227,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 - (BOOL)endActiveConversation {
 	if (self.activeConversation != nil) {
-        ApptentiveMutableConversation *conversation = [[ApptentiveMutableConversation alloc] initWithConversation:self.activeConversation];
+        ApptentiveMutableConversation *conversation = [self.activeConversation mutableCopy];
         
 		ApptentiveLogoutPayload *payload = [[ApptentiveLogoutPayload alloc] init];
 
@@ -670,7 +670,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
             return;
         }
     } else {
-        mutableConversation = [[ApptentiveMutableConversation alloc] initWithConversation:conversation];
+        mutableConversation = [conversation mutableCopy];
     }
 
     [mutableConversation setToken:token conversationID:conversationIdentifier personID:personIdentifier deviceID:deviceIdentifier];
@@ -694,7 +694,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	NSString *deviceID = [conversationResponse valueForKey:@"device_id"];
 
 	if (token != nil && conversationID != nil && personID != nil && deviceID != nil) {
-        ApptentiveMutableConversation *mutableConversation = [[ApptentiveMutableConversation alloc] initWithConversation:conversation];
+        ApptentiveMutableConversation *mutableConversation = [conversation mutableCopy];
         
 		[mutableConversation setToken:token conversationID:conversationID personID:personID deviceID:deviceID];
 
@@ -730,7 +730,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	NSString *conversationIdentifier = ApptentiveDictionaryGetString(conversationResponse, @"conversation_id");
 
 	if (JWT.length > 0 && conversationIdentifier.length > 0) {
-        ApptentiveMutableConversation *mutableConversation = [[ApptentiveMutableConversation alloc] initWithConversation:conversation];
+        ApptentiveMutableConversation *mutableConversation = [conversation mutableCopy];
         
 		mutableConversation.state = ApptentiveConversationStateLegacyPending;
 		[mutableConversation setConversationIdentifier:conversationIdentifier JWT:JWT];

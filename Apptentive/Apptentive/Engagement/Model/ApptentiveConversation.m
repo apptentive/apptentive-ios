@@ -68,9 +68,10 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 
 @implementation ApptentiveConversation
 
-- (instancetype)init {
+- (instancetype)initWithState:(ApptentiveConversationState)state {
 	self = [super init];
 	if (self) {
+        _state = state;
 		_appRelease = [[ApptentiveAppRelease alloc] initWithCurrentAppRelease];
 		_SDK = [[ApptentiveSDK alloc] initWithCurrentSDK];
 		_person = [[ApptentivePerson alloc] init];
@@ -282,6 +283,7 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 	self = [super init];
 
 	if (self) {
+        _state = ApptentiveConversationStateLegacyPending;
 		_appRelease = [[ApptentiveAppRelease alloc] initAndMigrate];
 		_SDK = [[ApptentiveSDK alloc] initAndMigrate];
 		_person = [[ApptentivePerson alloc] initAndMigrate];

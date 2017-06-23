@@ -41,7 +41,7 @@ extern NSString *NSStringFromApptentiveConversationState(ApptentiveConversationS
 /**
  Whether the conversation is anonymous, has a token, is logged in, etc.
  */
-@property (assign, nonatomic) ApptentiveConversationState state;
+@property (readonly, nonatomic) ApptentiveConversationState state;
 
 /**
  The `ApptentiveAppRelease` object for this conversation.
@@ -71,7 +71,7 @@ extern NSString *NSStringFromApptentiveConversationState(ApptentiveConversationS
 /**
  The authorization token obtained when creating the conversation.
  */
-@property (strong, nonatomic) NSString *token;
+@property (readonly, nonatomic) NSString *token;
 
 /**
  The identifier (obtained from server) for the conversation.
@@ -81,17 +81,17 @@ extern NSString *NSStringFromApptentiveConversationState(ApptentiveConversationS
 /**
  The authorization token obtained when creating the conversation (for a legacy request)
  */
-@property (strong, nonatomic) NSString *legacyToken;
+@property (readonly, nonatomic) NSString *legacyToken;
 
 /**
  Optional user id for logged-in conversations.
  */
-@property (strong, nonatomic) NSString *userId;
+@property (readonly, nonatomic) NSString *userId;
 
 /**
  Encryption key for sending payloads.
  */
-@property (strong, nonatomic) NSData *encryptionKey;
+@property (readonly, nonatomic) NSData *encryptionKey;
 
 /**
  The identifier for the last message downloaded from the conversation.
@@ -120,22 +120,7 @@ extern NSString *NSStringFromApptentiveConversationState(ApptentiveConversationS
  */
 @property (readonly, nonatomic) NSString *directoryName;
 
-/**
- This method is called when a conversation request completes, which specifies
- the identifiers for the person and device along with the token that will be
- used to authorize subsequent network requests.
-
- @param token The token to be used to authorize future network requests.
- @param personID The idenfier for the person associated with this conversation.
- @param deviceID The idenfier for the device associated with this conversation.
- */
-- (void)setToken:(NSString *)token conversationID:(NSString *)conversationID personID:(NSString *)personID deviceID:(NSString *)deviceID;
-
-/**
- This method is called when a conversation request completes, which specifies
- the conversation identifier along with JWT to authorize subsequent network requests.
- */
-- (void)setConversationIdentifier:(NSString *)identifier JWT:(NSString *)JWT;
+- (instancetype)initWithState:(ApptentiveConversationState)state;
 
 /**
  This method will compare the current app release, SDK, and device information
@@ -331,5 +316,34 @@ extern NSString *NSStringFromApptentiveConversationState(ApptentiveConversationS
  @param conversation The conversation associated with the change.
  */
 - (void)conversationEngagementDidChange:(ApptentiveConversation *)conversation;
+
+@end
+
+@interface ApptentiveMutableConversation : ApptentiveConversation
+
+@property (assign, nonatomic) ApptentiveConversationState state;
+@property (strong, nonatomic) NSString *token;
+@property (strong, nonatomic) NSString *legacyToken;
+@property (strong, nonatomic) NSString *userId;
+@property (strong, nonatomic) NSData *encryptionKey;
+
+- (instancetype)initWithConversation:(ApptentiveConversation *)conversation;
+
+/**
+ This method is called when a conversation request completes, which specifies
+ the identifiers for the person and device along with the token that will be
+ used to authorize subsequent network requests.
+ 
+ @param token The token to be used to authorize future network requests.
+ @param personID The idenfier for the person associated with this conversation.
+ @param deviceID The idenfier for the device associated with this conversation.
+ */
+- (void)setToken:(NSString *)token conversationID:(NSString *)conversationID personID:(NSString *)personID deviceID:(NSString *)deviceID;
+
+/**
+ This method is called when a conversation request completes, which specifies
+ the conversation identifier along with JWT to authorize subsequent network requests.
+ */
+- (void)setConversationIdentifier:(NSString *)identifier JWT:(NSString *)JWT;
 
 @end

@@ -67,7 +67,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 
 @synthesize supportDirectoryPath = _supportDirectoryPath;
 
-- (instancetype)initWithApptentiveKey:(NSString *)apptentiveKey signature:(NSString *)signature baseURL:(NSURL *)baseURL storagePath:(NSString *)storagePath {
+- (instancetype)initWithApptentiveKey:(NSString *)apptentiveKey signature:(NSString *)signature baseURL:(NSURL *)baseURL storagePath:(NSString *)storagePath operationQueue:(NSOperationQueue *)operationQueue {
 	self = [super init];
 
 	if (self) {
@@ -77,9 +77,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 		_storagePath = storagePath;
 
 		_state = ATBackendStateStarting;
-		_operationQueue = [[NSOperationQueue alloc] init];
-		_operationQueue.maxConcurrentOperationCount = 1;
-		_operationQueue.name = @"Apptentive Operation Queue";
+        _operationQueue = operationQueue;
 		_supportDirectoryPath = [[ApptentiveUtilities applicationSupportPath] stringByAppendingPathComponent:storagePath];
 
 		if ([UIApplication sharedApplication] != nil && ![UIApplication sharedApplication].isProtectedDataAvailable) {

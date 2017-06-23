@@ -88,7 +88,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	_conversationMetadata = [self resolveMetadata];
 
 	// attempt to load existing conversation
-	_activeConversation = [self loadConversation];
+	self.activeConversation = [self loadConversation];
 	// TODO: dispatch debug event (EVT_CONVERSATION_LOAD_ACTIVE, activeConversation != null);
 
 	if (self.activeConversation != nil) {

@@ -61,7 +61,7 @@ extern NSString *const ApptentiveAuthenticationDidFailNotificationKeyConversatio
  @param storagePath The path (relative to the App's Application Support directory) to use for storage.
  @return The newly-initialized backend.
  */
-- (instancetype)initWithApptentiveKey:(NSString *)apptentiveKey signature:(NSString *)signature baseURL:(NSURL *)baseURL storagePath:(NSString *)storagePath;
+- (instancetype)initWithApptentiveKey:(NSString *)apptentiveKey signature:(NSString *)signature baseURL:(NSURL *)baseURL storagePath:(NSString *)storagePath operationQueue:(NSOperationQueue *)operationQueue;
 
 @property (readonly, strong, nonatomic) NSString *apptentiveKey;
 @property (readonly, strong, nonatomic) NSString *apptentiveSignature;

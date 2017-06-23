@@ -69,7 +69,7 @@ static Apptentive *_sharedInstance;
 			return nil;
 		}
 
-		_apptentiveKey = [apptentiveKey copy];
+        _apptentiveKey = [apptentiveKey copy];
 		_apptentiveSignature = [apptentiveSignature copy];
 		_baseURL = [NSURL URLWithString:@"https://api.apptentive.com/"];
 		_logLevel = ApptentiveLogLevelInfo;
@@ -103,6 +103,10 @@ static Apptentive *_sharedInstance;
 	self = [super init];
 
 	if (self) {
+        _operationQueue = [[NSOperationQueue alloc] init];
+        _operationQueue.maxConcurrentOperationCount = 1;
+        _operationQueue.name = @"Apptentive Operation Queue";
+        
 		ApptentiveLogSetLevel(configuration.logLevel);
 
 		_style = [[ApptentiveStyleSheet alloc] init];
@@ -112,7 +116,8 @@ static Apptentive *_sharedInstance;
 		_backend = [[ApptentiveBackend alloc] initWithApptentiveKey:_apptentiveKey
 														  signature:_apptentiveSignature
 															baseURL:_baseURL
-														storagePath:@"com.apptentive.feedback"];
+														storagePath:@"com.apptentive.feedback"
+                                                     operationQueue:_operationQueue];
 
 		if (configuration.distributionName && configuration.distributionVersion) {
 			[ApptentiveSDK setDistributionName:configuration.distributionName];
@@ -685,6 +690,16 @@ static Apptentive *_sharedInstance;
 
 - (void)setLogLevel:(ApptentiveLogLevel)logLevel {
 	ApptentiveLogSetLevel(logLevel);
+}
+
+#pragma mark -
+#pragma mark Operations Queue
+
+- (void)dispatchOnOperationQueue:(void (^)(void))block {
+    ApptentiveAssertNotNil(block, @"Attempted to execute a nil block");
+    if (block) {
+        [_operationQueue addOperationWithBlock:block];
+    }
 }
 
 @end

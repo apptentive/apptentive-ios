@@ -169,3 +169,12 @@ extern NSErrorDomain const ApptentiveHTTPErrorDomain;
 - (void)resetBackoffDelay;
 
 @end
+
+@interface ApptentiveRequestOperationCallback : NSObject<ApptentiveRequestOperationDelegate>
+
+@property (copy, nonatomic) void(^operationStartCallback)(ApptentiveRequestOperation *operation);
+@property (copy, nonatomic) void(^operationFinishCallback)(ApptentiveRequestOperation *operation);
+@property (copy, nonatomic) void(^operationRetryCallback)(ApptentiveRequestOperation *operation);
+@property (copy, nonatomic) void(^operationFailCallback)(ApptentiveRequestOperation *operation, NSError *error);
+
+@end

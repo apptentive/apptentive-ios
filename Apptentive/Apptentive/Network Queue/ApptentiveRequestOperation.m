@@ -295,3 +295,33 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 }
 
 @end
+
+@implementation ApptentiveRequestOperationCallback
+
+#pragma mark - ApptentiveRequestOperationDelegate implementation
+
+- (void)requestOperationDidStart:(ApptentiveRequestOperation *)operation {
+    if (self.operationStartCallback) {
+        self.operationStartCallback(operation);
+    }
+}
+
+- (void)requestOperationDidFinish:(ApptentiveRequestOperation *)operation {
+    if (self.operationFinishCallback) {
+        self.operationFinishCallback(operation);
+    }
+}
+
+- (void)requestOperationWillRetry:(ApptentiveRequestOperation *)operation withError:(NSError *)error {
+    if (self.operationRetryCallback) {
+        self.operationRetryCallback(operation);
+    }
+}
+
+- (void)requestOperation:(ApptentiveRequestOperation *)operation didFailWithError:(NSError *)error {
+    if (self.operationFailCallback) {
+        self.operationFailCallback(operation, error);
+    }
+}
+
+@end

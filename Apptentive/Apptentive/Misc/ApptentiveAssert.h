@@ -57,6 +57,7 @@ if (expression.length == 0) __ApptentiveAssertHelper(#expression, __FILE__, __LI
  * @param expression An expression of dispatch_queue_t type.
  * @param ... An optional supplementary description of the failure. A literal NSString, optionally with string format specifiers. This parameter can be completely omitted.
  */
-#define ApptentiveAssertDispatchQueue(expression, ...)
+#define ApptentiveAssertOperationQueue(expression) \
+    if (NSOperationQueue.currentQueue != (expression)) __ApptentiveAssertHelper(#expression, __FILE__, __LINE__, __PRETTY_FUNCTION__, @"Unexpected operation queue: %@", NSOperationQueue.currentQueue)
 
 void __ApptentiveAssertHelper(const char *expression, const char *file, int line, const char *function, ...);

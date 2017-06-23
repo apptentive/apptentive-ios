@@ -14,6 +14,11 @@
 
 @interface ApptentivePayloadSender ()
 
+/*!
+ * This private serial queue is used for sending payloads one-by-one (also retrying)
+ */
+@property (readonly, nonatomic) NSOperationQueue *payloadQueue;
+
 @property (strong, nonatomic) NSMutableDictionary *activeTaskProgress;
 @property (assign, atomic) BOOL isResuming;
 
@@ -22,14 +27,15 @@
 
 @implementation ApptentivePayloadSender
 
-- (instancetype)initWithBaseURL:(NSURL *)baseURL apptentiveKey:(NSString *)apptentiveKey apptentiveSignature:(NSString *)apptentiveSignature managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
-	self = [super initWithBaseURL:baseURL apptentiveKey:apptentiveKey apptentiveSignature:apptentiveSignature];
+- (instancetype)initWithBaseURL:(NSURL *)baseURL apptentiveKey:(NSString *)apptentiveKey apptentiveSignature:(NSString *)apptentiveSignature managedObjectContext:(NSManagedObjectContext *)managedObjectContext operationQueue:(NSOperationQueue *)operationQueue {
+	self = [super initWithBaseURL:baseURL apptentiveKey:apptentiveKey apptentiveSignature:apptentiveSignature operationQueue:operationQueue];
 
 	if (self) {
+        _payloadQueue = [[NSOperationQueue alloc] init];
+        _payloadQueue.maxConcurrentOperationCount = 1;
+        _payloadQueue.name = @"Payload Queue";
+        
 		_managedObjectContext = managedObjectContext;
-
-		self.operationQueue.maxConcurrentOperationCount = 1;
-
 		_activeTaskProgress = [[NSMutableDictionary alloc] init];
 	}
 
@@ -39,7 +45,7 @@
 #pragma mark - Cancelling network operations
 
 - (void)cancelNetworkOperations {
-	[self.operationQueue cancelAllOperations];
+	[self.payloadQueue cancelAllOperations];
 
 	ApptentiveLogVerbose(ApptentiveLogTagPayload, @"Clearing isResuming Flag");
 	self.isResuming = NO;
@@ -84,7 +90,7 @@
 
 				operation.request = request;
 
-				[self.operationQueue addOperation:operation];
+				[self.payloadQueue addOperation:operation];
 			}
 		}];
 
@@ -113,14 +119,14 @@
 				}];
 			}];
 
-			[self.operationQueue addOperation:saveBlock];
+			[self.payloadQueue addOperation:saveBlock];
 		}
 
 		ApptentiveLogVerbose(ApptentiveLogTagPayload, @"Clearing isResuming Flag");
 		self.isResuming = NO;
 	}];
 
-	[self.operationQueue addOperation:resumeBlock];
+	[self.payloadQueue addOperation:resumeBlock];
 }
 
 #pragma mark - Message send progress
@@ -167,7 +173,7 @@
 }
 
 - (void)updateMessageStatusForOperation:(ApptentiveRequestOperation *)operation {
-	for (NSOperation *operation in self.operationQueue.operations) {
+	for (NSOperation *operation in self.payloadQueue.operations) {
 		if ([operation isKindOfClass:[ApptentiveRequestOperation class]] && [((ApptentiveRequestOperation *)operation).request isKindOfClass:[ApptentiveSerialRequest class]] && ((ApptentiveSerialRequest *)((ApptentiveRequestOperation *)operation).request).messageRequest) {
 			ApptentiveRequestOperation *messageOperation = (ApptentiveRequestOperation *)operation;
 			ApptentiveSerialRequest *messageSendRequest = (ApptentiveSerialRequest *)messageOperation.request;

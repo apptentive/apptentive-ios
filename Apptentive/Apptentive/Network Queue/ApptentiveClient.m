@@ -22,14 +22,14 @@
 @synthesize URLSession = _URLSession;
 @synthesize backoffDelay = _backoffDelay;
 
-- (instancetype)initWithBaseURL:(NSURL *)baseURL apptentiveKey:(nonnull NSString *)apptentiveKey apptentiveSignature:(nonnull NSString *)apptentiveSignature {
+- (instancetype)initWithBaseURL:(NSURL *)baseURL apptentiveKey:(nonnull NSString *)apptentiveKey apptentiveSignature:(nonnull NSString *)apptentiveSignature operationQueue:(NSOperationQueue *)operationQueue {
 	self = [super init];
 
 	if (self) {
 		_baseURL = baseURL;
 		_apptentiveKey = apptentiveKey;
 		_apptentiveSignature = apptentiveSignature;
-		_operationQueue = [[NSOperationQueue alloc] init];
+        _operationQueue = operationQueue;
 
 		NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
 		configuration.HTTPAdditionalHeaders = @{
@@ -39,7 +39,7 @@
 			@"User-Agent": [NSString stringWithFormat:@"ApptentiveConnect/%@ (iOS)", kApptentiveVersionString],
 		};
 
-		_URLSession = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:nil];
+		_URLSession = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:operationQueue];
 
 		[self resetBackoffDelay];
 	}

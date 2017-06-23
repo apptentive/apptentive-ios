@@ -199,16 +199,24 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	}
 
 	ApptentiveConversation *conversation = [NSKeyedUnarchiver unarchiveObjectWithData:conversationData];
-	conversation.state = item.state;
-	conversation.encryptionKey = item.encryptionKey;
-	conversation.userId = item.userId;
-	conversation.token = item.JWT;
+    ApptentiveAssertNotNil(conversation, @"Failed to load conversation");
+    if (conversation == nil) {
+        return nil;
+    }
+    
+    // TODO: do we need a mutable conversation here or can we just load it from the archive
+    ApptentiveMutableConversation *mutableConversation = [[ApptentiveMutableConversation alloc] initWithConversation:conversation];
+    
+	mutableConversation.state = item.state;
+	mutableConversation.encryptionKey = item.encryptionKey;
+	mutableConversation.userId = item.userId;
+	mutableConversation.token = item.JWT;
 
 	// TODO: check data consistency
 
-	[self createMessageManagerForConversation:conversation];
+	[self createMessageManagerForConversation:mutableConversation];
 
-	return conversation;
+	return mutableConversation;
 }
 
 - (void)createMessageManagerForConversation:(ApptentiveConversation *)conversation {

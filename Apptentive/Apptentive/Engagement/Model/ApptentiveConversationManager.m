@@ -52,8 +52,6 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 @property (strong, nullable, nonatomic) ApptentiveRequestOperation *manifestOperation;
 @property (strong, nullable, nonatomic) ApptentiveRequestOperation *loginRequestOperation;
 
-@property (strong, nullable, nonatomic) NSString *pendingLoggedInUserId; // FIXME: get rid off properties
-
 @property (readonly, nonatomic) NSString *metadataPath;
 @property (readonly, nonatomic) NSString *manifestPath;
 
@@ -465,12 +463,20 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
     ApptentiveAssertNotEmpty(token, @"Attempted to send login request with nil or empty conversation token");
     ApptentiveAssertNotEmpty(userId, @"Attempted to send login request with nil or empty user id");
     
-	self.pendingLoggedInUserId = userId;
+    ApptentiveRequestOperationCallback *delegate = [ApptentiveRequestOperationCallback new];
+    delegate.operationFinishCallback = ^(ApptentiveRequestOperation *operation) {
+        [self conversation:self.activeConversation processLoginResponse:(NSDictionary *)operation.responseObject userId:userId token:token];
+        self.loginRequestOperation = nil;
+    };
+    delegate.operationFailCallback = ^(ApptentiveRequestOperation *operation, NSError *error) {
+        self.loginRequestOperation = nil;
+        [self completeLoginSuccess:NO error:error];
+    };
     
-    id<ApptentiveRequest> request = conversationIdentifier != nil ?
+	id<ApptentiveRequest> request = conversationIdentifier != nil ?
         [[ApptentiveExistingLoginRequest alloc] initWithConversationIdentifier:conversationIdentifier token:token] :
         [[ApptentiveNewLoginRequest alloc] initWithToken:token];
-	self.loginRequestOperation = [self.client requestOperationWithRequest:request token:nil delegate:self];
+	self.loginRequestOperation = [self.client requestOperationWithRequest:request token:nil delegate:delegate];
 
 	[self.client.operationQueue addOperation:self.loginRequestOperation];
 }
@@ -591,27 +597,12 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		[self processManifestResponse:(NSDictionary *)operation.responseObject cacheLifetime:operation.cacheLifetime];
 
 		self.manifestOperation = nil;
-	} else if (operation == self.loginRequestOperation) {
-		ApptentiveAssertNotNil(self.pendingLoggedInUserId, @"Missing pending user_id");
-        NSString *token = nil;
-        if ([operation.request respondsToSelector:@selector(token)]) {
-            token = [operation.request performSelector:@selector(token)];
-        }
-        
-        [self processLoginResponse:(NSDictionary *)operation.responseObject userId:self.pendingLoggedInUserId token:token];
-		self.pendingLoggedInUserId = nil;
-		self.loginRequestOperation = nil;
 	}
 }
 
 - (void)requestOperation:(ApptentiveRequestOperation *)operation didFailWithError:(NSError *)error {
 	if (operation == self.manifestOperation) {
 		self.manifestOperation = nil;
-	} else if (operation == self.loginRequestOperation) {
-		self.loginRequestOperation = nil;
-		self.pendingLoggedInUserId = nil;
-
-		[self completeLoginSuccess:NO error:error];
 	}
 }
 
@@ -641,7 +632,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	});
 }
 
-- (void)processLoginResponse:(NSDictionary *)loginResponse userId:(NSString *)userId token:(NSString *)token {
+- (void)conversation:(ApptentiveConversation *)conversation processLoginResponse:(NSDictionary *)loginResponse userId:(NSString *)userId token:(NSString *)token {
     ApptentiveAssertNotEmpty(token, @"Empty token in login request");
     
 	NSString *encryptionKey = ApptentiveDictionaryGetString(loginResponse, @"encryption_key");
@@ -660,9 +651,10 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
     }
 
 	// if we were previously logged out we might end up with no active conversation
-	if (self.activeConversation == nil) {
+    ApptentiveMutableConversation *mutableConversation;
+	if (conversation == nil) {
 		ApptentiveConversationMetadataItem *conversationItem = [self.conversationMetadata findItemFilter:^BOOL(ApptentiveConversationMetadataItem *item) {
-            return [item.userId isEqualToString:self.pendingLoggedInUserId];
+            return [item.userId isEqualToString:userId];
 		}];
         
 		if (conversationItem == nil) {
@@ -677,17 +669,20 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
             [self failLoginWithErrorCode:ApptentiveInternalInconsistency failureReason:@"Mismatching conversation identifiers for user '%@'. Expected '%@' but was '%@'", userId, conversationItem.conversationIdentifier, conversationIdentifier];
             return;
         }
-	}
+    } else {
+        mutableConversation = [[ApptentiveMutableConversation alloc] initWithConversation:conversation];
+    }
 
-    [self.activeConversation setToken:token conversationID:conversationIdentifier personID:personIdentifier deviceID:deviceIdentifier];
-    self.activeConversation.state = ApptentiveConversationStateLoggedIn;
-	self.activeConversation.userId = self.pendingLoggedInUserId;
-	self.activeConversation.encryptionKey = [NSData apptentive_dataWithHexString:encryptionKey];
-    ApptentiveAssertNotNil(self.activeConversation.encryptionKey, @"Apptentive encryption key should be not nil");
+    [mutableConversation setToken:token conversationID:conversationIdentifier personID:personIdentifier deviceID:deviceIdentifier];
+    mutableConversation.state = ApptentiveConversationStateLoggedIn;
+	mutableConversation.userId = userId;
+	mutableConversation.encryptionKey = [NSData apptentive_dataWithHexString:encryptionKey];
+    ApptentiveAssertNotNil(mutableConversation.encryptionKey, @"Apptentive encryption key should be not nil");
     
-#warning FIXME: Don't pass global conversation object
-    [self saveConversation:self.activeConversation];
-	[self handleConversationStateChange:self.activeConversation];
+    self.activeConversation = mutableConversation;
+    
+    [self saveConversation:mutableConversation];
+	[self handleConversationStateChange:mutableConversation];
 
 	[self completeLoginSuccess:YES error:nil];
 }

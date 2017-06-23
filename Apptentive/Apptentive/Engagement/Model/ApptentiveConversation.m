@@ -429,3 +429,22 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 }
 
 @end
+@implementation ApptentiveMutableConversation
+
+- (instancetype)initWithConversation:(ApptentiveConversation *)conversation {
+#warning Implement me
+    ApptentiveAssertFail(@"Implement me");
+    return nil;
+}
+
+- (void)setToken:(NSString *)token conversationID:(NSString *)conversationID personID:(NSString *)personID deviceID:(NSString *)deviceID {
+#warning Implement me
+    ApptentiveAssertFail(@"Implement me");
+}
+
+- (void)setConversationIdentifier:(NSString *)identifier JWT:(NSString *)JWT {
+#warning Implement me
+    ApptentiveAssertFail(@"Implement me");
+}
+
+@end

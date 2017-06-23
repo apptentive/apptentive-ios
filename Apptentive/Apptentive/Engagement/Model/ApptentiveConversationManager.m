@@ -231,7 +231,8 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		[self.messageManager saveMessageStore];
 		_messageManager = nil;
 
-		[self saveConversation];
+#warning FIXME: Don't pass global conversation object
+        [self saveConversation:self.activeConversation];
 		[self handleConversationStateChange:self.activeConversation];
 
 		_activeConversation = nil;
@@ -495,7 +496,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
  server.
  */
 - (void)conversationDidChange:(ApptentiveConversation *)conversation {
-	[self scheduleConversationSave];
+    [self scheduleSaveConversation:conversation];
 }
 
 - (void)conversationAppReleaseOrSDKDidChange:(ApptentiveConversation *)conversation {
@@ -510,7 +511,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 			[ApptentiveSerialRequest enqueuePayload:payload forConversation:self.activeConversation usingAuthToken:self.activeConversation.token inContext:context];
 		}];
 
-		[self saveConversation];
+        [self saveConversation:conversation];
 
 		self.manifest.expiry = [NSDate distantPast];
 	}];
@@ -529,7 +530,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 			[ApptentiveSerialRequest enqueuePayload:payload forConversation:self.activeConversation usingAuthToken:self.activeConversation.token inContext:context];
 		}];
 
-		[self saveConversation];
+        [self saveConversation:conversation];
 
 		[self.delegate processQueuedRecords];
 	}];
@@ -548,7 +549,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 			[ApptentiveSerialRequest enqueuePayload:payload forConversation:self.activeConversation usingAuthToken:self.activeConversation.token inContext:context];
 		}];
 
-		[self saveConversation];
+        [self saveConversation:conversation];
 
 		[self.delegate processQueuedRecords];
 
@@ -560,7 +561,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 - (void)conversationUserInfoDidChange:(ApptentiveConversation *)conversation {
 	NSBlockOperation *conversationSaveOperation = [NSBlockOperation blockOperationWithBlock:^{
-		[self saveConversation];
+        [self saveConversation:conversation];
 	}];
 
 	[self.operationQueue addOperation:conversationSaveOperation];
@@ -568,7 +569,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 - (void)conversationEngagementDidChange:(ApptentiveConversation *)conversation {
 	NSBlockOperation *conversationSaveOperation = [NSBlockOperation blockOperationWithBlock:^{
-		[self saveConversation];
+        [self saveConversation:conversation];
 	}];
 
 	[self.operationQueue addOperation:conversationSaveOperation];
@@ -675,7 +676,8 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	self.activeConversation.encryptionKey = [NSData apptentive_dataWithHexString:encryptionKey];
     ApptentiveAssertNotNil(self.activeConversation.encryptionKey, @"Apptentive encryption key should be not nil");
     
-	[self saveConversation];
+#warning FIXME: Don't pass global conversation object
+    [self saveConversation:self.activeConversation];
 	[self handleConversationStateChange:self.activeConversation];
 
 	[self completeLoginSuccess:YES error:nil];
@@ -700,7 +702,8 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
         
         self.activeConversation = mutableConversation;
 
-		[self saveConversation];
+#warning FIXME: Don't pass global conversation object
+        [self saveConversation:self.activeConversation];
 
 		[self handleConversationStateChange:self.activeConversation];
 
@@ -735,7 +738,8 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
         
         self.activeConversation = mutableConversation;
 
-		[self saveConversation];
+#warning FIXME: Don't pass global conversation object
+        [self saveConversation:self.activeConversation];
 		[self handleConversationStateChange:self.activeConversation];
 
 		return YES;
@@ -745,71 +749,69 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	return NO;
 }
 
-- (BOOL)saveConversation {
+- (BOOL)saveConversation:(ApptentiveConversation *)conversation {
+    ApptentiveAssertNotNil(conversation, @"Attempted to save nil conversation");
+    if (conversation == nil) {
+        return NO;
+    }
+    
 	ApptentiveStopWatch *saveStopWatch = [[ApptentiveStopWatch alloc] init];
 
-	ApptentiveAssertNotNil(self.activeConversation, @"Missing active conversation");
-	if (self.activeConversation == nil) {
-		return NO;
-	}
+    NSString *conversationDirectoryPath = [self conversationContainerPathForDirectoryName:conversation.directoryName];
 
-	@synchronized(self.activeConversation) {
-		NSString *conversationDirectoryPath = [self conversationContainerPathForDirectoryName:self.activeConversation.directoryName];
+    BOOL isDirectory = NO;
+    if (![[NSFileManager defaultManager] fileExistsAtPath:conversationDirectoryPath isDirectory:&isDirectory] || !isDirectory) {
+        NSError *error;
 
-		BOOL isDirectory = NO;
-		if (![[NSFileManager defaultManager] fileExistsAtPath:conversationDirectoryPath isDirectory:&isDirectory] || !isDirectory) {
-			NSError *error;
+        if (![[NSFileManager defaultManager] createDirectoryAtPath:conversationDirectoryPath withIntermediateDirectories:YES attributes:nil error:&error]) {
+            ApptentiveAssertTrue(NO, @"Unable to create conversation directory “%@” (%@)", conversationDirectoryPath, error);
+            return NO;
+        }
+    }
 
-			if (![[NSFileManager defaultManager] createDirectoryAtPath:conversationDirectoryPath withIntermediateDirectories:YES attributes:nil error:&error]) {
-				ApptentiveAssertTrue(NO, @"Unable to create conversation directory “%@” (%@)", conversationDirectoryPath, error);
-				return NO;
-			}
-		}
+    NSString *file = [self conversationArchivePathForDirectoryName:conversation.directoryName];
+    ApptentiveAssertTrue(file.length != 0, @"Conversation file is nil or empty");
 
-		NSString *file = [self conversationArchivePathForDirectoryName:self.activeConversation.directoryName];
-		ApptentiveAssertTrue(file.length != 0, @"Conversation file is nil or empty");
+    if (file.length == 0) {
+        return NO;
+    }
 
-		if (file.length == 0) {
-			return NO;
-		}
+    NSData *conversationData = [NSKeyedArchiver archivedDataWithRootObject:conversation];
+    ApptentiveAssertNotNil(conversationData, @"Conversation data serialization failed");
 
-		NSData *conversationData = [NSKeyedArchiver archivedDataWithRootObject:self.activeConversation];
-		ApptentiveAssertNotNil(conversationData, @"Conversation data serialization failed");
+    if (conversationData == nil) {
+        return NO;
+    }
 
-		if (conversationData == nil) {
-			return NO;
-		}
+    if (conversation.state == ApptentiveConversationStateLoggedIn) {
+        ApptentiveStopWatch *encryptionStopWatch = [[ApptentiveStopWatch alloc] init];
 
-		if (self.activeConversation.state == ApptentiveConversationStateLoggedIn) {
-			ApptentiveStopWatch *encryptionStopWatch = [[ApptentiveStopWatch alloc] init];
+        ApptentiveAssertNotNil(conversation.encryptionKey, @"Missing encryption key");
+        if (conversation.encryptionKey == nil) {
+            return NO;
+        }
 
-			ApptentiveAssertNotNil(self.activeConversation.encryptionKey, @"Missing encryption key");
-			if (self.activeConversation.encryptionKey == nil) {
-				return NO;
-			}
+        NSData *initializationVector = [ApptentiveUtilities secureRandomDataOfLength:16];
+        ApptentiveAssertTrue(initializationVector.length > 0, @"Unable to generate random initialization vector.");
 
-			NSData *initializationVector = [ApptentiveUtilities secureRandomDataOfLength:16];
-			ApptentiveAssertTrue(initializationVector.length > 0, @"Unable to generate random initialization vector.");
+        if (initializationVector == nil) {
+            return NO;
+        }
 
-			if (initializationVector == nil) {
-				return NO;
-			}
+        conversationData = [conversationData apptentive_dataEncryptedWithKey:conversation.encryptionKey
+                                                        initializationVector:initializationVector];
+        if (conversationData == nil) {
+            ApptentiveLogError(@"Unable to save conversation data: encryption failed");
+            return NO;
+        }
 
-			conversationData = [conversationData apptentive_dataEncryptedWithKey:self.activeConversation.encryptionKey
-															initializationVector:initializationVector];
-			if (conversationData == nil) {
-				ApptentiveLogError(@"Unable to save conversation data: encryption failed");
-				return NO;
-			}
+        ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Conversation data encrypted (took %g ms)", encryptionStopWatch.elapsedMilliseconds);
+    }
 
-			ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Conversation data encrypted (took %g ms)", encryptionStopWatch.elapsedMilliseconds);
-		}
+    BOOL succeed = [conversationData writeToFile:file atomically:YES];
+    ApptentiveLogDebug(ApptentiveLogTagConversation, @"Conversation data %@saved (took %g ms): location=%@", succeed ? @"" : @"NOT ", saveStopWatch.elapsedMilliseconds, file);
 
-		BOOL succeed = [conversationData writeToFile:file atomically:YES];
-		ApptentiveLogDebug(ApptentiveLogTagConversation, @"Conversation data %@saved (took %g ms): location=%@", succeed ? @"" : @"NOT ", saveStopWatch.elapsedMilliseconds, file);
-
-		return succeed;
-	}
+    return succeed;
 }
 
 - (BOOL)saveManifest {
@@ -842,9 +844,9 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	}
 }
 
-- (void)scheduleConversationSave {
+- (void)scheduleSaveConversation:(ApptentiveConversation *)conversation {
 	[self.operationQueue addOperationWithBlock:^{
-		if (![self saveConversation]) {
+        if (![self saveConversation:conversation]) {
 			ApptentiveLogError(@"Error saving active conversation.");
 		}
 	}];

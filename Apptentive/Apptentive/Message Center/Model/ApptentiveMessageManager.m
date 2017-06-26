@@ -245,14 +245,18 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 #pragma mark - Sending Messages
 
 - (void)sendMessage:(ApptentiveMessage *)message {
-	message.sender = [[ApptentiveMessageSender alloc] initWithName:nil identifier:self.localUserIdentifier profilePhotoURL:nil];
-
-	[self enqueueMessageForSending:message];
-
-	[self appendMessage:message];
+    [self.operationQueue addOperationWithBlock:^{
+        message.sender = [[ApptentiveMessageSender alloc] initWithName:nil identifier:self.localUserIdentifier profilePhotoURL:nil];
+        
+        [self enqueueMessageForSending:message];
+        
+        [self appendMessage:message];
+    }];    
 }
 
 - (void)enqueueMessageForSending:(ApptentiveMessage *)message {
+    ApptentiveAssertOperationQueue(self.operationQueue);
+    
 	NSString *previousLocalIdentifier = message.localIdentifier;
 	ApptentiveConversation *conversation = Apptentive.shared.backend.conversationManager.activeConversation;
 

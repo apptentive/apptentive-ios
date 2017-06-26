@@ -21,11 +21,9 @@ static NSString *ATInteractionAppEventLabelExit = @"exit";
 
 @implementation ApptentiveBackend (Metrics)
 
-- (void)addMetricWithName:(NSString *)name fromInteraction:(ApptentiveInteraction *)fromInteraction info:(NSDictionary *)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData {
+- (void)conversation:(ApptentiveConversation *)conversation addMetricWithName:(NSString *)name fromInteraction:(ApptentiveInteraction *)fromInteraction info:(NSDictionary *)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData {
     ApptentiveAssertOperationQueue(self.operationQueue);
     
-	ApptentiveConversation *conversation = self.conversationManager.activeConversation;
-
 	if (self.configuration.metricsEnabled == NO || name == nil || conversation.state == ApptentiveConversationStateLoggedOut) {
 		return;
 	}

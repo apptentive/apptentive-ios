@@ -117,17 +117,19 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 		return NO;
 	}
     
-    if (self.conversationManager.activeConversation == nil) {
+    ApptentiveConversation *conversation = self.conversationManager.activeConversation;
+    
+    if (conversation == nil) {
         ApptentiveLogWarning(@"Attempting to engage event with no active conversation.");
         return NO;
     }
 
     [self.operationQueue addOperationWithBlock:^{
-        [self addMetricWithName:codePoint fromInteraction:fromInteraction info:userInfo customData:customData extendedData:extendedData];
+        [self conversation:conversation addMetricWithName:codePoint fromInteraction:fromInteraction info:userInfo customData:customData extendedData:extendedData];
     }];
 
-	[self codePointWasSeen:codePoint];
-	[self codePointWasEngaged:codePoint];
+    [conversation warmCodePoint:codePoint];
+    [conversation engageCodePoint:codePoint];
 
 	BOOL didEngageInteraction = NO;
 

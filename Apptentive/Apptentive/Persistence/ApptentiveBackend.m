@@ -92,11 +92,11 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 
 		[ApptentiveReachability sharedReachability];
 
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startWorking:) name:UIApplicationDidBecomeActiveNotification object:nil];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startWorking:) name:UIApplicationWillEnterForegroundNotification object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActiveNotification:) name:UIApplicationDidBecomeActiveNotification object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillEnterForegroundNotification:) name:UIApplicationWillEnterForegroundNotification object:nil];
 
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopWorking:) name:UIApplicationWillTerminateNotification object:nil];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopWorking:) name:UIApplicationDidEnterBackgroundNotification object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillTerminateNotification:) name:UIApplicationWillTerminateNotification object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidEnterBackgroundNotification:) name:UIApplicationDidEnterBackgroundNotification object:nil];
 
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleRemoteNotificationInUIApplicationStateActive) name:UIApplicationDidBecomeActiveNotification object:nil];
 
@@ -147,21 +147,49 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 #pragma mark Notification Handling
 
 - (void)networkStatusChanged:(NSNotification *)notification {
-	ApptentiveNetworkStatus status = [[ApptentiveReachability sharedReachability] currentNetworkStatus];
-	if (status == ApptentiveNetworkNotReachable) {
-		self.networkAvailable = NO;
-	} else {
-		self.networkAvailable = YES;
-	}
-	[self updateWorking];
+    [self.operationQueue addOperationWithBlock:^{
+        ApptentiveNetworkStatus status = [[ApptentiveReachability sharedReachability] currentNetworkStatus];
+        if (status == ApptentiveNetworkNotReachable) {
+            self.networkAvailable = NO;
+        } else {
+            self.networkAvailable = YES;
+        }
+        [self updateWorking];
+    }];
 }
 
-- (void)stopWorking:(NSNotification *)notification {
+- (void)applicationWillTerminateNotification:(NSNotification *)notification {
+    [self.operationQueue addOperationWithBlock:^{
+        [self stopWorking];
+    }];
+}
+
+- (void)applicationDidEnterBackgroundNotification:(NSNotification *)notification {
+    [self.operationQueue addOperationWithBlock:^{
+        [self stopWorking];
+    }];
+}
+
+- (void)applicationDidBecomeActiveNotification:(NSNotification *)notification {
+    [self.operationQueue addOperationWithBlock:^{
+        [self startWorking];
+    }];
+}
+
+- (void)applicationWillEnterForegroundNotification:(NSNotification *)notification {
+    [self.operationQueue addOperationWithBlock:^{
+        [self startWorking];
+    }];
+}
+
+- (void)stopWorking {
+    ApptentiveAssertOperationQueue(self.operationQueue);
 	self.shouldStopWorking = YES;
 	[self updateWorking];
 }
 
-- (void)startWorking:(NSNotification *)notification {
+- (void)startWorking {
+    ApptentiveAssertOperationQueue(self.operationQueue);
 	self.shouldStopWorking = NO;
 	[self updateWorking];
 }
@@ -545,7 +573,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 #pragma mark - Debugging
 
 - (void)resetBackend {
-	[self stopWorking:nil];
+	[self stopWorking];
 
 	NSError *error;
 

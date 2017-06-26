@@ -84,10 +84,13 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 			_operationQueue.suspended = YES;
 			_state = ATBackendStateWaitingForDataProtectionUnlock;
 
-#warning Reference cycle
+            __weak ApptentiveBackend *weakSelf = self;
 			[[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationProtectedDataDidBecomeAvailable object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *_Nonnull note) {
-				self.operationQueue.suspended = NO;
-				self.state = ATBackendStateStarting;
+                ApptentiveBackend *strongSelf = weakSelf;
+                if (strongSelf) {
+                    strongSelf.operationQueue.suspended = NO;
+                    strongSelf.state = ATBackendStateStarting;
+                }
 			}];
 		}
 
@@ -369,12 +372,16 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 }
 
 - (void)processQueuedRecords {
+    ApptentiveAssertOperationQueue(self.operationQueue);
+    
 	if (self.isReady && self.working && self.conversationManager.activeConversation.token != nil) {
 		[self.payloadSender createOperationsForQueuedRequestsInContext:self.managedObjectContext];
 	}
 }
 
 - (void)processConfigurationResponse:(NSDictionary *)configurationResponse cacheLifetime:(NSTimeInterval)cacheLifetime {
+    ApptentiveAssertOperationQueue(self.operationQueue);
+    
 	_configuration = [[ApptentiveAppConfiguration alloc] initWithJSONDictionary:configurationResponse cacheLifetime:cacheLifetime];
 
 	[self saveConfiguration];
@@ -444,15 +451,13 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 #pragma mark Person/Device management
 
 - (void)scheduleDeviceUpdate {
-	[self.operationQueue addOperationWithBlock:^{
-		[self.conversationManager.activeConversation checkForDeviceDiffs];
-	}];
+    ApptentiveAssertOperationQueue(self.operationQueue);
+    [self.conversationManager.activeConversation checkForDeviceDiffs];
 }
 
 - (void)schedulePersonUpdate {
-	[self.operationQueue addOperationWithBlock:^{
-		[self.conversationManager.activeConversation checkForPersonDiffs];
-	}];
+    ApptentiveAssertOperationQueue(self.operationQueue);
+    [self.conversationManager.activeConversation checkForPersonDiffs];
 }
 
 #pragma mark Message Polling

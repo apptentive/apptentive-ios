@@ -227,31 +227,29 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	Apptentive.shared.backend.payloadSender.messageDelegate = self.messageManager;
 }
 
-- (BOOL)endActiveConversation {
-	if (self.activeConversation != nil) {
+- (void)endActiveConversation {
+    ApptentiveAssertOperationQueue(self.operationQueue);
+    
+    if (self.activeConversation != nil) {
         ApptentiveMutableConversation *conversation = [self.activeConversation mutableCopy];
         
-		ApptentiveLogoutPayload *payload = [[ApptentiveLogoutPayload alloc] init];
-
-		[ApptentiveSerialRequest enqueuePayload:payload forConversation:conversation usingAuthToken:conversation.token inContext:self.parentManagedObjectContext];
+        ApptentiveLogoutPayload *payload = [[ApptentiveLogoutPayload alloc] init];
+        
+        [ApptentiveSerialRequest enqueuePayload:payload forConversation:conversation usingAuthToken:conversation.token inContext:self.parentManagedObjectContext];
         
         [Apptentive.shared.backend processQueuedRecords];
-
-		conversation.state = ApptentiveConversationStateLoggedOut;
-		[self.messageManager saveMessageStore];
-		_messageManager = nil;
-
+        
+        conversation.state = ApptentiveConversationStateLoggedOut;
+        [self.messageManager saveMessageStore];
+        _messageManager = nil;
+        
         [self saveConversation:conversation];
-		[self handleConversationStateChange:conversation];
-
-		self.activeConversation = nil;
-
-		return YES;
-	} else {
-		ApptentiveLogInfo(@"Attempting to log out, but no conversation is active.");
-	}
-
-	return NO;
+        [self handleConversationStateChange:conversation];
+        
+        self.activeConversation = nil;
+    } else {
+        ApptentiveLogInfo(@"Attempting to log out, but no conversation is active.");
+    }
 }
 
 #pragma mark - Conversation Token Fetching
@@ -384,6 +382,8 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 #pragma mark - Login/Logout
 
 - (void)logInWithToken:(NSString *)token completion:(void (^)(BOOL, NSError *_Nonnull))completion {
+    ApptentiveAssertOperationQueue(self.operationQueue);
+    
 	if (completion == nil) {
 		completion = ^void(BOOL success, NSError *error) {
 		};
@@ -520,7 +520,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	NSBlockOperation *conversationDidChangeOperation = [NSBlockOperation blockOperationWithBlock:^{
 		NSManagedObjectContext *context = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
 
-		ApptentiveSDKAppReleasePayload *payload = [[ApptentiveSDKAppReleasePayload alloc] initWithConversation:self.activeConversation];
+		ApptentiveSDKAppReleasePayload *payload = [[ApptentiveSDKAppReleasePayload alloc] initWithConversation:conversation];
 
 		context.parentContext = self.parentManagedObjectContext;
 
@@ -674,7 +674,9 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 }
 
 - (BOOL)updateActiveConversation:(ApptentiveConversation *)conversation withResponse:(NSDictionary *)conversationResponse {
-	NSString *token = [conversationResponse valueForKey:@"token"];
+    ApptentiveAssertOperationQueue(self.operationQueue);
+    
+    NSString *token = [conversationResponse valueForKey:@"token"];
 	NSString *conversationID = [conversationResponse valueForKey:@"id"];
 	NSString *personID = [conversationResponse valueForKey:@"person_id"];
 	NSString *deviceID = [conversationResponse valueForKey:@"device_id"];
@@ -705,12 +707,12 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 }
 
 - (BOOL)updateLegacyConversation:(ApptentiveConversation *)conversation withResponse:(NSDictionary *)conversationResponse {
-	ApptentiveAssertNotNil(self.activeConversation, @"Active conversation is nil");
-	if (self.activeConversation == nil) {
+	ApptentiveAssertNotNil(conversation, @"Active conversation is nil");
+	if (conversation == nil) {
 		return NO;
 	}
 
-	ApptentiveAssertTrue(self.activeConversation.state == ApptentiveConversationStateLegacyPending, @"Unexpected conversation state: %@", NSStringFromApptentiveConversationState(self.activeConversation.state));
+	ApptentiveAssertTrue(conversation.state == ApptentiveConversationStateLegacyPending, @"Unexpected conversation state: %@", NSStringFromApptentiveConversationState(conversation.state));
 
 	NSString *JWT = ApptentiveDictionaryGetString(conversationResponse, @"anonymous_jwt_token");
 	NSString *conversationIdentifier = ApptentiveDictionaryGetString(conversationResponse, @"conversation_id");

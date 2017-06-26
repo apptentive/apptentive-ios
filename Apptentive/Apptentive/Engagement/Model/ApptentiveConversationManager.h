@@ -45,7 +45,7 @@ extern NSString *const ApptentiveConversationStateDidChangeNotificationKeyConver
  * Returns NO if active conversation is missing or cannot be loaded.
  */
 - (BOOL)loadActiveConversation;
-- (BOOL)endActiveConversation;
+- (void)endActiveConversation;
 - (void)logInWithToken:(NSString *)token completion:(void (^)(BOOL success, NSError *error))completion;
 
 - (BOOL)saveMetadata;

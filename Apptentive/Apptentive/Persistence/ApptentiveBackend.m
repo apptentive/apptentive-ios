@@ -77,7 +77,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 		_storagePath = storagePath;
 
 		_state = ATBackendStateStarting;
-        _operationQueue = operationQueue;
+		_operationQueue = operationQueue;
 		_supportDirectoryPath = [[ApptentiveUtilities applicationSupportPath] stringByAppendingPathComponent:storagePath];
 
 		if ([UIApplication sharedApplication] != nil && ![UIApplication sharedApplication].isProtectedDataAvailable) {
@@ -103,8 +103,8 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkStatusChanged:) name:ApptentiveReachabilityStatusChanged object:nil];
 
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateMessageCheckingTimer) name:ApptentiveInteractionsDidUpdateNotification object:nil];
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(authenticationDidFailNotification:) name:ApptentiveAuthenticationDidFailNotification object:nil];
+
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(authenticationDidFailNotification:) name:ApptentiveAuthenticationDidFailNotification object:nil];
 
 		[_operationQueue addOperationWithBlock:^{
 			[self createSupportDirectoryIfNeeded];
@@ -223,15 +223,15 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	if (self.configurationOperation != nil || !self.working) {
 		return;
 	}
-    
-    ApptentiveRequestOperationCallback *callback = [ApptentiveRequestOperationCallback new];
-    callback.operationFinishCallback = ^(ApptentiveRequestOperation *operation) {
+
+	ApptentiveRequestOperationCallback *callback = [ApptentiveRequestOperationCallback new];
+	callback.operationFinishCallback = ^(ApptentiveRequestOperation *operation) {
         [self processConfigurationResponse:(NSDictionary *)operation.responseObject cacheLifetime:operation.cacheLifetime];
         self.configurationOperation = nil;
-    };
-    callback.operationFailCallback = ^(ApptentiveRequestOperation *operation, NSError *error) {
+	};
+	callback.operationFailCallback = ^(ApptentiveRequestOperation *operation, NSError *error) {
         self.configurationOperation = nil;
-    };
+	};
 
 	self.configurationOperation = [self.client requestOperationWithRequest:[[ApptentiveConfigurationRequest alloc] initWithConversationIdentifier:self.conversationManager.activeConversation.identifier] delegate:callback];
 
@@ -252,8 +252,8 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 }
 
 - (void)startUp {
-    ApptentiveAssertOperationQueue(self.operationQueue);
-    
+	ApptentiveAssertOperationQueue(self.operationQueue);
+
 	_client = [[ApptentiveClient alloc] initWithBaseURL:self.baseURL apptentiveKey:self.apptentiveKey apptentiveSignature:self.apptentiveSignature delegateQueue:self.operationQueue];
 
 	_conversationManager = [[ApptentiveConversationManager alloc] initWithStoragePath:self.supportDirectoryPath operationQueue:self.operationQueue client:self.client parentManagedObjectContext:self.managedObjectContext];
@@ -483,6 +483,11 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 			ApptentivePushProvider pushProvider = [[NSUserDefaults standardUserDefaults] integerForKey:ApptentivePushProviderPreferenceKey];
 			NSString *pushToken = [[NSUserDefaults standardUserDefaults] objectForKey:ApptentivePushTokenPreferenceKey];
 			[conversation setPushToken:pushToken provider:pushProvider];
+
+			if (Apptentive.shared.didAccessStyleSheet) {
+				[conversation didOverrideStyles];
+			}
+
 			[self scheduleDeviceUpdate];
 		}
 	}
@@ -491,20 +496,19 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 #pragma mark - Authentication
 
 - (void)authenticationDidFailNotification:(NSNotification *)notification {
-    if (self.conversationManager.activeConversation.state == ApptentiveConversationStateLoggedIn && self.authenticationFailureCallback) {
-        
-        NSString *conversationIdentifier = ApptentiveDictionaryGetString(notification.userInfo, ApptentiveAuthenticationDidFailNotificationKeyConversationIdentifier);
-        
-        if (![conversationIdentifier isEqualToString:self.conversationManager.activeConversation.identifier]) {
-            ApptentiveLogDebug(@"Conversation identifier mismatch");
-            return;
-        }
-        
-        NSString *errorType = ApptentiveDictionaryGetString(notification.userInfo, ApptentiveAuthenticationDidFailNotificationKeyErrorType);
-        NSString *errorMessage = ApptentiveDictionaryGetString(notification.userInfo, ApptentiveAuthenticationDidFailNotificationKeyErrorMessage);
-        ApptentiveAuthenticationFailureReason reason = parseAuthenticationFailureReason(errorType);
-        self.authenticationFailureCallback(reason, errorMessage);
-    }
+	if (self.conversationManager.activeConversation.state == ApptentiveConversationStateLoggedIn && self.authenticationFailureCallback) {
+		NSString *conversationIdentifier = ApptentiveDictionaryGetString(notification.userInfo, ApptentiveAuthenticationDidFailNotificationKeyConversationIdentifier);
+
+		if (![conversationIdentifier isEqualToString:self.conversationManager.activeConversation.identifier]) {
+			ApptentiveLogDebug(@"Conversation identifier mismatch");
+			return;
+		}
+
+		NSString *errorType = ApptentiveDictionaryGetString(notification.userInfo, ApptentiveAuthenticationDidFailNotificationKeyErrorType);
+		NSString *errorMessage = ApptentiveDictionaryGetString(notification.userInfo, ApptentiveAuthenticationDidFailNotificationKeyErrorMessage);
+		ApptentiveAuthenticationFailureReason reason = parseAuthenticationFailureReason(errorType);
+		self.authenticationFailureCallback(reason, errorMessage);
+	}
 }
 
 #pragma mark - Paths

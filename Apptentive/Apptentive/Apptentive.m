@@ -69,7 +69,7 @@ static Apptentive *_sharedInstance;
 			return nil;
 		}
 
-        _apptentiveKey = [apptentiveKey copy];
+		_apptentiveKey = [apptentiveKey copy];
 		_apptentiveSignature = [apptentiveSignature copy];
 		_baseURL = [NSURL URLWithString:@"https://api.apptentive.com/"];
 		_logLevel = ApptentiveLogLevelInfo;
@@ -103,10 +103,10 @@ static Apptentive *_sharedInstance;
 	self = [super init];
 
 	if (self) {
-        _operationQueue = [[NSOperationQueue alloc] init];
-        _operationQueue.maxConcurrentOperationCount = 1;
-        _operationQueue.name = @"Apptentive Operation Queue";
-        
+		_operationQueue = [[NSOperationQueue alloc] init];
+		_operationQueue.maxConcurrentOperationCount = 1;
+		_operationQueue.name = @"Apptentive Operation Queue";
+
 		ApptentiveLogSetLevel(configuration.logLevel);
 
 		_style = [[ApptentiveStyleSheet alloc] init];
@@ -117,7 +117,7 @@ static Apptentive *_sharedInstance;
 														  signature:_apptentiveSignature
 															baseURL:_baseURL
 														storagePath:@"com.apptentive.feedback"
-                                                     operationQueue:_operationQueue];
+													 operationQueue:_operationQueue];
 
 		if (configuration.distributionName && configuration.distributionVersion) {
 			[ApptentiveSDK setDistributionName:configuration.distributionName];
@@ -138,7 +138,7 @@ static Apptentive *_sharedInstance;
 }
 
 - (id<ApptentiveStyle>)styleSheet {
-	[self.backend.conversationManager.activeConversation didOverrideStyles];
+	[self setDidOverrideStyles];
 
 	return _style;
 }
@@ -146,7 +146,19 @@ static Apptentive *_sharedInstance;
 - (void)setStyleSheet:(id<ApptentiveStyle>)style {
 	_style = style;
 
-	[self.backend.conversationManager.activeConversation didOverrideStyles];
+	[self setDidOverrideStyles];
+}
+
+- (void)setDidOverrideStyles {
+	if (!self.didAccessStyleSheet) {
+		_didAccessStyleSheet = YES;
+
+		[self.operationQueue addOperationWithBlock:^{
+			if (self.backend.conversationManager.activeConversation) {
+				[self.backend.conversationManager.activeConversation didOverrideStyles];
+			}
+		}];
+	}
 }
 
 - (NSString *)personName {
@@ -168,11 +180,11 @@ static Apptentive *_sharedInstance;
 }
 
 - (void)sendAttachmentText:(NSString *)text {
-    if (self.backend.conversationManager.activeConversation == nil) {
-        ApptentiveLogError(@"Attempting to send message with no active conversation.");
-        return;
-    }
-    
+	if (self.backend.conversationManager.activeConversation == nil) {
+		ApptentiveLogError(@"Attempting to send message with no active conversation.");
+		return;
+	}
+
 	ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:text attachments:nil automated:NO customData:nil];
 	ApptentiveAssertNotNil(message, @"Message is nil");
 
@@ -182,12 +194,12 @@ static Apptentive *_sharedInstance;
 }
 
 - (void)sendAttachmentImage:(UIImage *)image {
-    if (self.backend.conversationManager.activeConversation == nil) {
-        ApptentiveLogError(@"Attempting to send message with no active conversation.");
-        return;
-    }
+	if (self.backend.conversationManager.activeConversation == nil) {
+		ApptentiveLogError(@"Attempting to send message with no active conversation.");
+		return;
+	}
 
-    if (image == nil) {
+	if (image == nil) {
 		ApptentiveLogError(@"Unable to send image attachment: image is nil");
 		return;
 	}
@@ -211,12 +223,12 @@ static Apptentive *_sharedInstance;
 }
 
 - (void)sendAttachmentFile:(NSData *)fileData withMimeType:(NSString *)mimeType {
-    if (self.backend.conversationManager.activeConversation == nil) {
-        ApptentiveLogError(@"Attempting to send message with no active conversation.");
-        return;
-    }
+	if (self.backend.conversationManager.activeConversation == nil) {
+		ApptentiveLogError(@"Attempting to send message with no active conversation.");
+		return;
+	}
 
-    if (fileData == nil) {
+	if (fileData == nil) {
 		ApptentiveLogError(@"Unable to send attachment file: file data is nil");
 		return;
 	}
@@ -674,11 +686,11 @@ static Apptentive *_sharedInstance;
 }
 
 - (ApptentiveAuthenticationFailureCallback)authenticationFailureCallback {
-    return self.backend.authenticationFailureCallback;
+	return self.backend.authenticationFailureCallback;
 }
 
 - (void)setAuthenticationFailureCallback:(ApptentiveAuthenticationFailureCallback)authenticationFailureCallback {
-    self.backend.authenticationFailureCallback = authenticationFailureCallback;
+	self.backend.authenticationFailureCallback = authenticationFailureCallback;
 }
 
 #pragma mark -
@@ -696,10 +708,10 @@ static Apptentive *_sharedInstance;
 #pragma mark Operations Queue
 
 - (void)dispatchOnOperationQueue:(void (^)(void))block {
-    ApptentiveAssertNotNil(block, @"Attempted to execute a nil block");
-    if (block) {
-        [_operationQueue addOperationWithBlock:block];
-    }
+	ApptentiveAssertNotNil(block, @"Attempted to execute a nil block");
+	if (block) {
+		[_operationQueue addOperationWithBlock:block];
+	}
 }
 
 @end
@@ -735,38 +747,38 @@ NSString *ApptentiveLocalizedString(NSString *key, NSString *comment) {
 }
 
 ApptentiveAuthenticationFailureReason parseAuthenticationFailureReason(NSString *reason) {
-    if ([reason isEqualToString:@"INVALID_ALGORITHM"]) {
-        return ApptentiveAuthenticationFailureReasonInvalidAlgorithm;
-    }
-    if ([reason isEqualToString:@"MALFORMED_TOKEN"]) {
-        return ApptentiveAuthenticationFailureReasonMalformedToken;
-    }
-    if ([reason isEqualToString:@"INVALID_TOKEN"]) {
-        return ApptentiveAuthenticationFailureReasonInvalidToken;
-    }
-    if ([reason isEqualToString:@"MISSING_SUB_CLAIM"]) {
-        return ApptentiveAuthenticationFailureReasonMissingSubClaim;
-    }
-    if ([reason isEqualToString:@"MISMATCHED_SUB_CLAIM"]) {
-        return ApptentiveAuthenticationFailureReasonMismatchedSubClaim;
-    }
-    if ([reason isEqualToString:@"INVALID_SUB_CLAIM"]) {
-        return ApptentiveAuthenticationFailureReasonInvalidSubClaim;
-    }
-    if ([reason isEqualToString:@"EXPIRED_TOKEN"]) {
-        return ApptentiveAuthenticationFailureReasonExpiredToken;
-    }
-    if ([reason isEqualToString:@"REVOKED_TOKEN"]) {
-        return ApptentiveAuthenticationFailureReasonRevokedToken;
-    }
-    if ([reason isEqualToString:@"MISSING_APP_KEY"]) {
-        return ApptentiveAuthenticationFailureReasonMissingAppKey;
-    }
-    if ([reason isEqualToString:@"MISSING_APP_SIGNATURE"]) {
-        return ApptentiveAuthenticationFailureReasonMissingAppSignature;
-    }
-    if ([reason isEqualToString:@"INVALID_KEY_SIGNATURE_PAIR"]) {
-        return ApptentiveAuthenticationFailureReasonInvalidKeySignaturePair;
-    }
-    return ApptentiveAuthenticationFailureReasonUnknown;
+	if ([reason isEqualToString:@"INVALID_ALGORITHM"]) {
+		return ApptentiveAuthenticationFailureReasonInvalidAlgorithm;
+	}
+	if ([reason isEqualToString:@"MALFORMED_TOKEN"]) {
+		return ApptentiveAuthenticationFailureReasonMalformedToken;
+	}
+	if ([reason isEqualToString:@"INVALID_TOKEN"]) {
+		return ApptentiveAuthenticationFailureReasonInvalidToken;
+	}
+	if ([reason isEqualToString:@"MISSING_SUB_CLAIM"]) {
+		return ApptentiveAuthenticationFailureReasonMissingSubClaim;
+	}
+	if ([reason isEqualToString:@"MISMATCHED_SUB_CLAIM"]) {
+		return ApptentiveAuthenticationFailureReasonMismatchedSubClaim;
+	}
+	if ([reason isEqualToString:@"INVALID_SUB_CLAIM"]) {
+		return ApptentiveAuthenticationFailureReasonInvalidSubClaim;
+	}
+	if ([reason isEqualToString:@"EXPIRED_TOKEN"]) {
+		return ApptentiveAuthenticationFailureReasonExpiredToken;
+	}
+	if ([reason isEqualToString:@"REVOKED_TOKEN"]) {
+		return ApptentiveAuthenticationFailureReasonRevokedToken;
+	}
+	if ([reason isEqualToString:@"MISSING_APP_KEY"]) {
+		return ApptentiveAuthenticationFailureReasonMissingAppKey;
+	}
+	if ([reason isEqualToString:@"MISSING_APP_SIGNATURE"]) {
+		return ApptentiveAuthenticationFailureReasonMissingAppSignature;
+	}
+	if ([reason isEqualToString:@"INVALID_KEY_SIGNATURE_PAIR"]) {
+		return ApptentiveAuthenticationFailureReasonInvalidKeySignaturePair;
+	}
+	return ApptentiveAuthenticationFailureReasonUnknown;
 }

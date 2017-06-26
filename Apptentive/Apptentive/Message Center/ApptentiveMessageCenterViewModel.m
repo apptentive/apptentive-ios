@@ -29,6 +29,8 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 
 @interface ApptentiveMessageCenterViewModel ()
 
+@property (readonly, nonatomic) ApptentiveConversation *activeConversation;
+
 @property (readonly, nonatomic) ApptentiveMessage *lastUserMessage;
 @property (readonly, nonatomic) NSURLSession *attachmentDownloadSession;
 @property (readonly, nonatomic) NSMutableDictionary<NSValue *, NSIndexPath *> *taskIndexPaths;
@@ -172,11 +174,11 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 }
 
 - (NSString *)personName {
-	return Apptentive.shared.backend.conversationManager.activeConversation.person.name;
+	return self.activeConversation.person.name;
 }
 
 - (NSString *)personEmailAddress {
-	return Apptentive.shared.backend.conversationManager.activeConversation.person.emailAddress;
+	return self.activeConversation.person.emailAddress;
 }
 
 #pragma mark - Profile (Initial)
@@ -508,8 +510,8 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 }
 
 - (void)setPersonName:(NSString *)name emailAddress:(NSString *)emailAddress {
-	Apptentive.shared.backend.conversationManager.activeConversation.person.name = name;
-	Apptentive.shared.backend.conversationManager.activeConversation.person.emailAddress = emailAddress;
+	self.activeConversation.person.name = name;
+	self.activeConversation.person.emailAddress = emailAddress;
 }
 
 - (BOOL)networkIsReachable {
@@ -517,22 +519,22 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 }
 
 - (BOOL)didSkipProfile {
-	return [[Apptentive.shared.backend.conversationManager.activeConversation.userInfo objectForKey:ATMessageCenterDidSkipProfileKey] boolValue];
+	return [[self.activeConversation.userInfo objectForKey:ATMessageCenterDidSkipProfileKey] boolValue];
 }
 
 - (void)setDidSkipProfile:(BOOL)didSkipProfile {
-	[Apptentive.shared.backend.conversationManager.activeConversation setUserInfo:@(didSkipProfile) forKey:ATMessageCenterDidSkipProfileKey];
+	[self.activeConversation setUserInfo:@(didSkipProfile) forKey:ATMessageCenterDidSkipProfileKey];
 }
 
 - (NSString *)draftMessage {
-	return Apptentive.shared.backend.conversationManager.activeConversation.userInfo[ATMessageCenterDraftMessageKey];
+	return self.activeConversation.userInfo[ATMessageCenterDraftMessageKey];
 }
 
 - (void)setDraftMessage:(NSString *)draftMessage {
 	if (draftMessage) {
-		[Apptentive.shared.backend.conversationManager.activeConversation setUserInfo:draftMessage forKey:ATMessageCenterDraftMessageKey];
+		[self.activeConversation setUserInfo:draftMessage forKey:ATMessageCenterDraftMessageKey];
 	} else {
-		[Apptentive.shared.backend.conversationManager.activeConversation removeUserInfoForKey:ATMessageCenterDraftMessageKey];
+		[self.activeConversation removeUserInfoForKey:ATMessageCenterDraftMessageKey];
 	}
 }
 
@@ -568,6 +570,10 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 	}
 
 	return nil;
+}
+
+- (ApptentiveConversation *)activeConversation {
+    return Apptentive.shared.backend.conversationManager.activeConversation;
 }
 
 @end

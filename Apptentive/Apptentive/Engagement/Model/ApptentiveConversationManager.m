@@ -62,6 +62,8 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 @implementation ApptentiveConversationManager
 
+@synthesize activeConversation = _activeConversation;
+
 - (instancetype)initWithStoragePath:(NSString *)storagePath operationQueue:(NSOperationQueue *)operationQueue client:(ApptentiveClient *)client parentManagedObjectContext:(NSManagedObjectContext *)parentManagedObjectContext {
 	self = [super init];
 
@@ -885,6 +887,20 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 - (void)pause {
 	[self saveMetadata];
+}
+
+- (ApptentiveConversation *)activeConversationTemp {
+    return _activeConversation;
+}
+
+- (ApptentiveConversation *)activeConversation {
+    ApptentiveAssertOperationQueue(self.operationQueue);
+    return _activeConversation;
+}
+
+- (void)setActiveConversation:(ApptentiveConversation *)activeConversation {
+    ApptentiveAssertOperationQueue(self.operationQueue);
+    _activeConversation = activeConversation;
 }
 
 

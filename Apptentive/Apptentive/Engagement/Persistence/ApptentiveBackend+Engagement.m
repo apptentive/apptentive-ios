@@ -92,7 +92,7 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 		return NO;
 	}
     
-    ApptentiveConversation *conversation = self.conversationManager.activeConversation;
+    ApptentiveConversation *conversation = self.conversationManager.activeConversationTemp;
     
     if (conversation == nil) {
         ApptentiveLogWarning(@"Attempting to engage event with no active conversation.");
@@ -125,7 +125,7 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 
 		[self presentInteraction:interaction fromViewController:viewController];
 
-		[self interactionWasEngaged:interaction];
+		[conversation engageInteraction:interaction.identifier];
 		didEngageInteraction = YES;
 	}
 

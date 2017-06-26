@@ -391,10 +391,12 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 	self.loginCompletionBlock = [completion copy];
 
+#warning Pass conversation here
 	[self requestLoggedInConversationWithToken:token];
 }
 
 - (void)requestLoggedInConversationWithToken:(NSString *)token {
+    
 	NSBlockOperation *loginOperation = [NSBlockOperation blockOperationWithBlock:^{
         
         NSError *jwtError;
@@ -410,6 +412,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
             return;
         }
         
+#warning Check concurrency issues
         // Check if there is an active conversation
 		if (self.activeConversation == nil) {
             ApptentiveLogDebug(ApptentiveLogTagConversation, @"No active conversation. Performing login...");
@@ -467,6 +470,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
     
     ApptentiveRequestOperationCallback *delegate = [ApptentiveRequestOperationCallback new];
     delegate.operationFinishCallback = ^(ApptentiveRequestOperation *operation) {
+#warning check Concurrency issues
         [self conversation:self.activeConversation processLoginResponse:(NSDictionary *)operation.responseObject userId:userId token:token];
         self.loginRequestOperation = nil;
     };

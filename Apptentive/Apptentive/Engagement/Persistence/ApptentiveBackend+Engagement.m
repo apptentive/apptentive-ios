@@ -103,6 +103,7 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
         [self conversation:conversation addMetricWithName:codePoint fromInteraction:fromInteraction info:userInfo customData:customData extendedData:extendedData];
 	}];
 
+#warning Wrap it up with a @synchronized block
 	[conversation warmCodePoint:codePoint];
 	[conversation engageCodePoint:codePoint];
 

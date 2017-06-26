@@ -559,11 +559,11 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	NSBlockOperation *deviceDidChangeOperation = [NSBlockOperation blockOperationWithBlock:^{
 		NSManagedObjectContext *context = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
 		context.parentContext = self.parentManagedObjectContext;
-
-		ApptentiveDevicePayload *payload = [[ApptentiveDevicePayload alloc] initWithDeviceDiffs:diffs];
+        
+        ApptentiveDevicePayload *payload = [[ApptentiveDevicePayload alloc] initWithDeviceDiffs:diffs];
 
 		[context performBlock:^{
-			[ApptentiveSerialRequest enqueuePayload:payload forConversation:self.activeConversation usingAuthToken:self.activeConversation.token inContext:context];
+			[ApptentiveSerialRequest enqueuePayload:payload forConversation:conversation usingAuthToken:conversation.token inContext:context];
 		}];
 
         [self saveConversation:conversation];

@@ -24,7 +24,9 @@
 	UINavigationController *navigationController = [[ApptentiveUtilities storyboard] instantiateViewControllerWithIdentifier:@"MessageCenterNavigation"];
 	ApptentiveMessageCenterViewController *messageCenter = navigationController.viewControllers.firstObject;
 
-	ApptentiveMessageCenterViewModel *viewModel = [[ApptentiveMessageCenterViewModel alloc] initWithInteraction:self.interaction messageManager:Apptentive.shared.backend.conversationManager.messageManager];
+	ApptentiveConversation *conversation = Apptentive.shared.backend.conversationManager.activeConversationTemp;
+
+	ApptentiveMessageCenterViewModel *viewModel = [[ApptentiveMessageCenterViewModel alloc] initWithConversation:(ApptentiveConversation *)conversation interaction:self.interaction messageManager:Apptentive.shared.backend.conversationManager.messageManager];
 	[viewModel start];
 
 	messageCenter.viewModel = viewModel;

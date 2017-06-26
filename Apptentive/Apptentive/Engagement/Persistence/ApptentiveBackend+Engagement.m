@@ -42,8 +42,8 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 }
 
 - (ApptentiveInteraction *)interactionForInvocations:(NSArray *)invocations {
-    ApptentiveEngagementBackend *engagementBackend = [[ApptentiveEngagementBackend alloc] initWithConversation:self.conversationManager.activeConversation manifest:self.conversationManager.manifest];
-    return [engagementBackend interactionForInvocations:invocations];
+	ApptentiveEngagementBackend *engagementBackend = [[ApptentiveEngagementBackend alloc] initWithConversation:self.conversationManager.activeConversation manifest:self.conversationManager.manifest];
+	return [engagementBackend interactionForInvocations:invocations];
 }
 
 - (ApptentiveInteraction *)interactionForIdentifier:(NSString *)identifier {
@@ -88,27 +88,27 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 
 - (BOOL)engageCodePoint:(NSString *)codePoint fromInteraction:(ApptentiveInteraction *)fromInteraction userInfo:(NSDictionary *)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData fromViewController:(UIViewController *)viewController {
 	ApptentiveLogInfo(@"Engage Apptentive event: %@", codePoint);
-    if (![self isReady]) {
+	if (![self isReady]) {
 		return NO;
 	}
-    
-    ApptentiveConversation *conversation = self.conversationManager.activeConversationTemp;
-    
-    if (conversation == nil) {
-        ApptentiveLogWarning(@"Attempting to engage event with no active conversation.");
-        return NO;
-    }
 
-    [self.operationQueue addOperationWithBlock:^{
+	ApptentiveConversation *conversation = self.conversationManager.activeConversationTemp;
+
+	if (conversation == nil) {
+		ApptentiveLogWarning(@"Attempting to engage event with no active conversation.");
+		return NO;
+	}
+
+	[self.operationQueue addOperationWithBlock:^{
         [self conversation:conversation addMetricWithName:codePoint fromInteraction:fromInteraction info:userInfo customData:customData extendedData:extendedData];
-    }];
+	}];
 
-    [conversation warmCodePoint:codePoint];
-    [conversation engageCodePoint:codePoint];
+	[conversation warmCodePoint:codePoint];
+	[conversation engageCodePoint:codePoint];
 
 	BOOL didEngageInteraction = NO;
-    
-    ApptentiveEngagementBackend *engagementBackend = [[ApptentiveEngagementBackend alloc] initWithConversation:conversation manifest:self.conversationManager.manifest];
+
+	ApptentiveEngagementBackend *engagementBackend = [[ApptentiveEngagementBackend alloc] initWithConversation:conversation manifest:self.conversationManager.manifest];
 
 	ApptentiveInteraction *interaction = [engagementBackend interactionForEvent:codePoint];
 	if (interaction) {
@@ -136,16 +136,8 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 	[self.conversationManager.activeConversation warmCodePoint:codePoint];
 }
 
-- (void)codePointWasEngaged:(NSString *)codePoint {
-	[self.conversationManager.activeConversation engageCodePoint:codePoint];
-}
-
 - (void)interactionWasSeen:(NSString *)interactionID {
 	[self.conversationManager.activeConversation warmInteraction:interactionID];
-}
-
-- (void)interactionWasEngaged:(ApptentiveInteraction *)interaction {
-	[self.conversationManager.activeConversation engageInteraction:interaction.identifier];
 }
 
 - (void)presentInteraction:(ApptentiveInteraction *)interaction fromViewController:(UIViewController *)viewController {

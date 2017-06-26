@@ -50,7 +50,7 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 		_conversation = conversation;
 		_storagePath = storagePath;
 		_client = client;
-        _operationQueue = operationQueue;
+		_operationQueue = operationQueue;
 
 		_messageIdentifierIndex = [NSMutableDictionary dictionary];
 		_messageStore = [NSKeyedUnarchiver unarchiveObjectWithFile:self.messageStorePath] ?: [[ApptentiveMessageStore alloc] init];
@@ -83,15 +83,15 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 	if (self.messageOperation != nil || self.conversationIdentifier == nil) {
 		return;
 	}
-    
-    ApptentiveRequestOperationCallback *callback = [ApptentiveRequestOperationCallback new];
-    callback.operationFinishCallback = ^(ApptentiveRequestOperation *operation) {
+
+	ApptentiveRequestOperationCallback *callback = [ApptentiveRequestOperationCallback new];
+	callback.operationFinishCallback = ^(ApptentiveRequestOperation *operation) {
         self.messageOperation = nil;
         [self processMessageOperationResponse:operation];
-    };
-    callback.operationFailCallback = ^(ApptentiveRequestOperation *operation, NSError *error) {
+	};
+	callback.operationFailCallback = ^(ApptentiveRequestOperation *operation, NSError *error) {
         self.messageOperation = nil;
-    };
+	};
 
 	ApptentiveMessageGetRequest *request = [[ApptentiveMessageGetRequest alloc] initWithConversationIdentifier:self.conversationIdentifier];
 	request.lastMessageIdentifier = self.messageStore.lastMessageIdentifier;
@@ -245,18 +245,18 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 #pragma mark - Sending Messages
 
 - (void)sendMessage:(ApptentiveMessage *)message {
-    [self.operationQueue addOperationWithBlock:^{
+	[self.operationQueue addOperationWithBlock:^{
         message.sender = [[ApptentiveMessageSender alloc] initWithName:nil identifier:self.localUserIdentifier profilePhotoURL:nil];
         
         [self enqueueMessageForSending:message];
         
         [self appendMessage:message];
-    }];    
+	}];
 }
 
 - (void)enqueueMessageForSending:(ApptentiveMessage *)message {
-    ApptentiveAssertOperationQueue(self.operationQueue);
-    
+	ApptentiveAssertOperationQueue(self.operationQueue);
+
 	NSString *previousLocalIdentifier = message.localIdentifier;
 	ApptentiveConversation *conversation = Apptentive.shared.backend.conversationManager.activeConversation;
 
@@ -368,9 +368,11 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 	UIBackgroundFetchResult fetchResult = success ? UIBackgroundFetchResultNewData : UIBackgroundFetchResultFailed;
 
 	if (self.backgroundFetchBlock) {
-		self.backgroundFetchBlock(fetchResult);
+		dispatch_async(dispatch_get_main_queue(), ^{
+			self.backgroundFetchBlock(fetchResult);
 
-		self.backgroundFetchBlock = nil;
+			self.backgroundFetchBlock = nil;
+		});
 	}
 }
 

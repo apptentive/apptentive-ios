@@ -525,7 +525,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		context.parentContext = self.parentManagedObjectContext;
 
 		[context performBlock:^{
-			[ApptentiveSerialRequest enqueuePayload:payload forConversation:self.activeConversation usingAuthToken:self.activeConversation.token inContext:context];
+			[ApptentiveSerialRequest enqueuePayload:payload forConversation:conversation usingAuthToken:conversation.token inContext:context];
 		}];
 
         [self saveConversation:conversation];
@@ -544,7 +544,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		ApptentivePersonPayload *payload = [[ApptentivePersonPayload alloc] initWithPersonDiffs:diffs];
 
 		[context performBlock:^{
-			[ApptentiveSerialRequest enqueuePayload:payload forConversation:self.activeConversation usingAuthToken:self.activeConversation.token inContext:context];
+			[ApptentiveSerialRequest enqueuePayload:payload forConversation:conversation usingAuthToken:conversation.token inContext:context];
 		}];
 
         [self saveConversation:conversation];

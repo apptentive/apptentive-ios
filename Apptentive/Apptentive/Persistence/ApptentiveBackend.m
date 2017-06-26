@@ -84,6 +84,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 			_operationQueue.suspended = YES;
 			_state = ATBackendStateWaitingForDataProtectionUnlock;
 
+#warning Reference cycle
 			[[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationProtectedDataDidBecomeAvailable object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *_Nonnull note) {
 				self.operationQueue.suspended = NO;
 				self.state = ATBackendStateStarting;
@@ -102,7 +103,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkStatusChanged:) name:ApptentiveReachabilityStatusChanged object:nil];
 
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateMessageCheckingTimer) name:ApptentiveInteractionsDidUpdateNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(apptentiveInteractionsDidUpdateNotification:) name:ApptentiveInteractionsDidUpdateNotification object:nil];
 
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(authenticationDidFailNotification:) name:ApptentiveAuthenticationDidFailNotification object:nil];
 
@@ -192,6 +193,12 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
     ApptentiveAssertOperationQueue(self.operationQueue);
 	self.shouldStopWorking = NO;
 	[self updateWorking];
+}
+
+- (void)apptentiveInteractionsDidUpdateNotification:(NSNotification *)notification {
+    [self.operationQueue addOperationWithBlock:^{
+        [self updateMessageCheckingTimer];
+    }];
 }
 
 - (void)handleRemoteNotificationInUIApplicationStateActive {
@@ -455,6 +462,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 }
 
 - (void)updateMessageCheckingTimer {
+    ApptentiveAssertOperationQueue(self.operationQueue);
 	if (self.working) {
 		if (self.messageCenterInForeground) {
 			self.conversationManager.messageManager.pollingInterval = self.configuration.messageCenter.foregroundPollingInterval;
@@ -467,13 +475,13 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 }
 
 - (void)messageCenterEnteredForeground {
-	@synchronized(self) {
-		_messageCenterInForeground = YES;
-
-		[self.conversationManager.messageManager checkForMessages];
-
-		[self updateMessageCheckingTimer];
-	}
+	[self.operationQueue addOperationWithBlock:^{
+        _messageCenterInForeground = YES;
+        
+        [self.conversationManager.messageManager checkForMessages];
+        
+        [self updateMessageCheckingTimer];
+    }];
 }
 
 - (void)messageCenterLeftForeground {
@@ -524,19 +532,21 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 #pragma mark - Authentication
 
 - (void)authenticationDidFailNotification:(NSNotification *)notification {
-	if (self.conversationManager.activeConversation.state == ApptentiveConversationStateLoggedIn && self.authenticationFailureCallback) {
-		NSString *conversationIdentifier = ApptentiveDictionaryGetString(notification.userInfo, ApptentiveAuthenticationDidFailNotificationKeyConversationIdentifier);
-
-		if (![conversationIdentifier isEqualToString:self.conversationManager.activeConversation.identifier]) {
-			ApptentiveLogDebug(@"Conversation identifier mismatch");
-			return;
-		}
-
-		NSString *errorType = ApptentiveDictionaryGetString(notification.userInfo, ApptentiveAuthenticationDidFailNotificationKeyErrorType);
-		NSString *errorMessage = ApptentiveDictionaryGetString(notification.userInfo, ApptentiveAuthenticationDidFailNotificationKeyErrorMessage);
-		ApptentiveAuthenticationFailureReason reason = parseAuthenticationFailureReason(errorType);
-		self.authenticationFailureCallback(reason, errorMessage);
-	}
+    [self.operationQueue addOperationWithBlock:^{
+        if (self.conversationManager.activeConversation.state == ApptentiveConversationStateLoggedIn && self.authenticationFailureCallback) {
+            NSString *conversationIdentifier = ApptentiveDictionaryGetString(notification.userInfo, ApptentiveAuthenticationDidFailNotificationKeyConversationIdentifier);
+            
+            if (![conversationIdentifier isEqualToString:self.conversationManager.activeConversation.identifier]) {
+                ApptentiveLogDebug(@"Conversation identifier mismatch");
+                return;
+            }
+            
+            NSString *errorType = ApptentiveDictionaryGetString(notification.userInfo, ApptentiveAuthenticationDidFailNotificationKeyErrorType);
+            NSString *errorMessage = ApptentiveDictionaryGetString(notification.userInfo, ApptentiveAuthenticationDidFailNotificationKeyErrorMessage);
+            ApptentiveAuthenticationFailureReason reason = parseAuthenticationFailureReason(errorType);
+            self.authenticationFailureCallback(reason, errorMessage);
+        }
+    }];
 }
 
 #pragma mark - Paths

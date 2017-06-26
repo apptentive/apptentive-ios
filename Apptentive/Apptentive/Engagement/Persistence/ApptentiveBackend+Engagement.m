@@ -15,6 +15,7 @@
 #import "ApptentiveInteractionController.h"
 #import "ApptentiveEngagement.h"
 #import "ApptentiveEngagementManifest.h"
+#import "ApptentiveEngagementBackend.h"
 
 NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEngagementCachedInteractionsExpirationPreferenceKey";
 
@@ -41,34 +42,8 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 }
 
 - (ApptentiveInteraction *)interactionForInvocations:(NSArray *)invocations {
-	NSString *interactionID = nil;
-
-	for (NSObject *invocationOrDictionary in invocations) {
-		ApptentiveInteractionInvocation *invocation = nil;
-
-		// Allow parsing of ATInteractionInvocation and NSDictionary invocation objects
-		if ([invocationOrDictionary isKindOfClass:[ApptentiveInteractionInvocation class]]) {
-			invocation = (ApptentiveInteractionInvocation *)invocationOrDictionary;
-		} else if ([invocationOrDictionary isKindOfClass:[NSDictionary class]]) {
-			invocation = [ApptentiveInteractionInvocation invocationWithJSONDictionary:((NSDictionary *)invocationOrDictionary)];
-		} else {
-			ApptentiveLogError(@"Attempting to parse an invocation that is neither an ATInteractionInvocation or NSDictionary.");
-		}
-
-		if (invocation && [invocation isKindOfClass:[ApptentiveInteractionInvocation class]]) {
-			if ([invocation criteriaAreMetForConversation:self.conversationManager.activeConversation]) {
-				interactionID = invocation.interactionID;
-				break;
-			}
-		}
-	}
-
-	ApptentiveInteraction *interaction = nil;
-	if (interactionID) {
-		interaction = [self interactionForIdentifier:interactionID];
-	}
-
-	return interaction;
+    ApptentiveEngagementBackend *engagementBackend = [[ApptentiveEngagementBackend alloc] initWithConversation:self.conversationManager.activeConversation manifest:self.conversationManager.manifest];
+    return [engagementBackend interactionForInvocations:invocations];
 }
 
 - (ApptentiveInteraction *)interactionForIdentifier:(NSString *)identifier {
@@ -132,8 +107,10 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
     [conversation engageCodePoint:codePoint];
 
 	BOOL didEngageInteraction = NO;
+    
+    ApptentiveEngagementBackend *engagementBackend = [[ApptentiveEngagementBackend alloc] initWithConversation:conversation manifest:self.conversationManager.manifest];
 
-	ApptentiveInteraction *interaction = [self interactionForEvent:codePoint];
+	ApptentiveInteraction *interaction = [engagementBackend interactionForEvent:codePoint];
 	if (interaction) {
 		ApptentiveLogInfo(@"--Running valid %@ interaction.", interaction.type);
 

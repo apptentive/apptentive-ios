@@ -36,7 +36,6 @@ extern NSString *const ApptentiveEngagementMessageCenterEvent;
 
 @interface ApptentiveBackend (Engagement)
 
-- (ApptentiveInteraction *)interactionForEvent:(NSString *)event;
 - (ApptentiveInteraction *)interactionForIdentifier:(NSString *)identifier;
 - (ApptentiveInteraction *)interactionForInvocations:(NSArray *)invocations;
 

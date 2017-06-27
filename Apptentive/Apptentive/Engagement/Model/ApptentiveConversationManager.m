@@ -755,7 +755,11 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		return NO;
 	}
 
-	NSData *conversationData = [NSKeyedArchiver archivedDataWithRootObject:conversation];
+	NSData *conversationData;
+	@synchronized(conversation) {
+		conversationData = [NSKeyedArchiver archivedDataWithRootObject:conversation];
+	}
+
 	ApptentiveAssertNotNil(conversationData, @"Conversation data serialization failed");
 
 	if (conversationData == nil) {

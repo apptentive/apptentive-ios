@@ -103,9 +103,11 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
         [self conversation:conversation addMetricWithName:codePoint fromInteraction:fromInteraction info:userInfo customData:customData extendedData:extendedData];
 	}];
 
-#warning Wrap it up with a @synchronized block
-	[conversation warmCodePoint:codePoint];
-	[conversation engageCodePoint:codePoint];
+	// FIXME: Race condition when trying to modify and save conversation from different threads
+	@synchronized(conversation) {
+		[conversation warmCodePoint:codePoint];
+		[conversation engageCodePoint:codePoint];
+	}
 
 	BOOL didEngageInteraction = NO;
 

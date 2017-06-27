@@ -19,5 +19,5 @@ void __ApptentiveAssertHelper(const char *expression, const char *file, int line
 	va_end(ap);
 
 	NSLog(@"Assertion failed (%s:%d): %@", file, line, message);
-	abort();
+	// abort();
 }

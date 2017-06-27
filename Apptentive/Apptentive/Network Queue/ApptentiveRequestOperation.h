@@ -9,8 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "ApptentiveRequestProtocol.h"
 
-@protocol ApptentiveRequestOperationDelegate
-, ApptentiveRequestOperationDataSource;
+@protocol ApptentiveRequestOperationDataSource;
+@class ApptentiveRequestOperationCallback;
 
 extern NSErrorDomain const ApptentiveHTTPErrorDomain;
 
@@ -65,7 +65,7 @@ extern NSErrorDomain const ApptentiveHTTPErrorDomain;
 /**
  An object that the request operation will communicate its status to.
  */
-@property (readonly, weak, nonatomic) id<ApptentiveRequestOperationDelegate> delegate;
+@property (readonly, nonatomic) ApptentiveRequestOperationCallback *delegate;
 
 /**
  An object that the request operation will use to obtain additional data
@@ -81,7 +81,7 @@ extern NSErrorDomain const ApptentiveHTTPErrorDomain;
  @param dataSource The data source that the operation will use
  @return The newly-initialized operation.
  */
-- (instancetype)initWithURLRequest:(NSURLRequest *)URLRequest delegate:(id<ApptentiveRequestOperationDelegate>)delegate dataSource:(id<ApptentiveRequestOperationDataSource>)dataSource;
+- (instancetype)initWithURLRequest:(NSURLRequest *)URLRequest delegate:(ApptentiveRequestOperationCallback *)delegate dataSource:(id<ApptentiveRequestOperationDataSource>)dataSource;
 
 #pragma mark - Subclassing
 
@@ -92,53 +92,6 @@ extern NSErrorDomain const ApptentiveHTTPErrorDomain;
 - (void)completeOperation __attribute__((objc_requires_super));
 
 @end
-
-/**
- The `ApptentiveRequestOperationDelegate` protocol specifies how a request
- operation will communicate its status with its delegate object.
- */
-@protocol ApptentiveRequestOperationDelegate <NSObject>
-@optional
-
-/**
- Indicates that the request operation's request has started.
-
- @param operation The request operation.
- */
-- (void)requestOperationDidStart:(ApptentiveRequestOperation *)operation;
-
-
-/**
- Indicates that the request operation's request has encountered a retry-able
- error.
-
- @param operation The request operation.
- @param error The error that the request encountered.
- */
-- (void)requestOperationWillRetry:(ApptentiveRequestOperation *)operation withError:(NSError *)error;
-
-/**
- Indicates that the request operation's request has succeeded.
-
- @param operation The request operation.
- */
-- (void)requestOperationDidFinish:(ApptentiveRequestOperation *)operation;
-
-/**
- Indicates that the request operation's request has encountered an unrecoverable
- error.
-
- @discussion The only type of error that is considered unrecoverable is a 400-
- series error indicating that the client is incapable of submitting a valid
- request for this data.
-
- @param operation The request operation.
- @param error The error that the request encountered.
- */
-- (void)requestOperation:(ApptentiveRequestOperation *)operation didFailWithError:(NSError *)error;
-
-@end
-
 
 /**
  The `ApptentiveRequestOperationDataSource` protocol specifies how a request
@@ -167,5 +120,52 @@ extern NSErrorDomain const ApptentiveHTTPErrorDomain;
  succeeded.
  */
 - (void)resetBackoffDelay;
+
+@end
+
+
+@interface ApptentiveRequestOperationCallback : NSObject
+
+@property (copy, nonatomic) void (^operationStartCallback)(ApptentiveRequestOperation *operation);
+@property (copy, nonatomic) void (^operationFinishCallback)(ApptentiveRequestOperation *operation);
+@property (copy, nonatomic) void (^operationRetryCallback)(ApptentiveRequestOperation *operation, NSError *error);
+@property (copy, nonatomic) void (^operationFailCallback)(ApptentiveRequestOperation *operation, NSError *error);
+
+/**
+ Indicates that the request operation's request has started.
+ 
+ @param operation The request operation.
+ */
+- (void)requestOperationDidStart:(ApptentiveRequestOperation *)operation;
+
+
+/**
+ Indicates that the request operation's request has encountered a retry-able
+ error.
+ 
+ @param operation The request operation.
+ @param error The error that the request encountered.
+ */
+- (void)requestOperationWillRetry:(ApptentiveRequestOperation *)operation withError:(NSError *)error;
+
+/**
+ Indicates that the request operation's request has succeeded.
+ 
+ @param operation The request operation.
+ */
+- (void)requestOperationDidFinish:(ApptentiveRequestOperation *)operation;
+
+/**
+ Indicates that the request operation's request has encountered an unrecoverable
+ error.
+ 
+ @discussion The only type of error that is considered unrecoverable is a 400-
+ series error indicating that the client is incapable of submitting a valid
+ request for this data.
+ 
+ @param operation The request operation.
+ @param error The error that the request encountered.
+ */
+- (void)requestOperation:(ApptentiveRequestOperation *)operation didFailWithError:(NSError *)error;
 
 @end

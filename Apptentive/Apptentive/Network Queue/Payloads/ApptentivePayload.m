@@ -76,6 +76,7 @@
 	NSDictionary *payloadJson = self.JSONDictionary;
 	ApptentiveAssertNotNil(payloadJson, @"JSONDictionary is nil");
 
+	// for each encrypted payload we should include token into JSON-body
 	if (self.encryptionKey != nil) {
 		ApptentiveAssertNotNil(self.token, @"Token is nil");
 		NSMutableDictionary *temp = [[NSMutableDictionary alloc] initWithDictionary:payloadJson];

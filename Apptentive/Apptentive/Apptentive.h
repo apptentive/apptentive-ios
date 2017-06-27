@@ -31,21 +31,21 @@ FOUNDATION_EXPORT const unsigned char ApptentiveVersionString[];
 NS_ASSUME_NONNULL_BEGIN
 
 typedef enum : NSUInteger {
-    ApptentiveAuthenticationFailureReasonUnknown,
-    ApptentiveAuthenticationFailureReasonInvalidAlgorithm,
-    ApptentiveAuthenticationFailureReasonMalformedToken,
-    ApptentiveAuthenticationFailureReasonInvalidToken,
-    ApptentiveAuthenticationFailureReasonMissingSubClaim,
-    ApptentiveAuthenticationFailureReasonMismatchedSubClaim,
-    ApptentiveAuthenticationFailureReasonInvalidSubClaim,
-    ApptentiveAuthenticationFailureReasonExpiredToken,
-    ApptentiveAuthenticationFailureReasonRevokedToken,
-    ApptentiveAuthenticationFailureReasonMissingAppKey,
-    ApptentiveAuthenticationFailureReasonMissingAppSignature,
-    ApptentiveAuthenticationFailureReasonInvalidKeySignaturePair
+	ApptentiveAuthenticationFailureReasonUnknown,
+	ApptentiveAuthenticationFailureReasonInvalidAlgorithm,
+	ApptentiveAuthenticationFailureReasonMalformedToken,
+	ApptentiveAuthenticationFailureReasonInvalidToken,
+	ApptentiveAuthenticationFailureReasonMissingSubClaim,
+	ApptentiveAuthenticationFailureReasonMismatchedSubClaim,
+	ApptentiveAuthenticationFailureReasonInvalidSubClaim,
+	ApptentiveAuthenticationFailureReasonExpiredToken,
+	ApptentiveAuthenticationFailureReasonRevokedToken,
+	ApptentiveAuthenticationFailureReasonMissingAppKey,
+	ApptentiveAuthenticationFailureReasonMissingAppSignature,
+	ApptentiveAuthenticationFailureReasonInvalidKeySignaturePair
 } ApptentiveAuthenticationFailureReason;
 
-typedef void(^ApptentiveAuthenticationFailureCallback)(ApptentiveAuthenticationFailureReason reason, NSString *errorMessage);
+typedef void (^ApptentiveAuthenticationFailureCallback)(ApptentiveAuthenticationFailureReason reason, NSString *errorMessage);
 
 @protocol ApptentiveDelegate
 , ApptentiveStyle;

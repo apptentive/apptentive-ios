@@ -36,7 +36,6 @@ extern NSString *const ApptentiveEngagementMessageCenterEvent;
 
 @interface ApptentiveBackend (Engagement)
 
-- (ApptentiveInteraction *)interactionForEvent:(NSString *)event;
 - (ApptentiveInteraction *)interactionForIdentifier:(NSString *)identifier;
 - (ApptentiveInteraction *)interactionForInvocations:(NSArray *)invocations;
 
@@ -52,9 +51,7 @@ extern NSString *const ApptentiveEngagementMessageCenterEvent;
 - (BOOL)engageCodePoint:(NSString *)codePoint fromInteraction:(ApptentiveInteraction *)fromInteraction userInfo:(NSDictionary *)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData fromViewController:(UIViewController *)viewController;
 
 - (void)codePointWasSeen:(NSString *)codePoint;
-- (void)codePointWasEngaged:(NSString *)codePoint;
 - (void)interactionWasSeen:(NSString *)interactionID;
-- (void)interactionWasEngaged:(ApptentiveInteraction *)interaction;
 
 - (void)presentInteraction:(ApptentiveInteraction *)interaction fromViewController:(UIViewController *)viewController;
 

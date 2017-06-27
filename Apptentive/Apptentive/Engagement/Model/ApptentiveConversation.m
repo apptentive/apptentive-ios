@@ -59,18 +59,32 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 
 @interface ApptentiveConversation ()
 
-@property (readonly, nonatomic) NSMutableDictionary *mutableUserInfo;
+@property (assign, nonatomic) ApptentiveConversationState state;
+@property (strong, nonatomic) NSString *token;
+@property (strong, nonatomic) NSString *legacyToken;
+@property (strong, nonatomic) NSString *userId;
+@property (strong, nonatomic) NSData *encryptionKey;
+@property (strong, nonatomic) NSString *identifier;
+@property (strong, nonatomic) NSString *lastMessageID;
+@property (strong, nonatomic) ApptentiveAppRelease *appRelease;
+@property (strong, nonatomic) ApptentiveSDK *SDK;
+@property (strong, nonatomic) ApptentivePerson *person;
+@property (strong, nonatomic) ApptentiveDevice *device;
+@property (strong, nonatomic) ApptentiveEngagement *engagement;
+@property (strong, nonatomic) NSMutableDictionary *mutableUserInfo;
 @property (strong, nonatomic) NSDictionary *lastSentPerson;
 @property (strong, nonatomic) NSDictionary *lastSentDevice;
+@property (strong, nonatomic) NSString *directoryName;
 
 @end
 
 
 @implementation ApptentiveConversation
 
-- (instancetype)init {
+- (instancetype)initWithState:(ApptentiveConversationState)state {
 	self = [super init];
 	if (self) {
+		_state = state;
 		_appRelease = [[ApptentiveAppRelease alloc] initWithCurrentAppRelease];
 		_SDK = [[ApptentiveSDK alloc] initWithCurrentSDK];
 		_person = [[ApptentivePerson alloc] init];
@@ -282,6 +296,7 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 	self = [super init];
 
 	if (self) {
+		_state = ApptentiveConversationStateLegacyPending;
 		_appRelease = [[ApptentiveAppRelease alloc] initAndMigrate];
 		_SDK = [[ApptentiveSDK alloc] initAndMigrate];
 		_person = [[ApptentivePerson alloc] initAndMigrate];
@@ -399,6 +414,31 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 	}
 }
 
+#pragma mark - Mutability
+
+- (id)mutableCopy {
+	ApptentiveMutableConversation *result = [[ApptentiveMutableConversation alloc] init];
+	result.state = self.state;
+	result.token = self.token;
+	result.legacyToken = self.legacyToken;
+	result.userId = self.userId;
+	result.encryptionKey = self.encryptionKey;
+	result.appRelease = self.appRelease;
+	result.SDK = self.SDK;
+	result.person = self.person;
+	result.device = self.device;
+	result.engagement = self.engagement;
+	result.mutableUserInfo = self.mutableUserInfo;
+	result.lastSentPerson = self.lastSentPerson;
+	result.lastSentDevice = self.lastSentDevice;
+	result.identifier = self.identifier;
+	result.lastMessageID = self.lastMessageID;
+	result.delegate = self.delegate;
+	result.directoryName = self.directoryName;
+	return result;
+}
+
+
 @end
 
 
@@ -424,6 +464,50 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 	[coder encodeObject:self.token forKey:@"token"];
 	[coder encodeObject:self.personID forKey:@"personID"];
 	[coder encodeObject:self.deviceID forKey:@"deviceID"];
+}
+
+@end
+
+
+@interface ApptentiveMutableConversation ()
+
+@property (strong, nonatomic) NSString *identifier;
+@property (strong, nonatomic) NSString *lastMessageID;
+@property (strong, nonatomic) NSString *directoryName;
+
+@end
+
+
+@implementation ApptentiveMutableConversation
+
+@dynamic mutableUserInfo;
+@dynamic lastSentPerson;
+@dynamic lastSentDevice;
+@dynamic state;
+@dynamic appRelease;
+@dynamic SDK;
+@dynamic person;
+@dynamic device;
+@dynamic engagement;
+@dynamic token;
+@dynamic identifier;
+@dynamic legacyToken;
+@dynamic userId;
+@dynamic encryptionKey;
+@dynamic lastMessageID;
+@dynamic directoryName;
+
+// FIXME: remove these methods
+
+- (void)setToken:(NSString *)token conversationID:(NSString *)conversationID personID:(NSString *)personID deviceID:(NSString *)deviceID {
+	[self setConversationIdentifier:conversationID JWT:token];
+	self.person.identifier = personID;
+	self.device.identifier = deviceID;
+}
+
+- (void)setConversationIdentifier:(NSString *)identifier JWT:(NSString *)JWT {
+	self.identifier = identifier;
+	self.token = JWT;
 }
 
 @end

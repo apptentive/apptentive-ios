@@ -35,6 +35,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterMessageStatus) {
 @interface ApptentiveMessageCenterViewModel : NSObject <NSURLSessionDownloadDelegate, ApptentiveMessageManagerDelegate>
 
 @property (weak, nonatomic) NSObject<ApptentiveMessageCenterViewModelDelegate> *delegate;
+
+@property (readonly, nonatomic) ApptentiveConversation *conversation;
 @property (readonly, nonatomic) NSDateFormatter *dateFormatter;
 @property (readonly, nonatomic) ApptentiveInteraction *interaction;
 @property (readonly, nonatomic) ApptentiveMessageManager *messageManager;
@@ -86,7 +88,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterMessageStatus) {
 @property (assign, nonatomic) BOOL didSkipProfile;
 @property (strong, nonatomic) NSString *draftMessage;
 
-- (instancetype)initWithInteraction:(ApptentiveInteraction *)interaction messageManager:(ApptentiveMessageManager *)messageManager;
+- (instancetype)initWithConversation:(ApptentiveConversation *)conversation interaction:(ApptentiveInteraction *)interaction messageManager:(ApptentiveMessageManager *)messageManager;
 - (void)start;
 - (void)stop;
 

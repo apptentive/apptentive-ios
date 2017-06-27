@@ -21,7 +21,7 @@ extern NSString *const ApptentiveConversationStateDidChangeNotification;
 extern NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation;
 
 
-@interface ApptentiveConversationManager : NSObject <ApptentiveConversationDelegate, ApptentiveRequestOperationDelegate>
+@interface ApptentiveConversationManager : NSObject <ApptentiveConversationDelegate>
 
 @property (strong, nonatomic) ApptentiveConversationMetadata *conversationMetadata;
 @property (readonly, strong, nonatomic) NSString *storagePath;
@@ -29,6 +29,7 @@ extern NSString *const ApptentiveConversationStateDidChangeNotificationKeyConver
 @property (readonly, strong, nonatomic) ApptentiveClient *client;
 @property (strong, nullable, nonatomic) ApptentiveRequestOperation *conversationOperation;
 @property (readonly, strong, nullable, nonatomic) ApptentiveConversation *activeConversation;
+@property (readonly, strong, nullable, nonatomic) ApptentiveConversation *activeConversationTemp;
 @property (readonly, strong, nullable, nonatomic) ApptentiveMessageManager *messageManager;
 
 @property (weak, nonatomic) id<ApptentiveConversationManagerDelegate> delegate;
@@ -44,7 +45,7 @@ extern NSString *const ApptentiveConversationStateDidChangeNotificationKeyConver
  * Returns NO if active conversation is missing or cannot be loaded.
  */
 - (BOOL)loadActiveConversation;
-- (BOOL)endActiveConversation;
+- (void)endActiveConversation;
 - (void)logInWithToken:(NSString *)token completion:(void (^)(BOOL success, NSError *error))completion;
 
 - (BOOL)saveMetadata;

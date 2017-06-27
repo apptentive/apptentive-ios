@@ -38,7 +38,7 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 
 @implementation ApptentiveMessageManager
 
-- (instancetype)initWithStoragePath:(NSString *)storagePath client:(ApptentiveClient *)client pollingInterval:(NSTimeInterval)pollingInterval conversation:(ApptentiveConversation *)conversation {
+- (instancetype)initWithStoragePath:(NSString *)storagePath client:(ApptentiveClient *)client pollingInterval:(NSTimeInterval)pollingInterval conversation:(ApptentiveConversation *)conversation operationQueue:(NSOperationQueue *)operationQueue {
 	self = [super init];
 
 	if (self) {
@@ -50,6 +50,7 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 		_conversation = conversation;
 		_storagePath = storagePath;
 		_client = client;
+		_operationQueue = operationQueue;
 
 		_messageIdentifierIndex = [NSMutableDictionary dictionary];
 		_messageStore = [NSKeyedUnarchiver unarchiveObjectWithFile:self.messageStorePath] ?: [[ApptentiveMessageStore alloc] init];
@@ -83,12 +84,21 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 		return;
 	}
 
+	ApptentiveRequestOperationCallback *callback = [ApptentiveRequestOperationCallback new];
+	callback.operationFinishCallback = ^(ApptentiveRequestOperation *operation) {
+        self.messageOperation = nil;
+        [self processMessageOperationResponse:operation];
+	};
+	callback.operationFailCallback = ^(ApptentiveRequestOperation *operation, NSError *error) {
+        self.messageOperation = nil;
+	};
+
 	ApptentiveMessageGetRequest *request = [[ApptentiveMessageGetRequest alloc] initWithConversationIdentifier:self.conversationIdentifier];
 	request.lastMessageIdentifier = self.messageStore.lastMessageIdentifier;
 
-	self.messageOperation = [self.client requestOperationWithRequest:request delegate:self];
+	self.messageOperation = [self.client requestOperationWithRequest:request delegate:callback];
 
-	[self.client.operationQueue addOperation:self.messageOperation];
+	[self.client.networkQueue addOperation:self.messageOperation];
 }
 
 - (void)checkForMessagesInBackground:(void (^)(UIBackgroundFetchResult))completionHandler {
@@ -119,9 +129,8 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 
 #pragma mark Request Operation Delegate
 
-- (void)requestOperationDidFinish:(ApptentiveRequestOperation *)operation {
+- (void)processMessageOperationResponse:(ApptentiveRequestOperation *)operation {
 	NSArray *messageListJSON = [operation.responseObject valueForKey:@"messages"];
-	self.messageOperation = nil;
 
 	if (messageListJSON == nil) {
 		ApptentiveLogError(@"Unexpected response from /messages endpoint");
@@ -215,10 +224,6 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 	}
 }
 
-- (void)requestOperation:(ApptentiveRequestOperation *)operation didFailWithError:(NSError *)error {
-	self.messageOperation = nil;
-}
-
 #pragma mark - Polling
 
 - (void)stopPolling {
@@ -240,14 +245,18 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 #pragma mark - Sending Messages
 
 - (void)sendMessage:(ApptentiveMessage *)message {
-	message.sender = [[ApptentiveMessageSender alloc] initWithName:nil identifier:self.localUserIdentifier profilePhotoURL:nil];
-
-	[self enqueueMessageForSending:message];
-
-	[self appendMessage:message];
+	[self.operationQueue addOperationWithBlock:^{
+        message.sender = [[ApptentiveMessageSender alloc] initWithName:nil identifier:self.localUserIdentifier profilePhotoURL:nil];
+        
+        [self enqueueMessageForSending:message];
+        
+        [self appendMessage:message];
+	}];
 }
 
 - (void)enqueueMessageForSending:(ApptentiveMessage *)message {
+	ApptentiveAssertOperationQueue(self.operationQueue);
+
 	NSString *previousLocalIdentifier = message.localIdentifier;
 	ApptentiveConversation *conversation = Apptentive.shared.backend.conversationManager.activeConversation;
 
@@ -359,9 +368,11 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 	UIBackgroundFetchResult fetchResult = success ? UIBackgroundFetchResultNewData : UIBackgroundFetchResultFailed;
 
 	if (self.backgroundFetchBlock) {
-		self.backgroundFetchBlock(fetchResult);
+		dispatch_async(dispatch_get_main_queue(), ^{
+			self.backgroundFetchBlock(fetchResult);
 
-		self.backgroundFetchBlock = nil;
+			self.backgroundFetchBlock = nil;
+		});
 	}
 }
 

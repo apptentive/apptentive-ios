@@ -11,6 +11,7 @@
 #import "ApptentiveBackend+Engagement.h"
 #import "ApptentiveInteractionUsageData.h"
 #import "ApptentiveUtilities.h"
+#import "Apptentive_Private.h"
 
 
 @implementation ApptentiveInteractionInvocation
@@ -296,6 +297,7 @@
 }
 
 + (NSPredicate *)predicateWithLeftKeyPath:(NSString *)leftKeyPath rightValue:(nullable id)rightValue operatorType:(NSPredicateOperatorType)operatorType {
+	ApptentiveAssertOperationQueue(Apptentive.shared.operationQueue);
 	[ApptentiveInteractionUsageData keyPathWasSeen:leftKeyPath];
 
 	NSExpression *leftExpression = [NSExpression expressionForKeyPath:leftKeyPath];

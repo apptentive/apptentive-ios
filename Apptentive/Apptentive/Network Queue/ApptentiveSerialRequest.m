@@ -48,7 +48,7 @@
 		return NO;
 	}
 
-	ApptentiveAssertNotNil(context, @"Managed object context is nill");
+	ApptentiveAssertNotNil(context, @"Managed object context is nil");
 	if (context == nil) {
 		ApptentiveLogError(@"Unable encode enqueue request: managed object context is nil");
 		return NO;
@@ -60,6 +60,27 @@
 	// set parent context
 	[childContext setParentContext:context];
 
+	// FIXME: don't modify payload here
+	payload.token = authToken;
+
+	// FIXME: don't modify payload here
+	if (conversation.state == ApptentiveConversationStateLoggedIn) {
+		ApptentiveAssertNotNil(conversation.encryptionKey, @"Encryption key is nil for a logged-in conversation!");
+		payload.encryptionKey = conversation.encryptionKey;
+	}
+
+	// capture all the data here to avoid concurrency issues
+	NSString *payloadPath = payload.path;
+	NSString *payloadMethod = payload.method;
+	NSString *payloadIdentifier = payload.localIdentifier;
+	NSString *conversationIdentifier = conversation.identifier;
+	NSString *payloadApiVersion = payload.apiVersion;
+	NSString *payloadContentType = payload.contentType;
+	BOOL payloadEncrypted = payload.encrypted;
+	NSData *payloadData = payload.payload;
+	NSString *payloadType = payload.type;
+	NSArray *payloadAttachments = payload.attachments;
+
 	// execute the block on a background thread (this call returns immediatelly)
 	[childContext performBlock:^{
         
@@ -67,32 +88,24 @@
         
         ApptentiveAssertNotNil(request, @"Can't load managed request object");
         if (request == nil) {
-            ApptentiveLogError(@"Unable encode enqueue request '%@': can't load managed request object", payload.path);
+            ApptentiveLogError(@"Unable encode enqueue request '%@': can't load managed request object", payloadPath);
             return;
         }
         
-        payload.token = authToken;
-
-        // FIXME: don't modify payload here
-        if (conversation.state == ApptentiveConversationStateLoggedIn) {
-            ApptentiveAssertNotNil(conversation.encryptionKey, @"Encryption key is nil for a logged-in conversation!");
-            payload.encryptionKey = conversation.encryptionKey;
-        }
-        
         request.date = [NSDate date];
-        request.path = payload.path;
-        request.method = payload.method;
-        request.identifier = payload.localIdentifier;
-        request.conversationIdentifier = conversation.identifier;
-        request.apiVersion = payload.apiVersion;
+        request.path = payloadPath;
+        request.method = payloadMethod;
+        request.identifier = payloadIdentifier;
+        request.conversationIdentifier = conversationIdentifier;
+        request.apiVersion = payloadApiVersion;
         request.authToken = authToken;
-        request.contentType = payload.contentType;
-        request.encrypted = payload.encrypted;
-        request.payload = payload.payload;
-		request.type = payload.type;
+        request.contentType = payloadContentType;
+        request.encrypted = payloadEncrypted;
+        request.payload = payloadData;
+		request.type = payloadType;
         
         NSMutableArray *attachmentArray = [NSMutableArray arrayWithCapacity:payload.attachments.count];
-        for (ApptentiveAttachment *attachment in payload.attachments) {
+        for (ApptentiveAttachment *attachment in payloadAttachments) {
             [attachmentArray addObject:[ApptentiveSerialRequestAttachment queuedAttachmentWithName:attachment.name path:attachment.fullLocalPath MIMEType:attachment.contentType inContext:childContext]];
         }
         request.attachments = [NSOrderedSet orderedSetWithArray:attachmentArray];

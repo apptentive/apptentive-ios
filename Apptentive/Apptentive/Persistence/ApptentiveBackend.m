@@ -67,7 +67,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 
 @synthesize supportDirectoryPath = _supportDirectoryPath;
 
-- (instancetype)initWithApptentiveKey:(NSString *)apptentiveKey signature:(NSString *)signature baseURL:(NSURL *)baseURL storagePath:(NSString *)storagePath {
+- (instancetype)initWithApptentiveKey:(NSString *)apptentiveKey signature:(NSString *)signature baseURL:(NSURL *)baseURL storagePath:(NSString *)storagePath operationQueue:(NSOperationQueue *)operationQueue {
 	self = [super init];
 
 	if (self) {
@@ -77,36 +77,38 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 		_storagePath = storagePath;
 
 		_state = ATBackendStateStarting;
-		_operationQueue = [[NSOperationQueue alloc] init];
-		_operationQueue.maxConcurrentOperationCount = 1;
-		_operationQueue.name = @"Apptentive Operation Queue";
+		_operationQueue = operationQueue;
 		_supportDirectoryPath = [[ApptentiveUtilities applicationSupportPath] stringByAppendingPathComponent:storagePath];
 
 		if ([UIApplication sharedApplication] != nil && ![UIApplication sharedApplication].isProtectedDataAvailable) {
 			_operationQueue.suspended = YES;
 			_state = ATBackendStateWaitingForDataProtectionUnlock;
 
+			__weak ApptentiveBackend *weakSelf = self;
 			[[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationProtectedDataDidBecomeAvailable object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *_Nonnull note) {
-				self.operationQueue.suspended = NO;
-				self.state = ATBackendStateStarting;
+                ApptentiveBackend *strongSelf = weakSelf;
+                if (strongSelf) {
+                    strongSelf.operationQueue.suspended = NO;
+                    strongSelf.state = ATBackendStateStarting;
+                }
 			}];
 		}
 
 		[ApptentiveReachability sharedReachability];
 
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startWorking:) name:UIApplicationDidBecomeActiveNotification object:nil];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startWorking:) name:UIApplicationWillEnterForegroundNotification object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActiveNotification:) name:UIApplicationDidBecomeActiveNotification object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillEnterForegroundNotification:) name:UIApplicationWillEnterForegroundNotification object:nil];
 
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopWorking:) name:UIApplicationWillTerminateNotification object:nil];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopWorking:) name:UIApplicationDidEnterBackgroundNotification object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillTerminateNotification:) name:UIApplicationWillTerminateNotification object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidEnterBackgroundNotification:) name:UIApplicationDidEnterBackgroundNotification object:nil];
 
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleRemoteNotificationInUIApplicationStateActive) name:UIApplicationDidBecomeActiveNotification object:nil];
 
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkStatusChanged:) name:ApptentiveReachabilityStatusChanged object:nil];
 
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateMessageCheckingTimer) name:ApptentiveInteractionsDidUpdateNotification object:nil];
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(authenticationDidFailNotification:) name:ApptentiveAuthenticationDidFailNotification object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(apptentiveInteractionsDidUpdateNotification:) name:ApptentiveInteractionsDidUpdateNotification object:nil];
+
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(authenticationDidFailNotification:) name:ApptentiveAuthenticationDidFailNotification object:nil];
 
 		[_operationQueue addOperationWithBlock:^{
 			[self createSupportDirectoryIfNeeded];
@@ -149,23 +151,57 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 #pragma mark Notification Handling
 
 - (void)networkStatusChanged:(NSNotification *)notification {
-	ApptentiveNetworkStatus status = [[ApptentiveReachability sharedReachability] currentNetworkStatus];
-	if (status == ApptentiveNetworkNotReachable) {
-		self.networkAvailable = NO;
-	} else {
-		self.networkAvailable = YES;
-	}
-	[self updateWorking];
+	[self.operationQueue addOperationWithBlock:^{
+        ApptentiveNetworkStatus status = [[ApptentiveReachability sharedReachability] currentNetworkStatus];
+        if (status == ApptentiveNetworkNotReachable) {
+            self.networkAvailable = NO;
+        } else {
+            self.networkAvailable = YES;
+        }
+        [self updateWorking];
+	}];
 }
 
-- (void)stopWorking:(NSNotification *)notification {
+- (void)applicationWillTerminateNotification:(NSNotification *)notification {
+	[self.operationQueue addOperationWithBlock:^{
+        [self stopWorking];
+	}];
+}
+
+- (void)applicationDidEnterBackgroundNotification:(NSNotification *)notification {
+	[self.operationQueue addOperationWithBlock:^{
+        [self stopWorking];
+	}];
+}
+
+- (void)applicationDidBecomeActiveNotification:(NSNotification *)notification {
+	[self.operationQueue addOperationWithBlock:^{
+        [self startWorking];
+	}];
+}
+
+- (void)applicationWillEnterForegroundNotification:(NSNotification *)notification {
+	[self.operationQueue addOperationWithBlock:^{
+        [self startWorking];
+	}];
+}
+
+- (void)stopWorking {
+	ApptentiveAssertOperationQueue(self.operationQueue);
 	self.shouldStopWorking = YES;
 	[self updateWorking];
 }
 
-- (void)startWorking:(NSNotification *)notification {
+- (void)startWorking {
+	ApptentiveAssertOperationQueue(self.operationQueue);
 	self.shouldStopWorking = NO;
 	[self updateWorking];
+}
+
+- (void)apptentiveInteractionsDidUpdateNotification:(NSNotification *)notification {
+	[self.operationQueue addOperationWithBlock:^{
+        [self updateMessageCheckingTimer];
+	}];
 }
 
 - (void)handleRemoteNotificationInUIApplicationStateActive {
@@ -226,13 +262,22 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 		return;
 	}
 
-	self.configurationOperation = [self.client requestOperationWithRequest:[[ApptentiveConfigurationRequest alloc] initWithConversationIdentifier:self.conversationManager.activeConversation.identifier] delegate:self];
+	ApptentiveRequestOperationCallback *callback = [ApptentiveRequestOperationCallback new];
+	callback.operationFinishCallback = ^(ApptentiveRequestOperation *operation) {
+        [self processConfigurationResponse:(NSDictionary *)operation.responseObject cacheLifetime:operation.cacheLifetime];
+        self.configurationOperation = nil;
+	};
+	callback.operationFailCallback = ^(ApptentiveRequestOperation *operation, NSError *error) {
+        self.configurationOperation = nil;
+	};
+
+	self.configurationOperation = [self.client requestOperationWithRequest:[[ApptentiveConfigurationRequest alloc] initWithConversationIdentifier:self.conversationManager.activeConversation.identifier] delegate:callback];
 
 	if (!self.conversationManager.activeConversation && self.conversationManager.conversationOperation) {
 		[self.configurationOperation addDependency:self.conversationManager.conversationOperation];
 	}
 
-	[self.client.operationQueue addOperation:self.configurationOperation];
+	[self.client.networkQueue addOperation:self.configurationOperation];
 }
 
 - (void)createSupportDirectoryIfNeeded {
@@ -245,12 +290,14 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 }
 
 - (void)startUp {
-	_client = [[ApptentiveClient alloc] initWithBaseURL:self.baseURL apptentiveKey:self.apptentiveKey apptentiveSignature:self.apptentiveSignature];
+	ApptentiveAssertOperationQueue(self.operationQueue);
+
+	_client = [[ApptentiveClient alloc] initWithBaseURL:self.baseURL apptentiveKey:self.apptentiveKey apptentiveSignature:self.apptentiveSignature delegateQueue:self.operationQueue];
 
 	_conversationManager = [[ApptentiveConversationManager alloc] initWithStoragePath:self.supportDirectoryPath operationQueue:self.operationQueue client:self.client parentManagedObjectContext:self.managedObjectContext];
 	self.conversationManager.delegate = self;
 
-	_payloadSender = [[ApptentivePayloadSender alloc] initWithBaseURL:self.baseURL apptentiveKey:self.apptentiveKey apptentiveSignature:self.apptentiveSignature managedObjectContext:self.managedObjectContext];
+	_payloadSender = [[ApptentivePayloadSender alloc] initWithBaseURL:self.baseURL apptentiveKey:self.apptentiveKey apptentiveSignature:self.apptentiveSignature managedObjectContext:self.managedObjectContext delegateQueue:self.operationQueue];
 
 	_imageCache = [[NSURLCache alloc] initWithMemoryCapacity:1 * 1024 * 1024 diskCapacity:10 * 1024 * 1024 diskPath:[self imageCachePath]];
 
@@ -324,29 +371,17 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	[self processQueuedRecords];
 }
 
-#pragma mark Apptentive request operation delegate
-
-- (void)requestOperationDidFinish:(ApptentiveRequestOperation *)operation {
-	if (operation == self.configurationOperation) {
-		[self processConfigurationResponse:(NSDictionary *)operation.responseObject cacheLifetime:operation.cacheLifetime];
-
-		self.configurationOperation = nil;
-	}
-}
-
-- (void)requestOperation:(ApptentiveRequestOperation *)operation didFailWithError:(NSError *)error {
-	if (operation == self.configurationOperation) {
-		self.configurationOperation = nil;
-	}
-}
-
 - (void)processQueuedRecords {
+	ApptentiveAssertOperationQueue(self.operationQueue);
+
 	if (self.isReady && self.working && self.conversationManager.activeConversation.token != nil) {
 		[self.payloadSender createOperationsForQueuedRequestsInContext:self.managedObjectContext];
 	}
 }
 
 - (void)processConfigurationResponse:(NSDictionary *)configurationResponse cacheLifetime:(NSTimeInterval)cacheLifetime {
+	ApptentiveAssertOperationQueue(self.operationQueue);
+
 	_configuration = [[ApptentiveAppConfiguration alloc] initWithJSONDictionary:configurationResponse cacheLifetime:cacheLifetime];
 
 	[self saveConfiguration];
@@ -416,15 +451,13 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 #pragma mark Person/Device management
 
 - (void)scheduleDeviceUpdate {
-	[self.operationQueue addOperationWithBlock:^{
-		[self.conversationManager.activeConversation checkForDeviceDiffs];
-	}];
+	ApptentiveAssertOperationQueue(self.operationQueue);
+	[self.conversationManager.activeConversation checkForDeviceDiffs];
 }
 
 - (void)schedulePersonUpdate {
-	[self.operationQueue addOperationWithBlock:^{
-		[self.conversationManager.activeConversation checkForPersonDiffs];
-	}];
+	ApptentiveAssertOperationQueue(self.operationQueue);
+	[self.conversationManager.activeConversation checkForPersonDiffs];
 }
 
 #pragma mark Message Polling
@@ -434,6 +467,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 }
 
 - (void)updateMessageCheckingTimer {
+	ApptentiveAssertOperationQueue(self.operationQueue);
 	if (self.working) {
 		if (self.messageCenterInForeground) {
 			self.conversationManager.messageManager.pollingInterval = self.configuration.messageCenter.foregroundPollingInterval;
@@ -446,17 +480,17 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 }
 
 - (void)messageCenterEnteredForeground {
-	@synchronized(self) {
-		_messageCenterInForeground = YES;
-
-		[self.conversationManager.messageManager checkForMessages];
-
-		[self updateMessageCheckingTimer];
-	}
+	[self.operationQueue addOperationWithBlock:^{
+        _messageCenterInForeground = YES;
+        
+        [self.conversationManager.messageManager checkForMessages];
+        
+        [self updateMessageCheckingTimer];
+	}];
 }
 
 - (void)messageCenterLeftForeground {
-	@synchronized(self) {
+	[self.operationQueue addOperationWithBlock:^{
 		_messageCenterInForeground = NO;
 
 		[self updateMessageCheckingTimer];
@@ -464,7 +498,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 		if (self.presentedMessageCenterViewController) {
 			self.presentedMessageCenterViewController = nil;
 		}
-	}
+	}];
 }
 
 #pragma mark - Conversation manager delegate
@@ -490,6 +524,11 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 			ApptentivePushProvider pushProvider = [[NSUserDefaults standardUserDefaults] integerForKey:ApptentivePushProviderPreferenceKey];
 			NSString *pushToken = [[NSUserDefaults standardUserDefaults] objectForKey:ApptentivePushTokenPreferenceKey];
 			[conversation setPushToken:pushToken provider:pushProvider];
+
+			if (Apptentive.shared.didAccessStyleSheet) {
+				[conversation didOverrideStyles];
+			}
+
 			[self scheduleDeviceUpdate];
 		}
 	}
@@ -498,20 +537,21 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 #pragma mark - Authentication
 
 - (void)authenticationDidFailNotification:(NSNotification *)notification {
-    if (self.conversationManager.activeConversation.state == ApptentiveConversationStateLoggedIn && self.authenticationFailureCallback) {
-        
-        NSString *conversationIdentifier = ApptentiveDictionaryGetString(notification.userInfo, ApptentiveAuthenticationDidFailNotificationKeyConversationIdentifier);
-        
-        if (![conversationIdentifier isEqualToString:self.conversationManager.activeConversation.identifier]) {
-            ApptentiveLogDebug(@"Conversation identifier mismatch");
-            return;
+	[self.operationQueue addOperationWithBlock:^{
+        if (self.conversationManager.activeConversation.state == ApptentiveConversationStateLoggedIn && self.authenticationFailureCallback) {
+            NSString *conversationIdentifier = ApptentiveDictionaryGetString(notification.userInfo, ApptentiveAuthenticationDidFailNotificationKeyConversationIdentifier);
+            
+            if (![conversationIdentifier isEqualToString:self.conversationManager.activeConversation.identifier]) {
+                ApptentiveLogDebug(@"Conversation identifier mismatch");
+                return;
+            }
+            
+            NSString *errorType = ApptentiveDictionaryGetString(notification.userInfo, ApptentiveAuthenticationDidFailNotificationKeyErrorType);
+            NSString *errorMessage = ApptentiveDictionaryGetString(notification.userInfo, ApptentiveAuthenticationDidFailNotificationKeyErrorMessage);
+            ApptentiveAuthenticationFailureReason reason = parseAuthenticationFailureReason(errorType);
+            self.authenticationFailureCallback(reason, errorMessage);
         }
-        
-        NSString *errorType = ApptentiveDictionaryGetString(notification.userInfo, ApptentiveAuthenticationDidFailNotificationKeyErrorType);
-        NSString *errorMessage = ApptentiveDictionaryGetString(notification.userInfo, ApptentiveAuthenticationDidFailNotificationKeyErrorMessage);
-        ApptentiveAuthenticationFailureReason reason = parseAuthenticationFailureReason(errorType);
-        self.authenticationFailureCallback(reason, errorMessage);
-    }
+	}];
 }
 
 #pragma mark - Paths
@@ -548,7 +588,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 #pragma mark - Debugging
 
 - (void)resetBackend {
-	[self stopWorking:nil];
+	[self stopWorking];
 
 	NSError *error;
 

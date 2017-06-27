@@ -104,11 +104,11 @@
 }
 
 - (NSString *)conversationToken {
-	return Apptentive.shared.backend.conversationManager.activeConversation.token;
+	return Apptentive.shared.backend.conversationManager.activeConversationTemp.token;
 }
 
 - (NSString *)conversationStateName {
-    return NSStringFromApptentiveConversationState(Apptentive.shared.backend.conversationManager.activeConversation.state);
+	return NSStringFromApptentiveConversationState(Apptentive.shared.backend.conversationManager.activeConversationTemp.state);
 }
 
 - (void)resetSDK {

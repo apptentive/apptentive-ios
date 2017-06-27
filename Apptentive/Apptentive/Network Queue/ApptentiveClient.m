@@ -29,7 +29,7 @@
 		_baseURL = baseURL;
 		_apptentiveKey = apptentiveKey;
 		_apptentiveSignature = apptentiveSignature;
-        _networkQueue = [NSOperationQueue new];
+		_networkQueue = [NSOperationQueue new];
 
 		NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
 		configuration.HTTPAdditionalHeaders = @{

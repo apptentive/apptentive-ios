@@ -30,9 +30,9 @@
 	self = [super initWithBaseURL:baseURL apptentiveKey:apptentiveKey apptentiveSignature:apptentiveSignature delegateQueue:delegateQueue];
 
 	if (self) {
-        self.networkQueue.maxConcurrentOperationCount = 1;
-        self.networkQueue.name = @"Payload Queue";
-        
+		self.networkQueue.maxConcurrentOperationCount = 1;
+		self.networkQueue.name = @"Payload Queue";
+
 		_managedObjectContext = managedObjectContext;
 		_activeTaskProgress = [[NSMutableDictionary alloc] init];
 	}

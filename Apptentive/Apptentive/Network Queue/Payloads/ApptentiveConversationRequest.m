@@ -41,7 +41,7 @@
 }
 
 - (NSString *)conversationIdentifier {
-    return _conversation.identifier;
+	return _conversation.identifier;
 }
 
 @end

@@ -16,7 +16,7 @@
 	self = [super init];
 
 	if (self) {
-        APPTENTIVE_CHECK_INIT_NOT_EMPTY_ARG(token);
+		APPTENTIVE_CHECK_INIT_NOT_EMPTY_ARG(token);
 		_token = token;
 	}
 

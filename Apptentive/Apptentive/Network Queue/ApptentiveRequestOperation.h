@@ -123,12 +123,13 @@ extern NSErrorDomain const ApptentiveHTTPErrorDomain;
 
 @end
 
+
 @interface ApptentiveRequestOperationCallback : NSObject
 
-@property (copy, nonatomic) void(^operationStartCallback)(ApptentiveRequestOperation *operation);
-@property (copy, nonatomic) void(^operationFinishCallback)(ApptentiveRequestOperation *operation);
-@property (copy, nonatomic) void(^operationRetryCallback)(ApptentiveRequestOperation *operation, NSError *error);
-@property (copy, nonatomic) void(^operationFailCallback)(ApptentiveRequestOperation *operation, NSError *error);
+@property (copy, nonatomic) void (^operationStartCallback)(ApptentiveRequestOperation *operation);
+@property (copy, nonatomic) void (^operationFinishCallback)(ApptentiveRequestOperation *operation);
+@property (copy, nonatomic) void (^operationRetryCallback)(ApptentiveRequestOperation *operation, NSError *error);
+@property (copy, nonatomic) void (^operationFailCallback)(ApptentiveRequestOperation *operation, NSError *error);
 
 /**
  Indicates that the request operation's request has started.

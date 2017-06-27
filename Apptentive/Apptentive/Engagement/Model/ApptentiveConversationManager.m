@@ -464,7 +464,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 }
 
 - (void)sendLoginRequestWithToken:(NSString *)token conversationIdentifier:(nullable NSString *)conversationIdentifier userId:(NSString *)userId {
-    ApptentiveAssertOperationQueue(self.operationQueue);
+	ApptentiveAssertOperationQueue(self.operationQueue);
 	ApptentiveAssertNotEmpty(token, @"Attempted to send login request with nil or empty conversation token");
 	ApptentiveAssertNotEmpty(userId, @"Attempted to send login request with nil or empty user id");
 
@@ -606,7 +606,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 }
 
 - (void)conversation:(ApptentiveConversation *)conversation processLoginResponse:(NSDictionary *)loginResponse userId:(NSString *)userId token:(NSString *)token {
-    ApptentiveAssertOperationQueue(self.operationQueue);
+	ApptentiveAssertOperationQueue(self.operationQueue);
 	ApptentiveAssertNotEmpty(token, @"Empty token in login request");
 
 	NSString *encryptionKey = ApptentiveDictionaryGetString(loginResponse, @"encryption_key");
@@ -639,7 +639,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		} else if ([conversationItem.conversationIdentifier isEqualToString:conversationIdentifier]) {
 			ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Loading conversation for user '%@'...", userId);
 			ApptentiveConversation *existingConversation = [self loadConversation:conversationItem];
-            mutableConversation = [existingConversation mutableCopy];
+			mutableConversation = [existingConversation mutableCopy];
 		} else {
 			[self failLoginWithErrorCode:ApptentiveInternalInconsistency failureReason:@"Mismatching conversation identifiers for user '%@'. Expected '%@' but was '%@'", userId, conversationItem.conversationIdentifier, conversationIdentifier];
 			return;

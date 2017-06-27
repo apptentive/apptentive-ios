@@ -12,6 +12,7 @@
 @class ApptentiveConversation;
 @class ApptentiveEngagementManifest;
 
+
 @interface ApptentiveEngagementBackend : NSObject
 
 @property (readonly, nonatomic) ApptentiveConversation *conversation;

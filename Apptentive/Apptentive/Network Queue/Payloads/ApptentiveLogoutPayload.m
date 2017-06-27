@@ -9,6 +9,7 @@
 #import "ApptentiveLogoutPayload.h"
 #import "ApptentiveDefines.h"
 
+
 @implementation ApptentiveLogoutPayload
 
 - (NSString *)type {
@@ -24,7 +25,7 @@
 }
 
 - (NSDictionary *)JSONDictionary {
-    return @{};
+	return @{};
 }
 
 @end

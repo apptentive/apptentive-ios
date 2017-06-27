@@ -59,27 +59,27 @@
 
 	// set parent context
 	[childContext setParentContext:context];
-    
-    // FIXME: don't modify payload here
-    payload.token = authToken;
-    
-    // FIXME: don't modify payload here
-    if (conversation.state == ApptentiveConversationStateLoggedIn) {
-        ApptentiveAssertNotNil(conversation.encryptionKey, @"Encryption key is nil for a logged-in conversation!");
-        payload.encryptionKey = conversation.encryptionKey;
-    }
-    
-    // capture all the data here to avoid concurrency issues
-    NSString *payloadPath = payload.path;
-    NSString *payloadMethod = payload.method;
-    NSString *payloadIdentifier = payload.localIdentifier;
-    NSString *conversationIdentifier = conversation.identifier;
-    NSString *payloadApiVersion = payload.apiVersion;
-    NSString *payloadContentType = payload.contentType;
-    BOOL payloadEncrypted = payload.encrypted;
-    NSData *payloadData = payload.payload;
-    NSString *payloadType = payload.type;
-    NSArray *payloadAttachments = payload.attachments;
+
+	// FIXME: don't modify payload here
+	payload.token = authToken;
+
+	// FIXME: don't modify payload here
+	if (conversation.state == ApptentiveConversationStateLoggedIn) {
+		ApptentiveAssertNotNil(conversation.encryptionKey, @"Encryption key is nil for a logged-in conversation!");
+		payload.encryptionKey = conversation.encryptionKey;
+	}
+
+	// capture all the data here to avoid concurrency issues
+	NSString *payloadPath = payload.path;
+	NSString *payloadMethod = payload.method;
+	NSString *payloadIdentifier = payload.localIdentifier;
+	NSString *conversationIdentifier = conversation.identifier;
+	NSString *payloadApiVersion = payload.apiVersion;
+	NSString *payloadContentType = payload.contentType;
+	BOOL payloadEncrypted = payload.encrypted;
+	NSData *payloadData = payload.payload;
+	NSString *payloadType = payload.type;
+	NSArray *payloadAttachments = payload.attachments;
 
 	// execute the block on a background thread (this call returns immediatelly)
 	[childContext performBlock:^{

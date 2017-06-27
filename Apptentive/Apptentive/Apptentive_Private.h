@@ -31,7 +31,7 @@ extern NSString *const ApptentivePushTokenPreferenceKey;
  * This private serial queue is used for all Apptentive internal API calls and callbacks.
  * You may think of it as of the 'main' queue for the SDK itself.
  */
-@property (readonly, nonatomic) NSOperationQueue * operationQueue;
+@property (readonly, nonatomic) NSOperationQueue *operationQueue;
 
 @property (readonly, nonatomic) NSURL *baseURL;
 @property (readonly, nonatomic) ApptentiveBackend *backend;

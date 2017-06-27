@@ -84,7 +84,7 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 - (instancetype)initWithState:(ApptentiveConversationState)state {
 	self = [super init];
 	if (self) {
-        _state = state;
+		_state = state;
 		_appRelease = [[ApptentiveAppRelease alloc] initWithCurrentAppRelease];
 		_SDK = [[ApptentiveSDK alloc] initWithCurrentSDK];
 		_person = [[ApptentivePerson alloc] init];
@@ -296,7 +296,7 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 	self = [super init];
 
 	if (self) {
-        _state = ApptentiveConversationStateLegacyPending;
+		_state = ApptentiveConversationStateLegacyPending;
 		_appRelease = [[ApptentiveAppRelease alloc] initAndMigrate];
 		_SDK = [[ApptentiveSDK alloc] initAndMigrate];
 		_person = [[ApptentivePerson alloc] initAndMigrate];
@@ -417,29 +417,30 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 #pragma mark - Mutability
 
 - (id)mutableCopy {
-    ApptentiveMutableConversation *result = [[ApptentiveMutableConversation alloc] init];
-    result.state = self.state;
-    result.token = self.token;
-    result.legacyToken = self.legacyToken;
-    result.userId = self.userId;
-    result.encryptionKey = self.encryptionKey;
-    result.appRelease = self.appRelease;
-    result.SDK = self.SDK;
-    result.person = self.person;
-    result.device = self.device;
-    result.engagement = self.engagement;
-    result.mutableUserInfo = self.mutableUserInfo;
-    result.lastSentPerson = self.lastSentPerson;
-    result.lastSentDevice = self.lastSentDevice;
-    result.identifier = self.identifier;
-    result.lastMessageID = self.lastMessageID;
-    result.delegate = self.delegate;
-    result.directoryName = self.directoryName;
-    return result;
+	ApptentiveMutableConversation *result = [[ApptentiveMutableConversation alloc] init];
+	result.state = self.state;
+	result.token = self.token;
+	result.legacyToken = self.legacyToken;
+	result.userId = self.userId;
+	result.encryptionKey = self.encryptionKey;
+	result.appRelease = self.appRelease;
+	result.SDK = self.SDK;
+	result.person = self.person;
+	result.device = self.device;
+	result.engagement = self.engagement;
+	result.mutableUserInfo = self.mutableUserInfo;
+	result.lastSentPerson = self.lastSentPerson;
+	result.lastSentDevice = self.lastSentDevice;
+	result.identifier = self.identifier;
+	result.lastMessageID = self.lastMessageID;
+	result.delegate = self.delegate;
+	result.directoryName = self.directoryName;
+	return result;
 }
 
 
 @end
+
 
 @implementation ApptentiveLegacyConversation
 
@@ -467,6 +468,7 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 
 @end
 
+
 @interface ApptentiveMutableConversation ()
 
 @property (strong, nonatomic) NSString *identifier;
@@ -474,6 +476,7 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 @property (strong, nonatomic) NSString *directoryName;
 
 @end
+
 
 @implementation ApptentiveMutableConversation
 
@@ -497,14 +500,14 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 // FIXME: remove these methods
 
 - (void)setToken:(NSString *)token conversationID:(NSString *)conversationID personID:(NSString *)personID deviceID:(NSString *)deviceID {
-    [self setConversationIdentifier:conversationID JWT:token];
-    self.person.identifier = personID;
-    self.device.identifier = deviceID;
+	[self setConversationIdentifier:conversationID JWT:token];
+	self.person.identifier = personID;
+	self.device.identifier = deviceID;
 }
 
 - (void)setConversationIdentifier:(NSString *)identifier JWT:(NSString *)JWT {
-    self.identifier = identifier;
-    self.token = JWT;
+	self.identifier = identifier;
+	self.token = JWT;
 }
 
 @end

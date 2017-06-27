@@ -138,7 +138,7 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 	ApptentiveLogDebug(ApptentiveLogTagNetwork, @"%@ %@ started.", self.URLRequest.HTTPMethod, self.URLRequest.URL.absoluteString);
 	ApptentiveLogVerbose(ApptentiveLogTagNetwork, @"Headers: %@%@", self.URLRequest.allHTTPHeaderFields, self.URLRequest.HTTPBody.length > 0 ? [NSString stringWithFormat:@"\n-----------PAYLOAD BEGIN-----------\n%@\n-----------PAYLOAD END-----------", [[NSString alloc] initWithData:self.URLRequest.HTTPBody encoding:NSUTF8StringEncoding]] : @"");
 
-    [self.delegate requestOperationDidStart:self];
+	[self.delegate requestOperationDidStart:self];
 }
 
 - (void)cancel {
@@ -218,32 +218,32 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 }
 
 - (void)processAuthenticationFailureResponseData:(NSData *)data {
-    NSError *error;
-    id jsonObject = [ApptentiveJSONSerialization JSONObjectWithData:data error:&error];
-    if (error) {
-        ApptentiveLogError(@"Error while parsing JSON: %@", error);
-        return;
-    }
-    
-    if (![jsonObject isKindOfClass:[NSDictionary class]]) {
-        ApptentiveLogError(@"Unexpected JSON object: %@", jsonObject);
-        return;
-    }
-    
-    NSString *conversationIdentifier = self.request.conversationIdentifier;
-    ApptentiveAssertTrue(conversationIdentifier.length > 0, @"Conversation identifier is nil or empty");
-    if (conversationIdentifier.length == 0) {
-        return;
-    }
-    
-    NSString *errorType = ApptentiveDictionaryGetString(jsonObject, @"error_type") ?: @"UNKNOWN";
-    NSString *errorMessage = ApptentiveDictionaryGetString(jsonObject, @"error") ?: @"Unknown error";
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveAuthenticationDidFailNotification object:nil userInfo:@{
-           ApptentiveAuthenticationDidFailNotificationKeyErrorType : errorType,
-           ApptentiveAuthenticationDidFailNotificationKeyErrorMessage : errorMessage,
-           ApptentiveAuthenticationDidFailNotificationKeyConversationIdentifier : conversationIdentifier
-    }];
+	NSError *error;
+	id jsonObject = [ApptentiveJSONSerialization JSONObjectWithData:data error:&error];
+	if (error) {
+		ApptentiveLogError(@"Error while parsing JSON: %@", error);
+		return;
+	}
+
+	if (![jsonObject isKindOfClass:[NSDictionary class]]) {
+		ApptentiveLogError(@"Unexpected JSON object: %@", jsonObject);
+		return;
+	}
+
+	NSString *conversationIdentifier = self.request.conversationIdentifier;
+	ApptentiveAssertTrue(conversationIdentifier.length > 0, @"Conversation identifier is nil or empty");
+	if (conversationIdentifier.length == 0) {
+		return;
+	}
+
+	NSString *errorType = ApptentiveDictionaryGetString(jsonObject, @"error_type") ?: @"UNKNOWN";
+	NSString *errorMessage = ApptentiveDictionaryGetString(jsonObject, @"error") ?: @"Unknown error";
+
+	[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveAuthenticationDidFailNotification object:nil userInfo:@{
+		ApptentiveAuthenticationDidFailNotificationKeyErrorType: errorType,
+		ApptentiveAuthenticationDidFailNotificationKeyErrorMessage: errorMessage,
+		ApptentiveAuthenticationDidFailNotificationKeyConversationIdentifier: conversationIdentifier
+	}];
 }
 
 - (void)completeOperation {
@@ -288,32 +288,33 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 
 @end
 
+
 @implementation ApptentiveRequestOperationCallback
 
 #pragma mark - ApptentiveRequestOperationDelegate implementation
 
 - (void)requestOperationDidStart:(ApptentiveRequestOperation *)operation {
-    if (self.operationStartCallback) {
-        self.operationStartCallback(operation);
-    }
+	if (self.operationStartCallback) {
+		self.operationStartCallback(operation);
+	}
 }
 
 - (void)requestOperationDidFinish:(ApptentiveRequestOperation *)operation {
-    if (self.operationFinishCallback) {
-        self.operationFinishCallback(operation);
-    }
+	if (self.operationFinishCallback) {
+		self.operationFinishCallback(operation);
+	}
 }
 
 - (void)requestOperationWillRetry:(ApptentiveRequestOperation *)operation withError:(NSError *)error {
-    if (self.operationRetryCallback) {
-        self.operationRetryCallback(operation, error);
-    }
+	if (self.operationRetryCallback) {
+		self.operationRetryCallback(operation, error);
+	}
 }
 
 - (void)requestOperation:(ApptentiveRequestOperation *)operation didFailWithError:(NSError *)error {
-    if (self.operationFailCallback) {
-        self.operationFailCallback(operation, error);
-    }
+	if (self.operationFailCallback) {
+		self.operationFailCallback(operation, error);
+	}
 }
 
 @end

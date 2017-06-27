@@ -319,6 +319,7 @@ extern NSString *NSStringFromApptentiveConversationState(ApptentiveConversationS
 
 @end
 
+
 @interface ApptentiveMutableConversation : ApptentiveConversation
 
 @property (assign, nonatomic) ApptentiveConversationState state;

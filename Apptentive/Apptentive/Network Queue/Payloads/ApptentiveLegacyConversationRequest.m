@@ -9,6 +9,7 @@
 #import "ApptentiveLegacyConversationRequest.h"
 #import "ApptentiveConversation.h"
 
+
 @implementation ApptentiveLegacyConversationRequest
 
 - (instancetype)initWithConversation:(ApptentiveConversation *)conversation {
@@ -38,7 +39,7 @@
 }
 
 - (NSString *)conversationIdentifier {
-    return @"#INVALID"; // FIXME: we need a not-nil value to keep logic consistent
+	return @"#INVALID"; // FIXME: we need a not-nil value to keep logic consistent
 }
 
 @end

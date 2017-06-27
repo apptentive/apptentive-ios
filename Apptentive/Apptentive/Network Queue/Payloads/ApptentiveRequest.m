@@ -52,8 +52,8 @@
 }
 
 - (NSString *)conversationIdentifier {
-    APPTENTIVE_ABSTRACT_METHOD_CALLED
-    return nil;
+	APPTENTIVE_ABSTRACT_METHOD_CALLED
+	return nil;
 }
 
 @end

@@ -40,7 +40,7 @@
  * @param ... An optional supplementary description of the failure. A literal NSString, optionally with string format specifiers. This parameter can be completely omitted.
  */
 #define ApptentiveAssertNotEmpty(expression, ...) \
-if (expression.length == 0) __ApptentiveAssertHelper(#expression, __FILE__, __LINE__, __PRETTY_FUNCTION__, __VA_ARGS__)
+	if (expression.length == 0) __ApptentiveAssertHelper(#expression, __FILE__, __LINE__, __PRETTY_FUNCTION__, __VA_ARGS__)
 
 /*!
  * @define ApptentiveAssertTrue(expression, ...)
@@ -58,6 +58,6 @@ if (expression.length == 0) __ApptentiveAssertHelper(#expression, __FILE__, __LI
  * @param ... An optional supplementary description of the failure. A literal NSString, optionally with string format specifiers. This parameter can be completely omitted.
  */
 #define ApptentiveAssertOperationQueue(expression) \
-    if (NSOperationQueue.currentQueue != (expression)) __ApptentiveAssertHelper(#expression, __FILE__, __LINE__, __PRETTY_FUNCTION__, @"Unexpected operation queue: %@", NSOperationQueue.currentQueue)
+	if (NSOperationQueue.currentQueue != (expression)) __ApptentiveAssertHelper(#expression, __FILE__, __LINE__, __PRETTY_FUNCTION__, @"Unexpected operation queue: %@", NSOperationQueue.currentQueue)
 
 void __ApptentiveAssertHelper(const char *expression, const char *file, int line, const char *function, ...);

@@ -373,7 +373,7 @@ static Apptentive *_sharedInstance;
 }
 
 - (NSDictionary *)integrationConfiguration {
-    ApptentiveAssertOperationQueue(self.operationQueue);
+	ApptentiveAssertOperationQueue(self.operationQueue);
 	return self.backend.conversationManager.activeConversation.device.integrationConfiguration;
 }
 
@@ -715,15 +715,15 @@ static Apptentive *_sharedInstance;
 #pragma mark - Authentication
 
 - (void)logInWithToken:(NSString *)token completion:(void (^)(BOOL, NSError *_Nonnull))completion {
-    [self.operationQueue addOperationWithBlock:^{
+	[self.operationQueue addOperationWithBlock:^{
         [self.backend.conversationManager logInWithToken:token completion:completion];
-    }];
+	}];
 }
 
 - (void)logOut {
-    [self.operationQueue addOperationWithBlock:^{
+	[self.operationQueue addOperationWithBlock:^{
         [self.backend.conversationManager endActiveConversation];
-    }];
+	}];
 }
 
 - (ApptentiveAuthenticationFailureCallback)authenticationFailureCallback {

@@ -622,6 +622,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 }
 
 - (void)conversation:(ApptentiveConversation *)conversation processLoginResponse:(NSDictionary *)loginResponse userId:(NSString *)userId token:(NSString *)token {
+    ApptentiveAssertOperationQueue(self.operationQueue);
 	ApptentiveAssertNotEmpty(token, @"Empty token in login request");
 
 	NSString *encryptionKey = ApptentiveDictionaryGetString(loginResponse, @"encryption_key");
@@ -648,12 +649,13 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 		if (conversationItem == nil) {
 			ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Can't load conversation for user '%@': creating a new one...", userId);
-			ApptentiveConversation *conversation = [[ApptentiveConversation alloc] init];
-			[self createMessageManagerForConversation:conversation];
-			_activeConversation = conversation;
+			ApptentiveConversation *newConversation = [[ApptentiveConversation alloc] init];
+			[self createMessageManagerForConversation:newConversation];
+			mutableConversation = [newConversation mutableCopy];
 		} else if ([conversationItem.conversationIdentifier isEqualToString:conversationIdentifier]) {
 			ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Loading conversation for user '%@'...", userId);
-			_activeConversation = [self loadConversation:conversationItem];
+			ApptentiveConversation *existingConversation = [self loadConversation:conversationItem];
+            mutableConversation = [existingConversation mutableCopy];
 		} else {
 			[self failLoginWithErrorCode:ApptentiveInternalInconsistency failureReason:@"Mismatching conversation identifiers for user '%@'. Expected '%@' but was '%@'", userId, conversationItem.conversationIdentifier, conversationIdentifier];
 			return;

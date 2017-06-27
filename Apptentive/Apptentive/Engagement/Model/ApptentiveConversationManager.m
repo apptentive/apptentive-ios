@@ -391,12 +391,13 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 	self.loginCompletionBlock = [completion copy];
 
-#warning Pass conversation here
 	[self requestLoggedInConversationWithToken:token];
 }
 
 - (void)requestLoggedInConversationWithToken:(NSString *)token {
 	NSBlockOperation *loginOperation = [NSBlockOperation blockOperationWithBlock:^{
+        
+        ApptentiveAssertOperationQueue(self.operationQueue);
         
         NSError *jwtError;
         ApptentiveJWT *jwt = [ApptentiveJWT JWTWithContentOfString:token error:&jwtError];
@@ -411,7 +412,6 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
             return;
         }
 
-#warning Check concurrency issues
         // Check if there is an active conversation
 		if (self.activeConversation == nil) {
             ApptentiveLogDebug(ApptentiveLogTagConversation, @"No active conversation. Performing login...");
@@ -464,12 +464,12 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 }
 
 - (void)sendLoginRequestWithToken:(NSString *)token conversationIdentifier:(nullable NSString *)conversationIdentifier userId:(NSString *)userId {
+    ApptentiveAssertOperationQueue(self.operationQueue);
 	ApptentiveAssertNotEmpty(token, @"Attempted to send login request with nil or empty conversation token");
 	ApptentiveAssertNotEmpty(userId, @"Attempted to send login request with nil or empty user id");
 
 	ApptentiveRequestOperationCallback *delegate = [ApptentiveRequestOperationCallback new];
 	delegate.operationFinishCallback = ^(ApptentiveRequestOperation *operation) {
-#warning check Concurrency issues
         [self conversation:self.activeConversation processLoginResponse:(NSDictionary *)operation.responseObject userId:userId token:token];
         self.loginRequestOperation = nil;
 	};
@@ -699,7 +699,6 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 		self.activeConversation = mutableConversation;
 
-#warning FIXME: Don't pass global conversation object
 		[self saveConversation:self.activeConversation];
 
 		[self handleConversationStateChange:self.activeConversation];
@@ -735,7 +734,6 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 		self.activeConversation = mutableConversation;
 
-#warning FIXME: Don't pass global conversation object
 		[self saveConversation:self.activeConversation];
 		[self handleConversationStateChange:self.activeConversation];
 

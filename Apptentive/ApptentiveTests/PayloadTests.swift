@@ -74,11 +74,10 @@ class PayloadTests: XCTestCase {
 	}
 
 	func testLogoutPayload() {
-		let payload = ApptentiveLogoutPayload(conversationToken: "abc123")
+		let payload = ApptentiveLogoutPayload()
 
 		do {
-			if let JSONDictionary = try JSONSerialization.jsonObject(with: (payload?.payload!)!, options: []) as? [String: Any] {
-				XCTAssertEqual(JSONDictionary["token"] as? String, "abc123")
+			if let _ = try JSONSerialization.jsonObject(with: payload.payload!, options: []) as? [String: Any] {
 			} else {
 				XCTFail("can't decode JSON")
 			}
@@ -88,7 +87,11 @@ class PayloadTests: XCTestCase {
 	}
 
 	func testSDKAppReleasePayload() {
-		let conversation = ApptentiveConversation()
+		guard let conversation = ApptentiveConversation(state: .anonymous) else {
+			XCTFail("can't create conversation")
+			return
+		}
+
 		let payload = ApptentiveSDKAppReleasePayload(conversation: conversation)
 
 		do {

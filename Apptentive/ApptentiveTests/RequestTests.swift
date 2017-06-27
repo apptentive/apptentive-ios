@@ -11,7 +11,11 @@ import XCTest
 class RequestTests: XCTestCase {
 
 	func testConversationRequest() {
-		let conversation = ApptentiveConversation()
+		guard let conversation = ApptentiveConversation(state: .anonymous) else {
+			XCTFail("unable to create conversation")
+			return;
+		}
+
 		let request = ApptentiveConversationRequest(conversation: conversation)
 
 		conversation.person.name = "Frank"

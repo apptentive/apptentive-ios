@@ -46,7 +46,7 @@
 		self.interaction = [ApptentiveInteractionInvocation invocationWithJSONDictionary:invocationDictionary];
 	}
 
-	self.data = [[ApptentiveConversation alloc] init];
+	self.data = [[ApptentiveConversation alloc] initWithState:ApptentiveConversationStateAnonymous];
 
 	[self.data.device addCustomNumber:@5 withKey:@"number_5"];
 	[self.data.device addCustomString:@"qwerty" withKey:@"string_qwerty"];

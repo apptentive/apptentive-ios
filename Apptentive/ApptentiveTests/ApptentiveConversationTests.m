@@ -33,7 +33,7 @@
 - (void)setUp {
 	[super setUp];
 
-	self.conversation = [[ApptentiveConversation alloc] init];
+	self.conversation = [[ApptentiveConversation alloc] initWithState:ApptentiveConversationStateAnonymous];
 	self.conversation.delegate = self;
 }
 
@@ -41,12 +41,6 @@
 	XCTAssertNil(self.conversation.token);
 	XCTAssertNil(self.conversation.person.identifier);
 	XCTAssertNil(self.conversation.device.identifier);
-
-	[self.conversation setToken:@"DEF456" conversationID:@"ABC123" personID:@"GHI789" deviceID:@"JKL101"];
-
-	XCTAssertEqualObjects(self.conversation.token, @"DEF456");
-	XCTAssertEqualObjects(self.conversation.person.identifier, @"GHI789");
-	XCTAssertEqualObjects(self.conversation.device.identifier, @"JKL101");
 
 	XCTAssertEqualObjects(self.conversation.userInfo, @{});
 	XCTAssertFalse(self.userInfoChanged);
@@ -268,64 +262,63 @@
 }
 
 - (void)testNSCoding {
+	ApptentiveMutableConversation *mutableConversation = [self.conversation mutableCopy];
+
 	// Make some changes to the default values
-	[self.conversation setToken:@"DEF456" conversationID:@"ABC123" personID:@"GHI789" deviceID:@"JKL101"];
-	[self.conversation setUserInfo:@"foo" forKey:@"bar"];
+	[mutableConversation setToken:@"DEF456" conversationID:@"ABC123" personID:@"GHI789" deviceID:@"JKL101"];
+	[mutableConversation setUserInfo:@"foo" forKey:@"bar"];
 
-	[self.conversation didOverrideStyles];
+	[mutableConversation didOverrideStyles];
 
-	self.conversation.person.name = @"Testy McTesterson";
-	self.conversation.person.emailAddress = @"test@apptentive.com";
+	mutableConversation.person.name = @"Testy McTesterson";
+	mutableConversation.person.emailAddress = @"test@apptentive.com";
 
-	[self.conversation.person addCustomString:@"bar" withKey:@"foo"];
-	[self.conversation.person addCustomNumber:@(5) withKey:@"five"];
-	[self.conversation.person addCustomBool:YES withKey:@"yes"];
+	[mutableConversation.person addCustomString:@"bar" withKey:@"foo"];
+	[mutableConversation.person addCustomNumber:@(5) withKey:@"five"];
+	[mutableConversation.person addCustomBool:YES withKey:@"yes"];
 
-	[self.conversation.device addCustomString:@"bar" withKey:@"foo"];
-	[self.conversation.device addCustomNumber:@(5) withKey:@"five"];
-	[self.conversation.device addCustomBool:YES withKey:@"yes"];
+	[mutableConversation.device addCustomString:@"bar" withKey:@"foo"];
+	[mutableConversation.device addCustomNumber:@(5) withKey:@"five"];
+	[mutableConversation.device addCustomBool:YES withKey:@"yes"];
 
-	[self.conversation.engagement engageCodePoint:@"test.code.point"];
-	[self.conversation.engagement engageInteraction:@"test.interaction"];
+	[mutableConversation.engagement engageCodePoint:@"test.code.point"];
+	[mutableConversation.engagement engageInteraction:@"test.interaction"];
 	NSDate *engagementTime = [NSDate date];
-	[self.conversation.engagement resetVersion];
+	[mutableConversation.engagement resetVersion];
 
 	NSString *path = [NSTemporaryDirectory() stringByAppendingString:@"conversation.archive"];
 
-	[NSKeyedArchiver archiveRootObject:self.conversation toFile:path];
+	[NSKeyedArchiver archiveRootObject:mutableConversation toFile:path];
 
 	ApptentiveConversation *conversation = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
 
-	XCTAssertEqualObjects(conversation.token, @"DEF456");
-	XCTAssertEqualObjects(conversation.person.identifier, @"GHI789");
-	XCTAssertEqualObjects(conversation.device.identifier, @"JKL101");
-	XCTAssertEqualObjects(self.conversation.userInfo[@"bar"], @"foo");
+	XCTAssertEqualObjects(conversation.userInfo[@"bar"], @"foo");
 
 	XCTAssertTrue(conversation.appRelease.isOverridingStyles);
 
-	XCTAssertEqualObjects(self.conversation.person.name, @"Testy McTesterson");
-	XCTAssertEqualObjects(self.conversation.person.emailAddress, @"test@apptentive.com");
-	XCTAssertEqualObjects(self.conversation.person.customData[@"foo"], @"bar");
-	XCTAssertEqualObjects(self.conversation.person.customData[@"five"], @5);
-	XCTAssertEqualObjects(self.conversation.person.customData[@"yes"], @YES);
+	XCTAssertEqualObjects(conversation.person.name, @"Testy McTesterson");
+	XCTAssertEqualObjects(conversation.person.emailAddress, @"test@apptentive.com");
+	XCTAssertEqualObjects(conversation.person.customData[@"foo"], @"bar");
+	XCTAssertEqualObjects(conversation.person.customData[@"five"], @5);
+	XCTAssertEqualObjects(conversation.person.customData[@"yes"], @YES);
 
-	XCTAssertNotNil(self.conversation.device.hardware);
-	XCTAssertNotNil(self.conversation.device.localeRaw);
-	XCTAssertNotNil(self.conversation.device.localeLanguageCode);
-	XCTAssertNotNil(self.conversation.device.localeCountryCode);
-	XCTAssertEqualObjects(self.conversation.device.OSName, @"iOS");
-	XCTAssertEqual(self.conversation.device.UUID.UUIDString.length, (NSUInteger)36);
-	XCTAssertEqualObjects(self.conversation.device.customData[@"foo"], @"bar");
-	XCTAssertEqualObjects(self.conversation.device.customData[@"five"], @5);
-	XCTAssertEqualObjects(self.conversation.device.customData[@"yes"], @YES);
+	XCTAssertNotNil(conversation.device.hardware);
+	XCTAssertNotNil(conversation.device.localeRaw);
+	XCTAssertNotNil(conversation.device.localeLanguageCode);
+	XCTAssertNotNil(conversation.device.localeCountryCode);
+	XCTAssertEqualObjects(conversation.device.OSName, @"iOS");
+	XCTAssertEqual(conversation.device.UUID.UUIDString.length, (NSUInteger)36);
+	XCTAssertEqualObjects(conversation.device.customData[@"foo"], @"bar");
+	XCTAssertEqualObjects(conversation.device.customData[@"five"], @5);
+	XCTAssertEqualObjects(conversation.device.customData[@"yes"], @YES);
 
-	ApptentiveCount *testCodePoint = self.conversation.engagement.codePoints[@"test.code.point"];
+	ApptentiveCount *testCodePoint = conversation.engagement.codePoints[@"test.code.point"];
 	XCTAssertEqual(testCodePoint.totalCount, 1);
 	XCTAssertEqual(testCodePoint.buildCount, 1);
 	XCTAssertEqual(testCodePoint.versionCount, 0);
 	XCTAssertEqualWithAccuracy(testCodePoint.lastInvoked.timeIntervalSince1970, [engagementTime timeIntervalSince1970], 0.01);
 
-	ApptentiveCount *testInteraction = self.conversation.engagement.interactions[@"test.interaction"];
+	ApptentiveCount *testInteraction = conversation.engagement.interactions[@"test.interaction"];
 	XCTAssertEqual(testInteraction.totalCount, 1);
 	XCTAssertEqual(testInteraction.buildCount, 1);
 	XCTAssertEqual(testInteraction.versionCount, 0);

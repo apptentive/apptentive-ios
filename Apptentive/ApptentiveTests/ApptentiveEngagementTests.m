@@ -103,7 +103,7 @@
 	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
 	invocation.criteria = @{ @"time_at_install/total": @{@"$before": @(-5 * 60 * 60 * 24), @"$after": @(-7 * 60 * 60 * 24)} };
 
-	ApptentiveConversation *conversation = [[ApptentiveConversation alloc] init];
+	ApptentiveConversation *conversation = [[ApptentiveConversation alloc] initWithState:ApptentiveConversationStateAnonymous];
 
 	[conversation.appRelease setValue:[NSDate dateWithTimeIntervalSinceNow:-6 * 60 * 60 * 24] forKey:@"timeAtInstallTotal"];
 	[conversation.appRelease setValue:[NSDate dateWithTimeIntervalSinceNow:-6 * 60 * 60 * 24] forKey:@"timeAtInstallVersion"];
@@ -121,7 +121,7 @@
 	invocation.criteria = @{ @"time_at_install/total": @{@"$before": @(6 * 60 * 60 * 24)},
 		@"time_at_install/cf_bundle_short_version_string": @{@"$before": @(6 * 60 * 60 * 24)} };
 
-	ApptentiveConversation *conversation = [[ApptentiveConversation alloc] init];
+	ApptentiveConversation *conversation = [[ApptentiveConversation alloc] initWithState:ApptentiveConversationStateAnonymous];
 
 	[conversation.appRelease setValue:[NSDate dateWithTimeIntervalSinceNow:-6 * 60 * 60 * 24] forKey:@"timeAtInstallTotal"];
 	[conversation.appRelease setValue:[NSDate dateWithTimeIntervalSinceNow:-6 * 60 * 60 * 24] forKey:@"timeAtInstallVersion"];
@@ -161,7 +161,7 @@
 - (void)testInteractionCriteriaDaysSnceInstall {
 	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
 
-	ApptentiveConversation *conversation = [[ApptentiveConversation alloc] init];
+	ApptentiveConversation *conversation = [[ApptentiveConversation alloc] initWithState:ApptentiveConversationStateAnonymous];
 
 	NSTimeInterval dayTimeInterval = 60 * 60 * 24;
 
@@ -182,7 +182,7 @@
 
 - (void)testInteractionCriteriaDebug {
 	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
-	ApptentiveConversation *conversation = [[ApptentiveConversation alloc] init];
+	ApptentiveConversation *conversation = [[ApptentiveConversation alloc] initWithState:ApptentiveConversationStateAnonymous];
 
 // Debug default to false
 #if APPTENTIVE_DEBUG
@@ -204,7 +204,7 @@
 
 - (void)testInteractionCriteriaVersion {
 	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
-	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] initWithConversation:[[ApptentiveConversation alloc] init]];
+	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] initWithConversation:[[ApptentiveConversation alloc] initWithState:ApptentiveConversationStateAnonymous]];
 
 	invocation.criteria = @{ @"application/cf_bundle_short_version_string": [Apptentive versionObjectWithVersion:@"1.2.8"] };
 	[usageData.conversation.appRelease setValue:[[ApptentiveVersion alloc] initWithString:@"1.2.8"] forKey:@"version"];
@@ -221,7 +221,7 @@
 
 - (void)testInteractionCriteriaBuild {
 	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
-	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] initWithConversation:[[ApptentiveConversation alloc] init]];
+	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] initWithConversation:[[ApptentiveConversation alloc] initWithState:ApptentiveConversationStateAnonymous]];
 
 	invocation.criteria = @{ @"application/cf_bundle_version": [Apptentive versionObjectWithVersion:@"39"] };
 	[usageData.conversation.appRelease setValue:[[ApptentiveVersion alloc] initWithString:@"39"] forKey:@"build"];
@@ -251,7 +251,7 @@
 
 - (void)testInteractionCriteriaSDK {
 	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
-	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] initWithConversation:[[ApptentiveConversation alloc] init]];
+	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] initWithConversation:[[ApptentiveConversation alloc] initWithState:ApptentiveConversationStateAnonymous]];
 
 	invocation.criteria = @{ @"sdk/version": [Apptentive versionObjectWithVersion:@"1.4.2"] };
 	[usageData.conversation.SDK setValue:[[ApptentiveVersion alloc] initWithString:@"1.4.2"] forKey:@"version"];
@@ -269,7 +269,7 @@
 
 - (void)testInteractionCriteriaCurrentTime {
 	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
-	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] initWithConversation:[[ApptentiveConversation alloc] init]];
+	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] initWithConversation:[[ApptentiveConversation alloc] initWithState:ApptentiveConversationStateAnonymous]];
 
 	invocation.criteria = @{ @"current_time": @{@"$exists": @YES} };
 	XCTAssertTrue([invocation criteriaAreMetForConversation:usageData.conversation], @"Must have default current time.");
@@ -293,7 +293,7 @@
 
 - (void)testCodePointInvokesVersion {
 	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
-	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] initWithConversation:[[ApptentiveConversation alloc] init]];
+	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] initWithConversation:[[ApptentiveConversation alloc] initWithState:ApptentiveConversationStateAnonymous]];
 
 	[usageData.conversation warmCodePoint:@"app.launch"];
 	invocation.criteria = @{ @"code_point/app.launch/invokes/cf_bundle_short_version_string": @1 };
@@ -315,7 +315,7 @@
 
 - (void)testCodePointInvokesBuild {
 	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
-	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] initWithConversation:[[ApptentiveConversation alloc] init]];
+	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] initWithConversation:[[ApptentiveConversation alloc] initWithState:ApptentiveConversationStateAnonymous]];
 
 	[usageData.conversation warmCodePoint:@"app.launch"];
 	invocation.criteria = @{ @"code_point/app.launch/invokes/cf_bundle_version": @1 };
@@ -337,7 +337,7 @@
 
 - (void)testInteractionInvokesVersion {
 	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
-	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] initWithConversation:[[ApptentiveConversation alloc] init]];
+	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] initWithConversation:[[ApptentiveConversation alloc] initWithState:ApptentiveConversationStateAnonymous]];
 
 	[usageData.conversation warmInteraction:@"526fe2836dd8bf546a00000b"];
 	invocation.criteria = @{ @"interactions/526fe2836dd8bf546a00000b/invokes/cf_bundle_short_version_string": @(1) };
@@ -359,7 +359,7 @@
 
 - (void)testInteractionInvokesBuild {
 	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
-	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] initWithConversation:[[ApptentiveConversation alloc] init]];
+	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] initWithConversation:[[ApptentiveConversation alloc] initWithState:ApptentiveConversationStateAnonymous]];
 
 	[usageData.conversation warmInteraction:@"526fe2836dd8bf546a00000b"];
 	invocation.criteria = @{ @"interactions/526fe2836dd8bf546a00000b/invokes/cf_bundle_version": @(1) };
@@ -381,7 +381,7 @@
 
 - (void)testUpgradeMessageCriteria {
 	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
-	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] initWithConversation:[[ApptentiveConversation alloc] init]];
+	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] initWithConversation:[[ApptentiveConversation alloc] initWithState:ApptentiveConversationStateAnonymous]];
 
 	invocation.criteria = @{ @"code_point/app.launch/invokes/cf_bundle_short_version_string": @1,
 		@"application/cf_bundle_short_version_string": [Apptentive versionObjectWithVersion:@"1.3.0"],
@@ -421,7 +421,7 @@
 
 - (void)testIsUpdateVersionsAndBuilds {
 	ApptentiveInteractionInvocation *invocation = [[ApptentiveInteractionInvocation alloc] init];
-	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] initWithConversation:[[ApptentiveConversation alloc] init]];
+	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] initWithConversation:[[ApptentiveConversation alloc] initWithState:ApptentiveConversationStateAnonymous]];
 
 	//Version
 	invocation.criteria = @{ @"is_update/cf_bundle_short_version_string": @YES };

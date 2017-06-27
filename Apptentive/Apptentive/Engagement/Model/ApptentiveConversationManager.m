@@ -521,15 +521,9 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 - (void)conversationAppReleaseOrSDKDidChange:(ApptentiveConversation *)conversation {
 	NSBlockOperation *conversationDidChangeOperation = [NSBlockOperation blockOperationWithBlock:^{
-		NSManagedObjectContext *context = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-
 		ApptentiveSDKAppReleasePayload *payload = [[ApptentiveSDKAppReleasePayload alloc] initWithConversation:conversation];
 
-		context.parentContext = self.parentManagedObjectContext;
-
-		[context performBlock:^{
-			[ApptentiveSerialRequest enqueuePayload:payload forConversation:conversation usingAuthToken:conversation.token inContext:context];
-		}];
+        [ApptentiveSerialRequest enqueuePayload:payload forConversation:conversation usingAuthToken:conversation.token inContext:self.parentManagedObjectContext];
 
         [self saveConversation:conversation];
 
@@ -541,14 +535,9 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 - (void)conversation:(ApptentiveConversation *)conversation personDidChange:(NSDictionary *)diffs {
 	NSBlockOperation *personDidChangeOperation = [NSBlockOperation blockOperationWithBlock:^{
-		NSManagedObjectContext *context = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-		context.parentContext = self.parentManagedObjectContext;
-
 		ApptentivePersonPayload *payload = [[ApptentivePersonPayload alloc] initWithPersonDiffs:diffs];
 
-		[context performBlock:^{
-			[ApptentiveSerialRequest enqueuePayload:payload forConversation:conversation usingAuthToken:conversation.token inContext:context];
-		}];
+        [ApptentiveSerialRequest enqueuePayload:payload forConversation:conversation usingAuthToken:conversation.token inContext:self.parentManagedObjectContext];
 
         [self saveConversation:conversation];
 
@@ -560,16 +549,11 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 - (void)conversation:(ApptentiveConversation *)conversation deviceDidChange:(NSDictionary *)diffs {
 	NSBlockOperation *deviceDidChangeOperation = [NSBlockOperation blockOperationWithBlock:^{
-		NSManagedObjectContext *context = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-		context.parentContext = self.parentManagedObjectContext;
+		ApptentiveDevicePayload *payload = [[ApptentiveDevicePayload alloc] initWithDeviceDiffs:diffs];
+
+		[ApptentiveSerialRequest enqueuePayload:payload forConversation:conversation usingAuthToken:conversation.token inContext:self.parentManagedObjectContext];
         
-        ApptentiveDevicePayload *payload = [[ApptentiveDevicePayload alloc] initWithDeviceDiffs:diffs];
-
-		[context performBlock:^{
-			[ApptentiveSerialRequest enqueuePayload:payload forConversation:conversation usingAuthToken:conversation.token inContext:context];
-		}];
-
-        [self saveConversation:conversation];
+		[self saveConversation:conversation];
 
 		[self.delegate processQueuedRecords];
 

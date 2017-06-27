@@ -80,6 +80,7 @@
 			ApptentiveLogDebug(ApptentiveLogTagPayload, @"Adding %d record operations for queued payloads", queuedRequests.count);
 
 			// Add an operation for every record in the queue
+			// When the operation succeeds (or fails permanently), it deletes the associated record
 			for (ApptentiveSerialRequest *request in queuedRequests) {
                 ApptentiveAssertNotNil(request.authToken, @"Attempted to send a request without a token: %@", request);
                 ApptentiveRequestOperationCallback *callback = [ApptentiveRequestOperationCallback new];
@@ -113,6 +114,7 @@
 					NSError *saveError;
 					if (![childContext save:&saveError]) {
 						ApptentiveLogError(@"Unable to save temporary managed object context: %@", saveError);
+						return;
 					}
                     
                     ApptentiveLogVerbose(ApptentiveLogTagPayload, @"Saving Parent Managed Object Context (with completed payloads deleted)");
@@ -121,7 +123,9 @@
                         if (![context save:&parentSaveError]) {
                             ApptentiveLogError(@"Unable to save parent managed object context: %@", parentSaveError);
                         }
-                        
+
+						// When the app is backgrounded, Core Data attempts to save before exiting.
+						// We have to call the endBackgroundTask when we are done saving to avoid an error.
                         if (self.backgroundTaskIdentifier != UIBackgroundTaskInvalid) {
                             [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTaskIdentifier];
                             self.backgroundTaskIdentifier = UIBackgroundTaskInvalid;

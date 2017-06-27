@@ -26,7 +26,7 @@
 - (void)setUp {
 	[super setUp];
 
-	self.usageData = [ApptentiveInteractionUsageData usageDataWithConversation:[[ApptentiveConversation alloc] init]];
+	self.usageData = [ApptentiveInteractionUsageData usageDataWithConversation:[[ApptentiveConversation alloc] initWithState:ApptentiveConversationStateAnonymous]];
 }
 
 - (void)incrementCodePoint:(NSString *)codePoint {

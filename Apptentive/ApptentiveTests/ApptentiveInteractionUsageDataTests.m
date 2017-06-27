@@ -32,7 +32,7 @@
 - (void)setUp {
 	[super setUp];
 
-	self.usage = [[ApptentiveInteractionUsageData alloc] initWithConversation:[[ApptentiveConversation alloc] init]];
+	self.usage = [[ApptentiveInteractionUsageData alloc] initWithConversation:[[ApptentiveConversation alloc] initWithState:ApptentiveConversationStateAnonymous]];
 }
 
 - (void)testApplicationVersion {
@@ -64,7 +64,7 @@
 	ApptentiveConfiguration *configuration = [ApptentiveConfiguration configurationWithApptentiveKey:@"app-key" apptentiveSignature:@"app-signature"];
 	[Apptentive registerWithConfiguration:configuration];
 	sleep(1);
-	ApptentiveInteractionUsageData *usage = [[ApptentiveInteractionUsageData alloc] initWithConversation:[[ApptentiveConversation alloc] init]];
+	ApptentiveInteractionUsageData *usage = [[ApptentiveInteractionUsageData alloc] initWithConversation:[[ApptentiveConversation alloc] initWithState:ApptentiveConversationStateAnonymous]];
 
 	NSDictionary *evaluationDictionary = [usage predicateEvaluationDictionary];
 	NSDictionary *versionValue = evaluationDictionary[@"sdk/version"];

@@ -633,7 +633,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 		if (conversationItem == nil) {
 			ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Can't load conversation for user '%@': creating a new one...", userId);
-			ApptentiveConversation *newConversation = [[ApptentiveConversation alloc] init];
+			ApptentiveConversation *newConversation = [[ApptentiveConversation alloc] initWithState:ApptentiveConversationStateAnonymous];
 			[self createMessageManagerForConversation:newConversation];
 			mutableConversation = [newConversation mutableCopy];
 		} else if ([conversationItem.conversationIdentifier isEqualToString:conversationIdentifier]) {
@@ -789,6 +789,8 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		}
 
 		ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Conversation data encrypted (took %g ms)", encryptionStopWatch.elapsedMilliseconds);
+	} else {
+		ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Saving unencrypted conversation data");
 	}
 
 	BOOL succeed = [conversationData writeToFile:file atomically:YES];

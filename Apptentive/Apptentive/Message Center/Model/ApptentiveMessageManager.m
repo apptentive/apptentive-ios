@@ -348,8 +348,6 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 	[self saveMessageStore];
 }
 
-#pragma mark - Private
-
 - (void)updateUnreadCount {
 	NSInteger unreadCount = 0;
 	for (ApptentiveMessage *message in self.messages) {
@@ -366,6 +364,8 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 		});
 	}
 }
+
+#pragma mark - Private
 
 - (void)messageFetchCompleted:(BOOL)success {
 	UIBackgroundFetchResult fetchResult = success ? UIBackgroundFetchResultNewData : UIBackgroundFetchResultFailed;

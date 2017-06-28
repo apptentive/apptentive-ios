@@ -181,7 +181,9 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		return nil;
 	}
 
-	if (item.state == ApptentiveConversationStateLoggedIn) {
+	// Decrypt any non-anonymous conversation that we're trying to load
+	// A logged-out conversation may not be logged in just yet
+	if (item.state == ApptentiveConversationStateLoggedIn || item.state == ApptentiveConversationStateLoggedOut) {
 		ApptentiveStopWatch *decryptionStopWatch = [ApptentiveStopWatch new];
 
 		ApptentiveAssertNotNil(item.encryptionKey, @"Missing encryption key");
@@ -638,6 +640,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 			mutableConversation = [newConversation mutableCopy];
 		} else if ([conversationItem.conversationIdentifier isEqualToString:conversationIdentifier]) {
 			ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Loading conversation for user '%@'...", userId);
+			conversationItem.encryptionKey = [NSData apptentive_dataWithHexString:encryptionKey];
 			ApptentiveConversation *existingConversation = [self loadConversation:conversationItem];
 			mutableConversation = [existingConversation mutableCopy];
 		} else {
@@ -766,7 +769,9 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		return NO;
 	}
 
-	if (conversation.state == ApptentiveConversationStateLoggedIn) {
+	// All non-anonymous conversations should be encrypted
+	// We may have just logged out, so also encrypt logged-out conversations
+	if (conversation.state == ApptentiveConversationStateLoggedIn || conversation.state == ApptentiveConversationStateLoggedOut) {
 		ApptentiveStopWatch *encryptionStopWatch = [[ApptentiveStopWatch alloc] init];
 
 		ApptentiveAssertNotNil(conversation.encryptionKey, @"Missing encryption key");

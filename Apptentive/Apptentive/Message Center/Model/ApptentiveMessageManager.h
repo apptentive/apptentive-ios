@@ -48,6 +48,8 @@
 - (void)appendMessage:(ApptentiveMessage *)message;
 - (void)removeMessage:(ApptentiveMessage *)message;
 
+- (void)updateUnreadCount;
+
 @property (readonly, nonatomic) NSString *attachmentDirectoryPath;
 
 @end

@@ -21,6 +21,15 @@ static NSString *const AutomatedKey = @"automated";
 static NSString *const CustomDataKey = @"customData";
 
 
+@interface ApptentiveMessage ()
+
+@property (readwrite, nullable, nonatomic) NSString *identifier;
+@property (readwrite, nonatomic) NSString *localIdentifier;
+@property (readwrite, nonatomic) NSDate *sentDate;
+
+@end
+
+
 @implementation ApptentiveMessage
 
 + (BOOL)supportsSecureCoding {
@@ -121,6 +130,18 @@ static NSString *const CustomDataKey = @"customData";
 	[coder encodeInteger:self.state forKey:StateKey];
 	[coder encodeBool:self.automated forKey:AutomatedKey];
 	[coder encodeObject:self.customData forKey:CustomDataKey];
+}
+
+- (id)copyWithZone:(NSZone *)zone {
+	ApptentiveMessage *copy = [[ApptentiveMessage alloc] initWithBody:self.body attachments:self.attachments automated:self.automated customData:self.customData];
+
+	copy.identifier = self.identifier;
+	copy.localIdentifier = self.localIdentifier;
+	copy.sentDate = self.sentDate;
+	copy.sender = self.sender;
+	copy.state = self.state;
+
+	return copy;
 }
 
 - (ApptentiveMessage *)mergedWith:(ApptentiveMessage *)messageFromServer {

@@ -821,7 +821,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
         self.manifestOperation = nil;
 	};
 
-	self.manifestOperation = [self.client requestOperationWithRequest:[[ApptentiveInteractionsRequest alloc] initWithConversationIdentifier:self.activeConversation.identifier] delegate:callback];
+	self.manifestOperation = [self.client requestOperationWithRequest:[[ApptentiveInteractionsRequest alloc] initWithConversationIdentifier:self.activeConversation.identifier] token:self.activeConversation.token delegate:callback];
 
 	if (!self.activeConversation.token && self.conversationOperation) {
 		[self.manifestOperation addDependency:self.conversationOperation];

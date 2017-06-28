@@ -57,9 +57,6 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 }
 
 - (void)dealloc {
-	// TODO: get resume data from cancelled downloads and use it
-	[self.attachmentDownloadSession invalidateAndCancel];
-
 	self.messageManager.delegate = nil;
 }
 
@@ -82,6 +79,9 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 	}
 
 	[[Apptentive sharedConnection].backend messageCenterLeftForeground];
+
+	// TODO: get resume data from cancelled downloads and use it
+	[self.attachmentDownloadSession invalidateAndCancel];
 }
 
 #pragma mark - Message center view controller support

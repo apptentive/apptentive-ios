@@ -148,9 +148,8 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 		ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithJSON:messageJSON];
 
 		if (message) {
-			ApptentiveMessage *previousVersion = self.messageIdentifierIndex[message.localIdentifier];
+			ApptentiveMessage *previousVersion = [self.messageIdentifierIndex[message.localIdentifier] copy];
 			BOOL sentByLocalUser = [message.sender.identifier isEqualToString:self.localUserIdentifier];
-
 
 			if (previousVersion != nil) {
 				ApptentiveMessageState previousState = previousVersion.state;
@@ -181,6 +180,8 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 			ApptentiveLogError(@"Unable to create message from JSON: %@", messageJSON);
 		}
 	}
+
+	ApptentiveAssertOperationQueue(Apptentive.shared.backend.operationQueue);
 
 	if (addedMessages.count + updatedMessages.count > 0) {
 		// Add local messages that aren't yet on server's list

@@ -20,6 +20,7 @@ static NSString *const StateKey = @"state";
 static NSString *const AutomatedKey = @"automated";
 static NSString *const CustomDataKey = @"customData";
 
+
 @interface ApptentiveMessage ()
 
 @property (readwrite, nullable, nonatomic) NSString *identifier;

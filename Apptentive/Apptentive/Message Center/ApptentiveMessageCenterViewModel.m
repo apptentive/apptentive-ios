@@ -348,7 +348,10 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 	}
 
 	if (message.state == ApptentiveMessageStateUnread) {
-		message.state = ApptentiveMessageStateRead;
+		[self.messageManager.operationQueue addOperationWithBlock:^{
+			message.state = ApptentiveMessageStateRead;
+			[self.messageManager updateUnreadCount];
+		}];
 	}
 }
 

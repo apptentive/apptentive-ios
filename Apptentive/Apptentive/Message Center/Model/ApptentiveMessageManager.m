@@ -360,7 +360,9 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 	if (_unreadCount != unreadCount) {
 		_unreadCount = unreadCount;
 
-		[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveMessageCenterUnreadCountChangedNotification object:self userInfo:@{ @"count": @(unreadCount) }];
+		dispatch_async(dispatch_get_main_queue(), ^{
+			[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveMessageCenterUnreadCountChangedNotification object:self userInfo:@{ @"count": @(unreadCount) }];
+		});
 	}
 }
 

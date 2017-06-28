@@ -26,7 +26,7 @@ typedef NS_ENUM(NSInteger, ApptentiveMessageState) {
 NS_ASSUME_NONNULL_BEGIN
 
 
-@interface ApptentiveMessage : NSObject <NSSecureCoding>
+@interface ApptentiveMessage : NSObject <NSSecureCoding, NSCopying>
 
 @property (readonly, nullable, nonatomic) NSString *identifier;
 @property (readonly, nonatomic) NSString *localIdentifier;

@@ -36,6 +36,8 @@
 
 - (void)checkForMessagesInBackground:(void (^)(UIBackgroundFetchResult))completionHandler;
 
+- (void)stop;
+
 - (void)stopPolling;
 
 - (BOOL)saveMessageStore;

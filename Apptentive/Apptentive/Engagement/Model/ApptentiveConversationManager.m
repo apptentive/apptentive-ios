@@ -243,6 +243,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 		conversation.state = ApptentiveConversationStateLoggedOut;
 		[self.messageManager saveMessageStore];
+		[self.messageManager stop];
 		_messageManager = nil;
 
 		[self saveConversation:conversation];

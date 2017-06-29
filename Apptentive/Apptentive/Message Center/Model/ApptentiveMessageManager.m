@@ -17,6 +17,7 @@
 #import "ApptentiveMessageGetRequest.h"
 #import "ApptentiveClient.h"
 #import "ApptentivePerson.h"
+#import "ApptentiveUtilities.h"
 
 static NSString *const MessageStoreFileName = @"messages-v1.archive";
 
@@ -77,6 +78,11 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 	}
 
 	return self;
+}
+
+- (void)stop {
+    [self stopPolling];
+    [self deleteCachedAttachments];
 }
 
 - (void)checkForMessages {
@@ -363,6 +369,16 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 			[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveMessageCenterUnreadCountChangedNotification object:self userInfo:@{ @"count": @(unreadCount) }];
 		});
 	}
+}
+
+#pragma mark - Attachments
+
+- (void)deleteCachedAttachments {
+    ApptentiveAssertNotNil(self.attachmentDirectoryPath, @"Attachments directory is nil");
+    NSError *error;
+    if (![ApptentiveUtilities deleteDirectoryAtPath:self.attachmentDirectoryPath error:&error]) {
+        ApptentiveLogError(@"Unable to remove cached attachments: %@", error);
+    }
 }
 
 #pragma mark - Private

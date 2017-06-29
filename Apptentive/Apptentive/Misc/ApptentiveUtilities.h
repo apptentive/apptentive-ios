@@ -16,6 +16,7 @@
 + (BOOL)fileExistsAtPath:(NSString *)path;
 + (BOOL)deleteFileAtPath:(NSString *)path;
 + (BOOL)deleteFileAtPath:(NSString *)path error:(NSError **)error;
++ (BOOL)deleteDirectoryAtPath:(NSString *)path error:(NSError **)error;
 
 + (NSString *)applicationSupportPath;
 + (NSBundle *)resourceBundle;

@@ -197,6 +197,10 @@ static NSString *const RemoteURLKey = @"remoteURL";
 
 - (UIImage *)createThumbnailOfSize:(CGSize)size {
 	CGImageSourceRef src = CGImageSourceCreateWithURL((__bridge CFURLRef)[NSURL fileURLWithPath:self.fullLocalPath], NULL);
+    if (src == NULL) {
+        return nil;
+    }
+    
 	CFDictionaryRef options = (__bridge CFDictionaryRef) @{
 		(id)kCGImageSourceCreateThumbnailWithTransform: @YES,
 		(id)

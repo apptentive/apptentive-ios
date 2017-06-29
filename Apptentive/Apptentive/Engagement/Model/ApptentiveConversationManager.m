@@ -212,6 +212,8 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	mutableConversation.userId = item.userId;
 	mutableConversation.token = item.JWT;
 
+	[self createMessageManagerForConversation:mutableConversation];
+
 	// TODO: check data consistency
 
 	return mutableConversation;
@@ -674,12 +676,11 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 		[mutableConversation setToken:token conversationID:conversationID personID:personID deviceID:deviceID];
 
-		self.messageManager.localUserIdentifier = personID;
-
 		if (mutableConversation.state == ApptentiveConversationStateAnonymousPending) {
 			mutableConversation.state = ApptentiveConversationStateAnonymous;
 		}
 
+		[self.messageManager stop];
 		[self createMessageManagerForConversation:mutableConversation];
 
 		self.activeConversation = mutableConversation;

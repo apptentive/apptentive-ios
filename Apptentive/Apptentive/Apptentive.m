@@ -715,14 +715,35 @@ static Apptentive *_sharedInstance;
 #pragma mark - Authentication
 
 - (void)logInWithToken:(NSString *)token completion:(void (^)(BOOL, NSError *_Nonnull))completion {
+	void (^wrappingCompletion)(BOOL success, NSError *_Nonnull error) = ^(BOOL success, NSError *_Nonnull error) {
+		if (success) {
+			[self.backend engageApptentiveAppEvent:@"login"];
+		}
+
+		if (completion != nil) {
+			completion(success, error);
+		}
+	};
+
 	[self.operationQueue addOperationWithBlock:^{
-        [self.backend.conversationManager logInWithToken:token completion:completion];
+		[self.backend.conversationManager logInWithToken:token completion:wrappingCompletion];
 	}];
 }
 
 - (void)logOut {
 	[self.operationQueue addOperationWithBlock:^{
-        [self.backend.conversationManager endActiveConversation];
+		if (self.backend.conversationManager.activeConversation.state != ApptentiveConversationStateLoggedIn) {
+			ApptentiveLogError(@"Attempting to log out of a conversation that is not logged in.");
+			return;
+		}
+
+		[self.backend engageApptentiveAppEvent:@"logout"];
+
+		// To ensure that the logout event payload gets added before the logout payload,
+		// use a separate block to run the actual logout operation.
+		[self.operationQueue addOperationWithBlock:^{
+			[self.backend.conversationManager endActiveConversation];
+		}];
 	}];
 }
 

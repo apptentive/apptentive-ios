@@ -386,11 +386,6 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 - (void)logInWithToken:(NSString *)token completion:(void (^)(BOOL, NSError *_Nonnull))completion {
 	ApptentiveAssertOperationQueue(self.operationQueue);
 
-	if (completion == nil) {
-		completion = ^void(BOOL success, NSError *error) {
-		};
-	}
-
 	self.loginCompletionBlock = [completion copy];
 
 	[self requestLoggedInConversationWithToken:token];

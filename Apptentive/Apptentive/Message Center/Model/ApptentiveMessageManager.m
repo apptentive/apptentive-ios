@@ -18,6 +18,7 @@
 #import "ApptentiveClient.h"
 #import "ApptentivePerson.h"
 #import "ApptentiveUtilities.h"
+#import "ApptentiveAttachment.h"
 
 static NSString *const MessageStoreFileName = @"messages-v1.archive";
 
@@ -29,7 +30,6 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 @property (strong, nonatomic) NSDictionary *currentCustomData;
 @property (readonly, nonatomic) NSMutableDictionary *messageIdentifierIndex;
 @property (readonly, nonatomic) ApptentiveMessageStore *messageStore;
-@property (strong, nonatomic) ApptentiveConversation *conversation;
 
 @property (readonly, nonatomic) NSString *messageStorePath;
 @property (copy, nonatomic) void (^backgroundFetchBlock)(UIBackgroundFetchResult);
@@ -81,8 +81,8 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 }
 
 - (void)stop {
-    [self stopPolling];
-    [self deleteCachedAttachments];
+	[self stopPolling];
+	[self deleteCachedAttachments];
 }
 
 - (void)checkForMessages {
@@ -374,11 +374,19 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 #pragma mark - Attachments
 
 - (void)deleteCachedAttachments {
-    ApptentiveAssertNotNil(self.attachmentDirectoryPath, @"Attachments directory is nil");
-    NSError *error;
-    if (![ApptentiveUtilities deleteDirectoryAtPath:self.attachmentDirectoryPath error:&error]) {
-        ApptentiveLogError(@"Unable to remove cached attachments: %@", error);
-    }
+	for (ApptentiveMessage *message in self.messageStore.messages) {
+		for (ApptentiveAttachment *attachment in message.attachments) {
+			[attachment deleteLocalContent];
+		}
+	}
+
+	[self saveMessageStore];
+
+	ApptentiveAssertNotNil(self.attachmentDirectoryPath, @"Attachments directory is nil");
+	NSError *error;
+	if (![ApptentiveUtilities deleteDirectoryAtPath:self.attachmentDirectoryPath error:&error]) {
+		ApptentiveLogError(@"Unable to remove cached attachments: %@", error);
+	}
 }
 
 #pragma mark - Private

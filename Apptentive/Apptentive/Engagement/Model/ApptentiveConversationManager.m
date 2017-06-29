@@ -146,7 +146,6 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	ApptentiveConversation *legacyConversation = [[ApptentiveConversation alloc] initAndMigrate];
 	if (legacyConversation != nil) {
 		[self fetchLegacyConversation:legacyConversation];
-		[self createMessageManagerForConversation:legacyConversation];
 		[Apptentive.shared.backend migrateLegacyCoreDataAndTaskQueueForConversation:legacyConversation];
 
 		[self migrateEngagementManifest];
@@ -158,7 +157,6 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	ApptentiveLogDebug(ApptentiveLogTagConversation, @"Can't load conversation: creating anonymous conversation...");
 	ApptentiveConversation *anonymousConversation = [[ApptentiveConversation alloc] initWithState:ApptentiveConversationStateAnonymousPending];
 	[self fetchConversationToken:anonymousConversation];
-	[self createMessageManagerForConversation:anonymousConversation];
 
 	return anonymousConversation;
 }
@@ -216,12 +214,13 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 	// TODO: check data consistency
 
-	[self createMessageManagerForConversation:mutableConversation];
-
 	return mutableConversation;
 }
 
 - (void)createMessageManagerForConversation:(ApptentiveConversation *)conversation {
+	ApptentiveAssertNotNil(conversation.token, @"Attempted to create message manager without conversation token");
+	ApptentiveAssertNotNil(conversation.identifier, @"Attempted to create message manager without conversation identifier");
+
 	NSString *directoryPath = [self conversationContainerPathForDirectoryName:conversation.directoryName];
 
 	_messageManager = [[ApptentiveMessageManager alloc] initWithStoragePath:directoryPath client:self.client pollingInterval:Apptentive.shared.backend.configuration.messageCenter.backgroundPollingInterval conversation:conversation operationQueue:self.operationQueue];
@@ -632,7 +631,6 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		if (conversationItem == nil) {
 			ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Can't load conversation for user '%@': creating a new one...", userId);
 			ApptentiveConversation *newConversation = [[ApptentiveConversation alloc] initWithState:ApptentiveConversationStateAnonymous];
-			[self createMessageManagerForConversation:newConversation];
 			mutableConversation = [newConversation mutableCopy];
 		} else if ([conversationItem.conversationIdentifier isEqualToString:conversationIdentifier]) {
 			ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Loading conversation for user '%@'...", userId);
@@ -652,6 +650,8 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	mutableConversation.userId = userId;
 	mutableConversation.encryptionKey = [NSData apptentive_dataWithHexString:encryptionKey];
 	ApptentiveAssertNotNil(mutableConversation.encryptionKey, @"Apptentive encryption key should be not nil");
+
+	[self createMessageManagerForConversation:mutableConversation];
 
 	self.activeConversation = mutableConversation;
 
@@ -679,6 +679,8 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		if (mutableConversation.state == ApptentiveConversationStateAnonymousPending) {
 			mutableConversation.state = ApptentiveConversationStateAnonymous;
 		}
+
+		[self createMessageManagerForConversation:mutableConversation];
 
 		self.activeConversation = mutableConversation;
 
@@ -714,6 +716,8 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		if (mutableConversation.state == ApptentiveConversationStateLegacyPending) {
 			mutableConversation.state = ApptentiveConversationStateAnonymous;
 		}
+
+		[self createMessageManagerForConversation:mutableConversation];
 
 		self.activeConversation = mutableConversation;
 

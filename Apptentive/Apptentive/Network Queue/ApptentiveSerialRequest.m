@@ -82,7 +82,7 @@
 	NSArray *payloadAttachments = payload.attachments;
 
 	// execute the block on a background thread (this call returns immediatelly)
-	[childContext performBlock:^{
+	[childContext performBlockAndWait:^{
         
         ApptentiveSerialRequest *request = (ApptentiveSerialRequest *)[[NSManagedObject alloc] initWithEntity:[NSEntityDescription entityForName:@"QueuedRequest" inManagedObjectContext:childContext] insertIntoManagedObjectContext:childContext];
         

@@ -43,7 +43,7 @@ class PayloadTests: XCTestCase {
 	func testSurveyPayload() {
 		let payload = ApptentiveSurveyResponsePayload(answers: ["56d49499c719925f3300000b":["id": "56d49499c719925f3300000b", "value": "Other Text"]], identifier: "56d49499c719925f3300000a")!
 
-		if let contents = self.testBoilerplateForPayload(payload, containerName: "survey"), let answers = contents["answers"] as? [String:Any], let answer = answers["56d49499c719925f3300000b"] as? [String:String] {
+		if let contents = self.testBoilerplateForPayload(payload, containerName: "response"), let answers = contents["answers"] as? [String:Any], let answer = answers["56d49499c719925f3300000b"] as? [String:String] {
 			XCTAssertEqual(contents["id"] as? String, "56d49499c719925f3300000a")
 			XCTAssertEqual(answer["id"], "56d49499c719925f3300000b")
 			XCTAssertEqual(answer["value"], "Other Text")

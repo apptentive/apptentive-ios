@@ -155,7 +155,6 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 
 		if (message) {
 			ApptentiveMessage *previousVersion = [self.messageIdentifierIndex[message.localIdentifier] copy];
-			BOOL sentByLocalUser = [message.sender.identifier isEqualToString:self.localUserIdentifier];
 
 			if (previousVersion != nil) {
 				ApptentiveMessageState previousState = previousVersion.state;
@@ -163,19 +162,11 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 				// Update with server identifier and date
 				message = [previousVersion mergedWith:message];
 
-				if (sentByLocalUser) {
-					message.state = ApptentiveMessageStateSent;
-				}
-
 				if (previousState != message.state) {
 					[updatedMessages addObject:message];
 				}
 			} else {
 				[addedMessages addObject:message];
-
-				if (!sentByLocalUser) {
-					message.state = ApptentiveMessageStateUnread;
-				} // else state defaults to sent
 			}
 
 			[mutableMessages addObject:message];
@@ -408,10 +399,6 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 
 - (NSString *)conversationIdentifier {
 	return self.conversation.identifier;
-}
-
-- (NSString *)localUserIdentifier {
-	return self.conversation.person.identifier;
 }
 
 @end

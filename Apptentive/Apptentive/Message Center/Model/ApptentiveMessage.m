@@ -148,6 +148,21 @@ static NSString *const CustomDataKey = @"customData";
 	_identifier = messageFromServer.identifier;
 	_sentDate = messageFromServer.sentDate;
 
+	if (self.attachments.count == messageFromServer.attachments.count) {
+		NSInteger i = 0;
+		NSMutableArray *updatedAttachments = [NSMutableArray arrayWithCapacity:self.attachments.count];
+		for (ApptentiveAttachment *attachment in self.attachments) {
+			ApptentiveAttachment *attachmentFromServer = messageFromServer.attachments[i++];
+
+			ApptentiveAttachment *updatedAttachment = [attachment mergedWith:attachmentFromServer];
+			[updatedAttachments addObject:updatedAttachment];
+		}
+
+		_attachments = updatedAttachments;
+	} else {
+		ApptentiveLogError(@"Mismatch in number of attachments between client and server.");
+	}
+
 	return self;
 }
 

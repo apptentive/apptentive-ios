@@ -15,6 +15,7 @@
 #import "Apptentive_Private.h"
 #import "ApptentiveBackend.h"
 #import "ApptentiveMessageManager.h"
+#import "ApptentiveUtilities.h"
 
 
 static NSString *const FileNameKey = @"fileName";
@@ -186,6 +187,17 @@ static NSString *const RemoteURLKey = @"remoteURL";
 	return image;
 }
 
+- (void)deleteLocalContent {
+	[ApptentiveUtilities deleteFileAtPath:self.fullLocalPath];
+	_fileName = nil;
+}
+
+- (ApptentiveAttachment *)mergedWith:(ApptentiveAttachment *)attachmentFromServer {
+	_remoteURL = attachmentFromServer.remoteURL;
+
+	return self;
+}
+
 #pragma mark - Private
 
 - (NSString *)filenameForThumbnailOfSize:(CGSize)size {
@@ -197,10 +209,10 @@ static NSString *const RemoteURLKey = @"remoteURL";
 
 - (UIImage *)createThumbnailOfSize:(CGSize)size {
 	CGImageSourceRef src = CGImageSourceCreateWithURL((__bridge CFURLRef)[NSURL fileURLWithPath:self.fullLocalPath], NULL);
-    if (src == NULL) {
-        return nil;
-    }
-    
+	if (src == NULL) {
+		return nil;
+	}
+
 	CFDictionaryRef options = (__bridge CFDictionaryRef) @{
 		(id)kCGImageSourceCreateThumbnailWithTransform: @YES,
 		(id)

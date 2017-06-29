@@ -38,6 +38,10 @@ NS_ASSUME_NONNULL_BEGIN
 /** Must be called from main thread. */
 - (void)completeMoveToStorageFor:(NSURL *)storageLocation;
 
+- (void)deleteLocalContent;
+
+- (ApptentiveAttachment *)mergedWith:(ApptentiveAttachment *)attachmentFromServer;
+
 @end
 
 

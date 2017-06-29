@@ -239,8 +239,9 @@ static NSString *const RemoteURLKey = @"remoteURL";
 
 + (NSString *)fullLocalPathForFilename:(NSString *)filename {
 	if (!filename) {
-		return nil;
+		return nil; // TODO: assertion?
 	}
+    ApptentiveAssertNotNil(Apptentive.shared.backend.conversationManager.messageManager, @"Can't resolve full local path for '%@': message manager is not initialized", filename);
 	return [Apptentive.shared.backend.conversationManager.messageManager.attachmentDirectoryPath stringByAppendingPathComponent:filename];
 }
 
@@ -283,21 +284,27 @@ static NSString *const RemoteURLKey = @"remoteURL";
 			return;
 		}
 		// Delete any thumbnails.
-		NSArray *filenames = [fm contentsOfDirectoryAtPath:Apptentive.shared.backend.conversationManager.messageManager.attachmentDirectoryPath error:&error];
-		if (!filenames) {
-			ApptentiveLogError(@"Error listing attachments directory: %@", error);
-		} else {
-			for (NSString *filename in filenames) {
-				if ([filename rangeOfString:self.fileName].location == 0) {
-					NSString *thumbnailPath = [[self class] fullLocalPathForFilename:filename];
+        ApptentiveMessageManager *messageManager = Apptentive.shared.backend.conversationManager.messageManager;
+        ApptentiveAssertNotNil(messageManager, @"Message manager is nil");
+        if (!messageManager) {
+            ApptentiveLogError(@"Error listing attachments directory: message manager is not initialized");
+        } else {
+            NSArray *filenames = [fm contentsOfDirectoryAtPath:messageManager.attachmentDirectoryPath error:&error];
+            if (!filenames) {
+                ApptentiveLogError(@"Error listing attachments directory: %@", error);
+            } else {
+                for (NSString *filename in filenames) {
+                    if ([filename rangeOfString:self.fileName].location == 0) {
+                        NSString *thumbnailPath = [[self class] fullLocalPathForFilename:filename];
 
-					if (![fm removeItemAtPath:thumbnailPath error:&error]) {
-						ApptentiveLogError(@"Error removing attachment thumbnail at path: %@. %@", thumbnailPath, error);
-						continue;
-					}
-				}
-			}
-		}
+                        if (![fm removeItemAtPath:thumbnailPath error:&error]) {
+                            ApptentiveLogError(@"Error removing attachment thumbnail at path: %@. %@", thumbnailPath, error);
+                            continue;
+                        }
+                    }
+                }
+            }
+        }
 		_fileName = nil;
 	}
 }

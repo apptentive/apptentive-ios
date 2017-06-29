@@ -81,6 +81,9 @@ static Apptentive *_sharedInstance;
 
 
 @interface Apptentive () <ApptentiveBannerViewControllerDelegate>
+
+@property (nonatomic, readonly) ApptentiveMessageManager *messageManager;
+
 @end
 
 
@@ -194,7 +197,11 @@ static Apptentive *_sharedInstance;
 		ApptentiveAssertNotNil(message, @"Message is nil");
 
 		if (message != nil) {
-			[self.backend.conversationManager.messageManager enqueueMessageForSending:message];
+            if (self.messageManager) {
+                [self.messageManager enqueueMessageForSending:message];
+            } else {
+                ApptentiveLogError(@"Unable to send attachment text: message manager is not initialized");
+            }
 		}
 	}];
 }
@@ -224,7 +231,11 @@ static Apptentive *_sharedInstance;
 			ApptentiveAssertNotNil(message, @"Message is nil");
 
 			if (message != nil) {
-				[self.backend.conversationManager.messageManager enqueueMessageForSending:message];
+                if (self.messageManager) {
+                    [self.messageManager enqueueMessageForSending:message];
+                } else {
+                    ApptentiveLogError(@"Unable to send attachment image: message manager is not initialized");
+                }
 			}
 		}
 	}];
@@ -254,9 +265,13 @@ static Apptentive *_sharedInstance;
 			ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:nil attachments:@[attachment] automated:NO customData:nil];
 
 			ApptentiveAssertNotNil(message, @"Message is nil");
-			if (message != nil) {
-				[self.backend.conversationManager.messageManager enqueueMessageForSending:message];
-			}
+            if (message != nil) {
+                if (self.messageManager) {
+                    [self.messageManager enqueueMessageForSending:message];
+                } else {
+                    ApptentiveLogError(@"Unable to send attachment file: message manager is not initialized");
+                }
+            }
 		}
 	}];
 }
@@ -563,7 +578,11 @@ static Apptentive *_sharedInstance;
 						NSNumber *contentAvailable = userInfo[@"aps"][@"content-available"];
 						if (contentAvailable.boolValue) {
 							shouldCallCompletionHandler = NO;
-							[self.backend.conversationManager.messageManager checkForMessagesInBackground:completionHandler];
+                            if (self.messageManager) {
+                                [self.messageManager checkForMessagesInBackground:completionHandler];
+                            } else {
+                                ApptentiveLogError(@"Can't check for incoming messages: message manager is not initialized");
+                            }
 						}
 
 						if (userInfo[@"aps"][@"alert"] == nil) {
@@ -599,7 +618,12 @@ static Apptentive *_sharedInstance;
 						if ([action isEqualToString:@"pmc"]) {
 							[self presentMessageCenterFromViewController:viewController];
 						} else {
-							[self.backend.conversationManager.messageManager checkForMessages];
+                            if (self.messageManager) {
+                                [self.messageManager checkForMessages];
+                            } else {
+                                ApptentiveLogError(@"Can't check for incoming messages: message manager is not initialized");
+                            }
+                            
 						}
 						break;
 				}
@@ -630,7 +654,11 @@ static Apptentive *_sharedInstance;
 		if ([action isEqualToString:@"pmc"]) {
 			[self presentMessageCenterFromViewController:viewController];
 		} else {
-			[self.backend.conversationManager.messageManager checkForMessages];
+            if (self.messageManager) {
+                [self.messageManager checkForMessages];
+            } else {
+                ApptentiveLogError(@"Can't check for incoming messages: message manager is not initialized");
+            }
 		}
 		return YES;
 	}
@@ -774,6 +802,13 @@ static Apptentive *_sharedInstance;
 	if (block) {
 		[_operationQueue addOperationWithBlock:block];
 	}
+}
+
+#pragma mark -
+#pragma mark Properties
+
+- (ApptentiveMessageManager *)messageManager {
+    return self.backend.conversationManager.messageManager;
 }
 
 @end

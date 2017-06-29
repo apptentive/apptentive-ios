@@ -225,6 +225,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 	_messageManager = [[ApptentiveMessageManager alloc] initWithStoragePath:directoryPath client:self.client pollingInterval:Apptentive.shared.backend.configuration.messageCenter.backgroundPollingInterval conversation:conversation operationQueue:self.operationQueue];
 
+    ApptentiveAssertNotNil(self.messageManager, @"Unable to create message manager");
 	Apptentive.shared.backend.payloadSender.messageDelegate = self.messageManager;
 }
 
@@ -241,6 +242,8 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		[Apptentive.shared.backend processQueuedRecords];
 
 		conversation.state = ApptentiveConversationStateLoggedOut;
+        
+        ApptentiveAssertNotNil(self.messageManager, @"Attempted to end active conversation without message manager");
 		[self.messageManager saveMessageStore];
 		[self.messageManager stop];
 		_messageManager = nil;
@@ -663,6 +666,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 - (BOOL)updateActiveConversation:(ApptentiveConversation *)conversation withResponse:(NSDictionary *)conversationResponse {
 	ApptentiveAssertOperationQueue(self.operationQueue);
+    ApptentiveAssertNotNil(self.messageManager, @"Attempted to update active conversation without message manager");
 
 	NSString *token = [conversationResponse valueForKey:@"token"];
 	NSString *conversationID = [conversationResponse valueForKey:@"id"];
@@ -882,6 +886,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		[self fetchEngagementManifest];
 	}
 
+    ApptentiveAssertNotNil(self.messageManager, @"Attempted to resume conversation manager without message manager");
 	[self.messageManager checkForMessages];
 }
 

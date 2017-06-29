@@ -18,6 +18,7 @@
 #import "ApptentiveInteraction.h"
 #import "ApptentivePerson.h"
 #import "ApptentiveReachability.h"
+#import "ApptentiveDefines.h"
 
 NSString *const ATMessageCenterServerErrorDomain = @"com.apptentive.MessageCenterServerError";
 NSString *const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenterErrorMessages";
@@ -41,6 +42,10 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 
 - (instancetype)initWithConversation:(ApptentiveConversation *)conversation interaction:(ApptentiveInteraction *)interaction messageManager:(ApptentiveMessageManager *)messageManager {
 	if ((self = [super init])) {
+        APPTENTIVE_CHECK_INIT_NOT_NIL_ARG(conversation);
+        APPTENTIVE_CHECK_INIT_NOT_NIL_ARG(interaction);
+        APPTENTIVE_CHECK_INIT_NOT_NIL_ARG(messageManager);
+        
 		_conversation = conversation;
 		_interaction = interaction;
 		_messageManager = messageManager;
@@ -57,7 +62,10 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 }
 
 - (void)dealloc {
-	self.messageManager.delegate = nil;
+    ApptentiveAssertTrue(self.messageManager.delegate == self, @"Delegate mismatch");
+    if (self.messageManager.delegate == self) {
+        self.messageManager.delegate = nil;
+    }
 }
 
 - (void)start {

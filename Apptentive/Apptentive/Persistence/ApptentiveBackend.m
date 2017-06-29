@@ -271,7 +271,9 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
         self.configurationOperation = nil;
 	};
 
-	self.configurationOperation = [self.client requestOperationWithRequest:[[ApptentiveConfigurationRequest alloc] initWithConversationIdentifier:self.conversationManager.activeConversation.identifier] delegate:callback];
+	ApptentiveConversation *conversation = self.conversationManager.activeConversation;
+
+	self.configurationOperation = [self.client requestOperationWithRequest:[[ApptentiveConfigurationRequest alloc] initWithConversationIdentifier:conversation.identifier] token:conversation.token delegate:callback];
 
 	if (!self.conversationManager.activeConversation && self.conversationManager.conversationOperation) {
 		[self.configurationOperation addDependency:self.conversationManager.conversationOperation];
@@ -330,9 +332,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	}
 }
 
-- (void)finishStartupWithToken:(NSString *)token {
-	self.client.authToken = token;
-
+- (void)finishStartup {
 	self.state = ATBackendStateReady;
 
 	[self networkStatusChanged:nil];
@@ -508,7 +508,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	if (conversation.state != ApptentiveConversationStateAnonymousPending &&
 		conversation.state != ApptentiveConversationStateLegacyPending) {
 		if (self.state != ATBackendStateReady) {
-			[self finishStartupWithToken:conversation.token];
+			[self finishStartup];
 		}
 
 		if (conversation.state == ApptentiveConversationStateAnonymous) {

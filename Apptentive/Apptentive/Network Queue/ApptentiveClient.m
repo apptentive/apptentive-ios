@@ -63,10 +63,6 @@
 
 #pragma mark - Creating request operations
 
-- (ApptentiveRequestOperation *)requestOperationWithRequest:(id<ApptentiveRequest>)request delegate:(ApptentiveRequestOperationCallback *)delegate {
-	return [self requestOperationWithRequest:request token:self.authToken delegate:delegate];
-}
-
 - (ApptentiveRequestOperation *)requestOperationWithRequest:(id<ApptentiveRequest>)request token:(NSString *)token delegate:(ApptentiveRequestOperationCallback *)delegate {
 	NSMutableURLRequest *URLRequest = [self URLRequestWithRequest:request];
 	if (token && !request.encrypted) {

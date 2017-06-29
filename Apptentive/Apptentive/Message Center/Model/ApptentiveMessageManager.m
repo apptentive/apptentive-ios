@@ -96,7 +96,7 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 	ApptentiveMessageGetRequest *request = [[ApptentiveMessageGetRequest alloc] initWithConversationIdentifier:self.conversationIdentifier];
 	request.lastMessageIdentifier = self.messageStore.lastMessageIdentifier;
 
-	self.messageOperation = [self.client requestOperationWithRequest:request delegate:callback];
+	self.messageOperation = [self.client requestOperationWithRequest:request token:self.conversation.token delegate:callback];
 
 	[self.client.networkQueue addOperation:self.messageOperation];
 }

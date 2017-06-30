@@ -265,6 +265,10 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 #pragma mark - Conversation Token Fetching
 
 - (void)fetchConversationToken:(ApptentiveConversation *)conversation {
+    ApptentiveAssertNil(self.conversationOperation, "Another request fetch request is running");
+    self.conversationOperation.delegate = nil;
+    [self.conversationOperation cancel];
+    
 	ApptentiveRequestOperationCallback *delegate = [ApptentiveRequestOperationCallback new];
 	delegate.operationFinishCallback = ^(ApptentiveRequestOperation *operation) {
         [self conversation:conversation processFetchResponse:(NSDictionary *)operation.responseObject];

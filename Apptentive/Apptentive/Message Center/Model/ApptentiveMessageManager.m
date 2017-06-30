@@ -372,12 +372,6 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 	}
 
 	[self saveMessageStore];
-
-	ApptentiveAssertNotNil(self.attachmentDirectoryPath, @"Attachments directory is nil");
-	NSError *error;
-	if (![ApptentiveUtilities deleteDirectoryAtPath:self.attachmentDirectoryPath error:&error]) {
-		ApptentiveLogError(@"Unable to remove cached attachments: %@", error);
-	}
 }
 
 #pragma mark - Private
@@ -402,7 +396,7 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 }
 
 - (NSString *)localUserIdentifier {
-    return self.conversation.person.identifier;
+	return self.conversation.person.identifier;
 }
 
 @end

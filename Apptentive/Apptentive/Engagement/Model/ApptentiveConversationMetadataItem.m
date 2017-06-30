@@ -26,9 +26,9 @@ static NSString *const JWTKey = @"JWT";
 	self = [super init];
 
 	if (self) {
-        APPTENTIVE_CHECK_INIT_NOT_EMPTY_ARG(conversationIdentifier);
-        APPTENTIVE_CHECK_INIT_NOT_EMPTY_ARG(filename);
-        
+		APPTENTIVE_CHECK_INIT_NOT_EMPTY_ARG(conversationIdentifier);
+		APPTENTIVE_CHECK_INIT_NOT_EMPTY_ARG(filename);
+
 		_conversationIdentifier = conversationIdentifier;
 		_directoryName = filename;
 	}

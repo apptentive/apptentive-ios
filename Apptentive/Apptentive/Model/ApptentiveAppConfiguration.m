@@ -56,8 +56,8 @@ static NSString *const ATAppConfigurationMessageCenterBackgroundRefreshIntervalK
 	self = [self init];
 
 	if (self) {
-        APPTENTIVE_CHECK_INIT_NOT_NIL_ARG(JSONDictionary);
-        
+		APPTENTIVE_CHECK_INIT_NOT_NIL_ARG(JSONDictionary);
+
 		_supportDisplayName = JSONDictionary[@"support_display_name"];
 		_supportDisplayEmail = JSONDictionary[@"support_display_email"];
 
@@ -82,8 +82,8 @@ static NSString *const ATAppConfigurationMessageCenterBackgroundRefreshIntervalK
 	self = [self init];
 
 	if (self) {
-        APPTENTIVE_CHECK_INIT_NOT_NIL_ARG(userDefaults);
-        
+		APPTENTIVE_CHECK_INIT_NOT_NIL_ARG(userDefaults);
+
 		_metricsEnabled = [userDefaults boolForKey:ATAppConfigurationMetricsEnabledPreferenceKey];
 		_hideBranding = [userDefaults boolForKey:ATAppConfigurationHideBrandingKey];
 

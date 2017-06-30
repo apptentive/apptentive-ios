@@ -654,11 +654,11 @@ static Apptentive *_sharedInstance;
 		if ([action isEqualToString:@"pmc"]) {
 			[self presentMessageCenterFromViewController:viewController];
 		} else {
-            if (self.messageManager) {
-                [self.messageManager checkForMessages];
-            } else {
-                ApptentiveLogError(@"Can't check for incoming messages: message manager is not initialized");
-            }
+			if (self.messageManager) {
+				[self.messageManager checkForMessages];
+			} else {
+				ApptentiveLogError(@"Can't check for incoming messages: message manager is not initialized");
+			}
 		}
 		return YES;
 	}
@@ -808,7 +808,7 @@ static Apptentive *_sharedInstance;
 #pragma mark Properties
 
 - (ApptentiveMessageManager *)messageManager {
-    return self.backend.conversationManager.messageManager;
+	return self.backend.conversationManager.messageManager;
 }
 
 @end

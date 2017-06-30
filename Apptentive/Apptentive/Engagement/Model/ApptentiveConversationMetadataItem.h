@@ -12,6 +12,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+
 @interface ApptentiveConversationMetadataItem : NSObject <NSSecureCoding>
 
 - (nullable instancetype)initWithConversationIdentifier:(NSString *)conversationIdentifier directoryName:(NSString *)filename;

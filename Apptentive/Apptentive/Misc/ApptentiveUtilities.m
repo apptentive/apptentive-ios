@@ -46,7 +46,7 @@ UIViewController *topChildViewController(UIViewController *viewController) {
 }
 
 + (BOOL)deleteDirectoryAtPath:(NSString *)path error:(NSError **)error {
-    return path != nil && [[NSFileManager defaultManager] removeItemAtPath:path error:error];
+	return path != nil && [[NSFileManager defaultManager] removeItemAtPath:path error:error];
 }
 
 + (NSString *)applicationSupportPath {

@@ -52,8 +52,8 @@
 	}
 
 	ApptentiveMessageManager *messageManager = Apptentive.shared.backend.conversationManager.messageManager;
-    ApptentiveAssertNotNil(messageManager, @"Need an active message manager to migrate");
-    
+	ApptentiveAssertNotNil(messageManager, @"Need an active message manager to migrate");
+
 	NSString *legacyAttachmentDirectoryPath = [Apptentive.shared.backend.supportDirectoryPath stringByAppendingPathComponent:@"attachments"];
 
 	for (ApptentiveLegacyMessage *legacyMessage in unsentMessages) {

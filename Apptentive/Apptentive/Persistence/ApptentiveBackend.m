@@ -469,7 +469,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 
 - (void)updateMessageCheckingTimer {
 	ApptentiveAssertOperationQueue(self.operationQueue);
-    ApptentiveAssertNotNil(self.messageManager, @"Message manager is nil");
+	ApptentiveAssertNotNil(self.messageManager, @"Message manager is nil");
 	if (self.working) {
 		if (self.messageCenterInForeground) {
 			self.messageManager.pollingInterval = self.configuration.messageCenter.foregroundPollingInterval;
@@ -604,7 +604,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 #pragma mark Properties
 
 - (ApptentiveMessageManager *)messageManager {
-    return self.conversationManager.messageManager;
+	return self.conversationManager.messageManager;
 }
 
 @end

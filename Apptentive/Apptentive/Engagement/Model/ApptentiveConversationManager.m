@@ -227,10 +227,10 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 	NSString *directoryPath = [self conversationContainerPathForDirectoryName:conversation.directoryName];
 
-    ApptentiveAssertNil(self.messageManager, @"Message manager already exists");
+	ApptentiveAssertNil(self.messageManager, @"Message manager already exists");
 	_messageManager = [[ApptentiveMessageManager alloc] initWithStoragePath:directoryPath client:self.client pollingInterval:Apptentive.shared.backend.configuration.messageCenter.backgroundPollingInterval conversation:conversation operationQueue:self.operationQueue];
 
-    ApptentiveAssertNotNil(self.messageManager, @"Unable to create message manager");
+	ApptentiveAssertNotNil(self.messageManager, @"Unable to create message manager");
 	Apptentive.shared.backend.payloadSender.messageDelegate = self.messageManager;
 }
 
@@ -247,8 +247,8 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		[Apptentive.shared.backend processQueuedRecords];
 
 		conversation.state = ApptentiveConversationStateLoggedOut;
-        
-        ApptentiveAssertNotNil(self.messageManager, @"Attempted to end active conversation without message manager");
+
+		ApptentiveAssertNotNil(self.messageManager, @"Attempted to end active conversation without message manager");
 		[self.messageManager saveMessageStore];
 		[self.messageManager stop];
 		_messageManager = nil;
@@ -265,10 +265,10 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 #pragma mark - Conversation Token Fetching
 
 - (void)fetchConversationToken:(ApptentiveConversation *)conversation {
-    ApptentiveAssertNil(self.conversationOperation, "Another request fetch request is running");
-    self.conversationOperation.delegate = nil;
-    [self.conversationOperation cancel];
-    
+	ApptentiveAssertNil(self.conversationOperation, "Another request fetch request is running");
+	self.conversationOperation.delegate = nil;
+	[self.conversationOperation cancel];
+
 	ApptentiveRequestOperationCallback *delegate = [ApptentiveRequestOperationCallback new];
 	delegate.operationFinishCallback = ^(ApptentiveRequestOperation *operation) {
         [self conversation:conversation processFetchResponse:(NSDictionary *)operation.responseObject];
@@ -663,9 +663,9 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	mutableConversation.encryptionKey = [NSData apptentive_dataWithHexString:encryptionKey];
 	ApptentiveAssertNotNil(mutableConversation.encryptionKey, @"Apptentive encryption key should be not nil");
 
-    [self.messageManager stopPolling];
-    self.messageManager = nil;
-    
+	[self.messageManager stopPolling];
+	self.messageManager = nil;
+
 	[self createMessageManagerForConversation:mutableConversation];
 
 	self.activeConversation = mutableConversation;
@@ -896,7 +896,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		[self fetchEngagementManifest];
 	}
 
-    ApptentiveAssertNotNil(self.messageManager, @"Attempted to resume conversation manager without message manager");
+	ApptentiveAssertNotNil(self.messageManager, @"Attempted to resume conversation manager without message manager");
 	[self.messageManager checkForMessages];
 }
 

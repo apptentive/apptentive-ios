@@ -25,9 +25,9 @@
 	ApptentiveMessageCenterViewController *messageCenter = navigationController.viewControllers.firstObject;
 
 	ApptentiveConversation *conversation = Apptentive.shared.backend.conversationManager.activeConversationTemp;
-    ApptentiveAssertNotNil(conversation, @"Conversation is nil");
+	ApptentiveAssertNotNil(conversation, @"Conversation is nil");
 
-    ApptentiveAssertNotNil(Apptentive.shared.backend.conversationManager.messageManager, @"Attempted to present interaction without message manager: %@", self.interaction);
+	ApptentiveAssertNotNil(Apptentive.shared.backend.conversationManager.messageManager, @"Attempted to present interaction without message manager: %@", self.interaction);
 	ApptentiveMessageCenterViewModel *viewModel = [[ApptentiveMessageCenterViewModel alloc] initWithConversation:(ApptentiveConversation *)conversation interaction:self.interaction messageManager:Apptentive.shared.backend.conversationManager.messageManager];
 	[viewModel start];
 

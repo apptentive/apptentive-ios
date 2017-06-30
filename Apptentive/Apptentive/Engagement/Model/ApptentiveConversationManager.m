@@ -48,6 +48,8 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 @interface ApptentiveConversationManager () <ApptentiveConversationDelegate>
 
+@property (strong, nonatomic) ApptentiveMessageManager *messageManager;
+
 @property (strong, nullable, nonatomic) ApptentiveConversation *activeConversation;
 @property (strong, nullable, nonatomic) ApptentiveRequestOperation *manifestOperation;
 @property (strong, nullable, nonatomic) ApptentiveRequestOperation *loginRequestOperation;
@@ -657,6 +659,9 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	mutableConversation.encryptionKey = [NSData apptentive_dataWithHexString:encryptionKey];
 	ApptentiveAssertNotNil(mutableConversation.encryptionKey, @"Apptentive encryption key should be not nil");
 
+    [self.messageManager stopPolling];
+    self.messageManager = nil;
+    
 	[self createMessageManagerForConversation:mutableConversation];
 
 	self.activeConversation = mutableConversation;

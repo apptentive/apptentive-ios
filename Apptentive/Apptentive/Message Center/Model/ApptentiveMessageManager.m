@@ -401,4 +401,8 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 	return self.conversation.identifier;
 }
 
+- (NSString *)localUserIdentifier {
+    return self.conversation.person.identifier;
+}
+
 @end

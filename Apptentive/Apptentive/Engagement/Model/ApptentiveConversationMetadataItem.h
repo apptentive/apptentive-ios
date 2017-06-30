@@ -10,16 +10,19 @@
 
 #import "ApptentiveConversation.h"
 
+NS_ASSUME_NONNULL_BEGIN
 
 @interface ApptentiveConversationMetadataItem : NSObject <NSSecureCoding>
 
-- (instancetype)initWithConversationIdentifier:(NSString *)conversationIdentifier directoryName:(NSString *)filename;
+- (nullable instancetype)initWithConversationIdentifier:(NSString *)conversationIdentifier directoryName:(NSString *)filename;
 
-@property (strong, nonatomic) NSData *encryptionKey;
 @property (assign, nonatomic) ApptentiveConversationState state;
 @property (strong, nonatomic) NSString *conversationIdentifier;
 @property (strong, nonatomic) NSString *directoryName;
-@property (strong, nonatomic) NSString *userId;
-@property (strong, nonatomic) NSString *JWT;
+@property (strong, nonatomic, nullable) NSData *encryptionKey;
+@property (strong, nonatomic, nullable) NSString *userId;
+@property (strong, nonatomic, nullable) NSString *JWT;
 
 @end
+
+NS_ASSUME_NONNULL_END

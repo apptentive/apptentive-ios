@@ -16,6 +16,7 @@
 #import "ApptentiveBackend.h"
 #import "ApptentiveMessageManager.h"
 #import "ApptentiveUtilities.h"
+#import "ApptentiveDefines.h"
 
 
 static NSString *const FileNameKey = @"fileName";
@@ -65,19 +66,12 @@ static NSString *const RemoteURLKey = @"remoteURL";
 	self = [super init];
 
 	if (self) {
-		if (path.length == 0) {
-			ApptentiveLogError(@"Can't init %@: path is nil or empty", NSStringFromClass([self class]));
-			return nil;
-		}
-
+        APPTENTIVE_CHECK_INIT_NOT_EMPTY_ARG(path);
+        APPTENTIVE_CHECK_INIT_NOT_EMPTY_ARG(contentType);
+        
 		BOOL isDirectory;
 		if (![[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isDirectory] || isDirectory) {
 			ApptentiveLogError(@"Can't init %@: file does not exist: %@", NSStringFromClass([self class]), path);
-			return nil;
-		}
-
-		if (contentType.length == 0) {
-			ApptentiveLogError(@"Can't init %@: content type is nil or empty", NSStringFromClass([self class]));
 			return nil;
 		}
 
@@ -94,6 +88,9 @@ static NSString *const RemoteURLKey = @"remoteURL";
 
 	// TODO: check input data
 	if (self) {
+        APPTENTIVE_CHECK_INIT_NOT_NIL_ARG(data);
+        APPTENTIVE_CHECK_INIT_NOT_NIL_ARG(contentType);
+        
 		_contentType = contentType;
 		_name = name;
 

@@ -62,7 +62,7 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 }
 
 - (void)dealloc {
-    ApptentiveAssertTrue(self.messageManager.delegate == self, @"Delegate mismatch");
+    ApptentiveAssertTrue(self.messageManager.delegate == self || self.messageManager.delegate == nil, @"Delegate mismatch");
     if (self.messageManager.delegate == self) {
         self.messageManager.delegate = nil;
     }

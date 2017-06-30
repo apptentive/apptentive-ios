@@ -225,6 +225,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 	NSString *directoryPath = [self conversationContainerPathForDirectoryName:conversation.directoryName];
 
+    ApptentiveAssertNil(self.messageManager, @"Message manager already exists");
 	_messageManager = [[ApptentiveMessageManager alloc] initWithStoragePath:directoryPath client:self.client pollingInterval:Apptentive.shared.backend.configuration.messageCenter.backgroundPollingInterval conversation:conversation operationQueue:self.operationQueue];
 
     ApptentiveAssertNotNil(self.messageManager, @"Unable to create message manager");
@@ -668,7 +669,6 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 - (BOOL)updateActiveConversation:(ApptentiveConversation *)conversation withResponse:(NSDictionary *)conversationResponse {
 	ApptentiveAssertOperationQueue(self.operationQueue);
-    ApptentiveAssertNotNil(self.messageManager, @"Attempted to update active conversation without message manager");
 
 	NSString *token = [conversationResponse valueForKey:@"token"];
 	NSString *conversationID = [conversationResponse valueForKey:@"id"];

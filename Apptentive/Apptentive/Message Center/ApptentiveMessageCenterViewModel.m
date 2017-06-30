@@ -18,6 +18,7 @@
 #import "ApptentiveInteraction.h"
 #import "ApptentivePerson.h"
 #import "ApptentiveReachability.h"
+#import "ApptentiveDefines.h"
 
 NSString *const ATMessageCenterServerErrorDomain = @"com.apptentive.MessageCenterServerError";
 NSString *const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenterErrorMessages";
@@ -41,6 +42,10 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 
 - (instancetype)initWithConversation:(ApptentiveConversation *)conversation interaction:(ApptentiveInteraction *)interaction messageManager:(ApptentiveMessageManager *)messageManager {
 	if ((self = [super init])) {
+		APPTENTIVE_CHECK_INIT_NOT_NIL_ARG(conversation);
+		APPTENTIVE_CHECK_INIT_NOT_NIL_ARG(interaction);
+		APPTENTIVE_CHECK_INIT_NOT_NIL_ARG(messageManager);
+
 		_conversation = conversation;
 		_interaction = interaction;
 		_messageManager = messageManager;
@@ -57,7 +62,10 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 }
 
 - (void)dealloc {
-	self.messageManager.delegate = nil;
+	ApptentiveAssertTrue(self.messageManager.delegate == self || self.messageManager.delegate == nil, @"Delegate mismatch");
+	if (self.messageManager.delegate == self) {
+		self.messageManager.delegate = nil;
+	}
 }
 
 - (void)start {
@@ -253,17 +261,17 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 
 	if (message.automated) {
 		return ATMessageCenterMessageTypeContextMessage;
-	} else if (![self messageSentByLocalUser:message]) {
-		if (message.attachments.count) {
-			return ATMessageCenterMessageTypeCompoundReply;
-		} else {
-			return ATMessageCenterMessageTypeReply;
-		}
-	} else {
+	} else if (message.inbound) {
 		if (message.attachments.count) {
 			return ATMessageCenterMessageTypeCompoundMessage;
 		} else {
 			return ATMessageCenterMessageTypeMessage;
+		}
+	} else {
+		if (message.attachments.count) {
+			return ATMessageCenterMessageTypeCompoundReply;
+		} else {
+			return ATMessageCenterMessageTypeReply;
 		}
 	}
 }
@@ -328,14 +336,10 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 	}
 }
 
-- (BOOL)messageSentByLocalUser:(ApptentiveMessage *)message {
-	return [message.sender.identifier isEqualToString:self.messageManager.localUserIdentifier];
-}
-
 - (void)markAsReadMessageAtIndexPath:(NSIndexPath *)indexPath {
 	ApptentiveMessage *message = [self messageAtIndexPath:indexPath];
 
-	if (message.identifier && ![self messageSentByLocalUser:message]) {
+	if (message.identifier && !message.inbound) {
 		NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
 
 		if (message.identifier) {
@@ -358,7 +362,7 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 - (BOOL)lastMessageIsReply {
 	ApptentiveMessage *lastMessage = self.messageManager.messages.lastObject;
 
-	return ![self messageSentByLocalUser:lastMessage];
+	return !lastMessage.inbound;
 }
 
 - (ApptentiveMessageState)lastUserMessageState {
@@ -566,7 +570,7 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 
 - (ApptentiveMessage *)lastUserMessage {
 	for (ApptentiveMessage *message in self.messageManager.messages.reverseObjectEnumerator) {
-		if ([self messageSentByLocalUser:message]) {
+		if (message.inbound) {
 			return message;
 		}
 	}

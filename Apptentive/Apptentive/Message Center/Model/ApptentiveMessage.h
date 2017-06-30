@@ -37,6 +37,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (assign, nonatomic) ApptentiveMessageState state;
 @property (readonly, nonatomic) BOOL automated;
 @property (readonly, nullable, nonatomic) NSDictionary *customData;
+@property (readonly, nonatomic) BOOL inbound;
 
 - (nullable instancetype)initWithJSON:(NSDictionary *)JSON;
 - (nullable instancetype)initWithBody:(nullable NSString *)body attachments:(nullable NSArray *)attachments automated:(BOOL)automated customData:(NSDictionary *_Nullable)customData;

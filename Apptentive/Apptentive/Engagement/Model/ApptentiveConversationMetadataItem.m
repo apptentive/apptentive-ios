@@ -7,6 +7,7 @@
 //
 
 #import "ApptentiveConversationMetadataItem.h"
+#import "ApptentiveDefines.h"
 
 #define VERSION 1
 
@@ -25,6 +26,9 @@ static NSString *const JWTKey = @"JWT";
 	self = [super init];
 
 	if (self) {
+		APPTENTIVE_CHECK_INIT_NOT_EMPTY_ARG(conversationIdentifier);
+		APPTENTIVE_CHECK_INIT_NOT_EMPTY_ARG(filename);
+
 		_conversationIdentifier = conversationIdentifier;
 		_directoryName = filename;
 	}

@@ -15,6 +15,8 @@
 #import "Apptentive_Private.h"
 #import "ApptentiveBackend.h"
 #import "ApptentiveMessageManager.h"
+#import "ApptentiveUtilities.h"
+#import "ApptentiveDefines.h"
 
 
 static NSString *const FileNameKey = @"fileName";
@@ -64,19 +66,12 @@ static NSString *const RemoteURLKey = @"remoteURL";
 	self = [super init];
 
 	if (self) {
-		if (path.length == 0) {
-			ApptentiveLogError(@"Can't init %@: path is nil or empty", NSStringFromClass([self class]));
-			return nil;
-		}
+		APPTENTIVE_CHECK_INIT_NOT_EMPTY_ARG(path);
+		APPTENTIVE_CHECK_INIT_NOT_EMPTY_ARG(contentType);
 
 		BOOL isDirectory;
 		if (![[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isDirectory] || isDirectory) {
 			ApptentiveLogError(@"Can't init %@: file does not exist: %@", NSStringFromClass([self class]), path);
-			return nil;
-		}
-
-		if (contentType.length == 0) {
-			ApptentiveLogError(@"Can't init %@: content type is nil or empty", NSStringFromClass([self class]));
 			return nil;
 		}
 
@@ -93,6 +88,9 @@ static NSString *const RemoteURLKey = @"remoteURL";
 
 	// TODO: check input data
 	if (self) {
+		APPTENTIVE_CHECK_INIT_NOT_NIL_ARG(data);
+		APPTENTIVE_CHECK_INIT_NOT_NIL_ARG(contentType);
+
 		_contentType = contentType;
 		_name = name;
 
@@ -186,17 +184,32 @@ static NSString *const RemoteURLKey = @"remoteURL";
 	return image;
 }
 
+- (void)deleteLocalContent {
+	[self deleteSidecarIfNecessary];
+	_fileName = nil;
+}
+
+- (ApptentiveAttachment *)mergedWith:(ApptentiveAttachment *)attachmentFromServer {
+	_remoteURL = attachmentFromServer.remoteURL;
+
+	return self;
+}
+
 #pragma mark - Private
 
 - (NSString *)filenameForThumbnailOfSize:(CGSize)size {
 	if (self.fileName == nil) {
 		return nil;
 	}
-	return [NSString stringWithFormat:@"%@_%dx%d_fit.jpeg", self.fileName, (int)floor(size.width), (int)floor(size.height)];
+	return [NSString stringWithFormat:@"%@_%dx%d_fit.jpeg", self.fileName.stringByDeletingPathExtension, (int)floor(size.width), (int)floor(size.height)];
 }
 
 - (UIImage *)createThumbnailOfSize:(CGSize)size {
 	CGImageSourceRef src = CGImageSourceCreateWithURL((__bridge CFURLRef)[NSURL fileURLWithPath:self.fullLocalPath], NULL);
+	if (src == NULL) {
+		return nil;
+	}
+
 	CFDictionaryRef options = (__bridge CFDictionaryRef) @{
 		(id)kCGImageSourceCreateThumbnailWithTransform: @YES,
 		(id)
@@ -223,8 +236,9 @@ static NSString *const RemoteURLKey = @"remoteURL";
 
 + (NSString *)fullLocalPathForFilename:(NSString *)filename {
 	if (!filename) {
-		return nil;
+		return nil; // TODO: assertion?
 	}
+	ApptentiveAssertNotNil(Apptentive.shared.backend.conversationManager.messageManager, @"Can't resolve full local path for '%@': message manager is not initialized", filename);
 	return [Apptentive.shared.backend.conversationManager.messageManager.attachmentDirectoryPath stringByAppendingPathComponent:filename];
 }
 
@@ -267,17 +281,23 @@ static NSString *const RemoteURLKey = @"remoteURL";
 			return;
 		}
 		// Delete any thumbnails.
-		NSArray *filenames = [fm contentsOfDirectoryAtPath:Apptentive.shared.backend.conversationManager.messageManager.attachmentDirectoryPath error:&error];
-		if (!filenames) {
-			ApptentiveLogError(@"Error listing attachments directory: %@", error);
+		ApptentiveMessageManager *messageManager = Apptentive.shared.backend.conversationManager.messageManager;
+		ApptentiveAssertNotNil(messageManager, @"Message manager is nil");
+		if (!messageManager) {
+			ApptentiveLogError(@"Error listing attachments directory: message manager is not initialized");
 		} else {
-			for (NSString *filename in filenames) {
-				if ([filename rangeOfString:self.fileName].location == 0) {
-					NSString *thumbnailPath = [[self class] fullLocalPathForFilename:filename];
+			NSArray *filenames = [fm contentsOfDirectoryAtPath:messageManager.attachmentDirectoryPath error:&error];
+			if (!filenames) {
+				ApptentiveLogError(@"Error listing attachments directory: %@", error);
+			} else {
+				for (NSString *filename in filenames) {
+					if ([filename hasPrefix:self.fileName.stringByDeletingPathExtension]) {
+						NSString *thumbnailPath = [[self class] fullLocalPathForFilename:filename];
 
-					if (![fm removeItemAtPath:thumbnailPath error:&error]) {
-						ApptentiveLogError(@"Error removing attachment thumbnail at path: %@. %@", thumbnailPath, error);
-						continue;
+						if (![fm removeItemAtPath:thumbnailPath error:&error]) {
+							ApptentiveLogError(@"Error removing attachment thumbnail at path: %@. %@", thumbnailPath, error);
+							continue;
+						}
 					}
 				}
 			}

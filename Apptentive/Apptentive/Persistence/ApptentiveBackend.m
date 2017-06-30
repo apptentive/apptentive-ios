@@ -57,6 +57,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 
 @property (strong, nonatomic) NSTimer *messageRetrievalTimer;
 @property (strong, nonatomic) ApptentiveDataManager *dataManager;
+@property (readonly, nonatomic) ApptentiveMessageManager *messageManager;
 
 @property (readonly, nonatomic, getter=isMessageCenterInForeground) BOOL messageCenterInForeground;
 
@@ -463,19 +464,20 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 #pragma mark Message Polling
 
 - (NSUInteger)unreadMessageCount {
-	return self.conversationManager.messageManager.unreadCount;
+	return self.messageManager.unreadCount;
 }
 
 - (void)updateMessageCheckingTimer {
 	ApptentiveAssertOperationQueue(self.operationQueue);
+	ApptentiveAssertNotNil(self.messageManager, @"Message manager is nil");
 	if (self.working) {
 		if (self.messageCenterInForeground) {
-			self.conversationManager.messageManager.pollingInterval = self.configuration.messageCenter.foregroundPollingInterval;
+			self.messageManager.pollingInterval = self.configuration.messageCenter.foregroundPollingInterval;
 		} else {
-			self.conversationManager.messageManager.pollingInterval = self.configuration.messageCenter.backgroundPollingInterval;
+			self.messageManager.pollingInterval = self.configuration.messageCenter.backgroundPollingInterval;
 		}
 	} else {
-		[self.conversationManager.messageManager stopPolling];
+		[self.messageManager stopPolling];
 	}
 }
 
@@ -483,7 +485,8 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	[self.operationQueue addOperationWithBlock:^{
         _messageCenterInForeground = YES;
         
-        [self.conversationManager.messageManager checkForMessages];
+        ApptentiveAssertNotNil(self.messageManager, @"Message manager is nil");
+        [self.messageManager checkForMessages];
         
         [self updateMessageCheckingTimer];
 	}];
@@ -595,6 +598,13 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	if (![[NSFileManager defaultManager] removeItemAtPath:self.supportDirectoryPath error:&error]) {
 		ApptentiveLogError(@"Unable to delete backend data");
 	}
+}
+
+#pragma mark -
+#pragma mark Properties
+
+- (ApptentiveMessageManager *)messageManager {
+	return self.conversationManager.messageManager;
 }
 
 @end

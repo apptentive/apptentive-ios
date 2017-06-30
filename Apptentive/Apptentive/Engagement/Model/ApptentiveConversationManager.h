@@ -59,6 +59,8 @@ extern NSString *const ApptentiveConversationStateDidChangeNotificationKeyConver
 
 @property (strong, nonatomic) NSURL *localEngagementManifestURL;
 
+- (void)createMessageManagerForConversation:(ApptentiveConversation *)conversation;
+
 @end
 
 @protocol ApptentiveConversationManagerDelegate <NSObject>

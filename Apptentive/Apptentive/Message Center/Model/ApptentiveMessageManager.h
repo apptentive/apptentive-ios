@@ -20,6 +20,7 @@
 @property (readonly, nonatomic) NSString *storagePath;
 @property (readonly, nonatomic) NSString *conversationIdentifier;
 @property (readonly, nonatomic) NSOperationQueue *operationQueue;
+@property (readonly, nonatomic) ApptentiveConversation *conversation;
 
 @property (readonly, nonatomic) ApptentiveClient *client;
 @property (assign, nonatomic) NSTimeInterval pollingInterval;
@@ -35,6 +36,8 @@
 - (void)checkForMessages;
 
 - (void)checkForMessagesInBackground:(void (^)(UIBackgroundFetchResult))completionHandler;
+
+- (void)stop;
 
 - (void)stopPolling;
 

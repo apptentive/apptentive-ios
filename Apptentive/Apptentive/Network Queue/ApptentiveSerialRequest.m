@@ -14,6 +14,7 @@
 #import "ApptentivePayload.h"
 #import "NSData+Encryption.h"
 #import "ApptentiveUtilities.h"
+#import "Apptentive_Private.h"
 
 
 @implementation ApptentiveSerialRequest
@@ -32,6 +33,8 @@
 @dynamic encrypted;
 
 + (BOOL)enqueuePayload:(ApptentivePayload *)payload forConversation:(ApptentiveConversation *)conversation usingAuthToken:(nullable NSString *)authToken inContext:(NSManagedObjectContext *)context {
+	ApptentiveAssertOperationQueue(Apptentive.shared.operationQueue);
+
 	ApptentiveAssertNotNil(payload, @"Attempted to enqueue nil payload");
 	if (payload == nil) {
 		return NO;

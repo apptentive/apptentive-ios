@@ -52,9 +52,9 @@
 	}
 
 	ApptentiveMessageManager *messageManager = Apptentive.shared.backend.conversationManager.messageManager;
-	NSString *legacyAttachmentDirectoryPath = [Apptentive.shared.backend.supportDirectoryPath stringByAppendingPathComponent:@"attachments"];
-
 	ApptentiveAssertNotNil(messageManager, @"Need an active message manager to migrate");
+
+	NSString *legacyAttachmentDirectoryPath = [Apptentive.shared.backend.supportDirectoryPath stringByAppendingPathComponent:@"attachments"];
 
 	for (ApptentiveLegacyMessage *legacyMessage in unsentMessages) {
 		NSInteger pendingState = legacyMessage.pendingState.integerValue;

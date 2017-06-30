@@ -45,6 +45,10 @@ UIViewController *topChildViewController(UIViewController *viewController) {
 	return path != nil && [[NSFileManager defaultManager] removeItemAtPath:path error:error];
 }
 
++ (BOOL)deleteDirectoryAtPath:(NSString *)path error:(NSError **)error {
+	return path != nil && [[NSFileManager defaultManager] removeItemAtPath:path error:error];
+}
+
 + (NSString *)applicationSupportPath {
 	static NSString *_applicationSupportPath;
 	static dispatch_once_t onceToken;

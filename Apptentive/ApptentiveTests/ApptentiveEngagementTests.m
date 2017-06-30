@@ -20,6 +20,7 @@
 #import "ApptentiveEngagement.h"
 #import "ApptentiveBackend+Engagement.h"
 #import "ApptentiveUtilities.h"
+#import "ApptentiveMessageManager.h"
 
 
 @interface ApptentiveEngagementTests : XCTestCase
@@ -542,6 +543,7 @@
 	XCTestExpectation *expectation = [self expectationWithDescription:@"Backend stood up"];
 
 	[Apptentive.shared.backend.operationQueue addOperationWithBlock:^{
+		[Apptentive.shared.backend.conversationManager createMessageManagerForConversation:Apptentive.shared.backend.conversationManager.activeConversation];
 		Apptentive.shared.localInteractionsURL = [[NSBundle bundleForClass:[self class]] URLForResource:@"testInteractions" withExtension:@"json"];
 
 		XCTAssertTrue([[Apptentive sharedConnection] canShowInteractionForEvent:@"canShow"], @"If invocation is valid, it will be shown for the next targeted event.");

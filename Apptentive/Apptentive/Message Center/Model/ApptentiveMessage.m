@@ -19,6 +19,7 @@ static NSString *const BodyKey = @"body";
 static NSString *const StateKey = @"state";
 static NSString *const AutomatedKey = @"automated";
 static NSString *const CustomDataKey = @"customData";
+static NSString *const InboundKey = @"inboundKey";
 
 
 @interface ApptentiveMessage ()
@@ -74,11 +75,20 @@ static NSString *const CustomDataKey = @"customData";
 		_sentDate = [NSDate dateWithTimeIntervalSince1970:[JSON[@"created_at"] doubleValue]];
 		_localIdentifier = JSON[@"nonce"];
 
+		if ([JSON[@"inbound"] isKindOfClass:[NSNumber class]] && ![JSON[@"inbound"] boolValue]) {
+			_inbound = NO;
+		} else {
+			_inbound = YES;
+		}
+
 		if ([JSON[@"hidden"] isKindOfClass:[NSNumber class]] && [JSON[@"hidden"] boolValue]) {
 			_state = ApptentiveMessageStateHidden;
 		} else {
-			// If not sent by local user, will get updated to read/unread by message manager
-			_state = ApptentiveMessageStateSent;
+			if (_inbound) {
+				_state = ApptentiveMessageStateUnread;
+			} else {
+				_state = ApptentiveMessageStateSent;
+			}
 		}
 
 		_identifier = ApptentiveDictionaryGetString(JSON, @"id");
@@ -99,6 +109,8 @@ static NSString *const CustomDataKey = @"customData";
 
 		_sentDate = [NSDate date];
 		_state = ApptentiveMessageStatePending;
+
+		_inbound = YES;
 	}
 
 	return self;
@@ -116,6 +128,7 @@ static NSString *const CustomDataKey = @"customData";
 		_state = [coder decodeIntegerForKey:StateKey];
 		_automated = [coder decodeBoolForKey:AutomatedKey];
 		_customData = [coder decodeObjectOfClass:[NSDictionary class] forKey:CustomDataKey];
+		_inbound = [coder decodeBoolForKey:InboundKey];
 	}
 	return self;
 }
@@ -130,6 +143,7 @@ static NSString *const CustomDataKey = @"customData";
 	[coder encodeInteger:self.state forKey:StateKey];
 	[coder encodeBool:self.automated forKey:AutomatedKey];
 	[coder encodeObject:self.customData forKey:CustomDataKey];
+	[coder encodeBool:self.inbound forKey:InboundKey];
 }
 
 - (id)copyWithZone:(NSZone *)zone {
@@ -147,6 +161,34 @@ static NSString *const CustomDataKey = @"customData";
 - (ApptentiveMessage *)mergedWith:(ApptentiveMessage *)messageFromServer {
 	_identifier = messageFromServer.identifier;
 	_sentDate = messageFromServer.sentDate;
+
+	switch (self.state) {
+		case ApptentiveMessageStatePending:
+		case ApptentiveMessageStateSending:
+		case ApptentiveMessageStateWaiting:
+		case ApptentiveMessageStateFailedToSend:
+		case ApptentiveMessageStateUndefined:
+			_state = ApptentiveMessageStateSent;
+			break;
+		default:
+			// Trust local state over server state
+			break;
+	}
+
+	if (self.attachments.count == messageFromServer.attachments.count) {
+		NSInteger i = 0;
+		NSMutableArray *updatedAttachments = [NSMutableArray arrayWithCapacity:self.attachments.count];
+		for (ApptentiveAttachment *attachment in self.attachments) {
+			ApptentiveAttachment *attachmentFromServer = messageFromServer.attachments[i++];
+
+			ApptentiveAttachment *updatedAttachment = [attachment mergedWith:attachmentFromServer];
+			[updatedAttachments addObject:updatedAttachment];
+		}
+
+		_attachments = updatedAttachments;
+	} else {
+		ApptentiveLogError(@"Mismatch in number of attachments between client and server.");
+	}
 
 	return self;
 }

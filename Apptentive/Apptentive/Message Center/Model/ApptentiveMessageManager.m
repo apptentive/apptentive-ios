@@ -17,6 +17,8 @@
 #import "ApptentiveMessageGetRequest.h"
 #import "ApptentiveClient.h"
 #import "ApptentivePerson.h"
+#import "ApptentiveUtilities.h"
+#import "ApptentiveAttachment.h"
 
 static NSString *const MessageStoreFileName = @"messages-v1.archive";
 
@@ -28,7 +30,6 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 @property (strong, nonatomic) NSDictionary *currentCustomData;
 @property (readonly, nonatomic) NSMutableDictionary *messageIdentifierIndex;
 @property (readonly, nonatomic) ApptentiveMessageStore *messageStore;
-@property (strong, nonatomic) ApptentiveConversation *conversation;
 
 @property (readonly, nonatomic) NSString *messageStorePath;
 @property (copy, nonatomic) void (^backgroundFetchBlock)(UIBackgroundFetchResult);
@@ -77,6 +78,11 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 	}
 
 	return self;
+}
+
+- (void)stop {
+	[self stopPolling];
+	[self deleteCachedAttachments];
 }
 
 - (void)checkForMessages {
@@ -149,7 +155,6 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 
 		if (message) {
 			ApptentiveMessage *previousVersion = [self.messageIdentifierIndex[message.localIdentifier] copy];
-			BOOL sentByLocalUser = [message.sender.identifier isEqualToString:self.localUserIdentifier];
 
 			if (previousVersion != nil) {
 				ApptentiveMessageState previousState = previousVersion.state;
@@ -157,19 +162,11 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 				// Update with server identifier and date
 				message = [previousVersion mergedWith:message];
 
-				if (sentByLocalUser) {
-					message.state = ApptentiveMessageStateSent;
-				}
-
 				if (previousState != message.state) {
 					[updatedMessages addObject:message];
 				}
 			} else {
 				[addedMessages addObject:message];
-
-				if (!sentByLocalUser) {
-					message.state = ApptentiveMessageStateUnread;
-				} // else state defaults to sent
 			}
 
 			[mutableMessages addObject:message];
@@ -363,6 +360,18 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 			[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveMessageCenterUnreadCountChangedNotification object:self userInfo:@{ @"count": @(unreadCount) }];
 		});
 	}
+}
+
+#pragma mark - Attachments
+
+- (void)deleteCachedAttachments {
+	for (ApptentiveMessage *message in self.messageStore.messages) {
+		for (ApptentiveAttachment *attachment in message.attachments) {
+			[attachment deleteLocalContent];
+		}
+	}
+
+	[self saveMessageStore];
 }
 
 #pragma mark - Private

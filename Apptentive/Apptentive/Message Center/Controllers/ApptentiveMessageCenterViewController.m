@@ -545,7 +545,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	@try {
 		[self.tableView endUpdates];
 	} @catch (NSException *exc) {
-		ApptentiveAssertTrue(NO, @"Exception when updating table view");
+		ApptentiveAssertTrue(NO, @"Exception when updating table view: %@", exc);
 	}
 
 	if (self.state != ATMessageCenterStateWhoCard && self.state != ATMessageCenterStateComposing) {

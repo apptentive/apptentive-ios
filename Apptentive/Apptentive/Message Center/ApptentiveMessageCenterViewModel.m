@@ -77,7 +77,10 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 
 		[self.contextMessage updateWithLocalIdentifier:@"context-message"];
 
+		// Don't trigger table view update
+		self.messageManager.delegate = nil;
 		[self.messageManager appendMessage:self.contextMessage];
+		self.messageManager.delegate = self;
 	}
 }
 

@@ -8,7 +8,9 @@
 
 #import "ApptentiveCustomData.h"
 
-@class ApptentiveVersion, ApptentiveMutableDevice;
+extern NSString *const ATDeviceLastUpdateValuePreferenceKey;
+
+@class ApptentiveVersion;
 
 
 /**
@@ -84,7 +86,7 @@
  may contain information related to push notification provider, such as the
  device token used for push notifications.
  */
-@property (readonly, strong, nonatomic) NSDictionary *integrationConfiguration;
+@property (copy, nonatomic) NSDictionary *integrationConfiguration;
 
 /**
  Initializes a device object with values obtained from the current device.
@@ -92,14 +94,5 @@
  @return The newly-initialized device object.
  */
 - (instancetype)initWithCurrentDevice;
-
-/**
- Initializes a device object by copying values from a representation of the
- device whose `customData` property can be modified.
-
- @param mutableDevice A mutable version of the device object.
- @return The newly-initialized copy of the mutable device object.
- */
-- (instancetype)initWithMutableDevice:(ApptentiveMutableDevice *)mutableDevice;
 
 @end

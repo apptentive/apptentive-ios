@@ -33,6 +33,22 @@ UIViewController *topChildViewController(UIViewController *viewController) {
 
 @implementation ApptentiveUtilities
 
++ (BOOL)fileExistsAtPath:(NSString *)path {
+	return path != nil && [[NSFileManager defaultManager] fileExistsAtPath:path];
+}
+
++ (BOOL)deleteFileAtPath:(NSString *)path {
+	return [self deleteFileAtPath:path error:NULL];
+}
+
++ (BOOL)deleteFileAtPath:(NSString *)path error:(NSError **)error {
+	return path != nil && [[NSFileManager defaultManager] removeItemAtPath:path error:error];
+}
+
++ (BOOL)deleteDirectoryAtPath:(NSString *)path error:(NSError **)error {
+	return path != nil && [[NSFileManager defaultManager] removeItemAtPath:path error:error];
+}
+
 + (NSString *)applicationSupportPath {
 	static NSString *_applicationSupportPath;
 	static dispatch_once_t onceToken;
@@ -342,6 +358,30 @@ UIViewController *topChildViewController(UIViewController *viewController) {
 	BOOL isValid = (count > 0);
 
 	return isValid;
+}
+
++ (NSData *)secureRandomDataOfLength:(NSUInteger)numberOfBytes {
+	NSMutableData *randomData = [[NSMutableData alloc] initWithLength:numberOfBytes];
+
+	int result = SecRandomCopyBytes(kSecRandomDefault, numberOfBytes, randomData.mutableBytes);
+	ApptentiveAssertTrue(result == 0, @"Unable to generate random data");
+
+	return (result == 0) ? randomData : nil;
+}
+
++ (NSData *)dictionaryToJsonData:(NSDictionary *)dictionary {
+	return dictionary != nil ? [NSJSONSerialization dataWithJSONObject:dictionary options:0 error:NULL] : nil;
+}
+
++ (NSString *)dictionaryToJsonString:(NSDictionary *)dictionary {
+	NSData *data = [self dictionaryToJsonData:dictionary];
+	return data != nil ? [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] : nil;
+}
+
++ (NSString *)stringByPaddingBase64:(NSString *)base64String {
+	NSUInteger lengthRoundedUpToNextMultipleOfFour = ceil(base64String.length / 4.0) * 4;
+
+	return [base64String stringByPaddingToLength:lengthRoundedUpToNextMultipleOfFour withString:@"=" startingAtIndex:0];
 }
 
 @end

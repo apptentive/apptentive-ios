@@ -7,7 +7,10 @@
 //
 
 #import "ApptentiveLegacySurveyResponse.h"
-#import "ApptentiveSerialRequest+Record.h"
+#import "ApptentiveSerialRequest.h"
+#import "Apptentive_Private.h"
+#import "ApptentiveBackend.h"
+#import "ApptentiveSurveyResponsePayload.h"
 
 
 @implementation ApptentiveLegacySurveyResponse
@@ -17,7 +20,10 @@
 @dynamic surveyID;
 @dynamic pendingState;
 
-+ (void)enqueueUnsentSurveyResponsesInContext:(NSManagedObjectContext *)context {
++ (void)enqueueUnsentSurveyResponsesInContext:(NSManagedObjectContext *)context forConversation:(ApptentiveConversation *)conversation {
+	ApptentiveAssertNotNil(context, @"Context is nil");
+	ApptentiveAssertNotNil(conversation, @"Conversation is nil");
+
 	NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"ATSurveyResponse"];
 
 	NSError *error;
@@ -29,7 +35,15 @@
 	}
 
 	for (ApptentiveLegacySurveyResponse *response in unsentSurveyResponses) {
-		[ApptentiveSerialRequest enqueueRequestWithPath:[NSString stringWithFormat:@"surveys/%@/respond", response.surveyID] method:@"POST" payload:response.apiJSON attachments:nil identifier:nil inContext:context];
+		NSDictionary *JSON = response.apiJSON;
+
+		ApptentiveSurveyResponsePayload *payload = [[ApptentiveSurveyResponsePayload alloc] initWithAnswers:JSON[@"answers"] identifier:JSON[@"id"]];
+		ApptentiveAssertNotNil(payload, @"Failed to create a survey response payload");
+
+		if (payload != nil) {
+			[ApptentiveSerialRequest enqueuePayload:payload forConversation:conversation usingAuthToken:conversation.token inContext:context];
+		}
+
 		[context deleteObject:response];
 	}
 }

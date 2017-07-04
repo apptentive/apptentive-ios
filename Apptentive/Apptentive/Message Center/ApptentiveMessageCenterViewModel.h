@@ -8,6 +8,8 @@
 
 #import "ApptentiveBackend.h"
 #import "ApptentiveMessage.h"
+#import "ApptentiveMessageManager.h"
+#import <QuickLook/QuickLook.h>
 
 typedef NS_ENUM(NSInteger, ATMessageCenterMessageType) {
 	ATMessageCenterMessageTypeMessage,
@@ -24,16 +26,20 @@ typedef NS_ENUM(NSInteger, ATMessageCenterMessageStatus) {
 	ATMessageCenterMessageStatusFailed,
 };
 
-@protocol ApptentiveMessageCenterViewModelDelegate, ApptentiveStyle;
+@protocol ApptentiveMessageCenterViewModelDelegate
+, ApptentiveStyle;
 
 @class ApptentiveInteraction;
 
-@interface ApptentiveMessageCenterViewModel : NSObject <NSURLSessionDownloadDelegate, ATBackendMessageDelegate>
 
-@property (readonly, strong, nonatomic) NSFetchedResultsController *fetchedMessagesController;
+@interface ApptentiveMessageCenterViewModel : NSObject <NSURLSessionDownloadDelegate, ApptentiveMessageManagerDelegate>
+
 @property (weak, nonatomic) NSObject<ApptentiveMessageCenterViewModelDelegate> *delegate;
+
+@property (readonly, nonatomic) ApptentiveConversation *conversation;
 @property (readonly, nonatomic) NSDateFormatter *dateFormatter;
 @property (readonly, nonatomic) ApptentiveInteraction *interaction;
+@property (readonly, nonatomic) ApptentiveMessageManager *messageManager;
 
 @property (readonly, nonatomic) id<ApptentiveStyle> styleSheet;
 
@@ -82,7 +88,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterMessageStatus) {
 @property (assign, nonatomic) BOOL didSkipProfile;
 @property (strong, nonatomic) NSString *draftMessage;
 
-- (instancetype)initWithInteraction:(ApptentiveInteraction *)interaction;
+- (instancetype)initWithConversation:(ApptentiveConversation *)conversation interaction:(ApptentiveInteraction *)interaction messageManager:(ApptentiveMessageManager *)messageManager;
 - (void)start;
 - (void)stop;
 
@@ -99,8 +105,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterMessageStatus) {
 - (NSURL *)imageURLOfSenderAtIndexPath:(NSIndexPath *)indexPath;
 - (void)markAsReadMessageAtIndexPath:(NSIndexPath *)indexPath;
 
-- (void)removeUnsentContextMessages;
-
 - (void)sendMessage:(NSString *)message withAttachments:(NSArray *)attachments;
 - (void)setPersonName:(NSString *)name emailAddress:(NSString *)emailAddress;
 
@@ -113,11 +117,18 @@ typedef NS_ENUM(NSInteger, ATMessageCenterMessageStatus) {
 - (id<QLPreviewControllerDataSource>)previewDataSourceAtIndex:(NSInteger)index;
 
 @property (readonly, nonatomic) BOOL lastMessageIsReply;
-@property (readonly, nonatomic) ATPendingMessageState lastUserMessageState;
+@property (readonly, nonatomic) ApptentiveMessageState lastUserMessageState;
 
 @end
 
 @protocol ApptentiveMessageCenterViewModelDelegate <NSObject, NSFetchedResultsControllerDelegate>
+@optional
+
+- (void)viewModelWillChangeContent:(ApptentiveMessageCenterViewModel *)viewModel;
+- (void)viewModelDidChangeContent:(ApptentiveMessageCenterViewModel *)viewModel;
+- (void)messageCenterViewModel:(ApptentiveMessageCenterViewModel *)viewModel didInsertMessageAtIndex:(NSInteger)index;
+- (void)messageCenterViewModel:(ApptentiveMessageCenterViewModel *)viewModel didUpdateMessageAtIndex:(NSInteger)index;
+- (void)messageCenterViewModel:(ApptentiveMessageCenterViewModel *)viewModel didDeleteMessageAtIndex:(NSInteger)index;
 
 - (void)messageCenterViewModel:(ApptentiveMessageCenterViewModel *)viewModel attachmentDownloadAtIndexPath:(NSIndexPath *)indexPath didProgress:(float)progress;
 - (void)messageCenterViewModel:(ApptentiveMessageCenterViewModel *)viewModel didLoadAttachmentThumbnailAtIndexPath:(NSIndexPath *)indexPath;

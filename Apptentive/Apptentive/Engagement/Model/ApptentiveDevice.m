@@ -8,7 +8,6 @@
 
 #import "ApptentiveDevice.h"
 #import "ApptentiveVersion.h"
-#import "ApptentiveMutableDevice.h"
 
 #import <UIKit/UIKit.h>
 #import <CoreTelephony/CTTelephonyNetworkInfo.h>
@@ -31,7 +30,7 @@ static NSString *const UTCOffsetKey = @"UTCOffset";
 static NSString *const IntegrationConfigurationKey = @"integrationConfiguration";
 
 // Legacy keys
-static NSString *const ATDeviceLastUpdateValuePreferenceKey = @"ATDeviceLastUpdateValuePreferenceKey";
+NSString *const ATDeviceLastUpdateValuePreferenceKey = @"ATDeviceLastUpdateValuePreferenceKey";
 static NSString *const ATDeviceLastUpdatePreferenceKey = @"ATDeviceLastUpdatePreferenceKey";
 static NSString *const ApptentiveCustomDeviceDataPreferenceKey = @"ApptentiveCustomDeviceDataPreferenceKey";
 
@@ -97,22 +96,16 @@ static NSString *const ApptentiveCustomDeviceDataPreferenceKey = @"ApptentiveCus
 }
 
 - (instancetype)initAndMigrate {
+	NSDictionary *customData = [[NSUserDefaults standardUserDefaults] dictionaryForKey:ApptentiveCustomDeviceDataPreferenceKey];
 	NSDictionary *device = [[[NSUserDefaults standardUserDefaults] dictionaryForKey:ATDeviceLastUpdateValuePreferenceKey] valueForKey:@"device"];
 
-	self = [super initWithCustomData:device[@"custom_data"]];
+	if (customData == nil) {
+		customData = device[@"custom_data"];
+	}
 
-	if (self) {
-		_UUID = [[NSUUID alloc] initWithUUIDString:device[@"uuid"]];
-		_OSName = device[@"os_name"];
-		_OSVersion = [[ApptentiveVersion alloc] initWithString:device[@"os_version"]];
-		_OSBuild = device[@"os_build"];
-		_hardware = device[@"hardware"];
-		_carrier = device[@"carrier"];
-		_contentSizeCategory = device[@"content_size_category"];
-		_localeRaw = device[@"locale_raw"];
-		_localeCountryCode = device[@"locale_country_code"];
-		_localeLanguageCode = device[@"locale_language_code"];
-		_UTCOffset = [device[@"utc_offset"] integerValue];
+	self = [super initWithCustomData:customData];
+
+	if (device) {
 		_integrationConfiguration = device[@"integration_config"];
 	}
 
@@ -123,17 +116,6 @@ static NSString *const ApptentiveCustomDeviceDataPreferenceKey = @"ApptentiveCus
 	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATDeviceLastUpdateValuePreferenceKey];
 	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATDeviceLastUpdatePreferenceKey];
 	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ApptentiveCustomDeviceDataPreferenceKey];
-}
-
-- (instancetype)initWithMutableDevice:(ApptentiveMutableDevice *)mutableDevice {
-	self = [self initWithMutableCustomData:mutableDevice];
-
-	if (self) {
-		_integrationConfiguration = mutableDevice.integrationConfiguration;
-		[self updateWithCurrentDeviceValues];
-	}
-
-	return self;
 }
 
 #pragma mark - Private

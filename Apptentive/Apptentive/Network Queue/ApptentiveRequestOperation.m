@@ -7,12 +7,20 @@
 //
 
 #import "ApptentiveRequestOperation.h"
+#import "ApptentiveRequestProtocol.h"
+#import "ApptentiveSerialRequest.h"
+#import "ApptentiveJSONSerialization.h"
+#import "ApptentiveSafeCollections.h"
+#import "ApptentiveBackend.h"
 
 
-@interface ApptentiveRequestOperation ()
+@interface ApptentiveRequestOperation () {
+	NSDate *_startDate;
+}
 
 @property (assign, nonatomic) BOOL wasCompleted;
 @property (assign, nonatomic) BOOL wasCancelled;
+@property (readonly, nonatomic) NSTimeInterval duration;
 
 @end
 
@@ -20,10 +28,6 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 
 
 @implementation ApptentiveRequestOperation
-
-+ (NSString *)APIVersion {
-	return @"7";
-}
 
 + (NSIndexSet *)okStatusCodes {
 	static NSIndexSet *_okStatusCodes;
@@ -57,39 +61,11 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 	return _serverErrorStatusCodes;
 }
 
-- (instancetype)initWithPath:(NSString *)path method:(NSString *)method payload:(NSDictionary *)payload delegate:(id<ApptentiveRequestOperationDelegate>)delegate dataSource:(id<ApptentiveRequestOperationDataSource>)dataSource {
-	NSData *payloadData = nil;
-
-	if (payload) {
-		NSError *error;
-		payloadData = [NSJSONSerialization dataWithJSONObject:payload options:0 error:&error];
-
-		if (!payloadData) {
-			NSLog(@"Error encoding payload: %@", error.localizedDescription);
-			return nil;
-		}
-	}
-
-	return [self initWithPath:path method:method payloadData:payloadData APIVersion:[[self class] APIVersion] delegate:delegate dataSource:dataSource];
-}
-
-- (instancetype)initWithPath:(NSString *)path method:(NSString *)method payloadData:(NSData *)payloadData APIVersion:(NSString *)APIVersion delegate:(id<ApptentiveRequestOperationDelegate>)delegate dataSource:(id<ApptentiveRequestOperationDataSource>)dataSource {
-	NSURL *URL = [NSURL URLWithString:path relativeToURL:dataSource.baseURL];
-
-	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:URL];
-	request.HTTPBody = payloadData;
-	request.HTTPMethod = method;
-	[request addValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-	[request addValue:APIVersion forHTTPHeaderField:@"X-API-Version"];
-
-	return [self initWithURLRequest:request delegate:delegate dataSource:dataSource];
-}
-
-- (instancetype)initWithURLRequest:(NSURLRequest *)request delegate:(id<ApptentiveRequestOperationDelegate>)delegate dataSource:(id<ApptentiveRequestOperationDataSource>)dataSource {
+- (instancetype)initWithURLRequest:(NSURLRequest *)URLRequest delegate:(ApptentiveRequestOperationCallback *)delegate dataSource:(id<ApptentiveRequestOperationDataSource>)dataSource {
 	self = [super init];
 
 	if (self) {
-		_request = request;
+		_URLRequest = URLRequest;
 		_delegate = delegate;
 		_dataSource = dataSource;
 	}
@@ -98,7 +74,7 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 }
 
 - (NSString *)name {
-	return self.request.URL.path;
+	return self.URLRequest.URL.path;
 }
 
 - (BOOL)isExecuting {
@@ -118,12 +94,14 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 }
 
 - (void)startTask {
+	_startDate = [[NSDate alloc] init];
+
 	if (self.cancelled) {
 		return;
 	}
 
 	[self willChangeValueForKey:@"isExecuting"];
-	_task = [self.dataSource.URLSession dataTaskWithRequest:self.request completionHandler:^(NSData *_Nullable data, NSURLResponse *_Nullable response, NSError *_Nullable error) {
+	_task = [self.dataSource.URLSession dataTaskWithRequest:self.URLRequest completionHandler:^(NSData *_Nullable data, NSURLResponse *_Nullable response, NSError *_Nullable error) {
 		if (self.isCancelled) {
 			return;
 		} else if (!response) {
@@ -146,15 +124,21 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 			} else {
 				[self processHTTPError:error withResponse:URLResponse responseData:data];
 			}
+            
+            // check if request failed due to an authentication failure
+            if (URLResponse.statusCode == 401) {
+                [self processAuthenticationFailureResponseData:data];
+            }
 		}
 	}];
 
 	[self.task resume];
 	[self didChangeValueForKey:@"isExecuting"];
 
-	if ([self.delegate respondsToSelector:@selector(requestOperationDidStart:)]) {
-		[self.delegate requestOperationDidStart:self];
-	}
+	ApptentiveLogDebug(ApptentiveLogTagNetwork, @"%@ %@ started.", self.URLRequest.HTTPMethod, self.URLRequest.URL.absoluteString);
+	ApptentiveLogVerbose(ApptentiveLogTagNetwork, @"Headers: %@%@", self.URLRequest.allHTTPHeaderFields, self.URLRequest.HTTPBody.length > 0 ? [NSString stringWithFormat:@"\n-----------PAYLOAD BEGIN-----------\n%@\n-----------PAYLOAD END-----------", [[NSString alloc] initWithData:self.URLRequest.HTTPBody encoding:NSUTF8StringEncoding]] : @"");
+
+	[self.delegate requestOperationDidStart:self];
 }
 
 - (void)cancel {
@@ -175,9 +159,10 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 	_cacheLifetime = [self maxAgeFromResponse:response];
 	_responseObject = responseObject;
 
-	if ([self.delegate respondsToSelector:@selector(requestOperationDidFinish:)]) {
-		[self.delegate requestOperationDidFinish:self];
-	}
+	ApptentiveLogDebug(ApptentiveLogTagNetwork, @"%@ %@ finished successfully (took %g sec).", self.URLRequest.HTTPMethod, self.URLRequest.URL.absoluteString, self.duration);
+	ApptentiveLogVerbose(ApptentiveLogTagNetwork, @"Response object:\n%@.", responseObject);
+
+	[self.delegate requestOperationDidFinish:self];
 
 	[self.dataSource resetBackoffDelay];
 
@@ -204,7 +189,7 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 		NSDictionary *userInfo = @{
 			NSLocalizedDescriptionKey: HTTPErrorTitle,
 			NSLocalizedFailureReasonErrorKey: HTTPErrorMessage,
-			NSURLErrorFailingURLErrorKey: self.request.URL
+			NSURLErrorFailingURLErrorKey: self.URLRequest.URL
 		};
 		error = [NSError errorWithDomain:ApptentiveHTTPErrorDomain code:response.statusCode userInfo:userInfo];
 	}
@@ -217,15 +202,48 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 }
 
 - (void)retryTaskWithError:(NSError *)error {
-	if ([self.delegate respondsToSelector:@selector(requestOperationWillRetry:withError:)]) {
-		[self.delegate requestOperationWillRetry:self withError:error];
+	if (error != nil) {
+		ApptentiveLogError(ApptentiveLogTagNetwork, @"%@ %@ failed with error: %@", self.URLRequest.HTTPMethod, self.URLRequest.URL.absoluteString, error);
 	}
+
+	ApptentiveLogInfo(@"%@ %@ will retry in %f seconds.", self.URLRequest.HTTPMethod, self.URLRequest.URL.absoluteString, self.dataSource.backoffDelay);
+
+	[self.delegate requestOperationWillRetry:self withError:error];
 
 	[self.dataSource increaseBackoffDelay];
 
 	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(self.dataSource.backoffDelay * NSEC_PER_SEC)), dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0), ^{
 		[self startTask];
 	});
+}
+
+- (void)processAuthenticationFailureResponseData:(NSData *)data {
+	NSError *error;
+	id jsonObject = [ApptentiveJSONSerialization JSONObjectWithData:data error:&error];
+	if (error) {
+		ApptentiveLogError(@"Error while parsing JSON: %@", error);
+		return;
+	}
+
+	if (![jsonObject isKindOfClass:[NSDictionary class]]) {
+		ApptentiveLogError(@"Unexpected JSON object: %@", jsonObject);
+		return;
+	}
+
+	NSString *conversationIdentifier = self.request.conversationIdentifier;
+	ApptentiveAssertTrue(conversationIdentifier.length > 0, @"Conversation identifier is nil or empty");
+	if (conversationIdentifier.length == 0) {
+		return;
+	}
+
+	NSString *errorType = ApptentiveDictionaryGetString(jsonObject, @"error_type") ?: @"UNKNOWN";
+	NSString *errorMessage = ApptentiveDictionaryGetString(jsonObject, @"error") ?: @"Unknown error";
+
+	[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveAuthenticationDidFailNotification object:nil userInfo:@{
+		ApptentiveAuthenticationDidFailNotificationKeyErrorType: errorType,
+		ApptentiveAuthenticationDidFailNotificationKeyErrorMessage: errorMessage,
+		ApptentiveAuthenticationDidFailNotificationKeyConversationIdentifier: conversationIdentifier
+	}];
 }
 
 - (void)completeOperation {
@@ -238,9 +256,9 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 }
 
 - (void)finishWithError:(NSError *)error {
-	if ([self.delegate respondsToSelector:@selector(requestOperation:didFailWithError:)]) {
-		[self.delegate requestOperation:self didFailWithError:error];
-	}
+	ApptentiveLogError(ApptentiveLogTagNetwork, @"%@ %@ failed with error (took %g sec): %@. Not retrying.", self.URLRequest.HTTPMethod, self.URLRequest.URL.absoluteString, self.duration, error);
+
+	[self.delegate requestOperation:self didFailWithError:error];
 
 	[self completeOperation];
 }
@@ -262,6 +280,41 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 	}
 
 	return maxAge;
+}
+
+- (NSTimeInterval)duration {
+	return -[_startDate timeIntervalSinceNow];
+}
+
+@end
+
+
+@implementation ApptentiveRequestOperationCallback
+
+#pragma mark - ApptentiveRequestOperationDelegate implementation
+
+- (void)requestOperationDidStart:(ApptentiveRequestOperation *)operation {
+	if (self.operationStartCallback) {
+		self.operationStartCallback(operation);
+	}
+}
+
+- (void)requestOperationDidFinish:(ApptentiveRequestOperation *)operation {
+	if (self.operationFinishCallback) {
+		self.operationFinishCallback(operation);
+	}
+}
+
+- (void)requestOperationWillRetry:(ApptentiveRequestOperation *)operation withError:(NSError *)error {
+	if (self.operationRetryCallback) {
+		self.operationRetryCallback(operation, error);
+	}
+}
+
+- (void)requestOperation:(ApptentiveRequestOperation *)operation didFailWithError:(NSError *)error {
+	if (self.operationFailCallback) {
+		self.operationFailCallback(operation, error);
+	}
 }
 
 @end

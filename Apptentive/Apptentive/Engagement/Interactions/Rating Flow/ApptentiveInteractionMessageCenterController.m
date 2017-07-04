@@ -22,12 +22,18 @@
 
 - (void)presentInteractionFromViewController:(UIViewController *)viewController {
 	UINavigationController *navigationController = [[ApptentiveUtilities storyboard] instantiateViewControllerWithIdentifier:@"MessageCenterNavigation"];
-
 	ApptentiveMessageCenterViewController *messageCenter = navigationController.viewControllers.firstObject;
-	messageCenter.viewModel = [[ApptentiveMessageCenterViewModel alloc] initWithInteraction:self.interaction];
+
+	ApptentiveConversation *conversation = Apptentive.shared.backend.conversationManager.activeConversationTemp;
+	ApptentiveAssertNotNil(conversation, @"Conversation is nil");
+
+	ApptentiveAssertNotNil(Apptentive.shared.backend.conversationManager.messageManager, @"Attempted to present interaction without message manager: %@", self.interaction);
+	ApptentiveMessageCenterViewModel *viewModel = [[ApptentiveMessageCenterViewModel alloc] initWithConversation:(ApptentiveConversation *)conversation interaction:self.interaction messageManager:Apptentive.shared.backend.conversationManager.messageManager];
+	[viewModel start];
+
+	messageCenter.viewModel = viewModel;
 
 	Apptentive.shared.backend.presentedMessageCenterViewController = messageCenter;
-	Apptentive.shared.backend.messageDelegate = messageCenter.viewModel;
 
 	[viewController presentViewController:navigationController animated:YES completion:nil];
 }

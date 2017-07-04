@@ -13,6 +13,11 @@
 
 @interface ApptentiveUtilities : NSObject
 
++ (BOOL)fileExistsAtPath:(NSString *)path;
++ (BOOL)deleteFileAtPath:(NSString *)path;
++ (BOOL)deleteFileAtPath:(NSString *)path error:(NSError **)error;
++ (BOOL)deleteDirectoryAtPath:(NSString *)path error:(NSError **)error;
+
 + (NSString *)applicationSupportPath;
 + (NSBundle *)resourceBundle;
 + (UIStoryboard *)storyboard;
@@ -37,5 +42,12 @@
 + (NSDictionary *)diffDictionary:(NSDictionary *) new againstDictionary:(NSDictionary *)old;
 
 + (BOOL)emailAddressIsValid:(NSString *)emailAddress;
+
++ (NSData *)secureRandomDataOfLength:(NSUInteger)length;
+
++ (NSData *)dictionaryToJsonData:(NSDictionary *)dictionary;
++ (NSString *)dictionaryToJsonString:(NSDictionary *)dictionary;
+
++ (NSString *)stringByPaddingBase64:(NSString *)base64String;
 
 @end

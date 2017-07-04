@@ -6,10 +6,12 @@
 //  Copyright © 2016 Apptentive, Inc. All rights reserved.
 //
 
+#import "ApptentiveRequestProtocol.h"
 #import <CoreData/CoreData.h>
 
-@class ApptentiveFileAttachment;
+NS_ASSUME_NONNULL_BEGIN
 
+@class ApptentiveConversation, ApptentivePayload;
 
 /**
  An `ApptentiveSerialRequest` instance encapsulates the data used to make a
@@ -22,7 +24,7 @@
  migrated requests (encoded to the previous version's specifications) should
  be sent with the matching API version.
  */
-@interface ApptentiveSerialRequest : NSManagedObject
+@interface ApptentiveSerialRequest : NSManagedObject <ApptentiveRequest>
 
 /**
  The API version for which the payload was encoded.
@@ -30,10 +32,25 @@
 @property (strong, nonatomic) NSString *apiVersion;
 
 /**
+ Payload type of the request.
+ */
+@property (strong, nonatomic) NSString *type;
+
+/**
  The attachments (used for some messages) that should be included with the
  request.
  */
 @property (strong, nonatomic) NSOrderedSet *attachments;
+
+/**
+ The conversation identifier (used to associate with a conversation for authentication).
+ */
+@property (strong, nonatomic) NSString *conversationIdentifier;
+
+/**
+ Authorization token that should be used to send a payload
+ */
+@property (strong, nonatomic) NSString *authToken;
 
 /**
  The date on which the request was created.
@@ -61,15 +78,29 @@
 @property (strong, nonatomic) NSData *payload;
 
 /**
- Creates an enqueues a request with the specified parameters.
-
- @param path The path to use to build the URL.
- @param method The HTTP request method to use.
- @param payload The data to be transmitted in the body of the HTTP request.
- @param attachments Any attachments that should be included in the request.
- @param identifier An optional string that identifies a request.
- @param context The managed object context to use to create the request.
+ Indicates if payload is encrypted.
  */
-+ (void)enqueueRequestWithPath:(NSString *)path method:(NSString *)method payload:(NSDictionary *)payload attachments:(NSOrderedSet *)attachments identifier:(NSString *)identifier inContext:(NSManagedObjectContext *)context;
+@property (assign, nonatomic) BOOL encrypted;
+
+/**
+ The MIME type of data in the body of the HTTP request.
+ */
+@property (strong, nonatomic) NSString *contentType;
+
+/**
+ Enqueues a payload with the given conversation information and
+ authorization token using the context.
+
+ @param payload An subclass of ApptentivePayload
+ @param conversation The conversation that is making the request.
+ @param authToken The authorization token to use for the request.
+ @param context The managed object context to use to create the request.
+ @return Whether the payload was successfull enqueued.
+ */
++ (BOOL)enqueuePayload:(ApptentivePayload *)payload forConversation:(ApptentiveConversation *)conversation usingAuthToken:(nullable NSString *)authToken inContext:(NSManagedObjectContext *)context;
+
+@property (readonly, nonatomic, getter=isMessageRequest) BOOL messageRequest;
 
 @end
+
+NS_ASSUME_NONNULL_END

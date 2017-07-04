@@ -114,14 +114,109 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 - (void)viewDidLoad {
 	[super viewDidLoad];
 
+	if (self.viewModel != nil) {
+		[self configureView];
+	}
+
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resizeFooterView:) name:UIKeyboardWillChangeFrameNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scrollToFooterView:) name:UIKeyboardWillShowNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resizeFooterView:) name:UIKeyboardDidHideNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardDidShowNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidHide:) name:UIKeyboardDidHideNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(saveDraft) name:UIApplicationDidEnterBackgroundNotification object:nil];
+
+	// Respond to dynamic type size changes
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateHeaderFooterTextSize:) name:UIContentSizeCategoryDidChangeNotification object:nil];
+
+	[self.attachmentController addObserver:self forKeyPath:@"attachments" options:0 context:NULL];
+	[self.attachmentController viewDidLoad];
+
+	[self updateSendButtonEnabledStatus];
+
+	self.iOSAfter8_0 = [[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){8, 1, 0}];
+}
+
+- (void)dealloc {
+	self.tableView.delegate = nil;
+	self.messageInputView.messageView.delegate = nil;
+	self.profileView.nameField.delegate = nil;
+	self.profileView.emailField.delegate = nil;
+
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
+
+	@try {
+		// May get here before -viewDidLoad completes, in which case we aren't an observer.
+		[self.attachmentController removeObserver:self forKeyPath:@"attachments"];
+	} @catch (NSException *__unused exception) {
+	}
+}
+
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+	[self.greetingView traitCollectionDidChange:previousTraitCollection];
+
+	[self resizeFooterView:nil];
+}
+
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+	[coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> _Nonnull context) {
+		// If the old cached keyboard rect overlaps the screen, assume it's moving off screen.
+		if (CGRectGetMinY(self.lastKnownKeyboardRect) <= CGRectGetHeight(self.view.bounds)) {
+			self.lastKnownKeyboardRect = CGRectMake(0, CGRectGetHeight(self.view.bounds), self.lastKnownKeyboardRect.size.width, self.lastKnownKeyboardRect.size.height);
+		}
+
+		[self resizeFooterView:nil];
+	} completion:^(id<UIViewControllerTransitionCoordinatorContext> _Nonnull context){
+	}];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+	[super viewWillAppear:animated];
+
+	self.lastKnownKeyboardRect = CGRectMake(0, CGRectGetHeight([UIScreen mainScreen].bounds), CGRectGetWidth([UIScreen mainScreen].bounds), 20);
+
+	if (self.attachmentController.active) {
+		self.state = ATMessageCenterStateComposing;
+		[self.attachmentController becomeFirstResponder];
+
+		CGSize screenSize = [UIScreen mainScreen].bounds.size;
+		CGSize drawerSize = self.attachmentController.inputView.bounds.size;
+		self.lastKnownKeyboardRect = CGRectMake(0, screenSize.height - drawerSize.height, screenSize.width, drawerSize.height);
+	} else if (self.messageComposerHasText || self.messageComposerHasAttachments) {
+		self.state = ATMessageCenterStateComposing;
+		[self.messageInputView.messageView becomeFirstResponder];
+	} else if (self.isSubsequentDisplay == NO) {
+		[self updateState];
+	}
+
+	if (self.isSubsequentDisplay == NO || self.attachmentController.active) {
+		[self engageGreetingViewEventIfNecessary];
+		[self scrollToLastMessageAnimated:NO];
+
+		self.isSubsequentDisplay = YES;
+	}
+}
+
+#pragma mark - View model
+
+- (void)setViewModel:(ApptentiveMessageCenterViewModel *)viewModel {
+	_viewModel.delegate = nil;
+
+	_viewModel = viewModel;
+
+	viewModel.delegate = self;
+
+	if (self.isViewLoaded) {
+		[self configureView];
+	}
+}
+
+- (void)configureView {
 	[self.viewModel.interaction engage:ATInteractionMessageCenterEventLabelLaunch fromViewController:self];
 
 	[self.navigationController.toolbar addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(compose:)]];
 
 	self.navigationItem.rightBarButtonItem.title = ApptentiveLocalizedString(@"Close", @"Button that closes Message Center.");
 	self.navigationItem.rightBarButtonItem.accessibilityHint = ApptentiveLocalizedString(@"Closes Message Center.", @"Accessibility hint for 'close' button");
-
-	[self.viewModel start];
 
 	self.navigationItem.title = self.viewModel.title;
 
@@ -220,95 +315,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	} else {
 		self.navigationItem.leftBarButtonItem = nil;
 	}
-
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resizeFooterView:) name:UIKeyboardWillChangeFrameNotification object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scrollToFooterView:) name:UIKeyboardWillShowNotification object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resizeFooterView:) name:UIKeyboardDidHideNotification object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardDidShowNotification object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidHide:) name:UIKeyboardDidHideNotification object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(saveDraft) name:UIApplicationDidEnterBackgroundNotification object:nil];
-
-	// Respond to dynamic type size changes
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateHeaderFooterTextSize:) name:UIContentSizeCategoryDidChangeNotification object:nil];
-
-	[self.attachmentController addObserver:self forKeyPath:@"attachments" options:0 context:NULL];
-	[self.attachmentController viewDidLoad];
-
-	[self updateSendButtonEnabledStatus];
-
-	self.iOSAfter8_0 = [[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){8, 1, 0}];
-}
-
-- (void)dealloc {
-	[self.viewModel removeUnsentContextMessages];
-
-	self.tableView.delegate = nil;
-	self.messageInputView.messageView.delegate = nil;
-	self.profileView.nameField.delegate = nil;
-	self.profileView.emailField.delegate = nil;
-
-	[[NSNotificationCenter defaultCenter] removeObserver:self];
-
-	@try {
-		// May get here before -viewDidLoad completes, in which case we aren't an observer.
-		[self.attachmentController removeObserver:self forKeyPath:@"attachments"];
-	} @catch (NSException *__unused exception) {
-	}
-}
-
-- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
-	[self.greetingView traitCollectionDidChange:previousTraitCollection];
-
-	[self resizeFooterView:nil];
-}
-
-- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
-	[coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> _Nonnull context) {
-		// If the old cached keyboard rect overlaps the screen, assume it's moving off screen.
-		if (CGRectGetMinY(self.lastKnownKeyboardRect) <= CGRectGetHeight(self.view.bounds)) {
-			self.lastKnownKeyboardRect = CGRectMake(0, CGRectGetHeight(self.view.bounds), self.lastKnownKeyboardRect.size.width, self.lastKnownKeyboardRect.size.height);
-		}
-
-		[self resizeFooterView:nil];
-	} completion:^(id<UIViewControllerTransitionCoordinatorContext> _Nonnull context){
-	}];
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-	[super viewWillAppear:animated];
-
-	self.lastKnownKeyboardRect = CGRectMake(0, CGRectGetHeight([UIScreen mainScreen].bounds), CGRectGetWidth([UIScreen mainScreen].bounds), 20);
-
-	if (self.attachmentController.active) {
-		self.state = ATMessageCenterStateComposing;
-		[self.attachmentController becomeFirstResponder];
-
-		CGSize screenSize = [UIScreen mainScreen].bounds.size;
-		CGSize drawerSize = self.attachmentController.inputView.bounds.size;
-		self.lastKnownKeyboardRect = CGRectMake(0, screenSize.height - drawerSize.height, screenSize.width, drawerSize.height);
-	} else if (self.messageComposerHasText || self.messageComposerHasAttachments) {
-		self.state = ATMessageCenterStateComposing;
-		[self.messageInputView.messageView becomeFirstResponder];
-	} else if (self.isSubsequentDisplay == NO) {
-		[self updateState];
-	}
-
-	if (self.isSubsequentDisplay == NO || self.attachmentController.active) {
-		[self engageGreetingViewEventIfNecessary];
-		[self scrollToLastMessageAnimated:NO];
-
-		self.isSubsequentDisplay = YES;
-	}
-}
-
-#pragma mark - View model
-
-- (void)setViewModel:(ApptentiveMessageCenterViewModel *)viewModel {
-	_viewModel.delegate = nil;
-
-	_viewModel = viewModel;
-
-	viewModel.delegate = self;
 }
 
 #pragma mark - Table view data source
@@ -527,19 +533,19 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[self engageGreetingViewEventIfNecessary];
 }
 
-#pragma mark Fetch results controller delegate
+#pragma mark Message center view model delegate
 
-- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
+- (void)viewModelWillChangeContent:(ApptentiveMessageCenterViewModel *)viewModel {
 	[self.tableView beginUpdates];
 }
 
-- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
+- (void)viewModelDidChangeContent:(ApptentiveMessageCenterViewModel *)viewModel {
 	[self updateStatusOfVisibleCells];
 
 	@try {
 		[self.tableView endUpdates];
-	} @catch (NSException *exception) {
-		ApptentiveLogError(@"caught exception: %@: %@", [exception name], [exception description]);
+	} @catch (NSException *exc) {
+		ApptentiveAssertTrue(NO, @"Exception when updating table view: %@", exc);
 	}
 
 	if (self.state != ATMessageCenterStateWhoCard && self.state != ATMessageCenterStateComposing) {
@@ -550,49 +556,17 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	}
 }
 
-- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath {
-	switch (type) {
-		case NSFetchedResultsChangeUpdate:
-			[self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
-			break;
-
-		case NSFetchedResultsChangeInsert:
-			[self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
-			break;
-
-		case NSFetchedResultsChangeDelete:
-			[self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
-			break;
-
-		case NSFetchedResultsChangeMove:
-			if (![indexPath isEqual:newIndexPath]) {
-				[self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
-				[self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
-			}
-			break;
-
-		default:
-			break;
-	}
+- (void)messageCenterViewModel:(ApptentiveMessageCenterViewModel *)viewModel didInsertMessageAtIndex:(NSInteger)index {
+	[self.tableView insertSections:[NSIndexSet indexSetWithIndex:index] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
-- (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id<NSFetchedResultsSectionInfo>)sectionInfo atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type {
-	switch (type) {
-		case NSFetchedResultsChangeInsert:
-			[self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
-			break;
-		case NSFetchedResultsChangeDelete:
-			[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
-			break;
-		case NSFetchedResultsChangeUpdate:
-			[self.tableView reloadSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
-			break;
-		default:
-			break;
-	}
+- (void)messageCenterViewModel:(ApptentiveMessageCenterViewModel *)viewModel didUpdateMessageAtIndex:(NSInteger)index {
+	[self.tableView reloadSections:[NSIndexSet indexSetWithIndex:index] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
-#pragma mark Message center view model delegate
+- (void)messageCenterViewModel:(ApptentiveMessageCenterViewModel *)viewModel didDeleteMessageAtIndex:(NSInteger)index {
+	[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:index] withRowAnimation:UITableViewRowAnimationAutomatic];
+}
 
 - (void)messageCenterViewModel:(ApptentiveMessageCenterViewModel *)viewModel didLoadAttachmentThumbnailAtIndexPath:(NSIndexPath *)indexPath {
 	ApptentiveCompoundMessageCell *cell = (ApptentiveCompoundMessageCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:indexPath.section]];
@@ -897,7 +871,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	@try {
 		[self.tableView reloadRowsAtIndexPaths:indexPathsToReload withRowAnimation:UITableViewRowAnimationFade];
 	} @catch (NSException *exception) {
-		ApptentiveLogError(@"caught exception: %@: %@", [exception name], [exception description]);
+		ApptentiveAssertTrue(NO, @"Exception when reloading row in table view");
 	}
 }
 
@@ -956,20 +930,18 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		BOOL networkIsUnreachable = !self.viewModel.networkIsReachable;
 
 		switch (self.viewModel.lastUserMessageState) {
-			case ATPendingMessageStateConfirmed:
+			case ApptentiveMessageStateSent:
 				self.state = ATMessageCenterStateConfirmed;
 				break;
-			case ATPendingMessageStateError:
+			case ApptentiveMessageStateFailedToSend:
 				self.state = networkIsUnreachable ? ATMessageCenterStateNetworkError : ATMessageCenterStateHTTPError;
 				break;
-			case ATPendingMessageStateSending:
+			case ApptentiveMessageStatePending:
+			case ApptentiveMessageStateWaiting:
+			case ApptentiveMessageStateSending:
 				self.state = networkIsUnreachable ? ATMessageCenterStateNetworkError : ATMessageCenterStateSending;
 				break;
-			case ATPendingMessageStateComposing:
-				// This indicates that the last message is a context message.
-				self.state = ATMessageCenterStateReplied;
-				break;
-			case ATPendingMessageStateNone:
+			default:
 				self.state = ATMessageCenterStateEmpty;
 				break;
 		}

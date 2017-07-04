@@ -7,9 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "ApptentiveRequestProtocol.h"
 
-@protocol ApptentiveRequestOperationDelegate
-, ApptentiveRequestOperationDataSource;
+@protocol ApptentiveRequestOperationDataSource;
+@class ApptentiveRequestOperationCallback;
 
 extern NSErrorDomain const ApptentiveHTTPErrorDomain;
 
@@ -39,7 +40,7 @@ extern NSErrorDomain const ApptentiveHTTPErrorDomain;
 /**
  The HTTP request that the operation will make.
  */
-@property (readonly, nonatomic) NSURLRequest *request;
+@property (readonly, nonatomic) NSURLRequest *URLRequest;
 
 /**
  The data task used to make the HTTP request.
@@ -57,58 +58,30 @@ extern NSErrorDomain const ApptentiveHTTPErrorDomain;
 @property (readonly, nonatomic) NSObject *responseObject;
 
 /**
-The API version that this version of the SDK targets.
+ The ApptentiveRequest-implementing object corresponding to this operation.
  */
-@property (class, readonly, nonatomic) NSString *APIVersion;
-
-
-/**
- Initializes a request operation with the specified request, delegate and data
- source.
-
- @param request The HTTP request that the operation will perform.
- @param delegate The delegate that the operation will communicate with.
- @param dataSource The data source that the operation will use
- @return The newly-initialized operation.
- */
-- (instancetype)initWithURLRequest:(NSURLRequest *)request delegate:(id<ApptentiveRequestOperationDelegate>)delegate dataSource:(id<ApptentiveRequestOperationDataSource>)dataSource;
-
-/**
- Initializes a request operation with a payload dictionary.
-
- @param path The path on the server the request will target.
- @param method The HTTP request method that the request will use.
- @param payload A dictonary that will be JSON encoded and transmitted in the
- body of the request.
- @param delegate The delegate that the operation will communicate with.
- @param dataSource The data source that the operation will use
- @return The newly-initialized operation.
- */
-- (instancetype)initWithPath:(NSString *)path method:(NSString *)method payload:(NSDictionary *)payload delegate:(id<ApptentiveRequestOperationDelegate>)delegate dataSource:(id<ApptentiveRequestOperationDataSource>)dataSource;
-
-/**
- Initializes a request operation with payload data.
-
- @param path The path on the server the request will target.
- @param method The HTTP request method that the request will use.
- @param payloadData The data to be transmitted in the request body.
- @param APIVersion The API version that the encoded data targets.
- @param delegate The delegate that the operation will communicate with.
- @param dataSource The data source that the operation will use
- @return The newly-initialized operation.
- */
-- (instancetype)initWithPath:(NSString *)path method:(NSString *)method payloadData:(NSData *)payloadData APIVersion:(NSString *)APIVersion delegate:(id<ApptentiveRequestOperationDelegate>)delegate dataSource:(id<ApptentiveRequestOperationDataSource>)dataSource;
+@property (strong, nonatomic) id<ApptentiveRequest> request;
 
 /**
  An object that the request operation will communicate its status to.
  */
-@property (readonly, weak, nonatomic) id<ApptentiveRequestOperationDelegate> delegate;
+@property (strong, nonatomic) ApptentiveRequestOperationCallback *delegate;
 
 /**
  An object that the request operation will use to obtain additional data
  required to make or retry the request.
  */
 @property (readonly, weak, nonatomic) id<ApptentiveRequestOperationDataSource> dataSource;
+
+/**
+ Initializes a request operation with the specified URL Request.
+
+ @param URLRequest The URL request to perform.
+ @param delegate The delegate that the operation will communicate with.
+ @param dataSource The data source that the operation will use
+ @return The newly-initialized operation.
+ */
+- (instancetype)initWithURLRequest:(NSURLRequest *)URLRequest delegate:(ApptentiveRequestOperationCallback *)delegate dataSource:(id<ApptentiveRequestOperationDataSource>)dataSource;
 
 #pragma mark - Subclassing
 
@@ -121,62 +94,10 @@ The API version that this version of the SDK targets.
 @end
 
 /**
- The `ApptentiveRequestOperationDelegate` protocol specifies how a request
- operation will communicate its status with its delegate object.
- */
-@protocol ApptentiveRequestOperationDelegate <NSObject>
-@optional
-
-/**
- Indicates that the request operation's request has started.
-
- @param operation The request operation.
- */
-- (void)requestOperationDidStart:(ApptentiveRequestOperation *)operation;
-
-
-/**
- Indicates that the request operation's request has encountered a retry-able
- error.
-
- @param operation The request operation.
- @param error The error that the request encountered.
- */
-- (void)requestOperationWillRetry:(ApptentiveRequestOperation *)operation withError:(NSError *)error;
-
-/**
- Indicates that the request operation's request has succeeded.
-
- @param operation The request operation.
- */
-- (void)requestOperationDidFinish:(ApptentiveRequestOperation *)operation;
-
-/**
- Indicates that the request operation's request has encountered an unrecoverable
- error.
-
- @discussion The only type of error that is considered unrecoverable is a 400-
- series error indicating that the client is incapable of submitting a valid
- request for this data.
-
- @param operation The request operation.
- @param error The error that the request encountered.
- */
-- (void)requestOperation:(ApptentiveRequestOperation *)operation didFailWithError:(NSError *)error;
-
-@end
-
-
-/**
  The `ApptentiveRequestOperationDataSource` protocol specifies how a request
  operation can obtain additional data needed to make and retry requests.
  */
 @protocol ApptentiveRequestOperationDataSource <NSObject>
-
-/**
- The server base URL that requests should target.
- */
-@property (readonly, nonatomic) NSURL *baseURL;
 
 /**
  The `NSURLSession` object that should be used to create the HTTP request.
@@ -199,5 +120,52 @@ The API version that this version of the SDK targets.
  succeeded.
  */
 - (void)resetBackoffDelay;
+
+@end
+
+
+@interface ApptentiveRequestOperationCallback : NSObject
+
+@property (copy, nonatomic) void (^operationStartCallback)(ApptentiveRequestOperation *operation);
+@property (copy, nonatomic) void (^operationFinishCallback)(ApptentiveRequestOperation *operation);
+@property (copy, nonatomic) void (^operationRetryCallback)(ApptentiveRequestOperation *operation, NSError *error);
+@property (copy, nonatomic) void (^operationFailCallback)(ApptentiveRequestOperation *operation, NSError *error);
+
+/**
+ Indicates that the request operation's request has started.
+ 
+ @param operation The request operation.
+ */
+- (void)requestOperationDidStart:(ApptentiveRequestOperation *)operation;
+
+
+/**
+ Indicates that the request operation's request has encountered a retry-able
+ error.
+ 
+ @param operation The request operation.
+ @param error The error that the request encountered.
+ */
+- (void)requestOperationWillRetry:(ApptentiveRequestOperation *)operation withError:(NSError *)error;
+
+/**
+ Indicates that the request operation's request has succeeded.
+ 
+ @param operation The request operation.
+ */
+- (void)requestOperationDidFinish:(ApptentiveRequestOperation *)operation;
+
+/**
+ Indicates that the request operation's request has encountered an unrecoverable
+ error.
+ 
+ @discussion The only type of error that is considered unrecoverable is a 400-
+ series error indicating that the client is incapable of submitting a valid
+ request for this data.
+ 
+ @param operation The request operation.
+ @param error The error that the request encountered.
+ */
+- (void)requestOperation:(ApptentiveRequestOperation *)operation didFailWithError:(NSError *)error;
 
 @end

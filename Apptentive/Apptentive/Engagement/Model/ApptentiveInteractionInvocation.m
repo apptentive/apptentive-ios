@@ -11,6 +11,7 @@
 #import "ApptentiveBackend+Engagement.h"
 #import "ApptentiveInteractionUsageData.h"
 #import "ApptentiveUtilities.h"
+#import "Apptentive_Private.h"
 
 
 @implementation ApptentiveInteractionInvocation
@@ -122,8 +123,8 @@
 	return criteriaAreMet;
 }
 
-- (BOOL)criteriaAreMetForSession:(ApptentiveSession *)session {
-	return [self criteriaAreMetForUsageData:[ApptentiveInteractionUsageData usageDataWithSession:session]];
+- (BOOL)criteriaAreMetForConversation:(ApptentiveConversation *)conversation {
+	return [self criteriaAreMetForUsageData:[ApptentiveInteractionUsageData usageDataWithConversation:conversation]];
 }
 
 - (NSPredicate *)criteriaPredicate {
@@ -296,6 +297,7 @@
 }
 
 + (NSPredicate *)predicateWithLeftKeyPath:(NSString *)leftKeyPath rightValue:(nullable id)rightValue operatorType:(NSPredicateOperatorType)operatorType {
+	ApptentiveAssertOperationQueue(Apptentive.shared.operationQueue);
 	[ApptentiveInteractionUsageData keyPathWasSeen:leftKeyPath];
 
 	NSExpression *leftExpression = [NSExpression expressionForKeyPath:leftKeyPath];

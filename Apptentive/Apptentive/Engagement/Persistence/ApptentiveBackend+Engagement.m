@@ -15,6 +15,7 @@
 #import "ApptentiveInteractionController.h"
 #import "ApptentiveEngagement.h"
 #import "ApptentiveEngagementManifest.h"
+#import "ApptentiveEngagementBackend.h"
 
 NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEngagementCachedInteractionsExpirationPreferenceKey";
 
@@ -41,42 +42,16 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 }
 
 - (ApptentiveInteraction *)interactionForInvocations:(NSArray *)invocations {
-	NSString *interactionID = nil;
-
-	for (NSObject *invocationOrDictionary in invocations) {
-		ApptentiveInteractionInvocation *invocation = nil;
-
-		// Allow parsing of ATInteractionInvocation and NSDictionary invocation objects
-		if ([invocationOrDictionary isKindOfClass:[ApptentiveInteractionInvocation class]]) {
-			invocation = (ApptentiveInteractionInvocation *)invocationOrDictionary;
-		} else if ([invocationOrDictionary isKindOfClass:[NSDictionary class]]) {
-			invocation = [ApptentiveInteractionInvocation invocationWithJSONDictionary:((NSDictionary *)invocationOrDictionary)];
-		} else {
-			ApptentiveLogError(@"Attempting to parse an invocation that is neither an ATInteractionInvocation or NSDictionary.");
-		}
-
-		if (invocation && [invocation isKindOfClass:[ApptentiveInteractionInvocation class]]) {
-			if ([invocation criteriaAreMetForSession:self.session]) {
-				interactionID = invocation.interactionID;
-				break;
-			}
-		}
-	}
-
-	ApptentiveInteraction *interaction = nil;
-	if (interactionID) {
-		interaction = [self interactionForIdentifier:interactionID];
-	}
-
-	return interaction;
+	ApptentiveEngagementBackend *engagementBackend = [[ApptentiveEngagementBackend alloc] initWithConversation:self.conversationManager.activeConversation manifest:self.conversationManager.manifest];
+	return [engagementBackend interactionForInvocations:invocations];
 }
 
 - (ApptentiveInteraction *)interactionForIdentifier:(NSString *)identifier {
-	return self.manifest.interactions[identifier];
+	return self.conversationManager.manifest.interactions[identifier];
 }
 
 - (ApptentiveInteraction *)interactionForEvent:(NSString *)event {
-	NSArray *invocations = self.manifest.targets[event];
+	NSArray *invocations = self.conversationManager.manifest.targets[event];
 	ApptentiveInteraction *interaction = [self interactionForInvocations:invocations];
 
 	return interaction;
@@ -117,14 +92,28 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 		return NO;
 	}
 
-	[self addMetricWithName:codePoint fromInteraction:fromInteraction info:userInfo customData:customData extendedData:extendedData];
+	ApptentiveConversation *conversation = self.conversationManager.activeConversationTemp;
 
-	[self codePointWasSeen:codePoint];
-	[self codePointWasEngaged:codePoint];
+	if (conversation == nil) {
+		ApptentiveLogWarning(@"Attempting to engage event with no active conversation.");
+		return NO;
+	}
+
+	[self.operationQueue addOperationWithBlock:^{
+        [self conversation:conversation addMetricWithName:codePoint fromInteraction:fromInteraction info:userInfo customData:customData extendedData:extendedData];
+	}];
+
+	// FIXME: Race condition when trying to modify and save conversation from different threads
+	@synchronized(conversation) {
+		[conversation warmCodePoint:codePoint];
+		[conversation engageCodePoint:codePoint];
+	}
 
 	BOOL didEngageInteraction = NO;
 
-	ApptentiveInteraction *interaction = [self interactionForEvent:codePoint];
+	ApptentiveEngagementBackend *engagementBackend = [[ApptentiveEngagementBackend alloc] initWithConversation:conversation manifest:self.conversationManager.manifest];
+
+	ApptentiveInteraction *interaction = [engagementBackend interactionForEvent:codePoint];
 	if (interaction) {
 		ApptentiveLogInfo(@"--Running valid %@ interaction.", interaction.type);
 
@@ -139,7 +128,7 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 
 		[self presentInteraction:interaction fromViewController:viewController];
 
-		[self interactionWasEngaged:interaction];
+		[conversation engageInteraction:interaction.identifier];
 		didEngageInteraction = YES;
 	}
 
@@ -147,19 +136,11 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 }
 
 - (void)codePointWasSeen:(NSString *)codePoint {
-	[self.session.engagement warmCodePoint:codePoint];
-}
-
-- (void)codePointWasEngaged:(NSString *)codePoint {
-	[self.session.engagement engageCodePoint:codePoint];
+	[self.conversationManager.activeConversation warmCodePoint:codePoint];
 }
 
 - (void)interactionWasSeen:(NSString *)interactionID {
-	[self.session.engagement warmInteraction:interactionID];
-}
-
-- (void)interactionWasEngaged:(ApptentiveInteraction *)interaction {
-	[self.session.engagement engageInteraction:interaction.identifier];
+	[self.conversationManager.activeConversation warmInteraction:interactionID];
 }
 
 - (void)presentInteraction:(ApptentiveInteraction *)interaction fromViewController:(UIViewController *)viewController {
@@ -175,7 +156,7 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 		return;
 	}
 
-	if ([[UIApplication sharedApplication] applicationState] != UIApplicationStateActive) {
+	if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateBackground) {
 		// Only present interaction UI in Active state.
 		return;
 	}

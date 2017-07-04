@@ -19,10 +19,19 @@ extern NSString *const ApptentiveConversationCreatedNotification;
 extern NSString *const ApptentiveCustomDeviceDataPreferenceKey;
 extern NSString *const ApptentiveCustomPersonDataPreferenceKey;
 
+extern NSString *const ApptentivePushProviderPreferenceKey;
+extern NSString *const ApptentivePushTokenPreferenceKey;
+
 @class ApptentiveMessage, ApptentiveBackend;
 
 
 @interface Apptentive ()
+
+/*!
+ * This private serial queue is used for all Apptentive internal API calls and callbacks.
+ * You may think of it as of the 'main' queue for the SDK itself.
+ */
+@property (readonly, nonatomic) NSOperationQueue *operationQueue;
 
 @property (readonly, nonatomic) NSURL *baseURL;
 @property (readonly, nonatomic) ApptentiveBackend *backend;
@@ -51,6 +60,8 @@ extern NSString *const ApptentiveCustomPersonDataPreferenceKey;
 /*! Replacement for NSLocalizedString within ApptentiveConnect. Pulls
  localized strings out of the resource bundle. */
 extern NSString *ApptentiveLocalizedString(NSString *key, NSString *comment);
+
+extern ApptentiveAuthenticationFailureReason parseAuthenticationFailureReason(NSString *reason);
 
 
 @interface ApptentiveNavigationController (AboutView)

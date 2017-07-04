@@ -18,6 +18,7 @@ NSString *const ApptentiveInteractionAppleRatingDialogEventLabelNotShown = @"not
 
 #define REVIEW_WINDOW_TIMEOUT (int64_t)(1.0 * NSEC_PER_SEC)
 
+
 @implementation ApptentiveInteractionAppleRatingDialogController
 
 + (void)load {
@@ -32,14 +33,14 @@ NSString *const ApptentiveInteractionAppleRatingDialogEventLabelNotShown = @"not
 	__block BOOL didShowReviewController = NO;
 
 	// …but listen for new windows whose class name starts with "SKStoreReview"
-	id<NSObject> notifier = [[NSNotificationCenter defaultCenter] addObserverForName:UIWindowDidBecomeVisibleNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+	id<NSObject> notifier = [[NSNotificationCenter defaultCenter] addObserverForName:UIWindowDidBecomeVisibleNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *_Nonnull note) {
 		if ([NSStringFromClass([note.object class]) hasPrefix:@"SKStoreReview"]) {
 			// Review window was shown
 			didShowReviewController = YES;
 		}
 	}];
 
-	// Guard against not having store review controller class in OS and/or SDK
+// Guard against not having store review controller class in OS and/or SDK
 #ifdef __IPHONE_10_3
 	if ([[SKStoreReviewController class] respondsToSelector:@selector(requestReview)]) {
 		// This may or may not display a review window

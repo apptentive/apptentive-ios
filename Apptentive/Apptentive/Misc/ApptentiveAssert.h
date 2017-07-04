@@ -1,0 +1,63 @@
+//
+//  ApptentiveAssert.h
+//  Apptentive
+//
+//  Created by Alex Lementuev on 3/20/17.
+//  Copyright © 2017 Apptentive, Inc. All rights reserved.
+//
+
+#import <Foundation/Foundation.h>
+
+/*!
+ * @define ApptentiveAssertFail(...)
+ * Generates a failure.
+ * @param ... An optional supplementary description of the failure. A literal NSString, optionally with string format specifiers. This parameter can be completely omitted.
+ */
+#define ApptentiveAssertFail(...) __ApptentiveAssertHelper("", __FILE__, __LINE__, __PRETTY_FUNCTION__, __VA_ARGS__)
+
+/*!
+ * @define ApptentiveAssertNil(expression, ...)
+ * Generates a failure when ((\a expression) != nil).
+ * @param expression An expression of id type.
+ * @param ... An optional supplementary description of the failure. A literal NSString, optionally with string format specifiers. This parameter can be completely omitted.
+ */
+#define ApptentiveAssertNil(expression, ...) \
+	if (expression) __ApptentiveAssertHelper(#expression, __FILE__, __LINE__, __PRETTY_FUNCTION__, __VA_ARGS__)
+
+/*!
+ * @define ApptentiveAssertNotNil(expression, ...)
+ * Generates a failure when ((\a expression) == nil).
+ * @param expression An expression of id type.
+ * @param ... An optional supplementary description of the failure. A literal NSString, optionally with string format specifiers. This parameter can be completely omitted.
+ */
+#define ApptentiveAssertNotNil(expression, ...) \
+	if (!(expression)) __ApptentiveAssertHelper(#expression, __FILE__, __LINE__, __PRETTY_FUNCTION__, __VA_ARGS__)
+
+/*!
+ * @define ApptentiveAssertNotEmpty(expression, ...)
+ * Generates a failure when ((\a expression).length == 0).
+ * @param expression An expression of NSString type.
+ * @param ... An optional supplementary description of the failure. A literal NSString, optionally with string format specifiers. This parameter can be completely omitted.
+ */
+#define ApptentiveAssertNotEmpty(expression, ...) \
+	if (expression.length == 0) __ApptentiveAssertHelper(#expression, __FILE__, __LINE__, __PRETTY_FUNCTION__, __VA_ARGS__)
+
+/*!
+ * @define ApptentiveAssertTrue(expression, ...)
+ * Generates a failure when ((\a expression) == false).
+ * @param expression An expression of boolean type.
+ * @param ... An optional supplementary description of the failure. A literal NSString, optionally with string format specifiers. This parameter can be completely omitted.
+ */
+#define ApptentiveAssertTrue(expression, ...) \
+	if (!(expression)) __ApptentiveAssertHelper(#expression, __FILE__, __LINE__, __PRETTY_FUNCTION__, __VA_ARGS__)
+
+/*!
+ * @define ApptentiveAssertDispatchQueue(expression, ...)
+ * Generates a failure when ((\a expression1) does not match the current dispatch queue.
+ * @param expression An expression of dispatch_queue_t type.
+ * @param ... An optional supplementary description of the failure. A literal NSString, optionally with string format specifiers. This parameter can be completely omitted.
+ */
+#define ApptentiveAssertOperationQueue(expression) \
+	if (NSOperationQueue.currentQueue != (expression)) __ApptentiveAssertHelper(#expression, __FILE__, __LINE__, __PRETTY_FUNCTION__, @"Unexpected operation queue: %@", NSOperationQueue.currentQueue)
+
+void __ApptentiveAssertHelper(const char *expression, const char *file, int line, const char *function, ...);

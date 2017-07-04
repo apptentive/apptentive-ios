@@ -17,6 +17,10 @@
 #import "ApptentiveVersion.h"
 #import "ApptentiveEngagementManifest.h"
 
+#import "ApptentiveConversation.h"
+#import "ApptentiveConversationMetadata.h"
+#import "ApptentiveConversationMetadataItem.h"
+
 
 @implementation Apptentive (Debugging)
 
@@ -25,15 +29,15 @@
 }
 
 - (NSString *)SDKVersion {
-	return self.backend.session.SDK.version.versionString;
+	return kApptentiveVersionString;
 }
 
 - (void)setLocalInteractionsURL:(NSURL *)localInteractionsURL {
-	self.backend.localEngagementManifestURL = localInteractionsURL;
+	self.backend.conversationManager.localEngagementManifestURL = localInteractionsURL;
 }
 
 - (NSURL *)localInteractionsURL {
-	return self.backend.localEngagementManifestURL;
+	return self.backend.conversationManager.localEngagementManifestURL;
 }
 
 - (NSString *)storagePath {
@@ -45,7 +49,7 @@
 }
 
 - (NSString *)manifestJSON {
-	NSDictionary *JSONDictionary = self.backend.manifest.JSONDictionary;
+	NSDictionary *JSONDictionary = self.backend.conversationManager.manifest.JSONDictionary;
 
 	if (JSONDictionary != nil) {
 		NSData *outputJSONData = [NSJSONSerialization dataWithJSONObject:JSONDictionary options:NSJSONWritingPrettyPrinted error:NULL];
@@ -57,11 +61,11 @@
 }
 
 - (NSDictionary *)deviceInfo {
-	return Apptentive.shared.backend.session.device.JSONDictionary;
+	return Apptentive.shared.backend.conversationManager.activeConversation.device.JSONDictionary;
 }
 
 - (NSArray *)engagementEvents {
-	NSDictionary *targets = Apptentive.shared.backend.manifest.targets;
+	NSDictionary *targets = Apptentive.shared.backend.conversationManager.manifest.targets;
 	NSArray *localCodePoints = [targets.allKeys filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF BEGINSWITH[c] %@", @"local#app#"]];
 	NSMutableArray *eventNames = [NSMutableArray array];
 	for (NSString *codePoint in localCodePoints) {
@@ -72,7 +76,7 @@
 }
 
 - (NSArray *)engagementInteractions {
-	return self.backend.manifest.interactions.allValues;
+	return self.backend.conversationManager.manifest.interactions.allValues;
 }
 
 - (NSInteger)numberOfEngagementInteractions {
@@ -100,7 +104,11 @@
 }
 
 - (NSString *)conversationToken {
-	return Apptentive.shared.backend.session.token;
+	return Apptentive.shared.backend.conversationManager.activeConversationTemp.token;
+}
+
+- (NSString *)conversationStateName {
+	return NSStringFromApptentiveConversationState(Apptentive.shared.backend.conversationManager.activeConversationTemp.state);
 }
 
 - (void)resetSDK {
@@ -110,11 +118,47 @@
 }
 
 - (NSDictionary *)customPersonData {
-	return self.backend.session.person.customData ?: @{};
+	return self.backend.conversationManager.activeConversation.person.customData ?: @{};
 }
 
 - (NSDictionary *)customDeviceData {
-	return self.backend.session.device.customData ?: @{};
+	return self.backend.conversationManager.activeConversation.device.customData ?: @{};
+}
+
+#pragma mark - Conversation metadata
+
+- (NSInteger)numberOfConversations {
+	return self.backend.conversationManager.conversationMetadata.items.count;
+}
+
+- (NSString *)conversationStateAtIndex:(NSInteger)index {
+	ApptentiveConversationState state = ((ApptentiveConversationMetadataItem *)self.backend.conversationManager.conversationMetadata.items[index]).state;
+	return NSStringFromApptentiveConversationState(state);
+}
+
+- (NSString *)conversationDescriptionAtIndex:(NSInteger)index {
+	ApptentiveConversationMetadataItem *item = self.backend.conversationManager.conversationMetadata.items[index];
+
+	NSString *result = [NSString stringWithFormat:@"ID: %@", item.conversationIdentifier];
+
+	if (item.encryptionKey != nil) {
+		result = [result stringByAppendingFormat:@" Key: %@", item.encryptionKey];
+	}
+
+	return result;
+}
+
+- (BOOL)conversationIsActiveAtIndex:(NSInteger)index {
+	NSString *activeConversationIdentifier = self.backend.conversationManager.activeConversation.identifier;
+	ApptentiveConversationMetadataItem *item = self.backend.conversationManager.conversationMetadata.items[index];
+
+	return [activeConversationIdentifier isEqualToString:item.conversationIdentifier];
+}
+
+- (void)deleteConversationAtIndex:(NSInteger)index {
+	ApptentiveConversationMetadataItem *item = self.backend.conversationManager.conversationMetadata.items[index];
+
+	[self.backend.conversationManager.conversationMetadata deleteItem:item];
 }
 
 @end

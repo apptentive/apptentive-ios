@@ -14,7 +14,8 @@
 #import "Apptentive_Private.h"
 #import "ApptentiveInteraction.h"
 #import "ApptentiveBackend.h"
-#import "ApptentiveSerialRequest+Record.h"
+#import "ApptentiveSerialRequest.h"
+#import "ApptentiveSurveyResponsePayload.h"
 
 NSString *const ApptentiveInteractionSurveyEventLabelQuestionResponse = @"question_response";
 NSString *const ApptentiveInteractionSurveyEventLabelSubmit = @"submit";
@@ -236,9 +237,15 @@ NSString *const ApptentiveInteractionSurveyEventLabelCancel = @"cancel";
 }
 
 - (void)submit {
-	[ApptentiveSerialRequest enqueueSurveyResponseWithAnswers:self.answers identifier:self.interaction.identifier inContext:Apptentive.shared.backend.managedObjectContext];
+	ApptentiveConversation *conversation = Apptentive.shared.backend.conversationManager.activeConversation;
+	ApptentiveSurveyResponsePayload *payload = [[ApptentiveSurveyResponsePayload alloc] initWithAnswers:self.answers identifier:self.interaction.identifier];
+	ApptentiveAssertNotNil(payload, @"Unable to create Apptentive survey response payload");
 
-	[Apptentive.shared.backend processQueuedRecords];
+	if (payload != nil) {
+		[ApptentiveSerialRequest enqueuePayload:payload forConversation:conversation usingAuthToken:conversation.token inContext:Apptentive.shared.backend.managedObjectContext];
+
+		[Apptentive.shared.backend processQueuedRecords];
+	}
 }
 
 #pragma mark - Validation & Output

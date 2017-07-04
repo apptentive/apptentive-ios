@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="11759" systemVersion="16C67" minimumToolsVersion="Xcode 4.3" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="12141" systemVersion="16G12b" minimumToolsVersion="Xcode 4.3" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
     <entity name="ATEvent" representedClassName="ApptentiveLegacyEvent" parentEntity="ATRecord" syncable="YES">
         <attribute name="dictionaryData" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="label" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="pendingEventID" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
     </entity>
-    <entity name="ATFileAttachment" representedClassName="ApptentiveFileAttachment" syncable="YES">
+    <entity name="ATFileAttachment" representedClassName="ApptentiveLegacyFileAttachment" syncable="YES">
         <attribute name="localPath" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="mimeType" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
@@ -13,7 +13,7 @@
         <attribute name="remoteURL" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="message" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ATMessage" inverseName="attachments" inverseEntity="ATMessage" syncable="YES"/>
     </entity>
-    <entity name="ATMessage" representedClassName="ApptentiveMessage" parentEntity="ATRecord" syncable="YES">
+    <entity name="ATMessage" representedClassName="ApptentiveLegacyMessage" parentEntity="ATRecord" syncable="YES">
         <attribute name="automated" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="body" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="customData" optional="YES" attributeType="Binary" syncable="YES"/>
@@ -29,7 +29,7 @@
         <relationship name="attachments" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="ATFileAttachment" inverseName="message" inverseEntity="ATFileAttachment" syncable="YES"/>
         <relationship name="sender" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="ATMessageSender" inverseName="sentMessages" inverseEntity="ATMessageSender" syncable="YES"/>
     </entity>
-    <entity name="ATMessageSender" representedClassName="ApptentiveMessageSender" syncable="YES">
+    <entity name="ATMessageSender" representedClassName="ApptentiveLegacyMessageSender" syncable="YES">
         <attribute name="apptentiveID" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="emailAddress" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
@@ -57,11 +57,16 @@
     </entity>
     <entity name="QueuedRequest" representedClassName="ApptentiveSerialRequest" syncable="YES">
         <attribute name="apiVersion" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="authToken" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="contentType" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="conversationIdentifier" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="encrypted" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="identifier" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="method" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="path" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="payload" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="attachments" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="QueuedAttachment" inverseName="request" inverseEntity="QueuedAttachment" syncable="YES"/>
     </entity>
     <elements>
@@ -72,6 +77,6 @@
         <element name="ATRecord" positionX="0" positionY="0" width="128" height="120"/>
         <element name="ATSurveyResponse" positionX="36" positionY="126" width="128" height="105"/>
         <element name="QueuedAttachment" positionX="72" positionY="162" width="128" height="105"/>
-        <element name="QueuedRequest" positionX="45" positionY="153" width="128" height="150"/>
+        <element name="QueuedRequest" positionX="45" positionY="153" width="128" height="225"/>
     </elements>
 </model>

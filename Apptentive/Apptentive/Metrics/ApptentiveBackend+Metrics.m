@@ -10,7 +10,8 @@
 #import "Apptentive_Private.h"
 #import "ApptentiveBackend+Engagement.h"
 #import "ApptentiveAppConfiguration.h"
-#import "ApptentiveSerialRequest+Record.h"
+#import "ApptentiveSerialRequest.h"
+#import "ApptentiveEventPayload.h"
 
 // Engagement event labels
 
@@ -20,14 +21,20 @@ static NSString *ATInteractionAppEventLabelExit = @"exit";
 
 @implementation ApptentiveBackend (Metrics)
 
-- (void)addMetricWithName:(NSString *)name fromInteraction:(ApptentiveInteraction *)fromInteraction info:(NSDictionary *)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData {
-	if (self.configuration.metricsEnabled == NO || name == nil) {
+- (void)conversation:(ApptentiveConversation *)conversation addMetricWithName:(NSString *)name fromInteraction:(ApptentiveInteraction *)fromInteraction info:(NSDictionary *)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData {
+	ApptentiveAssertOperationQueue(self.operationQueue);
+
+	if (self.configuration.metricsEnabled == NO || name == nil || conversation.state == ApptentiveConversationStateLoggedOut) {
 		return;
 	}
 
-	dispatch_async(dispatch_get_main_queue(), ^{
-		[ApptentiveSerialRequest enqueueEventWithLabel:name interactionIdentifier:fromInteraction.identifier userInfo:userInfo customData:customData extendedData:extendedData inContext:Apptentive.shared.backend.managedObjectContext];
-	});
+	ApptentiveEventPayload *payload = [[ApptentiveEventPayload alloc] initWithLabel:name];
+	payload.interactionIdentifier = fromInteraction.identifier;
+	payload.userInfo = userInfo;
+	payload.customData = customData;
+	payload.extendedData = extendedData;
+
+	[ApptentiveSerialRequest enqueuePayload:payload forConversation:conversation usingAuthToken:conversation.token inContext:self.managedObjectContext];
 
 	[self processQueuedRecords];
 }

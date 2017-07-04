@@ -23,17 +23,17 @@
 
 @implementation ApptentiveInteractionUsageData
 
-+ (ApptentiveInteractionUsageData *)usageDataWithSession:(ApptentiveSession *)session {
-	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] initWithSession:session];
++ (ApptentiveInteractionUsageData *)usageDataWithConversation:(ApptentiveConversation *)conversation {
+	ApptentiveInteractionUsageData *usageData = [[ApptentiveInteractionUsageData alloc] initWithConversation:conversation];
 
 	return usageData;
 }
 
-- (instancetype)initWithSession:(ApptentiveSession *)session {
+- (instancetype)initWithConversation:(ApptentiveConversation *)conversation {
 	self = [super init];
 
 	if (self) {
-		_session = session;
+		_conversation = conversation;
 	}
 
 	return self;
@@ -78,33 +78,33 @@
 - (NSDictionary *)predicateEvaluationDictionary {
 	NSMutableDictionary *result = [NSMutableDictionary dictionary];
 
-	result[@"is_update/cf_bundle_short_version_string"] = @(self.session.appRelease.isUpdateVersion);
-	result[@"is_update/cf_bundle_version"] = @(self.session.appRelease.isUpdateBuild);
+	result[@"is_update/cf_bundle_short_version_string"] = @(self.conversation.appRelease.isUpdateVersion);
+	result[@"is_update/cf_bundle_version"] = @(self.conversation.appRelease.isUpdateBuild);
 
-	result[@"time_at_install/total"] = [Apptentive timestampObjectWithDate:self.session.appRelease.timeAtInstallTotal];
-	result[@"time_at_install/cf_bundle_short_version_string"] = [Apptentive timestampObjectWithDate:self.session.appRelease.timeAtInstallVersion];
-	result[@"time_at_install/cf_bundle_version"] = [Apptentive timestampObjectWithDate:self.session.appRelease.timeAtInstallBuild];
+	result[@"time_at_install/total"] = [Apptentive timestampObjectWithDate:self.conversation.appRelease.timeAtInstallTotal];
+	result[@"time_at_install/cf_bundle_short_version_string"] = [Apptentive timestampObjectWithDate:self.conversation.appRelease.timeAtInstallVersion];
+	result[@"time_at_install/cf_bundle_version"] = [Apptentive timestampObjectWithDate:self.conversation.appRelease.timeAtInstallBuild];
 
-	result[@"application/cf_bundle_short_version_string"] = [self versionObjectWithVersion:self.session.appRelease.version];
-	result[@"application/cf_bundle_version"] = [self versionObjectWithVersion:self.session.appRelease.build];
-	result[@"application/debug"] = @(self.session.appRelease.debugBuild);
+	result[@"application/cf_bundle_short_version_string"] = [self versionObjectWithVersion:self.conversation.appRelease.version];
+	result[@"application/cf_bundle_version"] = [self versionObjectWithVersion:self.conversation.appRelease.build];
+	result[@"application/debug"] = @(self.conversation.appRelease.debugBuild);
 
-	result[@"sdk/version"] = [self versionObjectWithVersion:self.session.SDK.version];
-	result[@"sdk/distribution"] = self.session.SDK.distributionName;
-	result[@"sdk/distribution_version"] = [self versionObjectWithVersion:self.session.SDK.distributionVersion];
+	result[@"sdk/version"] = [self versionObjectWithVersion:self.conversation.SDK.version];
+	result[@"sdk/distribution"] = self.conversation.SDK.distributionName;
+	result[@"sdk/distribution_version"] = [self versionObjectWithVersion:self.conversation.SDK.distributionVersion];
 
-	result[@"current_time"] = [Apptentive timestampObjectWithDate:self.session.currentTime];
+	result[@"current_time"] = [Apptentive timestampObjectWithDate:self.conversation.currentTime];
 
-	for (NSString *key in self.session.engagement.codePoints) {
-		[result addEntriesFromDictionary:[self countDictionaryForCount:self.session.engagement.codePoints[key] withPrefix:[@"code_point/" stringByAppendingString:[ApptentiveUtilities stringByEscapingForPredicate:key]]]];
+	for (NSString *key in self.conversation.engagement.codePoints) {
+		[result addEntriesFromDictionary:[self countDictionaryForCount:self.conversation.engagement.codePoints[key] withPrefix:[@"code_point/" stringByAppendingString:[ApptentiveUtilities stringByEscapingForPredicate:key]]]];
 	}
 
-	for (NSString *key in self.session.engagement.interactions) {
-		[result addEntriesFromDictionary:[self countDictionaryForCount:self.session.engagement.interactions[key] withPrefix:[@"interactions/" stringByAppendingString:[ApptentiveUtilities stringByEscapingForPredicate:key]]]];
+	for (NSString *key in self.conversation.engagement.interactions) {
+		[result addEntriesFromDictionary:[self countDictionaryForCount:self.conversation.engagement.interactions[key] withPrefix:[@"interactions/" stringByAppendingString:[ApptentiveUtilities stringByEscapingForPredicate:key]]]];
 	}
 
 	// Device
-	NSDictionary *deviceData = self.session.device.JSONDictionary;
+	NSDictionary *deviceData = self.conversation.device.JSONDictionary;
 
 	// Device information
 	for (NSString *key in deviceData) {
@@ -135,7 +135,7 @@
 	}
 
 	// Person
-	NSDictionary *personData = self.session.person.JSONDictionary;
+	NSDictionary *personData = self.conversation.person.JSONDictionary;
 
 	// Person information
 	for (NSString *key in [personData allKeys]) {

@@ -14,7 +14,7 @@ FOUNDATION_EXPORT double ApptentiveVersionNumber;
 //! Project version string for Apptentive.
 FOUNDATION_EXPORT const unsigned char ApptentiveVersionString[];
 
-#define kApptentiveVersionString @"3.5.0"
+#define kApptentiveVersionString @"4.0.0"
 #define kApptentivePlatformString @"iOS"
 
 #ifdef __swift_compiler_version_at_least
@@ -30,6 +30,23 @@ FOUNDATION_EXPORT const unsigned char ApptentiveVersionString[];
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef enum : NSUInteger {
+	ApptentiveAuthenticationFailureReasonUnknown,
+	ApptentiveAuthenticationFailureReasonInvalidAlgorithm,
+	ApptentiveAuthenticationFailureReasonMalformedToken,
+	ApptentiveAuthenticationFailureReasonInvalidToken,
+	ApptentiveAuthenticationFailureReasonMissingSubClaim,
+	ApptentiveAuthenticationFailureReasonMismatchedSubClaim,
+	ApptentiveAuthenticationFailureReasonInvalidSubClaim,
+	ApptentiveAuthenticationFailureReasonExpiredToken,
+	ApptentiveAuthenticationFailureReasonRevokedToken,
+	ApptentiveAuthenticationFailureReasonMissingAppKey,
+	ApptentiveAuthenticationFailureReasonMissingAppSignature,
+	ApptentiveAuthenticationFailureReasonInvalidKeySignaturePair
+} ApptentiveAuthenticationFailureReason;
+
+typedef void (^ApptentiveAuthenticationFailureCallback)(ApptentiveAuthenticationFailureReason reason, NSString *errorMessage);
+
 @protocol ApptentiveDelegate
 , ApptentiveStyle;
 
@@ -44,6 +61,9 @@ extern NSString *const ApptentiveSurveyShownNotification;
 
 /** Notification sent when a survey is submitted by the user. */
 extern NSString *const ApptentiveSurveySentNotification;
+
+/** Error domain for the Apptentive SDK */
+extern NSString *const ApptentiveErrorDomain;
 
 /**
  When a survey is shown or sent, notification's userInfo dictionary will contain the ApptentiveSurveyIDKey key.
@@ -63,14 +83,54 @@ typedef NS_ENUM(NSInteger, ApptentivePushProvider) {
 	ApptentivePushProviderParse,
 };
 
+/** Log levels supported by the logging system */
+typedef NS_ENUM(NSUInteger, ApptentiveLogLevel) {
+	ApptentiveLogLevelCrit = 0,
+	ApptentiveLogLevelError = 1,
+	ApptentiveLogLevelWarn = 2,
+	ApptentiveLogLevelInfo = 3,
+	ApptentiveLogLevelDebug = 4,
+	ApptentiveLogLevelVerbose = 5
+};
+
+/*
+ * Configuration options for Apptentive. When Apptentive instance 
+ * is created, a copy of the configuration object is made -
+ * you cannot modify the configuration of a Apptentive instance after 
+ * it has been created.
+ */
+@interface ApptentiveConfiguration : NSObject
+
+/** Apptentive key */
+@property (copy, nonatomic, readonly) NSString *apptentiveKey;
+
+/** Apptentive signature */
+@property (copy, nonatomic, readonly) NSString *apptentiveSignature;
+
+/** Apptentive SDK log level (defaults to 'info') */
+@property (assign, nonatomic) ApptentiveLogLevel logLevel;
+
+/** Backend URL */
+@property (copy, nonatomic) NSURL *baseURL;
+
+/** The name of the distribution that includes the Apptentive SDK. For example "Cordova". */
+@property (copy, nonatomic, nullable) NSString *distributionName;
+
+/** The version of the distribution that includes the Apptentive SDK. */
+@property (copy, nonatomic, nullable) NSString *distributionVersion;
+
++ (nullable instancetype)configurationWithApptentiveKey:(NSString *)apptentiveKey apptentiveSignature:(NSString *)apptentiveSignature;
+
+@end
+
 /**
  `Apptentive` is a singleton which is used as the main point of entry for the Apptentive service.
 
  ## Configuration
 
-Before calling any other methods on the shared `Apptentive` instance, set the API key:
-
-     [[Apptentive sharedConnection].APIKey = @"your API key here";
+Before calling any other methods on the shared `Apptentive` instance, register you app key and signature:
+     ApptentiveConfiguration *configuration = [ApptentiveConfiguration configurationWithApptentiveKey:@"your APP key here" apptentiveSignature:@"your APP signature here"];
+     [Apptentive registerWithConfiguration:configuration];
 
 ## Engagement Events
 
@@ -115,31 +175,14 @@ Before calling any other methods on the shared `Apptentive` instance, set the AP
 @property (class, readonly, nonatomic) Apptentive *shared;
 #endif
 
-/**
- The API key for Apptentive.
+/** Initializes Apptentive instance with a given configuration */
++ (void)registerWithConfiguration:(ApptentiveConfiguration *)configuration;
 
- This key is found on the Apptentive website under Settings, API & Development.
- */
-@property (copy, nonatomic, nullable) NSString *APIKey;
+/** The key copied from the configuration object. */
+@property (readonly, nonatomic) NSString *apptentiveKey;
 
-/**
- Sets the API key along with distribution name and distribution version.
- This is used when the Apptentive SDK is bundled into another SDK for
- distribution, for example Apache Cordova.
- 
- @param APIKey The API key to use for the first connection to the Apptentive API.
- @param distributionName The name of the distribution that includes the Apptentive SDK. For example "Cordova".
- @param distributionVersion The version of the distribution that includes the Apptentive SDK.
- */
-- (void)setAPIKey:(NSString *)APIKey distributionName:(NSString *)distributionName distributionVersion:(NSString *)distributionVersion;
-
-/**
-  APIKey property with legacy capitalization.
-
- @deprecated Capitalize `API` in the property/setter name.
- */
-
-@property (copy, nonatomic, nullable) NSString *apiKey __deprecated_msg("Use 'APIKey' instead.") APPTENTIVE_SWIFT_UNAVAILABLE("Creates ambiguous name when translated to Swift 3.");
+/** The signature copied from the configuration object. */
+@property (readonly, nonatomic) NSString *apptentiveSignature;
 
 /**
  The app's iTunes App ID.
@@ -245,7 +288,7 @@ Before calling any other methods on the shared `Apptentive` instance, set the AP
 - (BOOL)didReceiveRemoteNotification:(NSDictionary *)userInfo fromViewController:(UIViewController *)viewController;
 
 /**
- Forwards a push notification from your application delegate to Apptentive Connect.
+ Forwards a push notification from your application delegate to Apptentive.
 
  If the push notification originated from Apptentive, Message Center will be presented from the view controller
  when the notification is tapped.
@@ -268,6 +311,15 @@ Before calling any other methods on the shared `Apptentive` instance, set the AP
  */
 
 - (BOOL)didReceiveRemoteNotification:(NSDictionary *)userInfo fromViewController:(UIViewController *)viewController fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler;
+
+/**
+ Forwards a local notification from your application delegate to Apptentive. 
+
+ @param notification The `UILocalNotification` object received by the application delegate.
+ @param viewController The view controller Message Center may be presented from.
+ @return `YES` if the notification was sent by Apptentive, `NO` otherwise.
+ */
+- (BOOL)didReceiveLocalNotification:(UILocalNotification *)notification fromViewController:(UIViewController *)viewController;
 
 /**
 Returns a Boolean value indicating whether the given event will cause an Interaction to be shown.
@@ -551,6 +603,41 @@ Returns a Boolean value indicating whether the given event will cause an Interac
 
 #if APPTENTIVE_DEBUG
 - (void)checkSDKConfiguration;
+#endif
+
+///---------------------------------
+/// @name Authentication
+///---------------------------------
+
+/**
+ Logs the specified user in, using the value of the proof parameter to
+ ensure that the login attempt is authorized.
+
+ @param token An authorization token.
+ @param completion A block that is called when the login attempt succeeds or fails.
+ */
+- (void)logInWithToken:(NSString *)token completion:(void (^)(BOOL success, NSError *error))completion;
+
+/**
+ Ends the current user session. The user session will be persisted in a logged-out state
+ so that it can be resumed using the logIn: method.
+ */
+- (void)logOut;
+
+/**
+ A block that is called when a logged-in conversation's request fails due to a problem with the user's JWT.
+ */
+@property (copy, nonatomic) ApptentiveAuthenticationFailureCallback authenticationFailureCallback;
+
+///---------------------------------
+/// @name Logging System
+///---------------------------------
+
+#ifdef APPTENTIVE_PREFER_PROPERTIES
+@property (assign, nonatomic) ApptentiveLogLevel logLevel;
+#else
+- (ApptentiveLogLevel)logLevel;
+- (void)setLogLevel:(ApptentiveLogLevel)logLevel;
 #endif
 
 @end

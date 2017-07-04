@@ -1,8 +1,9 @@
 language: objective-c
-osx_image: xcode8.2
+osx_image: xcode8.3
 xcode_project: Apptentive/Apptentive.xcodeproj
 xcode_scheme: Apptentive
-before_install:
-    - xcrun simctl delete DB794781-65A7-4884-8D00-AAC3CBD39A44
 script:
-    - xcodebuild clean test -sdk iphonesimulator -project Apptentive/Apptentive.xcodeproj -scheme Apptentive -destination platform="iOS Simulator,name=iPhone SE,OS=10.2" CODE_SIGNING_REQUIRED=NO
+    - xcodebuild clean test -sdk iphonesimulator -project Apptentive/Apptentive.xcodeproj -scheme Apptentive -destination platform="iOS Simulator,name=iPhone SE,OS=10.3.1" CODE_SIGNING_REQUIRED=NO
+notifications:
+  slack:
+    secure: "dg4pLEaCPh1xcb7c6nKEAbyG0YKxkiKk3LrPknLEvTY1wleD/+yG3yLqhNPkm9wirqlxSn5Hh0A/ukm8gvMsb98v/IuslXCLmBYE5jJ0OC41+Ou0UIYcIRREbCsoH5EVwetPGbpC9gA89yrtO1JO/6a9UEBRDibRjHe7ZPj6q70="

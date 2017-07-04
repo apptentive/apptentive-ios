@@ -310,11 +310,13 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 	[self.messageStore.messages addObject:message];
 	[self.messageIdentifierIndex setObject:message forKey:message.localIdentifier];
 
-	dispatch_async(dispatch_get_main_queue(), ^{
-		[self.delegate messageManagerWillBeginUpdates:self];
-		[self.delegate messageManager:self didInsertMessage:message atIndex:index];
-		[self.delegate messageManagerDidEndUpdates:self];
-	});
+	if (self.delegate) {
+		dispatch_async(dispatch_get_main_queue(), ^{
+			[self.delegate messageManagerWillBeginUpdates:self];
+			[self.delegate messageManager:self didInsertMessage:message atIndex:index];
+			[self.delegate messageManagerDidEndUpdates:self];
+		});
+	}
 
 	[self saveMessageStore];
 }

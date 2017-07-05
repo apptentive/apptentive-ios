@@ -33,10 +33,12 @@ NSString *const ApptentiveAppRatingFlowUserAgreedToRateAppNotification = @"Appte
 NSString *const ApptentiveSurveyShownNotification = @"ApptentiveSurveyShownNotification";
 NSString *const ApptentiveSurveySentNotification = @"ApptentiveSurveySentNotification";
 NSString *const ApptentiveSurveyIDKey = @"ApptentiveSurveyIDKey";
+NSString *const ApptentiveInteractionsShouldDismissAnimatedKey = @"ApptentiveInteractionsShouldDismissAnimatedKey";
 
 NSString *const ApptentiveCustomPersonDataChangedNotification = @"ApptentiveCustomPersonDataChangedNotification";
 NSString *const ApptentiveCustomDeviceDataChangedNotification = @"ApptentiveCustomDeviceDataChangedNotification";
 NSString *const ApptentiveInteractionsDidUpdateNotification = @"ApptentiveInteractionsDidUpdateNotification";
+NSString *const ApptentiveInteractionsShouldDismissNotification = @"ApptentiveInteractionsShouldDismissNotification";
 NSString *const ApptentiveConversationCreatedNotification = @"ApptentiveConversationCreatedNotification";
 
 NSString *const ApptentiveCustomDeviceDataPreferenceKey = @"ApptentiveCustomDeviceDataPreferenceKey";
@@ -712,6 +714,9 @@ static Apptentive *_sharedInstance;
 	}
 }
 
+- (void)dismissAllInteractions:(BOOL)animated {
+	[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveInteractionsShouldDismissNotification object:self userInfo:@{ ApptentiveInteractionsShouldDismissAnimatedKey: @(animated) }];
+}
 
 #if APPTENTIVE_DEBUG
 - (void)checkSDKConfiguration {

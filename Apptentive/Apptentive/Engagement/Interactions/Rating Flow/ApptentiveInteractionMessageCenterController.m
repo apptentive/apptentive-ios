@@ -21,6 +21,8 @@
 }
 
 - (void)presentInteractionFromViewController:(UIViewController *)viewController {
+	[super presentInteractionFromViewController:viewController];
+
 	UINavigationController *navigationController = [[ApptentiveUtilities storyboard] instantiateViewControllerWithIdentifier:@"MessageCenterNavigation"];
 	ApptentiveMessageCenterViewController *messageCenter = navigationController.viewControllers.firstObject;
 
@@ -32,6 +34,9 @@
 	[viewModel start];
 
 	messageCenter.viewModel = viewModel;
+
+	// Add owning reference to self so we stick around until VC is dismissed.
+	messageCenter.interactionController = self;
 
 	Apptentive.shared.backend.presentedMessageCenterViewController = messageCenter;
 

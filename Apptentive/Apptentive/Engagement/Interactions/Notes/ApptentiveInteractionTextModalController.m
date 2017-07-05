@@ -23,7 +23,6 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 
 @interface ApptentiveInteractionTextModalController ()
 
-@property (strong, nonatomic) UIViewController *viewController;
 @property (strong, nonatomic) UIAlertController *alertController;
 
 @end
@@ -36,13 +35,13 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 }
 
 - (void)presentInteractionFromViewController:(UIViewController *)viewController {
-	self.viewController = viewController;
+	[super presentInteractionFromViewController:viewController];
 
 	self.alertController = [self alertControllerWithInteraction:self.interaction];
 
 	if (self.alertController) {
 		[viewController presentViewController:self.alertController animated:YES completion:^{
-			[self.interaction engage:ATInteractionTextModalEventLabelLaunch fromViewController:self.viewController];
+			[self.interaction engage:ATInteractionTextModalEventLabelLaunch fromViewController:viewController];
 		}];
 	}
 }
@@ -159,7 +158,9 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 		@"action_id": (actionConfig[@"id"] ?: [NSNull null]),
 	};
 
-	[self.interaction engage:ATInteractionTextModalEventLabelDismiss fromViewController:self.viewController userInfo:userInfo];
+	[self.interaction engage:ATInteractionTextModalEventLabelDismiss fromViewController:self.presentingViewController userInfo:userInfo];
+
+	self.alertController = nil;
 }
 
 - (alertActionHandler)createButtonHandlerBlockDismiss:(NSDictionary *)actionConfig {
@@ -181,11 +182,13 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 		@"action_id": (actionConfig[@"id"] ?: [NSNull null]),
 	};
 
-	[self.interaction engage:ATInteractionTextModalEventLabelInteraction fromViewController:self.viewController userInfo:userInfo];
+	[self.interaction engage:ATInteractionTextModalEventLabelInteraction fromViewController:self.presentingViewController userInfo:userInfo];
 
 	if (interaction) {
-		[[Apptentive sharedConnection].backend presentInteraction:interaction fromViewController:self.viewController];
+		[[Apptentive sharedConnection].backend presentInteraction:interaction fromViewController:self.presentingViewController];
 	}
+
+	self.alertController = nil;
 }
 
 - (alertActionHandler)createButtonHandlerBlockInteractionAction:(NSDictionary *)actionConfig {

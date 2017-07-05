@@ -8,8 +8,10 @@
 
 #import "ApptentiveInteractionController.h"
 #import "ApptentiveInteraction.h"
+#import "Apptentive_Private.h"
 
 static NSDictionary *interactionControllerClassRegistry;
+static NSString *const ApptentiveInteractionEventLabelCancel = @"cancel";
 
 
 @implementation ApptentiveInteractionController
@@ -46,13 +48,32 @@ static NSDictionary *interactionControllerClassRegistry;
 
 	if (self) {
 		_interaction = interaction;
+
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dismissInteractionNotification:) name:ApptentiveInteractionsShouldDismissNotification object:nil];
 	}
 
 	return self;
 }
 
+- (void)dealloc {
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (void)presentInteractionFromViewController:(UIViewController *)viewController {
-	ApptentiveLogInfo(@"Unable to present interaction with unknown type “%@”", self.interaction.type);
+	self.presentingViewController = viewController;
+}
+
+- (void)dismissInteractionNotification:(NSNotification *)notification {
+	BOOL animated = [notification.userInfo[ApptentiveInteractionsShouldDismissAnimatedKey] boolValue];
+	UIViewController *presentingViewController = self.presentingViewController;
+
+	[self.presentingViewController dismissViewControllerAnimated:animated completion:^{
+		[self.interaction engage:self.programmaticDismissEventLabel fromViewController:presentingViewController userInfo:@{ @"cause": @"notification" }];
+	}];
+}
+
+- (NSString *)programmaticDismissEventLabel {
+	return ApptentiveInteractionEventLabelCancel;
 }
 
 @end

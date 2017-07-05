@@ -161,6 +161,7 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 		NSDictionary *appReleaseDiffs = [ApptentiveUtilities diffDictionary:currentAppRelease.JSONDictionary againstDictionary:self.appRelease.JSONDictionary];
 
 		if (appReleaseDiffs.count > 0) {
+			ApptentiveLogDebug(ApptentiveLogTagConversation, @"App release did change.");
 			conversationNeedsUpdate = YES;
 
 			if (![currentAppRelease.version isEqualToVersion:self.appRelease.version]) {
@@ -179,6 +180,8 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 		NSDictionary *SDKDiffs = [ApptentiveUtilities diffDictionary:currentSDK.JSONDictionary againstDictionary:self.SDK.JSONDictionary];
 
 		if (SDKDiffs.count > 0) {
+			ApptentiveLogDebug(ApptentiveLogTagConversation, @"SDK did change.");
+
 			conversationNeedsUpdate = YES;
 
 			_SDK = currentSDK;

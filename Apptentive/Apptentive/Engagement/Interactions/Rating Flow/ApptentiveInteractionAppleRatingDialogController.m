@@ -15,8 +15,16 @@
 NSString *const ApptentiveInteractionAppleRatingDialogEventLabelRequest = @"request";
 NSString *const ApptentiveInteractionAppleRatingDialogEventLabelShown = @"shown";
 NSString *const ApptentiveInteractionAppleRatingDialogEventLabelNotShown = @"not_shown";
+NSString *const ApptentiveInteractionAppleRatingDialogEventLabelFallback = @"fallback";
 
-#define REVIEW_WINDOW_TIMEOUT (int64_t)(1.0 * NSEC_PER_SEC)
+#define REVIEW_WINDOW_TIMEOUT 1.0
+
+
+@interface ApptentiveInteractionAppleRatingDialogController ()
+
+@property (assign, nonatomic) BOOL didShowReviewController;
+
+@end
 
 
 @implementation ApptentiveInteractionAppleRatingDialogController
@@ -26,58 +34,75 @@ NSString *const ApptentiveInteractionAppleRatingDialogEventLabelNotShown = @"not
 }
 
 - (void)presentInteractionFromViewController:(UIViewController *)viewController {
+	[super presentInteractionFromViewController:viewController];
+
 	[self.interaction engage:ApptentiveInteractionAppleRatingDialogEventLabelRequest fromViewController:viewController];
-	NSString *notShownReason = nil;
-
-	// Assume the review request will not be shown…
-	__block BOOL didShowReviewController = NO;
-
-	// …but listen for new windows whose class name starts with "SKStoreReview"
-	id<NSObject> notifier = [[NSNotificationCenter defaultCenter] addObserverForName:UIWindowDidBecomeVisibleNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *_Nonnull note) {
-		if ([NSStringFromClass([note.object class]) hasPrefix:@"SKStoreReview"]) {
-			// Review window was shown
-			didShowReviewController = YES;
-		}
-	}];
 
 // Guard against not having store review controller class in OS and/or SDK
 #ifdef __IPHONE_10_3
 	if ([[SKStoreReviewController class] respondsToSelector:@selector(requestReview)]) {
-		// This may or may not display a review window
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowDidBecomeVisible:) name:UIWindowDidBecomeVisibleNotification object:nil];
+
 		[SKStoreReviewController performSelector:@selector(requestReview)];
+
+		// Give the window a sec to appear before (possibly) invoking fallback
+		[self performSelector:@selector(checkIfAppleRatingDialogShowed) withObject:nil afterDelay:REVIEW_WINDOW_TIMEOUT];
 	} else {
-		notShownReason = @"os too old";
+		[self invokeNotShownInteractionFromViewController:viewController withReason:@"os too old"];
 	}
 #else
-	notShownReason = @"tools too old";
+	[self invokeNotShownInteractionFromViewController:viewController withReason:@"tools too old"];
 #endif
+}
 
-	// Give the window a sec to appear
-	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, REVIEW_WINDOW_TIMEOUT), dispatch_get_main_queue(), ^{
-		[[NSNotificationCenter defaultCenter] removeObserver:notifier];
+- (void)windowDidBecomeVisible:(NSNotification *)notification {
+	if ([NSStringFromClass([notification.object class]) hasPrefix:@"SKStoreReview"]) {
+		// Review window was shown
+		self.didShowReviewController = YES;
+		ApptentiveLogInfo(@"Apple Rating Dialog did appear.");
+	}
+}
 
-		if (didShowReviewController) {
-			[self.interaction engage:ApptentiveInteractionAppleRatingDialogEventLabelShown fromViewController:viewController];
-		} else {
-			[self invokeNotShownInteractionFromViewController:viewController withReason:notShownReason];
-		}
-	});
+- (void)checkIfAppleRatingDialogShowed {
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIWindowDidBecomeVisibleNotification object:nil];
+
+	if (self.didShowReviewController) {
+		[self.interaction engage:ApptentiveInteractionAppleRatingDialogEventLabelShown fromViewController:self.presentingViewController];
+	} else {
+		[self invokeNotShownInteractionFromViewController:self.presentingViewController withReason:nil];
+	}
 }
 
 - (void)invokeNotShownInteractionFromViewController:(UIViewController *)viewController withReason:(NSString *)notShownReason {
 	NSDictionary *userInfo = nil;
 
-	if (notShownReason) {
+	if (notShownReason != nil) {
 		userInfo = @{ @"cause": notShownReason };
+	} else {
+		// Don't include nil notShownReason in userinfo, but explain in log message
+		notShownReason = @"reached limit or user disabled";
 	}
+
+	ApptentiveLogInfo(@"Apple Rating Dialog did not appear (reason: %@)", notShownReason);
 
 	[self.interaction engage:ApptentiveInteractionAppleRatingDialogEventLabelNotShown fromViewController:viewController userInfo:userInfo];
 
-	ApptentiveInteraction *interaction = [Apptentive.shared.backend interactionForIdentifier:self.interaction.configuration[@"not_shown_interaction"]];
+	NSString *notShownInteractionIdentifier = self.interaction.configuration[@"not_shown_interaction"];
 
-	if (interaction) {
-		[[Apptentive sharedConnection].backend presentInteraction:interaction fromViewController:viewController];
+	if (notShownInteractionIdentifier != nil) {
+		ApptentiveInteraction *interaction = [Apptentive.shared.backend interactionForIdentifier:notShownInteractionIdentifier];
+
+		if (interaction) {
+			[self.interaction engage:ApptentiveInteractionAppleRatingDialogEventLabelFallback fromViewController:viewController userInfo:@{ @"fallback_interaction_id": notShownInteractionIdentifier }];
+
+			[[Apptentive sharedConnection].backend presentInteraction:interaction fromViewController:viewController];
+		} else {
+			ApptentiveLogError(@"Apple rating dialog fallback interaction has invalid id: %@", notShownInteractionIdentifier);
+		}
+	} else {
+		ApptentiveLogInfo(@"Apple Rating Dialog fallback interaction not configured.");
 	}
 }
+
 
 @end

@@ -8,6 +8,12 @@
 
 #import "ApptentiveAssert.h"
 
+static ApptentiveAssertionCallback _callback;
+
+void ApptentiveSetAssertionCallback(ApptentiveAssertionCallback callback) {
+    _callback = callback;
+}
+
 void __ApptentiveAssertHelper(const char *expression, const char *file, int line, const char *function, ...) {
 	// TODO: better implemetation
 	va_list ap;
@@ -18,6 +24,8 @@ void __ApptentiveAssertHelper(const char *expression, const char *file, int line
 	}
 	va_end(ap);
 
-	NSLog(@"Assertion failed (%s:%d): %@", file, line, message);
-	abort();
+	NSLog(@"Apptentive Assertion failed (%s:%d): %@", file, line, message);
+    if (_callback) {
+        _callback([NSString stringWithUTF8String:file], line, message);
+    }
 }

@@ -8,6 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
+typedef void(^ApptentiveAssertionCallback)(NSString *filename, NSInteger line, NSString *message);
+
+extern void ApptentiveSetAssertionCallback(ApptentiveAssertionCallback callback);
+
 /*!
  * @define ApptentiveAssertFail(...)
  * Generates a failure.

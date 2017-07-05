@@ -896,6 +896,8 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		[self fetchEngagementManifest];
 	}
 
+	[self.activeConversation checkForDiffs];
+
 	ApptentiveAssertNotNil(self.messageManager, @"Attempted to resume conversation manager without message manager");
 	[self.messageManager checkForMessages];
 }

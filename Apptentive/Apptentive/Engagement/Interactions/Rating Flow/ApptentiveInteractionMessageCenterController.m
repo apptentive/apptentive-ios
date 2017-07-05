@@ -43,4 +43,10 @@
 	[viewController presentViewController:navigationController animated:YES completion:nil];
 }
 
+- (void)dismissInteractionNotification:(NSNotification *)notification {
+	[((ApptentiveMessageCenterViewController *)Apptentive.shared.backend.presentedMessageCenterViewController).viewModel stop];
+
+	[super dismissInteractionNotification:notification];
+}
+
 @end

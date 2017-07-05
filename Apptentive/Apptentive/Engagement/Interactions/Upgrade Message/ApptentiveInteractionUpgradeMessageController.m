@@ -12,6 +12,7 @@
 #import "ApptentiveUtilities.h"
 
 NSString *const ATInteractionUpgradeMessageEventLabelLaunch = @"launch";
+NSString *const ATInteractionUpgradeMessageEventLabelDismiss = @"dismiss";
 
 
 @implementation ApptentiveInteractionUpgradeMessageController
@@ -21,14 +22,23 @@ NSString *const ATInteractionUpgradeMessageEventLabelLaunch = @"launch";
 }
 
 - (void)presentInteractionFromViewController:(UIViewController *)viewController {
+	[super presentInteractionFromViewController:viewController];
+
 	UINavigationController *navigationController = [[ApptentiveUtilities storyboard] instantiateViewControllerWithIdentifier:@"UpgradeMessageNavigation"];
 	ApptentiveInteractionUpgradeMessageViewController *result = (ApptentiveInteractionUpgradeMessageViewController *)navigationController.viewControllers.firstObject;
 
 	result.upgradeMessageInteraction = self.interaction;
 
+	// Add owning reference to self so we stick around until VC is dismissed.
+	result.interactionController = self;
+
 	[viewController presentViewController:navigationController animated:YES completion:nil];
 
 	[result.upgradeMessageInteraction engage:ATInteractionUpgradeMessageEventLabelLaunch fromViewController:viewController];
+}
+
+- (NSString *)programmaticDismissEventLabel {
+	return ATInteractionUpgradeMessageEventLabelDismiss;
 }
 
 @end

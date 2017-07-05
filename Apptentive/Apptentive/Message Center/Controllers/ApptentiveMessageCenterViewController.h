@@ -10,10 +10,16 @@
 #import "ApptentiveMessageCenterViewModel.h"
 
 @class ApptentiveMessageCenterInteraction;
+@class ApptentiveInteractionController;
 
 
 @interface ApptentiveMessageCenterViewController : UITableViewController <ApptentiveMessageCenterViewModelDelegate, UITextViewDelegate, UITextFieldDelegate, UICollectionViewDataSource, UICollectionViewDelegate>
 
 @property (strong, nonatomic) ApptentiveMessageCenterViewModel *viewModel;
+
+// This strong reference makes sure the interaction controller sticks around
+// until the view controller is dismissed (required for
+// `-dismissAllInteractions:` calls).
+@property (strong, nonatomic) ApptentiveInteractionController *interactionController;
 
 @end

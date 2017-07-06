@@ -319,7 +319,7 @@ Before calling any other methods on the shared `Apptentive` instance, register y
  @param viewController The view controller Message Center may be presented from.
  @return `YES` if the notification was sent by Apptentive, `NO` otherwise.
  */
-- (BOOL)didReceiveLocalNotification:(UILocalNotification *)notification fromViewController:(UIViewController *)viewController;
+- (BOOL)didReceiveLocalNotification:(UILocalNotification *)notification fromViewController:(UIViewController *)viewController APPTENTIVE_SWIFT_NAME(didReceiveLocalNotification(_:from:));
 
 /**
 Returns a Boolean value indicating whether the given event will cause an Interaction to be shown.

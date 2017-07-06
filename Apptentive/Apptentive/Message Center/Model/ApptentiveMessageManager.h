@@ -47,6 +47,7 @@
 
 - (void)sendMessage:(ApptentiveMessage *)message;
 - (void)enqueueMessageForSending:(ApptentiveMessage *)message;
+- (void)enqueueMessageForSendingOnBackgroundQueue:(ApptentiveMessage *)message;
 
 - (void)appendMessage:(ApptentiveMessage *)message;
 - (void)removeMessage:(ApptentiveMessage *)message;

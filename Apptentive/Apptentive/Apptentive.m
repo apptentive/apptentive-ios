@@ -592,7 +592,7 @@ static Apptentive *_sharedInstance;
 
 							UILocalNotification *localNotification = [[UILocalNotification alloc] init];
 							localNotification.alertTitle = [ApptentiveUtilities appName];
-							localNotification.alertBody = userInfo[@"apptentive"][@"alert"];
+							localNotification.alertBody = userInfo[@"apptentive"][@"alert"] ?: NSLocalizedString(@"A new message awaits you in Message Center", @"Default push alert body");
 							localNotification.userInfo = @{ @"apptentive": apptentivePayload };
 
 							NSString *soundName = userInfo[@"apptentive"][@"sound"];
@@ -630,7 +630,7 @@ static Apptentive *_sharedInstance;
 						break;
 				}
 			} else {
-				ApptentiveLogInfo(@"Push notification received for conversation that is not active.");
+				ApptentiveLogInfo(@"Push notification received for conversation that is not active. Active conversation ID is %@, push conversation ID is %@", self.backend.conversationManager.activeConversationTemp.identifier, apptentivePayload[@"conversation_id"]);
 			}
 
 			if (shouldCallCompletionHandler && completionHandler) {

@@ -73,7 +73,7 @@ extern NSString *const ApptentiveAuthenticationDidFailNotificationKeyConversatio
  */
 - (void)processQueuedRecords;
 
-- (void)migrateLegacyCoreDataAndTaskQueueForConversation:(ApptentiveConversation *)conversation;
+- (void)migrateLegacyCoreDataAndTaskQueueForConversation:(ApptentiveConversation *)conversation conversationDirectoryPath:(NSString *)directoryPath;
 
 
 /**

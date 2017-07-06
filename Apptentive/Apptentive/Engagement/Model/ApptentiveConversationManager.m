@@ -148,7 +148,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	ApptentiveConversation *legacyConversation = [[ApptentiveConversation alloc] initAndMigrate];
 	if (legacyConversation != nil) {
 		[self fetchLegacyConversation:legacyConversation];
-		[Apptentive.shared.backend migrateLegacyCoreDataAndTaskQueueForConversation:legacyConversation];
+		[Apptentive.shared.backend migrateLegacyCoreDataAndTaskQueueForConversation:legacyConversation conversationDirectoryPath:[self conversationContainerPathForDirectoryName:legacyConversation.directoryName]];
 
 		[self migrateEngagementManifest];
 

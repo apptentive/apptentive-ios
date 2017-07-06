@@ -572,7 +572,7 @@ static Apptentive *_sharedInstance;
 		[self.operationQueue addOperationWithBlock:^{
 			BOOL shouldCallCompletionHandler = YES;
 
-			if ([apptentivePayload[@"conversationId"] isEqualToString:self.backend.conversationManager.activeConversation.identifier]) {
+			if ([apptentivePayload[@"conversation_id"] isEqualToString:self.backend.conversationManager.activeConversation.identifier]) {
 				ApptentiveLogInfo(@"Push notification received for active conversation. userInfo: %@", userInfo);
 
 				switch ([UIApplication sharedApplication].applicationState) {

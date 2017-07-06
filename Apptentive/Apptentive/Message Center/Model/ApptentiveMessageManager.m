@@ -194,6 +194,15 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 		// Sort by sent date
 		[mutableMessages sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"sentDate" ascending:YES]]];
 
+		// But make sure any context message always sorts to end of list
+		if (self.messages.lastObject.automated) {
+			NSString *lastContextMessageIdentifier = self.messages.lastObject.localIdentifier;
+			ApptentiveMessage *lastContextMessage = mutableMessageIdentifierIndex[lastContextMessageIdentifier];
+
+			[mutableMessages removeObject:lastContextMessage];
+			[mutableMessages addObject:lastContextMessage];
+		}
+
 		dispatch_sync(dispatch_get_main_queue(), ^{
 			[self.delegate messageManagerWillBeginUpdates:self];
 

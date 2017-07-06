@@ -469,15 +469,16 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 
 - (void)updateMessageCheckingTimer {
 	ApptentiveAssertOperationQueue(self.operationQueue);
-	ApptentiveAssertNotNil(self.messageManager, @"Message manager is nil");
-	if (self.working) {
-		if (self.messageCenterInForeground) {
-			self.messageManager.pollingInterval = self.configuration.messageCenter.foregroundPollingInterval;
+	if (self.messageManager != nil) {
+		if (self.working) {
+			if (self.messageCenterInForeground) {
+				self.messageManager.pollingInterval = self.configuration.messageCenter.foregroundPollingInterval;
+			} else {
+				self.messageManager.pollingInterval = self.configuration.messageCenter.backgroundPollingInterval;
+			}
 		} else {
-			self.messageManager.pollingInterval = self.configuration.messageCenter.backgroundPollingInterval;
+			[self.messageManager stopPolling];
 		}
-	} else {
-		[self.messageManager stopPolling];
 	}
 }
 

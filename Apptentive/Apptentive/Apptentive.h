@@ -309,7 +309,6 @@ Before calling any other methods on the shared `Apptentive` instance, register y
 
  @return `YES` if the notification was sent by Apptentive, `NO` otherwise.
  */
-
 - (BOOL)didReceiveRemoteNotification:(NSDictionary *)userInfo fromViewController:(UIViewController *)viewController fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler;
 
 /**
@@ -344,6 +343,7 @@ Returns a Boolean value indicating whether the given event will cause an Interac
  @return `YES` if an interaction was triggered by the event, `NO` otherwise.
  */
 - (BOOL)engage:(NSString *)event fromViewController:(UIViewController *_Nullable)viewController APPTENTIVE_SWIFT_NAME(engage(event:from:));
+
 /**
  Shows interaction UI, if applicable, related to a given event, and attaches the specified custom data to the event.
 
@@ -354,6 +354,7 @@ Returns a Boolean value indicating whether the given event will cause an Interac
  @return `YES` if an interaction was triggered by the event, `NO` otherwise.
 */
 - (BOOL)engage:(NSString *)event withCustomData:(nullable NSDictionary *)customData fromViewController:(UIViewController *_Nullable)viewController APPTENTIVE_SWIFT_NAME(engage(event:withCustomData:from:));
+
 /**
  Shows interaction UI, if applicable, related to a given event. Attaches the specified custom data to the event along with the specified extended data.
 

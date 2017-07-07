@@ -504,7 +504,7 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 
 - (void)sendMessage:(NSString *)messageText withAttachments:(NSArray *)attachments {
 	if (self.contextMessage) {
-		[self.messageManager enqueueMessageForSending:self.contextMessage];
+		[self.messageManager enqueueMessageForSendingOnBackgroundQueue:self.contextMessage];
 		self.contextMessage = nil;
 	}
 

@@ -256,6 +256,12 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 	}];
 }
 
+- (void)enqueueMessageForSendingOnBackgroundQueue:(ApptentiveMessage *)message {
+	[self.operationQueue addOperationWithBlock:^{
+		[self enqueueMessageForSending:message];
+	}];
+}
+
 - (void)enqueueMessageForSending:(ApptentiveMessage *)message {
 	ApptentiveAssertOperationQueue(self.operationQueue);
 

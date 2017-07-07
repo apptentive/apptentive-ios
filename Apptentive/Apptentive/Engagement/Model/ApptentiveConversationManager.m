@@ -244,7 +244,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 		[ApptentiveSerialRequest enqueuePayload:payload forConversation:conversation usingAuthToken:conversation.token inContext:self.parentManagedObjectContext];
 
-		[Apptentive.shared.backend processQueuedRecords];
+		[self.delegate processQueuedRecords];
 
 		conversation.state = ApptentiveConversationStateLoggedOut;
 
@@ -533,6 +533,8 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		ApptentiveSDKAppReleasePayload *payload = [[ApptentiveSDKAppReleasePayload alloc] initWithConversation:conversation];
 
         [ApptentiveSerialRequest enqueuePayload:payload forConversation:conversation usingAuthToken:conversation.token inContext:self.parentManagedObjectContext];
+
+		[self.delegate processQueuedRecords];
 
         [self saveConversation:conversation];
 

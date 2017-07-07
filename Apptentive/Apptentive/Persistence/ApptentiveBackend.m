@@ -340,7 +340,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	[self startMonitoringAppLifecycleMetrics];
 }
 
-- (void)migrateLegacyCoreDataAndTaskQueueForConversation:(ApptentiveConversation *)conversation {
+- (void)migrateLegacyCoreDataAndTaskQueueForConversation:(ApptentiveConversation *)conversation conversationDirectoryPath:(NSString *)directoryPath {
 	ApptentiveAssertNotNil(conversation, @"Trying to migrate nil conversation");
 	ApptentiveAssertTrue(conversation.state == ApptentiveConversationStateLegacyPending, @"Trying to migrate conversation that is not a legacy conversation (%@)", NSStringFromApptentiveConversationState(conversation.state));
 
@@ -354,12 +354,15 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 		ApptentiveLogError(@"Unable to delete migrated tasks: %@", error);
 	}
 
+	NSString *newAttachmentPath = [ApptentiveMessageManager attachmentDirectoryPathForConversationDirectory:directoryPath];
+	NSString *oldAttachmentPath = [self.storagePath stringByAppendingString:@"attachments"];
+
 	// Enqueue any unsent messages, events, or survey responses from <= v3.4
 	NSManagedObjectContext *migrationContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
 	migrationContext.parentContext = self.managedObjectContext;
 
 	[migrationContext performBlockAndWait:^{
-		[ApptentiveLegacyMessage enqueueUnsentMessagesInContext:migrationContext forConversation:conversation];
+		[ApptentiveLegacyMessage enqueueUnsentMessagesInContext:migrationContext forConversation:conversation oldAttachmentPath:oldAttachmentPath newAttachmentPath:newAttachmentPath];
 		[ApptentiveLegacyEvent enqueueUnsentEventsInContext:migrationContext forConversation:conversation];
 		[ApptentiveLegacySurveyResponse enqueueUnsentSurveyResponsesInContext:migrationContext forConversation:conversation];
 

@@ -53,6 +53,8 @@
 
 - (void)updateUnreadCount;
 
++ (NSString *)attachmentDirectoryPathForConversationDirectory:(NSString *)storagePath;
+
 @property (readonly, nonatomic) NSString *attachmentDirectoryPath;
 
 @end

@@ -130,7 +130,11 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 }
 
 - (NSString *)attachmentDirectoryPath {
-	return [self.storagePath stringByAppendingPathComponent:@"Attachments"];
+	return [[self class] attachmentDirectoryPathForConversationDirectory:self.storagePath];
+}
+
++ (NSString *)attachmentDirectoryPathForConversationDirectory:(NSString *)conversationDirectory {
+	return [conversationDirectory stringByAppendingPathComponent:@"Attachments"];
 }
 
 #pragma mark Request Operation Delegate

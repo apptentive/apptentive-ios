@@ -37,7 +37,7 @@
 @dynamic body;
 @dynamic attachments;
 
-+ (void)enqueueUnsentMessagesInContext:(NSManagedObjectContext *)context forConversation:(ApptentiveConversation *)conversation {
++ (void)enqueueUnsentMessagesInContext:(NSManagedObjectContext *)context forConversation:(ApptentiveConversation *)conversation oldAttachmentPath:(NSString *)oldAttachmentPath newAttachmentPath:(NSString *)newAttachmentPath {
 	ApptentiveAssertNotNil(context, @"Context is nil");
 	ApptentiveAssertNotNil(conversation, @"Conversation is nil");
 
@@ -51,11 +51,6 @@
 		return;
 	}
 
-	ApptentiveMessageManager *messageManager = Apptentive.shared.backend.conversationManager.messageManager;
-	ApptentiveAssertNotNil(messageManager, @"Need an active message manager to migrate");
-
-	NSString *legacyAttachmentDirectoryPath = [Apptentive.shared.backend.supportDirectoryPath stringByAppendingPathComponent:@"attachments"];
-
 	for (ApptentiveLegacyMessage *legacyMessage in unsentMessages) {
 		NSInteger pendingState = legacyMessage.pendingState.integerValue;
 
@@ -64,7 +59,7 @@
 			NSMutableArray *attachments = [NSMutableArray arrayWithCapacity:legacyMessage.attachments.count];
 			for (ApptentiveLegacyFileAttachment *legacyAttachment in legacyMessage.attachments) {
 				// Move the file from its current location into the conversation's container.
-				NSString *oldPath = [legacyAttachmentDirectoryPath stringByAppendingPathComponent:legacyAttachment.localPath];
+				NSString *oldPath = [oldAttachmentPath stringByAppendingPathComponent:legacyAttachment.localPath];
 
 				// QLPreviewController needs a valid extension. Try to add one if it's missing.
 				NSString *filename = oldPath.lastPathComponent;
@@ -72,7 +67,7 @@
 					filename = [filename stringByAppendingPathExtension:legacyAttachment.extension];
 				}
 
-				NSString *newPath = [messageManager.attachmentDirectoryPath stringByAppendingPathComponent:filename];
+				NSString *newPath = [newAttachmentPath stringByAppendingPathComponent:filename];
 
 				if (![[NSFileManager defaultManager] moveItemAtPath:oldPath toPath:newPath error:&error]) {
 					ApptentiveLogError(@"Unable to move attachment file to %@: %@", newPath, error);
@@ -104,8 +99,8 @@
 		[context deleteObject:legacyMessage];
 	}
 
-	if (![[NSFileManager defaultManager] removeItemAtPath:legacyAttachmentDirectoryPath error:&error]) {
-		ApptentiveLogError(@"Unable to remove legacy attachments directory (%@): %@", legacyAttachmentDirectoryPath, error);
+	if (![[NSFileManager defaultManager] removeItemAtPath:oldAttachmentPath error:&error]) {
+		ApptentiveLogError(@"Unable to remove legacy attachments directory (%@): %@", oldAttachmentPath, error);
 	}
 }
 

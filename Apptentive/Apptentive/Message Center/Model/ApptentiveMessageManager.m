@@ -197,10 +197,13 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 		// But make sure any context message always sorts to end of list
 		if (self.messages.lastObject.automated) {
 			NSString *lastContextMessageIdentifier = self.messages.lastObject.localIdentifier;
-			ApptentiveMessage *lastContextMessage = mutableMessageIdentifierIndex[lastContextMessageIdentifier];
-
-			[mutableMessages removeObject:lastContextMessage];
-			[mutableMessages addObject:lastContextMessage];
+			ApptentiveAssertNotNil(lastContextMessageIdentifier, @"Last context message identifier is nil");
+			ApptentiveMessage *lastContextMessage = lastContextMessageIdentifier ? mutableMessageIdentifierIndex[lastContextMessageIdentifier] : nil;
+			ApptentiveAssertNotNil(lastContextMessage, @"Can't find last context message with identifier: %@", lastContextMessageIdentifier);
+			if (lastContextMessage != nil) {
+				[mutableMessages removeObject:lastContextMessage];
+				[mutableMessages addObject:lastContextMessage];
+			}
 		}
 
 		dispatch_sync(dispatch_get_main_queue(), ^{

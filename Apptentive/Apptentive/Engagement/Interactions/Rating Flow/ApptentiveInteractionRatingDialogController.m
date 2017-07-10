@@ -112,4 +112,10 @@ NSString *const ATInteractionRatingDialogEventLabelDecline = @"decline";
 	return alertController;
 }
 
+- (void)dismissInteractionNotification:(NSNotification *)notification {
+	self.alertController = nil;
+
+	[super dismissInteractionNotification:notification];
+}
+
 @end

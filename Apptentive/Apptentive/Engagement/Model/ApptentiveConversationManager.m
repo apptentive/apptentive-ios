@@ -417,7 +417,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
         
         NSString *userId = jwt.payload[@"sub"];
         if (userId.length == 0) {
-            [self failLoginWithErrorCode:ApptentiveInternalInconsistency failureReason:@"'user_id' is nil or empty."];
+            [self failLoginWithErrorCode:ApptentiveInternalInconsistency failureReason:@"MISSING_SUB_CLAIM"];
             return;
         }
 

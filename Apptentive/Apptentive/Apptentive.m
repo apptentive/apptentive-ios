@@ -764,6 +764,8 @@ static Apptentive *_sharedInstance;
 }
 
 - (void)logOut {
+	[self dismissAllInteractions:NO];
+
 	[self.operationQueue addOperationWithBlock:^{
 		if (self.backend.conversationManager.activeConversation.state != ApptentiveConversationStateLoggedIn) {
 			ApptentiveLogError(@"Attempting to log out of a conversation that is not logged in.");

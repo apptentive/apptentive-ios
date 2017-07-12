@@ -35,7 +35,7 @@
 	}
 
 	for (ApptentiveLegacySurveyResponse *response in unsentSurveyResponses) {
-		NSDictionary *JSON = response.apiJSON;
+		NSDictionary *JSON = response.apiJSON[@"survey"];
 
 		ApptentiveSurveyResponsePayload *payload = [[ApptentiveSurveyResponsePayload alloc] initWithAnswers:JSON[@"answers"] identifier:JSON[@"id"]];
 		ApptentiveAssertNotNil(payload, @"Failed to create a survey response payload");

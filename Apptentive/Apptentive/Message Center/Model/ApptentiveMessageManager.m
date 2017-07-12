@@ -56,6 +56,12 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 		_messageIdentifierIndex = [NSMutableDictionary dictionary];
 		_messageStore = [NSKeyedUnarchiver unarchiveObjectWithFile:self.messageStorePath] ?: [[ApptentiveMessageStore alloc] init];
 
+		for (ApptentiveMessage *message in _messageStore.messages) {
+			for (ApptentiveAttachment *attachment in message.attachments) {
+				attachment.attachmentDirectoryPath = self.attachmentDirectoryPath;
+			}
+		}
+
 		[self updateUnreadCount];
 
 		NSError *error;
@@ -134,7 +140,18 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 }
 
 + (NSString *)attachmentDirectoryPathForConversationDirectory:(NSString *)conversationDirectory {
-	return [conversationDirectory stringByAppendingPathComponent:@"Attachments"];
+	NSString *result = [conversationDirectory stringByAppendingPathComponent:@"Attachments"];
+
+	if (![[NSFileManager defaultManager] fileExistsAtPath:result]) {
+		NSError *error;
+
+		if (![[NSFileManager defaultManager] createDirectoryAtPath:result withIntermediateDirectories:YES attributes:nil error:&error]) {
+			ApptentiveLogError(@"Unable to create attachments directory (%@): %@", result, error);
+			return nil;
+		}
+	}
+
+	return result;
 }
 
 #pragma mark Request Operation Delegate

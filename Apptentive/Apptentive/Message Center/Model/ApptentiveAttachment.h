@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ApptentiveAttachment : NSObject <NSSecureCoding>
 
-@property (readonly, nonatomic) NSString *fileName;
+@property (readonly, nonatomic) NSString *filename;
 @property (readonly, nonatomic) NSString *contentType;
 @property (readonly, nonatomic) NSString *name;
 @property (readonly, nonatomic) NSInteger size;

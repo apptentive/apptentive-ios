@@ -19,7 +19,7 @@
 #import "ApptentiveDefines.h"
 
 
-static NSString *const FileNameKey = @"fileName";
+static NSString *const FileNameKey = @"filename";
 static NSString *const ContentTypeKey = @"contentType";
 static NSString *const NameKey = @"name";
 static NSString *const SizeKey = @"size";
@@ -75,7 +75,7 @@ static NSString *const RemoteURLKey = @"remoteURL";
 			return nil;
 		}
 
-		_fileName = path.lastPathComponent;
+		_filename = path.lastPathComponent;
 		_contentType = contentType;
 		_name = name;
 	}
@@ -96,7 +96,7 @@ static NSString *const RemoteURLKey = @"remoteURL";
 
 		NSURL *URL = [self permanentLocation];
 		[data writeToURL:URL atomically:YES];
-		_fileName = URL.lastPathComponent;
+		_filename = URL.lastPathComponent;
 		_size = [data length];
 	}
 
@@ -106,7 +106,7 @@ static NSString *const RemoteURLKey = @"remoteURL";
 - (instancetype)initWithCoder:(NSCoder *)coder {
 	self = [super init];
 	if (self) {
-		_fileName = [coder decodeObjectOfClass:[NSString class] forKey:FileNameKey];
+		_filename = [coder decodeObjectOfClass:[NSString class] forKey:FileNameKey];
 		_contentType = [coder decodeObjectOfClass:[NSString class] forKey:ContentTypeKey];
 		_name = [coder decodeObjectOfClass:[NSString class] forKey:NameKey];
 		_size = [coder decodeIntegerForKey:SizeKey];
@@ -116,7 +116,7 @@ static NSString *const RemoteURLKey = @"remoteURL";
 }
 
 - (void)encodeWithCoder:(NSCoder *)coder {
-	[coder encodeObject:self.fileName forKey:FileNameKey];
+	[coder encodeObject:self.filename forKey:FileNameKey];
 	[coder encodeObject:self.contentType forKey:ContentTypeKey];
 	[coder encodeObject:self.name forKey:NameKey];
 	[coder encodeInteger:self.size forKey:SizeKey];
@@ -130,7 +130,7 @@ static NSString *const RemoteURLKey = @"remoteURL";
 
 - (void)completeMoveToStorageFor:(NSURL *)storageLocation {
 	[self deleteSidecarIfNecessary];
-	_fileName = storageLocation.lastPathComponent;
+	_filename = storageLocation.lastPathComponent;
 }
 
 - (NSString *)fullLocalPath {
@@ -186,7 +186,7 @@ static NSString *const RemoteURLKey = @"remoteURL";
 
 - (void)deleteLocalContent {
 	[self deleteSidecarIfNecessary];
-	_fileName = nil;
+	_filename = nil;
 }
 
 - (ApptentiveAttachment *)mergedWith:(ApptentiveAttachment *)attachmentFromServer {
@@ -198,10 +198,10 @@ static NSString *const RemoteURLKey = @"remoteURL";
 #pragma mark - Private
 
 - (NSString *)filenameForThumbnailOfSize:(CGSize)size {
-	if (self.fileName == nil) {
+	if (self.filename == nil) {
 		return nil;
 	}
-	return [NSString stringWithFormat:@"%@_%dx%d_fit.jpeg", self.fileName.stringByDeletingPathExtension, (int)floor(size.width), (int)floor(size.height)];
+	return [NSString stringWithFormat:@"%@_%dx%d_fit.jpeg", self.filename.stringByDeletingPathExtension, (int)floor(size.width), (int)floor(size.height)];
 }
 
 - (UIImage *)createThumbnailOfSize:(CGSize)size {
@@ -267,7 +267,7 @@ static NSString *const RemoteURLKey = @"remoteURL";
 }
 
 - (void)deleteSidecarIfNecessary {
-	if (self.fileName) {
+	if (self.filename) {
 		NSFileManager *fm = [NSFileManager defaultManager];
 		NSString *fullPath = [self fullLocalPath];
 		NSError *error = nil;
@@ -302,7 +302,7 @@ static NSString *const RemoteURLKey = @"remoteURL";
 				}
 			}
 		}
-		_fileName = nil;
+		_filename = nil;
 	}
 }
 

@@ -56,6 +56,10 @@ NSString *const ATInteractionMessageCenterEventLabelNoInteractionClose = @"no_in
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dismissNotification:) name:ApptentiveInteractionsShouldDismissNotification object:nil];
 }
 
+- (void)dealloc {
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (IBAction)dismiss:(id)sender {
 	[Apptentive.shared.backend engageCodePoint:[self codePointForEvent:ATInteractionMessageCenterEventLabelNoInteractionClose] fromInteraction:nil userInfo:nil customData:nil extendedData:nil fromViewController:self];
 

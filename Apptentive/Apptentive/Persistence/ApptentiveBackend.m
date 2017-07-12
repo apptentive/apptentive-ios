@@ -355,7 +355,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	}
 
 	NSString *newAttachmentPath = [ApptentiveMessageManager attachmentDirectoryPathForConversationDirectory:directoryPath];
-	NSString *oldAttachmentPath = [self.storagePath stringByAppendingString:@"attachments"];
+	NSString *oldAttachmentPath = [self.supportDirectoryPath stringByAppendingPathComponent:@"attachments"];
 
 	// Enqueue any unsent messages, events, or survey responses from <= v3.4
 	NSManagedObjectContext *migrationContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];

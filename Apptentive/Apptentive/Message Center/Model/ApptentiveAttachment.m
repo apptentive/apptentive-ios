@@ -19,7 +19,7 @@
 #import "ApptentiveDefines.h"
 
 
-static NSString *const FileNameKey = @"fileName";
+static NSString *const FileNameKey = @"filename";
 static NSString *const ContentTypeKey = @"contentType";
 static NSString *const NameKey = @"name";
 static NSString *const SizeKey = @"size";
@@ -75,7 +75,8 @@ static NSString *const RemoteURLKey = @"remoteURL";
 			return nil;
 		}
 
-		_fileName = path.lastPathComponent;
+		_filename = path.lastPathComponent;
+		_attachmentDirectoryPath = path.stringByDeletingLastPathComponent;
 		_contentType = contentType;
 		_name = name;
 	}
@@ -83,7 +84,7 @@ static NSString *const RemoteURLKey = @"remoteURL";
 	return self;
 }
 
-- (instancetype)initWithData:(NSData *)data contentType:(NSString *)contentType name:(NSString *)name {
+- (instancetype)initWithData:(NSData *)data contentType:(NSString *)contentType name:(NSString *)name attachmentDirectoryPath:(nonnull NSString *)attachmentDirectoryPath {
 	self = [super init];
 
 	// TODO: check input data
@@ -93,10 +94,11 @@ static NSString *const RemoteURLKey = @"remoteURL";
 
 		_contentType = contentType;
 		_name = name;
+		_attachmentDirectoryPath = attachmentDirectoryPath;
 
 		NSURL *URL = [self permanentLocation];
 		[data writeToURL:URL atomically:YES];
-		_fileName = URL.lastPathComponent;
+		_filename = URL.lastPathComponent;
 		_size = [data length];
 	}
 
@@ -106,7 +108,7 @@ static NSString *const RemoteURLKey = @"remoteURL";
 - (instancetype)initWithCoder:(NSCoder *)coder {
 	self = [super init];
 	if (self) {
-		_fileName = [coder decodeObjectOfClass:[NSString class] forKey:FileNameKey];
+		_filename = [coder decodeObjectOfClass:[NSString class] forKey:FileNameKey];
 		_contentType = [coder decodeObjectOfClass:[NSString class] forKey:ContentTypeKey];
 		_name = [coder decodeObjectOfClass:[NSString class] forKey:NameKey];
 		_size = [coder decodeIntegerForKey:SizeKey];
@@ -116,7 +118,7 @@ static NSString *const RemoteURLKey = @"remoteURL";
 }
 
 - (void)encodeWithCoder:(NSCoder *)coder {
-	[coder encodeObject:self.fileName forKey:FileNameKey];
+	[coder encodeObject:self.filename forKey:FileNameKey];
 	[coder encodeObject:self.contentType forKey:ContentTypeKey];
 	[coder encodeObject:self.name forKey:NameKey];
 	[coder encodeInteger:self.size forKey:SizeKey];
@@ -125,16 +127,17 @@ static NSString *const RemoteURLKey = @"remoteURL";
 
 - (NSURL *)permanentLocation {
 	NSString *name = [[NSUUID UUID].UUIDString stringByAppendingPathExtension:self.extension];
-	return [NSURL fileURLWithPath:[[self class] fullLocalPathForFilename:name]];
+	return [NSURL fileURLWithPath:[self fullLocalPathForFilename:name]];
 }
 
 - (void)completeMoveToStorageFor:(NSURL *)storageLocation {
 	[self deleteSidecarIfNecessary];
-	_fileName = storageLocation.lastPathComponent;
+	_filename = storageLocation.lastPathComponent;
+	_attachmentDirectoryPath = storageLocation.path.stringByDeletingLastPathComponent;
 }
 
 - (NSString *)fullLocalPath {
-	return [[self class] fullLocalPathForFilename:self.fileName];
+	return [self.attachmentDirectoryPath stringByAppendingPathComponent:self.filename];
 }
 
 #pragma mark - Computed Properties
@@ -176,7 +179,7 @@ static NSString *const RemoteURLKey = @"remoteURL";
 	if (!filename) {
 		return nil;
 	}
-	NSString *path = [[self class] fullLocalPathForFilename:filename];
+	NSString *path = [self fullLocalPathForFilename:filename];
 	UIImage *image = [UIImage imageWithContentsOfFile:path];
 	if (image == nil) {
 		image = [self createThumbnailOfSize:size];
@@ -186,7 +189,7 @@ static NSString *const RemoteURLKey = @"remoteURL";
 
 - (void)deleteLocalContent {
 	[self deleteSidecarIfNecessary];
-	_fileName = nil;
+	_filename = nil;
 }
 
 - (ApptentiveAttachment *)mergedWith:(ApptentiveAttachment *)attachmentFromServer {
@@ -198,10 +201,10 @@ static NSString *const RemoteURLKey = @"remoteURL";
 #pragma mark - Private
 
 - (NSString *)filenameForThumbnailOfSize:(CGSize)size {
-	if (self.fileName == nil) {
+	if (self.filename == nil) {
 		return nil;
 	}
-	return [NSString stringWithFormat:@"%@_%dx%d_fit.jpeg", self.fileName.stringByDeletingPathExtension, (int)floor(size.width), (int)floor(size.height)];
+	return [NSString stringWithFormat:@"%@_%dx%d_fit.jpeg", self.filename.stringByDeletingPathExtension, (int)floor(size.width), (int)floor(size.height)];
 }
 
 - (UIImage *)createThumbnailOfSize:(CGSize)size {
@@ -227,19 +230,23 @@ static NSString *const RemoteURLKey = @"remoteURL";
 		CGImageRelease(thumbnail);
 
 		NSString *filename = [self filenameForThumbnailOfSize:size];
-		NSString *fullThumbnailPath = [[self class] fullLocalPathForFilename:filename];
+		NSString *fullThumbnailPath = [self fullLocalPathForFilename:filename];
 		[UIImagePNGRepresentation(thumbnailImage) writeToFile:fullThumbnailPath atomically:YES];
 	}
 
 	return thumbnailImage;
 }
 
-+ (NSString *)fullLocalPathForFilename:(NSString *)filename {
-	if (!filename) {
+- (NSString *)fullLocalPathForFilename:(NSString *)filename {
+	ApptentiveAssertNotEmpty(filename, @"Filename is required");
+	ApptentiveAssertNotEmpty(self.attachmentDirectoryPath, @"Attachment directory path must be set");
+
+	if (filename.length == 0 || self.attachmentDirectoryPath.length == 0) {
+		ApptentiveLogError(@"Attempting to access attachment without attachment directory path set");
 		return nil; // TODO: assertion?
 	}
-	ApptentiveAssertNotNil(Apptentive.shared.backend.conversationManager.messageManager, @"Can't resolve full local path for '%@': message manager is not initialized", filename);
-	return [Apptentive.shared.backend.conversationManager.messageManager.attachmentDirectoryPath stringByAppendingPathComponent:filename];
+
+	return [self.attachmentDirectoryPath stringByAppendingPathComponent:filename];
 }
 
 + (BOOL)canCreateThumbnailForMIMEType:(NSString *)MIMEType {
@@ -267,7 +274,7 @@ static NSString *const RemoteURLKey = @"remoteURL";
 }
 
 - (void)deleteSidecarIfNecessary {
-	if (self.fileName) {
+	if (self.filename) {
 		NSFileManager *fm = [NSFileManager defaultManager];
 		NSString *fullPath = [self fullLocalPath];
 		NSError *error = nil;
@@ -291,8 +298,8 @@ static NSString *const RemoteURLKey = @"remoteURL";
 				ApptentiveLogError(@"Error listing attachments directory: %@", error);
 			} else {
 				for (NSString *filename in filenames) {
-					if ([filename hasPrefix:self.fileName.stringByDeletingPathExtension]) {
-						NSString *thumbnailPath = [[self class] fullLocalPathForFilename:filename];
+					if ([filename hasPrefix:self.filename.stringByDeletingPathExtension]) {
+						NSString *thumbnailPath = [self fullLocalPathForFilename:filename];
 
 						if (![fm removeItemAtPath:thumbnailPath error:&error]) {
 							ApptentiveLogError(@"Error removing attachment thumbnail at path: %@. %@", thumbnailPath, error);
@@ -302,7 +309,7 @@ static NSString *const RemoteURLKey = @"remoteURL";
 				}
 			}
 		}
-		_fileName = nil;
+		_filename = nil;
 	}
 }
 
@@ -316,12 +323,12 @@ static NSString *const RemoteURLKey = @"remoteURL";
 }
 
 - (NSURL *)previewItemURL {
-	if (self.fileName) {
+	if (self.filename) {
 		return [NSURL fileURLWithPath:self.fullLocalPath];
 	} else {
 		// Use fake path
 		NSString *name = self.name ?: [[NSUUID UUID].UUIDString stringByAppendingPathExtension:self.extension];
-		return [NSURL fileURLWithPath:[[self class] fullLocalPathForFilename:name]];
+		return [NSURL fileURLWithPath:[self fullLocalPathForFilename:name]];
 	}
 }
 

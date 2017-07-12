@@ -381,19 +381,20 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 - (BOOL)shouldUsePlaceholderForAttachmentAtIndexPath:(NSIndexPath *)indexPath {
 	ApptentiveAttachment *attachment = [self fileAttachmentAtIndexPath:indexPath];
 
-	return attachment.fileName == nil || !attachment.canCreateThumbnail;
+	return attachment.filename == nil || !attachment.canCreateThumbnail;
 }
 
 - (BOOL)canPreviewAttachmentAtIndexPath:(NSIndexPath *)indexPath {
 	ApptentiveAttachment *attachment = [self fileAttachmentAtIndexPath:indexPath];
 
-	return attachment.fileName != nil;
+	return attachment.filename != nil;
 }
 
 - (UIImage *)imageForAttachmentAtIndexPath:(NSIndexPath *)indexPath size:(CGSize)size {
 	ApptentiveAttachment *attachment = [self fileAttachmentAtIndexPath:indexPath];
+	attachment.attachmentDirectoryPath = self.messageManager.attachmentDirectoryPath;
 
-	if (attachment.fileName) {
+	if (attachment.filename) {
 		UIImage *thumbnail = [attachment thumbnailOfSize:size];
 		if (thumbnail) {
 			return thumbnail;
@@ -416,7 +417,8 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 	}
 
 	ApptentiveAttachment *attachment = [self fileAttachmentAtIndexPath:indexPath];
-	if (attachment.fileName != nil || !attachment.remoteURL) {
+	attachment.attachmentDirectoryPath = self.messageManager.attachmentDirectoryPath;
+	if (attachment.filename != nil || !attachment.remoteURL) {
 		ApptentiveLogError(@"Attempting to download attachment with missing or invalid remote URL");
 		return;
 	}

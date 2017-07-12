@@ -100,7 +100,7 @@ NSString *const ATInteractionMessageCenterEventLabelAttachmentDelete = @"attachm
 
 			// TODO: Localize this once server can accept non-ASCII filenames
 			NSString *name = [NSString stringWithFormat:@"Attachment %@", numberString];
-			ApptentiveAttachment *attachment = [[ApptentiveAttachment alloc] initWithData:UIImageJPEGRepresentation(image, 0.6) contentType:@"image/jpeg" name:name];
+			ApptentiveAttachment *attachment = [[ApptentiveAttachment alloc] initWithData:UIImageJPEGRepresentation(image, 0.6) contentType:@"image/jpeg" name:name attachmentDirectoryPath:self.viewController.viewModel.messageManager.attachmentDirectoryPath];
 
 			index++;
 			ApptentiveAssertNotNil(attachment, @"Attachment is nil");

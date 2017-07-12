@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ApptentiveAttachment : NSObject <NSSecureCoding>
 
-@property (readonly, nonatomic) NSString *fileName;
+@property (readonly, nonatomic) NSString *filename;
 @property (readonly, nonatomic) NSString *contentType;
 @property (readonly, nonatomic) NSString *name;
 @property (readonly, nonatomic) NSInteger size;
@@ -25,12 +25,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable instancetype)initWithJSON:(NSDictionary *)JSON;
 - (nullable instancetype)initWithPath:(NSString *)path contentType:(NSString *)contentType name:(nullable NSString *)name;
-- (nullable instancetype)initWithData:(NSData *)data contentType:(NSString *)contentType name:(nullable NSString *)name;
+- (nullable instancetype)initWithData:(NSData *)data contentType:(NSString *)contentType name:(nullable NSString *)name attachmentDirectoryPath:(NSString *)attachmentDirectoryPath;
 
+@property (strong, nonatomic) NSString *attachmentDirectoryPath;
 @property (readonly, nonatomic) NSString *extension;
 @property (readonly, nonatomic) BOOL canCreateThumbnail;
 
 - (nullable UIImage *)thumbnailOfSize:(CGSize)size;
+- (NSString *)fullLocalPathForFilename:(NSString *)filename;
 
 /** Can be called from background thread. */
 - (NSURL *)permanentLocation;

@@ -226,7 +226,12 @@ static Apptentive *_sharedInstance;
 			return;
 		}
 
-		ApptentiveAttachment *attachment = [[ApptentiveAttachment alloc] initWithData:imageData contentType:@"image/jpeg" name:nil];
+		if (self.backend.conversationManager.messageManager == nil) {
+			ApptentiveLogError(@"Unable to send attachment file: message manager is not initialized");
+			return;
+		}
+
+		ApptentiveAttachment *attachment = [[ApptentiveAttachment alloc] initWithData:imageData contentType:@"image/jpeg" name:nil attachmentDirectoryPath:self.backend.conversationManager.messageManager.attachmentDirectoryPath];
 		ApptentiveAssertNotNil(attachment, @"Attachment is nil");
 		if (attachment != nil) {
 			ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:nil attachments:@[attachment] automated:NO customData:nil];
@@ -260,7 +265,12 @@ static Apptentive *_sharedInstance;
 			return;
 		}
 
-		ApptentiveAttachment *attachment = [[ApptentiveAttachment alloc] initWithData:fileData contentType:mimeType name:nil];
+		if (self.backend.conversationManager.messageManager == nil) {
+			ApptentiveLogError(@"Unable to send attachment file: message manager is not initialized");
+			return;
+		}
+
+		ApptentiveAttachment *attachment = [[ApptentiveAttachment alloc] initWithData:fileData contentType:mimeType name:nil attachmentDirectoryPath:self.backend.conversationManager.messageManager.attachmentDirectoryPath];
 		ApptentiveAssertNotNil(attachment, @"Attachment is nil");
 
 		if (attachment != nil) {

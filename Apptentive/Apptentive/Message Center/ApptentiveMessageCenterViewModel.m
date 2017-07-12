@@ -392,6 +392,7 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 
 - (UIImage *)imageForAttachmentAtIndexPath:(NSIndexPath *)indexPath size:(CGSize)size {
 	ApptentiveAttachment *attachment = [self fileAttachmentAtIndexPath:indexPath];
+	attachment.attachmentDirectoryPath = self.messageManager.attachmentDirectoryPath;
 
 	if (attachment.filename) {
 		UIImage *thumbnail = [attachment thumbnailOfSize:size];
@@ -416,6 +417,7 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 	}
 
 	ApptentiveAttachment *attachment = [self fileAttachmentAtIndexPath:indexPath];
+	attachment.attachmentDirectoryPath = self.messageManager.attachmentDirectoryPath;
 	if (attachment.filename != nil || !attachment.remoteURL) {
 		ApptentiveLogError(@"Attempting to download attachment with missing or invalid remote URL");
 		return;

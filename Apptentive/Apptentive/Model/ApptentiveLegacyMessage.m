@@ -40,8 +40,11 @@
 + (void)enqueueUnsentMessagesInContext:(NSManagedObjectContext *)context forConversation:(ApptentiveConversation *)conversation oldAttachmentPath:(NSString *)oldAttachmentPath newAttachmentPath:(NSString *)newAttachmentPath {
 	ApptentiveAssertNotNil(context, @"Context is nil");
 	ApptentiveAssertNotNil(conversation, @"Conversation is nil");
+	ApptentiveAssertNotNil(oldAttachmentPath, @"Old attachment path is nil");
+	ApptentiveAssertNotNil(newAttachmentPath, @"New attachment path is nil");
 
 	NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"ATMessage"];
+	request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"clientCreationTime" ascending:YES]];
 
 	NSError *error;
 	NSArray *unsentMessages = [context executeFetchRequest:request error:&error];
@@ -87,6 +90,10 @@
 			};
 
 			ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:legacyMessage.body attachments:attachments automated:legacyMessage.automated.boolValue customData:customData];
+
+			if (legacyMessage.hidden.boolValue) {
+				message.state = ApptentiveMessageStateHidden;
+			}
 
 			ApptentiveMessagePayload *payload = [[ApptentiveMessagePayload alloc] initWithMessage:message];
 			ApptentiveAssertNotNil(payload, @"Failed to create a message payload");

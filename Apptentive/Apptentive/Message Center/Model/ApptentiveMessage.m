@@ -85,9 +85,9 @@ static NSString *const InboundKey = @"inboundKey";
 			_state = ApptentiveMessageStateHidden;
 		} else {
 			if (_inbound) {
-				_state = ApptentiveMessageStateUnread;
-			} else {
 				_state = ApptentiveMessageStateSent;
+			} else {
+				_state = ApptentiveMessageStateUnread;
 			}
 		}
 

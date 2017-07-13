@@ -284,13 +284,6 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 	return [NSDate date];
 }
 
-- (NSDictionary *)appReleaseSDKJSON {
-	NSMutableDictionary *result = [[NSMutableDictionary alloc] initWithDictionary:self.appRelease.JSONDictionary];
-	[result addEntriesFromDictionary:self.SDK.JSONDictionary];
-
-	return result;
-}
-
 - (instancetype)initAndMigrate {
 	if (![[NSUserDefaults standardUserDefaults] objectForKey:@"ATEngagementInstallDateKey"]) {
 		return nil;

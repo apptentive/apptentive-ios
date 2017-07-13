@@ -8,6 +8,7 @@
 
 #import "ApptentiveState.h"
 #import "Apptentive.h"
+#import "ApptentiveAppInstall.h"
 
 typedef NS_ENUM(NSInteger, ApptentiveConversationState) {
 	ApptentiveConversationStateUndefined = 0,
@@ -36,7 +37,7 @@ extern NSString *NSStringFromApptentiveConversationState(ApptentiveConversationS
  Finally, if this is a fresh installation of the SDK, the `-initWithAPIKey:`
  method should be used.
 */
-@interface ApptentiveConversation : ApptentiveState
+@interface ApptentiveConversation : ApptentiveState <ApptentiveAppInstall>
 
 /**
  Whether the conversation is anonymous, has a token, is logged in, etc.
@@ -193,13 +194,6 @@ extern NSString *NSStringFromApptentiveConversationState(ApptentiveConversationS
  @param lastMessageID The identifier of the last downloaded message.
  */
 - (void)didDownloadMessagesUpTo:(NSString *)lastMessageID;
-
-
-/**
- A dictionary representing the app release and SDK objects in
- a format suitable for encoding in JSON.
- */
-@property (readonly, nonatomic) NSDictionary *appReleaseSDKJSON;
 
 
 /**

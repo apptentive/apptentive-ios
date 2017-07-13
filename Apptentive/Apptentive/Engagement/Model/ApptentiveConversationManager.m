@@ -33,6 +33,7 @@
 #import "ApptentiveJWT.h"
 #import "ApptentiveStopWatch.h"
 #import "ApptentiveSafeCollections.h"
+#import "ApptentiveAppInstall.h"
 
 
 static NSString *const ConversationMetadataFilename = @"conversation-v1.meta";
@@ -279,7 +280,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
         [self conversation:conversation processFetchResponseError:error];
 	};
 
-	self.conversationOperation = [self.client requestOperationWithRequest:[[ApptentiveConversationRequest alloc] initWithConversation:conversation] token:nil delegate:delegate];
+	self.conversationOperation = [self.client requestOperationWithRequest:[[ApptentiveConversationRequest alloc] initWithAppInstall:conversation] token:nil delegate:delegate];
 
 	[self.client.networkQueue addOperation:self.conversationOperation];
 }
@@ -487,9 +488,10 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
         [self completeLoginSuccess:NO error:error];
 	};
 
+    ApptentiveAppInstall *appInstall = [[ApptentiveAppInstall alloc] initWithToken:token identifier:conversationIdentifier];
 	id<ApptentiveRequest> request = conversationIdentifier != nil ?
-		[[ApptentiveExistingLoginRequest alloc] initWithConversationIdentifier:conversationIdentifier token:token] :
-		[[ApptentiveNewLoginRequest alloc] initWithToken:token];
+    [[ApptentiveExistingLoginRequest alloc] initWithAppInstall:appInstall] :
+		[[ApptentiveNewLoginRequest alloc] initWithAppInstall:appInstall];
 	self.loginRequestOperation = [self.client requestOperationWithRequest:request token:nil delegate:delegate];
 
 	[self.client.networkQueue addOperation:self.loginRequestOperation];

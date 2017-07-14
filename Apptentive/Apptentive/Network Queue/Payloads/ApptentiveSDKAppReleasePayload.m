@@ -37,9 +37,9 @@
 }
 
 - (NSDictionary *)JSONDictionary {
-    // Combine app release and SDK JSON payloads
-    NSMutableDictionary *appReleaseJSON = [self.conversation.appRelease.JSONDictionary mutableCopy];
-    [appReleaseJSON addEntriesFromDictionary:self.conversation.SDK.JSONDictionary];
+	// Combine app release and SDK JSON payloads
+	NSMutableDictionary *appReleaseJSON = [self.conversation.appRelease.JSONDictionary mutableCopy];
+	[appReleaseJSON addEntriesFromDictionary:self.conversation.SDK.JSONDictionary];
 
 	return @{
 		@"app_release": appReleaseJSON

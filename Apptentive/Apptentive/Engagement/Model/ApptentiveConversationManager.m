@@ -488,9 +488,9 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
         [self completeLoginSuccess:NO error:error];
 	};
 
-    ApptentiveAppInstall *appInstall = [[ApptentiveAppInstall alloc] initWithToken:token identifier:conversationIdentifier];
+	ApptentiveAppInstall *appInstall = [[ApptentiveAppInstall alloc] initWithToken:token identifier:conversationIdentifier];
 	id<ApptentiveRequest> request = conversationIdentifier != nil ?
-    [[ApptentiveExistingLoginRequest alloc] initWithAppInstall:appInstall] :
+		[[ApptentiveExistingLoginRequest alloc] initWithAppInstall:appInstall] :
 		[[ApptentiveNewLoginRequest alloc] initWithAppInstall:appInstall];
 	self.loginRequestOperation = [self.client requestOperationWithRequest:request token:nil delegate:delegate];
 

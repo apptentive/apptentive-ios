@@ -14,17 +14,17 @@
 @implementation ApptentiveNewLoginRequest
 
 - (instancetype)initWithAppInstall:(id<ApptentiveAppInstall>)appInstall {
-    APPTENTIVE_CHECK_INIT_NOT_EMPTY_ARG(appInstall.token);
-    
-    return [super initWithAppInstall:appInstall];
+	APPTENTIVE_CHECK_INIT_NOT_EMPTY_ARG(appInstall.token);
+
+	return [super initWithAppInstall:appInstall];
 }
 
 - (NSDictionary *)JSONDictionary {
-    NSMutableDictionary *result = [super.JSONDictionary mutableCopy];
-    
-    result[@"token"] = self.appInstall.token;
-    
-    return result;
+	NSMutableDictionary *result = [super.JSONDictionary mutableCopy];
+
+	result[@"token"] = self.appInstall.token;
+
+	return result;
 }
 
 @end

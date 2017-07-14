@@ -34,8 +34,18 @@ NSString *const ATDeviceLastUpdateValuePreferenceKey = @"ATDeviceLastUpdateValue
 static NSString *const ATDeviceLastUpdatePreferenceKey = @"ATDeviceLastUpdatePreferenceKey";
 static NSString *const ApptentiveCustomDeviceDataPreferenceKey = @"ApptentiveCustomDeviceDataPreferenceKey";
 
+static NSDictionary *_integrationConfiguration;
+
 
 @implementation ApptentiveDevice
+
++ (void)setIntegrationConfiguration:(NSDictionary *)integrationConfiguration {
+	_integrationConfiguration = integrationConfiguration;
+}
+
++ (NSDictionary *)integrationConfiguration {
+	return _integrationConfiguration;
+}
 
 - (instancetype)init {
 	self = [super init];
@@ -155,6 +165,8 @@ static NSString *const ApptentiveCustomDeviceDataPreferenceKey = @"ApptentiveCus
 	_localeCountryCode = [localeComponents objectForKey:NSLocaleCountryCode];
 	_localeLanguageCode = [NSLocale preferredLanguages].firstObject;
 	_UTCOffset = [NSTimeZone systemTimeZone].secondsFromGMT;
+
+	_integrationConfiguration = ApptentiveDevice.integrationConfiguration;
 }
 
 @end

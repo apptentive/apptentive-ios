@@ -212,11 +212,6 @@ extern NSString *NSStringFromApptentiveConversationState(ApptentiveConversationS
  */
 - (void)removeUserInfoForKey:(NSString *)key;
 
-/**
- Updates push token and push provider.
- */
-- (void)setPushToken:(NSString *)pushToken provider:(ApptentivePushProvider)pushProvider;
-
 @end
 
 

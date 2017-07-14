@@ -12,6 +12,7 @@
 #import "ApptentiveSDK.h"
 #import "ApptentiveAppRelease.h"
 
+
 @implementation ApptentiveAppInstall
 
 @synthesize token = _token;
@@ -23,17 +24,17 @@
 @synthesize appRelease = _appRelease;
 
 - (instancetype)initWithToken:(NSString *)token identifier:(NSString *)identifier {
-    self = [super init];
-    if (self) {
-        _token = token;
-        _identifier = identifier;
-        
-        _person = [[ApptentivePerson alloc] init];
-        _device = [[ApptentiveDevice alloc] initWithCurrentDevice];
-        _SDK = [[ApptentiveSDK alloc] initWithCurrentSDK];
-        _appRelease = [[ApptentiveAppRelease alloc] initWithCurrentAppRelease];
-    }
-    return self;
+	self = [super init];
+	if (self) {
+		_token = token;
+		_identifier = identifier;
+
+		_person = [[ApptentivePerson alloc] init];
+		_device = [[ApptentiveDevice alloc] initWithCurrentDevice];
+		_SDK = [[ApptentiveSDK alloc] initWithCurrentSDK];
+		_appRelease = [[ApptentiveAppRelease alloc] initWithCurrentAppRelease];
+	}
+	return self;
 }
 
 @end

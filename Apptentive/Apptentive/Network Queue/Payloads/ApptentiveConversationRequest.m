@@ -17,13 +17,13 @@
 @implementation ApptentiveConversationRequest
 
 - (instancetype)initWithAppInstall:(id<ApptentiveAppInstall>)appInstall {
-    self = [super init];
-    
-    if (self) {
-        _appInstall = appInstall;
-    }
-    
-    return self;
+	self = [super init];
+
+	if (self) {
+		_appInstall = appInstall;
+	}
+
+	return self;
 }
 
 - (NSString *)method {
@@ -35,10 +35,10 @@
 }
 
 - (NSDictionary *)JSONDictionary {
-    // Combine app release and SDK JSON payloads
-    NSMutableDictionary *appReleaseJSON = [self.appInstall.appRelease.JSONDictionary mutableCopy];
-    [appReleaseJSON addEntriesFromDictionary:self.appInstall.SDK.JSONDictionary];
-    
+	// Combine app release and SDK JSON payloads
+	NSMutableDictionary *appReleaseJSON = [self.appInstall.appRelease.JSONDictionary mutableCopy];
+	[appReleaseJSON addEntriesFromDictionary:self.appInstall.SDK.JSONDictionary];
+
 	return @{
 		@"app_release": appReleaseJSON,
 		@"person": self.appInstall.person.JSONDictionary,

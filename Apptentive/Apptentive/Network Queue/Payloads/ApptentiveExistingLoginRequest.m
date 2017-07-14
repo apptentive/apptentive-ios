@@ -16,10 +16,10 @@
 @synthesize conversationIdentifier = _conversationIdentifier;
 
 - (instancetype)initWithAppInstall:(id<ApptentiveAppInstall>)appInstall {
-    APPTENTIVE_CHECK_INIT_NOT_EMPTY_ARG(appInstall.token);
-    APPTENTIVE_CHECK_INIT_NOT_EMPTY_ARG(appInstall.identifier);
-    
-    return [super initWithAppInstall:appInstall];
+	APPTENTIVE_CHECK_INIT_NOT_EMPTY_ARG(appInstall.token);
+	APPTENTIVE_CHECK_INIT_NOT_EMPTY_ARG(appInstall.identifier);
+
+	return [super initWithAppInstall:appInstall];
 }
 
 - (NSString *)path {
@@ -27,7 +27,7 @@
 }
 
 - (NSDictionary *)JSONDictionary {
-    return @{ @"token": self.appInstall.token };
+	return @{ @"token": self.appInstall.token };
 }
 
 

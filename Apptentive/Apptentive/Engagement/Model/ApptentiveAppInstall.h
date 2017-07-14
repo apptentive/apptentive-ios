@@ -14,13 +14,6 @@
 NS_ASSUME_NONNULL_BEGIN
 
 
-@interface ApptentiveAppInstall : NSObject <ApptentiveAppInstall>
-
-- (instancetype)initWithToken:(nullable NSString *)token identifier:(nullable NSString *)identifier;
-
-@end
-
-
 @protocol ApptentiveAppInstall <NSObject>
 
 @property (readonly, nullable, nonatomic) NSString *token;
@@ -30,6 +23,13 @@ NS_ASSUME_NONNULL_BEGIN
 @property (readonly, nonatomic) ApptentiveDevice *device;
 @property (readonly, nonatomic) ApptentiveSDK *SDK;
 @property (readonly, nonatomic) ApptentiveAppRelease *appRelease;
+
+@end
+
+
+@interface ApptentiveAppInstall : NSObject <ApptentiveAppInstall>
+
+- (instancetype)initWithToken:(nullable NSString *)token identifier:(nullable NSString *)identifier;
 
 @end
 

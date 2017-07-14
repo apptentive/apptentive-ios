@@ -335,8 +335,8 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 	}
 }
 
-- (void)payloadSenderProgressDidChange:(ApptentivePayloadSender *)sender {
-	[self.delegate messageManager:self messageSendProgressDidUpdate:sender.messageSendProgress];
+- (void)payloadSenderProgressDidChange:(ApptentivePayloadSender *)sender toValue:(double)value {
+	[self.delegate messageManager:self messageSendProgressDidUpdate:value];
 }
 
 - (void)appendMessage:(ApptentiveMessage *)message {

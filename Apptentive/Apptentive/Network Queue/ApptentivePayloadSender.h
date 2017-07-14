@@ -71,6 +71,6 @@ typedef NS_ENUM(NSInteger, ApptentiveQueueStatus) {
 @protocol ApptentivePayloadSenderDelegate <NSObject>
 
 - (void)payloadSender:(ApptentivePayloadSender *)sender setState:(ApptentiveMessageState)state forMessageWithLocalIdentifier:(NSString *)localIdentifier;
-- (void)payloadSenderProgressDidChange:(ApptentivePayloadSender *)sender;
+- (void)payloadSenderProgressDidChange:(ApptentivePayloadSender *)sender toValue:(double)value;
 
 @end

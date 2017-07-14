@@ -151,9 +151,7 @@
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didSendBodyData:(int64_t)bytesSent totalBytesSent:(int64_t)totalBytesSent totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend {
 	if (self.activeTaskProgress[@(task.taskIdentifier)]) {
 		self.activeTaskProgress[@(task.taskIdentifier)] = [NSNumber numberWithDouble:(double)totalBytesSent / (double)totalBytesExpectedToSend];
-		dispatch_async(dispatch_get_main_queue(), ^{
-			[self updateProgress];
-		});
+		[self updateProgress];
 	}
 }
 
@@ -168,7 +166,7 @@
 		_messageSendProgress = messageSendProgress;
 
 		dispatch_async(dispatch_get_main_queue(), ^{
-			[self.messageDelegate payloadSenderProgressDidChange:self];
+			[self.messageDelegate payloadSenderProgressDidChange:self toValue:messageSendProgress];
 		});
 	}
 }

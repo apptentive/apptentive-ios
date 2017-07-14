@@ -8,6 +8,8 @@
 
 #import "ApptentiveSDKAppReleasePayload.h"
 #import "ApptentiveConversation.h"
+#import "ApptentiveSDK.h"
+#import "ApptentiveAppRelease.h"
 
 
 @implementation ApptentiveSDKAppReleasePayload
@@ -35,8 +37,12 @@
 }
 
 - (NSDictionary *)JSONDictionary {
+	// Combine app release and SDK JSON payloads
+	NSMutableDictionary *appReleaseJSON = [self.conversation.appRelease.JSONDictionary mutableCopy];
+	[appReleaseJSON addEntriesFromDictionary:self.conversation.SDK.JSONDictionary];
+
 	return @{
-		@"app_release": self.conversation.appReleaseSDKJSON,
+		@"app_release": appReleaseJSON
 	};
 }
 

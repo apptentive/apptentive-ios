@@ -16,7 +16,7 @@ class RequestTests: XCTestCase {
 			return;
 		}
 
-		let request = ApptentiveConversationRequest(conversation: conversation)
+		let request = ApptentiveConversationRequest(appInstall: conversation)
 
 		conversation.person.name = "Frank"
 		conversation.person.emailAddress = "test@apptentive.com"

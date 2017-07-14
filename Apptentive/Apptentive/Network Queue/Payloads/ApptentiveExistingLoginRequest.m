@@ -1,5 +1,5 @@
 //
-//  ApptentiveLoginRequest.m
+//  ApptentiveExistingLoginRequest.m
 //  Apptentive
 //
 //  Created by Frank Schmitt on 4/21/17.
@@ -7,43 +7,27 @@
 //
 
 #import "ApptentiveExistingLoginRequest.h"
+#import "ApptentiveAppInstall.h"
+#import "ApptentiveDefines.h"
 
 
 @implementation ApptentiveExistingLoginRequest
 
 @synthesize conversationIdentifier = _conversationIdentifier;
 
-- (instancetype)initWithConversationIdentifier:(NSString *)conversationIdentifier token:(NSString *)token {
-	self = [super init];
+- (instancetype)initWithAppInstall:(id<ApptentiveAppInstall>)appInstall {
+	APPTENTIVE_CHECK_INIT_NOT_EMPTY_ARG(appInstall.token);
+	APPTENTIVE_CHECK_INIT_NOT_EMPTY_ARG(appInstall.identifier);
 
-	if (self) {
-		if (conversationIdentifier.length == 0) {
-			ApptentiveLogError(@"Unable to create %@: conversation identifier is nil or empty", [self class]);
-			return nil;
-		}
-
-		if (token.length == 0) {
-			ApptentiveLogError(@"Unable to create %@: conversation token is nil or empty", [self class]);
-			return nil;
-		}
-
-		_conversationIdentifier = conversationIdentifier;
-		_token = token;
-	}
-
-	return self;
-}
-
-- (NSString *)method {
-	return @"POST";
+	return [super initWithAppInstall:appInstall];
 }
 
 - (NSString *)path {
-	return [NSString stringWithFormat:@"conversations/%@/session", self.conversationIdentifier];
+	return [NSString stringWithFormat:@"conversations/%@/session", self.appInstall.identifier];
 }
 
 - (NSDictionary *)JSONDictionary {
-	return @{ @"token": self.token };
+	return @{ @"token": self.appInstall.token };
 }
 
 

@@ -58,25 +58,6 @@
 	[self.conversation.appRelease setValue:ApptentiveSDK.SDKVersion forKey:@"version"];
 
 	[self.conversation checkForDiffs];
-
-#if APPTENTIVE_DEBUG
-	NSNumber *isDebug = @YES;
-#else
-	NSNumber *isDebug = @NO;
-#endif
-
-	NSDictionary *appRelease = self.conversation.appReleaseSDKJSON;
-	XCTAssertNotNil(appRelease);
-	XCTAssertEqualObjects(appRelease[@"app_store_receipt"][@"has_receipt"], @NO);
-	XCTAssertEqualObjects(appRelease[@"debug"], isDebug);
-	XCTAssertEqualObjects(appRelease[@"overriding_styles"], @NO);
-	XCTAssertEqualObjects(appRelease[@"type"], @"ios");
-	XCTAssertEqualObjects(appRelease[@"sdk_author_name"], @"Apptentive, Inc.");
-	XCTAssertEqualObjects(appRelease[@"sdk_distribution"], @"source");
-	XCTAssertEqualObjects(appRelease[@"sdk_distribution_version"], ApptentiveSDK.SDKVersion.versionString);
-	XCTAssertEqualObjects(appRelease[@"sdk_platform"], @"iOS");
-	XCTAssertEqualObjects(appRelease[@"sdk_programming_language"], @"Objective-C");
-	XCTAssertEqualObjects(appRelease[@"sdk_version"], ApptentiveSDK.SDKVersion.versionString);
 }
 
 - (void)testAppRelease {

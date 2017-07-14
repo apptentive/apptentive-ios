@@ -8,16 +8,18 @@
 
 #import "ApptentiveRequest.h"
 
-@class ApptentiveConversation;
+@protocol ApptentiveAppInstall;
 
 NS_ASSUME_NONNULL_BEGIN
 
 
 @interface ApptentiveConversationRequest : ApptentiveRequest
 
-@property (readonly, nonatomic) ApptentiveConversation *conversation;
+@property (readonly, nonatomic) id<ApptentiveAppInstall> appInstall;
 
-- (instancetype)initWithConversation:(ApptentiveConversation *)conversation;
+- (instancetype)initWithAppInstall:(id<ApptentiveAppInstall>)appInstall;
+
+- (NSDictionary *)JSONDictionary;
 
 @end
 

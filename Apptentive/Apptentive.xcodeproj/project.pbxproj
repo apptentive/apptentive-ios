@@ -349,6 +349,8 @@
 		01A2D2A11E4963F700C2103A /* v2CorruptDatabase in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D29E1E4963F700C2103A /* v2CorruptDatabase */; };
 		01A2D2A21E4963F700C2103A /* v2WALDatabase in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D29F1E4963F700C2103A /* v2WALDatabase */; };
 		01A2D2A31E4963F700C2103A /* v3WALDatabase in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D2A01E4963F700C2103A /* v3WALDatabase */; };
+		01AA89B81F18177E00FB59AB /* ApptentiveAppInstall.h in Headers */ = {isa = PBXBuildFile; fileRef = 01AA89B61F18177E00FB59AB /* ApptentiveAppInstall.h */; };
+		01AA89B91F18177E00FB59AB /* ApptentiveAppInstall.m in Sources */ = {isa = PBXBuildFile; fileRef = 01AA89B71F18177E00FB59AB /* ApptentiveAppInstall.m */; };
 		01E04F9E1E819CD300D7E849 /* ApptentiveMessageManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 01E04F9C1E819CD300D7E849 /* ApptentiveMessageManager.h */; };
 		01E04F9F1E819CD300D7E849 /* ApptentiveMessageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 01E04F9D1E819CD300D7E849 /* ApptentiveMessageManager.m */; };
 		01E8E2361E6E096D00786738 /* ApptentiveInteractionAppleRatingDialogController.h in Headers */ = {isa = PBXBuildFile; fileRef = 01E8E2341E6E096D00786738 /* ApptentiveInteractionAppleRatingDialogController.h */; };
@@ -771,6 +773,8 @@
 		01A2D29E1E4963F700C2103A /* v2CorruptDatabase */ = {isa = PBXFileReference; lastKnownFileType = folder; path = v2CorruptDatabase; sourceTree = "<group>"; };
 		01A2D29F1E4963F700C2103A /* v2WALDatabase */ = {isa = PBXFileReference; lastKnownFileType = folder; path = v2WALDatabase; sourceTree = "<group>"; };
 		01A2D2A01E4963F700C2103A /* v3WALDatabase */ = {isa = PBXFileReference; lastKnownFileType = folder; path = v3WALDatabase; sourceTree = "<group>"; };
+		01AA89B61F18177E00FB59AB /* ApptentiveAppInstall.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveAppInstall.h; sourceTree = "<group>"; };
+		01AA89B71F18177E00FB59AB /* ApptentiveAppInstall.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveAppInstall.m; sourceTree = "<group>"; };
 		01E04F9C1E819CD300D7E849 /* ApptentiveMessageManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveMessageManager.h; sourceTree = "<group>"; };
 		01E04F9D1E819CD300D7E849 /* ApptentiveMessageManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveMessageManager.m; sourceTree = "<group>"; };
 		01E8E2341E6E096D00786738 /* ApptentiveInteractionAppleRatingDialogController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveInteractionAppleRatingDialogController.h; sourceTree = "<group>"; };
@@ -1081,6 +1085,8 @@
 				01F1DFF71E5BBFBD009AB3D2 /* ApptentiveConversationMetadata.m */,
 				01F1DFFA1E5BBFCB009AB3D2 /* ApptentiveConversationMetadataItem.h */,
 				01F1DFFB1E5BBFCB009AB3D2 /* ApptentiveConversationMetadataItem.m */,
+				01AA89B61F18177E00FB59AB /* ApptentiveAppInstall.h */,
+				01AA89B71F18177E00FB59AB /* ApptentiveAppInstall.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1705,6 +1711,7 @@
 				01A2D1821E490A9700C2103A /* ApptentiveJSONModel.h in Headers */,
 				0134EB1A1EA9930200DA4925 /* ApptentiveDevicePayload.h in Headers */,
 				01A2D1A81E490A9700C2103A /* NSDictionary+Apptentive.h in Headers */,
+				01AA89B81F18177E00FB59AB /* ApptentiveAppInstall.h in Headers */,
 				01A2D1B21E490A9700C2103A /* ApptentiveLegacyEvent.h in Headers */,
 				01A2D1941E490A9700C2103A /* ApptentiveMessageCenterMessageCell.h in Headers */,
 				01F1DFF41E5BBFB3009AB3D2 /* ApptentiveConversationManager.h in Headers */,
@@ -2103,6 +2110,7 @@
 				01A2D1F31E490A9700C2103A /* ApptentiveSurveyMultilineCell.m in Sources */,
 				01A2D1881E490A9700C2103A /* ApptentiveCompoundMessageCell.m in Sources */,
 				01F1DFFD1E5BBFCB009AB3D2 /* ApptentiveConversationMetadataItem.m in Sources */,
+				01AA89B91F18177E00FB59AB /* ApptentiveAppInstall.m in Sources */,
 				01A2D0F91E490A9700C2103A /* Apptentive.m in Sources */,
 				01A2D1811E490A9700C2103A /* ApptentiveMessageCenterViewController.m in Sources */,
 				01A2D11C1E490A9700C2103A /* ApptentiveInteractionUpgradeMessageController.m in Sources */,

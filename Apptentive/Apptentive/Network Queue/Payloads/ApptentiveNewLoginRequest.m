@@ -1,5 +1,5 @@
 //
-//  ApptentiveLoginRequest.m
+//  ApptentiveNewLoginRequest.m
 //  Apptentive
 //
 //  Created by Frank Schmitt on 4/21/17.
@@ -7,33 +7,24 @@
 //
 
 #import "ApptentiveNewLoginRequest.h"
+#import "ApptentiveAppInstall.h"
 #import "ApptentiveDefines.h"
 
 
 @implementation ApptentiveNewLoginRequest
 
-- (instancetype)initWithToken:(NSString *)token {
-	self = [super init];
+- (instancetype)initWithAppInstall:(id<ApptentiveAppInstall>)appInstall {
+	APPTENTIVE_CHECK_INIT_NOT_EMPTY_ARG(appInstall.token);
 
-	if (self) {
-		APPTENTIVE_CHECK_INIT_NOT_EMPTY_ARG(token);
-		_token = token;
-	}
-
-	return self;
-}
-
-- (NSString *)method {
-	return @"POST";
-}
-
-- (NSString *)path {
-	return @"conversations";
+	return [super initWithAppInstall:appInstall];
 }
 
 - (NSDictionary *)JSONDictionary {
-	return @{ @"token": self.token };
-}
+	NSMutableDictionary *result = [super.JSONDictionary mutableCopy];
 
+	result[@"token"] = self.appInstall.token;
+
+	return result;
+}
 
 @end

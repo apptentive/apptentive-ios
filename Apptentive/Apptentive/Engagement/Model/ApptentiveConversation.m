@@ -284,13 +284,6 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 	return [NSDate date];
 }
 
-- (NSDictionary *)appReleaseSDKJSON {
-	NSMutableDictionary *result = [[NSMutableDictionary alloc] initWithDictionary:self.appRelease.JSONDictionary];
-	[result addEntriesFromDictionary:self.SDK.JSONDictionary];
-
-	return result;
-}
-
 - (instancetype)initAndMigrate {
 	if (![[NSUserDefaults standardUserDefaults] objectForKey:@"ATEngagementInstallDateKey"]) {
 		return nil;
@@ -386,34 +379,6 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 		[self.mutableUserInfo removeObjectForKey:key];
 	} else {
 		ApptentiveLogError(ApptentiveLogTagConversation, @"Attempting to set user info with nil key and/or value");
-	}
-}
-
-- (void)setPushToken:(NSString *)pushToken provider:(ApptentivePushProvider)pushProvider {
-	NSMutableDictionary *integrationConfiguration = [self.device.integrationConfiguration mutableCopy];
-
-	[integrationConfiguration removeObjectForKey:[self integrationKeyForPushProvider:ApptentivePushProviderApptentive]];
-	[integrationConfiguration removeObjectForKey:[self integrationKeyForPushProvider:ApptentivePushProviderUrbanAirship]];
-	[integrationConfiguration removeObjectForKey:[self integrationKeyForPushProvider:ApptentivePushProviderAmazonSNS]];
-	[integrationConfiguration removeObjectForKey:[self integrationKeyForPushProvider:ApptentivePushProviderParse]];
-
-	[integrationConfiguration setObject:@{ @"token": pushToken } forKey:[self integrationKeyForPushProvider:pushProvider]];
-
-	self.device.integrationConfiguration = integrationConfiguration;
-}
-
-- (NSString *)integrationKeyForPushProvider:(ApptentivePushProvider)pushProvider {
-	switch (pushProvider) {
-		case ApptentivePushProviderApptentive:
-			return @"apptentive_push";
-		case ApptentivePushProviderUrbanAirship:
-			return @"urban_airship";
-		case ApptentivePushProviderAmazonSNS:
-			return @"aws_sns";
-		case ApptentivePushProviderParse:
-			return @"parse";
-		default:
-			return @"UNKNOWN_PUSH_PROVIDER";
 	}
 }
 

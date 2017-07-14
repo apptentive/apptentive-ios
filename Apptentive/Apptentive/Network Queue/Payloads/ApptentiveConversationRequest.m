@@ -7,18 +7,20 @@
 //
 
 #import "ApptentiveConversationRequest.h"
-#import "ApptentiveConversation.h"
+#import "ApptentiveAppInstall.h"
 #import "ApptentivePerson.h"
 #import "ApptentiveDevice.h"
+#import "ApptentiveSDK.h"
+#import "ApptentiveAppRelease.h"
 
 
 @implementation ApptentiveConversationRequest
 
-- (instancetype)initWithConversation:(ApptentiveConversation *)conversation {
+- (instancetype)initWithAppInstall:(id<ApptentiveAppInstall>)appInstall {
 	self = [super init];
 
 	if (self) {
-		_conversation = conversation;
+		_appInstall = appInstall;
 	}
 
 	return self;
@@ -33,15 +35,15 @@
 }
 
 - (NSDictionary *)JSONDictionary {
-	return @{
-		@"app_release": self.conversation.appReleaseSDKJSON,
-		@"person": self.conversation.person.JSONDictionary,
-		@"device": self.conversation.device.JSONDictionary
-	};
-}
+	// Combine app release and SDK JSON payloads
+	NSMutableDictionary *appReleaseJSON = [self.appInstall.appRelease.JSONDictionary mutableCopy];
+	[appReleaseJSON addEntriesFromDictionary:self.appInstall.SDK.JSONDictionary];
 
-- (NSString *)conversationIdentifier {
-	return _conversation.identifier;
+	return @{
+		@"app_release": appReleaseJSON,
+		@"person": self.appInstall.person.JSONDictionary,
+		@"device": self.appInstall.device.JSONDictionary
+	};
 }
 
 @end

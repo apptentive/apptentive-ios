@@ -8,6 +8,7 @@
 
 #import "ApptentiveState.h"
 #import "Apptentive.h"
+#import "ApptentiveAppInstall.h"
 
 typedef NS_ENUM(NSInteger, ApptentiveConversationState) {
 	ApptentiveConversationStateUndefined = 0,
@@ -36,7 +37,7 @@ extern NSString *NSStringFromApptentiveConversationState(ApptentiveConversationS
  Finally, if this is a fresh installation of the SDK, the `-initWithAPIKey:`
  method should be used.
 */
-@interface ApptentiveConversation : ApptentiveState
+@interface ApptentiveConversation : ApptentiveState <ApptentiveAppInstall>
 
 /**
  Whether the conversation is anonymous, has a token, is logged in, etc.
@@ -196,13 +197,6 @@ extern NSString *NSStringFromApptentiveConversationState(ApptentiveConversationS
 
 
 /**
- A dictionary representing the app release and SDK objects in
- a format suitable for encoding in JSON.
- */
-@property (readonly, nonatomic) NSDictionary *appReleaseSDKJSON;
-
-
-/**
  Sets free-form user info on the conversation object.
 
  @param object The object to be set or updated
@@ -217,11 +211,6 @@ extern NSString *NSStringFromApptentiveConversationState(ApptentiveConversationS
  @param key The key representing the object.
  */
 - (void)removeUserInfoForKey:(NSString *)key;
-
-/**
- Updates push token and push provider.
- */
-- (void)setPushToken:(NSString *)pushToken provider:(ApptentivePushProvider)pushProvider;
 
 @end
 

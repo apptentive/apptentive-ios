@@ -19,6 +19,11 @@ extern NSString *const ATDeviceLastUpdateValuePreferenceKey;
 @interface ApptentiveDevice : ApptentiveCustomData
 
 /**
+ The push integration to be set globally for all devices
+ */
+@property (class, strong, nonatomic) NSDictionary *integrationConfiguration;
+
+/**
  A unique identifier that identifies the device. Set to the value of
  `UIDevice`'s `identifierForVendor` property.
  */

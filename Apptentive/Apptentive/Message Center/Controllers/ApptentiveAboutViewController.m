@@ -105,8 +105,6 @@ NSString *const ATInteractionAboutViewEventLabelClose = @"close";
 
 		self.privacyButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
 	}
-
-	[self.view layoutIfNeeded];
 }
 
 @end

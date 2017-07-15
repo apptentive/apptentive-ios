@@ -320,6 +320,8 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 															object:self
 														  userInfo:userInfo];
 
+		[conversation checkForDiffs];
+
 		if ([self.delegate respondsToSelector:@selector(conversationManager:conversationDidChangeState:)]) {
 			[self.delegate conversationManager:self conversationDidChangeState:conversation];
 		}
@@ -673,6 +675,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	[self createMessageManagerForConversation:mutableConversation];
 
 	self.activeConversation = mutableConversation;
+	self.activeConversation.delegate = self;
 
 	[self saveConversation:mutableConversation];
 	[self handleConversationStateChange:mutableConversation];
@@ -701,6 +704,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		[self createMessageManagerForConversation:mutableConversation];
 
 		self.activeConversation = mutableConversation;
+		self.activeConversation.delegate = self;
 
 		[self saveConversation:self.activeConversation];
 
@@ -738,6 +742,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		[self createMessageManagerForConversation:mutableConversation];
 
 		self.activeConversation = mutableConversation;
+		self.activeConversation.delegate = self;
 
 		[self saveConversation:self.activeConversation];
 		[self handleConversationStateChange:self.activeConversation];

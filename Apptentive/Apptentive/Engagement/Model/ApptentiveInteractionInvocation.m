@@ -297,7 +297,6 @@
 }
 
 + (NSPredicate *)predicateWithLeftKeyPath:(NSString *)leftKeyPath rightValue:(nullable id)rightValue operatorType:(NSPredicateOperatorType)operatorType {
-	ApptentiveAssertOperationQueue(Apptentive.shared.operationQueue);
 	[ApptentiveInteractionUsageData keyPathWasSeen:leftKeyPath];
 
 	NSExpression *leftExpression = [NSExpression expressionForKeyPath:leftKeyPath];

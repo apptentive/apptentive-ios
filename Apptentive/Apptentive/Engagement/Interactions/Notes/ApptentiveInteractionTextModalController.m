@@ -173,6 +173,7 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 	ApptentiveInteraction *interaction = nil;
 	NSArray *invocations = actionConfig[@"invokes"];
 	if (invocations) {
+		// TODO: Do this on the background queue?
 		interaction = [[Apptentive sharedConnection].backend interactionForInvocations:invocations];
 	}
 

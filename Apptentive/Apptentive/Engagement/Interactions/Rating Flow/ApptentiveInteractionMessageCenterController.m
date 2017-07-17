@@ -26,7 +26,8 @@
 	UINavigationController *navigationController = [[ApptentiveUtilities storyboard] instantiateViewControllerWithIdentifier:@"MessageCenterNavigation"];
 	ApptentiveMessageCenterViewController *messageCenter = navigationController.viewControllers.firstObject;
 
-	ApptentiveConversation *conversation = Apptentive.shared.backend.conversationManager.activeConversationTemp;
+	// TODO: Do this on the background queue?
+	ApptentiveConversation *conversation = Apptentive.shared.backend.conversationManager.activeConversation;
 	ApptentiveAssertNotNil(conversation, @"Conversation is nil");
 
 	ApptentiveAssertNotNil(Apptentive.shared.backend.conversationManager.messageManager, @"Attempted to present interaction without message manager: %@", self.interaction);

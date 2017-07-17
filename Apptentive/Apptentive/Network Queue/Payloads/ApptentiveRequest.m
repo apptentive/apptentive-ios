@@ -53,7 +53,7 @@
 
 - (NSString *)conversationIdentifier {
 	APPTENTIVE_ABSTRACT_METHOD_CALLED
-	return nil;
+	return @"INVALID";
 }
 
 @end

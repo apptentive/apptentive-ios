@@ -55,7 +55,7 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 		_dateFormatter.dateStyle = NSDateFormatterLongStyle;
 		_dateFormatter.timeStyle = NSDateFormatterNoStyle;
 
-		_attachmentDownloadSession = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:self delegateQueue:nil];
+		_attachmentDownloadSession = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:self delegateQueue:self.messageManager.operationQueue];
 		_taskIndexPaths = [NSMutableDictionary dictionary];
 	}
 	return self;
@@ -358,6 +358,7 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 		[self.messageManager.operationQueue addOperationWithBlock:^{
 			message.state = ApptentiveMessageStateRead;
 			[self.messageManager updateUnreadCount];
+			[self.messageManager saveMessageStore];
 		}];
 	}
 }
@@ -454,6 +455,10 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 		// -completeMoveToStorageFor: must be called on main thread.
 		[[self fileAttachmentAtIndexPath:attachmentIndexPath] completeMoveToStorageFor:finalLocation];
 		[self.delegate messageCenterViewModel:self didLoadAttachmentThumbnailAtIndexPath:attachmentIndexPath];
+
+		[self.messageManager.operationQueue addOperationWithBlock:^{
+			[self.messageManager saveMessageStore];
+		}];
 	});
 }
 

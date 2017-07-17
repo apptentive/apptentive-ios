@@ -915,12 +915,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	[self saveMetadata];
 }
 
-- (ApptentiveConversation *)activeConversationTemp {
-	return _activeConversation;
-}
-
 - (ApptentiveConversation *)activeConversation {
-	ApptentiveAssertOperationQueue(self.operationQueue);
 	return _activeConversation;
 }
 

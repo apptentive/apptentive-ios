@@ -92,7 +92,8 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 		return NO;
 	}
 
-	ApptentiveConversation *conversation = self.conversationManager.activeConversationTemp;
+	// TODO: Do this on the background queue?
+	ApptentiveConversation *conversation = self.conversationManager.activeConversation;
 
 	if (conversation == nil) {
 		ApptentiveLogWarning(@"Attempting to engage event with no active conversation.");
@@ -136,11 +137,13 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 }
 
 - (void)codePointWasSeen:(NSString *)codePoint {
-	[self.conversationManager.activeConversationTemp warmCodePoint:codePoint];
+	// TODO: Do this on the background queue?
+	[self.conversationManager.activeConversation warmCodePoint:codePoint];
 }
 
 - (void)interactionWasSeen:(NSString *)interactionID {
-	[self.conversationManager.activeConversationTemp warmInteraction:interactionID];
+	// TODO: Do this on the background queue?
+	[self.conversationManager.activeConversation warmInteraction:interactionID];
 }
 
 - (void)presentInteraction:(ApptentiveInteraction *)interaction fromViewController:(UIViewController *)viewController {

@@ -660,7 +660,7 @@ static Apptentive *_sharedInstance;
 						break;
 				}
 			} else {
-				ApptentiveLogInfo(@"Push notification received for conversation that is not active. Active conversation ID is %@, push conversation ID is %@", self.backend.conversationManager.activeConversationTemp.identifier, apptentivePayload[@"conversation_id"]);
+				ApptentiveLogInfo(@"Push notification received for conversation that is not active. Active conversation ID is %@, push conversation ID is %@", self.backend.conversationManager.activeConversation.identifier, apptentivePayload[@"conversation_id"]);
 			}
 
 			if (shouldCallCompletionHandler && completionHandler) {

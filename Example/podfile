@@ -6,5 +6,5 @@ target 'iOSExample' do
 	pod 'apptentive-ios', :path => '..'
 
 	# In your own apps, you will want to use the latest version from CocoaPods, like so:
-	# pod 'apptentive-ios', '~> 3'
+	# pod 'apptentive-ios', '~> 4'
 end

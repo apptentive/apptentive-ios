@@ -1,3 +1,7 @@
+2017-07-18 frankus, weeebox v4.0.0
+----------------------------------
+Version 4.0.0 adds multi-user support and a new method for initializing the SDK. There is also a new method (required for using push) to forward local notifications to the SDK. Static library support has been dropped in favor of a dynamic framework. There is a new runtime setting for log level, which defaults to `INFO` in all build configurations. 
+
 2017-01-06 frankus v3.4.1
 -------------------------
 Version 3.4.0 fixes visual issues in surveys and upgrade messages. 

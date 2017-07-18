@@ -148,6 +148,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	// attempt to load a legacy conversation
 	ApptentiveConversation *legacyConversation = [[ApptentiveConversation alloc] initAndMigrate];
 	if (legacyConversation != nil) {
+		ApptentiveLogDebug(ApptentiveLogTagConversation, @"Found legacy conversation. Migrating to anonymous conversation...");
 		[self fetchLegacyConversation:legacyConversation];
 		[Apptentive.shared.backend migrateLegacyCoreDataAndTaskQueueForConversation:legacyConversation conversationDirectoryPath:[self conversationContainerPathForDirectoryName:legacyConversation.directoryName]];
 

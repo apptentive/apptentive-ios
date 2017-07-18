@@ -24,9 +24,10 @@ You should begin by setting your app's API key, then engaging Apptentive events 
 ``` objective-c
 #import "Apptentive.h"
 ...
-Apptentive.shared.APIKey = @"<Your API Key>";
+ApptentiveConfiguration = [ApptentiveConfiguration configurationWithApptentiveKey:@"<#Your Apptentive Key#>" apptentiveSignature:@"<#Your Apptentive signature#>"];
+[Apptentive registerWithConfiguration:configuration];
 ...
-[Apptentive.shared engage:@"event_name" fromViewController:viewController];
+[Apptentive.shared engage:@"event_name", from: viewController];
 ```
 
 Or, in Swift:
@@ -34,7 +35,9 @@ Or, in Swift:
 ``` Swift
 import Apptentive
 ...
-Apptentive.shared.APIKey = "<Your API Key>"
+if let configuration = ApptentiveConfiguration(apptentiveKey: "<#Your Apptentive Key#>", apptentiveSignature: "<#Your Apptentive signature#>") {
+	Apptentive.register(with: configuration)
+}
 ...
 Apptentive.shared.engage(event: "event_name", from: viewController)
 ```

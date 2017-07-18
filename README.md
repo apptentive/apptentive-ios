@@ -19,12 +19,12 @@ The following guides explain the integration process:
 
 After integrating the Apptentive SDK into your project, you can [begin using Apptentive features in your app](http://www.apptentive.com/docs/ios/integration/).
 
-You should begin by setting your app's API key, then engaging Apptentive events at various places in your app:
+To begin using the SDK, import the SDK and create a configuration object with your Apptentive App Key and Apptentive App Signature (found in the [API section of your Apptentive dashboard](https://be.apptentive.com/apps/current/settings/api)).
 
 ``` objective-c
-#import "Apptentive.h"
+@import Apptentive;
 ...
-ApptentiveConfiguration = [ApptentiveConfiguration configurationWithApptentiveKey:@"<#Your Apptentive Key#>" apptentiveSignature:@"<#Your Apptentive signature#>"];
+ApptentiveConfiguration = [ApptentiveConfiguration configurationWithApptentiveKey:@"<#Your Apptentive App Key#>" apptentiveSignature:@"<#Your Apptentive App Signature#>"];
 [Apptentive registerWithConfiguration:configuration];
 ...
 [Apptentive.shared engage:@"event_name", from: viewController];
@@ -35,7 +35,7 @@ Or, in Swift:
 ``` Swift
 import Apptentive
 ...
-if let configuration = ApptentiveConfiguration(apptentiveKey: "<#Your Apptentive Key#>", apptentiveSignature: "<#Your Apptentive signature#>") {
+if let configuration = ApptentiveConfiguration(apptentiveKey: "<#Your Apptentive App Key#>", apptentiveSignature: "<#Your Apptentive App Signature#>") {
 	Apptentive.register(with: configuration)
 }
 ...
@@ -60,7 +60,7 @@ Please see the [Apptentive testing guide](http://www.apptentive.com/docs/ios/tes
 
 To see an example of how the Apptentive iOS SDK can be integrated with your app, take a look at the `iOSExample` app in the `Example` directory in this repository.
 
-The example app shows you how to integrate using CocoaPods, set your API key, engage events, and integrate with Message Center. See the `README.md` file in the `Example` directory for more information.
+The example app shows you how to integrate using CocoaPods, set your Apptentive App Key and Apptentive App Signature, engage events, and integrate with Message Center. See the `README.md` file in the `Example` directory for more information.
 
 ## Contributing
 

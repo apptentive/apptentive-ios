@@ -8,7 +8,7 @@ Features
 
 This app shows an example of the how to use Apptentive SDK's classes and methods in an app:
 
-- Setting the API Key
+- Setting the Apptentive Key and Apptentive Signature
 - Engaging events
 - Launching message center
 - Showing the unread message count
@@ -18,7 +18,7 @@ Setup
 
 First, navigate to the directory that this README is in and type `pod install` to install the Apptentive SDK. Then open the `Example.xcworkspace` file.
 
-You will need to set a valid Apptentive API Key to run this app in the `AppDelegate.swift` file. You can find your API key on your [Apptentive dashboard](https://be.apptentive.com/apps/current/settings/api) in the API section of the Settings tab. We suggest creating a new app for evaluation purposes.
+You will need to set a valid Apptentive Key and ApptentiveSignature to run this app in the `AppDelegate.swift` file. You can find these on your [Apptentive dashboard](https://be.apptentive.com/apps/current/settings/api) in the API section of the Settings tab. We suggest creating a new app for evaluation purposes.
 
 Events
 ======

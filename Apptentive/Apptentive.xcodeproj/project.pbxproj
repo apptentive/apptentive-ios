@@ -69,7 +69,7 @@
 		01A2D0F81E490A9700C2103A /* Apptentive_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2CFAB1E490A9600C2103A /* Apptentive_Private.h */; };
 		01A2D0F91E490A9700C2103A /* Apptentive.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2CFAC1E490A9700C2103A /* Apptentive.m */; };
 		01A2D0FA1E490A9700C2103A /* Apptentive.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 01A2CFAD1E490A9700C2103A /* Apptentive.storyboard */; };
-		01A2D0FB1E490A9700C2103A /* ApptentiveStyleSheet.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2CFAE1E490A9700C2103A /* ApptentiveStyleSheet.h */; };
+		01A2D0FB1E490A9700C2103A /* ApptentiveStyleSheet.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2CFAE1E490A9700C2103A /* ApptentiveStyleSheet.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		01A2D0FC1E490A9700C2103A /* ApptentiveStyleSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2CFAF1E490A9700C2103A /* ApptentiveStyleSheet.m */; };
 		01A2D0FD1E490A9700C2103A /* ApptentiveHUDViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2CFB11E490A9700C2103A /* ApptentiveHUDViewController.h */; };
 		01A2D0FE1E490A9700C2103A /* ApptentiveHUDViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2CFB21E490A9700C2103A /* ApptentiveHUDViewController.m */; };

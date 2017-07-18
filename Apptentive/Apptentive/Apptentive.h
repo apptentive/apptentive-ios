@@ -9,58 +9,68 @@
 #import <UIKit/UIKit.h>
 
 //! Project version number for Apptentive.
+/** The Apptentive version number */
 FOUNDATION_EXPORT double ApptentiveVersionNumber;
 
 //! Project version string for Apptentive.
+/** The Apptentive version string */
 FOUNDATION_EXPORT const unsigned char ApptentiveVersionString[];
 
+/** The version number of the Apptentive SDK. */
 #define kApptentiveVersionString @"4.0.0"
-#define kApptentivePlatformString @"iOS"
 
-#ifdef __swift_compiler_version_at_least
-#if __swift_compiler_version_at_least(3)
-#define APPTENTIVE_SWIFT_NAME NS_SWIFT_NAME
-#define APPTENTIVE_SWIFT_UNAVAILABLE NS_SWIFT_UNAVAILABLE
-#define APPTENTIVE_PREFER_PROPERTIES
-#endif
-#else
-#define APPTENTIVE_SWIFT_NAME(x)		  /*x*/
-#define APPTENTIVE_SWIFT_UNAVAILABLE(msg) /*msg*/
-#endif
+/** The platform that the SDK is built for. */
+#define kApptentivePlatformString @"iOS"
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef enum : NSUInteger {
+/**
+ A code corresponding to the reason that the Apptentive server authentication failed.
+ */
+typedef NS_ENUM(NSInteger, ApptentiveAuthenticationFailureReason) {
+	/** An unknown authentication failure. */
 	ApptentiveAuthenticationFailureReasonUnknown,
+	/** An invalid JWT algorithm was used. */
 	ApptentiveAuthenticationFailureReasonInvalidAlgorithm,
+	/** A malformed JWT was encountered. */
 	ApptentiveAuthenticationFailureReasonMalformedToken,
+	/** An invalid JWT was encountered. */
 	ApptentiveAuthenticationFailureReasonInvalidToken,
+	/** A required subclaim was missing. */
 	ApptentiveAuthenticationFailureReasonMissingSubClaim,
+	/** A subclaim didn't match the logged-in session. */
 	ApptentiveAuthenticationFailureReasonMismatchedSubClaim,
+	/** An invalid subclaim was encountered. */
 	ApptentiveAuthenticationFailureReasonInvalidSubClaim,
+	/** The JWT expired. */
 	ApptentiveAuthenticationFailureReasonExpiredToken,
+	/** The JWT was revoked. */
 	ApptentiveAuthenticationFailureReasonRevokedToken,
+	/** The Apptentive App Key was missing. */
 	ApptentiveAuthenticationFailureReasonMissingAppKey,
+	/** The Apptentive App Signature was missing */
 	ApptentiveAuthenticationFailureReasonMissingAppSignature,
+	/** In invalid combination of an Apptentive App Key and an Apptentive App Signature was found. */
 	ApptentiveAuthenticationFailureReasonInvalidKeySignaturePair
-} ApptentiveAuthenticationFailureReason;
+};
 
+/** A block used to notify your app that an authenticated request failed to authenticate. */
 typedef void (^ApptentiveAuthenticationFailureCallback)(ApptentiveAuthenticationFailureReason reason, NSString *errorMessage);
 
 @protocol ApptentiveDelegate
 , ApptentiveStyle;
 
 /** Notification sent when Message Center unread messages count changes. */
-extern NSString *const ApptentiveMessageCenterUnreadCountChangedNotification;
+extern NSNotificationName const ApptentiveMessageCenterUnreadCountChangedNotification;
 
 /** Notification sent when the user has agreed to rate the application. */
-extern NSString *const ApptentiveAppRatingFlowUserAgreedToRateAppNotification;
+extern NSNotificationName const ApptentiveAppRatingFlowUserAgreedToRateAppNotification;
 
 /** Notification sent when a survey is shown. */
-extern NSString *const ApptentiveSurveyShownNotification;
+extern NSNotificationName const ApptentiveSurveyShownNotification;
 
 /** Notification sent when a survey is submitted by the user. */
-extern NSString *const ApptentiveSurveySentNotification;
+extern NSNotificationName const ApptentiveSurveySentNotification;
 
 /** Error domain for the Apptentive SDK */
 extern NSString *const ApptentiveErrorDomain;
@@ -83,34 +93,44 @@ typedef NS_ENUM(NSInteger, ApptentivePushProvider) {
 	ApptentivePushProviderParse,
 };
 
-/** Log levels supported by the logging system */
+/**
+ Log levels supported by the logging system. Each level includes those above it on the list.
+*/
 typedef NS_ENUM(NSUInteger, ApptentiveLogLevel) {
+	/** Critical failure log messages. */
 	ApptentiveLogLevelCrit = 0,
+	/** Error log messages. */
 	ApptentiveLogLevelError = 1,
+	/** Warning log messages. */
 	ApptentiveLogLevelWarn = 2,
+	/** Informational log messages. */
 	ApptentiveLogLevelInfo = 3,
+	/** Log messages that are potentially useful for debugging. */
 	ApptentiveLogLevelDebug = 4,
+	/** All possible log messages enabled. */
 	ApptentiveLogLevelVerbose = 5
 };
 
-/*
- * Configuration options for Apptentive. When Apptentive instance 
- * is created, a copy of the configuration object is made -
- * you cannot modify the configuration of a Apptentive instance after 
- * it has been created.
+/**
+ An `ApptentiveConfiguration` instance is used to pass configuration
+ parameters into the `-registerWithConfiguration:` method.
+ 
+ The `Apptentive` singleton instance makes a copy of the configuration
+ parameters, so changes made to the configuration later
+ will have no effect.
  */
 @interface ApptentiveConfiguration : NSObject
 
-/** Apptentive key */
+/** The Apptentive App Key, obtained from your Apptentive dashboard. */
 @property (copy, nonatomic, readonly) NSString *apptentiveKey;
 
-/** Apptentive signature */
+/** The Apptentive App Signature, obtained from your Apptentive dashboard. */
 @property (copy, nonatomic, readonly) NSString *apptentiveSignature;
 
-/** Apptentive SDK log level (defaults to 'info') */
+/** The granularity of log messages emitted from the SDK (defaults to `ApptentiveLogLevelInfo`). */
 @property (assign, nonatomic) ApptentiveLogLevel logLevel;
 
-/** Backend URL */
+/** The server URL to use for API calls. Should only be used for testing. */
 @property (copy, nonatomic) NSURL *baseURL;
 
 /** The name of the distribution that includes the Apptentive SDK. For example "Cordova". */
@@ -119,6 +139,15 @@ typedef NS_ENUM(NSUInteger, ApptentiveLogLevel) {
 /** The version of the distribution that includes the Apptentive SDK. */
 @property (copy, nonatomic, nullable) NSString *distributionVersion;
 
+
+/**
+ Returns an instance of the `ApptentiveConfiguration` class
+ initialized with the specified parameters.
+
+ @param apptentiveKey The Apptentive App Key, obtained from your Apptentive dashboard.
+ @param apptentiveSignature The Apptentive App Signature, obtained from your Apptentive dashboard.
+ @return The newly-initiazlied configuration object.
+ */
 + (nullable instancetype)configurationWithApptentiveKey:(NSString *)apptentiveKey apptentiveSignature:(NSString *)apptentiveSignature;
 
 @end
@@ -126,13 +155,15 @@ typedef NS_ENUM(NSUInteger, ApptentiveLogLevel) {
 /**
  `Apptentive` is a singleton which is used as the main point of entry for the Apptentive service.
 
- ## Configuration
+## Configuration
 
-Before calling any other methods on the shared `Apptentive` instance, register you app key and signature:
-     ApptentiveConfiguration *configuration = [ApptentiveConfiguration configurationWithApptentiveKey:@"your APP key here" apptentiveSignature:@"your APP signature here"];
-     [Apptentive registerWithConfiguration:configuration];
+ Before calling any other methods on the shared `Apptentive` instance, register you app key and signature:
 
-## Engagement Events
+    ApptentiveConfiguration *configuration = [ApptentiveConfiguration configurationWithApptentiveKey:@"your APP key here" apptentiveSignature:@"your APP signature here"];
+    [Apptentive registerWithConfiguration:configuration];
+
+
+## Engaging Events
 
  The Ratings Prompt and other Apptentive interactions are targeted to certain Apptentive events. For example,
  you could decide to show the Ratings Prompt after an event named "user_completed_level" has been engaged.
@@ -140,7 +171,7 @@ Before calling any other methods on the shared `Apptentive` instance, register y
 
  You would add calls at these points to optionally engage with the user:
 
-     [[Apptentive sharedConnection] engage:@"completed_level" fromViewController:viewController];
+    [[Apptentive sharedConnection] engage:@"completed_level" fromViewController:viewController];
 
  See the readme for more information.
 
@@ -170,10 +201,8 @@ Before calling any other methods on the shared `Apptentive` instance, register y
 /** The shared singleton of `Apptentive`. */
 + (instancetype)sharedConnection;
 
-#if __has_feature(objc_class_property)
 /** Alias for `sharedConnection` */
 @property (class, readonly, nonatomic) Apptentive *shared;
-#endif
 
 /** Initializes Apptentive instance with a given configuration */
 + (void)registerWithConfiguration:(ApptentiveConfiguration *)configuration;
@@ -196,15 +225,121 @@ Before calling any other methods on the shared `Apptentive` instance, register y
  the SDK will request a view controller from the delegate from which to present an interaction. */
 @property (weak, nonatomic) id<ApptentiveDelegate> delegate;
 
-///---------------------------------
-/// @name Interface Customization
-///---------------------------------
+///--------------------
+/// @name Engage Events
+///--------------------
 
-/** The style sheet used for styling Apptentive UI.
+/**
+ Shows interaction UI, if applicable, related to a given event.
 
-@discussion See the [Apptentive Styling Guide for iOS](https://docs.apptentive.com/ios/customization/) for information on configuring this property.
+ For example, if you have an upgrade message to display on app launch, you might call with event label set to
+ `@"app.launch"` here, along with the view controller an upgrade message might be displayed from.
+
+ @param event A string representing the name of the event.
+ @param viewController A view controller Apptentive UI may be presented from. If `nil`, a view controller should be provided by the delegate.
+
+ @return `YES` if an interaction was triggered by the event, `NO` otherwise.
  */
-@property (strong, nonatomic) id<ApptentiveStyle> styleSheet;
+- (BOOL)engage:(NSString *)event fromViewController:(UIViewController *_Nullable)viewController NS_SWIFT_NAME(engage(event:from:));
+
+/**
+ Shows interaction UI, if applicable, related to a given event, and attaches the specified custom data to the event.
+
+ @param event A string representing the name of the event.
+ @param customData A dictionary of key/value pairs to be associated with the event. Keys and values should conform to standards of NSJSONSerialization's `isValidJSONObject:`.
+ @param viewController A view controller Apptentive UI may be presented from. If `nil`, a view controller should be provided by the delegate.
+
+ @return `YES` if an interaction was triggered by the event, `NO` otherwise.
+ */
+- (BOOL)engage:(NSString *)event withCustomData:(nullable NSDictionary *)customData fromViewController:(UIViewController *_Nullable)viewController NS_SWIFT_NAME(engage(event:withCustomData:from:));
+
+/**
+ Shows interaction UI, if applicable, related to a given event. Attaches the specified custom data to the event along with the specified extended data.
+
+ @param event A string representing the name of the event.
+ @param customData A dictionary of key/value pairs to be associated with the event. Keys and values should conform to standards of NSJSONSerialization's `isValidJSONObject:`.
+ @param extendedData An array of dictionaries with specific Apptentive formatting. For example, [Apptentive extendedDataDate:[NSDate date]].
+ @param viewController A view controller Apptentive UI may be presented from. If `nil`, a view controller should be provided by the delegate.
+
+ @return `YES` if an interaction was triggered by the event, `NO` otherwise.
+ */
+- (BOOL)engage:(NSString *)event withCustomData:(nullable NSDictionary *)customData withExtendedData:(nullable NSArray<NSDictionary *> *)extendedData fromViewController:(UIViewController *_Nullable)viewController NS_SWIFT_NAME(engage(event:withCustomData:withExtendedData:from:));
+
+/**
+ Returns a Boolean value indicating whether the given event will cause an Interaction to be shown.
+
+ For example, returns YES if a survey is ready to be shown the next time you engage your survey-targeted event. You can use this method to hide a "Show Survey" button in your app if there is no survey to take.
+
+ @param event A string representing the name of the event.
+
+ @return `YES` if the event will show an interaction, `NO` otherwise.
+ */
+- (BOOL)canShowInteractionForEvent:(NSString *)event;
+
+///--------------------
+/// @name Extended Data for Events
+///--------------------
+
+/**
+ Used to specify a point in time in an event's extended data.
+
+ @param date A date and time to be included in an event's extended data.
+
+ @return An extended data dictionary representing a point in time, to be included in an event's extended data.
+ */
++ (NSDictionary *)extendedDataDate:(NSDate *)date NS_SWIFT_NAME(extendedData(date:));
+
+/**
+ Used to specify a geographic coordinate in an event's extended data.
+
+ @param latitude A location's latitude coordinate.
+ @param longitude A location's longitude coordinate.
+
+ @return An extended data dictionary representing a geographic coordinate, to be included in an event's extended data.
+ */
++ (NSDictionary *)extendedDataLocationForLatitude:(double)latitude longitude:(double)longitude NS_SWIFT_NAME(extendedData(latitude:longitude:));
+
+/**
+ Used to specify a commercial transaction (incorporating multiple items) in an event's extended data.
+
+ @param transactionID The transaction's ID.
+ @param affiliation The store or affiliation from which this transaction occurred.
+ @param revenue The transaction's revenue.
+ @param shipping The transaction's shipping cost.
+ @param tax Tax on the transaction.
+ @param currency Currency for revenue/shipping/tax values.
+ @param commerceItems An array of commerce items contained in the transaction. Create commerce items with [Apptentive extendedDataCommerceItemWithItemID:name:category:price:quantity:currency:].
+
+ @return An extended data dictionary representing a commerce transaction, to be included in an event's extended data.
+ */
++ (NSDictionary *)extendedDataCommerceWithTransactionID:(nullable NSString *)transactionID
+											affiliation:(nullable NSString *)affiliation
+												revenue:(nullable NSNumber *)revenue
+											   shipping:(nullable NSNumber *)shipping
+													tax:(nullable NSNumber *)tax
+											   currency:(nullable NSString *)currency
+										  commerceItems:(nullable NSArray<NSDictionary *> *)commerceItems
+	NS_SWIFT_NAME(extendedData(transactionID:affiliation:revenue:shipping:tax:currency:commerceItems:));
+
+/**
+ Used to specify a commercial transaction (consisting of a single item) in an event's extended data.
+
+ @param itemID The transaction item's ID.
+ @param name The transaction item's name.
+ @param category The transaction item's category.
+ @param price The individual item price.
+ @param quantity The number of units purchased.
+ @param currency Currency for price.
+
+ @return An extended data dictionary representing a single item in a commerce transaction, to be included in an event's extended data.
+ */
++ (NSDictionary *)extendedDataCommerceItemWithItemID:(nullable NSString *)itemID
+												name:(nullable NSString *)name
+											category:(nullable NSString *)category
+											   price:(nullable NSNumber *)price
+											quantity:(nullable NSNumber *)quantity
+											currency:(nullable NSString *)currency
+	NS_SWIFT_NAME(extendedData(itemID:name:category:price:quantity:currency:));
 
 ///--------------------
 /// @name Presenting UI
@@ -218,11 +353,7 @@ Before calling any other methods on the shared `Apptentive` instance, register y
  hide the "Message Center" button in your interface.
  **/
 
-#ifdef APPTENTIVE_PREFER_PROPERTIES
 @property (readonly, nonatomic) BOOL canShowMessageCenter;
-#else
-- (BOOL)canShowMessageCenter;
-#endif
 
 /**
  Presents Message Center modally from the specified view controller.
@@ -250,17 +381,27 @@ Before calling any other methods on the shared `Apptentive` instance, register y
 - (BOOL)presentMessageCenterFromViewController:(UIViewController *)viewController withCustomData:(nullable NSDictionary *)customData;
 
 /**
+ Dismisses Message Center.
+
+ @param animated `YES` to animate the dismissal, otherwise `NO`.
+ @param completion A block called at the conclusion of the message center being dismissed.
+
+ @note Under normal circumstances, Message Center will be dismissed by the user tapping the Close button, so it is not necessary to call this method.
+ */
+- (void)dismissMessageCenterAnimated:(BOOL)animated completion:(nullable void (^)(void))completion;
+
+///-------------------------------------
+/// @name Displaying Unread Message Count
+///-------------------------------------
+
+/**
  Returns the current number of unread messages in Message Center.
 
  These are the messages sent via the Apptentive website to this user.
 
  @return The number of unread messages.
  */
-#ifdef APPTENTIVE_PREFER_PROPERTIES
 @property (readonly, nonatomic) NSUInteger unreadMessageCount;
-#else
-- (NSUInteger)unreadMessageCount;
-#endif
 
 /**
  Returns a "badge" than can be used as a UITableViewCell accessoryView to indicate the current number of unread messages.
@@ -272,7 +413,40 @@ Before calling any other methods on the shared `Apptentive` instance, register y
 
  @return A badge view suitable for use as a table view cell accessory view.
  */
-- (UIView *)unreadMessageCountAccessoryView:(BOOL)apptentiveHeart APPTENTIVE_SWIFT_NAME(unreadMessageCountAccessoryView(apptentiveHeart:));
+- (UIView *)unreadMessageCountAccessoryView:(BOOL)apptentiveHeart NS_SWIFT_NAME(unreadMessageCountAccessoryView(apptentiveHeart:));
+
+///---------------------------------------
+/// @name Open App Store
+///---------------------------------------
+
+/**
+ Open your app's page on the App Store or Mac App Store.
+
+ This method can be used to power, for example, a "Rate this app" button in your settings screen.
+ `openAppStore` opens the app store directly, without the normal Apptentive Ratings Prompt.
+ */
+- (void)openAppStore;
+
+///------------------------------------
+/// @name Enable Push Notifications
+///------------------------------------
+
+/**
+ Register for Push Notifications with the given service provider.
+
+ Uses the `deviceToken` from `application:didRegisterForRemoteNotificationsWithDeviceToken:`
+
+ Only one Push Notification Integration can be added at a time. Setting a Push Notification
+ Integration removes all previously set Push Notification Integrations.
+
+ To enable background fetching of Message Center messages upon receiving a remote notification,
+ add `remote-notification` as a `UIBackgroundModes` value in your app's Info.plist.
+
+ @param pushProvider The Push Notification provider with which to register.
+ @param deviceToken The device token used to send Remote Notifications.
+ **/
+
+- (void)setPushNotificationIntegration:(ApptentivePushProvider)pushProvider withDeviceToken:(NSData *)deviceToken NS_SWIFT_NAME(setPushProvider(_:deviceToken:));
 
 /**
  Forwards a push notification from your application delegate to Apptentive Connect.
@@ -312,136 +486,13 @@ Before calling any other methods on the shared `Apptentive` instance, register y
 - (BOOL)didReceiveRemoteNotification:(NSDictionary *)userInfo fromViewController:(UIViewController *)viewController fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler;
 
 /**
- Forwards a local notification from your application delegate to Apptentive. 
+ Forwards a local notification from your application delegate to Apptentive.
 
  @param notification The `UILocalNotification` object received by the application delegate.
  @param viewController The view controller Message Center may be presented from.
  @return `YES` if the notification was sent by Apptentive, `NO` otherwise.
  */
-- (BOOL)didReceiveLocalNotification:(UILocalNotification *)notification fromViewController:(UIViewController *)viewController APPTENTIVE_SWIFT_NAME(didReceiveLocalNotification(_:from:));
-
-/**
-Returns a Boolean value indicating whether the given event will cause an Interaction to be shown.
-
- For example, returns YES if a survey is ready to be shown the next time you engage your survey-targeted event. You can use this method to hide a "Show Survey" button in your app if there is no survey to take.
-
- @param event A string representing the name of the event.
-
- @return `YES` if the event will show an interaction, `NO` otherwise.
- */
-- (BOOL)canShowInteractionForEvent:(NSString *)event;
-
-/**
- Shows interaction UI, if applicable, related to a given event.
-
- For example, if you have an upgrade message to display on app launch, you might call with event label set to
- `@"app.launch"` here, along with the view controller an upgrade message might be displayed from.
-
- @param event A string representing the name of the event.
- @param viewController A view controller Apptentive UI may be presented from. If `nil`, a view controller should be provided by the delegate.
-
- @return `YES` if an interaction was triggered by the event, `NO` otherwise.
- */
-- (BOOL)engage:(NSString *)event fromViewController:(UIViewController *_Nullable)viewController APPTENTIVE_SWIFT_NAME(engage(event:from:));
-
-/**
- Shows interaction UI, if applicable, related to a given event, and attaches the specified custom data to the event.
-
- @param event A string representing the name of the event.
- @param customData A dictionary of key/value pairs to be associated with the event. Keys and values should conform to standards of NSJSONSerialization's `isValidJSONObject:`.
- @param viewController A view controller Apptentive UI may be presented from. If `nil`, a view controller should be provided by the delegate.
-
- @return `YES` if an interaction was triggered by the event, `NO` otherwise.
-*/
-- (BOOL)engage:(NSString *)event withCustomData:(nullable NSDictionary *)customData fromViewController:(UIViewController *_Nullable)viewController APPTENTIVE_SWIFT_NAME(engage(event:withCustomData:from:));
-
-/**
- Shows interaction UI, if applicable, related to a given event. Attaches the specified custom data to the event along with the specified extended data.
-
- @param event A string representing the name of the event.
- @param customData A dictionary of key/value pairs to be associated with the event. Keys and values should conform to standards of NSJSONSerialization's `isValidJSONObject:`.
- @param extendedData An array of dictionaries with specific Apptentive formatting. For example, [Apptentive extendedDataDate:[NSDate date]].
- @param viewController A view controller Apptentive UI may be presented from. If `nil`, a view controller should be provided by the delegate.
-
- @return `YES` if an interaction was triggered by the event, `NO` otherwise.
- */
-- (BOOL)engage:(NSString *)event withCustomData:(nullable NSDictionary *)customData withExtendedData:(nullable NSArray<NSDictionary *> *)extendedData fromViewController:(UIViewController *_Nullable)viewController APPTENTIVE_SWIFT_NAME(engage(event:withCustomData:withExtendedData:from:));
-
-/**
- Dismisses Message Center.
-
- @param animated `YES` to animate the dismissal, otherwise `NO`.
- @param completion A block called at the conclusion of the message center being dismissed.
-
- @discussion Under normal circumstances, Message Center will be dismissed by the user tapping the Close button, so it is not necessary to call this method.
- */
-- (void)dismissMessageCenterAnimated:(BOOL)animated completion:(nullable void (^)(void))completion;
-
-///--------------------
-/// @name Extended Data for Events
-///--------------------
-
-/**
- Used to specify a point in time in an event's extended data.
-
- @param date A date and time to be included in an event's extended data.
-
- @return An extended data dictionary representing a point in time, to be included in an event's extended data.
- */
-+ (NSDictionary *)extendedDataDate:(NSDate *)date APPTENTIVE_SWIFT_NAME(extendedData(date:));
-
-/**
- Used to specify a geographic coordinate in an event's extended data.
-
- @param latitude A location's latitude coordinate.
- @param longitude A location's longitude coordinate.
-
- @return An extended data dictionary representing a geographic coordinate, to be included in an event's extended data.
- */
-+ (NSDictionary *)extendedDataLocationForLatitude:(double)latitude longitude:(double)longitude APPTENTIVE_SWIFT_NAME(extendedData(latitude:longitude:));
-
-/**
- Used to specify a commercial transaction (incorporating multiple items) in an event's extended data.
-
- @param transactionID The transaction's ID.
- @param affiliation The store or affiliation from which this transaction occurred.
- @param revenue The transaction's revenue.
- @param shipping The transaction's shipping cost.
- @param tax Tax on the transaction.
- @param currency Currency for revenue/shipping/tax values.
- @param commerceItems An array of commerce items contained in the transaction. Create commerce items with [Apptentive extendedDataCommerceItemWithItemID:name:category:price:quantity:currency:].
-
- @return An extended data dictionary representing a commerce transaction, to be included in an event's extended data.
-  */
-+ (NSDictionary *)extendedDataCommerceWithTransactionID:(nullable NSString *)transactionID
-											affiliation:(nullable NSString *)affiliation
-												revenue:(nullable NSNumber *)revenue
-											   shipping:(nullable NSNumber *)shipping
-													tax:(nullable NSNumber *)tax
-											   currency:(nullable NSString *)currency
-										  commerceItems:(nullable NSArray<NSDictionary *> *)commerceItems
-	APPTENTIVE_SWIFT_NAME(extendedData(transactionID:affiliation:revenue:shipping:tax:currency:commerceItems:));
-
-/**
- Used to specify a commercial transaction (consisting of a single item) in an event's extended data.
-
- @param itemID The transaction item's ID.
- @param name The transaction item's name.
- @param category The transaction item's category.
- @param price The individual item price.
- @param quantity The number of units purchased.
- @param currency Currency for price.
-
- @return An extended data dictionary representing a single item in a commerce transaction, to be included in an event's extended data.
- */
-+ (NSDictionary *)extendedDataCommerceItemWithItemID:(nullable NSString *)itemID
-												name:(nullable NSString *)name
-											category:(nullable NSString *)category
-											   price:(nullable NSNumber *)price
-											quantity:(nullable NSNumber *)quantity
-											currency:(nullable NSString *)currency
-	APPTENTIVE_SWIFT_NAME(extendedData(itemID:name:category:price:quantity:currency:));
-
+- (BOOL)didReceiveLocalNotification:(UILocalNotification *)notification fromViewController:(UIViewController *)viewController NS_SWIFT_NAME(didReceiveLocalNotification(_:from:));
 
 ///-------------------------------------
 /// @name Attach Text, Images, and Files
@@ -454,7 +505,7 @@ Returns a Boolean value indicating whether the given event will cause an Interac
 
  @param text The text to attach to the user's feedback as a file.
  */
-- (void)sendAttachmentText:(NSString *)text APPTENTIVE_SWIFT_NAME(sendAttachment(_:));
+- (void)sendAttachmentText:(NSString *)text NS_SWIFT_NAME(sendAttachment(_:));
 
 /**
  Attaches an image the user's feedback. This method should be called from the main thread only.
@@ -463,7 +514,7 @@ Returns a Boolean value indicating whether the given event will cause an Interac
 
  @param image The image to attach to the user's feedback as a file.
  */
-- (void)sendAttachmentImage:(UIImage *)image APPTENTIVE_SWIFT_NAME(sendAttachment(_:));
+- (void)sendAttachmentImage:(UIImage *)image NS_SWIFT_NAME(sendAttachment(_:));
 
 /**
  Attaches an arbitrary file to the user's feedback. This method should be called from the main thread only.
@@ -473,7 +524,7 @@ Returns a Boolean value indicating whether the given event will cause an Interac
  @param fileData The contents of the file as data.
  @param mimeType The MIME type of the file data.
  */
-- (void)sendAttachmentFile:(NSData *)fileData withMimeType:(NSString *)mimeType APPTENTIVE_SWIFT_NAME(sendAttachment(_:mimeType:));
+- (void)sendAttachmentFile:(NSData *)fileData withMimeType:(NSString *)mimeType NS_SWIFT_NAME(sendAttachment(_:mimeType:));
 
 ///---------------------------------------
 /// @name Add Custom Device or Person Data
@@ -511,7 +562,7 @@ Returns a Boolean value indicating whether the given event will cause an Interac
  @param string Custom data of type `NSString`.
  @param key A key to associate the data with.
  */
-- (void)addCustomDeviceDataString:(NSString *)string withKey:(NSString *)key APPTENTIVE_SWIFT_NAME(addCustomDeviceData(_:withKey:));
+- (void)addCustomDeviceDataString:(NSString *)string withKey:(NSString *)key NS_SWIFT_NAME(addCustomDeviceData(_:withKey:));
 
 /**
  Adds custom numeric data associated with the current device.
@@ -522,7 +573,7 @@ Returns a Boolean value indicating whether the given event will cause an Interac
  @param number Custom data of type `NSNumber`.
  @param key A key to associate the data with.
  */
-- (void)addCustomDeviceDataNumber:(NSNumber *)number withKey:(NSString *)key APPTENTIVE_SWIFT_NAME(addCustomDeviceData(_:withKey:));
+- (void)addCustomDeviceDataNumber:(NSNumber *)number withKey:(NSString *)key NS_SWIFT_NAME(addCustomDeviceData(_:withKey:));
 
 /**
  Adds custom Boolean data associated with the current device.
@@ -533,7 +584,7 @@ Returns a Boolean value indicating whether the given event will cause an Interac
  @param boolValue Custom data of type `BOOL`.
  @param key A key to associate the data with.
  */
-- (void)addCustomDeviceDataBool:(BOOL)boolValue withKey:(NSString *)key APPTENTIVE_SWIFT_NAME(addCustomDeviceData(_:withKey:));
+- (void)addCustomDeviceDataBool:(BOOL)boolValue withKey:(NSString *)key NS_SWIFT_NAME(addCustomDeviceData(_:withKey:));
 
 /**
  Adds custom text data associated with the current person.
@@ -544,7 +595,7 @@ Returns a Boolean value indicating whether the given event will cause an Interac
  @param string Custom data of type `NSString`.
  @param key A key to associate the data with.
  */
-- (void)addCustomPersonDataString:(NSString *)string withKey:(NSString *)key APPTENTIVE_SWIFT_NAME(addCustomPersonData(_:withKey:));
+- (void)addCustomPersonDataString:(NSString *)string withKey:(NSString *)key NS_SWIFT_NAME(addCustomPersonData(_:withKey:));
 
 /**
  Adds custom numeric data associated with the current person.
@@ -555,7 +606,7 @@ Returns a Boolean value indicating whether the given event will cause an Interac
  @param number Custom data of type `NSNumber`.
  @param key A key to associate the data with.
  */
-- (void)addCustomPersonDataNumber:(NSNumber *)number withKey:(NSString *)key APPTENTIVE_SWIFT_NAME(addCustomPersonData(_:withKey:));
+- (void)addCustomPersonDataNumber:(NSNumber *)number withKey:(NSString *)key NS_SWIFT_NAME(addCustomPersonData(_:withKey:));
 
 
 /**
@@ -567,49 +618,31 @@ Returns a Boolean value indicating whether the given event will cause an Interac
  @param boolValue Custom data of type `BOOL`.
  @param key A key to associate the data with.
  */
-- (void)addCustomPersonDataBool:(BOOL)boolValue withKey:(NSString *)key APPTENTIVE_SWIFT_NAME(addCustomPersonData(_:withKey:));
-
-///---------------------------------------
-/// @name Open App Store
-///---------------------------------------
-
-/**
- Open your app's page on the App Store or Mac App Store.
-
- This method can be used to power, for example, a "Rate this app" button in your settings screen.
- `openAppStore` opens the app store directly, without the normal Apptentive Ratings Prompt.
- */
-- (void)openAppStore;
+- (void)addCustomPersonDataBool:(BOOL)boolValue withKey:(NSString *)key NS_SWIFT_NAME(addCustomPersonData(_:withKey:));
 
 ///------------------------------------
-/// @name Add Push Notifications
+/// @name Miscellaneous
 ///------------------------------------
 
-/**
- Register for Push Notifications with the given service provider.
-
- Uses the `deviceToken` from `application:didRegisterForRemoteNotificationsWithDeviceToken:`
-
- Only one Push Notification Integration can be added at a time. Setting a Push Notification
- Integration removes all previously set Push Notification Integrations.
-
- To enable background fetching of Message Center messages upon receiving a remote notification,
- add `remote-notification` as a `UIBackgroundModes` value in your app's Info.plist.
-
- @param pushProvider The Push Notification provider with which to register.
- @param deviceToken The device token used to send Remote Notifications.
- **/
-
-- (void)setPushNotificationIntegration:(ApptentivePushProvider)pushProvider withDeviceToken:(NSData *)deviceToken APPTENTIVE_SWIFT_NAME(setPushProvider(_:deviceToken:));
 
 /**
  Dismisses any currently-visible interactions.
 
- @discussion This method is for internal use and is subject to change.
+ @note This method is for internal use and is subject to change.
 
  @param animated Whether to animate the dismissal.
  */
-- (void)dismissAllInteractions:(BOOL)animated APPTENTIVE_SWIFT_NAME(dismissAllInteractions(animated:));
+- (void)dismissAllInteractions:(BOOL)animated NS_SWIFT_NAME(dismissAllInteractions(animated:));
+
+///---------------------------------
+/// @name Interface Customization
+///---------------------------------
+
+/** The style sheet used for styling Apptentive UI.
+
+ @note See the [Apptentive Styling Guide for iOS](https://docs.apptentive.com/ios/customization/) for information on configuring this property.
+ */
+@property (strong, nonatomic) id<ApptentiveStyle> styleSheet;
 
 
 #if APPTENTIVE_DEBUG
@@ -644,12 +677,7 @@ Returns a Boolean value indicating whether the given event will cause an Interac
 /// @name Logging System
 ///---------------------------------
 
-#ifdef APPTENTIVE_PREFER_PROPERTIES
 @property (assign, nonatomic) ApptentiveLogLevel logLevel;
-#else
-- (ApptentiveLogLevel)logLevel;
-- (void)setLogLevel:(ApptentiveLogLevel)logLevel;
-#endif
 
 @end
 
@@ -672,7 +700,7 @@ Returns a Boolean value indicating whether the given event will cause an Interac
 
  @return The view controller your app would like the interaction to be presented from.
  */
-- (UIViewController *)viewControllerForInteractionsWithConnection:(Apptentive *)connection APPTENTIVE_SWIFT_NAME(viewControllerForInteractions(with:));
+- (UIViewController *)viewControllerForInteractionsWithConnection:(Apptentive *)connection NS_SWIFT_NAME(viewControllerForInteractions(with:));
 
 @end
 
@@ -689,9 +717,6 @@ Returns a Boolean value indicating whether the given event will cause an Interac
 @interface ApptentiveNavigationController : UINavigationController
 @end
 
-@compatibility_alias ATConnect Apptentive;
-@compatibility_alias ATNavigationController ApptentiveNavigationController;
-
 /**
  The ApptentiveStyle protocol allows extensive customization of the fonts and colors used by the Apptentive SDK's UI.
 
@@ -699,94 +724,97 @@ Returns a Boolean value indicating whether the given event will cause an Interac
  */
 @protocol ApptentiveStyle <NSObject>
 
-#ifndef NS_EXTENSIBLE_STRING_ENUM
-#define NS_EXTENSIBLE_STRING_ENUM
-#endif
-
+/** A typealias for string used to identify a text style or color. */
 typedef NSString *ApptentiveStyleIdentifier NS_EXTENSIBLE_STRING_ENUM;
 
 /**
  @param textStyle the text style whose font should be returned.
  @return the font to use for the given style.
  */
-- (UIFont *)fontForStyle:(ApptentiveStyleIdentifier)textStyle APPTENTIVE_SWIFT_NAME(font(for:));
+- (UIFont *)fontForStyle:(ApptentiveStyleIdentifier)textStyle NS_SWIFT_NAME(font(for:));
 
 /**
  @param style the style whose color should be returned.
  @return the color to use for the given style.
  */
-- (UIColor *)colorForStyle:(ApptentiveStyleIdentifier)style APPTENTIVE_SWIFT_NAME(color(for:));
+- (UIColor *)colorForStyle:(ApptentiveStyleIdentifier)style NS_SWIFT_NAME(color(for:));
 
 @end
 
-/// The text style for the title text of the greeting view in Message Center.
-extern ApptentiveStyleIdentifier ApptentiveTextStyleBody APPTENTIVE_SWIFT_NAME(body);
+NS_ASSUME_NONNULL_END
+
+#import "ApptentiveStyleSheet.h"
+
+NS_ASSUME_NONNULL_BEGIN
 
 /// The text style for the title text of the greeting view in Message Center.
-extern ApptentiveStyleIdentifier ApptentiveTextStyleHeaderTitle APPTENTIVE_SWIFT_NAME(headerTitle);
+extern ApptentiveStyleIdentifier ApptentiveTextStyleBody NS_SWIFT_NAME(body);
+
+/// The text style for the title text of the greeting view in Message Center.
+extern ApptentiveStyleIdentifier ApptentiveTextStyleHeaderTitle NS_SWIFT_NAME(headerTitle);
 
 /// The text style for the message text of the greeting view in Message Center.
-extern ApptentiveStyleIdentifier ApptentiveTextStyleHeaderMessage APPTENTIVE_SWIFT_NAME(headerMessage);
+extern ApptentiveStyleIdentifier ApptentiveTextStyleHeaderMessage NS_SWIFT_NAME(headerMessage);
 
 /// The text style for the date lables in Message Center.
-extern ApptentiveStyleIdentifier ApptentiveTextStyleMessageDate APPTENTIVE_SWIFT_NAME(messageDate);
+extern ApptentiveStyleIdentifier ApptentiveTextStyleMessageDate NS_SWIFT_NAME(messageDate);
 
 /// The text style for the message sender text in Message Center.
-extern ApptentiveStyleIdentifier ApptentiveTextStyleMessageSender APPTENTIVE_SWIFT_NAME(messageSender);
+extern ApptentiveStyleIdentifier ApptentiveTextStyleMessageSender NS_SWIFT_NAME(messageSender);
 
 /// The text style for the message status text in Message Center.
-extern ApptentiveStyleIdentifier ApptentiveTextStyleMessageStatus APPTENTIVE_SWIFT_NAME(messageStatus);
+extern ApptentiveStyleIdentifier ApptentiveTextStyleMessageStatus NS_SWIFT_NAME(messageStatus);
 
 /// The text style for the message center status text in Message Center.
-extern ApptentiveStyleIdentifier ApptentiveTextStyleMessageCenterStatus APPTENTIVE_SWIFT_NAME(messageCenterStatus);
+extern ApptentiveStyleIdentifier ApptentiveTextStyleMessageCenterStatus NS_SWIFT_NAME(messageCenterStatus);
 
 /// The text style for the survey description text.
-extern ApptentiveStyleIdentifier ApptentiveTextStyleSurveyInstructions APPTENTIVE_SWIFT_NAME(surveyInstructions);
+extern ApptentiveStyleIdentifier ApptentiveTextStyleSurveyInstructions NS_SWIFT_NAME(surveyInstructions);
 
 /// The text style for buttons that make changes when tapped.
-extern ApptentiveStyleIdentifier ApptentiveTextStyleDoneButton APPTENTIVE_SWIFT_NAME(doneButton);
+extern ApptentiveStyleIdentifier ApptentiveTextStyleDoneButton NS_SWIFT_NAME(doneButton);
 
 /// The text style for buttons that cancel or otherwise don't make changes when tapped.
-extern ApptentiveStyleIdentifier ApptentiveTextStyleButton APPTENTIVE_SWIFT_NAME(button);
+extern ApptentiveStyleIdentifier ApptentiveTextStyleButton NS_SWIFT_NAME(button);
 
 /// The text style for the the submit button on Surveys.
-extern ApptentiveStyleIdentifier ApptentiveTextStyleSubmitButton APPTENTIVE_SWIFT_NAME(submitButton);
+extern ApptentiveStyleIdentifier ApptentiveTextStyleSubmitButton NS_SWIFT_NAME(submitButton);
 
 /// The text style for text input fields.
-extern ApptentiveStyleIdentifier ApptentiveTextStyleTextInput APPTENTIVE_SWIFT_NAME(textInput);
+extern ApptentiveStyleIdentifier ApptentiveTextStyleTextInput NS_SWIFT_NAME(textInput);
 
 
 /// The background color for headers in Message Center and Surveys.
-extern ApptentiveStyleIdentifier ApptentiveColorHeaderBackground APPTENTIVE_SWIFT_NAME(headerBackground);
+extern ApptentiveStyleIdentifier ApptentiveColorHeaderBackground NS_SWIFT_NAME(headerBackground);
 
 /// The background color for the footer in Surveys.
-extern ApptentiveStyleIdentifier ApptentiveColorFooterBackground APPTENTIVE_SWIFT_NAME(footerBackground);
+extern ApptentiveStyleIdentifier ApptentiveColorFooterBackground NS_SWIFT_NAME(footerBackground);
 
 /// The foreground color for text and borders indicating a failure of validation or sending.
-extern ApptentiveStyleIdentifier ApptentiveColorFailure APPTENTIVE_SWIFT_NAME(failure);
+extern ApptentiveStyleIdentifier ApptentiveColorFailure NS_SWIFT_NAME(failure);
 
 /// The foreground color for borders in Message Center and Surveys.
-extern ApptentiveStyleIdentifier ApptentiveColorSeparator APPTENTIVE_SWIFT_NAME(separator);
+extern ApptentiveStyleIdentifier ApptentiveColorSeparator NS_SWIFT_NAME(separator);
 
 /// The background color for cells in Message Center and Surveys.
-extern ApptentiveStyleIdentifier ApptentiveColorBackground APPTENTIVE_SWIFT_NAME(background);
+extern ApptentiveStyleIdentifier ApptentiveColorBackground NS_SWIFT_NAME(background);
 
 /// The background color for table- and collection views.
-extern ApptentiveStyleIdentifier ApptentiveColorCollectionBackground APPTENTIVE_SWIFT_NAME(collectionBackground);
+extern ApptentiveStyleIdentifier ApptentiveColorCollectionBackground NS_SWIFT_NAME(collectionBackground);
 
 /// The background color for text input fields.
-extern ApptentiveStyleIdentifier ApptentiveColorTextInputBackground APPTENTIVE_SWIFT_NAME(textInputBackground);
+extern ApptentiveStyleIdentifier ApptentiveColorTextInputBackground NS_SWIFT_NAME(textInputBackground);
 
 /// The color for text input placeholder text.
-extern ApptentiveStyleIdentifier ApptentiveColorTextInputPlaceholder APPTENTIVE_SWIFT_NAME(textInputPlaceholder);
+extern ApptentiveStyleIdentifier ApptentiveColorTextInputPlaceholder NS_SWIFT_NAME(textInputPlaceholder);
 
 /// The background color for message cells in Message Center.
-extern ApptentiveStyleIdentifier ApptentiveColorMessageBackground APPTENTIVE_SWIFT_NAME(messageBackground);
+extern ApptentiveStyleIdentifier ApptentiveColorMessageBackground NS_SWIFT_NAME(messageBackground);
 
 /// The background color for reply cells in Message Center.
-extern ApptentiveStyleIdentifier ApptentiveColorReplyBackground APPTENTIVE_SWIFT_NAME(replyBackground);
+extern ApptentiveStyleIdentifier ApptentiveColorReplyBackground NS_SWIFT_NAME(replyBackground);
 
 /// The background color for context cells in Message Center.
-extern ApptentiveStyleIdentifier ApptentiveColorContextBackground APPTENTIVE_SWIFT_NAME(contextBackground);
+extern ApptentiveStyleIdentifier ApptentiveColorContextBackground NS_SWIFT_NAME(contextBackground);
 
 NS_ASSUME_NONNULL_END

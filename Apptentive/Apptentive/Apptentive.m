@@ -26,20 +26,22 @@
 #import "ApptentiveMessageSender.h"
 #import "ApptentiveAttachment.h"
 
-NSString *const ApptentiveMessageCenterUnreadCountChangedNotification = @"ApptentiveMessageCenterUnreadCountChangedNotification";
 
-NSString *const ApptentiveAppRatingFlowUserAgreedToRateAppNotification = @"ApptentiveAppRatingFlowUserAgreedToRateAppNotification";
+NSNotificationName const ApptentiveMessageCenterUnreadCountChangedNotification = @"ApptentiveMessageCenterUnreadCountChangedNotification";
 
-NSString *const ApptentiveSurveyShownNotification = @"ApptentiveSurveyShownNotification";
-NSString *const ApptentiveSurveySentNotification = @"ApptentiveSurveySentNotification";
+NSNotificationName const ApptentiveAppRatingFlowUserAgreedToRateAppNotification = @"ApptentiveAppRatingFlowUserAgreedToRateAppNotification";
+
+NSNotificationName const ApptentiveSurveyShownNotification = @"ApptentiveSurveyShownNotification";
+NSNotificationName const ApptentiveSurveySentNotification = @"ApptentiveSurveySentNotification";
+
+NSNotificationName const ApptentiveCustomPersonDataChangedNotification = @"ApptentiveCustomPersonDataChangedNotification";
+NSNotificationName const ApptentiveCustomDeviceDataChangedNotification = @"ApptentiveCustomDeviceDataChangedNotification";
+NSNotificationName const ApptentiveInteractionsDidUpdateNotification = @"ApptentiveInteractionsDidUpdateNotification";
+NSNotificationName const ApptentiveInteractionsShouldDismissNotification = @"ApptentiveInteractionsShouldDismissNotification";
+NSNotificationName const ApptentiveConversationCreatedNotification = @"ApptentiveConversationCreatedNotification";
+
 NSString *const ApptentiveSurveyIDKey = @"ApptentiveSurveyIDKey";
 NSString *const ApptentiveInteractionsShouldDismissAnimatedKey = @"ApptentiveInteractionsShouldDismissAnimatedKey";
-
-NSString *const ApptentiveCustomPersonDataChangedNotification = @"ApptentiveCustomPersonDataChangedNotification";
-NSString *const ApptentiveCustomDeviceDataChangedNotification = @"ApptentiveCustomDeviceDataChangedNotification";
-NSString *const ApptentiveInteractionsDidUpdateNotification = @"ApptentiveInteractionsDidUpdateNotification";
-NSString *const ApptentiveInteractionsShouldDismissNotification = @"ApptentiveInteractionsShouldDismissNotification";
-NSString *const ApptentiveConversationCreatedNotification = @"ApptentiveConversationCreatedNotification";
 
 NSString *const ApptentiveCustomDeviceDataPreferenceKey = @"ApptentiveCustomDeviceDataPreferenceKey";
 NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPersonDataPreferenceKey";

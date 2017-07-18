@@ -106,7 +106,7 @@
 		[context deleteObject:legacyMessage];
 	}
 
-	if (![[NSFileManager defaultManager] removeItemAtPath:oldAttachmentPath error:&error]) {
+	if ([[NSFileManager defaultManager] fileExistsAtPath:oldAttachmentPath] && ![[NSFileManager defaultManager] removeItemAtPath:oldAttachmentPath error:&error]) {
 		ApptentiveLogError(@"Unable to remove legacy attachments directory (%@): %@", oldAttachmentPath, error);
 	}
 }

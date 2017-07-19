@@ -2,7 +2,12 @@ This document tracks changes to the API between versions.
 
 #4.0.0
 
-* Adds a new method for forwarding local notifications from the application delegate to the Apptentive SDK. 
+* Adds a new `ApptentiveConfiguration` class.
+* Replaces the `-setAPIKey:` instance method with a `-registerWithConfiguration:` class method.
+* Adds methods for logging multiple users in and out.
+* Adds a new method for forwarding local notifications from the application delegate to the Apptentive SDK. This method must be called for push notifications to reach the Apptentive SDK. 
+* Removes the static library target. Use the dynamic framework target instead.
+* Adds a runtime log level setting, which defaults to `INFO` for all build configurations.
 
 # 3.3.1
 

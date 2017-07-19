@@ -196,15 +196,9 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 		}
 
 		// See if any of the non-custom device attributes have changed
-		ApptentiveDevice *device = [[ApptentiveDevice alloc] initWithCurrentDevice];
-		device.integrationConfiguration = self.device.integrationConfiguration;
+		_device = [[ApptentiveDevice alloc] initWithCurrentDevice];
 
-		NSDictionary *deviceDiffs = [ApptentiveUtilities diffDictionary:device.JSONDictionary againstDictionary:self.device.JSONDictionary];
-
-		if (deviceDiffs.count > 0) {
-			[self.delegate conversation:self deviceDidChange:deviceDiffs];
-			self.lastSentDevice = self.device.JSONDictionary;
-		}
+		[self checkForDeviceDiffs];
 	}
 }
 

@@ -117,6 +117,7 @@ static NSDictionary *_integrationConfiguration;
 
 	if (device) {
 		_integrationConfiguration = device[@"integration_config"];
+		[[self class] setIntegrationConfiguration:self.integrationConfiguration];
 	}
 
 	return self;

@@ -119,6 +119,9 @@ typedef NS_ENUM(NSUInteger, ApptentiveLogLevel) {
 /** The version of the distribution that includes the Apptentive SDK. */
 @property (copy, nonatomic, nullable) NSString *distributionVersion;
 
+/** The iTunes store app ID of the app (used for Apptentive rating prompt). */
+@property (copy, nonatomic, nullable) NSString *appID;
+
 + (nullable instancetype)configurationWithApptentiveKey:(NSString *)apptentiveKey apptentiveSignature:(NSString *)apptentiveSignature;
 
 @end

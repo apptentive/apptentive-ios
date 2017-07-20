@@ -115,6 +115,7 @@ static Apptentive *_sharedInstance;
 		_apptentiveKey = configuration.apptentiveKey;
 		_apptentiveSignature = configuration.apptentiveSignature;
 		_baseURL = configuration.baseURL;
+		_appID = configuration.appID;
 		_backend = [[ApptentiveBackend alloc] initWithApptentiveKey:_apptentiveKey
 														  signature:_apptentiveSignature
 															baseURL:_baseURL

@@ -9,6 +9,7 @@
 #import "ApptentiveConversationMetadata.h"
 #import "ApptentiveConversationMetadataItem.h"
 #import "ApptentiveConversation.h"
+#import "ApptentiveUtilities.h"
 
 #define VERSION 1
 
@@ -71,6 +72,63 @@ static NSString *const VersionKey = @"version";
 		}
 	}
 	return nil;
+}
+
+#pragma mark - Debug
+
+- (void)printAsTableWithTitle:(NSString *)title {
+	if (!ApptentiveCanLogLevel(ApptentiveLogLevelVerbose)) {
+		return;
+	}
+	
+	NSMutableArray *items = _items;
+	
+	if (items.count == 0) {
+		ApptentiveLogVerbose(ApptentiveLogTagConversation, "%@ (%ld item(s))", title, items.count);
+		return;
+	}
+	
+	NSMutableArray *rows = [NSMutableArray new];
+	[rows addObject:@[
+		@"state",
+		@"conversationIdentifier",
+		@"userId",
+		@"directoryName",
+		@"JWT",
+		@"encryptionKey"
+	]];
+	
+	NSMutableString *moreInfo = [NSMutableString new];
+	
+	NSInteger row = 1;
+	for (ApptentiveConversationMetadataItem *item in items) {
+		if (item.JWT) {
+			if (moreInfo.length > 0) {
+				[moreInfo appendString:@"\n"];
+			}
+			[moreInfo appendFormat:@"JWT-%ld: %@", row, item.JWT];
+		}
+		if (item.encryptionKey) {
+			if (moreInfo.length > 0) {
+				[moreInfo appendString:@"\n"];
+			}
+			[moreInfo appendFormat:@"KEY-%ld: %@", row, item.encryptionKey];
+		}
+		
+		[rows addObject:@[
+			NSStringFromApptentiveConversationState(item.state),
+			item.conversationIdentifier ?: @"nil",
+			item.userId ?: @"nil",
+			item.directoryName ?: @"nil",
+			item.JWT ? [NSString stringWithFormat:@"JWT-%ld", row] : @"nil",
+			item.encryptionKey ? [NSString stringWithFormat:@"KEY-%ld", row] : @"nil"
+		]];
+		
+		++row;
+	}
+	
+	NSString *table = [ApptentiveUtilities formatAsTableRows:rows];
+	ApptentiveLogVerbose(ApptentiveLogTagConversation, @"%@ (%ld item(s))\n%@\n%@\n-", title, items.count, table, moreInfo);
 }
 
 @end

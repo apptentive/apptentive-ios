@@ -91,6 +91,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 - (BOOL)loadActiveConversation {
 	// resolving metadata
 	_conversationMetadata = [self resolveMetadata];
+	[_conversationMetadata printAsTableWithTitle:@"Loaded Metadata"];
 
 	// attempt to load existing conversation
 	self.activeConversation = [self loadConversation];
@@ -337,6 +338,8 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	}
 
 	[self updateMetadataItems:conversation];
+	
+	[_conversationMetadata printAsTableWithTitle:@"Conversation state changed"];
 }
 
 - (void)updateMetadataItems:(ApptentiveConversation *)conversation {

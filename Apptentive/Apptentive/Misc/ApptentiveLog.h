@@ -19,6 +19,7 @@
 
 extern ApptentiveLogLevel ApptentiveLogGetLevel(void);
 extern void ApptentiveLogSetLevel(ApptentiveLogLevel level);
+extern BOOL ApptentiveCanLogLevel(ApptentiveLogLevel level);
 
 void ApptentiveLogCrit(id arg, ...);
 void ApptentiveLogError(id arg, ...);

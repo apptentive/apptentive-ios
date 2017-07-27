@@ -384,4 +384,44 @@ UIViewController *topChildViewController(UIViewController *viewController) {
 	return [base64String stringByPaddingToLength:lengthRoundedUpToNextMultipleOfFour withString:@"=" startingAtIndex:0];
 }
 
++ (NSString *)formatAsTableRows:(NSArray<NSArray *> *)rows {
+	NSMutableArray *columnSizes = [[NSMutableArray alloc] initWithCapacity:rows[0].count];
+	for (int i = 0; i < rows[0].count; ++i) {
+		[columnSizes addObject:@0];
+	}
+	
+	for (NSArray *row in rows) {
+		for (int i = 0; i < row.count; ++i) {
+			columnSizes[i] = [NSNumber numberWithInteger:MAX([columnSizes[i] intValue], [row[i] description].length)];
+		}
+	}
+	
+	NSMutableString *line = [NSMutableString new];
+	int totalSize = 0;
+	for (int i = 0; i < columnSizes.count; ++i) {
+		totalSize += [columnSizes[i] intValue];
+	}
+	totalSize += columnSizes.count > 0 ? (columnSizes.count - 1) * @" | ".length : 0;
+	while (totalSize-- > 0) {
+		[line appendString:@"-"];
+	}
+	
+	NSMutableString *result = [[NSMutableString alloc] initWithString:line];
+	
+	for (NSArray *row in rows) {
+		[result appendString:@"\n"];
+		
+		for (int i = 0; i < row.count; ++i) {
+			if (i > 0) {
+				[result appendString:@" | "];
+			}
+			[result appendString:[[row[i] description] stringByPaddingToLength:[columnSizes[i] intValue] withString:@" " startingAtIndex:0]];
+		}
+	}
+	[result appendString:@"\n"];
+	[result appendString:line];
+			 
+	return result;
+}
+
 @end

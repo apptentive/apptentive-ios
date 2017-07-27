@@ -21,4 +21,6 @@ typedef BOOL (^ApptentiveConversationMetadataItemFilter)(ApptentiveConversationM
 - (void)addItem:(ApptentiveConversationMetadataItem *)item;
 - (void)deleteItem:(ApptentiveConversationMetadataItem *)item;
 
+- (void)printAsTableWithTitle:(NSString *)title;
+
 @end

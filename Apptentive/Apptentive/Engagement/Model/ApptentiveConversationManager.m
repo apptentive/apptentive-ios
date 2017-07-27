@@ -91,6 +91,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 - (BOOL)loadActiveConversation {
 	// resolving metadata
 	_conversationMetadata = [self resolveMetadata];
+	[_conversationMetadata printAsTableWithTitle:@"Loaded Metadata"];
 
 	// attempt to load existing conversation
 	self.activeConversation = [self loadConversation];
@@ -149,10 +150,19 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	ApptentiveConversation *legacyConversation = [[ApptentiveConversation alloc] initAndMigrate];
 	if (legacyConversation != nil) {
 		ApptentiveLogDebug(ApptentiveLogTagConversation, @"Found legacy conversation. Migrating to anonymous conversation...");
-		[self fetchLegacyConversation:legacyConversation];
+
 		[Apptentive.shared.backend migrateLegacyCoreDataAndTaskQueueForConversation:legacyConversation conversationDirectoryPath:[self conversationContainerPathForDirectoryName:legacyConversation.directoryName]];
 
-		[self migrateEngagementManifest];
+		if (legacyConversation.token) {
+			[self fetchLegacyConversation:legacyConversation];
+
+			[self migrateEngagementManifest];
+		} else {
+			ApptentiveLogDebug(ApptentiveLogTagConversation, @"Legacy conversation missing token, etc. Fixing up and creating new conversation...");
+			[legacyConversation updateWithCurrentValues];
+
+			[self fetchConversationToken:legacyConversation];
+		}
 
 		return legacyConversation;
 	}
@@ -267,7 +277,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 #pragma mark - Conversation Token Fetching
 
 - (void)fetchConversationToken:(ApptentiveConversation *)conversation {
-	ApptentiveAssertNil(self.conversationOperation, "Another request fetch request is running");
+	ApptentiveAssertNil(self.conversationOperation, @"Another request fetch request is running");
 	self.conversationOperation.delegate = nil;
 	[self.conversationOperation cancel];
 
@@ -329,6 +339,8 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	}
 
 	[self updateMetadataItems:conversation];
+
+	[_conversationMetadata printAsTableWithTitle:@"Conversation state changed"];
 }
 
 - (void)updateMetadataItems:(ApptentiveConversation *)conversation {

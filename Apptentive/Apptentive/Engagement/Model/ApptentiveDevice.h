@@ -100,4 +100,6 @@ extern NSString *const ATDeviceLastUpdateValuePreferenceKey;
  */
 - (instancetype)initWithCurrentDevice;
 
+- (void)updateWithCurrentDeviceValues;
+
 @end

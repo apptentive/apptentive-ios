@@ -49,5 +49,6 @@
 + (NSString *)dictionaryToJsonString:(NSDictionary *)dictionary;
 
 + (NSString *)stringByPaddingBase64:(NSString *)base64String;
++ (NSString *)formatAsTableRows:(NSArray<NSArray *> *)rows;
 
 @end

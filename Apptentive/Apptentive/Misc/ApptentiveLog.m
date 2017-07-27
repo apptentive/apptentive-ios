@@ -145,3 +145,7 @@ ApptentiveLogLevel ApptentiveLogGetLevel(void) {
 void ApptentiveLogSetLevel(ApptentiveLogLevel level) {
 	_logLevel = level;
 }
+
+BOOL ApptentiveCanLogLevel(ApptentiveLogLevel level) {
+	return shouldLogLevel(level);
+}

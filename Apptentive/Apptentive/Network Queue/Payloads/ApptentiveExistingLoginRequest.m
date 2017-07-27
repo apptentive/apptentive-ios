@@ -13,8 +13,6 @@
 
 @implementation ApptentiveExistingLoginRequest
 
-@synthesize conversationIdentifier = _conversationIdentifier;
-
 - (instancetype)initWithAppInstall:(id<ApptentiveAppInstall>)appInstall {
 	APPTENTIVE_CHECK_INIT_NOT_EMPTY_ARG(appInstall.token);
 	APPTENTIVE_CHECK_INIT_NOT_EMPTY_ARG(appInstall.identifier);

@@ -34,6 +34,10 @@
 	return @"conversations";
 }
 
+- (NSString *)conversationIdentifier {
+	return self.appInstall.identifier;
+}
+
 - (NSDictionary *)JSONDictionary {
 	// Combine app release and SDK JSON payloads
 	NSMutableDictionary *appReleaseJSON = [self.appInstall.appRelease.JSONDictionary mutableCopy];

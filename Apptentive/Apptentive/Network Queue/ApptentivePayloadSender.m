@@ -10,6 +10,7 @@
 #import "ApptentiveClient.h"
 #import "ApptentiveSerialRequest.h"
 #import "ApptentiveConversation.h"
+#import "ApptentivePayloadDebug.h"
 
 
 @interface ApptentivePayloadSender ()
@@ -66,6 +67,8 @@
 
 		__block NSArray *queuedRequests;
 		[childContext performBlockAndWait:^{
+			[ApptentivePayloadDebug printPayloadSendingQueueWithContext:childContext title:@"Sending payloads..."];
+			
 			NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"QueuedRequest"];
 			fetchRequest.sortDescriptors = @[ [NSSortDescriptor sortDescriptorWithKey:@"date" ascending:YES] ];
 			fetchRequest.predicate = [NSPredicate predicateWithFormat:@"conversationIdentifier != nil"]; // make sure we don't include "anonymous" conversation here
@@ -309,6 +312,8 @@
                 // we call -createOperationsForQueuedRequestsInContext: to send everything
                 [self createOperationsForQueuedRequestsInContext:context];
             }];
+
+			[ApptentivePayloadDebug printPayloadSendingQueueWithContext:context title:@"Recently Added CIDs"];
 		}
 	}];
 }
@@ -319,6 +324,7 @@
 	if (requestToDelete != nil) {
 		[requestToDelete.managedObjectContext performBlockAndWait:^{
 			[requestToDelete.managedObjectContext deleteObject:requestToDelete];
+			[ApptentivePayloadDebug printPayloadSendingQueueWithContext:requestToDelete.managedObjectContext title:@"Deleted payload"];
 		}];
 	}
 }

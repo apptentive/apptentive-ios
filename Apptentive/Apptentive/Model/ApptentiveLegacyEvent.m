@@ -39,21 +39,23 @@
 		ApptentiveAssertNotNil(payload, @"Failed to create an event payload");
 
 		// Add custom data, interaction identifier, and extended data
-		NSDictionary *dictionaryData = [NSKeyedUnarchiver unarchiveObjectWithData:event.dictionaryData];
+		if (event.dictionaryData != nil) {
+			NSDictionary *dictionaryData = [NSKeyedUnarchiver unarchiveObjectWithData:event.dictionaryData];
 
-		payload.customData = dictionaryData[@"custom_data"];
+			payload.customData = dictionaryData[@"custom_data"];
 
-		payload.interactionIdentifier = dictionaryData[@"interaction_id"];
+			payload.interactionIdentifier = dictionaryData[@"interaction_id"];
 
-		NSMutableArray *extendedData = [NSMutableArray array];
-		NSArray *extendedDataKeys = @[@"commerce", @"location", @"time"];
-		for (NSString *key in dictionaryData) {
-			if ([extendedDataKeys containsObject:key]) {
-				[extendedData addObject:@{key: dictionaryData[key]}];
+			NSMutableArray *extendedData = [NSMutableArray array];
+			NSArray *extendedDataKeys = @[@"commerce", @"location", @"time"];
+			for (NSString *key in dictionaryData) {
+				if ([extendedDataKeys containsObject:key]) {
+					[extendedData addObject:@{key: dictionaryData[key]}];
+				}
 			}
-		}
 
-		payload.extendedData = extendedData;
+			payload.extendedData = extendedData;
+		}
 
 		if (payload != nil) {
 			[ApptentiveSerialRequest enqueuePayload:payload forConversation:conversation usingAuthToken:conversation.token inContext:context];

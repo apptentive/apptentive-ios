@@ -277,7 +277,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 #pragma mark - Conversation Token Fetching
 
 - (void)fetchConversationToken:(ApptentiveConversation *)conversation {
-	ApptentiveAssertNil(self.conversationOperation, "Another request fetch request is running");
+	ApptentiveAssertNil(self.conversationOperation, @"Another request fetch request is running");
 	self.conversationOperation.delegate = nil;
 	[self.conversationOperation cancel];
 

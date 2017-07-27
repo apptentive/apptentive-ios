@@ -312,6 +312,8 @@
                 // we call -createOperationsForQueuedRequestsInContext: to send everything
                 [self createOperationsForQueuedRequestsInContext:context];
             }];
+
+			[ApptentivePayloadDebug printPayloadSendingQueueWithContext:context title:@"Recently Added CIDs"];
 		}
 	}];
 }

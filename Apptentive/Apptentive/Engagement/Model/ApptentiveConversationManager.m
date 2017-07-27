@@ -158,6 +158,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 			[self migrateEngagementManifest];
 		} else {
+			ApptentiveLogDebug(ApptentiveLogTagConversation, @"Legacy conversation missing token, etc. Fixing up and creating new conversation...");
 			[legacyConversation updateWithCurrentValues];
 
 			[self fetchConversationToken:legacyConversation];
@@ -338,7 +339,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	}
 
 	[self updateMetadataItems:conversation];
-	
+
 	[_conversationMetadata printAsTableWithTitle:@"Conversation state changed"];
 }
 

@@ -297,17 +297,19 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 
 		NSData *legacyConversationData = [[NSUserDefaults standardUserDefaults] dataForKey:ATCurrentConversationPreferenceKey];
 
-		[NSKeyedUnarchiver setClass:[ApptentiveLegacyConversation class] forClassName:@"ApptentiveConversation"];
-		[NSKeyedUnarchiver setClass:[ApptentiveLegacyConversation class] forClassName:@"ATConversation"];
+		if (legacyConversationData != nil) {
+			[NSKeyedUnarchiver setClass:[ApptentiveLegacyConversation class] forClassName:@"ApptentiveConversation"];
+			[NSKeyedUnarchiver setClass:[ApptentiveLegacyConversation class] forClassName:@"ATConversation"];
 
-		ApptentiveLegacyConversation *legacyConversation = (ApptentiveLegacyConversation *)[NSKeyedUnarchiver unarchiveObjectWithData:legacyConversationData];
+			ApptentiveLegacyConversation *legacyConversation = (ApptentiveLegacyConversation *)[NSKeyedUnarchiver unarchiveObjectWithData:legacyConversationData];
 
-		[NSKeyedUnarchiver setClass:[self class] forClassName:@"ApptentiveConversation"];
+			[NSKeyedUnarchiver setClass:[self class] forClassName:@"ApptentiveConversation"];
 
-		// we only need a legacy token here: jwt-token and conversation id would be fetched later
-		_legacyToken = legacyConversation.token;
-		_person.identifier = legacyConversation.personID;
-		_device.identifier = legacyConversation.deviceID;
+			// we only need a legacy token here: jwt-token and conversation id would be fetched later
+			_legacyToken = legacyConversation.token;
+			_person.identifier = legacyConversation.personID;
+			_device.identifier = legacyConversation.deviceID;
+		}
 
 		_mutableUserInfo = [NSMutableDictionary dictionary];
 
@@ -325,7 +327,7 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 		// Migrate last sent person if available
 		NSData *lastSentPersondata = [[NSUserDefaults standardUserDefaults] dataForKey:ATPersonLastUpdateValuePreferenceKey];
 
-		if (lastSentPersondata) {
+		if (lastSentPersondata != nil) {
 			NSDictionary *person = [NSKeyedUnarchiver unarchiveObjectWithData:lastSentPersondata];
 			if ([person isKindOfClass:[NSDictionary class]]) {
 				_lastSentPerson = person[@"person"];
@@ -338,6 +340,14 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 	}
 
 	return self;
+}
+
+- (void)updateWithCurrentValues {
+	_SDK = [[ApptentiveSDK alloc] initWithCurrentSDK];
+	_appRelease = [[ApptentiveAppRelease alloc] initWithCurrentAppRelease];
+	_state = ApptentiveConversationStateAnonymousPending;
+
+	[self.device updateWithCurrentDeviceValues];
 }
 
 + (void)deleteMigratedData {

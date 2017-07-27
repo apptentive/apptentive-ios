@@ -212,6 +212,8 @@ extern NSString *NSStringFromApptentiveConversationState(ApptentiveConversationS
  */
 - (void)removeUserInfoForKey:(NSString *)key;
 
+- (void)updateWithCurrentValues;
+
 @end
 
 

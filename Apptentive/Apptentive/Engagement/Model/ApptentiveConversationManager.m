@@ -149,10 +149,18 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	ApptentiveConversation *legacyConversation = [[ApptentiveConversation alloc] initAndMigrate];
 	if (legacyConversation != nil) {
 		ApptentiveLogDebug(ApptentiveLogTagConversation, @"Found legacy conversation. Migrating to anonymous conversation...");
-		[self fetchLegacyConversation:legacyConversation];
+
 		[Apptentive.shared.backend migrateLegacyCoreDataAndTaskQueueForConversation:legacyConversation conversationDirectoryPath:[self conversationContainerPathForDirectoryName:legacyConversation.directoryName]];
 
-		[self migrateEngagementManifest];
+		if (legacyConversation.token) {
+			[self fetchLegacyConversation:legacyConversation];
+
+			[self migrateEngagementManifest];
+		} else {
+			[legacyConversation updateWithCurrentValues];
+
+			[self fetchConversationToken:legacyConversation];
+		}
 
 		return legacyConversation;
 	}

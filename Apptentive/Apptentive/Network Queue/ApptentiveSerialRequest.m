@@ -15,6 +15,7 @@
 #import "NSData+Encryption.h"
 #import "ApptentiveUtilities.h"
 #import "Apptentive_Private.h"
+#import "ApptentivePayloadDebug.h"
 
 
 @implementation ApptentiveSerialRequest
@@ -118,17 +119,33 @@
         if (![childContext save:&saveError]) {
             ApptentiveLogError(@"Unable to save temporary managed object context: %@", saveError);
         }
-        
-        // save parent context
+		
+		// save parent context
         [context performBlockAndWait:^{
             NSError *parentSaveError;
             if (![context save:&parentSaveError]) {
                 ApptentiveLogError(@"Unable to save parent managed object context: %@", parentSaveError);
             }
         }];
+		
+		// print payload queue
+		[ApptentivePayloadDebug printPayloadSendingQueueWithContext:childContext title:@"Enqueue payload"];
 	}];
 
 	return YES;
+}
+
+- (void)printPayloadQueueWithContext:(NSManagedObjectContext *)context {
+	NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"QueuedRequest"];
+	fetchRequest.sortDescriptors = @[ [NSSortDescriptor sortDescriptorWithKey:@"date" ascending:YES] ];
+	
+	NSError *error;
+	NSArray *queuedRequests = [context executeFetchRequest:fetchRequest error:&error];
+	
+	if (queuedRequests == nil) {
+		ApptentiveLogError(ApptentiveLogTagPayload, @"Unable to fetch waiting network payloads.");
+	}
+
 }
 
 - (void)awakeFromFetch {

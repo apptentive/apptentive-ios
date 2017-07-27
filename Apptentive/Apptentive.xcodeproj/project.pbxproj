@@ -368,6 +368,8 @@
 		EF18123F1E807FC00053BD68 /* ApptentiveAssert.h in Headers */ = {isa = PBXBuildFile; fileRef = EF18123D1E807FC00053BD68 /* ApptentiveAssert.h */; };
 		EF18124B1E8084C80053BD68 /* ApptentiveSafeCollections.h in Headers */ = {isa = PBXBuildFile; fileRef = EF1812491E8084C80053BD68 /* ApptentiveSafeCollections.h */; };
 		EF18124D1E8084C80053BD68 /* ApptentiveSafeCollections.m in Sources */ = {isa = PBXBuildFile; fileRef = EF18124A1E8084C80053BD68 /* ApptentiveSafeCollections.m */; };
+		EF3063A91F2A8353004B4EB9 /* ApptentivePayloadDebug.h in Headers */ = {isa = PBXBuildFile; fileRef = EF3063A71F2A8353004B4EB9 /* ApptentivePayloadDebug.h */; };
+		EF3063AA1F2A8353004B4EB9 /* ApptentivePayloadDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = EF3063A81F2A8353004B4EB9 /* ApptentivePayloadDebug.m */; };
 		EF49AC941EF2C50B00E2187F /* NSMutableData+Types.h in Headers */ = {isa = PBXBuildFile; fileRef = EF49AC921EF2C50B00E2187F /* NSMutableData+Types.h */; };
 		EF49AC951EF2C50B00E2187F /* NSMutableData+Types.m in Sources */ = {isa = PBXBuildFile; fileRef = EF49AC931EF2C50B00E2187F /* NSMutableData+Types.m */; };
 		EF8EE3981EB3F37B0033E7A1 /* ApptentiveConversationBaseRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = EF8EE3961EB3F37B0033E7A1 /* ApptentiveConversationBaseRequest.h */; };
@@ -792,6 +794,8 @@
 		EF18123D1E807FC00053BD68 /* ApptentiveAssert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveAssert.h; sourceTree = "<group>"; };
 		EF1812491E8084C80053BD68 /* ApptentiveSafeCollections.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveSafeCollections.h; sourceTree = "<group>"; };
 		EF18124A1E8084C80053BD68 /* ApptentiveSafeCollections.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveSafeCollections.m; sourceTree = "<group>"; };
+		EF3063A71F2A8353004B4EB9 /* ApptentivePayloadDebug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentivePayloadDebug.h; sourceTree = "<group>"; };
+		EF3063A81F2A8353004B4EB9 /* ApptentivePayloadDebug.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentivePayloadDebug.m; sourceTree = "<group>"; };
 		EF37099C1EDE19F300CFC5E5 /* ApptentiveDefines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ApptentiveDefines.h; sourceTree = "<group>"; };
 		EF49AC921EF2C50B00E2187F /* NSMutableData+Types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableData+Types.h"; sourceTree = "<group>"; };
 		EF49AC931EF2C50B00E2187F /* NSMutableData+Types.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableData+Types.m"; sourceTree = "<group>"; };
@@ -1430,16 +1434,18 @@
 			isa = PBXGroup;
 			children = (
 				0174771D1EA92BDC00A0A949 /* Requests & Payloads */,
+				014508AF1EAE5F71003326E7 /* ApptentiveClient.h */,
+				014508B01EAE5F71003326E7 /* ApptentiveClient.m */,
+				EF3063A71F2A8353004B4EB9 /* ApptentivePayloadDebug.h */,
+				EF3063A81F2A8353004B4EB9 /* ApptentivePayloadDebug.m */,
+				01798C001EAF94FD00633164 /* ApptentivePayloadSender.h */,
+				01798C011EAF94FD00633164 /* ApptentivePayloadSender.m */,
 				01A2D0BC1E490A9700C2103A /* ApptentiveRequestOperation.h */,
 				01A2D0BD1E490A9700C2103A /* ApptentiveRequestOperation.m */,
 				01A2D0C21E490A9700C2103A /* ApptentiveSerialRequest.h */,
 				01A2D0C31E490A9700C2103A /* ApptentiveSerialRequest.m */,
 				01A2D0C41E490A9700C2103A /* ApptentiveSerialRequestAttachment.h */,
 				01A2D0C51E490A9700C2103A /* ApptentiveSerialRequestAttachment.m */,
-				014508AF1EAE5F71003326E7 /* ApptentiveClient.h */,
-				014508B01EAE5F71003326E7 /* ApptentiveClient.m */,
-				01798C001EAF94FD00633164 /* ApptentivePayloadSender.h */,
-				01798C011EAF94FD00633164 /* ApptentivePayloadSender.m */,
 			);
 			name = Networking;
 			path = "Network Queue";
@@ -1663,6 +1669,7 @@
 				01A2D1901E490A9700C2103A /* ApptentiveMessageCenterGreetingView.h in Headers */,
 				01A2D10D1E490A9700C2103A /* ApptentiveInteractionNavigateToLink.h in Headers */,
 				01A2D1761E490A9700C2103A /* ApptentiveMessageCenterViewModel.h in Headers */,
+				EF3063A91F2A8353004B4EB9 /* ApptentivePayloadDebug.h in Headers */,
 				01F1DFFC1E5BBFCB009AB3D2 /* ApptentiveConversationMetadataItem.h in Headers */,
 				01A2D1FA1E490A9700C2103A /* ApptentiveSurveyQuestionView.h in Headers */,
 				01A2CFA21E49062800C2103A /* Apptentive.h in Headers */,
@@ -2089,6 +2096,7 @@
 				01A2D18F1E490A9700C2103A /* ApptentiveMessageCenterContextMessageCell.m in Sources */,
 				EF8EE39B1EB3FB120033E7A1 /* ApptentiveAssert.m in Sources */,
 				01A2D1FB1E490A9700C2103A /* ApptentiveSurveyQuestionView.m in Sources */,
+				EF3063AA1F2A8353004B4EB9 /* ApptentivePayloadDebug.m in Sources */,
 				01A2D1421E490A9700C2103A /* ApptentiveVersion.m in Sources */,
 				0140D5FF1E835420007B5130 /* ApptentiveAttachment.m in Sources */,
 				01A2D1E71E490A9700C2103A /* ApptentiveSurveyViewController.m in Sources */,

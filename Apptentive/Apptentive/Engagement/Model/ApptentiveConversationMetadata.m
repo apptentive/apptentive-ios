@@ -80,14 +80,14 @@ static NSString *const VersionKey = @"version";
 	if (!ApptentiveCanLogLevel(ApptentiveLogLevelVerbose)) {
 		return;
 	}
-	
+
 	NSMutableArray *items = _items;
-	
+
 	if (items.count == 0) {
-		ApptentiveLogVerbose(ApptentiveLogTagConversation, "%@ (%ld item(s))", title, items.count);
+		ApptentiveLogVerbose(ApptentiveLogTagConversation, @"%@ (%ld item(s))", title, items.count);
 		return;
 	}
-	
+
 	NSMutableArray *rows = [NSMutableArray new];
 	[rows addObject:@[
 		@"state",
@@ -97,9 +97,9 @@ static NSString *const VersionKey = @"version";
 		@"JWT",
 		@"encryptionKey"
 	]];
-	
+
 	NSMutableString *moreInfo = [NSMutableString new];
-	
+
 	NSInteger row = 1;
 	for (ApptentiveConversationMetadataItem *item in items) {
 		if (item.JWT) {
@@ -114,7 +114,7 @@ static NSString *const VersionKey = @"version";
 			}
 			[moreInfo appendFormat:@"KEY-%ld: %@", row, item.encryptionKey];
 		}
-		
+
 		[rows addObject:@[
 			NSStringFromApptentiveConversationState(item.state),
 			item.conversationIdentifier ?: @"nil",
@@ -123,10 +123,10 @@ static NSString *const VersionKey = @"version";
 			item.JWT ? [NSString stringWithFormat:@"JWT-%ld", row] : @"nil",
 			item.encryptionKey ? [NSString stringWithFormat:@"KEY-%ld", row] : @"nil"
 		]];
-		
+
 		++row;
 	}
-	
+
 	NSString *table = [ApptentiveUtilities formatAsTableRows:rows];
 	ApptentiveLogVerbose(ApptentiveLogTagConversation, @"%@ (%ld item(s))\n%@\n%@\n-", title, items.count, table, moreInfo);
 }

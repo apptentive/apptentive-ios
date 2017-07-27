@@ -389,13 +389,13 @@ UIViewController *topChildViewController(UIViewController *viewController) {
 	for (int i = 0; i < rows[0].count; ++i) {
 		[columnSizes addObject:@0];
 	}
-	
+
 	for (NSArray *row in rows) {
 		for (int i = 0; i < row.count; ++i) {
 			columnSizes[i] = [NSNumber numberWithInteger:MAX([columnSizes[i] intValue], [row[i] description].length)];
 		}
 	}
-	
+
 	NSMutableString *line = [NSMutableString new];
 	int totalSize = 0;
 	for (int i = 0; i < columnSizes.count; ++i) {
@@ -405,12 +405,12 @@ UIViewController *topChildViewController(UIViewController *viewController) {
 	while (totalSize-- > 0) {
 		[line appendString:@"-"];
 	}
-	
+
 	NSMutableString *result = [[NSMutableString alloc] initWithString:line];
-	
+
 	for (NSArray *row in rows) {
 		[result appendString:@"\n"];
-		
+
 		for (int i = 0; i < row.count; ++i) {
 			if (i > 0) {
 				[result appendString:@" | "];
@@ -420,7 +420,7 @@ UIViewController *topChildViewController(UIViewController *viewController) {
 	}
 	[result appendString:@"\n"];
 	[result appendString:line];
-			 
+
 	return result;
 }
 

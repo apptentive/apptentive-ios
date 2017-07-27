@@ -137,15 +137,14 @@
 
 - (void)printPayloadQueueWithContext:(NSManagedObjectContext *)context {
 	NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"QueuedRequest"];
-	fetchRequest.sortDescriptors = @[ [NSSortDescriptor sortDescriptorWithKey:@"date" ascending:YES] ];
-	
+	fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"date" ascending:YES]];
+
 	NSError *error;
 	NSArray *queuedRequests = [context executeFetchRequest:fetchRequest error:&error];
-	
+
 	if (queuedRequests == nil) {
 		ApptentiveLogError(ApptentiveLogTagPayload, @"Unable to fetch waiting network payloads.");
 	}
-
 }
 
 - (void)awakeFromFetch {

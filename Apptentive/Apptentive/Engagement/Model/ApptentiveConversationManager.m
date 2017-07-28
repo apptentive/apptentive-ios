@@ -153,7 +153,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 		[Apptentive.shared.backend migrateLegacyCoreDataAndTaskQueueForConversation:legacyConversation conversationDirectoryPath:[self conversationContainerPathForDirectoryName:legacyConversation.directoryName]];
 
-		if (legacyConversation.token) {
+		if (legacyConversation.legacyToken) {
 			[self fetchLegacyConversation:legacyConversation];
 
 			[self migrateEngagementManifest];

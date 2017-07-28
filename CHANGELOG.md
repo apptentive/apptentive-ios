@@ -1,3 +1,7 @@
+2017-07-28 frankus, weeebox v4.0.1
+----------------------------------
+Version 4.0.1 fixes a bug where a small number of legacy SDK installations could be incorrectly migrated and could cause the SDK to get stuck in an invalid state. It also corrects a bug where JWTs were not deleted on logout (they would still be revoked on the server).
+
 2017-07-18 frankus, weeebox v4.0.0
 ----------------------------------
 Version 4.0.0 adds the ability to pass customer authentication to Apptentive to protect and separate each customer's personal information from one another. It uses a new method for initializing the SDK. There is also a new method (required for using push) to forward local notifications to the SDK. Static library support has been dropped in favor of a dynamic framework. There is a new runtime setting for log level, which defaults to `INFO` in all build configurations. 

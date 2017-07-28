@@ -196,7 +196,7 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 		}
 
 		// See if any of the non-custom device attributes have changed
-		_device = [[ApptentiveDevice alloc] initWithCurrentDevice];
+		[self.device updateWithCurrentDeviceValues];
 
 		[self checkForDeviceDiffs];
 	}

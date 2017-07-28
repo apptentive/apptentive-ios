@@ -374,7 +374,11 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	}
 
 	item.state = conversation.state;
-	item.JWT = conversation.token; // TODO: check nil for 'active' conversations
+	if (item.state == ApptentiveConversationStateLoggedOut) {
+		item.JWT = nil;
+	} else {
+		item.JWT = conversation.token;
+	}
 
 	if (item.state == ApptentiveConversationStateLoggedIn) {
 		ApptentiveAssertNotNil(conversation.encryptionKey, @"Encryption key is nil");

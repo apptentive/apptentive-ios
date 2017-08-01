@@ -6,6 +6,14 @@ Version 4.0.1 fixes a bug where a small number of legacy SDK installations could
 ----------------------------------
 Version 4.0.0 adds the ability to pass customer authentication to Apptentive to protect and separate each customer's personal information from one another. It uses a new method for initializing the SDK. There is also a new method (required for using push) to forward local notifications to the SDK. Static library support has been dropped in favor of a dynamic framework. There is a new runtime setting for log level, which defaults to `INFO` in all build configurations. 
 
+2017-06-13 frankus, weeebox v3.5.1
+----------------------------------
+This release attempts to work around a crash experienced by a small number of users using the SKStoreReviewController feature of version 3.5.0 of the Apptentive iOS SDK by using selector-based APIs rather than block-based APIs for notification and timeout handling.
+
+2017-04-05 frankus, weeebox v3.5.0
+----------------------------------
+This release adds the capability to request a review using the SKStoreReviewController class added in iOS version 10.3.
+
 2017-01-06 frankus v3.4.1
 -------------------------
 Version 3.4.0 fixes visual issues in surveys and upgrade messages. 

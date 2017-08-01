@@ -20,6 +20,10 @@ static NSString *const PatchKey = @"patch";
 	self = [super init];
 
 	if (self) {
+        if (versionString == nil || versionString.length == 0) {
+            versionString = @"0.0.0";
+        }
+
 		_versionString = versionString;
 
 		NSInteger major = 0, minor = 0, patch = 0;

@@ -19,6 +19,8 @@
  If the version uses a different format, the major, minor, and patch numbers
  will be set to negative one, and equality will be determined by the whether
  the version string is an exact match.
+ 
+ If the version argument is nil or empty, it will default to 0.0.0.
  */
 @interface ApptentiveVersion : ApptentiveState
 

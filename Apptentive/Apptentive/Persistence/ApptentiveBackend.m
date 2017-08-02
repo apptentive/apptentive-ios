@@ -33,6 +33,8 @@
 #import "ApptentiveLegacyMessage.h"
 #import "ApptentiveLegacyFileAttachment.h"
 
+@import CoreTelephony;
+
 NSString *const ApptentiveAuthenticationDidFailNotification = @"ApptentiveAuthenticationDidFailNotification";
 NSString *const ApptentiveAuthenticationDidFailNotificationKeyErrorType = @"errorType";
 NSString *const ApptentiveAuthenticationDidFailNotificationKeyErrorMessage = @"errorMessage";
@@ -54,6 +56,8 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 @property (assign, nonatomic) BOOL working;
 @property (assign, nonatomic) BOOL shouldStopWorking;
 @property (assign, nonatomic) BOOL networkAvailable;
+
+@property (strong, nonatomic) CTTelephonyNetworkInfo *telephonyNetworkInfo;
 
 @property (strong, nonatomic) NSTimer *messageRetrievalTimer;
 @property (strong, nonatomic) ApptentiveDataManager *dataManager;
@@ -111,6 +115,8 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(authenticationDidFailNotification:) name:ApptentiveAuthenticationDidFailNotification object:nil];
 
+		[self updateAndMonitorDeviceValues];
+
 		[_operationQueue addOperationWithBlock:^{
 			[self createSupportDirectoryIfNeeded];
 
@@ -147,6 +153,49 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 		// No API Key, no network, or no Core Data. Stop working.
 		self.working = NO;
 	}
+}
+
+
+/**
+ Set up class properties on ApptentiveDevice and monitor for changes
+ */
+- (void)updateAndMonitorDeviceValues {
+	[ApptentiveDevice getPermanentDeviceValues];
+
+	__weak ApptentiveBackend *weakSelf = self;
+	if ([CTTelephonyNetworkInfo class]) {
+		_telephonyNetworkInfo = [[CTTelephonyNetworkInfo alloc] init];
+		ApptentiveDevice.carrierName = _telephonyNetworkInfo.subscriberCellularProvider.carrierName;
+
+		_telephonyNetworkInfo.subscriberCellularProviderDidUpdateNotifier = ^(CTCarrier * _Nonnull carrier) {
+			ApptentiveBackend *strongSelf = weakSelf;
+			ApptentiveDevice.carrierName = carrier.carrierName;
+			ApptentiveLogDebug(@"Carrier changed to %@. Updating device.", ApptentiveDevice.carrierName);
+			[strongSelf scheduleDeviceUpdate];
+		};
+	}
+
+	[NSNotificationCenter.defaultCenter addObserverForName:UIContentSizeCategoryDidChangeNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+		ApptentiveBackend *strongSelf = weakSelf;
+		// Must happen on main queue:
+		ApptentiveDevice.contentSizeCategory = [UIApplication sharedApplication].preferredContentSizeCategory;
+		ApptentiveLogDebug(@"Content size category changed to %@. Updating device.", ApptentiveDevice.contentSizeCategory);
+		[strongSelf scheduleDeviceUpdate];
+	}];
+
+	[[NSNotificationCenter defaultCenter] addObserverForName:NSCurrentLocaleDidChangeNotification object:nil queue:self.operationQueue usingBlock:^(NSNotification * _Nonnull note) {
+		ApptentiveBackend *strongSelf = weakSelf;
+		ApptentiveLogDebug(@"Locale changed to %@. Updating device and reloading manifest.", NSLocale.currentLocale);
+		[strongSelf scheduleDeviceUpdate];
+		[strongSelf.conversationManager invalidateManifest];
+		[strongSelf.conversationManager updateManifestIfNeeded];
+	}];
+
+	[[NSNotificationCenter defaultCenter] addObserverForName:NSSystemTimeZoneDidChangeNotification object:nil queue:self.operationQueue usingBlock:^(NSNotification * _Nonnull note) {
+		ApptentiveLogDebug(@"System time zone changed to %@. Updating device.", NSTimeZone.systemTimeZone);
+		ApptentiveBackend *strongSelf = weakSelf;
+		[strongSelf scheduleDeviceUpdate];
+	}];
 }
 
 #pragma mark Notification Handling

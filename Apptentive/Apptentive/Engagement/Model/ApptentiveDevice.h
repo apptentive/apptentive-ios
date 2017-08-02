@@ -19,11 +19,6 @@ extern NSString *const ATDeviceLastUpdateValuePreferenceKey;
 @interface ApptentiveDevice : ApptentiveCustomData
 
 /**
- The push integration to be set globally for all devices
- */
-@property (class, strong, nonatomic) NSDictionary *integrationConfiguration;
-
-/**
  A unique identifier that identifies the device. Set to the value of
  `UIDevice`'s `identifierForVendor` property.
  */
@@ -100,6 +95,31 @@ extern NSString *const ATDeviceLastUpdateValuePreferenceKey;
  */
 - (instancetype)initWithCurrentDevice;
 
+/**
+ Updates the device object with values from the current environment.
+ */
 - (void)updateWithCurrentDeviceValues;
+
+/**
+ Sets static variables for the values that won't change until app is terminated.
+ */
++ (void)getPermanentDeviceValues;
+
+/**
+ The push integration to be set globally for all devices
+ */
+@property (class, strong, nonatomic) NSDictionary *integrationConfiguration;
+
+/**
+ Due to threading issues, we need to determine carrier on the main thread.
+ This is an intermediate value that device objects can use to update themselves.
+ */
+@property (class, strong, nonatomic) NSString *carrierName;
+
+/**
+ Due to UIKit thread safety issues, we need to determine this on the main thread.
+ This is an intermediate value that device objects can use to update themselves.
+ */
+@property (class, strong, nonatomic) UIContentSizeCategory contentSizeCategory;
 
 @end

@@ -33,6 +33,8 @@
 - (void)setUp {
 	[super setUp];
 
+	[ApptentiveDevice getPermanentDeviceValues];
+
 	self.conversation = [[ApptentiveConversation alloc] initWithState:ApptentiveConversationStateAnonymous];
 	self.conversation.delegate = self;
 }

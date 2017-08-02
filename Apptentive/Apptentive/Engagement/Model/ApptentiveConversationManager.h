@@ -53,6 +53,9 @@ extern NSString *const ApptentiveConversationStateDidChangeNotificationKeyConver
 
 - (void)pause;
 
+- (void)invalidateManifest;
+
+- (void)updateManifestIfNeeded;
 
 // Debugging
 

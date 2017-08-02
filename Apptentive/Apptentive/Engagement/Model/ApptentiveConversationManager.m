@@ -915,12 +915,10 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 #if APPTENTIVE_DEBUG
 	[Apptentive.shared checkSDKConfiguration];
 
-	self.manifest.expiry = [NSDate distantPast];
+	[self invalidateManifest];
 #endif
 
-	if ([self.manifest.expiry timeIntervalSinceNow] <= 0) {
-		[self fetchEngagementManifest];
-	}
+	[self updateManifestIfNeeded];
 
 	[self.activeConversation checkForDiffs];
 
@@ -941,6 +939,15 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	_activeConversation = activeConversation;
 }
 
+- (void)invalidateManifest {
+	self.manifest.expiry = [NSDate distantPast];
+}
+
+- (void)updateManifestIfNeeded {
+	if ([self.manifest.expiry timeIntervalSinceNow] <= 0) {
+		[self fetchEngagementManifest];
+	}
+}
 
 #pragma mark - Debugging
 

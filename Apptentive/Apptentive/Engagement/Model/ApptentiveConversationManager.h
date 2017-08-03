@@ -53,7 +53,6 @@ extern NSString *const ApptentiveConversationStateDidChangeNotificationKeyConver
 
 - (void)pause;
 
-
 // Debugging
 
 @property (strong, nonatomic) NSURL *localEngagementManifestURL;

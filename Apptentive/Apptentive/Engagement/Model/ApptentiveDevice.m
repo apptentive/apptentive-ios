@@ -34,17 +34,62 @@ NSString *const ATDeviceLastUpdateValuePreferenceKey = @"ATDeviceLastUpdateValue
 static NSString *const ATDeviceLastUpdatePreferenceKey = @"ATDeviceLastUpdatePreferenceKey";
 static NSString *const ApptentiveCustomDeviceDataPreferenceKey = @"ApptentiveCustomDeviceDataPreferenceKey";
 
-static NSDictionary *_integrationConfiguration;
+static NSUUID *_currentUUID;
+static NSString *_currentOSName;
+static ApptentiveVersion *_currentOSVersion;
+static NSString *_currentOSBuild;
+static NSString *_currentHardware;
+
+static NSDictionary *_currentIntegrationConfiguration;
+static NSString *_currentCarrierName;
+static UIContentSizeCategory _currentContentSizeCategory;
+
 
 
 @implementation ApptentiveDevice
 
 + (void)setIntegrationConfiguration:(NSDictionary *)integrationConfiguration {
-	_integrationConfiguration = integrationConfiguration;
+	_currentIntegrationConfiguration = integrationConfiguration;
 }
 
 + (NSDictionary *)integrationConfiguration {
-	return _integrationConfiguration;
+	return _currentIntegrationConfiguration;
+}
+
++ (void)setCarrierName:(NSString *)carrierName {
+	_currentCarrierName = carrierName;
+}
+
++ (NSString *)carrierName {
+	return _currentCarrierName;
+}
+
++ (void)setContentSizeCategory:(UIContentSizeCategory)contentSizeCategory {
+	_currentContentSizeCategory = contentSizeCategory;
+}
+
++ (UIContentSizeCategory)contentSizeCategory {
+	return _currentContentSizeCategory;
+}
+
++ (void)getPermanentDeviceValues {
+	_currentUUID = [UIDevice currentDevice].identifierForVendor;
+	_currentOSName = [UIDevice currentDevice].systemName;
+	_currentOSVersion = [[ApptentiveVersion alloc] initWithString:[UIDevice currentDevice].systemVersion];
+
+	int mib[2] = {CTL_KERN, KERN_OSVERSION};
+	size_t size = 0;
+	sysctl(mib, 2, NULL, &size, NULL, 0);
+	char *answer = malloc(size);
+	int result = sysctl(mib, 2, answer, &size, NULL, 0);
+	if (result >= 0) {
+		_currentOSBuild = [NSString stringWithCString:answer encoding:NSUTF8StringEncoding];
+	}
+	free(answer);
+
+	struct utsname systemInfo;
+	uname(&systemInfo);
+	_currentHardware = [NSString stringWithCString:systemInfo.machine encoding:NSUTF8StringEncoding];
 }
 
 - (instancetype)init {
@@ -132,34 +177,14 @@ static NSDictionary *_integrationConfiguration;
 #pragma mark - Private
 
 - (void)updateWithCurrentDeviceValues {
-	_UUID = [UIDevice currentDevice].identifierForVendor;
-	_OSName = [UIDevice currentDevice].systemName;
-	_OSVersion = [[ApptentiveVersion alloc] initWithString:[UIDevice currentDevice].systemVersion];
+	_UUID = _currentUUID;
+	_OSName = _currentOSName;
+	_OSVersion = _currentOSVersion;
+	_OSBuild = _currentOSBuild;
+	_hardware = _currentHardware;
 
-	int mib[2] = {CTL_KERN, KERN_OSVERSION};
-	size_t size = 0;
-	sysctl(mib, 2, NULL, &size, NULL, 0);
-	char *answer = malloc(size);
-	int result = sysctl(mib, 2, answer, &size, NULL, 0);
-	if (result >= 0) {
-		_OSBuild = [NSString stringWithCString:answer encoding:NSUTF8StringEncoding];
-	}
-	free(answer);
-
-	struct utsname systemInfo;
-	uname(&systemInfo);
-	_hardware = [NSString stringWithCString:systemInfo.machine encoding:NSUTF8StringEncoding];
-
-	if ([CTTelephonyNetworkInfo class]) {
-		CTTelephonyNetworkInfo *netInfo = [[CTTelephonyNetworkInfo alloc] init];
-		CTCarrier *c = [netInfo subscriberCellularProvider];
-		if (c.carrierName) {
-			_carrier = c.carrierName;
-		}
-		netInfo = nil;
-	}
-
-	_contentSizeCategory = [UIApplication sharedApplication].preferredContentSizeCategory;
+	_carrier = [self class].carrierName;
+	_contentSizeCategory = [self class].contentSizeCategory;
 
 	_localeRaw = [NSLocale currentLocale].localeIdentifier;
 	NSDictionary *localeComponents = [NSLocale componentsFromLocaleIdentifier:[NSLocale currentLocale].localeIdentifier];

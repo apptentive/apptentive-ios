@@ -1,3 +1,7 @@
+2017-08-03 frankus, weeebox v4.0.2
+----------------------------------
+Version 4.0.2 fixes a potential deadlock when an app returns to the foreground.
+
 2017-07-28 frankus, weeebox v4.0.1
 ----------------------------------
 Version 4.0.1 fixes a bug where a small number of legacy SDK installations could be incorrectly migrated and could cause the SDK to get stuck in an invalid state. It also corrects a bug where JWTs were not deleted on logout (they would still be revoked on the server).

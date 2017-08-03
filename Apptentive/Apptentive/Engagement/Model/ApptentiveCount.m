@@ -77,7 +77,7 @@ static NSString *const LastInvokedKey = @"lastInvoked";
 }
 
 - (NSString *)description {
-	return [NSString stringWithFormat:@"[%@] totalCount=%ld versionCount=%ld buildCount=%ld lastInvoked=%@", NSStringFromClass([self class]), _totalCount, _versionCount, _buildCount, _lastInvoked];
+	return [NSString stringWithFormat:@"[%@] totalCount=%ld versionCount=%ld buildCount=%ld lastInvoked=%@", NSStringFromClass([self class]), (unsigned long)_totalCount, (unsigned long)_versionCount, (unsigned long)_buildCount, _lastInvoked];
 }
 
 @end

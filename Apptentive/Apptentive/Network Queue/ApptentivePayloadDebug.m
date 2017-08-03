@@ -25,7 +25,7 @@
 	NSArray *queuedRequests = [context executeFetchRequest:fetchRequest error:&error];
 
 	if (queuedRequests.count == 0) {
-		ApptentiveLogVerbose(ApptentiveLogTagPayload, @"%@ (%ld payload(s))", title, queuedRequests.count);
+		ApptentiveLogVerbose(ApptentiveLogTagPayload, @"%@ (%ld payload(s))", title, (unsigned long)queuedRequests.count);
 		return;
 	}
 
@@ -53,24 +53,24 @@
 			if (moreInfo.length > 0) {
 				[moreInfo appendString:@"\n"];
 			}
-			[moreInfo appendFormat:@"JWT-%ld: %@", row, request.authToken];
+			[moreInfo appendFormat:@"JWT-%ld: %@", (unsigned long)row, request.authToken];
 		}
 		[rows addObject:@[
 			request.type ?: @"nil",
-			[NSString stringWithFormat:@"%ld", request.attachments.count],
+			[NSString stringWithFormat:@"%ld", (unsigned long)request.attachments.count],
 			request.conversationIdentifier ?: @"nil",
-			request.authToken ? [NSString stringWithFormat:@"JWT-%ld", row] : @"nil",
+			request.authToken ? [NSString stringWithFormat:@"JWT-%ld", (unsigned long)row] : @"nil",
 			request.date ? [formatter stringFromDate:request.date] : @"nil",
 			request.identifier ?: @"nil",
 			request.method ?: @"nil",
 			request.path ?: @"nil",
-			[NSString stringWithFormat:@"%ld", request.payload.length],
+			[NSString stringWithFormat:@"%ld", (unsigned long)request.payload.length],
 			[NSString stringWithFormat:@"%d", request.encrypted ? 1 : 0],
 			request.contentType ?: @"nil"
 		]];
 	}
 
-	ApptentiveLogVerbose(ApptentiveLogTagPayload, @"%@ (%ld payload(s)):\n%@\n%@\n-", title, queuedRequests.count, [ApptentiveUtilities formatAsTableRows:rows], moreInfo);
+	ApptentiveLogVerbose(ApptentiveLogTagPayload, @"%@ (%ld payload(s)):\n%@\n%@\n-", title, (unsigned long)queuedRequests.count, [ApptentiveUtilities formatAsTableRows:rows], moreInfo);
 }
 
 @end

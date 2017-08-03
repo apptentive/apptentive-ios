@@ -171,14 +171,16 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 			ApptentiveBackend *strongSelf = weakSelf;
 			ApptentiveDevice.carrierName = carrier.carrierName;
 			ApptentiveLogDebug(@"Carrier changed to %@. Updating device.", ApptentiveDevice.carrierName);
-			[strongSelf scheduleDeviceUpdate];
+			[strongSelf.operationQueue addOperationWithBlock:^{
+				[strongSelf scheduleDeviceUpdate]; // Must happen on our queue
+			}];
 		};
 	}
 
+	ApptentiveDevice.contentSizeCategory = [UIApplication sharedApplication].preferredContentSizeCategory;
 	[NSNotificationCenter.defaultCenter addObserverForName:UIContentSizeCategoryDidChangeNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
 		ApptentiveBackend *strongSelf = weakSelf;
-		// Must happen on main queue:
-		ApptentiveDevice.contentSizeCategory = [UIApplication sharedApplication].preferredContentSizeCategory;
+		ApptentiveDevice.contentSizeCategory = [UIApplication sharedApplication].preferredContentSizeCategory; // Must happen on main queue
 		ApptentiveLogDebug(@"Content size category changed to %@. Updating device.", ApptentiveDevice.contentSizeCategory);
 		[strongSelf.operationQueue addOperationWithBlock:^{
 			[strongSelf scheduleDeviceUpdate]; // Must happen on our queue

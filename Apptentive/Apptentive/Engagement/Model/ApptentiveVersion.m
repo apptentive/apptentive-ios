@@ -20,7 +20,7 @@ static NSString *const PatchKey = @"patch";
 	self = [super init];
 
 	if (self) {
-        if (versionString == nil || versionString.length == 0) {
+        if (versionString.length == 0) {
             versionString = @"0.0.0";
         }
 

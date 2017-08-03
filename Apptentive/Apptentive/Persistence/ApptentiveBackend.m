@@ -180,15 +180,9 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 		// Must happen on main queue:
 		ApptentiveDevice.contentSizeCategory = [UIApplication sharedApplication].preferredContentSizeCategory;
 		ApptentiveLogDebug(@"Content size category changed to %@. Updating device.", ApptentiveDevice.contentSizeCategory);
-		[strongSelf scheduleDeviceUpdate];
-	}];
-
-	[[NSNotificationCenter defaultCenter] addObserverForName:NSCurrentLocaleDidChangeNotification object:nil queue:self.operationQueue usingBlock:^(NSNotification * _Nonnull note) {
-		ApptentiveBackend *strongSelf = weakSelf;
-		ApptentiveLogDebug(@"Locale changed to %@. Updating device and reloading manifest.", NSLocale.currentLocale);
-		[strongSelf scheduleDeviceUpdate];
-		[strongSelf.conversationManager invalidateManifest];
-		[strongSelf.conversationManager updateManifestIfNeeded];
+		[strongSelf.operationQueue addOperationWithBlock:^{
+			[strongSelf scheduleDeviceUpdate]; // Must happen on our queue
+		}];
 	}];
 
 	[[NSNotificationCenter defaultCenter] addObserverForName:NSSystemTimeZoneDidChangeNotification object:nil queue:self.operationQueue usingBlock:^(NSNotification * _Nonnull note) {

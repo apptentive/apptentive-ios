@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 
 extern NSInteger ApptentiveJSONDeserializationErrorCode;
+extern NSInteger ApptentiveJSONSerializationErrorCode;
+
 
 @interface ApptentiveJSONSerialization : NSObject
 

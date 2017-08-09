@@ -8,6 +8,7 @@
 
 #import "ApptentiveRequest.h"
 #import "ApptentiveDefines.h"
+#import "ApptentiveJSONSerialization.h"
 
 
 @implementation ApptentiveRequest
@@ -40,7 +41,7 @@
 	}
 
 	NSError *error;
-	NSData *payloadData = [NSJSONSerialization dataWithJSONObject:self.JSONDictionary options:0 error:&error];
+	NSData *payloadData = [ApptentiveJSONSerialization dataWithJSONObject:self.JSONDictionary options:0 error:&error];
 
 	ApptentiveAssertNotNil(payloadData, @"JSONDictionary was not serializable into JSON data (%@)", error);
 

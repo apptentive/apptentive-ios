@@ -34,6 +34,7 @@
 #import "ApptentiveStopWatch.h"
 #import "ApptentiveSafeCollections.h"
 #import "ApptentiveAppInstall.h"
+#import "ApptentiveJSONSerialization.h"
 
 
 static NSString *const ConversationMetadataFilename = @"conversation-v1.meta";
@@ -966,7 +967,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 			NSError *error;
 			NSData *localData = [NSData dataWithContentsOfURL:localEngagementManifestURL];
-			NSDictionary *manifestDictionary = [NSJSONSerialization JSONObjectWithData:localData options:0 error:&error];
+			NSDictionary *manifestDictionary = [ApptentiveJSONSerialization JSONObjectWithData:localData error:&error];
 
 			if (!manifestDictionary) {
 				ApptentiveLogError(@"Unable to parse local manifest %@: %@", localEngagementManifestURL.absoluteString, error);

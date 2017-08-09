@@ -16,6 +16,7 @@
 #import "ApptentiveSDK.h"
 #import "ApptentiveVersion.h"
 #import "ApptentiveEngagementManifest.h"
+#import "ApptentiveJSONSerialization.h"
 
 #import "ApptentiveConversation.h"
 #import "ApptentiveConversationMetadata.h"
@@ -52,7 +53,7 @@
 	NSDictionary *JSONDictionary = self.backend.conversationManager.manifest.JSONDictionary;
 
 	if (JSONDictionary != nil) {
-		NSData *outputJSONData = [NSJSONSerialization dataWithJSONObject:JSONDictionary options:NSJSONWritingPrettyPrinted error:NULL];
+		NSData *outputJSONData = [ApptentiveJSONSerialization dataWithJSONObject:JSONDictionary options:NSJSONWritingPrettyPrinted error:NULL];
 
 		return [[NSString alloc] initWithData:outputJSONData encoding:NSUTF8StringEncoding];
 	} else {

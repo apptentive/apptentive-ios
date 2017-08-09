@@ -12,6 +12,7 @@
 #import "ApptentiveJSONSerialization.h"
 #import "ApptentiveSafeCollections.h"
 #import "ApptentiveBackend.h"
+#import "ApptentiveJSONSerialization.h"
 
 
 @interface ApptentiveRequestOperation () {
@@ -113,7 +114,7 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 				NSObject *responseObject = nil;
 
 				if (URLResponse.statusCode != 204) { // "No Content"
-					responseObject = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&error];
+					responseObject = [ApptentiveJSONSerialization JSONObjectWithData:data error:&error];
 
 					if (responseObject == nil) { // Decoding error
 						[self processHTTPError:error withResponse:URLResponse responseData:data];

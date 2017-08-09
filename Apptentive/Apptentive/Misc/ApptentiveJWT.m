@@ -8,6 +8,7 @@
 
 #import "ApptentiveJWT.h"
 #import "ApptentiveUtilities.h"
+#import "ApptentiveJSONSerialization.h"
 
 static NSString *const kApptentiveErrorDomain = @"com.apptentive";
 
@@ -33,7 +34,7 @@ static NSDictionary *_Nullable _decodeBase64Json(NSString *string, NSError **err
 	}
 
 	NSError *jsonError = nil;
-	id dictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:&jsonError];
+	id dictionary = [ApptentiveJSONSerialization JSONObjectWithData:data error:&jsonError];
 	if (jsonError != nil) {
 		ApptentiveLogError(@"Unable to parse json string: '%@'", error);
 		if (error) {

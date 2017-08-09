@@ -45,9 +45,6 @@
 
 + (NSData *)secureRandomDataOfLength:(NSUInteger)length;
 
-+ (NSData *)dictionaryToJsonData:(NSDictionary *)dictionary;
-+ (NSString *)dictionaryToJsonString:(NSDictionary *)dictionary;
-
 + (NSString *)stringByPaddingBase64:(NSString *)base64String;
 + (NSString *)formatAsTableRows:(NSArray<NSArray *> *)rows;
 

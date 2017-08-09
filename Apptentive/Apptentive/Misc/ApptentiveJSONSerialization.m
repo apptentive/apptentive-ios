@@ -24,7 +24,8 @@ NSInteger ApptentiveJSONSerializationErrorCode = -568;
 				*error = [NSError errorWithDomain:ApptentiveErrorDomain code:ApptentiveJSONSerializationErrorCode userInfo:@{ NSLocalizedFailureReasonErrorKey: @"JSON object is malformed." }];
 			}
 			
-			ApptentiveLogError(@"Unable to create JSON data from object: %@ Exception: %@", obj, exception);
+			ApptentiveLogError(@"Exception when encoding JSON: %@.", exception.reason);
+			ApptentiveLogError(@"Attempted to encode %@.", obj);
 		}
 
 		return jsonData;
@@ -33,7 +34,7 @@ NSInteger ApptentiveJSONSerializationErrorCode = -568;
 			*error = [NSError errorWithDomain:ApptentiveErrorDomain code:ApptentiveJSONDeserializationErrorCode userInfo:@{ NSLocalizedFailureReasonErrorKey: @"Object is not valid JSON object." }];
 		}
 
-		ApptentiveLogError(@"Attempting to create JSON data from an invalid JSON object.");
+		ApptentiveLogError(@"Attempting to create JSON data from an invalid JSON object (%@).", obj);
 
 		return nil;
 	}
@@ -44,10 +45,10 @@ NSInteger ApptentiveJSONSerializationErrorCode = -568;
 
 	if (data == nil) {
 		if (error != NULL) {
-			*error = [NSError errorWithDomain:ApptentiveErrorDomain code:ApptentiveJSONDeserializationErrorCode userInfo:@{ NSLocalizedFailureReasonErrorKey: @"JSON data is nil" }];
+			*error = [NSError errorWithDomain:ApptentiveErrorDomain code:ApptentiveJSONDeserializationErrorCode userInfo:@{ NSLocalizedFailureReasonErrorKey: @"JSON data is nil." }];
 		}
 
-		ApptentiveLogError(@"Attempting to decode nil JSON data");
+		ApptentiveLogError(@"Attempting to decode nil JSON data.");
 
 		return nil;
 	}
@@ -58,7 +59,7 @@ NSInteger ApptentiveJSONSerializationErrorCode = -568;
 		return JSONObject;
 	} @catch (NSException *exception) {
 		if (error != NULL) {
-			*error = [NSError errorWithDomain:ApptentiveErrorDomain code:ApptentiveJSONDeserializationErrorCode userInfo:@{ NSLocalizedDescriptionKey: exception.description, NSLocalizedFailureReasonErrorKey: exception.reason }];
+			*error = [NSError errorWithDomain:ApptentiveErrorDomain code:ApptentiveJSONSerializationErrorCode userInfo:@{ NSLocalizedFailureReasonErrorKey: @"JSON data is malformed." }];
 		}
 
 		ApptentiveLogError(@"Exception when decoding JSON: %@", exception.reason);

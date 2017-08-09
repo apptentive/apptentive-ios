@@ -6,7 +6,6 @@ If you have integrated a previous version of the Apptentive SDK, you will need t
 
 We still recommend integrating using CocoaPods. If you previously integrated using a static library, it has been removed from the project and replaced with a dynamic framework.
 
-<<<<<<< HEAD
 The easiest way to use this framework is by using [Carthage](https://github.com/Carthage/Carthage). 
 
 ## New SDK Registration Process

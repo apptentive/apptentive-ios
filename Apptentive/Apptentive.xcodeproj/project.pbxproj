@@ -63,6 +63,7 @@
 		0174772F1EA92D7D00A0A949 /* PayloadTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0174772E1EA92D7C00A0A949 /* PayloadTests.swift */; };
 		01798C021EAF94FE00633164 /* ApptentivePayloadSender.h in Headers */ = {isa = PBXBuildFile; fileRef = 01798C001EAF94FD00633164 /* ApptentivePayloadSender.h */; };
 		01798C031EAF94FE00633164 /* ApptentivePayloadSender.m in Sources */ = {isa = PBXBuildFile; fileRef = 01798C011EAF94FD00633164 /* ApptentivePayloadSender.m */; };
+		017E54ED1F3B860E00EA9F81 /* ApptentiveJSONSerializationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 017E54EC1F3B860E00EA9F81 /* ApptentiveJSONSerializationTests.m */; };
 		01917D451E5E0B7400B37D82 /* ConversationManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01917D441E5E0B7400B37D82 /* ConversationManagerTests.swift */; };
 		01A2CF9B1E49062800C2103A /* Apptentive.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01A2CF911E49062700C2103A /* Apptentive.framework */; };
 		01A2CFA21E49062800C2103A /* Apptentive.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2CF941E49062700C2103A /* Apptentive.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -463,6 +464,7 @@
 		0174772E1EA92D7C00A0A949 /* PayloadTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PayloadTests.swift; sourceTree = "<group>"; };
 		01798C001EAF94FD00633164 /* ApptentivePayloadSender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentivePayloadSender.h; sourceTree = "<group>"; };
 		01798C011EAF94FD00633164 /* ApptentivePayloadSender.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentivePayloadSender.m; sourceTree = "<group>"; };
+		017E54EC1F3B860E00EA9F81 /* ApptentiveJSONSerializationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveJSONSerializationTests.m; sourceTree = "<group>"; };
 		01917D431E5E0B7400B37D82 /* ApptentiveTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ApptentiveTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		01917D441E5E0B7400B37D82 /* ConversationManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationManagerTests.swift; sourceTree = "<group>"; };
 		01A2CF911E49062700C2103A /* Apptentive.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Apptentive.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -961,6 +963,7 @@
 				01216C4F1EBBB53E0062BD0D /* RequestTests.swift */,
 				EFF4D2AA1EC39EC000FD4EFE /* ApptentiveAppDataContainer.h */,
 				EFF4D2AB1EC39EC000FD4EFE /* ApptentiveAppDataContainer.m */,
+				017E54EC1F3B860E00EA9F81 /* ApptentiveJSONSerializationTests.m */,
 			);
 			path = ApptentiveTests;
 			sourceTree = "<group>";
@@ -2175,6 +2178,7 @@
 				01A2D29B1E4963A500C2103A /* ATDataModel v3 to v4.xcmappingmodel in Sources */,
 				0174772F1EA92D7D00A0A949 /* PayloadTests.swift in Sources */,
 				01A2D2451E4946D600C2103A /* ApptentiveMigrationTests.m in Sources */,
+				017E54ED1F3B860E00EA9F81 /* ApptentiveJSONSerializationTests.m in Sources */,
 				01626EBC1EB7E5B90064E73F /* ApptentiveEncryptionTests.m in Sources */,
 				01A2D29A1E4963A500C2103A /* ATDataModel v2 to v3.xcmappingmodel in Sources */,
 				01A2D2491E4946D600C2103A /* ApptentiveUtilitiesTests.m in Sources */,

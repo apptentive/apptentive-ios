@@ -8,39 +8,65 @@
 
 #import "ApptentiveJSONSerialization.h"
 
+NSInteger ApptentiveJSONDeserializationErrorCode = -567;
+NSInteger ApptentiveJSONSerializationErrorCode = -568;
+
 
 @implementation ApptentiveJSONSerialization
+
 + (NSData *)dataWithJSONObject:(id)obj options:(NSJSONWritingOptions)opt error:(NSError **)error {
 	if ([NSJSONSerialization isValidJSONObject:obj]) {
 		NSData *jsonData = nil;
 		@try {
 			jsonData = [NSJSONSerialization dataWithJSONObject:obj options:opt error:error];
 		} @catch (NSException *exception) {
-			ApptentiveLogError(@"Unable to create JSON data from object: %@ Exception: %@", obj, exception);
+			if (error != NULL) {
+				*error = [NSError errorWithDomain:ApptentiveErrorDomain code:ApptentiveJSONSerializationErrorCode userInfo:@{ NSLocalizedFailureReasonErrorKey: @"JSON object is malformed." }];
+			}
+			
+			ApptentiveLogError(@"Exception when encoding JSON: %@.", exception.reason);
+			ApptentiveLogError(@"Attempted to encode %@.", obj);
 		}
+
 		return jsonData;
 	} else {
-		ApptentiveLogError(@"Attempting to create JSON data from an invalid JSON object.");
+		if (error != NULL) {
+			*error = [NSError errorWithDomain:ApptentiveErrorDomain code:ApptentiveJSONDeserializationErrorCode userInfo:@{ NSLocalizedFailureReasonErrorKey: @"Object is not valid JSON object." }];
+		}
+
+		ApptentiveLogError(@"Attempting to create JSON data from an invalid JSON object (%@).", obj);
+
 		return nil;
 	}
 }
 
-+ (NSString *)stringWithJSONObject:(id)obj options:(NSJSONWritingOptions)opt error:(NSError **)error {
-	NSData *d = [ApptentiveJSONSerialization dataWithJSONObject:obj options:opt error:error];
-	if (!d) {
++ (id)JSONObjectWithData:(NSData *)data error:(NSError *__autoreleasing *)error {
+	id JSONObject = nil;
+
+	if (data == nil) {
+		if (error != NULL) {
+			*error = [NSError errorWithDomain:ApptentiveErrorDomain code:ApptentiveJSONDeserializationErrorCode userInfo:@{ NSLocalizedFailureReasonErrorKey: @"JSON data is nil." }];
+		}
+
+		ApptentiveLogError(@"Attempting to decode nil JSON data.");
+
 		return nil;
 	}
-	NSString *s = [[NSString alloc] initWithData:d encoding:NSUTF8StringEncoding];
-	return s;
+
+	@try {
+		JSONObject = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:error];
+
+		return JSONObject;
+	} @catch (NSException *exception) {
+		if (error != NULL) {
+			*error = [NSError errorWithDomain:ApptentiveErrorDomain code:ApptentiveJSONSerializationErrorCode userInfo:@{ NSLocalizedFailureReasonErrorKey: @"JSON data is malformed." }];
+		}
+
+		ApptentiveLogError(@"Exception when decoding JSON: %@", exception.reason);
+		ApptentiveLogError(@"Attempted to decode “%@”", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+
+		return nil;
+	}
 }
 
-+ (id)JSONObjectWithData:(NSData *)data error:(NSError **)error {
-	return [NSJSONSerialization JSONObjectWithData:data options:0 error:error];
-}
-
-+ (id)JSONObjectWithString:(NSString *)string error:(NSError **)error {
-	NSData *d = [string dataUsingEncoding:NSUTF8StringEncoding];
-	NSObject *result = [ApptentiveJSONSerialization JSONObjectWithData:d error:error];
-	return result;
-}
 @end

@@ -369,15 +369,6 @@ UIViewController *topChildViewController(UIViewController *viewController) {
 	return (result == 0) ? randomData : nil;
 }
 
-+ (NSData *)dictionaryToJsonData:(NSDictionary *)dictionary {
-	return dictionary != nil ? [NSJSONSerialization dataWithJSONObject:dictionary options:0 error:NULL] : nil;
-}
-
-+ (NSString *)dictionaryToJsonString:(NSDictionary *)dictionary {
-	NSData *data = [self dictionaryToJsonData:dictionary];
-	return data != nil ? [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] : nil;
-}
-
 + (NSString *)stringByPaddingBase64:(NSString *)base64String {
 	NSUInteger lengthRoundedUpToNextMultipleOfFour = ceil(base64String.length / 4.0) * 4;
 

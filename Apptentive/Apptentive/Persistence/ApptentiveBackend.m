@@ -259,13 +259,14 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 #pragma mark Accessors
 
 - (void)setWorking:(BOOL)working {
+#if APPTENTIVE_DEBUG
+	[Apptentive.shared checkSDKConfiguration];
+#endif
+
 	if (_working != working) {
 		_working = working;
 		if (_working) {
 #if APPTENTIVE_DEBUG
-			[Apptentive.shared checkSDKConfiguration];
-
-
 			self.configuration.expiry = [NSDate distantPast];
 #endif
 			if ([self.configuration.expiry timeIntervalSinceNow] <= 0) {

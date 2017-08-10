@@ -581,7 +581,8 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 
 - (void)authenticationDidFailNotification:(NSNotification *)notification {
 	[self.operationQueue addOperationWithBlock:^{
-        if (self.conversationManager.activeConversation.state == ApptentiveConversationStateLoggedIn && self.authenticationFailureCallback) {
+		ApptentiveConversationState conversationState = self.conversationManager.activeConversation.state;
+        if (conversationState == ApptentiveConversationStateLoggedIn && self.authenticationFailureCallback) {
             NSString *conversationIdentifier = ApptentiveDictionaryGetString(notification.userInfo, ApptentiveAuthenticationDidFailNotificationKeyConversationIdentifier);
             
             if (![conversationIdentifier isEqualToString:self.conversationManager.activeConversation.identifier]) {
@@ -593,7 +594,9 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
             NSString *errorMessage = ApptentiveDictionaryGetString(notification.userInfo, ApptentiveAuthenticationDidFailNotificationKeyErrorMessage);
             ApptentiveAuthenticationFailureReason reason = parseAuthenticationFailureReason(errorType);
             self.authenticationFailureCallback(reason, errorMessage);
-        }
+		} else if (conversationState == ApptentiveConversationStateAnonymousPending || conversationState == ApptentiveConversationStateLegacyPending) {
+			ApptentiveAssertFail(@"Authentication failure when creating conversation. Please double-check your Apptentive App Key and Apptentive App Signature.");
+		}
 	}];
 }
 

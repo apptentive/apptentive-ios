@@ -914,8 +914,6 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 - (void)resume {
 #if APPTENTIVE_DEBUG
-	[Apptentive.shared checkSDKConfiguration];
-
 	[self invalidateManifest];
 #endif
 

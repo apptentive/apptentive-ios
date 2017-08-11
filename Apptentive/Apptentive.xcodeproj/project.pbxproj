@@ -2396,6 +2396,7 @@
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = 86WML2UN43;
+				GCC_PREPROCESSOR_DEFINITIONS = "APPTENTIVE_DEBUG=1";
 				INFOPLIST_FILE = ApptentiveTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.apptentive.ApptentiveTests;

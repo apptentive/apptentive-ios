@@ -1,3 +1,7 @@
+2017-08-11 frankus, weeebox v4.0.3
+----------------------------------
+Version 4.0.3 fixes a potential crash when decoding invalid JSON, and provides better error messaging for incorrect Apptentive App Key and Apptentive App Signature values. It also updates the URL used to send users to the App Store rating page for an app.
+
 2017-08-03 frankus, weeebox v4.0.2
 ----------------------------------
 Version 4.0.2 fixes a potential deadlock when an app returns to the foreground.

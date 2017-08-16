@@ -322,9 +322,11 @@
 
 - (void)deleteCompletedOrFailedRequest:(ApptentiveSerialRequest *)requestToDelete {
 	if (requestToDelete != nil) {
-		[requestToDelete.managedObjectContext performBlockAndWait:^{
-			[requestToDelete.managedObjectContext deleteObject:requestToDelete];
-			[ApptentivePayloadDebug printPayloadSendingQueueWithContext:requestToDelete.managedObjectContext title:@"Deleted payload"];
+		NSManagedObjectContext *managedObjectContext = requestToDelete.managedObjectContext;
+
+		[managedObjectContext performBlockAndWait:^{
+			[managedObjectContext deleteObject:requestToDelete];
+			[ApptentivePayloadDebug printPayloadSendingQueueWithContext:managedObjectContext title:@"Deleted payload"];
 		}];
 	}
 }

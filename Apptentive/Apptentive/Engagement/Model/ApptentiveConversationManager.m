@@ -118,7 +118,11 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	}];
 	if (item != nil) {
 		ApptentiveLogDebug(ApptentiveLogTagConversation, @"Loading logged-in conversation...");
-		return [self loadConversation:item];
+		ApptentiveConversation *loggedInConversation = [self loadConversationFromMetadataItem:item];
+
+		[self createMessageManagerForConversation:loggedInConversation];
+
+		return loggedInConversation;
 	}
 
 	// if no users were logged in previously - we might have an anonymous conversation
@@ -128,7 +132,11 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 	if (item != nil) {
 		ApptentiveLogDebug(ApptentiveLogTagConversation, @"Loading anonymous conversation...");
-		return [self loadConversation:item];
+		ApptentiveConversation *anonymousConversation = [self loadConversationFromMetadataItem:item];
+
+		[self createMessageManagerForConversation:anonymousConversation];
+
+		return anonymousConversation;
 	}
 
 	// check if we have a 'pending' anonymous conversation
@@ -136,7 +144,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		return item.state == ApptentiveConversationStateAnonymousPending;
 	}];
 	if (item != nil) {
-		ApptentiveConversation *conversation = [self loadConversation:item];
+		ApptentiveConversation *conversation = [self loadConversationFromMetadataItem:item];
 		[self fetchConversationToken:conversation];
 		return conversation;
 	}
@@ -176,7 +184,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	return anonymousConversation;
 }
 
-- (ApptentiveConversation *)loadConversation:(ApptentiveConversationMetadataItem *)item {
+- (ApptentiveConversation *)loadConversationFromMetadataItem:(ApptentiveConversationMetadataItem *)item {
 	ApptentiveAssertNotNil(item, @"Conversation metadata item is nil");
 	if (item == nil) {
 		return nil;
@@ -226,8 +234,6 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	mutableConversation.encryptionKey = item.encryptionKey;
 	mutableConversation.userId = item.userId;
 	mutableConversation.token = item.JWT;
-
-	[self createMessageManagerForConversation:mutableConversation];
 
 	// TODO: check data consistency
 
@@ -300,7 +306,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 - (BOOL)fetchLegacyConversation:(ApptentiveConversation *)conversation {
 	ApptentiveAssertNotNil(conversation, @"Conversation is nil");
 	ApptentiveAssertNil(conversation.token, @"Conversation token already exists");
-	ApptentiveAssertTrue(conversation.legacyToken > 0, @"Conversation legacy token is nil or empty");
+	ApptentiveAssertTrue(conversation.legacyToken.length > 0, @"Conversation legacy token is nil or empty");
 
 	ApptentiveRequestOperationCallback *delegate = [ApptentiveRequestOperationCallback new];
 	delegate.operationFinishCallback = ^(ApptentiveRequestOperation *operation) {
@@ -671,7 +677,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		} else if ([conversationItem.conversationIdentifier isEqualToString:conversationIdentifier]) {
 			ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Loading conversation for user '%@'...", userId);
 			conversationItem.encryptionKey = [NSData apptentive_dataWithHexString:encryptionKey];
-			ApptentiveConversation *existingConversation = [self loadConversation:conversationItem];
+			ApptentiveConversation *existingConversation = [self loadConversationFromMetadataItem:conversationItem];
 			mutableConversation = [existingConversation mutableCopy];
 		} else {
 			[self failLoginWithErrorCode:ApptentiveInternalInconsistency failureReason:@"Mismatching conversation identifiers for user '%@'. Expected '%@' but was '%@'", userId, conversationItem.conversationIdentifier, conversationIdentifier];

@@ -19,11 +19,11 @@
 #import "ApptentiveDataManager.h"
 
 
-static inline NSDate *dateFromString(NSString *date) {
-	NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-	formatter.dateFormat = @"MM/dd/yyyy HH:mm:ss aa";
-	return [formatter dateFromString:date];
-}
+//static inline NSDate *dateFromString(NSString *date) {
+//	NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+//	formatter.dateFormat = @"MM/dd/yyyy HH:mm:ss aa";
+//	return [formatter dateFromString:date];
+//}
 
 
 @interface ApptentiveConversationMigrationTests : XCTestCase

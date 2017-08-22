@@ -191,7 +191,7 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 			}
 
 			ApptentiveArrayAddObject(mutableMessages, message);
-			[mutableMessageIdentifierIndex setObject:message forKey:message.localIdentifier];
+			ApptentiveDictionarySetKeyValue(mutableMessageIdentifierIndex, message.localIdentifier, message);
 
 			lastDownloadedMessageIdentifier = message.identifier;
 		} else {
@@ -208,7 +208,7 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 
 			if (newVersion == nil) {
 				ApptentiveArrayAddObject(mutableMessages, message);
-				[mutableMessageIdentifierIndex setObject:message forKey:message.localIdentifier];
+				ApptentiveDictionarySetKeyValue(mutableMessageIdentifierIndex, message.localIdentifier, message);
 			}
 		}
 
@@ -307,7 +307,7 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 	// (i.e. context messages).
 	if (previousLocalIdentifier) {
 		[self.messageIdentifierIndex removeObjectForKey:previousLocalIdentifier];
-		[self.messageIdentifierIndex setObject:message forKey:message.localIdentifier];
+		ApptentiveDictionarySetKeyValue(self.messageIdentifierIndex, message.localIdentifier, message);
 	}
 
 	message.state = ApptentiveMessageStateWaiting;
@@ -347,7 +347,7 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 
 	NSInteger index = self.messages.count;
 	ApptentiveArrayAddObject(self.messageStore.messages, message);
-	[self.messageIdentifierIndex setObject:message forKey:message.localIdentifier];
+	ApptentiveDictionarySetKeyValue(self.messageIdentifierIndex, message.localIdentifier, message);
 
 	if (self.delegate) {
 		dispatch_async(dispatch_get_main_queue(), ^{

@@ -189,7 +189,7 @@ NSString *const ApptentiveInteractionSurveyEventLabelCancel = @"cancel";
 
 - (void)setText:(NSString *)text forAnswerAtIndexPath:(NSIndexPath *)indexPath {
 	if (text) {
-		[self.textAtIndexPath setObject:text forKey:indexPath];
+		ApptentiveDictionarySetKeyValue(self.textAtIndexPath, indexPath, text);
 	}
 
 	if (self.invalidQuestionIndexes) {

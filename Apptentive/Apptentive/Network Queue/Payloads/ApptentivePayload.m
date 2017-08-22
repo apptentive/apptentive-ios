@@ -81,7 +81,7 @@
 	if (self.encryptionKey != nil) {
 		ApptentiveAssertNotNil(self.token, @"Token is nil");
 		NSMutableDictionary *temp = [[NSMutableDictionary alloc] initWithDictionary:payloadJson];
-		[temp setObject:self.token forKey:@"token"];
+		ApptentiveDictionarySetKeyValue(temp, @"token", self.token);
 		payloadJson = temp;
 	}
 

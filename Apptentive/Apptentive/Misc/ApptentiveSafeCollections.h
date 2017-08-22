@@ -13,22 +13,22 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Safely adds key and value into the dictionary
  */
-void ApptentiveDictionarySetKeyValue(NSMutableDictionary *dictionary, NSString *key, id value);
+void ApptentiveDictionarySetKeyValue(NSMutableDictionary *dictionary, id<NSCopying> key, id value);
 
 /**
  Tries to add nullable value into the dictionary
  */
-BOOL ApptentiveDictionaryTrySetKeyValue(NSMutableDictionary *dictionary, NSString *key, id value);
+BOOL ApptentiveDictionaryTrySetKeyValue(NSMutableDictionary *dictionary, id<NSCopying> key, id value);
 
 /**
  Safely retrieves string from a dictionary (or returns nil if failed)
  */
-NSString *ApptentiveDictionaryGetString(NSDictionary *dictionary, NSString *key);
+NSString *ApptentiveDictionaryGetString(NSDictionary *dictionary, id<NSCopying> key);
 
 /**
  Safely retrieves array from a dictionary (or returns nil if failed)
  */
-NSArray *ApptentiveDictionaryGetArray(NSDictionary *dictionary, NSString *key);
+NSArray *ApptentiveDictionaryGetArray(NSDictionary *dictionary, id<NSCopying> key);
 
 /**
  Safely adds an object to the array.

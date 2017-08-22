@@ -369,7 +369,7 @@ ApptentiveStyleIdentifier ApptentiveColorContextBackground = @"com.apptentive.co
 }
 
 - (void)setFontDescriptor:(UIFontDescriptor *)fontDescriptor forStyle:(ApptentiveStyleIdentifier)textStyle {
-	[self.fontDescriptorOverrides setObject:fontDescriptor forKey:textStyle];
+	ApptentiveDictionarySetKeyValue(self.fontDescriptorOverrides, textStyle, fontDescriptor);
 }
 
 - (UIFontDescriptor *)fontDescriptorForStyle:(ApptentiveStyleIdentifier)textStyle {
@@ -435,7 +435,7 @@ ApptentiveStyleIdentifier ApptentiveColorContextBackground = @"com.apptentive.co
 }
 
 - (void)setColor:(UIColor *)color forStyle:(NSString *)style {
-	[self.colorOverrides setObject:color forKey:style];
+	ApptentiveDictionarySetKeyValue(self.colorOverrides, style, color);
 }
 
 - (UIColor *)interpolateAtPoint:(CGFloat)interpolation between:(UIColor *)color1 and:(UIColor *)color2 {

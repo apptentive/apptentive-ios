@@ -561,7 +561,7 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 }
 
 - (void)setIndexPath:(NSIndexPath *)indexPath forTask:(NSURLSessionTask *)task {
-	[self.taskIndexPaths setObject:indexPath forKey:[NSValue valueWithNonretainedObject:task]];
+	ApptentiveDictionarySetKeyValue(self.taskIndexPaths, [NSValue valueWithNonretainedObject:task], indexPath);
 }
 
 - (void)removeTask:(NSURLSessionTask *)task {

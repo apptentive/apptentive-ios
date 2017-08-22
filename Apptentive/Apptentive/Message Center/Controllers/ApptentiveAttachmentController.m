@@ -153,6 +153,10 @@ NSString *const ATInteractionMessageCenterEventLabelAttachmentDelete = @"attachm
 - (IBAction)deleteImage:(UIButton *)sender {
 	UICollectionViewCell *cell = (UICollectionViewCell *)sender.superview.superview;
 	NSIndexPath *indexPath = [self.collectionView indexPathForCell:cell];
+	ApptentiveAssertNotNil(indexPath, @"Index path is nil for cell: %@", cell);
+	if (indexPath == nil) {
+		return;
+	}
 
 	[self willChangeValueForKey:@"attachments"];
 	[self.mutableAttachments removeObjectAtIndex:indexPath.item];

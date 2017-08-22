@@ -7,6 +7,7 @@
 //
 
 #import "ApptentiveDataManager.h"
+#import "ApptentiveDefines.h"
 
 // Used to indicate a database upgrade or check was in progress and didn't complete.
 NSString *const ATDataManagerUpgradeCanaryFilename = @"ATDataManagerUpgradeCanary";
@@ -48,6 +49,10 @@ typedef enum {
 
 - (id)initWithModelName:(NSString *)aModelName inBundle:(NSBundle *)aBundle storagePath:(NSString *)path {
 	if ((self = [super init])) {
+		APPTENTIVE_CHECK_INIT_NOT_EMPTY_ARG(aModelName);
+		APPTENTIVE_CHECK_INIT_NOT_NIL_ARG(aBundle);
+		APPTENTIVE_CHECK_INIT_NOT_EMPTY_ARG(path);
+
 		_modelName = aModelName;
 		_bundle = aBundle;
 		_supportDirectoryPath = path;

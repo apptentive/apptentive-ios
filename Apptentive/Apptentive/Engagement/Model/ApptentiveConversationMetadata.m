@@ -38,6 +38,8 @@ static NSString *const VersionKey = @"version";
 
 	if (self) {
 		_items = [coder decodeObjectOfClass:[NSMutableArray class] forKey:ItemsKey];
+
+		[self checkConsistency];
 	}
 
 	return self;
@@ -129,6 +131,22 @@ static NSString *const VersionKey = @"version";
 
 	NSString *table = [ApptentiveUtilities formatAsTableRows:rows];
 	ApptentiveLogVerbose(ApptentiveLogTagConversation, @"%@ (%ld item(s))\n%@\n%@\n-", title, (unsigned long)items.count, table, moreInfo);
+}
+
+#pragma mark - Private
+
+- (void)checkConsistency {
+	NSMutableArray *invalidItems = [NSMutableArray array];
+
+	for (ApptentiveConversationMetadataItem *item in self.items) {
+		if (!item.consistent) {
+			ApptentiveLogError(@"Conversation metadata item %@ is inconsistent. Deleting it...", item);
+
+			[invalidItems addObject:item];
+		}
+	}
+
+	[self.items removeObjectsInArray:invalidItems];
 }
 
 @end

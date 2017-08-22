@@ -24,6 +24,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic, nullable) NSString *userId;
 @property (strong, nonatomic, nullable) NSString *JWT;
 
+@property (readonly, nonatomic, getter=isConsistent) BOOL consistent;
+
 @end
 
 NS_ASSUME_NONNULL_END

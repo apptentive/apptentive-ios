@@ -56,11 +56,11 @@
 			_maximumLabel = JSON[@"max_label"];
 
 			for (NSInteger i = _minimumValue; i <= _maximumValue; i++) {
-				[mutableAnswers addObject:[[ApptentiveSurveyAnswer alloc] initWithValue:[numberFormatter stringFromNumber:@(i)]]];
+				ApptentiveArrayAddObject(mutableAnswers, [[ApptentiveSurveyAnswer alloc] initWithValue:[numberFormatter stringFromNumber:@(i)]]);
 			}
 		} else {
 			for (NSDictionary *answerJSON in JSON[@"answer_choices"]) {
-				[mutableAnswers addObject:[[ApptentiveSurveyAnswer alloc] initWithJSON:answerJSON]];
+				ApptentiveArrayAddObject(mutableAnswers, [[ApptentiveSurveyAnswer alloc] initWithJSON:answerJSON]);
 			}
 		}
 

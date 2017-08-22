@@ -43,3 +43,10 @@ NSArray *ApptentiveDictionaryGetArray(NSDictionary *dictionary, NSString *key) {
 	}
 	return nil;
 }
+
+void ApptentiveArrayAddObject(NSMutableArray *array, id object) {
+	ApptentiveAssertNotNil(object, @"Object is nil");
+	if (object != nil) {
+		[array addObject:object];
+	}
+}

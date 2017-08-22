@@ -110,7 +110,7 @@
         
         NSMutableArray *attachmentArray = [NSMutableArray arrayWithCapacity:payload.attachments.count];
         for (ApptentiveAttachment *attachment in payloadAttachments) {
-            [attachmentArray addObject:[ApptentiveSerialRequestAttachment queuedAttachmentWithName:attachment.name path:attachment.fullLocalPath MIMEType:attachment.contentType inContext:childContext]];
+            ApptentiveArrayAddObject(attachmentArray, [ApptentiveSerialRequestAttachment queuedAttachmentWithName:attachment.name path:attachment.fullLocalPath MIMEType:attachment.contentType inContext:childContext]);
         }
         request.attachments = [NSOrderedSet orderedSetWithArray:attachmentArray];
         

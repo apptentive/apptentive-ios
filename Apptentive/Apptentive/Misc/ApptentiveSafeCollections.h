@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 /**
  Safely adds key and value into the dictionary
  */
@@ -27,3 +29,10 @@ NSString *ApptentiveDictionaryGetString(NSDictionary *dictionary, NSString *key)
  Safely retrieves array from a dictionary (or returns nil if failed)
  */
 NSArray *ApptentiveDictionaryGetArray(NSDictionary *dictionary, NSString *key);
+
+/**
+ Safely adds an object to the array.
+ */
+void ApptentiveArrayAddObject(NSMutableArray *array, id object);
+
+NS_ASSUME_NONNULL_END

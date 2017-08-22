@@ -50,14 +50,14 @@ static NSString *const VersionKey = @"version";
 
 - (void)addItem:(ApptentiveConversationMetadataItem *)item {
 	ApptentiveAssertNotNil(item, @"Attempting to add nil item to metadata");
-
-	[self.items addObject:item];
+	ApptentiveArrayAddObject(self.items, item);
 }
 
 - (void)deleteItem:(ApptentiveConversationMetadataItem *)item {
 	ApptentiveAssertNotNil(item, @"Attempting to remove nil item from metadata");
-
-	[self.items removeObject:item];
+	if (item) {
+		[self.items removeObject:item];
+	}
 }
 
 #pragma mark - Filtering

@@ -8,6 +8,7 @@
 
 #import "ApptentiveSurvey.h"
 #import "ApptentiveSurveyQuestion.h"
+#import "ApptentiveSafeCollections.h"
 
 
 @implementation ApptentiveSurvey
@@ -30,10 +31,7 @@
 
 		for (NSDictionary *questionJSON in JSON[@"questions"]) {
 			ApptentiveSurveyQuestion *question = [[ApptentiveSurveyQuestion alloc] initWithJSON:questionJSON];
-
-			if (question) {
-				[mutableQuestions addObject:question];
-			}
+			ApptentiveArrayAddObject(mutableQuestions, question);
 		}
 
 		_questions = [mutableQuestions copy];

@@ -21,6 +21,7 @@
 #import "ApptentiveConversation.h"
 #import "ApptentiveConversationMetadata.h"
 #import "ApptentiveConversationMetadataItem.h"
+#import "ApptentiveSafeCollections.h"
 
 
 @implementation Apptentive (Debugging)
@@ -70,7 +71,7 @@
 	NSArray *localCodePoints = [targets.allKeys filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF BEGINSWITH[c] %@", @"local#app#"]];
 	NSMutableArray *eventNames = [NSMutableArray array];
 	for (NSString *codePoint in localCodePoints) {
-		[eventNames addObject:[codePoint substringFromIndex:10]];
+		ApptentiveArrayAddObject(eventNames, [codePoint substringFromIndex:10]);
 	}
 
 	return eventNames;

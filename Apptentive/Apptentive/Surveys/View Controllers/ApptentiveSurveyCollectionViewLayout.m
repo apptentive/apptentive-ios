@@ -106,7 +106,7 @@
 	for (UICollectionViewLayoutAttributes *attributes in superAttributes) {
 		if (attributes.representedElementCategory == UICollectionElementCategorySupplementaryView) {
 			[newAttributes replaceObjectAtIndex:i withObject:[self layoutAttributesForSupplementaryViewOfKind:attributes.representedElementKind atIndexPath:attributes.indexPath]];
-			[decorationViewAttributes addObject:[self layoutAttributesForDecorationViewOfKind:@"QuestionBackground" atIndexPath:attributes.indexPath]];
+			ApptentiveArrayAddObject(decorationViewAttributes, [self layoutAttributesForDecorationViewOfKind:@"QuestionBackground" atIndexPath:attributes.indexPath]);
 		}
 
 		i++;
@@ -118,7 +118,7 @@
 	for (UICollectionViewLayoutAttributes *attributes in result) {
 		UICollectionViewLayoutAttributes *movedAttributes = [attributes copy];
 		movedAttributes.frame = CGRectOffset(attributes.frame, 0, self.headerHeight);
-		[newAttributes addObject:movedAttributes];
+		ApptentiveArrayAddObject(newAttributes, movedAttributes);
 	}
 
 	return newAttributes;

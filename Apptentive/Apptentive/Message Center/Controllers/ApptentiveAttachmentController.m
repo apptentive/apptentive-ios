@@ -243,7 +243,7 @@ NSString *const ATInteractionMessageCenterEventLabelAttachmentDelete = @"attachm
 
 - (void)insertImage:(UIImage *)image {
 	[self willChangeValueForKey:@"attachments"];
-	[self.mutableAttachments addObject:image];
+	ApptentiveArrayAddObject(self.mutableAttachments, image);
 	_attachments = nil;
 	[self didChangeValueForKey:@"attachments"];
 

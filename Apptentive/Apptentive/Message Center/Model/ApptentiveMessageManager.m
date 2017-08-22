@@ -184,13 +184,13 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 				message = [previousVersion mergedWith:message];
 
 				if (previousState != message.state) {
-					[updatedMessages addObject:message];
+					ApptentiveArrayAddObject(updatedMessages, message);
 				}
 			} else {
-				[addedMessages addObject:message];
+				ApptentiveArrayAddObject(addedMessages, message);
 			}
 
-			[mutableMessages addObject:message];
+			ApptentiveArrayAddObject(mutableMessages, message);
 			[mutableMessageIdentifierIndex setObject:message forKey:message.localIdentifier];
 
 			lastDownloadedMessageIdentifier = message.identifier;
@@ -207,7 +207,7 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 			ApptentiveMessage *newVersion = mutableMessageIdentifierIndex[message.localIdentifier];
 
 			if (newVersion == nil) {
-				[mutableMessages addObject:message];
+				ApptentiveArrayAddObject(mutableMessages, message);
 				[mutableMessageIdentifierIndex setObject:message forKey:message.localIdentifier];
 			}
 		}
@@ -346,7 +346,7 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 	}
 
 	NSInteger index = self.messages.count;
-	[self.messageStore.messages addObject:message];
+	ApptentiveArrayAddObject(self.messageStore.messages, message);
 	[self.messageIdentifierIndex setObject:message forKey:message.localIdentifier];
 
 	if (self.delegate) {

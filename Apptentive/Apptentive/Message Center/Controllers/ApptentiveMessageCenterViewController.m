@@ -860,6 +860,11 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		if ([cell isKindOfClass:[ApptentiveMessageCenterMessageCell class]]) {
 			ApptentiveMessageCenterMessageCell *messageCell = (ApptentiveMessageCenterMessageCell *)cell;
 			NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+			ApptentiveAssertNotNil(indexPath, @"Index path is nil for cell: %@", cell);
+			if (indexPath == nil) {
+				continue;
+			}
+
 			BOOL shouldHideStatus = [self.viewModel statusOfMessageAtIndexPath:indexPath] == ATMessageCenterMessageStatusHidden;
 
 			if (messageCell.statusLabelHidden != shouldHideStatus) {

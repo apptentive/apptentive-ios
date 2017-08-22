@@ -11,6 +11,11 @@
 NS_ASSUME_NONNULL_BEGIN
 
 /**
+ Returns non-nil value or NSNull
+ */
+id ApptentiveCollectionValue(id value);
+
+/**
  Safely adds key and value into the dictionary
  */
 void ApptentiveDictionarySetKeyValue(NSMutableDictionary *dictionary, id<NSCopying> key, id value);

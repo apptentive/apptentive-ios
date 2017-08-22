@@ -463,26 +463,27 @@ ApptentiveStyleIdentifier ApptentiveColorContextBackground = @"com.apptentive.co
 	}
 
 	if ([style isEqualToString:ApptentiveColorFailure]) {
-		return self.failureColor;
+		result = self.failureColor;
 	} else if ([style isEqualToString:ApptentiveColorSeparator]) {
-		return self.separatorColor;
+		result = self.separatorColor;
 	} else if ([style isEqualToString:ApptentiveColorCollectionBackground]) {
-		return self.collectionBackgroundColor;
+		result = self.collectionBackgroundColor;
 	} else if ([@[ApptentiveColorHeaderBackground, ApptentiveColorBackground, ApptentiveColorTextInputBackground, ApptentiveColorMessageBackground] containsObject:style]) {
-		return self.backgroundColor;
+		result = self.backgroundColor;
 	} else if ([style isEqualToString:ApptentiveColorFooterBackground]) {
-		return [self.backgroundColor colorWithAlphaComponent:0.5];
+		result = [self.backgroundColor colorWithAlphaComponent:0.5];
 	} else if ([style isEqualToString:ApptentiveColorReplyBackground] || [style isEqualToString:ApptentiveColorContextBackground]) {
-		return [self interpolateAtPoint:0.968 between:self.backgroundColor and:self.primaryColor];
+		result = [self interpolateAtPoint:0.968 between:self.backgroundColor and:self.primaryColor];
 	} else if ([style isEqualToString:ApptentiveColorTextInputPlaceholder]) {
-		return self.placeholderColor;
+		result = self.placeholderColor;
 	} else if ([@[ApptentiveTextStyleHeaderMessage, ApptentiveTextStyleMessageDate, ApptentiveTextStyleMessageStatus, ApptentiveTextStyleMessageCenterStatus, ApptentiveTextStyleSurveyInstructions] containsObject:style]) {
-		return self.secondaryColor;
+		result = self.secondaryColor;
 	} else {
-		return self.primaryColor;
+		result = self.primaryColor;
 	}
 
-	return result;
+	ApptentiveAssertNotNil(result, @"Can't resolve color for style: %@", style);
+	return result ?: [UIColor magentaColor];
 }
 
 @end

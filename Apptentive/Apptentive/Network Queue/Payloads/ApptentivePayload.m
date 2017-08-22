@@ -62,7 +62,9 @@
 }
 
 - (NSDictionary *)JSONDictionary {
-	return @{self.containerName: self.contents};
+	NSMutableDictionary *dictionary = [NSMutableDictionary new];
+	ApptentiveDictionarySetKeyValue(dictionary, self.containerName, self.contents);
+	return dictionary;
 }
 
 - (NSData *)payload {

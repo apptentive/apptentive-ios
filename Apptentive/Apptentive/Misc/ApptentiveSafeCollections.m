@@ -9,6 +9,11 @@
 #import "ApptentiveSafeCollections.h"
 #import "ApptentiveAssert.h"
 
+id ApptentiveCollectionValue(id value) {
+	ApptentiveAssertNotNil(value, @"Value is nil");
+	return value ?: [NSNull null];
+}
+
 void ApptentiveDictionarySetKeyValue(NSMutableDictionary *dictionary, id<NSCopying> key, id value) {
 	ApptentiveAssertNotNil(key, @"Key is nil");
 	ApptentiveAssertNotNil(value, @"Value is nil");

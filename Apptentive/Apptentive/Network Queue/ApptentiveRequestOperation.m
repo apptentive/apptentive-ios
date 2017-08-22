@@ -190,7 +190,7 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 		NSDictionary *userInfo = @{
 			NSLocalizedDescriptionKey: HTTPErrorTitle,
 			NSLocalizedFailureReasonErrorKey: HTTPErrorMessage,
-			NSURLErrorFailingURLErrorKey: self.URLRequest.URL
+			NSURLErrorFailingURLErrorKey: ApptentiveCollectionValue(self.URLRequest.URL)
 		};
 		error = [NSError errorWithDomain:ApptentiveHTTPErrorDomain code:response.statusCode userInfo:userInfo];
 	}

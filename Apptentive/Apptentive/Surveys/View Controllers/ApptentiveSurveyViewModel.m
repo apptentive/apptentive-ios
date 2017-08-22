@@ -396,7 +396,7 @@ NSString *const ApptentiveInteractionSurveyEventLabelCancel = @"cancel";
 }
 
 - (void)didSubmit:(UIViewController *)presentingViewController {
-	[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveSurveySentNotification object:@{ApptentiveSurveyIDKey: self.interaction.identifier}];
+	[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveSurveySentNotification object:@{ApptentiveSurveyIDKey: ApptentiveCollectionValue(self.interaction.identifier)}];
 	[self.interaction engage:ApptentiveInteractionSurveyEventLabelSubmit fromViewController:presentingViewController];
 }
 

@@ -38,6 +38,8 @@ static NSString *const VersionKey = @"version";
 
 	if (self) {
 		_items = [coder decodeObjectOfClass:[NSMutableArray class] forKey:ItemsKey];
+
+		[self checkConsistency];
 	}
 
 	return self;
@@ -50,14 +52,14 @@ static NSString *const VersionKey = @"version";
 
 - (void)addItem:(ApptentiveConversationMetadataItem *)item {
 	ApptentiveAssertNotNil(item, @"Attempting to add nil item to metadata");
-
-	[self.items addObject:item];
+	ApptentiveArrayAddObject(self.items, item);
 }
 
 - (void)deleteItem:(ApptentiveConversationMetadataItem *)item {
 	ApptentiveAssertNotNil(item, @"Attempting to remove nil item from metadata");
-
-	[self.items removeObject:item];
+	if (item) {
+		[self.items removeObject:item];
+	}
 }
 
 #pragma mark - Filtering
@@ -129,6 +131,22 @@ static NSString *const VersionKey = @"version";
 
 	NSString *table = [ApptentiveUtilities formatAsTableRows:rows];
 	ApptentiveLogVerbose(ApptentiveLogTagConversation, @"%@ (%ld item(s))\n%@\n%@\n-", title, (unsigned long)items.count, table, moreInfo);
+}
+
+#pragma mark - Private
+
+- (void)checkConsistency {
+	NSMutableArray *invalidItems = [NSMutableArray array];
+
+	for (ApptentiveConversationMetadataItem *item in self.items) {
+		if (!item.consistent) {
+			ApptentiveLogError(@"Conversation metadata item %@ is inconsistent. Deleting it...", item);
+
+			[invalidItems addObject:item];
+		}
+	}
+
+	[self.items removeObjectsInArray:invalidItems];
 }
 
 @end

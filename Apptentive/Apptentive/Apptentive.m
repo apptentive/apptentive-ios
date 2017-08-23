@@ -360,7 +360,7 @@ static Apptentive *_sharedInstance;
 	}
 
 	if (simpleType || complexType) {
-		[customData setObject:object forKey:key];
+		ApptentiveDictionarySetKeyValue(customData, key, object);
 	} else {
 		ApptentiveLogError(@"Apptentive custom data must be of type NSString, NSNumber, or NSNull, or a 'complex type' NSDictionary created by one of the constructors in Apptentive.h");
 	}
@@ -421,7 +421,7 @@ static Apptentive *_sharedInstance;
 		[integrationConfiguration removeObjectForKey:[self integrationKeyForPushProvider:ApptentivePushProviderAmazonSNS]];
 		[integrationConfiguration removeObjectForKey:[self integrationKeyForPushProvider:ApptentivePushProviderParse]];
 
-		[integrationConfiguration setObject:@{ @"token": token } forKey:[self integrationKeyForPushProvider:pushProvider]];
+		ApptentiveDictionarySetKeyValue(integrationConfiguration, [self integrationKeyForPushProvider:pushProvider], @{ @"token": token });
 
 		ApptentiveDevice.integrationConfiguration = integrationConfiguration;
 
@@ -449,7 +449,7 @@ static Apptentive *_sharedInstance;
 - (void)addIntegration:(NSString *)integration withConfiguration:(NSDictionary *)configuration {
 	[self.operationQueue addOperationWithBlock:^{
 		NSMutableDictionary *integrationConfiguration = [self.backend.conversationManager.activeConversation.device.integrationConfiguration mutableCopy];
-		[integrationConfiguration setObject:configuration forKey:integration];
+		ApptentiveDictionarySetKeyValue(integrationConfiguration, integration, configuration);
 		self.backend.conversationManager.activeConversation.device.integrationConfiguration = integrationConfiguration;
 		[self.backend scheduleDeviceUpdate];
 	}];

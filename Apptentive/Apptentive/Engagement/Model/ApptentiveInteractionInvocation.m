@@ -42,9 +42,7 @@
 			invocation = [ApptentiveInteractionInvocation invocationWithJSONDictionary:(NSDictionary *)invocationObject];
 		}
 
-		if (invocation) {
-			[invocations addObject:invocation];
-		}
+		ApptentiveArrayAddObject(invocations, invocation);
 	}
 
 	return invocations;
@@ -185,9 +183,9 @@
 			}
 		}
 
-		if (predicate) {
-			[subPredicates addObject:predicate];
-		} else {
+		ApptentiveArrayAddObject(subPredicates, predicate);
+
+		if (!predicate) {
 			return nil;
 		}
 	}
@@ -202,9 +200,9 @@
 
 	for (NSDictionary *criteria in criteriaArray) {
 		NSPredicate *predicate = [self compoundPredicateWithCriteria:criteria];
-		if (predicate) {
-			[subPredicates addObject:predicate];
-		} else {
+		ApptentiveArrayAddObject(subPredicates, predicate);
+
+		if (!predicate) {
 			return nil;
 		}
 	}
@@ -284,9 +282,8 @@
 			}];
 		}
 
-		if (predicate) {
-			[subPredicates addObject:predicate];
-		} else {
+		ApptentiveArrayAddObject(subPredicates, predicate);
+		if (!predicate) {
 			return nil;
 		}
 	}

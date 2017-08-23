@@ -106,12 +106,12 @@ NSString *const ApptentiveInteractionSurveyEventLabelCancel = @"cancel";
 	NSInteger redCharacterCount = 0;
 
 	if ([self questionAtIndex:index].required) {
-		[parts addObject:self.survey.requiredText ?: ApptentiveLocalizedString(@"required", nil)];
+		ApptentiveArrayAddObject(parts, self.survey.requiredText ?: ApptentiveLocalizedString(@"required", nil));
 		redCharacterCount = self.survey.requiredText.length;
 	}
 
 	if ([self questionAtIndex:index].instructions) {
-		[parts addObject:[self questionAtIndex:index].instructions];
+		ApptentiveArrayAddObject(parts, [self questionAtIndex:index].instructions);
 	}
 
 	if (parts.count > 0) {
@@ -189,7 +189,7 @@ NSString *const ApptentiveInteractionSurveyEventLabelCancel = @"cancel";
 
 - (void)setText:(NSString *)text forAnswerAtIndexPath:(NSIndexPath *)indexPath {
 	if (text) {
-		[self.textAtIndexPath setObject:text forKey:indexPath];
+		ApptentiveDictionarySetKeyValue(self.textAtIndexPath, indexPath, text);
 	}
 
 	if (self.invalidQuestionIndexes) {
@@ -202,7 +202,9 @@ NSString *const ApptentiveInteractionSurveyEventLabelCancel = @"cancel";
 }
 
 - (void)selectAnswerAtIndexPath:(NSIndexPath *)indexPath {
-	if ([self.selectedIndexPaths containsObject:indexPath])
+	ApptentiveAssertNotNil(indexPath, @"Index path is nil");
+
+	if (indexPath == nil || [self.selectedIndexPaths containsObject:indexPath])
 		return;
 
 	[self.selectedIndexPaths addObject:indexPath];
@@ -352,13 +354,13 @@ NSString *const ApptentiveInteractionSurveyEventLabelCancel = @"cancel";
 				NSArray *selections = [self selectedIndexPathsForQuestionAtIndex:questionIndex];
 
 				if (selections.count == 1) {
-					[responses addObject:[self responseDictionaryForAnswerAtIndexPath:selections.firstObject]];
+					ApptentiveArrayAddObject(responses, [self responseDictionaryForAnswerAtIndexPath:selections.firstObject]);
 				}
 				break;
 			}
 			case ATSurveyQuestionTypeMultipleSelect:
 				for (NSIndexPath *indexPath in [self selectedIndexPathsForQuestionAtIndex:questionIndex]) {
-					[responses addObject:[self responseDictionaryForAnswerAtIndexPath:indexPath]];
+					ApptentiveArrayAddObject(responses, [self responseDictionaryForAnswerAtIndexPath:indexPath]);
 				}
 
 				break;
@@ -394,7 +396,7 @@ NSString *const ApptentiveInteractionSurveyEventLabelCancel = @"cancel";
 }
 
 - (void)didSubmit:(UIViewController *)presentingViewController {
-	[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveSurveySentNotification object:@{ApptentiveSurveyIDKey: self.interaction.identifier}];
+	[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveSurveySentNotification object:@{ApptentiveSurveyIDKey: ApptentiveCollectionValue(self.interaction.identifier)}];
 	[self.interaction engage:ApptentiveInteractionSurveyEventLabelSubmit fromViewController:presentingViewController];
 }
 

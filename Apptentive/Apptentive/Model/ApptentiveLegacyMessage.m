@@ -78,10 +78,7 @@
 				}
 
 				ApptentiveAttachment *attachment = [[ApptentiveAttachment alloc] initWithPath:newPath contentType:legacyAttachment.mimeType name:legacyAttachment.name];
-
-				if (attachment != nil) {
-					[attachments addObject:attachment];
-				}
+				ApptentiveArrayAddObject(attachments, attachment);
 			}
 
 			NSDictionary *customData = @{};

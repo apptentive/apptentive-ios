@@ -184,14 +184,14 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 				message = [previousVersion mergedWith:message];
 
 				if (previousState != message.state) {
-					[updatedMessages addObject:message];
+					ApptentiveArrayAddObject(updatedMessages, message);
 				}
 			} else {
-				[addedMessages addObject:message];
+				ApptentiveArrayAddObject(addedMessages, message);
 			}
 
-			[mutableMessages addObject:message];
-			[mutableMessageIdentifierIndex setObject:message forKey:message.localIdentifier];
+			ApptentiveArrayAddObject(mutableMessages, message);
+			ApptentiveDictionarySetKeyValue(mutableMessageIdentifierIndex, message.localIdentifier, message);
 
 			lastDownloadedMessageIdentifier = message.identifier;
 		} else {
@@ -207,8 +207,8 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 			ApptentiveMessage *newVersion = mutableMessageIdentifierIndex[message.localIdentifier];
 
 			if (newVersion == nil) {
-				[mutableMessages addObject:message];
-				[mutableMessageIdentifierIndex setObject:message forKey:message.localIdentifier];
+				ApptentiveArrayAddObject(mutableMessages, message);
+				ApptentiveDictionarySetKeyValue(mutableMessageIdentifierIndex, message.localIdentifier, message);
 			}
 		}
 
@@ -307,7 +307,7 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 	// (i.e. context messages).
 	if (previousLocalIdentifier) {
 		[self.messageIdentifierIndex removeObjectForKey:previousLocalIdentifier];
-		[self.messageIdentifierIndex setObject:message forKey:message.localIdentifier];
+		ApptentiveDictionarySetKeyValue(self.messageIdentifierIndex, message.localIdentifier, message);
 	}
 
 	message.state = ApptentiveMessageStateWaiting;
@@ -346,8 +346,8 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 	}
 
 	NSInteger index = self.messages.count;
-	[self.messageStore.messages addObject:message];
-	[self.messageIdentifierIndex setObject:message forKey:message.localIdentifier];
+	ApptentiveArrayAddObject(self.messageStore.messages, message);
+	ApptentiveDictionarySetKeyValue(self.messageIdentifierIndex, message.localIdentifier, message);
 
 	if (self.delegate) {
 		dispatch_async(dispatch_get_main_queue(), ^{

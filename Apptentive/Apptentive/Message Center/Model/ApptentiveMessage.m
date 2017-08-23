@@ -58,9 +58,7 @@ static NSString *const InboundKey = @"inboundKey";
 				}
 
 				ApptentiveAttachment *attachment = [[ApptentiveAttachment alloc] initWithJSON:attachmentDict];
-				if (attachment != nil) {
-					[attachments addObject:attachment];
-				}
+				ApptentiveArrayAddObject(attachments, attachment);
 			}
 
 			_attachments = attachments;
@@ -182,7 +180,7 @@ static NSString *const InboundKey = @"inboundKey";
 			ApptentiveAttachment *attachmentFromServer = messageFromServer.attachments[i++];
 
 			ApptentiveAttachment *updatedAttachment = [attachment mergedWith:attachmentFromServer];
-			[updatedAttachments addObject:updatedAttachment];
+			ApptentiveArrayAddObject(updatedAttachments, updatedAttachment);
 		}
 
 		_attachments = updatedAttachments;

@@ -54,7 +54,7 @@ static NSString *const ATEngagementInteractionsAppBuildNumberKey = @"ATEngagemen
 			for (NSString *event in [targetsDictionary allKeys]) {
 				NSArray *invocationsJSONArray = targetsDictionary[event];
 				NSArray *invocationsArray = [ApptentiveInteractionInvocation invocationsWithJSONArray:invocationsJSONArray];
-				[targets setObject:invocationsArray forKey:event];
+				ApptentiveDictionarySetKeyValue(targets, event, invocationsArray);
 			}
 
 			_targets = [NSDictionary dictionaryWithDictionary:targets];
@@ -68,7 +68,7 @@ static NSString *const ATEngagementInteractionsAppBuildNumberKey = @"ATEngagemen
 
 			for (NSDictionary *interactionDictionary in interactionsArray) {
 				ApptentiveInteraction *interactionObject = [ApptentiveInteraction interactionWithJSONDictionary:interactionDictionary];
-				[interactions setObject:interactionObject forKey:interactionObject.identifier];
+				ApptentiveDictionarySetKeyValue(interactions, interactionObject.identifier, interactionObject);
 			}
 
 			_interactions = [NSDictionary dictionaryWithDictionary:interactions];

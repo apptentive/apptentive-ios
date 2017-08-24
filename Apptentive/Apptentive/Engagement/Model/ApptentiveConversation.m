@@ -23,6 +23,7 @@ static NSString *const DeviceKey = @"device";
 static NSString *const EngagementKey = @"engagement";
 static NSString *const APIKeyKey = @"APIKey";
 static NSString *const TokenKey = @"token";
+static NSString *const LegacyTokenKey = @"legacyToken";
 static NSString *const LastMessageIDKey = @"lastMessageID";
 static NSString *const MutableUserInfoKey = @"mutableUserInfo";
 static NSString *const ArchiveVersionKey = @"archiveVersion";
@@ -112,6 +113,7 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 		_device = [coder decodeObjectOfClass:[ApptentiveDevice class] forKey:DeviceKey];
 		_engagement = [coder decodeObjectOfClass:[ApptentiveEngagement class] forKey:EngagementKey];
 		_token = [coder decodeObjectOfClass:[NSString class] forKey:TokenKey];
+		_legacyToken = [coder decodeObjectOfClass:[NSString class] forKey:LegacyTokenKey];
 		_lastMessageID = [coder decodeObjectOfClass:[NSString class] forKey:LastMessageIDKey];
 		_mutableUserInfo = [coder decodeObjectOfClass:[NSMutableDictionary class] forKey:MutableUserInfoKey];
 		_identifier = [coder decodeObjectOfClass:[NSString class] forKey:IdentifierKey];
@@ -131,6 +133,7 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 	[coder encodeObject:self.device forKey:DeviceKey];
 	[coder encodeObject:self.engagement forKey:EngagementKey];
 	[coder encodeObject:self.token forKey:TokenKey];
+	[coder encodeObject:self.legacyToken forKey:LegacyTokenKey];
 	[coder encodeObject:self.lastMessageID forKey:LastMessageIDKey];
 	[coder encodeObject:self.mutableUserInfo forKey:MutableUserInfoKey];
 	[coder encodeObject:self.identifier forKey:IdentifierKey];

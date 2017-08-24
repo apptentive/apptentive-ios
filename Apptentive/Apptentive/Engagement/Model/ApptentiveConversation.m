@@ -27,6 +27,7 @@ static NSString *const LastMessageIDKey = @"lastMessageID";
 static NSString *const MutableUserInfoKey = @"mutableUserInfo";
 static NSString *const ArchiveVersionKey = @"archiveVersion";
 static NSString *const IdentifierKey = @"identifier";
+static NSString *const LocalIdentifierKey = @"localIdentifier";
 static NSString *const DirectoryNameKey = @"directoryName";
 static NSString *const LastSentDeviceKey = @"lastSentDevice";
 static NSString *const LastSentPersonKey = @"lastSentPerson";
@@ -84,6 +85,7 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 - (instancetype)initWithState:(ApptentiveConversationState)state {
 	self = [super init];
 	if (self) {
+		_localIdentifier = [[NSUUID UUID] UUIDString];
 		_state = state;
 		_appRelease = [[ApptentiveAppRelease alloc] initWithCurrentAppRelease];
 		_SDK = [[ApptentiveSDK alloc] initWithCurrentSDK];
@@ -112,6 +114,7 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 		_lastMessageID = [coder decodeObjectOfClass:[NSString class] forKey:LastMessageIDKey];
 		_mutableUserInfo = [coder decodeObjectOfClass:[NSMutableDictionary class] forKey:MutableUserInfoKey];
 		_identifier = [coder decodeObjectOfClass:[NSString class] forKey:IdentifierKey];
+		_localIdentifier = [coder decodeObjectOfClass:[NSString class] forKey:LocalIdentifierKey] ?: [[NSUUID UUID] UUIDString];
 		_directoryName = [coder decodeObjectOfClass:[NSString class] forKey:DirectoryNameKey];
 		_lastSentDevice = [coder decodeObjectOfClass:[NSDictionary class] forKey:LastSentDeviceKey];
 		_lastSentPerson = [coder decodeObjectOfClass:[NSDictionary class] forKey:LastSentPersonKey];
@@ -130,6 +133,7 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 	[coder encodeObject:self.lastMessageID forKey:LastMessageIDKey];
 	[coder encodeObject:self.mutableUserInfo forKey:MutableUserInfoKey];
 	[coder encodeObject:self.identifier forKey:IdentifierKey];
+	[coder encodeObject:self.localIdentifier forKey:LocalIdentifierKey];
 	[coder encodeObject:self.directoryName forKey:DirectoryNameKey];
 	[coder encodeObject:self.lastSentDevice forKey:LastSentDeviceKey];
 	[coder encodeObject:self.lastSentPerson forKey:LastSentPersonKey];
@@ -348,6 +352,10 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 	_state = ApptentiveConversationStateAnonymousPending;
 
 	[self.device updateWithCurrentDeviceValues];
+}
+
+- (BOOL)hasActiveState {
+	return _state == ApptentiveConversationStateAnonymous || _state == ApptentiveConversationStateLoggedIn;
 }
 
 + (void)deleteMigratedData {

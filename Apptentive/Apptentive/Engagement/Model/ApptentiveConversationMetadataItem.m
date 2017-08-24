@@ -13,6 +13,7 @@
 
 static NSString *const StateKey = @"state";
 static NSString *const ConversationIdentifierKey = @"conversationIdentifier";
+static NSString *const ConversationLocalIdentifierKey = @"conversationLocalIdentifier";
 static NSString *const FileNameKey = @"fileName";
 static NSString *const EncryptionKeyKey = @"encryptionKey";
 static NSString *const VersionKey = @"version";
@@ -22,13 +23,14 @@ static NSString *const JWTKey = @"JWT";
 
 @implementation ApptentiveConversationMetadataItem
 
-- (instancetype)initWithConversationIdentifier:(NSString *)conversationIdentifier directoryName:(NSString *)filename {
+- (instancetype)initWithConversationLocalIdentifier:(NSString *)conversationLocalIdentifier conversationIdentifier:(NSString *)conversationIdentifier directoryName:(NSString *)filename {
 	self = [super init];
 
 	if (self) {
-		APPTENTIVE_CHECK_INIT_NOT_EMPTY_ARG(conversationIdentifier);
+		APPTENTIVE_CHECK_INIT_NOT_EMPTY_ARG(conversationLocalIdentifier);
 		APPTENTIVE_CHECK_INIT_NOT_EMPTY_ARG(filename);
 
+		_conversationLocalIdentifier = conversationLocalIdentifier;
 		_conversationIdentifier = conversationIdentifier;
 		_directoryName = filename;
 	}
@@ -46,6 +48,7 @@ static NSString *const JWTKey = @"JWT";
 	if (self) {
 		_state = [coder decodeIntegerForKey:StateKey];
 		_conversationIdentifier = [coder decodeObjectOfClass:[NSString class] forKey:ConversationIdentifierKey];
+		_conversationLocalIdentifier = [coder decodeObjectOfClass:[NSString class] forKey:ConversationLocalIdentifierKey];
 		_directoryName = [coder decodeObjectOfClass:[NSString class] forKey:FileNameKey];
 		_encryptionKey = [coder decodeObjectOfClass:[NSData class] forKey:EncryptionKeyKey];
 		_userId = [coder decodeObjectOfClass:[NSString class] forKey:UserIdKey];
@@ -58,6 +61,7 @@ static NSString *const JWTKey = @"JWT";
 - (void)encodeWithCoder:(NSCoder *)coder {
 	[coder encodeInteger:self.state forKey:StateKey];
 	[coder encodeObject:self.conversationIdentifier forKey:ConversationIdentifierKey];
+	[coder encodeObject:self.conversationLocalIdentifier forKey:ConversationLocalIdentifierKey];
 	[coder encodeObject:self.directoryName forKey:FileNameKey];
 	[coder encodeObject:self.encryptionKey forKey:EncryptionKeyKey];
 	[coder encodeObject:self.userId forKey:UserIdKey];

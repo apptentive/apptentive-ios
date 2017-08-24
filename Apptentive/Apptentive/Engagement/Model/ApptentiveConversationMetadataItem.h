@@ -15,11 +15,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ApptentiveConversationMetadataItem : NSObject <NSSecureCoding>
 
-- (nullable instancetype)initWithConversationIdentifier:(NSString *)conversationIdentifier directoryName:(NSString *)filename;
+- (nullable instancetype)initWithConversationLocalIdentifier:(NSString *)conversationLocalIdentifier conversationIdentifier:(nullable NSString *)conversationIdentifier directoryName:(NSString *)filename;
 
 @property (assign, nonatomic) ApptentiveConversationState state;
-@property (strong, nonatomic) NSString *conversationIdentifier;
+@property (strong, nonatomic, nullable) NSString *conversationIdentifier;
 @property (strong, nonatomic) NSString *directoryName;
+@property (strong, nonatomic) NSString *conversationLocalIdentifier;
 @property (strong, nonatomic, nullable) NSData *encryptionKey;
 @property (strong, nonatomic, nullable) NSString *userId;
 @property (strong, nonatomic, nullable) NSString *JWT;

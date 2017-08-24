@@ -144,8 +144,20 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		return item.state == ApptentiveConversationStateAnonymousPending;
 	}];
 	if (item != nil) {
+		ApptentiveLogDebug(ApptentiveLogTagConversation, @"Loading anonymous pending conversation...");
 		ApptentiveConversation *conversation = [self loadConversationFromMetadataItem:item];
 		[self fetchConversationToken:conversation];
+		return conversation;
+	}
+	
+	// check if we have a 'pending' legacy conversation
+	item = [self.conversationMetadata findItemFilter:^BOOL(ApptentiveConversationMetadataItem *item) {
+		return item.state == ApptentiveConversationStateLegacyPending;
+	}];
+	if (item != nil) {
+		ApptentiveLogDebug(ApptentiveLogTagConversation, @"Loading legacy pending conversation...");
+		ApptentiveConversation *conversation = [self loadConversationFromMetadataItem:item];
+		[self fetchLegacyConversation:conversation];
 		return conversation;
 	}
 
@@ -351,12 +363,8 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 }
 
 - (void)updateMetadataItems:(ApptentiveConversation *)conversation {
-	if (conversation.state == ApptentiveConversationStateAnonymousPending ||
-		conversation.state == ApptentiveConversationStateLegacyPending) {
-		ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Skipping updating metadata since conversation is %@", NSStringFromApptentiveConversationState(conversation.state));
-		return;
-	}
-
+	ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Updating metadata: state=%@ localId=%@ conversationId=%@ token=%@", conversation.state, conversation.localIdentifier, conversation.identifier, conversation.token);
+	
 	// if the conversation is 'logged-in' we should not have any other 'logged-in' items in metadata
 	if (conversation.state == ApptentiveConversationStateLoggedIn) {
 		for (ApptentiveConversationMetadataItem *item in self.conversationMetadata.items) {
@@ -366,24 +374,32 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		}
 	}
 
-	// delete all existing encryption keys
+	// delete sensitive information
 	for (ApptentiveConversationMetadataItem *item in self.conversationMetadata.items) {
 		item.encryptionKey = nil;
+		item.JWT = nil;
 	}
 
 	// update the state of the corresponding item
 	ApptentiveConversationMetadataItem *item = [self.conversationMetadata findItemFilter:^BOOL(ApptentiveConversationMetadataItem *item) {
+		if (item.conversationLocalIdentifier.length > 0) {
+			return [item.conversationLocalIdentifier isEqualToString:conversation.localIdentifier];
+		}
+		// lookup item for SDK prior to v4.0.4 (legacy)
 		return [item.conversationIdentifier isEqualToString:conversation.identifier];
 	}];
 	if (item == nil) {
-		item = [[ApptentiveConversationMetadataItem alloc] initWithConversationIdentifier:conversation.identifier directoryName:conversation.directoryName];
+		item = [[ApptentiveConversationMetadataItem alloc] initWithConversationLocalIdentifier:conversation.localIdentifier conversationIdentifier:conversation.identifier directoryName:conversation.directoryName];
 		[self.conversationMetadata addItem:item];
+	} else {
+		ApptentiveAssertTrue(conversation.identifier != nil || conversation.state == ApptentiveConversationStateAnonymousPending || conversation.state == ApptentiveConversationStateLegacyPending, @"Missing conversation id for state: %@", NSStringFromApptentiveConversationState(conversation.state));
+		item.conversationIdentifier = conversation.identifier;
+		item.conversationLocalIdentifier = conversation.localIdentifier;
 	}
 
 	item.state = conversation.state;
-	if (item.state == ApptentiveConversationStateLoggedOut) {
-		item.JWT = nil;
-	} else {
+	if ([conversation hasActiveState]) {
+		ApptentiveAssertNotNil(conversation.token, @"Conversation token is nil");
 		item.JWT = conversation.token;
 	}
 

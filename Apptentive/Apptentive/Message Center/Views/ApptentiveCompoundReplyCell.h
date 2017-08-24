@@ -15,6 +15,7 @@
 @interface ApptentiveCompoundReplyCell : ApptentiveMessageCenterReplyCell <ApptentiveMessageCenterCompoundCell>
 
 @property (weak, nonatomic) IBOutlet ApptentiveIndexedCollectionView *collectionView;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *collectionViewHeightConstraint;
 @property (assign, nonatomic) BOOL messageLabelHidden;
 
 @end

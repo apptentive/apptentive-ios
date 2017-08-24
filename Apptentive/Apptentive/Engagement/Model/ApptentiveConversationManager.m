@@ -363,7 +363,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 }
 
 - (void)updateMetadataItems:(ApptentiveConversation *)conversation {
-	ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Updating metadata: state=%@ localId=%@ conversationId=%@ token=%@", conversation.state, conversation.localIdentifier, conversation.identifier, conversation.token);
+	ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Updating metadata: state=%@ localId=%@ conversationId=%@ token=%@", NSStringFromApptentiveConversationState(conversation.state), conversation.localIdentifier, conversation.identifier, conversation.token);
 	
 	// if the conversation is 'logged-in' we should not have any other 'logged-in' items in metadata
 	if (conversation.state == ApptentiveConversationStateLoggedIn) {

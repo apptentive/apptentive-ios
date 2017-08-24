@@ -80,6 +80,11 @@ extern NSString *NSStringFromApptentiveConversationState(ApptentiveConversationS
 @property (readonly, nonatomic) NSString *identifier;
 
 /**
+ The identifier (generated on the client) for the conversation.
+ */
+@property (readonly, nonatomic) NSString *localIdentifier;
+
+/**
  The authorization token obtained when creating the conversation (for a legacy request)
  */
 @property (readonly, nonatomic) NSString *legacyToken;
@@ -213,6 +218,11 @@ extern NSString *NSStringFromApptentiveConversationState(ApptentiveConversationS
 - (void)removeUserInfoForKey:(NSString *)key;
 
 - (void)updateWithCurrentValues;
+
+/**
+ Checks if conversation is in active state
+ */
+- (BOOL)hasActiveState;
 
 @end
 

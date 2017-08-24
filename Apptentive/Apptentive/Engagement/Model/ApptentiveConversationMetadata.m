@@ -93,7 +93,8 @@ static NSString *const VersionKey = @"version";
 	NSMutableArray *rows = [NSMutableArray new];
 	[rows addObject:@[
 		@"state",
-		@"conversationIdentifier",
+		@"localIdentifier",
+		@"identifier",
 		@"userId",
 		@"directoryName",
 		@"JWT",
@@ -119,6 +120,7 @@ static NSString *const VersionKey = @"version";
 
 		[rows addObject:@[
 			NSStringFromApptentiveConversationState(item.state),
+			item.conversationLocalIdentifier ?: @"nil",
 			item.conversationIdentifier ?: @"nil",
 			item.userId ?: @"nil",
 			item.directoryName ?: @"nil",

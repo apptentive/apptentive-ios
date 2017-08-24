@@ -66,6 +66,7 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 @property (strong, nonatomic) NSString *userId;
 @property (strong, nonatomic) NSData *encryptionKey;
 @property (strong, nonatomic) NSString *identifier;
+@property (strong, nonatomic) NSString *localIdentifier;
 @property (strong, nonatomic) NSString *lastMessageID;
 @property (strong, nonatomic) ApptentiveAppRelease *appRelease;
 @property (strong, nonatomic) ApptentiveSDK *SDK;
@@ -412,6 +413,7 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 	result.lastSentPerson = self.lastSentPerson;
 	result.lastSentDevice = self.lastSentDevice;
 	result.identifier = self.identifier;
+	result.localIdentifier = self.localIdentifier;
 	result.lastMessageID = self.lastMessageID;
 	result.delegate = self.delegate;
 	result.directoryName = self.directoryName;
@@ -452,6 +454,7 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 @interface ApptentiveMutableConversation ()
 
 @property (strong, nonatomic) NSString *identifier;
+@property (strong, nonatomic) NSString *localIdentifier;
 @property (strong, nonatomic) NSString *lastMessageID;
 @property (strong, nonatomic) NSString *directoryName;
 
@@ -471,6 +474,7 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 @dynamic engagement;
 @dynamic token;
 @dynamic identifier;
+@dynamic localIdentifier;
 @dynamic legacyToken;
 @dynamic userId;
 @dynamic encryptionKey;

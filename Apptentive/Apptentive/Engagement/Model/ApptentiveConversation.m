@@ -299,6 +299,7 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 		_engagement = [[ApptentiveEngagement alloc] initAndMigrate];
 
 		_directoryName = [NSUUID UUID].UUIDString;
+		_localIdentifier = [NSUUID UUID].UUIDString;
 
 		NSData *legacyConversationData = [[NSUserDefaults standardUserDefaults] dataForKey:ATCurrentConversationPreferenceKey];
 

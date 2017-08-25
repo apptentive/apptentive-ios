@@ -226,15 +226,18 @@
 		case ATSurveyQuestionTypeSingleSelect:
 		case ATSurveyQuestionTypeMultipleSelect: {
 			NSString *reuseIdentifier, *buttonImageName, *detailText;
+			NSString *accessibilityHintDetails = nil;
 
 			switch ([self.viewModel typeOfQuestionAtIndex:indexPath.section]) {
 				case ATSurveyQuestionTypeRange:
 					if (indexPath.item == 0) {
 						reuseIdentifier = @"RangeMinimum";
 						detailText = [self.viewModel minimumLabelForQuestionAtIndex:indexPath.section];
+						accessibilityHintDetails = [self.viewModel minimumLabelForQuestionAtIndex:indexPath.section];
 					} else if (indexPath.item == [self.viewModel numberOfAnswersForQuestionAtIndex:indexPath.section] - 1) {
 						reuseIdentifier = @"RangeMaximum";
 						detailText = [self.viewModel maximumLabelForQuestionAtIndex:indexPath.section];
+						accessibilityHintDetails = [self.viewModel maximumLabelForQuestionAtIndex:indexPath.section];
 					} else {
 						reuseIdentifier = @"Range";
 					}
@@ -271,7 +274,11 @@
 				cell.accessibilityHint = detailText;
 			}
 
-			cell.accessibilityLabel = [self.viewModel textOfChoiceAtIndexPath:indexPath];
+			if (accessibilityHintDetails.length > 0) {
+				cell.accessibilityLabel = [NSString stringWithFormat:@"%@, %@", accessibilityHintDetails, [self.viewModel textOfChoiceAtIndexPath:indexPath]];
+			} else {
+				cell.accessibilityLabel = [self.viewModel textOfChoiceAtIndexPath:indexPath];
+			}
 			cell.accessibilityTraits |= UIAccessibilityTraitButton;
 			cell.button.image = buttonImage;
 			cell.button.highlightedImage = highlightedButtonImage;

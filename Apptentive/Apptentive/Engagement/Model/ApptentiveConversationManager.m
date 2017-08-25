@@ -120,6 +120,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		ApptentiveLogDebug(ApptentiveLogTagConversation, @"Loading logged-in conversation...");
 		ApptentiveConversation *loggedInConversation = [self loadConversationFromMetadataItem:item];
 
+		[self loadEngagmentManfiest];
 		[self createMessageManagerForConversation:loggedInConversation];
 
 		return loggedInConversation;
@@ -134,6 +135,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		ApptentiveLogDebug(ApptentiveLogTagConversation, @"Loading anonymous conversation...");
 		ApptentiveConversation *anonymousConversation = [self loadConversationFromMetadataItem:item];
 
+		[self loadEngagmentManfiest];
 		[self createMessageManagerForConversation:anonymousConversation];
 
 		return anonymousConversation;
@@ -655,9 +657,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 	[self saveManifest];
 
-	dispatch_async(dispatch_get_main_queue(), ^{
-		[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveInteractionsDidUpdateNotification object:self.manifest];
-	});
+	[self notifyEngagementManifestUpdate];
 }
 
 - (void)conversation:(ApptentiveConversation *)conversation processLoginResponse:(NSDictionary *)loginResponse userId:(NSString *)userId token:(NSString *)token {
@@ -867,9 +867,41 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	return succeed;
 }
 
+#pragma mark - Engagement manifest
+
+- (void)loadEngagmentManfiest {
+	if ([[NSFileManager defaultManager] fileExistsAtPath:self.manifestPath]) {
+		ApptentiveLogDebug(@"Loading cached engagment manifest from %@", self.manifestPath);
+		@try {
+			_manifest = [NSKeyedUnarchiver unarchiveObjectWithFile:self.manifestPath];
+
+			[self notifyEngagementManifestUpdate];
+		} @catch (NSException *exc) {
+			ApptentiveAssertFail(@"Exception when loading engagement manifest: %@", exc);
+		}
+	} else {
+		ApptentiveLogDebug(@"No cached engagement manifest available at %@", self.manifestPath);
+	}
+}
+
+- (void)migrateEngagementManifest {
+	_manifest = [[ApptentiveEngagementManifest alloc] initWithCachePath:self.storagePath userDefaults:[NSUserDefaults standardUserDefaults]];
+
+	if (self.manifest) {
+		[ApptentiveEngagementManifest deleteMigratedDataFromCachePath:self.storagePath];
+		[self notifyEngagementManifestUpdate];
+	}
+}
+
+- (void)notifyEngagementManifestUpdate {
+	dispatch_async(dispatch_get_main_queue(), ^{
+		[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveInteractionsDidUpdateNotification object:self.manifest];
+	});
+}
+
 - (BOOL)saveManifest {
 	@synchronized(self.manifest) {
-		return [NSKeyedArchiver archiveRootObject:_manifest toFile:[self manifestPath]];
+		return [NSKeyedArchiver archiveRootObject:_manifest toFile:self.manifestPath];
 	}
 }
 
@@ -896,14 +928,6 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	}
 
 	[self.client.networkQueue addOperation:self.manifestOperation];
-}
-
-- (void)migrateEngagementManifest {
-	_manifest = [[ApptentiveEngagementManifest alloc] initWithCachePath:self.storagePath userDefaults:[NSUserDefaults standardUserDefaults]];
-
-	if (self.manifest) {
-		[ApptentiveEngagementManifest deleteMigratedDataFromCachePath:self.storagePath];
-	}
 }
 
 - (void)scheduleSaveConversation:(ApptentiveConversation *)conversation {
@@ -977,7 +1001,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		_localEngagementManifestURL = localEngagementManifestURL;
 
 		if (localEngagementManifestURL == nil) {
-			_manifest = [NSKeyedUnarchiver unarchiveObjectWithFile:[self manifestPath]];
+			_manifest = [NSKeyedUnarchiver unarchiveObjectWithFile:self.manifestPath];
 
 			if ([self.manifest.expiry timeIntervalSinceNow] <= 0) {
 				[self fetchEngagementManifest];

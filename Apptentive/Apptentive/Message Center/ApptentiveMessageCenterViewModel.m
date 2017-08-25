@@ -184,11 +184,11 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 }
 
 - (NSString *)personName {
-	return self.conversation.person.name;
+	return Apptentive.shared.personName;
 }
 
 - (NSString *)personEmailAddress {
-	return self.conversation.person.emailAddress;
+	return Apptentive.shared.personEmailAddress;
 }
 
 #pragma mark - Profile (Initial)
@@ -526,8 +526,8 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 }
 
 - (void)setPersonName:(NSString *)name emailAddress:(NSString *)emailAddress {
-	self.conversation.person.name = name;
-	self.conversation.person.emailAddress = emailAddress;
+	Apptentive.shared.personName = name;
+	Apptentive.shared.personEmailAddress = emailAddress;
 }
 
 - (BOOL)networkIsReachable {

@@ -23,8 +23,14 @@
 #import "ApptentiveConversationMetadataItem.h"
 #import "ApptentiveSafeCollections.h"
 
+#import <objc/runtime.h>
+#import "ApptentiveJWT.h"
+
+NSNotificationName _Nonnull const ApptentiveConversationChangedNotification = @"ApptentiveConversationChangedNotification";
+
 
 @implementation Apptentive (Debugging)
+@dynamic activeConversation;
 
 - (ApptentiveDebuggingOptions)debuggingOptions {
 	return 0;
@@ -105,12 +111,59 @@
 	[self.backend presentInteraction:[ApptentiveInteraction interactionWithJSONDictionary:JSON] fromViewController:viewController];
 }
 
+- (void)startObservingConversation {
+	self.activeConversation = Apptentive.shared.backend.conversationManager.activeConversation;
+
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(conversationStateChanged:) name:ApptentiveConversationStateDidChangeNotification object:nil];
+}
+
+- (void)conversationStateChanged:(NSNotification *)notification {
+	self.activeConversation = notification.userInfo[@"conversation"];
+
+	if (self.activeConversation.state == ApptentiveConversationStateLoggedOut) {
+		self.activeConversation = nil;
+	}
+
+	dispatch_async(dispatch_get_main_queue(), ^{
+		[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveConversationChangedNotification object:self];
+	});
+}
+
+- (void)setActiveConversation:(ApptentiveConversation *)activeConversation {
+	objc_setAssociatedObject(self, @selector(activeConversation), activeConversation, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (ApptentiveConversation *)activeConversation {
+	return objc_getAssociatedObject(self, @selector(activeConversation));
+}
+
+- (NSString *)conversationIdentifier {
+	return self.activeConversation.identifier ?: @"N/A";
+}
+
 - (NSString *)conversationToken {
-	return Apptentive.shared.backend.conversationManager.activeConversation.token;
+	return self.activeConversation.token ?: @"N/A";
+}
+
+- (NSString *)conversationJWTSubject {
+	ApptentiveJWT *JWT = [ApptentiveJWT JWTWithContentOfString:self.activeConversation.token error:NULL];
+
+	return JWT.payload[@"sub"] ?: @"N/A";
 }
 
 - (NSString *)conversationStateName {
-	return NSStringFromApptentiveConversationState(Apptentive.shared.backend.conversationManager.activeConversation.state);
+	return NSStringFromApptentiveConversationState(self.activeConversation.state) ?: @"N/A";
+}
+
+- (BOOL)canLogIn {
+	switch (self.activeConversation.state) {
+		case ApptentiveConversationStateUndefined: // No active convo
+		case ApptentiveConversationStateAnonymous:
+		case ApptentiveConversationStateLoggedOut:
+			return YES;
+		default: // Logged-in, pending
+			return NO;
+	}
 }
 
 - (void)resetSDK {

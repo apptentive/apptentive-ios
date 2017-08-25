@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "Apptentive_Private.h"
 
+@class ApptentiveConversation;
+
 typedef NS_OPTIONS(NSInteger, ApptentiveDebuggingOptions) {
 	ApptentiveDebuggingOptionsNone = 0,
 	ApptentiveDebuggingOptionsShowDebugPanel = 1 << 0,
@@ -16,8 +18,9 @@ typedef NS_OPTIONS(NSInteger, ApptentiveDebuggingOptions) {
 	ApptentiveDebuggingOptionsLogAllHTTPRequests = 1 << 2,
 };
 
-NS_ASSUME_NONNULL_BEGIN
+extern NSNotificationName _Nonnull const ApptentiveConversationChangedNotification;
 
+NS_ASSUME_NONNULL_BEGIN
 
 @interface Apptentive ()
 
@@ -36,8 +39,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (readonly, nonatomic) UIView *_Nullable unreadAccessoryView;
 @property (readonly, nonatomic) NSString *_Nullable manifestJSON;
 @property (readonly, nonatomic) NSDictionary<NSString *, NSObject *> *deviceInfo;
-@property (readonly, nonatomic) NSString *conversationStateName;
-@property (readonly, nonatomic, nullable) NSString *conversationToken;
 @property (strong, nonatomic, nullable) NSURL *localInteractionsURL;
 
 @property (readonly, nonatomic) NSDictionary *customPersonData;
@@ -60,6 +61,17 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)deleteConversationAtIndex:(NSInteger)index;
 
 - (void)resetSDK;
+
+- (void)startObservingConversation;
+
+// Local cache of conversation to avoid race condition on logout
+@property (strong, nullable, nonatomic) ApptentiveConversation *activeConversation;
+
+@property (readonly, nonatomic) NSString *conversationIdentifier;
+@property (readonly, nonatomic) NSString *conversationToken;
+@property (readonly, nonatomic) NSString *conversationStateName;
+@property (readonly, nonatomic) NSString *conversationJWTSubject;
+@property (readonly, nonatomic) BOOL canLogIn;
 
 @end
 

@@ -17,7 +17,7 @@ FOUNDATION_EXPORT double ApptentiveVersionNumber;
 FOUNDATION_EXPORT const unsigned char ApptentiveVersionString[];
 
 /** The version number of the Apptentive SDK. */
-#define kApptentiveVersionString @"4.0.3"
+#define kApptentiveVersionString @"4.0.4"
 
 /** The platform that the SDK is built for. */
 #define kApptentivePlatformString @"iOS"

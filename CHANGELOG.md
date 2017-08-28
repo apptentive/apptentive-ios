@@ -1,3 +1,7 @@
+2017-08-28 frankus, weeebox v4.0.4
+----------------------------------
+Version 4.0.4 fixes a potential crash when exiting the app. It also fixes saving person name and email when they are supplied in message center, and improves accessibility for surveys.
+
 2017-08-11 frankus, weeebox v4.0.3
 ----------------------------------
 Version 4.0.3 fixes a potential crash when decoding invalid JSON, and provides better error messaging for incorrect Apptentive App Key and Apptentive App Signature values. It also updates the URL used to send users to the App Store rating page for an app.

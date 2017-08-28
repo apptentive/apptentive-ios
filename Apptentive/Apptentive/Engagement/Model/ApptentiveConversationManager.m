@@ -120,7 +120,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		ApptentiveLogDebug(ApptentiveLogTagConversation, @"Loading logged-in conversation...");
 		ApptentiveConversation *loggedInConversation = [self loadConversationFromMetadataItem:item];
 
-		[self loadEngagmentManfiest];
+		[self loadEngagementManfiest];
 		[self createMessageManagerForConversation:loggedInConversation];
 
 		return loggedInConversation;
@@ -135,7 +135,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		ApptentiveLogDebug(ApptentiveLogTagConversation, @"Loading anonymous conversation...");
 		ApptentiveConversation *anonymousConversation = [self loadConversationFromMetadataItem:item];
 
-		[self loadEngagmentManfiest];
+		[self loadEngagementManfiest];
 		[self createMessageManagerForConversation:anonymousConversation];
 
 		return anonymousConversation;
@@ -869,7 +869,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 #pragma mark - Engagement manifest
 
-- (void)loadEngagmentManfiest {
+- (void)loadEngagementManfiest {
 	if ([[NSFileManager defaultManager] fileExistsAtPath:self.manifestPath]) {
 		ApptentiveLogDebug(@"Loading cached engagment manifest from %@", self.manifestPath);
 		@try {

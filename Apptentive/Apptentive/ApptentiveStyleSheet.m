@@ -330,7 +330,7 @@ ApptentiveStyleIdentifier ApptentiveColorContextBackground = @"com.apptentive.co
 
 		_sizeAdjustment = 1.0;
 
-		_secondaryColor = [UIColor colorWithRed:142.0 / 255.0 green:142.0 / 255.0 blue:147.0 / 255.0 alpha:1.0];
+		_secondaryColor = [UIColor colorWithRed:118.0 / 255.0 green:118.0 / 255.0 blue:122.0 / 255.0 alpha:1.0];
 		_failureColor = [UIColor colorWithRed:218.0 / 255.0 green:53.0 / 255.0 blue:71.0 / 255.0 alpha:1.0];
 
 		_fontDescriptorOverrides = [NSMutableDictionary dictionary];

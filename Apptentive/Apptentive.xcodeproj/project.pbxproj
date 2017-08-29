@@ -384,6 +384,8 @@
 		EFC308D31EC52915006B6D36 /* ApptentiveStopWatch.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC308D11EC52915006B6D36 /* ApptentiveStopWatch.m */; };
 		EFC308D71ECA6692006B6D36 /* ApptentiveLegacyConversationRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = EFC308D51ECA6692006B6D36 /* ApptentiveLegacyConversationRequest.h */; };
 		EFC308D81ECA6692006B6D36 /* ApptentiveLegacyConversationRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC308D61ECA6692006B6D36 /* ApptentiveLegacyConversationRequest.m */; };
+		EFC97A9E1F56303300BCC461 /* UIAlertController+Apptentive.h in Headers */ = {isa = PBXBuildFile; fileRef = EFC97A9C1F56303300BCC461 /* UIAlertController+Apptentive.h */; };
+		EFC97A9F1F56303300BCC461 /* UIAlertController+Apptentive.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC97A9D1F56303300BCC461 /* UIAlertController+Apptentive.m */; };
 		EFF3FE3B1E8C2F05006AD2B4 /* ApptentiveLog.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF3FE3A1E8C2F05006AD2B4 /* ApptentiveLog.m */; };
 		EFF3FE421E8C386E006AD2B4 /* ApptentiveLogTag.h in Headers */ = {isa = PBXBuildFile; fileRef = EFF3FE401E8C386E006AD2B4 /* ApptentiveLogTag.h */; };
 		EFF3FE431E8C386E006AD2B4 /* ApptentiveLogTag.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF3FE411E8C386E006AD2B4 /* ApptentiveLogTag.m */; };
@@ -811,6 +813,8 @@
 		EFC308D11EC52915006B6D36 /* ApptentiveStopWatch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveStopWatch.m; sourceTree = "<group>"; };
 		EFC308D51ECA6692006B6D36 /* ApptentiveLegacyConversationRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveLegacyConversationRequest.h; sourceTree = "<group>"; };
 		EFC308D61ECA6692006B6D36 /* ApptentiveLegacyConversationRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveLegacyConversationRequest.m; sourceTree = "<group>"; };
+		EFC97A9C1F56303300BCC461 /* UIAlertController+Apptentive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertController+Apptentive.h"; sourceTree = "<group>"; };
+		EFC97A9D1F56303300BCC461 /* UIAlertController+Apptentive.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertController+Apptentive.m"; sourceTree = "<group>"; };
 		EFF3FE3A1E8C2F05006AD2B4 /* ApptentiveLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveLog.m; sourceTree = "<group>"; };
 		EFF3FE401E8C386E006AD2B4 /* ApptentiveLogTag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveLogTag.h; sourceTree = "<group>"; };
 		EFF3FE411E8C386E006AD2B4 /* ApptentiveLogTag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveLogTag.m; sourceTree = "<group>"; };
@@ -1401,6 +1405,8 @@
 				EF8EE3AA1EBBA5D00033E7A1 /* ApptentiveJWT.m */,
 				EF49AC921EF2C50B00E2187F /* NSMutableData+Types.h */,
 				EF49AC931EF2C50B00E2187F /* NSMutableData+Types.m */,
+				EFC97A9C1F56303300BCC461 /* UIAlertController+Apptentive.h */,
+				EFC97A9D1F56303300BCC461 /* UIAlertController+Apptentive.m */,
 			);
 			path = Misc;
 			sourceTree = "<group>";
@@ -1724,6 +1730,7 @@
 				01AA89B81F18177E00FB59AB /* ApptentiveAppInstall.h in Headers */,
 				01A2D1B21E490A9700C2103A /* ApptentiveLegacyEvent.h in Headers */,
 				01A2D1941E490A9700C2103A /* ApptentiveMessageCenterMessageCell.h in Headers */,
+				EFC97A9E1F56303300BCC461 /* UIAlertController+Apptentive.h in Headers */,
 				01F1DFF41E5BBFB3009AB3D2 /* ApptentiveConversationManager.h in Headers */,
 				0174772A1EA92BED00A0A949 /* ApptentivePayload.h in Headers */,
 				01A2D11B1E490A9700C2103A /* ApptentiveInteractionUpgradeMessageController.h in Headers */,
@@ -2089,6 +2096,7 @@
 				01A2D1C31E490A9700C2103A /* ATDataModel v4 to v5.xcmappingmodel in Sources */,
 				01A2D1F71E490A9700C2103A /* ApptentiveSurveyQuestionBackgroundView.m in Sources */,
 				01A2D17D1E490A9700C2103A /* ApptentiveBannerViewController.m in Sources */,
+				EFC97A9F1F56303300BCC461 /* UIAlertController+Apptentive.m in Sources */,
 				01A2D1D71E490A9700C2103A /* ApptentiveBackend.m in Sources */,
 				01A2D1A91E490A9700C2103A /* NSDictionary+ApptentiveAdditions.m in Sources */,
 				0140D60B1E83553C007B5130 /* ApptentiveLegacyFileAttachment.m in Sources */,

@@ -11,6 +11,7 @@
 #import "ApptentiveUtilities.h"
 #import "ApptentiveInteraction.h"
 #import "ApptentiveBackend+Engagement.h"
+#import "UIAlertController+Apptentive.h"
 
 NSString *const ATInteractionAppStoreRatingEventLabelLaunch = @"launch";
 NSString *const ATInteractionAppStoreRatingEventLabelOpenAppStoreURL = @"open_app_store_url";
@@ -85,7 +86,11 @@ NSString *const ATInteractionAppStoreRatingEventLabelUnableToRate = @"unable_to_
 	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
 	[alertController addAction:[UIAlertAction actionWithTitle:cancelButtonTitle style:UIAlertActionStyleCancel handler:nil]];
 
-	[self.presentingViewController presentViewController:alertController animated:YES completion:nil];
+	if (self.presentingViewController != nil) {
+		[self.presentingViewController presentViewController:alertController animated:YES completion:nil];
+	} else {
+		[alertController apptentive_presentAnimated:YES];
+	}
 }
 
 - (BOOL)shouldOpenAppStoreViaStoreKit {

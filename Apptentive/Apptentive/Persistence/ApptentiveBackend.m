@@ -282,10 +282,6 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 			[self.conversationManager pause];
 
 			[self.payloadSender cancelNetworkOperations];
-
-			self.payloadSender.backgroundTaskIdentifier = [[UIApplication sharedApplication] beginBackgroundTaskWithName:@"SaveContext" expirationHandler:^{
-				ApptentiveLogWarning(@"Background task expired");
-			}];
 		}
 
 		[self updateMessageCheckingTimer];

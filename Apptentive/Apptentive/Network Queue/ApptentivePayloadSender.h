@@ -60,12 +60,6 @@ typedef NS_ENUM(NSInteger, ApptentiveQueueStatus) {
  */
 @property (readonly, nonatomic) ApptentiveQueueStatus status;
 
-/**
- A background task identifier, used on iOS to complete the parent context save
- operation when an app is closed.
- */
-@property (assign, nonatomic) UIBackgroundTaskIdentifier backgroundTaskIdentifier;
-
 @end
 
 @protocol ApptentivePayloadSenderDelegate <NSObject>

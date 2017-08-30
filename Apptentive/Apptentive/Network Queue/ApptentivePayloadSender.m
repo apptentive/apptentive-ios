@@ -22,6 +22,12 @@
 @property (strong, nonatomic) NSMutableDictionary *activeTaskProgress;
 @property (assign, atomic) BOOL isResuming;
 
+/**
+ A background task identifier, used on iOS to complete the parent context save
+ operation when an app is closed.
+ */
+@property (assign, nonatomic) UIBackgroundTaskIdentifier backgroundTaskIdentifier;
+
 @end
 
 
@@ -44,10 +50,21 @@
 #pragma mark - Cancelling network operations
 
 - (void)cancelNetworkOperations {
-	[self.networkQueue cancelAllOperations];
+	for (NSOperation *operation in self.networkQueue.operations) {
+		if ([operation isKindOfClass:[ApptentiveRequestOperation class]]) {
+			[operation cancel];
+		}
+	}
 
 	ApptentiveLogVerbose(ApptentiveLogTagPayload, @"Clearing isResuming Flag");
 	self.isResuming = NO;
+
+	if (self.networkQueue.operations.count > 0) {
+		// If there is a save block in the queue, complete it in the background.
+		self.backgroundTaskIdentifier = [[UIApplication sharedApplication] beginBackgroundTaskWithName:@"SaveContext" expirationHandler:^{
+			ApptentiveLogError(@"Background task expired");
+		}];
+	}
 }
 
 #pragma mark - Creating network operations from queued payloads
@@ -130,6 +147,12 @@
 						// When the app is backgrounded, Core Data attempts to save before exiting.
 						// We have to call the endBackgroundTask when we are done saving to avoid an error.
                         if (self.backgroundTaskIdentifier != UIBackgroundTaskInvalid) {
+							ApptentiveLogInfo(@"Completing background Core Data save task.");
+
+							// If there are any other save blocks in the queue, cancel them.
+							[self.networkQueue cancelAllOperations];
+
+							// Notify the application that we've finished saving.
                             [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTaskIdentifier];
                             self.backgroundTaskIdentifier = UIBackgroundTaskInvalid;
                         }

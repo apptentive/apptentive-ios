@@ -60,9 +60,10 @@
 	self.isResuming = NO;
 
 	if (self.networkQueue.operations.count > 0) {
+		ApptentiveLogVerbose(@"Starting background task to complete save block");
 		// If there is a save block in the queue, complete it in the background.
 		self.backgroundTaskIdentifier = [[UIApplication sharedApplication] beginBackgroundTaskWithName:@"SaveContext" expirationHandler:^{
-			ApptentiveLogError(@"Background task expired");
+			ApptentiveLogError(@"Background task expired. Payload Queue save block did not finish or did not get called.");
 		}];
 	}
 }

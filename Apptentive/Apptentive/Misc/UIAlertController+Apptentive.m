@@ -32,12 +32,12 @@
 
 @implementation UIAlertController (Apptentive)
 
-- (void)apptentive_presentAnimated:(BOOL)animated {
+- (void)apptentive_presentAnimated:(BOOL)animated completion:(void (^ __nullable)(void))completion {
 	self.apptentiveAlertWindow = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
 	self.apptentiveAlertWindow.rootViewController = [[UIViewController alloc] init];
 	self.apptentiveAlertWindow.windowLevel = UIWindowLevelAlert + 1;
 	[self.apptentiveAlertWindow makeKeyAndVisible];
-	[self.apptentiveAlertWindow.rootViewController presentViewController:self animated:animated completion:nil];
+	[self.apptentiveAlertWindow.rootViewController presentViewController:self animated:animated completion:completion];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {

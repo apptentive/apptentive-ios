@@ -89,7 +89,7 @@ NSString *const ATInteractionAppStoreRatingEventLabelUnableToRate = @"unable_to_
 	if (self.presentingViewController != nil) {
 		[self.presentingViewController presentViewController:alertController animated:YES completion:nil];
 	} else {
-		[alertController apptentive_presentAnimated:YES];
+		[alertController apptentive_presentAnimated:YES completion:nil];
 	}
 }
 

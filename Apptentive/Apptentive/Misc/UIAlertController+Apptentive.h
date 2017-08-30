@@ -10,6 +10,6 @@
 
 @interface UIAlertController (Apptentive)
 
-- (void)apptentive_presentAnimated:(BOOL)animated;
+- (void)apptentive_presentAnimated:(BOOL)animated completion:(void (^ __nullable)(void))completion;
 
 @end

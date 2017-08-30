@@ -46,7 +46,9 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 				[self.interaction engage:ATInteractionTextModalEventLabelLaunch fromViewController:viewController];
 			}];
 		} else {
-			[self.alertController apptentive_presentAnimated:YES];
+			[self.alertController apptentive_presentAnimated:YES completion:^{
+				[self.interaction engage:ATInteractionTextModalEventLabelLaunch fromViewController:nil];
+			}];
 		}
 	}
 }

@@ -45,7 +45,9 @@ NSString *const ATInteractionEnjoymentDialogEventLabelNo = @"no";
 				[self.interaction engage:ATInteractionEnjoymentDialogEventLabelLaunch fromViewController:viewController];
 			}];
 		} else {
-			[self.alertController apptentive_presentAnimated:YES];
+			[self.alertController apptentive_presentAnimated:YES completion:^{
+				[self.interaction engage:ATInteractionEnjoymentDialogEventLabelLaunch fromViewController:nil];
+			}];
 		}
 	}
 }

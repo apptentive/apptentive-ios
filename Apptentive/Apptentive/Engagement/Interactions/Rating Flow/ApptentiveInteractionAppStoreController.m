@@ -12,6 +12,7 @@
 #import "ApptentiveInteraction.h"
 #import "ApptentiveBackend+Engagement.h"
 #import "UIAlertController+Apptentive.h"
+#import "ApptentiveStoreProductViewController.h"
 
 NSString *const ATInteractionAppStoreRatingEventLabelLaunch = @"launch";
 NSString *const ATInteractionAppStoreRatingEventLabelOpenAppStoreURL = @"open_app_store_url";
@@ -144,7 +145,7 @@ NSString *const ATInteractionAppStoreRatingEventLabelUnableToRate = @"unable_to_
 
 - (void)openAppStoreViaStoreKit {
 	if ([SKStoreProductViewController class] != NULL && [self appID]) {
-		SKStoreProductViewController *vc = [[SKStoreProductViewController alloc] init];
+		ApptentiveStoreProductViewController *vc = [[ApptentiveStoreProductViewController alloc] init];
 		vc.delegate = self;
 		[vc loadProductWithParameters:@{ SKStoreProductParameterITunesItemIdentifier: self.appID } completionBlock:^(BOOL result, NSError *error) {
 			if (error) {
@@ -155,10 +156,10 @@ NSString *const ATInteractionAppStoreRatingEventLabelUnableToRate = @"unable_to_
 				
 				UIViewController *presentingVC = self.presentingViewController;
 
-				if (presentingVC) {
-					[presentingVC presentViewController:vc animated:YES completion:^{}];
+				if (presentingVC != nil) {
+					[presentingVC presentViewController:vc animated:YES completion:nil];
 				} else {
-					ApptentiveLogError(@"Attempting to open the App Store via StoreKit from a nil View Controller!");
+					[vc presentAnimated:YES completion:nil];
 				}
 			}
 		}];

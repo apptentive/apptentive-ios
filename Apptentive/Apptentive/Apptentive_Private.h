@@ -36,8 +36,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (readonly, nonatomic) NSURL *baseURL;
 @property (readonly, nonatomic) ApptentiveBackend *backend;
 
-@property (copy, nonatomic) NSDictionary *pushUserInfo;
-@property (strong, nonatomic) UIViewController *pushViewController;
+@property (copy, nonatomic, nullable) NSDictionary *pushUserInfo;
+@property (strong, nonatomic, nullable) UIViewController *pushViewController;
 
 @property (readonly, nonatomic) id<ApptentiveStyle> style;
 @property (readonly, nonatomic) BOOL didAccessStyleSheet;
@@ -59,7 +59,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /*! Replacement for NSLocalizedString within ApptentiveConnect. Pulls
  localized strings out of the resource bundle. */
-extern NSString *ApptentiveLocalizedString(NSString *key, NSString *comment);
+extern NSString *ApptentiveLocalizedString(NSString *key, NSString * _Nullable comment);
 
 extern ApptentiveAuthenticationFailureReason parseAuthenticationFailureReason(NSString *reason);
 

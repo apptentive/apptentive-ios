@@ -862,8 +862,6 @@ static Apptentive *_sharedInstance;
 
 @implementation ApptentiveNavigationController
 
-@dynamic apptentiveAlertWindow;
-
 // Container to allow customization of Apptentive UI using UIAppearance
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {

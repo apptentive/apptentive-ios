@@ -437,13 +437,20 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
 	switch ([self.viewModel cellTypeAtIndexPath:indexPath]) {
-		case ATMessageCenterMessageTypeMessage:
 		case ATMessageCenterMessageTypeCompoundMessage:
+			((id<ApptentiveMessageCenterCompoundCell>)cell).collectionView.backgroundColor = [self.viewModel.styleSheet colorForStyle:ApptentiveColorMessageBackground];
+			// Fall through
+		case ATMessageCenterMessageTypeMessage:
 			cell.contentView.backgroundColor = [self.viewModel.styleSheet colorForStyle:ApptentiveColorMessageBackground];
 			break;
-		case ATMessageCenterMessageTypeReply:
+
 		case ATMessageCenterMessageTypeCompoundReply:
+			((id<ApptentiveMessageCenterCompoundCell>)cell).collectionView.backgroundColor = [self.viewModel.styleSheet colorForStyle:ApptentiveColorReplyBackground];
+			// Fall through
+		case ATMessageCenterMessageTypeReply:
 			cell.contentView.backgroundColor = [self.viewModel.styleSheet colorForStyle:ApptentiveColorReplyBackground];
+			break;
+
 		case ATMessageCenterMessageTypeContextMessage:
 			cell.contentView.backgroundColor = [self.viewModel.styleSheet colorForStyle:ApptentiveColorContextBackground];
 	}

@@ -26,8 +26,6 @@
 #import "ApptentiveMessageSender.h"
 #import "ApptentiveAttachment.h"
 
-#import <objc/runtime.h>
-
 NSNotificationName const ApptentiveMessageCenterUnreadCountChangedNotification = @"ApptentiveMessageCenterUnreadCountChangedNotification";
 
 NSNotificationName const ApptentiveAppRatingFlowUserAgreedToRateAppNotification = @"ApptentiveAppRatingFlowUserAgreedToRateAppNotification";
@@ -894,14 +892,6 @@ static Apptentive *_sharedInstance;
 - (void)pushAboutApptentiveViewController {
 	UIViewController *aboutViewController = [[ApptentiveUtilities storyboard] instantiateViewControllerWithIdentifier:@"About"];
 	[self pushViewController:aboutViewController animated:YES];
-}
-
-- (void)setApptentiveAlertWindow:(UIWindow *)window {
-	objc_setAssociatedObject(self, @selector(apptentiveAlertWindow), window, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-}
-
-- (UIWindow *)apptentiveAlertWindow {
-	return objc_getAssociatedObject(self, @selector(apptentiveAlertWindow));
 }
 
 @end

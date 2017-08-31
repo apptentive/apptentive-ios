@@ -26,6 +26,7 @@
 #import "ApptentiveMessageSender.h"
 #import "ApptentiveAttachment.h"
 
+#import <objc/runtime.h>
 
 NSNotificationName const ApptentiveMessageCenterUnreadCountChangedNotification = @"ApptentiveMessageCenterUnreadCountChangedNotification";
 
@@ -853,8 +854,16 @@ static Apptentive *_sharedInstance;
 
 @end
 
+@interface ApptentiveNavigationController ()
+
+@property (nonatomic, strong) UIWindow *apptentiveAlertWindow;
+
+@end
 
 @implementation ApptentiveNavigationController
+
+@dynamic apptentiveAlertWindow;
+
 // Container to allow customization of Apptentive UI using UIAppearance
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
@@ -867,9 +876,34 @@ static Apptentive *_sharedInstance;
 	return self;
 }
 
+- (void)presentAnimated:(BOOL)animated completion:(void (^ __nullable)(void))completion {
+	self.apptentiveAlertWindow = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+	self.apptentiveAlertWindow.rootViewController = [[UIViewController alloc] init];
+	self.apptentiveAlertWindow.windowLevel = UIWindowLevelAlert + 1;
+	[self.apptentiveAlertWindow makeKeyAndVisible];
+	[self.apptentiveAlertWindow.rootViewController presentViewController:self animated:animated completion:completion];
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+	[super viewDidDisappear:animated];
+	
+	if (self.presentingViewController == nil) {
+		self.apptentiveAlertWindow.hidden = YES;
+		self.apptentiveAlertWindow = nil;
+	}
+}
+
 - (void)pushAboutApptentiveViewController {
 	UIViewController *aboutViewController = [[ApptentiveUtilities storyboard] instantiateViewControllerWithIdentifier:@"About"];
 	[self pushViewController:aboutViewController animated:YES];
+}
+
+- (void)setApptentiveAlertWindow:(UIWindow *)window {
+	objc_setAssociatedObject(self, @selector(apptentiveAlertWindow), window, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (UIWindow *)apptentiveAlertWindow {
+	return objc_getAssociatedObject(self, @selector(apptentiveAlertWindow));
 }
 
 @end

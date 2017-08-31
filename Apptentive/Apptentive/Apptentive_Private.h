@@ -68,3 +68,9 @@ extern ApptentiveAuthenticationFailureReason parseAuthenticationFailureReason(NS
 - (void)pushAboutApptentiveViewController;
 
 @end
+
+@interface ApptentiveNavigationController (UIWindow)
+
+- (void)presentAnimated:(BOOL)animated completion:(void (^ __nullable)(void))completion;
+
+@end

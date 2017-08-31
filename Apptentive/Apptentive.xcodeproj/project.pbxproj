@@ -386,6 +386,8 @@
 		EFC308D81ECA6692006B6D36 /* ApptentiveLegacyConversationRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC308D61ECA6692006B6D36 /* ApptentiveLegacyConversationRequest.m */; };
 		EFC97A9E1F56303300BCC461 /* UIAlertController+Apptentive.h in Headers */ = {isa = PBXBuildFile; fileRef = EFC97A9C1F56303300BCC461 /* UIAlertController+Apptentive.h */; };
 		EFC97A9F1F56303300BCC461 /* UIAlertController+Apptentive.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC97A9D1F56303300BCC461 /* UIAlertController+Apptentive.m */; };
+		EFC97AAE1F58818900BCC461 /* ApptentiveStoreProductViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = EFC97AAC1F58818900BCC461 /* ApptentiveStoreProductViewController.h */; };
+		EFC97AAF1F58818900BCC461 /* ApptentiveStoreProductViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC97AAD1F58818900BCC461 /* ApptentiveStoreProductViewController.m */; };
 		EFF3FE3B1E8C2F05006AD2B4 /* ApptentiveLog.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF3FE3A1E8C2F05006AD2B4 /* ApptentiveLog.m */; };
 		EFF3FE421E8C386E006AD2B4 /* ApptentiveLogTag.h in Headers */ = {isa = PBXBuildFile; fileRef = EFF3FE401E8C386E006AD2B4 /* ApptentiveLogTag.h */; };
 		EFF3FE431E8C386E006AD2B4 /* ApptentiveLogTag.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF3FE411E8C386E006AD2B4 /* ApptentiveLogTag.m */; };
@@ -815,6 +817,8 @@
 		EFC308D61ECA6692006B6D36 /* ApptentiveLegacyConversationRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveLegacyConversationRequest.m; sourceTree = "<group>"; };
 		EFC97A9C1F56303300BCC461 /* UIAlertController+Apptentive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertController+Apptentive.h"; sourceTree = "<group>"; };
 		EFC97A9D1F56303300BCC461 /* UIAlertController+Apptentive.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertController+Apptentive.m"; sourceTree = "<group>"; };
+		EFC97AAC1F58818900BCC461 /* ApptentiveStoreProductViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveStoreProductViewController.h; sourceTree = "<group>"; };
+		EFC97AAD1F58818900BCC461 /* ApptentiveStoreProductViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveStoreProductViewController.m; sourceTree = "<group>"; };
 		EFF3FE3A1E8C2F05006AD2B4 /* ApptentiveLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveLog.m; sourceTree = "<group>"; };
 		EFF3FE401E8C386E006AD2B4 /* ApptentiveLogTag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveLogTag.h; sourceTree = "<group>"; };
 		EFF3FE411E8C386E006AD2B4 /* ApptentiveLogTag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveLogTag.m; sourceTree = "<group>"; };
@@ -1395,6 +1399,8 @@
 				EF18124A1E8084C80053BD68 /* ApptentiveSafeCollections.m */,
 				EFC308D01EC52915006B6D36 /* ApptentiveStopWatch.h */,
 				EFC308D11EC52915006B6D36 /* ApptentiveStopWatch.m */,
+				EFC97AAC1F58818900BCC461 /* ApptentiveStoreProductViewController.h */,
+				EFC97AAD1F58818900BCC461 /* ApptentiveStoreProductViewController.m */,
 				01A2D0901E490A9700C2103A /* ApptentiveUtilities.h */,
 				01A2D0911E490A9700C2103A /* ApptentiveUtilities.m */,
 				01A2D0921E490A9700C2103A /* NSDictionary+Apptentive.h */,
@@ -1661,6 +1667,7 @@
 				01A2D17E1E490A9700C2103A /* ApptentiveMessageCenterErrorViewController.h in Headers */,
 				EFF3FE421E8C386E006AD2B4 /* ApptentiveLogTag.h in Headers */,
 				01A2D1981E490A9700C2103A /* ApptentiveMessageCenterReplyCell.h in Headers */,
+				EFC97AAE1F58818900BCC461 /* ApptentiveStoreProductViewController.h in Headers */,
 				014508941EAAA7A1003326E7 /* ApptentiveRequest.h in Headers */,
 				01A2D1431E490A9700C2103A /* ApptentiveBackend+Engagement.h in Headers */,
 				0145089C1EAAB0F1003326E7 /* ApptentiveConfigurationRequest.h in Headers */,
@@ -2164,6 +2171,7 @@
 				01A2D1861E490A9700C2103A /* ApptentiveAttachmentCell.m in Sources */,
 				01A2D1FD1E490A9700C2103A /* ApptentiveSurveySingleLineCell.m in Sources */,
 				01A2D1EF1E490A9700C2103A /* ApptentiveSurveyCollectionView.m in Sources */,
+				EFC97AAF1F58818900BCC461 /* ApptentiveStoreProductViewController.m in Sources */,
 				0116D5281E92F516001DA5CF /* ApptentiveMessageStore.m in Sources */,
 				01A2D1101E490A9700C2103A /* ApptentiveInteractionTextModalController.m in Sources */,
 				01A2D1401E490A9700C2103A /* ApptentiveState.m in Sources */,

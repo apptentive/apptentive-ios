@@ -32,18 +32,9 @@
 #define TEXT_VIEW_HORIZONTAL_INSET 12.0
 #define TEXT_VIEW_VERTICAL_INSET 10.0
 #define ATTACHMENT_MARGIN CGSizeMake(16.0, 15.0)
+#define MINIMUM_INPUT_VIEW_HEIGHT 108.0
 
 #define FOOTER_ANIMATION_DURATION 0.10
-
-// The following need to match the storyboard for sizing cells on iOS 7
-#define MESSAGE_LABEL_TOTAL_HORIZONTAL_MARGIN 30.0
-#define REPLY_LABEL_TOTAL_HORIZONTAL_MARGIN 74.0
-#define MESSAGE_LABEL_TOTAL_VERTICAL_MARGIN 29.0
-#define REPLY_LABEL_TOTAL_VERTICAL_MARGIN 46.0
-#define REPLY_CELL_MINIMUM_HEIGHT 66.0
-#define STATUS_LABEL_HEIGHT 14.0
-#define STATUS_LABEL_MARGIN 6.0
-#define MINIMUM_INPUT_VIEW_HEIGHT 108.0
 
 NSString *const ATInteractionMessageCenterEventLabelLaunch = @"launch";
 NSString *const ATInteractionMessageCenterEventLabelClose = @"close";
@@ -187,8 +178,10 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	} else if (self.isSubsequentDisplay == NO) {
 		[self updateState];
 	}
+}
 
-	if (self.isSubsequentDisplay == NO || self.attachmentController.active) {
+- (void)viewDidLayoutSubviews {
+	if (self.isSubsequentDisplay == NO) {
 		[self engageGreetingViewEventIfNecessary];
 		[self scrollToLastMessageAnimated:NO];
 
@@ -400,6 +393,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		layout.minimumInteritemSpacing = ATTACHMENT_MARGIN.width;
 		layout.itemSize = [ApptentiveAttachmentCell sizeForScreen:[UIScreen mainScreen] withMargin:ATTACHMENT_MARGIN];
 
+		compoundCell.collectionViewHeightConstraint.constant = ATTACHMENT_MARGIN.height * 2 + layout.itemSize.height;
+
 		compoundCell.messageLabelHidden = compoundCell.messageLabel.text.length == 0;
 	}
 
@@ -414,63 +409,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	}
 
 	return height;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-	// iOS 7 requires this and there's no good way to instantiate a cell to sample, so we're hard-coding it for now.
-	CGFloat verticalMargin, horizontalMargin, minimumCellHeight;
-	BOOL statusLabelVisible = [self.viewModel statusOfMessageAtIndexPath:indexPath] != ATMessageCenterMessageStatusHidden;
-
-	switch ([self.viewModel cellTypeAtIndexPath:indexPath]) {
-		case ATMessageCenterMessageTypeContextMessage:
-		case ATMessageCenterMessageTypeMessage:
-			horizontalMargin = MESSAGE_LABEL_TOTAL_HORIZONTAL_MARGIN;
-			verticalMargin = MESSAGE_LABEL_TOTAL_VERTICAL_MARGIN;
-			minimumCellHeight = 0;
-			break;
-
-		case ATMessageCenterMessageTypeCompoundMessage:
-			horizontalMargin = MESSAGE_LABEL_TOTAL_HORIZONTAL_MARGIN;
-			verticalMargin = MESSAGE_LABEL_TOTAL_VERTICAL_MARGIN / 2.0 + [ApptentiveAttachmentCell heightForScreen:[UIScreen mainScreen] withMargin:ATTACHMENT_MARGIN];
-			if (statusLabelVisible) {
-				verticalMargin += MESSAGE_LABEL_TOTAL_VERTICAL_MARGIN / 2.0 - STATUS_LABEL_MARGIN;
-			}
-			minimumCellHeight = 0;
-			break;
-
-		case ATMessageCenterMessageTypeReply:
-			horizontalMargin = REPLY_LABEL_TOTAL_HORIZONTAL_MARGIN;
-			verticalMargin = REPLY_LABEL_TOTAL_VERTICAL_MARGIN;
-			minimumCellHeight = REPLY_CELL_MINIMUM_HEIGHT;
-			break;
-
-		case ATMessageCenterMessageTypeCompoundReply:
-			horizontalMargin = REPLY_LABEL_TOTAL_HORIZONTAL_MARGIN;
-			verticalMargin = 33.5 + [ApptentiveAttachmentCell heightForScreen:[UIScreen mainScreen] withMargin:ATTACHMENT_MARGIN];
-			minimumCellHeight = REPLY_CELL_MINIMUM_HEIGHT + [ApptentiveAttachmentCell heightForScreen:[UIScreen mainScreen] withMargin:ATTACHMENT_MARGIN] - MESSAGE_LABEL_TOTAL_VERTICAL_MARGIN / 2.0;
-			break;
-	}
-
-	if (statusLabelVisible) {
-		verticalMargin += STATUS_LABEL_HEIGHT + STATUS_LABEL_MARGIN;
-	}
-
-	NSString *labelText = [self.viewModel textOfMessageAtIndexPath:indexPath];
-	CGFloat effectiveLabelWidth = CGRectGetWidth(tableView.bounds) - horizontalMargin;
-	CGRect labelRect = CGRectZero;
-	if (labelText.length) {
-		UIFont *font = [self.viewModel.styleSheet fontForStyle:UIFontTextStyleBody];
-		UIColor *color = [self.viewModel.styleSheet colorForStyle:UIFontTextStyleBody];
-		NSAttributedString *attributedText = [[NSAttributedString alloc] initWithString:labelText attributes:@{NSFontAttributeName: font, NSForegroundColorAttributeName: color}];
-		labelRect = [attributedText boundingRectWithSize:CGSizeMake(effectiveLabelWidth, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin context:nil];
-	} else {
-		verticalMargin -= MESSAGE_LABEL_TOTAL_VERTICAL_MARGIN / 2.0;
-	}
-
-	double height = ceil(fmax(labelRect.size.height + verticalMargin, minimumCellHeight) + 0.5);
-
-	// "Due to an underlying implementation detail, you should not return values greater than 2009."
-	return fmin(height, 2009.0);
 }
 
 #pragma mark Table view delegate
@@ -501,13 +439,20 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
 	switch ([self.viewModel cellTypeAtIndexPath:indexPath]) {
-		case ATMessageCenterMessageTypeMessage:
 		case ATMessageCenterMessageTypeCompoundMessage:
+			((id<ApptentiveMessageCenterCompoundCell>)cell).collectionView.backgroundColor = [self.viewModel.styleSheet colorForStyle:ApptentiveColorMessageBackground];
+			// Fall through
+		case ATMessageCenterMessageTypeMessage:
 			cell.contentView.backgroundColor = [self.viewModel.styleSheet colorForStyle:ApptentiveColorMessageBackground];
 			break;
-		case ATMessageCenterMessageTypeReply:
+
 		case ATMessageCenterMessageTypeCompoundReply:
+			((id<ApptentiveMessageCenterCompoundCell>)cell).collectionView.backgroundColor = [self.viewModel.styleSheet colorForStyle:ApptentiveColorReplyBackground];
+			// Fall through
+		case ATMessageCenterMessageTypeReply:
 			cell.contentView.backgroundColor = [self.viewModel.styleSheet colorForStyle:ApptentiveColorReplyBackground];
+			break;
+
 		case ATMessageCenterMessageTypeContextMessage:
 			cell.contentView.backgroundColor = [self.viewModel.styleSheet colorForStyle:ApptentiveColorContextBackground];
 	}
@@ -1087,6 +1032,9 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (void)scrollToFooterView:(NSNotification *)notification {
+	[self.tableView scrollToRowAtIndexPath:self.indexPathOfLastMessage atScrollPosition:UITableViewScrollPositionTop animated:NO];
+	[self.tableView layoutIfNeeded];
+
 	if (notification) {
 		self.lastKnownKeyboardRect = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
 	}
@@ -1118,7 +1066,14 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		}
 
 		CGRect localKeyboardRect = self.view.window ? [self.view.window convertRect:self.lastKnownKeyboardRect toView:self.tableView.superview] : self.lastKnownKeyboardRect;
-		CGFloat topContentInset = self.tableView.contentInset.top;
+
+		UIEdgeInsets insets = self.tableView.contentInset;
+#ifdef __IPHONE_11_0
+		if (@available(iOS 11.0, *)) {
+			insets = self.tableView.safeAreaInsets;
+		}
+#endif
+		CGFloat topContentInset = insets.top;
 
 		// Available space is between the top of the keyboard and the bottom of the navigation bar
 		height = fmin(CGRectGetMinY(localKeyboardRect), CGRectGetHeight(self.view.bounds)) - topContentInset;

@@ -8,6 +8,12 @@
 
 #import "ApptentiveMessageCenterMessageCell.h"
 
+@interface ApptentiveMessageCenterMessageCell ()
+
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *statusLabelBottomConstraint;
+
+@end
+
 
 @implementation ApptentiveMessageCenterMessageCell
 
@@ -23,6 +29,8 @@
 	_statusLabelHidden = statusLabelHidden;
 
 	self.statusLabel.hidden = statusLabelHidden;
+
+	self.statusLabelBottomConstraint.active = !statusLabelHidden;
 }
 
 @end

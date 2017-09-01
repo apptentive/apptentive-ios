@@ -26,7 +26,6 @@
 #import "ApptentiveMessageSender.h"
 #import "ApptentiveAttachment.h"
 
-
 NSNotificationName const ApptentiveMessageCenterUnreadCountChangedNotification = @"ApptentiveMessageCenterUnreadCountChangedNotification";
 
 NSNotificationName const ApptentiveAppRatingFlowUserAgreedToRateAppNotification = @"ApptentiveAppRatingFlowUserAgreedToRateAppNotification";
@@ -853,8 +852,14 @@ static Apptentive *_sharedInstance;
 
 @end
 
+@interface ApptentiveNavigationController ()
+
+@property (nonatomic, strong) UIWindow *apptentiveAlertWindow;
+
+@end
 
 @implementation ApptentiveNavigationController
+
 // Container to allow customization of Apptentive UI using UIAppearance
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
@@ -865,6 +870,23 @@ static Apptentive *_sharedInstance;
 		}
 	}
 	return self;
+}
+
+- (void)presentAnimated:(BOOL)animated completion:(void (^ __nullable)(void))completion {
+	self.apptentiveAlertWindow = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+	self.apptentiveAlertWindow.rootViewController = [[UIViewController alloc] init];
+	self.apptentiveAlertWindow.windowLevel = UIWindowLevelAlert + 1;
+	[self.apptentiveAlertWindow makeKeyAndVisible];
+	[self.apptentiveAlertWindow.rootViewController presentViewController:self animated:animated completion:completion];
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+	[super viewDidDisappear:animated];
+	
+	if (self.presentingViewController == nil) {
+		self.apptentiveAlertWindow.hidden = YES;
+		self.apptentiveAlertWindow = nil;
+	}
 }
 
 - (void)pushAboutApptentiveViewController {

@@ -13,6 +13,7 @@
 #import "Apptentive_Private.h"
 #import "ApptentiveBackend.h"
 #import "ApptentiveInteraction.h"
+#import "UIAlertController+Apptentive.h"
 
 NSString *const ATInteractionRatingDialogEventLabelLaunch = @"launch";
 NSString *const ATInteractionRatingDialogEventLabelCancel = @"cancel";
@@ -40,9 +41,15 @@ NSString *const ATInteractionRatingDialogEventLabelDecline = @"decline";
 	self.alertController = [self alertControllerWithInteraction:self.interaction];
 
 	if (self.alertController) {
-		[viewController presentViewController:self.alertController animated:YES completion:^{
-			[self.interaction engage:ATInteractionRatingDialogEventLabelLaunch fromViewController:viewController];
-		}];
+		if (viewController != nil) {
+			[viewController presentViewController:self.alertController animated:YES completion:^{
+				[self.interaction engage:ATInteractionRatingDialogEventLabelLaunch fromViewController:viewController];
+			}];
+		} else {
+			[self.alertController apptentive_presentAnimated:YES completion:^{
+				[self.interaction engage:ATInteractionRatingDialogEventLabelLaunch fromViewController:nil];
+			}];
+		}
 	}
 }
 

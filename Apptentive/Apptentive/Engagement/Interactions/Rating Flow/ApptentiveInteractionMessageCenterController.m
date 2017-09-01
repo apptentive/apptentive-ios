@@ -23,7 +23,7 @@
 - (void)presentInteractionFromViewController:(UIViewController *)viewController {
 	[super presentInteractionFromViewController:viewController];
 
-	UINavigationController *navigationController = [[ApptentiveUtilities storyboard] instantiateViewControllerWithIdentifier:@"MessageCenterNavigation"];
+	ApptentiveNavigationController *navigationController = [[ApptentiveUtilities storyboard] instantiateViewControllerWithIdentifier:@"MessageCenterNavigation"];
 	ApptentiveMessageCenterViewController *messageCenter = navigationController.viewControllers.firstObject;
 
 	// TODO: Do this on the background queue?
@@ -41,7 +41,11 @@
 
 	Apptentive.shared.backend.presentedMessageCenterViewController = messageCenter;
 
-	[viewController presentViewController:navigationController animated:YES completion:nil];
+	if (viewController) {
+		[viewController presentViewController:navigationController animated:YES completion:nil];
+	} else {
+		[navigationController presentAnimated:YES completion:nil];
+	}
 }
 
 - (void)dismissInteractionNotification:(NSNotification *)notification {

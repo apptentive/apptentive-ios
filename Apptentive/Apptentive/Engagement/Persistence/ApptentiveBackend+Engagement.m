@@ -117,14 +117,10 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 	ApptentiveInteraction *interaction = [engagementBackend interactionForEvent:codePoint];
 	if (interaction) {
 		ApptentiveLogInfo(@"--Running valid %@ interaction.", interaction.type);
-
-		if (viewController == nil) {
-			viewController = [Apptentive.shared viewControllerForInteractions];
-		}
-
-		if (viewController == nil || !viewController.isViewLoaded || viewController.view.window == nil) {
-			ApptentiveLogError(@"Attempting to present interaction on a view controller whose view is not visible in a window.");
-			return NO;
+		
+		if (viewController != nil && (!viewController.isViewLoaded || viewController.view.window == nil)) {
+			ApptentiveLogError(@"Attempting to present interaction on a view controller whose view is not visible in a window. Using a separate window instead.");
+			viewController = nil;
 		}
 
 		[self presentInteraction:interaction fromViewController:viewController];

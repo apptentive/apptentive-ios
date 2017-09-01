@@ -13,6 +13,7 @@
 #import "Apptentive_Private.h"
 #import "ApptentiveBackend.h"
 #import "ApptentiveInteraction.h"
+#import "UIAlertController+Apptentive.h"
 
 NSString *const ATInteractionEnjoymentDialogEventLabelLaunch = @"launch";
 NSString *const ATInteractionEnjoymentDialogEventLabelCancel = @"cancel";
@@ -39,9 +40,15 @@ NSString *const ATInteractionEnjoymentDialogEventLabelNo = @"no";
 	self.alertController = [self alertControllerWithInteraction:self.interaction];
 
 	if (self.alertController) {
-		[viewController presentViewController:self.alertController animated:YES completion:^{
-			[self.interaction engage:ATInteractionEnjoymentDialogEventLabelLaunch fromViewController:viewController];
-		}];
+		if (viewController != nil) {
+			[viewController presentViewController:self.alertController animated:YES completion:^{
+				[self.interaction engage:ATInteractionEnjoymentDialogEventLabelLaunch fromViewController:viewController];
+			}];
+		} else {
+			[self.alertController apptentive_presentAnimated:YES completion:^{
+				[self.interaction engage:ATInteractionEnjoymentDialogEventLabelLaunch fromViewController:nil];
+			}];
+		}
 	}
 }
 

@@ -48,8 +48,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSArray *)engagementInteractions;
 - (NSString *)engagementInteractionNameAtIndex:(NSInteger)index;
 - (NSString *)engagementInteractionTypeAtIndex:(NSInteger)index;
-- (void)presentInteractionAtIndex:(NSInteger)index fromViewController:(UIViewController *)viewController;
-- (void)presentInteractionWithJSON:(NSDictionary *)JSON fromViewController:(UIViewController *)viewController;
+- (void)presentInteractionAtIndex:(NSInteger)index fromViewController:(nullable UIViewController *)viewController;
+- (void)presentInteractionWithJSON:(NSDictionary *)JSON fromViewController:(nullable UIViewController *)viewController;
 
 #pragma mark - Conversation Metadata
 

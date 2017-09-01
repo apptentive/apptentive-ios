@@ -12,6 +12,7 @@
 #import "ApptentiveBackend+Engagement.h"
 #import "Apptentive_Private.h"
 #import "ApptentiveInteraction.h"
+#import "UIAlertController+Apptentive.h"
 
 NSString *const ATInteractionTextModalEventLabelLaunch = @"launch";
 NSString *const ATInteractionTextModalEventLabelCancel = @"cancel";
@@ -40,9 +41,15 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 	self.alertController = [self alertControllerWithInteraction:self.interaction];
 
 	if (self.alertController) {
-		[viewController presentViewController:self.alertController animated:YES completion:^{
-			[self.interaction engage:ATInteractionTextModalEventLabelLaunch fromViewController:viewController];
-		}];
+		if (viewController != nil) {
+			[viewController presentViewController:self.alertController animated:YES completion:^{
+				[self.interaction engage:ATInteractionTextModalEventLabelLaunch fromViewController:viewController];
+			}];
+		} else {
+			[self.alertController apptentive_presentAnimated:YES completion:^{
+				[self.interaction engage:ATInteractionTextModalEventLabelLaunch fromViewController:nil];
+			}];
+		}
 	}
 }
 

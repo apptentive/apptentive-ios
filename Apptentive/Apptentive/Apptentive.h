@@ -367,7 +367,7 @@ typedef NS_ENUM(NSUInteger, ApptentiveLogLevel) {
 
  @return `YES` if Message Center was presented, `NO` otherwise.
  */
-- (BOOL)presentMessageCenterFromViewController:(UIViewController *)viewController;
+- (BOOL)presentMessageCenterFromViewController:(nullable UIViewController *)viewController;
 
 /**
  Presents Message Center from a given view controller with custom data.

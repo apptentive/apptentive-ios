@@ -178,8 +178,10 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	} else if (self.isSubsequentDisplay == NO) {
 		[self updateState];
 	}
+}
 
-	if (self.isSubsequentDisplay == NO || self.attachmentController.active) {
+- (void)viewDidLayoutSubviews {
+	if (self.isSubsequentDisplay == NO) {
 		[self engageGreetingViewEventIfNecessary];
 		[self scrollToLastMessageAnimated:NO];
 
@@ -1030,6 +1032,9 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (void)scrollToFooterView:(NSNotification *)notification {
+	[self.tableView scrollToRowAtIndexPath:self.indexPathOfLastMessage atScrollPosition:UITableViewScrollPositionTop animated:NO];
+	[self.tableView layoutIfNeeded];
+
 	if (notification) {
 		self.lastKnownKeyboardRect = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
 	}

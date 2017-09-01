@@ -1061,7 +1061,14 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		}
 
 		CGRect localKeyboardRect = self.view.window ? [self.view.window convertRect:self.lastKnownKeyboardRect toView:self.tableView.superview] : self.lastKnownKeyboardRect;
-		CGFloat topContentInset = self.tableView.contentInset.top;
+
+		UIEdgeInsets insets = self.tableView.contentInset;
+#ifdef __IPHONE_11_0
+		if (@available(iOS 11.0, *)) {
+			insets = self.tableView.safeAreaInsets;
+		}
+#endif
+		CGFloat topContentInset = insets.top;
 
 		// Available space is between the top of the keyboard and the bottom of the navigation bar
 		height = fmin(CGRectGetMinY(localKeyboardRect), CGRectGetHeight(self.view.bounds)) - topContentInset;

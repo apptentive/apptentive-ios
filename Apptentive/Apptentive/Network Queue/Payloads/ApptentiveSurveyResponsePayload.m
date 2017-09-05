@@ -12,7 +12,7 @@
 @implementation ApptentiveSurveyResponsePayload
 
 - (nullable instancetype)initWithAnswers:(NSDictionary *)answers identifier:(NSString *)identifier {
-	if (answers.count == 0) {
+	if (answers == nil) {
 		ApptentiveLogError(@"Attempting to create survey response without answers");
 		return nil;
 	}

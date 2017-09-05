@@ -125,6 +125,9 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[self updateSendButtonEnabledStatus];
 
 	self.iOSAfter8_0 = [[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){8, 1, 0}];
+
+	self.tableView.estimatedRowHeight = 66.0;
+	self.tableView.rowHeight = UITableViewAutomaticDimension;
 }
 
 - (void)dealloc {

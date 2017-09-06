@@ -659,6 +659,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[self dismissViewControllerAnimated:YES completion:^{
 		[self.viewModel.interaction engage:ATInteractionMessageCenterEventLabelClose fromViewController:presentingViewController];
 	}];
+
+	self.interactionController = nil;
 }
 
 - (IBAction)send:(id)sender {

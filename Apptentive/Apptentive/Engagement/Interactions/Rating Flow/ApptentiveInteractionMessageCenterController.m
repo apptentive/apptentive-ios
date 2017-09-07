@@ -41,6 +41,8 @@
 
 	Apptentive.shared.backend.presentedMessageCenterViewController = messageCenter;
 
+	self.presentedViewController = navigationController;
+
 	if (viewController) {
 		[viewController presentViewController:navigationController animated:YES completion:nil];
 	} else {

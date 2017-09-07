@@ -66,10 +66,12 @@ static NSString *const ApptentiveInteractionEventLabelCancel = @"cancel";
 - (void)dismissInteractionNotification:(NSNotification *)notification {
 	BOOL animated = [notification.userInfo[ApptentiveInteractionsShouldDismissAnimatedKey] boolValue];
 
-	[self.presentingViewController dismissViewControllerAnimated:animated completion:nil];
+	[self.presentedViewController dismissViewControllerAnimated:animated completion:nil];
 
 	// Ordinarily we would engage in the completion block of the -dismiss method, but that screws up event ordering during logout.
 	[self.interaction engage:self.programmaticDismissEventLabel fromViewController:nil userInfo:@{ @"cause": @"notification" }];
+
+	self.presentedViewController = nil;
 }
 
 - (NSString *)programmaticDismissEventLabel {

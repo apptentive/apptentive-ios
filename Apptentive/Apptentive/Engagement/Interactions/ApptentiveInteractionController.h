@@ -20,6 +20,7 @@
 
 @property (readonly, nonatomic) ApptentiveInteraction *interaction;
 @property (strong, nonatomic) UIViewController *presentingViewController;
+@property (strong, nonatomic) UIViewController *presentedViewController;
 @property (readonly, nonatomic) NSString *programmaticDismissEventLabel;
 
 - (void)presentInteractionFromViewController:(UIViewController *)viewController NS_REQUIRES_SUPER;

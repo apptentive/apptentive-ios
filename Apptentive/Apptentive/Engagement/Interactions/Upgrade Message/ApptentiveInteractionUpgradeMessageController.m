@@ -33,6 +33,8 @@ NSString *const ATInteractionUpgradeMessageEventLabelDismiss = @"dismiss";
 	// Add owning reference to self so we stick around until VC is dismissed.
 	result.interactionController = self;
 
+	self.presentedViewController = navigationController;
+
 	if (viewController != nil) {
 		[viewController presentViewController:navigationController animated:YES completion:nil];
 	} else {

@@ -158,6 +158,8 @@
 	[self dismissViewControllerAnimated:YES completion:^{
 		[self.viewModel didCancel:presentingViewController];
 	}];
+
+	self.interactionController = nil;
 }
 
 - (IBAction)showAbout:(id)sender {

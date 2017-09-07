@@ -47,7 +47,13 @@
 		ApptentiveSurveyCollectionView *myCollectionView = (ApptentiveSurveyCollectionView *)self.collectionView;
 		superSize.height += CGRectGetHeight(myCollectionView.collectionHeaderView.bounds) + CGRectGetHeight(myCollectionView.collectionFooterView.bounds) + self.sectionInset.top + self.sectionInset.bottom;
 
-		superSize.height = fmax(superSize.height, CGRectGetHeight(self.collectionView.bounds) - self.collectionView.contentInset.top - self.collectionView.contentInset.bottom);
+		UIEdgeInsets contentInset = self.collectionView.contentInset;
+#ifdef __IPHONE_11_0
+		if (@available(iOS 11.0, *)) {
+			contentInset = self.collectionView.safeAreaInsets;
+		}
+#endif
+		superSize.height = fmax(superSize.height, CGRectGetHeight(self.collectionView.bounds) - contentInset.top - contentInset.bottom);
 	}
 
 	return superSize;

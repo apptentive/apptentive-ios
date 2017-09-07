@@ -1,5 +1,9 @@
 This document tracks changes to the API between versions.
 
+#4.0.5
+
+* Passing `nil` for the view controller parameter of the `engage` method will now open interactions in a new window. The `delegate` property of the `Apptentive` singleton will no longer be asked for a view controller to present interactions from.
+
 #4.0.0
 
 * Adds a new `ApptentiveConfiguration` class.

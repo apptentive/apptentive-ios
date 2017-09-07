@@ -739,11 +739,14 @@ static Apptentive *_sharedInstance;
 }
 
 - (UIViewController *)viewControllerForInteractions {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
 	if (self.delegate && [self.delegate respondsToSelector:@selector(viewControllerForInteractionsWithConnection:)]) {
 		return [self.delegate viewControllerForInteractionsWithConnection:self];
 	} else {
 		return [ApptentiveUtilities topViewController];
 	}
+#pragma clang diagnostic pop
 }
 
 - (void)dismissAllInteractions:(BOOL)animated {

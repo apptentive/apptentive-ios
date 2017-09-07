@@ -12,6 +12,7 @@
 #import "ApptentiveBackend+Engagement.h"
 #import "Apptentive_Private.h"
 #import "ApptentiveInteraction.h"
+#import "UIAlertController+Apptentive.h"
 
 NSString *const ATInteractionTextModalEventLabelLaunch = @"launch";
 NSString *const ATInteractionTextModalEventLabelCancel = @"cancel";
@@ -19,13 +20,6 @@ NSString *const ATInteractionTextModalEventLabelDismiss = @"dismiss";
 NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 
 typedef void (^alertActionHandler)(UIAlertAction *);
-
-
-@interface ApptentiveInteractionTextModalController ()
-
-@property (strong, nonatomic) UIAlertController *alertController;
-
-@end
 
 
 @implementation ApptentiveInteractionTextModalController
@@ -37,12 +31,18 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 - (void)presentInteractionFromViewController:(UIViewController *)viewController {
 	[super presentInteractionFromViewController:viewController];
 
-	self.alertController = [self alertControllerWithInteraction:self.interaction];
+	self.presentedViewController = [self alertControllerWithInteraction:self.interaction];
 
-	if (self.alertController) {
-		[viewController presentViewController:self.alertController animated:YES completion:^{
-			[self.interaction engage:ATInteractionTextModalEventLabelLaunch fromViewController:viewController];
-		}];
+	if (self.presentedViewController) {
+		if (viewController != nil) {
+			[viewController presentViewController:self.presentedViewController animated:YES completion:^{
+				[self.interaction engage:ATInteractionTextModalEventLabelLaunch fromViewController:viewController];
+			}];
+		} else {
+			[(UIAlertController *)self.presentedViewController apptentive_presentAnimated:YES completion:^{
+				[self.interaction engage:ATInteractionTextModalEventLabelLaunch fromViewController:nil];
+			}];
+		}
 	}
 }
 
@@ -160,7 +160,7 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 
 	[self.interaction engage:ATInteractionTextModalEventLabelDismiss fromViewController:self.presentingViewController userInfo:userInfo];
 
-	self.alertController = nil;
+	self.presentedViewController = nil;
 }
 
 - (alertActionHandler)createButtonHandlerBlockDismiss:(NSDictionary *)actionConfig {
@@ -189,19 +189,13 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 		[[Apptentive sharedConnection].backend presentInteraction:interaction fromViewController:self.presentingViewController];
 	}
 
-	self.alertController = nil;
+	self.presentedViewController = nil;
 }
 
 - (alertActionHandler)createButtonHandlerBlockInteractionAction:(NSDictionary *)actionConfig {
 	return [^(UIAlertAction *alertAction) {
 		[self interactionAction:actionConfig];
 	} copy];
-}
-
-- (void)dismissInteractionNotification:(NSNotification *)notification {
-	self.alertController = nil;
-
-	[super dismissInteractionNotification:notification];
 }
 
 @end

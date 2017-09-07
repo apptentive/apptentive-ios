@@ -282,10 +282,6 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 			[self.conversationManager pause];
 
 			[self.payloadSender cancelNetworkOperations];
-
-			self.payloadSender.backgroundTaskIdentifier = [[UIApplication sharedApplication] beginBackgroundTaskWithName:@"SaveContext" expirationHandler:^{
-				ApptentiveLogWarning(@"Background task expired");
-			}];
 		}
 
 		[self updateMessageCheckingTimer];
@@ -457,10 +453,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 
 	self.currentCustomData = customData;
 
-	if (!viewController) {
-		ApptentiveLogError(@"Attempting to present Apptentive Message Center from a nil View Controller.");
-		return NO;
-	} else if (viewController.presentedViewController) {
+	if (viewController.presentedViewController) {
 		ApptentiveLogError(@"Attempting to present Apptentive Message Center from View Controller that is already presenting a modal view controller");
 		return NO;
 	}
@@ -473,9 +466,13 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	BOOL didShowMessageCenter = [[ApptentiveInteraction apptentiveAppInteraction] engage:ApptentiveEngagementMessageCenterEvent fromViewController:viewController];
 
 	if (!didShowMessageCenter) {
-		UINavigationController *navigationController = [[ApptentiveUtilities storyboard] instantiateViewControllerWithIdentifier:@"NoPayloadNavigation"];
+		ApptentiveNavigationController *navigationController = [[ApptentiveUtilities storyboard] instantiateViewControllerWithIdentifier:@"NoPayloadNavigation"];
 
-		[viewController presentViewController:navigationController animated:YES completion:nil];
+		if (viewController != nil) {
+			[viewController presentViewController:navigationController animated:YES completion:nil];
+		} else {
+			[navigationController presentAnimated:YES completion:nil];
+		}
 	}
 
 	return didShowMessageCenter;

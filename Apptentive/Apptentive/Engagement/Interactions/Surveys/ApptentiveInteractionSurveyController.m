@@ -29,7 +29,7 @@ NSString *const ATInteractionSurveyEventLabelLaunch = @"launch";
 - (void)presentInteractionFromViewController:(UIViewController *)viewController {
 	[super presentInteractionFromViewController:viewController];
 
-	UINavigationController *navigationController = [[ApptentiveUtilities storyboard] instantiateViewControllerWithIdentifier:@"SurveyNavigation"];
+	ApptentiveNavigationController *navigationController = [[ApptentiveUtilities storyboard] instantiateViewControllerWithIdentifier:@"SurveyNavigation"];
 	ApptentiveSurveyViewModel *viewModel = [[ApptentiveSurveyViewModel alloc] initWithInteraction:self.interaction];
 	if (viewModel) {
 		ApptentiveSurveyViewController *surveyViewController = navigationController.viewControllers.firstObject;
@@ -39,7 +39,13 @@ NSString *const ATInteractionSurveyEventLabelLaunch = @"launch";
 		// Add owning reference to self so we stick around until VC is dismissed
 		surveyViewController.interactionController = self;
 
-		[viewController presentViewController:navigationController animated:YES completion:nil];
+		self.presentedViewController = navigationController;
+
+		if (viewController != nil) {
+			[viewController presentViewController:navigationController animated:YES completion:nil];
+		} else {
+			[navigationController presentAnimated:YES completion:nil];
+		}
 	}
 
 	ApptentiveAssertNotNil(self.interaction.identifier, @"Interaction identifier is nil");

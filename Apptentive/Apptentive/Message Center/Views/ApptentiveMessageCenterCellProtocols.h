@@ -17,6 +17,7 @@
 @protocol ApptentiveMessageCenterCompoundCell <ApptentiveMessageCenterCell>
 
 @property (weak, nonatomic) ApptentiveIndexedCollectionView *collectionView;
+@property (weak, nonatomic) NSLayoutConstraint *collectionViewHeightConstraint;
 @property (assign, nonatomic) BOOL messageLabelHidden;
 
 @end

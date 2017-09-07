@@ -13,19 +13,13 @@
 #import "Apptentive_Private.h"
 #import "ApptentiveBackend.h"
 #import "ApptentiveInteraction.h"
+#import "UIAlertController+Apptentive.h"
 
 NSString *const ATInteractionRatingDialogEventLabelLaunch = @"launch";
 NSString *const ATInteractionRatingDialogEventLabelCancel = @"cancel";
 NSString *const ATInteractionRatingDialogEventLabelRate = @"rate";
 NSString *const ATInteractionRatingDialogEventLabelRemind = @"remind";
 NSString *const ATInteractionRatingDialogEventLabelDecline = @"decline";
-
-
-@interface ApptentiveInteractionRatingDialogController ()
-
-@property (strong, nonatomic) UIAlertController *alertController;
-
-@end
 
 
 @implementation ApptentiveInteractionRatingDialogController
@@ -37,12 +31,18 @@ NSString *const ATInteractionRatingDialogEventLabelDecline = @"decline";
 - (void)presentInteractionFromViewController:(UIViewController *)viewController {
 	[super presentInteractionFromViewController:viewController];
 
-	self.alertController = [self alertControllerWithInteraction:self.interaction];
+	self.presentedViewController = [self alertControllerWithInteraction:self.interaction];
 
-	if (self.alertController) {
-		[viewController presentViewController:self.alertController animated:YES completion:^{
-			[self.interaction engage:ATInteractionRatingDialogEventLabelLaunch fromViewController:viewController];
-		}];
+	if (self.presentedViewController) {
+		if (viewController != nil) {
+			[viewController presentViewController:self.presentedViewController animated:YES completion:^{
+				[self.interaction engage:ATInteractionRatingDialogEventLabelLaunch fromViewController:viewController];
+			}];
+		} else {
+			[(UIAlertController *)self.presentedViewController apptentive_presentAnimated:YES completion:^{
+				[self.interaction engage:ATInteractionRatingDialogEventLabelLaunch fromViewController:nil];
+			}];
+		}
 	}
 }
 
@@ -94,28 +94,22 @@ NSString *const ATInteractionRatingDialogEventLabelDecline = @"decline";
 	[alertController addAction:[UIAlertAction actionWithTitle:self.rateText style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
 		[self.interaction engage:ATInteractionRatingDialogEventLabelRate fromViewController:self.presentingViewController];
 
-		self.alertController = nil;
+		self.presentedViewController = nil;
 	}]];
 
 	[alertController addAction:[UIAlertAction actionWithTitle:self.remindText style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
 		[self.interaction engage:ATInteractionRatingDialogEventLabelRemind fromViewController:self.presentingViewController];
 
-		self.alertController = nil;
+		self.presentedViewController = nil;
 	}]];
 
 	[alertController addAction:[UIAlertAction actionWithTitle:self.declineText style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
 		[self.interaction engage:ATInteractionRatingDialogEventLabelDecline fromViewController:self.presentingViewController];
 
-		self.alertController = nil;
+		self.presentedViewController = nil;
 	}]];
 
 	return alertController;
-}
-
-- (void)dismissInteractionNotification:(NSNotification *)notification {
-	self.alertController = nil;
-
-	[super dismissInteractionNotification:notification];
 }
 
 @end

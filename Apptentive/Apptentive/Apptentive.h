@@ -17,7 +17,7 @@ FOUNDATION_EXPORT double ApptentiveVersionNumber;
 FOUNDATION_EXPORT const unsigned char ApptentiveVersionString[];
 
 /** The version number of the Apptentive SDK. */
-#define kApptentiveVersionString @"4.0.3"
+#define kApptentiveVersionString @"4.0.5"
 
 /** The platform that the SDK is built for. */
 #define kApptentivePlatformString @"iOS"
@@ -224,8 +224,11 @@ typedef NS_ENUM(NSUInteger, ApptentiveLogLevel) {
 
 /** An object conforming to the `ApptentiveDelegate` protocol.
  If a `nil` value is passed for the view controller into methods such as	`-engage:fromViewController`,
- the SDK will request a view controller from the delegate from which to present an interaction. */
-@property (weak, nonatomic) id<ApptentiveDelegate> delegate;
+ the SDK will request a view controller from the delegate from which to present an interaction.
+
+ Deprecation Note: when a suitable view controller is not available for presenting interactions,
+ the system will now use a new window to present Apptentive UI. */
+@property (weak, nonatomic) id<ApptentiveDelegate> delegate DEPRECATED_ATTRIBUTE;
 
 ///--------------------
 /// @name Engage Events
@@ -367,7 +370,7 @@ typedef NS_ENUM(NSUInteger, ApptentiveLogLevel) {
 
  @return `YES` if Message Center was presented, `NO` otherwise.
  */
-- (BOOL)presentMessageCenterFromViewController:(UIViewController *)viewController;
+- (BOOL)presentMessageCenterFromViewController:(nullable UIViewController *)viewController;
 
 /**
  Presents Message Center from a given view controller with custom data.
@@ -683,15 +686,6 @@ typedef NS_ENUM(NSUInteger, ApptentiveLogLevel) {
 
 @end
 
-/**
- The `ApptentiveDelegate` protocol allows your app to override the default behavior when an
- interaction is presented without a view controller having been specified. In most cases the
- default behavior (which walks the view controller stack from the main window's root view
- controller) will work, but if your app features custom container view controllers, it may
- behave unexpectedly. In that case an object in your app should implement the
- `ApptentiveDelegate` protocol's `-viewControllerForInteractionsWithConnection:` method
- and return the view controller from which to present the Message Center interaction.
- */
 @protocol ApptentiveDelegate <NSObject>
 @optional
 
@@ -701,8 +695,10 @@ typedef NS_ENUM(NSUInteger, ApptentiveLogLevel) {
  @param connection The `Apptentive` object that is requesting a view controller to present from.
 
  @return The view controller your app would like the interaction to be presented from.
- */
-- (UIViewController *)viewControllerForInteractionsWithConnection:(Apptentive *)connection NS_SWIFT_NAME(viewControllerForInteractions(with:));
+
+ Deprecation Note: when a suitable view controller is not available for presenting interactions,
+ the system will now use a new window to present Apptentive UI. */
+- (UIViewController *)viewControllerForInteractionsWithConnection:(Apptentive *)connection NS_SWIFT_NAME(viewControllerForInteractions(with:)) DEPRECATED_ATTRIBUTE;
 
 @end
 

@@ -1,3 +1,11 @@
+2017-09-06 frankus, weeebox v4.0.5
+----------------------------------
+Version 4.0.5 fixes an error where a background task expiration handler was not called correctly, which could result in a crash. It also adds an experimental feature where passing `nil` for the view controller parameter of the `engage` method will present interactions in a new window.
+
+2017-08-28 frankus, weeebox v4.0.4
+----------------------------------
+Version 4.0.4 fixes a potential crash when exiting the app. It also fixes saving person name and email when they are supplied in message center, and improves accessibility for surveys.
+
 2017-08-11 frankus, weeebox v4.0.3
 ----------------------------------
 Version 4.0.3 fixes a potential crash when decoding invalid JSON, and provides better error messaging for incorrect Apptentive App Key and Apptentive App Signature values. It also updates the URL used to send users to the App Store rating page for an app.

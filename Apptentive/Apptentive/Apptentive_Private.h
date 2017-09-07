@@ -12,17 +12,18 @@
 #import <Apptentive/Apptentive.h>
 #endif
 
-extern NSString *const ApptentiveCustomPersonDataChangedNotification;
-extern NSString *const ApptentiveCustomDeviceDataChangedNotification;
-extern NSString *const ApptentiveInteractionsDidUpdateNotification;
-extern NSString *const ApptentiveInteractionsShouldDismissNotification;
-extern NSString *const ApptentiveInteractionsShouldDismissAnimatedKey;
-extern NSString *const ApptentiveConversationCreatedNotification;
-extern NSString *const ApptentiveCustomDeviceDataPreferenceKey;
-extern NSString *const ApptentiveCustomPersonDataPreferenceKey;
+extern NSNotificationName _Nonnull const ApptentiveCustomPersonDataChangedNotification;
+extern NSNotificationName _Nonnull const ApptentiveCustomDeviceDataChangedNotification;
+extern NSNotificationName _Nonnull const ApptentiveInteractionsDidUpdateNotification;
+extern NSNotificationName _Nonnull const ApptentiveInteractionsShouldDismissNotification;
+extern NSString * _Nonnull const ApptentiveInteractionsShouldDismissAnimatedKey;
+extern NSNotificationName _Nonnull const ApptentiveConversationCreatedNotification;
+extern NSString * _Nonnull const ApptentiveCustomDeviceDataPreferenceKey;
+extern NSString * _Nonnull const ApptentiveCustomPersonDataPreferenceKey;
 
 @class ApptentiveMessage, ApptentiveBackend;
 
+NS_ASSUME_NONNULL_BEGIN
 
 @interface Apptentive ()
 
@@ -35,8 +36,8 @@ extern NSString *const ApptentiveCustomPersonDataPreferenceKey;
 @property (readonly, nonatomic) NSURL *baseURL;
 @property (readonly, nonatomic) ApptentiveBackend *backend;
 
-@property (copy, nonatomic) NSDictionary *pushUserInfo;
-@property (strong, nonatomic) UIViewController *pushViewController;
+@property (copy, nonatomic, nullable) NSDictionary *pushUserInfo;
+@property (strong, nonatomic, nullable) UIViewController *pushViewController;
 
 @property (readonly, nonatomic) id<ApptentiveStyle> style;
 @property (readonly, nonatomic) BOOL didAccessStyleSheet;
@@ -58,7 +59,7 @@ extern NSString *const ApptentiveCustomPersonDataPreferenceKey;
 
 /*! Replacement for NSLocalizedString within ApptentiveConnect. Pulls
  localized strings out of the resource bundle. */
-extern NSString *ApptentiveLocalizedString(NSString *key, NSString *comment);
+extern NSString *ApptentiveLocalizedString(NSString *key, NSString * _Nullable comment);
 
 extern ApptentiveAuthenticationFailureReason parseAuthenticationFailureReason(NSString *reason);
 
@@ -68,3 +69,11 @@ extern ApptentiveAuthenticationFailureReason parseAuthenticationFailureReason(NS
 - (void)pushAboutApptentiveViewController;
 
 @end
+
+@interface ApptentiveNavigationController (UIWindow)
+
+- (void)presentAnimated:(BOOL)animated completion:(void (^ __nullable)(void))completion;
+
+@end
+
+NS_ASSUME_NONNULL_END

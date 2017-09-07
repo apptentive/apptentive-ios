@@ -279,7 +279,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	if (self.viewModel.profileRequested) {
 		UIBarButtonItem *profileButtonItem = [[UIBarButtonItem alloc] initWithImage:[ApptentiveUtilities imageNamed:@"at_account"] landscapeImagePhone:[ApptentiveUtilities imageNamed:@"at_account"] style:UIBarButtonItemStylePlain target:self action:@selector(showWho:)];
 		profileButtonItem.accessibilityLabel = ApptentiveLocalizedString(@"Profile", @"Accessibility label for 'edit profile' button");
-		profileButtonItem.accessibilityHint = ApptentiveLocalizedString(@"Displays name and email editor.", @"Accessibility hint for 'edit profile' button");
+		profileButtonItem.accessibilityHint = ApptentiveLocalizedString(@"Allows editing of your name and email.", @"Accessibility hint for 'edit profile' button");
 		self.navigationItem.leftBarButtonItem = profileButtonItem;
 
 		self.profileView.containerView.backgroundColor = [self.viewModel.styleSheet colorForStyle:ApptentiveColorBackground];

@@ -700,9 +700,19 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		return;
 	}
 
+	BOOL cancelReturnsToComposer = !self.attachmentController.active;
+
+	[self.messageInputView.messageView resignFirstResponder];
+
 	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:self.viewModel.composerCloseConfirmBody message:nil preferredStyle:UIAlertControllerStyleActionSheet];
 
-	[alertController addAction:[UIAlertAction actionWithTitle:self.viewModel.composerCloseCancelButtonTitle style:UIAlertActionStyleCancel handler:nil]];
+	[alertController addAction:[UIAlertAction actionWithTitle:self.viewModel.composerCloseCancelButtonTitle style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+		if (cancelReturnsToComposer) {
+			[self.messageInputView.messageView becomeFirstResponder];
+		} else {
+			[self.attachmentController becomeFirstResponder];
+		}
+	}]];
 	[alertController addAction:[UIAlertAction actionWithTitle:self.viewModel.composerCloseDiscardButtonTitle style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
 		[self discardDraft];
 	}]];

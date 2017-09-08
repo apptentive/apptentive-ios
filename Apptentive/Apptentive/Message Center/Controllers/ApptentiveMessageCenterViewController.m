@@ -128,6 +128,10 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 	self.tableView.estimatedRowHeight = 66.0;
 	self.tableView.rowHeight = UITableViewAutomaticDimension;
+
+	ApptentiveProgressNavigationBar *navigationBar = (ApptentiveProgressNavigationBar *)self.navigationController.navigationBar;
+
+	navigationBar.progressView.hidden = YES;
 }
 
 - (void)dealloc {

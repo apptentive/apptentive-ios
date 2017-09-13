@@ -150,6 +150,12 @@
 			HUD.textLabel.text = self.viewModel.thankYouText;
 			HUD.imageView.image = [ApptentiveUtilities imageNamed:@"at_thanks"];
 		}
+	} else {
+		NSIndexPath *firstInvalidQuestionIndex = self.viewModel.firstInvalidAnswerIndexPath;
+		ApptentiveAssertNotNil(firstInvalidQuestionIndex, @"Expected non-nil index");
+		if (firstInvalidQuestionIndex) {
+			[self.collectionView scrollToItemAtIndexPath:firstInvalidQuestionIndex atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:YES];
+		}
 	}
 }
 

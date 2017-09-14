@@ -35,6 +35,8 @@
 @property (readonly, nonatomic) NSString *thankYouText;
 @property (readonly, nonatomic) NSString *missingRequiredItemText;
 
+@property (readonly, nonatomic) NSIndexPath *firstInvalidAnswerIndexPath;
+
 - (NSInteger)numberOfQuestionsInSurvey;
 - (NSInteger)numberOfAnswersForQuestionAtIndex:(NSInteger)index;
 

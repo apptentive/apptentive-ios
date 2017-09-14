@@ -65,6 +65,8 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 
 @property (readonly, nonatomic, getter=isMessageCenterInForeground) BOOL messageCenterInForeground;
 
+@property (assign, nonatomic) UIBackgroundTaskIdentifier backgroundTaskIdentifier;
+
 @end
 
 
@@ -277,11 +279,15 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 
 			[self.conversationManager resume];
 
+			self.payloadSender.suspended = NO;
+
 			[self processQueuedRecords];
 		} else {
 			[self.conversationManager pause];
 
-			[self.payloadSender cancelNetworkOperations];
+			self.payloadSender.suspended = YES;
+
+			[self windDownOperationQueues];
 		}
 
 		[self updateMessageCheckingTimer];
@@ -437,6 +443,33 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	@synchronized(self.configuration) {
 		return [NSKeyedArchiver archiveRootObject:self.configuration toFile:[self configurationPath]];
 	}
+}
+
+- (void)windDownOperationQueues {
+	// Asynchronous tasks off the main thread will not be given a chance to complete automatically.
+	// We create a background task to clear out our operation queue and the payload sender queue.
+	self.backgroundTaskIdentifier = [[UIApplication sharedApplication] beginBackgroundTaskWithName:@"Wind Down Backend" expirationHandler:^{
+		ApptentiveLogError(@"Background task (%ld) did not complete in time.", (unsigned long)self.backgroundTaskIdentifier);
+		[[UIApplication sharedApplication] endBackgroundTask:self.backgroundTaskIdentifier];
+	}];
+
+	// Here, we cancel any ongoing network operations in the payload sender.
+	[self.payloadSender cancelNetworkOperations];
+
+	// Create an operation to end the background task.
+	NSBlockOperation *completeBackgroundTaskOperation = [NSBlockOperation blockOperationWithBlock:^{
+		ApptentiveLogDebug(@"All background operations finished. Exiting.");
+		[[UIApplication sharedApplication] endBackgroundTask:self.backgroundTaskIdentifier];
+	}];
+
+
+	// If there is a save operation in the queue, add it as a cross-queue dependency.
+	if (self.payloadSender.networkQueue.operations.count > 0) {
+		[completeBackgroundTaskOperation addDependency:self.payloadSender.networkQueue.operations.lastObject];
+	}
+
+	// Add the "complete background task" operation to the end of our (serial) background queue.
+	[self.operationQueue addOperation:completeBackgroundTaskOperation];
 }
 
 #pragma mark Message Center

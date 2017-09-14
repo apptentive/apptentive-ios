@@ -58,14 +58,6 @@
 
 	ApptentiveLogVerbose(ApptentiveLogTagPayload, @"Clearing isResuming Flag");
 	self.isResuming = NO;
-
-	if (self.networkQueue.operations.count > 0) {
-		ApptentiveLogVerbose(@"Starting background task to complete save block");
-		// If there is a save block in the queue, complete it in the background.
-		self.backgroundTaskIdentifier = [[UIApplication sharedApplication] beginBackgroundTaskWithName:@"SaveContext" expirationHandler:^{
-			ApptentiveLogError(@"Background task expired. Payload Queue save block did not finish or did not get called.");
-		}];
-	}
 }
 
 #pragma mark - Creating network operations from queued payloads
@@ -103,6 +95,11 @@
 			// Add an operation for every record in the queue
 			// When the operation succeeds (or fails permanently), it deletes the associated record
 			for (ApptentiveSerialRequest *request in queuedRequests) {
+				if (self.isSuspended) {
+					ApptentiveLogDebug(@"Attempting to generate payload operation while suspended. Exiting");
+					return;
+				}
+
                 ApptentiveAssertNotNil(request.authToken, @"Attempted to send a request without a token: %@", request);
                 ApptentiveRequestOperationCallback *callback = [ApptentiveRequestOperationCallback new];
                 callback.operationStartCallback = ^(ApptentiveRequestOperation *operation) {
@@ -143,19 +140,6 @@
                         NSError *parentSaveError;
                         if (![context save:&parentSaveError]) {
                             ApptentiveLogError(@"Unable to save parent managed object context: %@", parentSaveError);
-                        }
-
-						// When the app is backgrounded, Core Data attempts to save before exiting.
-						// We have to call the endBackgroundTask when we are done saving to avoid an error.
-                        if (self.backgroundTaskIdentifier != UIBackgroundTaskInvalid) {
-							ApptentiveLogInfo(@"Completing background Core Data save task.");
-
-							// If there are any other save blocks in the queue, cancel them.
-							[self.networkQueue cancelAllOperations];
-
-							// Notify the application that we've finished saving.
-                            [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTaskIdentifier];
-                            self.backgroundTaskIdentifier = UIBackgroundTaskInvalid;
                         }
                     }];
 				}];

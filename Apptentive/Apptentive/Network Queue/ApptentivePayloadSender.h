@@ -26,8 +26,6 @@ typedef NS_ENUM(NSInteger, ApptentiveQueueStatus) {
 
 @property (weak, nonatomic) id<ApptentivePayloadSenderDelegate> messageDelegate;
 
-@property (assign, nonatomic, getter=isSuspended) BOOL suspended;
-
 - (instancetype)initWithBaseURL:(NSURL *)baseURL apptentiveKey:(NSString *)apptentiveKey apptentiveSignature:(NSString *)apptentiveSignature managedObjectContext:(NSManagedObjectContext *)managedObjectContext delegateQueue:(NSOperationQueue *)delegateQueue;
 - (void)cancelNetworkOperations;
 
@@ -61,6 +59,8 @@ typedef NS_ENUM(NSInteger, ApptentiveQueueStatus) {
  The status (success or failure) of the most recently-sent request in the queue.
  */
 @property (readonly, nonatomic) ApptentiveQueueStatus status;
+
+@property (readonly, weak, nonatomic) NSOperation *saveContextOperation;
 
 @end
 

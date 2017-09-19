@@ -12,6 +12,8 @@
 #import "ApptentiveConversation.h"
 #import "ApptentivePayloadDebug.h"
 
+NSString * const ApptentiveBuildPayloadRequestsName = @"Build Payload Requests";
+
 
 @interface ApptentivePayloadSender ()
 
@@ -53,6 +55,8 @@
 	for (NSOperation *operation in self.networkQueue.operations) {
 		if ([operation isKindOfClass:[ApptentiveRequestOperation class]]) {
 			[operation cancel];
+		} else if ([operation.name isEqualToString:ApptentiveBuildPayloadRequestsName]) {
+			[operation cancel];
 		}
 	}
 
@@ -71,7 +75,7 @@
 	ApptentiveLogVerbose(ApptentiveLogTagPayload, @"Setting isResuming Flag");
 	self.isResuming = YES;
 
-	NSBlockOperation *resumeBlock = [NSBlockOperation blockOperationWithBlock:^{
+	NSBlockOperation *buildPayloadRequestsOperation = [NSBlockOperation blockOperationWithBlock:^{
 		NSManagedObjectContext *childContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
 		[childContext setParentContext:context];
 
@@ -95,11 +99,6 @@
 			// Add an operation for every record in the queue
 			// When the operation succeeds (or fails permanently), it deletes the associated record
 			for (ApptentiveSerialRequest *request in queuedRequests) {
-				if (self.isSuspended) {
-					ApptentiveLogDebug(@"Attempting to generate payload operation while suspended. Exiting");
-					return;
-				}
-
                 ApptentiveAssertNotNil(request.authToken, @"Attempted to send a request without a token: %@", request);
                 ApptentiveRequestOperationCallback *callback = [ApptentiveRequestOperationCallback new];
                 callback.operationStartCallback = ^(ApptentiveRequestOperation *operation) {
@@ -126,7 +125,7 @@
 
 		if (queuedRequests.count) {
 			// Save the context after all enqueued records have been sent
-			NSBlockOperation *saveBlock = [NSBlockOperation blockOperationWithBlock:^{
+			NSBlockOperation *saveBlockOperation = [NSBlockOperation blockOperationWithBlock:^{
 				ApptentiveLogVerbose(ApptentiveLogTagPayload, @"Saving Private Managed Object Context (with completed payloads deleted)");
 				[childContext performBlockAndWait:^{
 					NSError *saveError;
@@ -145,14 +144,20 @@
 				}];
 			}];
 
-			[self.networkQueue addOperation:saveBlock];
+			saveBlockOperation.name = @"Save Child & Parent Context";
+
+			_saveContextOperation = saveBlockOperation;
+
+			[self.networkQueue addOperation:saveBlockOperation];
 		}
 
 		ApptentiveLogVerbose(ApptentiveLogTagPayload, @"Clearing isResuming Flag");
 		self.isResuming = NO;
 	}];
 
-	[self.networkQueue addOperation:resumeBlock];
+	buildPayloadRequestsOperation.name = ApptentiveBuildPayloadRequestsName;
+
+	[self.networkQueue addOperation:buildPayloadRequestsOperation];
 }
 
 #pragma mark - Message send progress

@@ -74,10 +74,6 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 	return self;
 }
 
-- (NSString *)name {
-	return self.URLRequest.URL.path;
-}
-
 - (BOOL)isExecuting {
 	return self.task != nil;
 }
@@ -280,6 +276,10 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 
 - (NSTimeInterval)duration {
 	return -[_startDate timeIntervalSinceNow];
+}
+
+- (NSString *)name {
+	return [NSString stringWithFormat:@"Request Operation (%@ %@)", self.URLRequest.HTTPMethod, self.URLRequest.URL.absoluteString];
 }
 
 @end

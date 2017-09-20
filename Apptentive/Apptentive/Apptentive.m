@@ -138,7 +138,11 @@ static Apptentive *_sharedInstance;
 		ApptentiveLogWarning(@"Apptentive instance is already initialized");
 		return;
 	}
-	_sharedInstance = [[Apptentive alloc] initWithConfiguration:configuration];
+	@try {
+		_sharedInstance = [[Apptentive alloc] initWithConfiguration:configuration];
+	} @catch (NSException *e) {
+		ApptentiveLogCrit(@"Exception while initializing Apptentive instance: %@", e);
+	}
 }
 
 - (id<ApptentiveStyle>)styleSheet {
@@ -476,7 +480,12 @@ static Apptentive *_sharedInstance;
 }
 
 - (BOOL)engage:(NSString *)event withCustomData:(NSDictionary *)customData withExtendedData:(NSArray *)extendedData fromViewController:(UIViewController *)viewController {
-	return [self.backend engageLocalEvent:event userInfo:nil customData:customData extendedData:extendedData fromViewController:viewController];
+	@try {
+		return [self.backend engageLocalEvent:event userInfo:nil customData:customData extendedData:extendedData fromViewController:viewController];
+	} @catch (NSException *e) {
+		ApptentiveLogCrit(@"Exception while engaging event: %@", event);
+		return NO;
+	}
 }
 
 + (NSDictionary *)extendedDataDate:(NSDate *)date {

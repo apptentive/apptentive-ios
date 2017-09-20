@@ -789,6 +789,9 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		[self.view endEditing:YES];
 		[self resizeFooterView:nil];
 	}
+
+	UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, @"Profile Saved");
+	UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification,  self.navigationItem.leftBarButtonItem);
 }
 
 - (IBAction)skipWho:(id)sender {
@@ -805,6 +808,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[self updateState];
 	[self.view endEditing:YES];
 	[self resizeFooterView:nil];
+
+	UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification,  self.navigationItem.leftBarButtonItem);
 }
 
 - (IBAction)showAbout:(id)sender {

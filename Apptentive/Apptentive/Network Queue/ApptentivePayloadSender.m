@@ -69,6 +69,11 @@ NSString * const ApptentiveBuildPayloadRequestsName = @"Build Payload Requests";
 #pragma mark - Creating network operations from queued payloads
 
 - (void)createOperationsForQueuedRequestsInContext:(NSManagedObjectContext *)context {
+	ApptentiveAssertNotNil(context, @"Context is nil");
+	if (context == nil) {
+		return;
+	}
+	
 	if (self.isResuming) {
 		ApptentiveLogVerbose(ApptentiveLogTagPayload, @"Already creating operations for queued payloads. Skipping.");
 		return;
@@ -268,6 +273,11 @@ NSString * const ApptentiveBuildPayloadRequestsName = @"Build Payload Requests";
 #pragma mark - Update missing conversation IDs
 
 - (void)updateQueuedRequestsInContext:(NSManagedObjectContext *)context withConversation:(ApptentiveConversation *)conversation {
+	ApptentiveAssertNotNil(context, @"Context is nil");
+	if (context == nil) {
+		return;
+	}
+	
 	ApptentiveAssertNotNil(conversation, @"Conversation is nil");
 
 	NSString *conversationToken = conversation.token;

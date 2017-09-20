@@ -367,6 +367,12 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	if (conversation.state != ApptentiveConversationStateLegacyPending) {
 		return;
 	}
+	
+	NSManagedObjectContext *parentContext = self.managedObjectContext;
+	ApptentiveAssertNotNil(parentContext, @"Parent context is nil");
+	if (parentContext == nil) {
+		return;
+	}
 
 	NSString *legacyTaskPath = [self.supportDirectoryPath stringByAppendingPathComponent:@"tasks.objects"];
 	NSError *error;
@@ -379,7 +385,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 
 	// Enqueue any unsent messages, events, or survey responses from <= v3.4
 	NSManagedObjectContext *migrationContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-	migrationContext.parentContext = self.managedObjectContext;
+	migrationContext.parentContext = parentContext;
 
 	[migrationContext performBlockAndWait:^{
 		[ApptentiveLegacyMessage enqueueUnsentMessagesInContext:migrationContext forConversation:conversation oldAttachmentPath:oldAttachmentPath newAttachmentPath:newAttachmentPath];

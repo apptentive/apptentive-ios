@@ -35,6 +35,11 @@
 
 + (BOOL)enqueuePayload:(ApptentivePayload *)payload forConversation:(ApptentiveConversation *)conversation usingAuthToken:(nullable NSString *)authToken inContext:(NSManagedObjectContext *)context {
 	ApptentiveAssertOperationQueue(Apptentive.shared.operationQueue);
+	
+	ApptentiveAssertNotNil(context, @"Context is nil");
+	if (context == nil) {
+		return NO;
+	}
 
 	ApptentiveAssertNotNil(payload, @"Attempted to enqueue nil payload");
 	if (payload == nil) {

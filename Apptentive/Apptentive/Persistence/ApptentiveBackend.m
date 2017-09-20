@@ -53,8 +53,6 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 @property (strong, nonatomic) ApptentiveRequestOperation *configurationOperation;
 
 @property (assign, nonatomic) ATBackendState state;
-@property (assign, nonatomic) BOOL working;
-@property (assign, nonatomic) BOOL shouldStopWorking;
 @property (assign, nonatomic) BOOL networkAvailable;
 
 @property (strong, nonatomic) CTTelephonyNetworkInfo *telephonyNetworkInfo;
@@ -64,6 +62,8 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 @property (readonly, nonatomic) ApptentiveMessageManager *messageManager;
 
 @property (readonly, nonatomic, getter=isMessageCenterInForeground) BOOL messageCenterInForeground;
+
+@property (assign, nonatomic) UIBackgroundTaskIdentifier backgroundTaskIdentifier;
 
 @end
 
@@ -101,18 +101,12 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 
 		[ApptentiveReachability sharedReachability];
 
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActiveNotification:) name:UIApplicationDidBecomeActiveNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillEnterForegroundNotification:) name:UIApplicationWillEnterForegroundNotification object:nil];
-
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillTerminateNotification:) name:UIApplicationWillTerminateNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidEnterBackgroundNotification:) name:UIApplicationDidEnterBackgroundNotification object:nil];
-
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleRemoteNotificationInUIApplicationStateActive) name:UIApplicationDidBecomeActiveNotification object:nil];
-
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkStatusChanged:) name:ApptentiveReachabilityStatusChanged object:nil];
-
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(apptentiveInteractionsDidUpdateNotification:) name:ApptentiveInteractionsDidUpdateNotification object:nil];
-
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(authenticationDidFailNotification:) name:ApptentiveAuthenticationDidFailNotification object:nil];
 
 		[self updateAndMonitorDeviceValues];
@@ -138,23 +132,6 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
-
-- (void)updateWorking {
-	if (self.shouldStopWorking) {
-		// Probably going into the background or being terminated.
-		self.working = NO;
-	} else if (self.state != ATBackendStateReady) {
-		// Backend isn't ready yet.
-		self.working = NO;
-	} else if (self.networkAvailable && self.dataManager != nil && [self.dataManager persistentStoreCoordinator] != nil) {
-		// API Key is set and the network and Core Data stack is up. Start working.
-		self.working = YES;
-	} else {
-		// No API Key, no network, or no Core Data. Stop working.
-		self.working = NO;
-	}
-}
-
 
 /**
  Set up class properties on ApptentiveDevice and monitor for changes
@@ -197,51 +174,19 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 #pragma mark Notification Handling
 
 - (void)networkStatusChanged:(NSNotification *)notification {
-	[self.operationQueue addOperationWithBlock:^{
-        ApptentiveNetworkStatus status = [[ApptentiveReachability sharedReachability] currentNetworkStatus];
-        if (status == ApptentiveNetworkNotReachable) {
-            self.networkAvailable = NO;
-        } else {
-            self.networkAvailable = YES;
-        }
-        [self updateWorking];
-	}];
+	[self updateNetworkingForCurrentNetworkStatus];
 }
 
 - (void)applicationWillTerminateNotification:(NSNotification *)notification {
-	[self.operationQueue addOperationWithBlock:^{
-        [self stopWorking];
-	}];
+	[self shutDown];
 }
 
 - (void)applicationDidEnterBackgroundNotification:(NSNotification *)notification {
-	[self.operationQueue addOperationWithBlock:^{
-        [self stopWorking];
-	}];
-}
-
-- (void)applicationDidBecomeActiveNotification:(NSNotification *)notification {
-	[self.operationQueue addOperationWithBlock:^{
-        [self startWorking];
-	}];
+	[self shutDown];
 }
 
 - (void)applicationWillEnterForegroundNotification:(NSNotification *)notification {
-	[self.operationQueue addOperationWithBlock:^{
-        [self startWorking];
-	}];
-}
-
-- (void)stopWorking {
-	ApptentiveAssertOperationQueue(self.operationQueue);
-	self.shouldStopWorking = YES;
-	[self updateWorking];
-}
-
-- (void)startWorking {
-	ApptentiveAssertOperationQueue(self.operationQueue);
-	self.shouldStopWorking = NO;
-	[self updateWorking];
+	[self resume];
 }
 
 - (void)apptentiveInteractionsDidUpdateNotification:(NSNotification *)notification {
@@ -258,36 +203,6 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 
 #pragma mark Accessors
 
-- (void)setWorking:(BOOL)working {
-#if APPTENTIVE_DEBUG
-	[Apptentive.shared checkSDKConfiguration];
-#endif
-
-	if (_working != working) {
-		_working = working;
-		if (_working) {
-#if APPTENTIVE_DEBUG
-			self.configuration.expiry = [NSDate distantPast];
-#endif
-			if ([self.configuration.expiry timeIntervalSinceNow] <= 0) {
-				[self fetchConfiguration];
-			}
-
-			[self.client resetBackoffDelay];
-
-			[self.conversationManager resume];
-
-			[self processQueuedRecords];
-		} else {
-			[self.conversationManager pause];
-
-			[self.payloadSender cancelNetworkOperations];
-		}
-
-		[self updateMessageCheckingTimer];
-	}
-}
-
 - (BOOL)isReady {
 	return (self.state == ATBackendStateReady);
 }
@@ -301,7 +216,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 #pragma mark -
 
 - (void)fetchConfiguration {
-	if (self.configurationOperation != nil || !self.working) {
+	if (self.configurationOperation != nil || !self.isReady || !self.networkAvailable) {
 		return;
 	}
 
@@ -334,6 +249,8 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	}
 }
 
+#pragma mark - Lifecycle
+
 - (void)startUp {
 	ApptentiveAssertOperationQueue(self.operationQueue);
 
@@ -349,6 +266,67 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	[self.conversationManager loadActiveConversation];
 
 	[self.conversationManager.activeConversation checkForDiffs];
+}
+
+- (void)shutDown {
+	ApptentiveLogVerbose(@"Shutting down backend");
+
+	[self.operationQueue addOperationWithBlock:^{
+		[self.conversationManager pause];
+	}];
+
+	ApptentiveLogVerbose(@"Operations in background queue: %@", [self.operationQueue.operations valueForKeyPath:@"name"]);
+	ApptentiveLogVerbose(@"operations in payload network queue: %@", [self.payloadSender.networkQueue.operations valueForKeyPath:@"name"]);
+
+	// Asynchronous tasks off the main thread will not be given a chance to complete automatically.
+	// We create a background task to clear out our operation queue and the payload sender queue.
+	self.backgroundTaskIdentifier = [[UIApplication sharedApplication] beginBackgroundTaskWithName:@"Wind Down Backend" expirationHandler:^{
+		ApptentiveLogError(@"Background task (%ld) did not complete in time.", (unsigned long)self.backgroundTaskIdentifier);
+		[[UIApplication sharedApplication] endBackgroundTask:self.backgroundTaskIdentifier];
+	}];
+
+	// Here, we cancel any ongoing network operations in the payload sender.
+	[self.payloadSender cancelNetworkOperations];
+
+	// Create an operation to end the background task.
+	NSBlockOperation *completeBackgroundTaskOperation = [NSBlockOperation blockOperationWithBlock:^{
+		ApptentiveLogDebug(@"All background operations finished. Exiting.");
+		[[UIApplication sharedApplication] endBackgroundTask:self.backgroundTaskIdentifier];
+	}];
+
+	completeBackgroundTaskOperation.name = @"Complete background task";
+
+	// If there is a save operation in the queue, add it as a cross-queue dependency.
+	NSOperation *saveContextOperation = self.payloadSender.saveContextOperation;
+
+	if (saveContextOperation) {
+		[completeBackgroundTaskOperation addDependency:saveContextOperation];
+	}
+
+	// Add the "complete background task" operation to the end of our (serial) background queue.
+	[self.operationQueue addOperation:completeBackgroundTaskOperation];
+}
+
+- (void)resume {
+#if APPTENTIVE_DEBUG
+	[Apptentive.shared checkSDKConfiguration];
+
+	self.configuration.expiry = [NSDate distantPast];
+#endif
+
+	[self updateNetworkingForCurrentNetworkStatus];
+
+	if (self.networkAvailable) {
+		if ([self.configuration.expiry timeIntervalSinceNow] <= 0) {
+			[self fetchConfiguration];
+		}
+	}
+
+	[self.operationQueue addOperationWithBlock:^{
+		[self.conversationManager resume];
+
+		[self processQueuedRecords];
+	}];
 }
 
 // Note: must be called on main thread
@@ -420,7 +398,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 - (void)processQueuedRecords {
 	ApptentiveAssertOperationQueue(self.operationQueue);
 
-	if (self.isReady && self.working && self.conversationManager.activeConversation.token != nil) {
+	if (self.isReady && self.networkAvailable && self.conversationManager.activeConversation.token != nil) {
 		[self.payloadSender createOperationsForQueuedRequestsInContext:self.managedObjectContext];
 	}
 }
@@ -437,6 +415,24 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	@synchronized(self.configuration) {
 		return [NSKeyedArchiver archiveRootObject:self.configuration toFile:[self configurationPath]];
 	}
+}
+
+- (void)updateNetworkingForCurrentNetworkStatus {
+	BOOL networkWasAvailable = self.networkAvailable;
+
+	ApptentiveNetworkStatus status = [[ApptentiveReachability sharedReachability] currentNetworkStatus];
+	self.networkAvailable = (status != ApptentiveNetworkNotReachable);
+
+	[self.operationQueue addOperationWithBlock:^{
+		if (self.networkAvailable != networkWasAvailable) {
+			if (self.networkAvailable) {
+				[self.client resetBackoffDelay];
+				[self.payloadSender resetBackoffDelay];
+			} else {
+				[self.payloadSender cancelNetworkOperations];
+			}
+		}
+	}];
 }
 
 #pragma mark Message Center
@@ -516,7 +512,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 - (void)updateMessageCheckingTimer {
 	ApptentiveAssertOperationQueue(self.operationQueue);
 	if (self.messageManager != nil) {
-		if (self.working) {
+		if (self.networkAvailable) {
 			if (self.messageCenterInForeground) {
 				self.messageManager.pollingInterval = self.configuration.messageCenter.foregroundPollingInterval;
 			} else {
@@ -626,18 +622,6 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 
 - (NSString *)configurationPath {
 	return [self.supportDirectoryPath stringByAppendingPathComponent:@"configuration-v1.archive"];
-}
-
-#pragma mark - Debugging
-
-- (void)resetBackend {
-	[self stopWorking];
-
-	NSError *error;
-
-	if (![[NSFileManager defaultManager] removeItemAtPath:self.supportDirectoryPath error:&error]) {
-		ApptentiveLogError(@"Unable to delete backend data");
-	}
 }
 
 #pragma mark -

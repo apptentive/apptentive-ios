@@ -166,12 +166,6 @@ NSNotificationName _Nonnull const ApptentiveConversationChangedNotification = @"
 	}
 }
 
-- (void)resetSDK {
-	[self.backend resetBackend];
-
-	[self setValue:nil forKey:@"backend"];
-}
-
 - (NSDictionary *)customPersonData {
 	return self.backend.conversationManager.activeConversation.person.customData ?: @{};
 }

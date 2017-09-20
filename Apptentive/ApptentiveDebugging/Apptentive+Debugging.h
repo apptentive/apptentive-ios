@@ -60,8 +60,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)conversationIsActiveAtIndex:(NSInteger)index;
 - (void)deleteConversationAtIndex:(NSInteger)index;
 
-- (void)resetSDK;
-
 - (void)startObservingConversation;
 
 // Local cache of conversation to avoid race condition on logout

@@ -636,6 +636,8 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	[self.operationQueue addOperation:conversationSaveOperation];
 }
 
+#pragma mark - Process network responses
+
 - (void)conversation:(ApptentiveConversation *)conversation processFetchResponse:(NSDictionary *)conversationResponse {
 	[self updateActiveConversation:conversation withResponse:conversationResponse];
 }
@@ -750,6 +752,8 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 		[self handleConversationStateChange:self.activeConversation];
 
+		[self updateManifestIfNeeded];
+
 		return YES;
 	} else {
 		ApptentiveAssertTrue(NO, @"Conversation response did not include token, conversation identifier, device identifier and/or person identifier.");
@@ -786,6 +790,8 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 		[self saveConversation:self.activeConversation];
 		[self handleConversationStateChange:self.activeConversation];
+
+		[self updateManifestIfNeeded];
 
 		return YES;
 	}
@@ -967,7 +973,6 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 	[self.activeConversation checkForDiffs];
 
-	ApptentiveAssertNotNil(self.messageManager, @"Attempted to resume conversation manager without message manager");
 	[self.messageManager checkForMessages];
 }
 

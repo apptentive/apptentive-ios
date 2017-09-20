@@ -12,6 +12,8 @@
 #import "ApptentiveConversation.h"
 #import "ApptentivePayloadDebug.h"
 
+NSString * const ApptentiveBuildPayloadRequestsName = @"Build Payload Requests";
+
 
 @interface ApptentivePayloadSender ()
 
@@ -52,20 +54,16 @@
 - (void)cancelNetworkOperations {
 	for (NSOperation *operation in self.networkQueue.operations) {
 		if ([operation isKindOfClass:[ApptentiveRequestOperation class]]) {
+			ApptentiveLogVerbose(@"Cancelling request operation %@.", operation.name);
+			[operation cancel];
+		} else if ([operation.name isEqualToString:ApptentiveBuildPayloadRequestsName]) {
+			ApptentiveLogVerbose(@"Cancelling build payload requets operation.");
 			[operation cancel];
 		}
 	}
 
 	ApptentiveLogVerbose(ApptentiveLogTagPayload, @"Clearing isResuming Flag");
 	self.isResuming = NO;
-
-	if (self.networkQueue.operations.count > 0) {
-		ApptentiveLogVerbose(@"Starting background task to complete save block");
-		// If there is a save block in the queue, complete it in the background.
-		self.backgroundTaskIdentifier = [[UIApplication sharedApplication] beginBackgroundTaskWithName:@"SaveContext" expirationHandler:^{
-			ApptentiveLogError(@"Background task expired. Payload Queue save block did not finish or did not get called.");
-		}];
-	}
 }
 
 #pragma mark - Creating network operations from queued payloads
@@ -79,7 +77,7 @@
 	ApptentiveLogVerbose(ApptentiveLogTagPayload, @"Setting isResuming Flag");
 	self.isResuming = YES;
 
-	NSBlockOperation *resumeBlock = [NSBlockOperation blockOperationWithBlock:^{
+	NSBlockOperation *buildPayloadRequestsOperation = [NSBlockOperation blockOperationWithBlock:^{
 		NSManagedObjectContext *childContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
 		[childContext setParentContext:context];
 
@@ -129,7 +127,7 @@
 
 		if (queuedRequests.count) {
 			// Save the context after all enqueued records have been sent
-			NSBlockOperation *saveBlock = [NSBlockOperation blockOperationWithBlock:^{
+			NSBlockOperation *saveBlockOperation = [NSBlockOperation blockOperationWithBlock:^{
 				ApptentiveLogVerbose(ApptentiveLogTagPayload, @"Saving Private Managed Object Context (with completed payloads deleted)");
 				[childContext performBlockAndWait:^{
 					NSError *saveError;
@@ -144,31 +142,24 @@
                         if (![context save:&parentSaveError]) {
                             ApptentiveLogError(@"Unable to save parent managed object context: %@", parentSaveError);
                         }
-
-						// When the app is backgrounded, Core Data attempts to save before exiting.
-						// We have to call the endBackgroundTask when we are done saving to avoid an error.
-                        if (self.backgroundTaskIdentifier != UIBackgroundTaskInvalid) {
-							ApptentiveLogInfo(@"Completing background Core Data save task.");
-
-							// If there are any other save blocks in the queue, cancel them.
-							[self.networkQueue cancelAllOperations];
-
-							// Notify the application that we've finished saving.
-                            [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTaskIdentifier];
-                            self.backgroundTaskIdentifier = UIBackgroundTaskInvalid;
-                        }
                     }];
 				}];
 			}];
 
-			[self.networkQueue addOperation:saveBlock];
+			saveBlockOperation.name = @"Save Child & Parent Context";
+
+			_saveContextOperation = saveBlockOperation;
+
+			[self.networkQueue addOperation:saveBlockOperation];
 		}
 
 		ApptentiveLogVerbose(ApptentiveLogTagPayload, @"Clearing isResuming Flag");
 		self.isResuming = NO;
 	}];
 
-	[self.networkQueue addOperation:resumeBlock];
+	buildPayloadRequestsOperation.name = ApptentiveBuildPayloadRequestsName;
+
+	[self.networkQueue addOperation:buildPayloadRequestsOperation];
 }
 
 #pragma mark - Message send progress

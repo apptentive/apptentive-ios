@@ -60,6 +60,8 @@ typedef NS_ENUM(NSInteger, ApptentiveQueueStatus) {
  */
 @property (readonly, nonatomic) ApptentiveQueueStatus status;
 
+@property (readonly, weak, nonatomic) NSOperation *saveContextOperation;
+
 @end
 
 @protocol ApptentivePayloadSenderDelegate <NSObject>

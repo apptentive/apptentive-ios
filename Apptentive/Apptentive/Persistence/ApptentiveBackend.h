@@ -99,6 +99,4 @@ extern NSString *const ApptentiveAuthenticationDidFailNotificationKeyConversatio
 - (void)schedulePersonUpdate;
 - (void)scheduleDeviceUpdate;
 
-- (void)resetBackend;
-
 @end

@@ -75,15 +75,21 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 }
 
 - (BOOL)isExecuting {
-	return self.task != nil;
+	@synchronized(self) {
+		return self.task != nil;
+	}
 }
 
 - (BOOL)isFinished {
-	return self.wasCompleted || self.wasCancelled;
+	@synchronized(self) {
+		return self.wasCompleted || self.wasCancelled;
+	}
 }
 
 - (BOOL)isCancelled {
-	return self.wasCancelled;
+	@synchronized(self) {
+		return self.wasCancelled;
+	}
 }
 
 - (void)main {
@@ -91,64 +97,68 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 }
 
 - (void)startTask {
-	_startDate = [[NSDate alloc] init];
+	@synchronized(self) {
+		_startDate = [[NSDate alloc] init];
 
-	if (self.cancelled) {
-		return;
-	}
-
-	[self willChangeValueForKey:@"isExecuting"];
-	_task = [self.dataSource.URLSession dataTaskWithRequest:self.URLRequest completionHandler:^(NSData *_Nullable data, NSURLResponse *_Nullable response, NSError *_Nullable error) {
-		if (self.isCancelled) {
+		if (self.cancelled) {
 			return;
-		} else if (!response) {
-			[self processNetworkError:error];
-		} else {
-			NSHTTPURLResponse *URLResponse = (NSHTTPURLResponse *)response;
+		}
 
-			if ([[[self class] okStatusCodes] containsIndex:URLResponse.statusCode]) {
-				NSObject *responseObject = nil;
+		[self willChangeValueForKey:@"isExecuting"];
+		_task = [self.dataSource.URLSession dataTaskWithRequest:self.URLRequest completionHandler:^(NSData *_Nullable data, NSURLResponse *_Nullable response, NSError *_Nullable error) {
+			if (self.isCancelled) {
+				return;
+			} else if (!response) {
+				[self processNetworkError:error];
+			} else {
+				NSHTTPURLResponse *URLResponse = (NSHTTPURLResponse *)response;
 
-				if (URLResponse.statusCode != 204) { // "No Content"
-					responseObject = [ApptentiveJSONSerialization JSONObjectWithData:data error:&error];
+				if ([[[self class] okStatusCodes] containsIndex:URLResponse.statusCode]) {
+					NSObject *responseObject = nil;
 
-					if (responseObject == nil) { // Decoding error
-						[self processHTTPError:error withResponse:URLResponse responseData:data];
+					if (URLResponse.statusCode != 204) { // "No Content"
+						responseObject = [ApptentiveJSONSerialization JSONObjectWithData:data error:&error];
+
+						if (responseObject == nil) { // Decoding error
+							[self processHTTPError:error withResponse:URLResponse responseData:data];
+						}
 					}
+
+					[self processResponse:URLResponse withObject:responseObject];
+				} else {
+					[self processHTTPError:error withResponse:URLResponse responseData:data];
 				}
 
-				[self processResponse:URLResponse withObject:responseObject];
-			} else {
-				[self processHTTPError:error withResponse:URLResponse responseData:data];
+				// check if request failed due to an authentication failure
+				if (URLResponse.statusCode == 401) {
+					[self processAuthenticationFailureResponseData:data];
+				}
 			}
-            
-            // check if request failed due to an authentication failure
-            if (URLResponse.statusCode == 401) {
-                [self processAuthenticationFailureResponseData:data];
-            }
-		}
-	}];
+		}];
 
-	[self.task resume];
-	[self didChangeValueForKey:@"isExecuting"];
+		[self.task resume];
+		[self didChangeValueForKey:@"isExecuting"];
 
-	ApptentiveLogDebug(ApptentiveLogTagNetwork, @"%@ %@ started.", self.URLRequest.HTTPMethod, self.URLRequest.URL.absoluteString);
-	ApptentiveLogVerbose(ApptentiveLogTagNetwork, @"Headers: %@%@", self.URLRequest.allHTTPHeaderFields, self.URLRequest.HTTPBody.length > 0 ? [NSString stringWithFormat:@"\n-----------PAYLOAD BEGIN-----------\n%@\n-----------PAYLOAD END-----------", [[NSString alloc] initWithData:self.URLRequest.HTTPBody encoding:NSUTF8StringEncoding]] : @"");
+		ApptentiveLogDebug(ApptentiveLogTagNetwork, @"%@ %@ started.", self.URLRequest.HTTPMethod, self.URLRequest.URL.absoluteString);
+		ApptentiveLogVerbose(ApptentiveLogTagNetwork, @"Headers: %@%@", self.URLRequest.allHTTPHeaderFields, self.URLRequest.HTTPBody.length > 0 ? [NSString stringWithFormat:@"\n-----------PAYLOAD BEGIN-----------\n%@\n-----------PAYLOAD END-----------", [[NSString alloc] initWithData:self.URLRequest.HTTPBody encoding:NSUTF8StringEncoding]] : @"");
 
-	[self.delegate requestOperationDidStart:self];
+		[self.delegate requestOperationDidStart:self];
+	}
 }
 
 - (void)cancel {
-	BOOL shouldFinish = self.isExecuting;
+	@synchronized(self) {
+		BOOL shouldFinish = self.isExecuting;
 
-	[self willChangeValueForKey:@"isCancelled"];
-	[self.task cancel];
-	[self didChangeValueForKey:@"isCancelled"];
+		[self willChangeValueForKey:@"isCancelled"];
+		[self.task cancel];
+		[self didChangeValueForKey:@"isCancelled"];
 
-	if (shouldFinish) {
-		[self willChangeValueForKey:@"isFinished"];
-		_wasCompleted = YES;
-		[self didChangeValueForKey:@"isFinished"];
+		if (shouldFinish) {
+			[self willChangeValueForKey:@"isFinished"];
+			_wasCompleted = YES;
+			[self didChangeValueForKey:@"isFinished"];
+		}
 	}
 }
 
@@ -239,12 +249,14 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 }
 
 - (void)completeOperation {
-	[self willChangeValueForKey:@"isFinished"];
-	[self willChangeValueForKey:@"isExecuting"];
-	_task = nil;
-	self.wasCompleted = YES;
-	[self didChangeValueForKey:@"isFinished"];
-	[self didChangeValueForKey:@"isExecuting"];
+	@synchronized(self) {
+		[self willChangeValueForKey:@"isFinished"];
+		[self willChangeValueForKey:@"isExecuting"];
+		_task = nil;
+		self.wasCompleted = YES;
+		[self didChangeValueForKey:@"isFinished"];
+		[self didChangeValueForKey:@"isExecuting"];
+	}
 }
 
 - (void)finishWithError:(NSError *)error {

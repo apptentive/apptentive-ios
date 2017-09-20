@@ -167,11 +167,9 @@ NSString * const ApptentiveBuildPayloadRequestsName = @"Build Payload Requests";
 #pragma mark URL sesison delegate
 
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didSendBodyData:(int64_t)bytesSent totalBytesSent:(int64_t)totalBytesSent totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend {
-	@synchronized(self.activeTaskProgress) {
-		if (self.activeTaskProgress[@(task.taskIdentifier)]) {
-			self.activeTaskProgress[@(task.taskIdentifier)] = [NSNumber numberWithDouble:(double)totalBytesSent / (double)totalBytesExpectedToSend];
-			[self updateProgress];
-		}
+	if (self.activeTaskProgress[@(task.taskIdentifier)]) {
+		self.activeTaskProgress[@(task.taskIdentifier)] = [NSNumber numberWithDouble:(double)totalBytesSent / (double)totalBytesExpectedToSend];
+		[self updateProgress];
 	}
 }
 
@@ -193,10 +191,8 @@ NSString * const ApptentiveBuildPayloadRequestsName = @"Build Payload Requests";
 
 - (void)addActiveOperation:(ApptentiveRequestOperation *)operation {
 	if (((ApptentiveSerialRequest *)operation.request).messageRequest) {
-		@synchronized(self.activeTaskProgress) {
-			[self.activeTaskProgress setObject:@0 forKey:@(operation.task.taskIdentifier)];
-			[self updateProgress];
-		}
+		[self.activeTaskProgress setObject:@0 forKey:@(operation.task.taskIdentifier)];
+		[self updateProgress];
 	}
 }
 

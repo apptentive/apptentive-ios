@@ -142,7 +142,9 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 		ApptentiveLogDebug(ApptentiveLogTagNetwork, @"%@ %@ started.", self.URLRequest.HTTPMethod, self.URLRequest.URL.absoluteString);
 		ApptentiveLogVerbose(ApptentiveLogTagNetwork, @"Headers: %@%@", self.URLRequest.allHTTPHeaderFields, self.URLRequest.HTTPBody.length > 0 ? [NSString stringWithFormat:@"\n-----------PAYLOAD BEGIN-----------\n%@\n-----------PAYLOAD END-----------", [[NSString alloc] initWithData:self.URLRequest.HTTPBody encoding:NSUTF8StringEncoding]] : @"");
 
-		[self.delegate requestOperationDidStart:self];
+		[self.dataSource.URLSession.delegateQueue addOperationWithBlock:^{
+			[self.delegate requestOperationDidStart:self];
+		}];
 	}
 }
 

@@ -54,8 +54,10 @@ NSString * const ApptentiveBuildPayloadRequestsName = @"Build Payload Requests";
 - (void)cancelNetworkOperations {
 	for (NSOperation *operation in self.networkQueue.operations) {
 		if ([operation isKindOfClass:[ApptentiveRequestOperation class]]) {
+			ApptentiveLogVerbose(@"Cancelling request operation %@.", operation.name);
 			[operation cancel];
 		} else if ([operation.name isEqualToString:ApptentiveBuildPayloadRequestsName]) {
+			ApptentiveLogVerbose(@"Cancelling build payload requets operation.");
 			[operation cancel];
 		}
 	}

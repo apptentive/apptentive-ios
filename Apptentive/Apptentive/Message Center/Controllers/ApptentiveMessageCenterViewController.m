@@ -502,10 +502,20 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	}
 
 	if (self.state != ATMessageCenterStateWhoCard && self.state != ATMessageCenterStateComposing) {
+		ATMessageCenterState oldState = self.state;
+		
 		[self updateState];
-
+		
 		[self resizeFooterView:nil];
 		[self scrollToLastMessageAnimated:YES];
+		
+		if (self.state == ATMessageCenterStateSending && oldState == ATMessageCenterStateConfirmed) {
+			UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, self.statusView.statusLabel);
+			
+			if (self.viewModel.statusBody.length > 0) {
+				UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, self.viewModel.statusBody);
+			}
+		}
 	}
 }
 

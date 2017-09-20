@@ -174,15 +174,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 #pragma mark Notification Handling
 
 - (void)networkStatusChanged:(NSNotification *)notification {
-	[self.operationQueue addOperationWithBlock:^{
-        ApptentiveNetworkStatus status = [[ApptentiveReachability sharedReachability] currentNetworkStatus];
-
-		self.networkAvailable = (status != ApptentiveNetworkNotReachable);
-
-		if (!self.networkAvailable) {
-			[self.payloadSender cancelNetworkOperations];
-		}
-	}];
+	[self updateNetworkingForCurrentNetworkStatus];
 }
 
 - (void)applicationWillTerminateNotification:(NSNotification *)notification {
@@ -322,12 +314,12 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	self.configuration.expiry = [NSDate distantPast];
 #endif
 
+	[self updateNetworkingForCurrentNetworkStatus];
+
 	if (self.networkAvailable) {
 		if ([self.configuration.expiry timeIntervalSinceNow] <= 0) {
 			[self fetchConfiguration];
 		}
-
-		[self.client resetBackoffDelay];
 	}
 
 	[self.operationQueue addOperationWithBlock:^{
@@ -423,6 +415,24 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	@synchronized(self.configuration) {
 		return [NSKeyedArchiver archiveRootObject:self.configuration toFile:[self configurationPath]];
 	}
+}
+
+- (void)updateNetworkingForCurrentNetworkStatus {
+	BOOL networkWasAvailable = self.networkAvailable;
+
+	ApptentiveNetworkStatus status = [[ApptentiveReachability sharedReachability] currentNetworkStatus];
+	self.networkAvailable = (status != ApptentiveNetworkNotReachable);
+
+	[self.operationQueue addOperationWithBlock:^{
+		if (self.networkAvailable != networkWasAvailable) {
+			if (self.networkAvailable) {
+				[self.client resetBackoffDelay];
+				[self.payloadSender resetBackoffDelay];
+			} else {
+				[self.payloadSender cancelNetworkOperations];
+			}
+		}
+	}];
 }
 
 #pragma mark Message Center

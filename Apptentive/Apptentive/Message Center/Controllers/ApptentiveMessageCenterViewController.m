@@ -509,7 +509,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		[self resizeFooterView:nil];
 		[self scrollToLastMessageAnimated:YES];
 		
-		if (self.state == ApptentiveMessageStateSent && oldState == ATMessageCenterStateConfirmed) {
+		if (self.state == ATMessageCenterStateSending && oldState == ATMessageCenterStateConfirmed) {
 			UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, self.statusView.statusLabel);
 			
 			if (self.viewModel.statusBody.length > 0) {

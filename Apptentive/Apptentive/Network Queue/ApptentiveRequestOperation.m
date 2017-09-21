@@ -159,6 +159,11 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 		if (shouldFinish) {
 			[self willChangeValueForKey:@"isFinished"];
 			_wasCompleted = YES;
+
+			[self.dataSource.URLSession.delegateQueue addOperationWithBlock:^{
+				[self.delegate requestOperation:self didFailWithError:nil];
+			}];
+
 			[self didChangeValueForKey:@"isFinished"];
 		}
 	}

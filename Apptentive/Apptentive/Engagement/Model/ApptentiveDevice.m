@@ -189,7 +189,7 @@ static UIContentSizeCategory _currentContentSizeCategory;
 	_localeRaw = [NSLocale currentLocale].localeIdentifier;
 	NSDictionary *localeComponents = [NSLocale componentsFromLocaleIdentifier:[NSLocale currentLocale].localeIdentifier];
 	_localeCountryCode = [localeComponents objectForKey:NSLocaleCountryCode];
-	_localeLanguageCode = [NSLocale preferredLanguages].firstObject;
+	_localeLanguageCode = [NSBundle mainBundle].preferredLocalizations.firstObject;
 	_UTCOffset = [NSTimeZone systemTimeZone].secondsFromGMT;
 
 	_integrationConfiguration = ApptentiveDevice.integrationConfiguration;

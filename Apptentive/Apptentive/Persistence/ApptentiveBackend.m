@@ -354,8 +354,12 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 - (void)finishStartup {
 	self.state = ATBackendStateReady;
 
-	[self networkStatusChanged:nil];
+	[self updateNetworkingForCurrentNetworkStatus];
 	[self startMonitoringAppLifecycleMetrics];
+
+	if (self.networkAvailable) {
+		[self fetchConfiguration];
+	}
 }
 
 - (void)migrateLegacyCoreDataAndTaskQueueForConversation:(ApptentiveConversation *)conversation conversationDirectoryPath:(NSString *)directoryPath {

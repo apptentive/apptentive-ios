@@ -216,7 +216,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 #pragma mark -
 
 - (void)fetchConfiguration {
-	if (self.configurationOperation != nil || !self.isReady || !self.networkAvailable) {
+	if (self.configurationOperation != nil || !self.isReady || !self.networkAvailable || [self.configuration.expiry timeIntervalSinceNow] > 0) {
 		return;
 	}
 
@@ -317,9 +317,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	[self updateNetworkingForCurrentNetworkStatus];
 
 	if (self.networkAvailable) {
-		if ([self.configuration.expiry timeIntervalSinceNow] <= 0) {
-			[self fetchConfiguration];
-		}
+		[self fetchConfiguration];
 	}
 
 	[self.operationQueue addOperationWithBlock:^{
@@ -356,8 +354,12 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 - (void)finishStartup {
 	self.state = ATBackendStateReady;
 
-	[self networkStatusChanged:nil];
+	[self updateNetworkingForCurrentNetworkStatus];
 	[self startMonitoringAppLifecycleMetrics];
+
+	if (self.networkAvailable) {
+		[self fetchConfiguration];
+	}
 }
 
 - (void)migrateLegacyCoreDataAndTaskQueueForConversation:(ApptentiveConversation *)conversation conversationDirectoryPath:(NSString *)directoryPath {

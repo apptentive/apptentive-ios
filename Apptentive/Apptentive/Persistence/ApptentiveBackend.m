@@ -180,18 +180,18 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 }
 
 - (void)applicationWillTerminateNotification:(NSNotification *)notification {
-	[self engageApptentiveAppEvent:ATInteractionAppEventLabelExit];
+	[self addExitMetric];
 	[self shutDown];
 }
 
 - (void)applicationDidEnterBackgroundNotification:(NSNotification *)notification {
-	[self engageApptentiveAppEvent:ATInteractionAppEventLabelExit];
+	[self addExitMetric];
 	[self shutDown];
 }
 
 - (void)applicationWillEnterForegroundNotification:(NSNotification *)notification {
 	[self resume];
-	[self engageApptentiveAppEvent:ATInteractionAppEventLabelLaunch];
+	[self addLaunchMetric];
 }
 
 - (void)apptentiveInteractionsDidUpdateNotification:(NSNotification *)notification {
@@ -450,6 +450,10 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 
 - (void)addLaunchMetric {
 	[self engageApptentiveAppEvent:ATInteractionAppEventLabelLaunch];
+}
+
+- (void)addExitMetric {
+	[self engageApptentiveAppEvent:ATInteractionAppEventLabelExit];
 }
 
 #pragma mark Message Center

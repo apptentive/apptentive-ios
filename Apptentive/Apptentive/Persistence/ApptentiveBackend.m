@@ -8,7 +8,6 @@
 
 #import "ApptentiveBackend.h"
 #import "ApptentiveBackend+Engagement.h"
-#import "ApptentiveBackend+Metrics.h"
 #import "Apptentive_Private.h"
 #import "ApptentiveDataManager.h"
 #import "ApptentiveReachability.h"
@@ -27,6 +26,7 @@
 #import "ApptentiveConfigurationRequest.h"
 #import "ApptentivePayloadSender.h"
 #import "ApptentiveSafeCollections.h"
+#import "ApptentiveInteraction.h"
 
 #import "ApptentiveLegacyEvent.h"
 #import "ApptentiveLegacySurveyResponse.h"
@@ -39,6 +39,8 @@ NSString *const ApptentiveAuthenticationDidFailNotification = @"ApptentiveAuthen
 NSString *const ApptentiveAuthenticationDidFailNotificationKeyErrorType = @"errorType";
 NSString *const ApptentiveAuthenticationDidFailNotificationKeyErrorMessage = @"errorMessage";
 NSString *const ApptentiveAuthenticationDidFailNotificationKeyConversationIdentifier = @"conversationIdentifier";
+NSString *const ATInteractionAppEventLabelLaunch = @"launch";
+NSString *const ATInteractionAppEventLabelExit = @"exit";
 
 
 typedef NS_ENUM(NSInteger, ATBackendState) {
@@ -178,15 +180,18 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 }
 
 - (void)applicationWillTerminateNotification:(NSNotification *)notification {
+	[self engageApptentiveAppEvent:ATInteractionAppEventLabelExit];
 	[self shutDown];
 }
 
 - (void)applicationDidEnterBackgroundNotification:(NSNotification *)notification {
+	[self engageApptentiveAppEvent:ATInteractionAppEventLabelExit];
 	[self shutDown];
 }
 
 - (void)applicationWillEnterForegroundNotification:(NSNotification *)notification {
 	[self resume];
+	[self engageApptentiveAppEvent:ATInteractionAppEventLabelLaunch];
 }
 
 - (void)apptentiveInteractionsDidUpdateNotification:(NSNotification *)notification {
@@ -355,7 +360,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	self.state = ATBackendStateReady;
 
 	[self updateNetworkingForCurrentNetworkStatus];
-	[self startMonitoringAppLifecycleMetrics];
+	[self addLaunchMetric];
 
 	if (self.networkAvailable) {
 		[self fetchConfiguration];
@@ -441,6 +446,10 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 			}
 		}
 	}];
+}
+
+- (void)addLaunchMetric {
+	[self engageApptentiveAppEvent:ATInteractionAppEventLabelLaunch];
 }
 
 #pragma mark Message Center

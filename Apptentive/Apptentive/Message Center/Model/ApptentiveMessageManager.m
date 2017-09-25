@@ -201,6 +201,13 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 
 	ApptentiveAssertOperationQueue(Apptentive.shared.backend.operationQueue);
 
+	BOOL needsSave = NO;
+
+	if (self.messageStore.lastMessageIdentifier != lastDownloadedMessageIdentifier) {
+		self.messageStore.lastMessageIdentifier = lastDownloadedMessageIdentifier;
+		needsSave = YES;
+	}
+
 	if (addedMessages.count + updatedMessages.count > 0) {
 		// Add local messages that aren't yet on server's list
 		for (ApptentiveMessage *message in self.messages) {
@@ -245,13 +252,16 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 			[self.delegate messageManagerDidEndUpdates:self];
 		});
 
-		self.messageStore.lastMessageIdentifier = lastDownloadedMessageIdentifier;
-		[self saveMessageStore];
+		needsSave = YES;
 
 		[self messageFetchCompleted:YES];
 		[self updateUnreadCount];
 	} else {
 		[self messageFetchCompleted:NO];
+	}
+
+	if (needsSave) {
+		[self saveMessageStore];
 	}
 }
 

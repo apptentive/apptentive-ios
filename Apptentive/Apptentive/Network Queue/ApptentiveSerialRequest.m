@@ -159,7 +159,13 @@
 }
 
 - (BOOL)isMessageRequest {
-	return [self.type isEqualToString:@"message"]; // TODO: get rid of literal string
+	__block BOOL result;
+
+	[self.managedObjectContext performBlockAndWait:^{
+		result = [self.type isEqualToString:@"message"];
+	}];
+	
+	return result;
 }
 
 @end

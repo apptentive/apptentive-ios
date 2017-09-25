@@ -223,13 +223,8 @@ NSString * const ApptentiveBuildPayloadRequestsName = @"Build Payload Requests";
 				state = ApptentiveMessageStateSent;
 			}
 
-			__block NSString *messageIdentifier;
-			[messageSendRequest.managedObjectContext performBlockAndWait:^{
-				messageIdentifier = messageSendRequest.identifier;
-			}];
-
 			dispatch_async(dispatch_get_main_queue(), ^{
-				[self.messageDelegate payloadSender:self setState:state forMessageWithLocalIdentifier:messageIdentifier];
+				[self.messageDelegate payloadSender:self setState:state forMessageWithLocalIdentifier:messageSendRequest.messageIdentifier];
 			});
 		}
 	}

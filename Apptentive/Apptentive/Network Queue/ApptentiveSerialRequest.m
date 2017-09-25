@@ -33,6 +33,8 @@
 @dynamic payload;
 @dynamic encrypted;
 
+@synthesize messageIdentifier = _messageIdentifier;
+
 + (BOOL)enqueuePayload:(ApptentivePayload *)payload forConversation:(ApptentiveConversation *)conversation usingAuthToken:(nullable NSString *)authToken inContext:(NSManagedObjectContext *)context {
 	ApptentiveAssertOperationQueue(Apptentive.shared.operationQueue);
 	
@@ -156,16 +158,12 @@
 	if (self.conversationIdentifier.length > 0 && [self.path containsString:@"<cid>"]) {
 		self.path = [self.path stringByReplacingOccurrencesOfString:@"<cid>" withString:self.conversationIdentifier];
 	}
+
+	_messageIdentifier = [self.identifier copy];
 }
 
 - (BOOL)isMessageRequest {
-	__block BOOL result;
-
-	[self.managedObjectContext performBlockAndWait:^{
-		result = [self.type isEqualToString:@"message"];
-	}];
-	
-	return result;
+	return self.messageIdentifier != nil;
 }
 
 @end

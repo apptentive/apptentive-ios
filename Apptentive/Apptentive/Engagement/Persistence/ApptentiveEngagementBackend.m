@@ -11,7 +11,6 @@
 #import "ApptentiveInteraction.h"
 #import "ApptentiveInteractionInvocation.h"
 #import "Apptentive_Private.h"
-#import "ApptentiveBackend+Metrics.h"
 #import "ApptentiveInteractionController.h"
 #import "ApptentiveEngagement.h"
 #import "ApptentiveEngagementManifest.h"

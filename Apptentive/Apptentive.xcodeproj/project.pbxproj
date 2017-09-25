@@ -221,8 +221,6 @@
 		01A2D19B1E490A9700C2103A /* ApptentiveMessageCenterStatusView.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0831E490A9700C2103A /* ApptentiveMessageCenterStatusView.m */; };
 		01A2D19C1E490A9700C2103A /* ApptentiveProgressNavigationBar.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0841E490A9700C2103A /* ApptentiveProgressNavigationBar.h */; };
 		01A2D19D1E490A9700C2103A /* ApptentiveProgressNavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0851E490A9700C2103A /* ApptentiveProgressNavigationBar.m */; };
-		01A2D19E1E490A9700C2103A /* ApptentiveBackend+Metrics.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0871E490A9700C2103A /* ApptentiveBackend+Metrics.h */; };
-		01A2D19F1E490A9700C2103A /* ApptentiveBackend+Metrics.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0881E490A9700C2103A /* ApptentiveBackend+Metrics.m */; };
 		01A2D1A01E490A9700C2103A /* ApptentiveConnect-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D08A1E490A9700C2103A /* ApptentiveConnect-Prefix.pch */; };
 		01A2D1A11E490A9700C2103A /* ApptentiveJSONSerialization.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D08B1E490A9700C2103A /* ApptentiveJSONSerialization.h */; };
 		01A2D1A21E490A9700C2103A /* ApptentiveJSONSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D08C1E490A9700C2103A /* ApptentiveJSONSerialization.m */; };
@@ -649,8 +647,6 @@
 		01A2D0831E490A9700C2103A /* ApptentiveMessageCenterStatusView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveMessageCenterStatusView.m; sourceTree = "<group>"; };
 		01A2D0841E490A9700C2103A /* ApptentiveProgressNavigationBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveProgressNavigationBar.h; sourceTree = "<group>"; };
 		01A2D0851E490A9700C2103A /* ApptentiveProgressNavigationBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveProgressNavigationBar.m; sourceTree = "<group>"; };
-		01A2D0871E490A9700C2103A /* ApptentiveBackend+Metrics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ApptentiveBackend+Metrics.h"; sourceTree = "<group>"; };
-		01A2D0881E490A9700C2103A /* ApptentiveBackend+Metrics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ApptentiveBackend+Metrics.m"; sourceTree = "<group>"; };
 		01A2D08A1E490A9700C2103A /* ApptentiveConnect-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ApptentiveConnect-Prefix.pch"; sourceTree = "<group>"; };
 		01A2D08B1E490A9700C2103A /* ApptentiveJSONSerialization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveJSONSerialization.h; sourceTree = "<group>"; };
 		01A2D08C1E490A9700C2103A /* ApptentiveJSONSerialization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveJSONSerialization.m; sourceTree = "<group>"; };
@@ -933,7 +929,6 @@
 				01A2D0021E490A9700C2103A /* Images */,
 				01A2D0441E490A9700C2103A /* localization */,
 				01A2D05A1E490A9700C2103A /* Message Center */,
-				01A2D0861E490A9700C2103A /* Metrics */,
 				01A2D0891E490A9700C2103A /* Misc */,
 				01A2D0941E490A9700C2103A /* Model */,
 				01A2D0B71E490A9700C2103A /* Networking */,
@@ -1373,15 +1368,6 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
-		01A2D0861E490A9700C2103A /* Metrics */ = {
-			isa = PBXGroup;
-			children = (
-				01A2D0871E490A9700C2103A /* ApptentiveBackend+Metrics.h */,
-				01A2D0881E490A9700C2103A /* ApptentiveBackend+Metrics.m */,
-			);
-			path = Metrics;
-			sourceTree = "<group>";
-		};
 		01A2D0891E490A9700C2103A /* Misc */ = {
 			isa = PBXGroup;
 			children = (
@@ -1675,7 +1661,6 @@
 				017477261EA92BED00A0A949 /* ApptentiveEventPayload.h in Headers */,
 				01A2D18D1E490A9700C2103A /* ApptentiveMessageCenterCellProtocols.h in Headers */,
 				01A2D0F81E490A9700C2103A /* Apptentive_Private.h in Headers */,
-				01A2D19E1E490A9700C2103A /* ApptentiveBackend+Metrics.h in Headers */,
 				01A2D1DE1E490A9700C2103A /* ApptentiveSurveyAnswer.h in Headers */,
 				01E8E2361E6E096D00786738 /* ApptentiveInteractionAppleRatingDialogController.h in Headers */,
 				01A2D12F1E490A9700C2103A /* ApptentiveInteractionUsageData.h in Headers */,
@@ -2068,7 +2053,6 @@
 				0174772D1EA92BED00A0A949 /* ApptentiveSurveyResponsePayload.m in Sources */,
 				0145089D1EAAB0F1003326E7 /* ApptentiveConfigurationRequest.m in Sources */,
 				01A2D1A21E490A9700C2103A /* ApptentiveJSONSerialization.m in Sources */,
-				01A2D19F1E490A9700C2103A /* ApptentiveBackend+Metrics.m in Sources */,
 				01A2D1931E490A9700C2103A /* ApptentiveMessageCenterInputView.m in Sources */,
 				01626EBA1EB7D60C0064E73F /* NSData+Encryption.m in Sources */,
 				01A2D1771E490A9700C2103A /* ApptentiveMessageCenterViewModel.m in Sources */,

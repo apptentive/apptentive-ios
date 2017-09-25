@@ -11,11 +11,13 @@
 #import "ApptentiveInteraction.h"
 #import "ApptentiveInteractionInvocation.h"
 #import "Apptentive_Private.h"
-#import "ApptentiveBackend+Metrics.h"
 #import "ApptentiveInteractionController.h"
 #import "ApptentiveEngagement.h"
 #import "ApptentiveEngagementManifest.h"
 #import "ApptentiveEngagementBackend.h"
+#import "ApptentiveEventPayload.h"
+#import "ApptentiveSerialRequest.h"
+#import "ApptentiveAppConfiguration.h"
 
 NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEngagementCachedInteractionsExpirationPreferenceKey";
 
@@ -163,6 +165,24 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 	ApptentiveInteractionController *controller = [ApptentiveInteractionController interactionControllerWithInteraction:interaction];
 
 	[controller presentInteractionFromViewController:viewController];
+}
+
+- (void)conversation:(ApptentiveConversation *)conversation addMetricWithName:(NSString *)name fromInteraction:(ApptentiveInteraction *)fromInteraction info:(NSDictionary *)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData {
+	ApptentiveAssertOperationQueue(self.operationQueue);
+
+	if (self.configuration.metricsEnabled == NO || name == nil || conversation.state == ApptentiveConversationStateLoggedOut) {
+		return;
+	}
+
+	ApptentiveEventPayload *payload = [[ApptentiveEventPayload alloc] initWithLabel:name];
+	payload.interactionIdentifier = fromInteraction.identifier;
+	payload.userInfo = userInfo;
+	payload.customData = customData;
+	payload.extendedData = extendedData;
+
+	[ApptentiveSerialRequest enqueuePayload:payload forConversation:conversation usingAuthToken:conversation.token inContext:self.managedObjectContext];
+
+	[self processQueuedRecords];
 }
 
 @end

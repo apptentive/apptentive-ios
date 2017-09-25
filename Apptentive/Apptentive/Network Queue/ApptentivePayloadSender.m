@@ -223,8 +223,13 @@ NSString * const ApptentiveBuildPayloadRequestsName = @"Build Payload Requests";
 				state = ApptentiveMessageStateSent;
 			}
 
+			__block NSString *messageIdentifier;
+			[messageSendRequest.managedObjectContext performBlockAndWait:^{
+				messageIdentifier = messageSendRequest.identifier;
+			}];
+
 			dispatch_async(dispatch_get_main_queue(), ^{
-				[self.messageDelegate payloadSender:self setState:state forMessageWithLocalIdentifier:messageSendRequest.identifier];
+				[self.messageDelegate payloadSender:self setState:state forMessageWithLocalIdentifier:messageIdentifier];
 			});
 		}
 	}
@@ -338,7 +343,7 @@ NSString * const ApptentiveBuildPayloadRequestsName = @"Build Payload Requests";
                 [self createOperationsForQueuedRequestsInContext:context];
             }];
 
-			[ApptentivePayloadDebug printPayloadSendingQueueWithContext:context title:@"Recently Added CIDs"];
+			[ApptentivePayloadDebug printPayloadSendingQueueWithContext:childContext title:@"Recently Added CIDs"];
 		}
 	}];
 }

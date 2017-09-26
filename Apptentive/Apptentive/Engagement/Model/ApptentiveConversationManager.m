@@ -965,10 +965,6 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 #pragma mark - Metadata
 
 - (void)resume {
-#if APPTENTIVE_DEBUG
-	[self invalidateManifest];
-#endif
-
 	[self updateManifestIfNeeded];
 
 	[self.activeConversation checkForDiffs];
@@ -994,6 +990,10 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 }
 
 - (void)updateManifestIfNeeded {
+#if APPTENTIVE_DEBUG
+	[self invalidateManifest];
+#endif
+
 	if ([self.manifest.expiry timeIntervalSinceNow] <= 0) {
 		[self fetchEngagementManifest];
 	}

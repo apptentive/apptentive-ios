@@ -721,6 +721,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 	[self saveConversation:mutableConversation];
 	[self handleConversationStateChange:mutableConversation];
+	[self updateManifestIfNeeded];
 
 	[self completeLoginSuccess:YES error:nil];
 }
@@ -914,7 +915,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 #pragma mark - Private
 
 - (void)fetchEngagementManifest {
-	if (self.manifestOperation != nil) {
+	if (self.manifestOperation != nil || self.activeConversation.identifier == nil) {
 		return;
 	}
 

@@ -327,7 +327,8 @@ UIViewController *topChildViewController(UIViewController *viewController) {
 					result[key] = newValue;
 				}
 
-				i++, j++;
+				i++;
+				j++;
 			}
 		} else if (comp == NSOrderedAscending) {
 			// New key appeared

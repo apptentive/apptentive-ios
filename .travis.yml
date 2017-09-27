@@ -1,5 +1,5 @@
 language: objective-c
-osx_image: xcode9.0
+osx_image: xcode9
 xcode_project: Apptentive/Apptentive.xcodeproj
 xcode_scheme: Apptentive
 script:

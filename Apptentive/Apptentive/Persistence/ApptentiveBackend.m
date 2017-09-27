@@ -441,6 +441,8 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 			if (self.networkAvailable) {
 				[self.client resetBackoffDelay];
 				[self.payloadSender resetBackoffDelay];
+
+				[self processQueuedRecords];
 			} else {
 				[self.payloadSender cancelNetworkOperations];
 			}

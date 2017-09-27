@@ -721,6 +721,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 	[self saveConversation:mutableConversation];
 	[self handleConversationStateChange:mutableConversation];
+	[self updateManifestIfNeeded];
 
 	[self completeLoginSuccess:YES error:nil];
 }
@@ -914,7 +915,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 #pragma mark - Private
 
 - (void)fetchEngagementManifest {
-	if (self.manifestOperation != nil) {
+	if (self.manifestOperation != nil || self.activeConversation.identifier == nil) {
 		return;
 	}
 
@@ -965,10 +966,6 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 #pragma mark - Metadata
 
 - (void)resume {
-#if APPTENTIVE_DEBUG
-	[self invalidateManifest];
-#endif
-
 	[self updateManifestIfNeeded];
 
 	[self.activeConversation checkForDiffs];
@@ -994,6 +991,10 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 }
 
 - (void)updateManifestIfNeeded {
+#if APPTENTIVE_DEBUG
+	[self invalidateManifest];
+#endif
+
 	if ([self.manifest.expiry timeIntervalSinceNow] <= 0) {
 		[self fetchEngagementManifest];
 	}

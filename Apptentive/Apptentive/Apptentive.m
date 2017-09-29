@@ -696,7 +696,9 @@ static Apptentive *_sharedInstance;
 	if ([self presentMessageCenterIfNeededForUserInfo:response.notification.request.content.userInfo fromViewController:nil]) {
 		ApptentiveLogInfo(@"Apptentive user notification received.");
 
-		completionHandler();
+		if (completionHandler != nil) {
+			completionHandler();
+		}
 
 		return YES;
 	} else {

@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <UserNotifications/UserNotifications.h>
 
 //! Project version number for Apptentive.
 /** The Apptentive version number */
@@ -497,7 +498,21 @@ typedef NS_ENUM(NSUInteger, ApptentiveLogLevel) {
  @param viewController The view controller Message Center may be presented from.
  @return `YES` if the notification was sent by Apptentive, `NO` otherwise.
  */
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
 - (BOOL)didReceiveLocalNotification:(UILocalNotification *)notification fromViewController:(UIViewController *)viewController NS_SWIFT_NAME(didReceiveLocalNotification(_:from:));
+#pragma clang diagnostic pop
+
+/**
+ Forwards a user notification from your user notification center delegate to Apptentive.
+
+ @param response The notification response
+ @param completionHandler The completion handler that will be called if the notification was sent by Apptentive
+ @return `YES` if the notification was sent by Apptentive, `NO` otherwise.
+ */
+
+- (BOOL)didReceveUserNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void(^)(void))completionHandler;
 
 ///-------------------------------------
 /// @name Attach Text, Images, and Files

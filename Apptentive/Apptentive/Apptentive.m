@@ -736,7 +736,9 @@ static Apptentive *_sharedInstance;
 	NSDictionary *apptentiveUserInfo = @{ @"apptentive": userInfo[@"apptentive"] };
 	NSString *soundName = userInfo[@"apptentive"][@"sound"];
 
-	if ([[[UIApplication sharedApplication] delegate] respondsToSelector:@selector(userNotificationCenter:didReceiveNotificationResponse:withCompletionHandler:)]) {
+	id<UIApplicationDelegate> appDelegate = [[UIApplication sharedApplication] delegate];
+
+	if ([appDelegate respondsToSelector:@selector(userNotificationCenter:didReceiveNotificationResponse:withCompletionHandler:)]) {
 		UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
 		content.title = title;
 		content.body = body;
@@ -751,7 +753,7 @@ static Apptentive *_sharedInstance;
 				ApptentiveLogError(@"Error posting local notification: %@", error);
 			}
 		}];
-	} else {
+	} else if ([appDelegate respondsToSelector:@selector(application:didReceiveLocalNotification:)]) {
 		UILocalNotification *localNotification = [[UILocalNotification alloc] init];
 		localNotification.alertTitle = title;
 		localNotification.alertBody = body;
@@ -759,6 +761,8 @@ static Apptentive *_sharedInstance;
 		localNotification.soundName = [soundName isEqualToString:@"default"] ? UILocalNotificationDefaultSoundName : soundName;
 
 		[[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
+	} else {
+		ApptentiveLogError(@"Your App Delegate must implement -application:didReceiveLocalNotification: for Message Center push notifications to work.");
 	}
 }
 

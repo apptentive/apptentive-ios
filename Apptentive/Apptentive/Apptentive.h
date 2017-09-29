@@ -506,10 +506,12 @@ typedef NS_ENUM(NSUInteger, ApptentiveLogLevel) {
 
 /**
  Forwards a user notification from your user notification center delegate to Apptentive.
+ In the event that this method returns `NO`, your code must call the completion handler. 
 
  @param response The notification response
  @param completionHandler The completion handler that will be called if the notification was sent by Apptentive
  @return `YES` if the notification was sent by Apptentive, `NO` otherwise.
+
  */
 
 - (BOOL)didReceveUserNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void(^)(void))completionHandler;

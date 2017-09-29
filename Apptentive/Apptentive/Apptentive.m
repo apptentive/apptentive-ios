@@ -738,7 +738,9 @@ static Apptentive *_sharedInstance;
 
 	id<UIApplicationDelegate> appDelegate = [[UIApplication sharedApplication] delegate];
 
-	if ([appDelegate respondsToSelector:@selector(userNotificationCenter:didReceiveNotificationResponse:withCompletionHandler:)]) {
+
+
+	if ([UNUserNotificationCenter class] && [[UNUserNotificationCenter currentNotificationCenter].delegate respondsToSelector:@selector(userNotificationCenter:didReceiveNotificationResponse:withCompletionHandler:)]) {
 		UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
 		content.title = title;
 		content.body = body;
@@ -762,7 +764,8 @@ static Apptentive *_sharedInstance;
 
 		[[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
 	} else {
-		ApptentiveLogError(@"Your App Delegate must implement -application:didReceiveLocalNotification: for Message Center push notifications to work.");
+		ApptentiveLogError(@"Your app is not properly configured to accept Apptentive Message Center push notifications.");
+		ApptentiveLogError(@"Please see the push notification section of the integration guide for assistance: https://learn.apptentive.com/knowledge-base/ios-integration-reference/#push-notifications");
 	}
 }
 

@@ -736,10 +736,6 @@ static Apptentive *_sharedInstance;
 	NSDictionary *apptentiveUserInfo = @{ @"apptentive": userInfo[@"apptentive"] };
 	NSString *soundName = userInfo[@"apptentive"][@"sound"];
 
-	id<UIApplicationDelegate> appDelegate = [[UIApplication sharedApplication] delegate];
-
-
-
 	if ([UNUserNotificationCenter class] && [[UNUserNotificationCenter currentNotificationCenter].delegate respondsToSelector:@selector(userNotificationCenter:didReceiveNotificationResponse:withCompletionHandler:)]) {
 		UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
 		content.title = title;
@@ -755,7 +751,7 @@ static Apptentive *_sharedInstance;
 				ApptentiveLogError(@"Error posting local notification: %@", error);
 			}
 		}];
-	} else if ([appDelegate respondsToSelector:@selector(application:didReceiveLocalNotification:)]) {
+	} else if ([[UIApplication sharedApplication].delegate respondsToSelector:@selector(application:didReceiveLocalNotification:)]) {
 		UILocalNotification *localNotification = [[UILocalNotification alloc] init];
 		localNotification.alertTitle = title;
 		localNotification.alertBody = body;

@@ -120,10 +120,12 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		ApptentiveLogDebug(ApptentiveLogTagConversation, @"Loading logged-in conversation...");
 		ApptentiveConversation *loggedInConversation = [self loadConversationFromMetadataItem:item];
 
-		[self loadEngagementManfiest];
-		[self createMessageManagerForConversation:loggedInConversation];
+		if (loggedInConversation != nil) {
+			[self loadEngagementManfiest];
+			[self createMessageManagerForConversation:loggedInConversation];
 
-		return loggedInConversation;
+			return loggedInConversation;
+		}
 	}
 
 	// if no users were logged in previously - we might have an anonymous conversation
@@ -135,10 +137,12 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		ApptentiveLogDebug(ApptentiveLogTagConversation, @"Loading anonymous conversation...");
 		ApptentiveConversation *anonymousConversation = [self loadConversationFromMetadataItem:item];
 
-		[self loadEngagementManfiest];
-		[self createMessageManagerForConversation:anonymousConversation];
+		if (anonymousConversation != nil) {
+			[self loadEngagementManfiest];
+			[self createMessageManagerForConversation:anonymousConversation];
 
-		return anonymousConversation;
+			return anonymousConversation;
+		}
 	}
 
 	// check if we have a 'pending' anonymous conversation
@@ -148,8 +152,12 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	if (item != nil) {
 		ApptentiveLogDebug(ApptentiveLogTagConversation, @"Loading anonymous pending conversation...");
 		ApptentiveConversation *conversation = [self loadConversationFromMetadataItem:item];
-		[self fetchConversationToken:conversation];
-		return conversation;
+
+		if (conversation != nil) {
+			[self fetchConversationToken:conversation];
+
+			return conversation;
+		}
 	}
 	
 	// check if we have a 'pending' legacy conversation
@@ -159,8 +167,12 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	if (item != nil) {
 		ApptentiveLogDebug(ApptentiveLogTagConversation, @"Loading legacy pending conversation...");
 		ApptentiveConversation *conversation = [self loadConversationFromMetadataItem:item];
-		[self fetchLegacyConversation:conversation];
-		return conversation;
+
+		if (conversation != nil) {
+			[self fetchLegacyConversation:conversation];
+
+			return conversation;
+		}
 	}
 
 	// any remaining conversations are 'logged out', and we should not load them.

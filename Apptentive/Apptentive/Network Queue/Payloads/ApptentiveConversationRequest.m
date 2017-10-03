@@ -12,12 +12,17 @@
 #import "ApptentiveDevice.h"
 #import "ApptentiveSDK.h"
 #import "ApptentiveAppRelease.h"
+#import "ApptentiveDefines.h"
 
 
 @implementation ApptentiveConversationRequest
 
 - (instancetype)initWithAppInstall:(id<ApptentiveAppInstall>)appInstall {
 	self = [super init];
+
+	ApptentiveAssertNotNil(appInstall.appRelease.JSONDictionary, @"App release JSON should not be nil");
+	ApptentiveAssertNotNil(appInstall.person.JSONDictionary, @"Person JSON should not be nil");
+	ApptentiveAssertNotNil(appInstall.device.JSONDictionary, @"Device JSON should not be nil");
 
 	if (self) {
 		_appInstall = appInstall;

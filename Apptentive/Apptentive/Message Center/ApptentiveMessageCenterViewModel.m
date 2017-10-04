@@ -531,7 +531,7 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 }
 
 - (BOOL)networkIsReachable {
-	return [[ApptentiveReachability sharedReachability] currentNetworkStatus] != ApptentiveNetworkNotReachable;
+	return Apptentive.shared.backend.networkAvailable;
 }
 
 - (BOOL)didSkipProfile {

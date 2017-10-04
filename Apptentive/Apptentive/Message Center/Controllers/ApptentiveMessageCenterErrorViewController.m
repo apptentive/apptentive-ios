@@ -37,7 +37,7 @@ NSString *const ATInteractionMessageCenterEventLabelNoInteractionClose = @"no_in
 
 	self.navigationItem.title = ApptentiveLocalizedString(@"Message Center", @"Message Center default title");
 
-	if ([ApptentiveReachability sharedReachability].currentNetworkStatus == ApptentiveNetworkNotReachable) {
+	if (!Apptentive.shared.backend.networkAvailable) {
 		self.imageView.image = [[ApptentiveUtilities imageNamed:@"at_network_error"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 		self.textLabel.text = ApptentiveLocalizedString(@"You must connect to the internet before you can send feedback.", @"Message Center configuration hasn't downloaded due to connection problem.");
 

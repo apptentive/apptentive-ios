@@ -52,6 +52,8 @@ extern NSString *const ApptentiveAuthenticationDidFailNotificationKeyConversatio
 @property (copy, nonatomic) NSDictionary *currentCustomData;
 @property (copy, nonatomic) ApptentiveAuthenticationFailureCallback authenticationFailureCallback;
 
+@property (readonly, nonatomic) BOOL networkAvailable;
+
 /**
  Initializes a new backend object.
 

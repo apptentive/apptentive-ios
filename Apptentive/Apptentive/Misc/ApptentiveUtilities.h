@@ -8,8 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-#define kApptentiveHostName @"apptentive.com"
-
 
 @interface ApptentiveUtilities : NSObject
 

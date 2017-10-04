@@ -11,12 +11,13 @@ import XCTest
 class RequestTests: XCTestCase {
 
 	func testConversationRequest() {
-		guard let conversation = ApptentiveConversation(state: .anonymous) else {
-			XCTFail("unable to create conversation")
-			return;
-		}
-
+		let conversation = ApptentiveConversation(state: .anonymous)
 		let request = ApptentiveConversationRequest(appInstall: conversation)
+
+		ApptentiveDevice.getPermanentDeviceValues()
+		ApptentiveDevice.carrierName = "MyCarrier";
+		ApptentiveDevice.contentSizeCategory = .large
+		conversation.device.updateWithCurrentDeviceValues()
 
 		conversation.person.name = "Frank"
 		conversation.person.emailAddress = "test@apptentive.com"

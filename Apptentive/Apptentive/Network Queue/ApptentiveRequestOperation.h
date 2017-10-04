@@ -67,7 +67,7 @@ extern NSErrorDomain const ApptentiveHTTPErrorDomain;
 /**
  An object that the request operation will communicate its status to.
  */
-@property (strong, nonatomic) ApptentiveRequestOperationCallback *delegate;
+@property (strong, nullable, nonatomic) ApptentiveRequestOperationCallback *delegate;
 
 /**
  An object that the request operation will use to obtain additional data
@@ -168,7 +168,7 @@ extern NSErrorDomain const ApptentiveHTTPErrorDomain;
  @param operation The request operation.
  @param error The error that the request encountered.
  */
-- (void)requestOperation:(ApptentiveRequestOperation *)operation didFailWithError:(NSError *)error;
+- (void)requestOperation:(ApptentiveRequestOperation *)operation didFailWithError:(nullable NSError *)error;
 
 @end
 

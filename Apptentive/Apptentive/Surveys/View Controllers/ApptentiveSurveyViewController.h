@@ -22,7 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 // This strong reference makes sure the interaction controller sticks around
 // until the view controller is dismissed (required for
 // `-dismissAllInteractions:` calls).
-@property (strong, nonatomic) ApptentiveInteractionController *interactionController;
+@property (strong, nullable, nonatomic) ApptentiveInteractionController *interactionController;
 
 @end
 

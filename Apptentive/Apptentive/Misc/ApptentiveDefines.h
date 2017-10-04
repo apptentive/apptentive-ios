@@ -8,10 +8,10 @@
 
 #ifndef ApptentiveDefines_h
 #define ApptentiveDefines_h
+#import "ApptentiveLog.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-#import "ApptentiveLog.h"
 
 #define APPTENTIVE_CHECK_INIT_NOT_NIL_ARG(ARG)                                                    \
 	if ((ARG) == nil) {                                                                           \

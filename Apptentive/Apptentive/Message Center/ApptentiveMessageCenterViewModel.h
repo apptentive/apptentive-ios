@@ -88,7 +88,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterMessageStatus) {
 @property (readonly, nonatomic) BOOL networkIsReachable;
 
 @property (assign, nonatomic) BOOL didSkipProfile;
-@property (strong, nonatomic) NSString *draftMessage;
+@property (strong, nullable, nonatomic) NSString *draftMessage;
 
 - (instancetype)initWithConversation:(ApptentiveConversation *)conversation interaction:(ApptentiveInteraction *)interaction messageManager:(ApptentiveMessageManager *)messageManager;
 - (void)start;

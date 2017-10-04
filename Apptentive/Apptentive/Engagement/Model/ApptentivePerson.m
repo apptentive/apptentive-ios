@@ -67,7 +67,7 @@ static NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCus
 		}
 	}
 
-	self = [super initWithCustomData:customData];
+	self = [super initWithCustomData:customData ?: @{}];
 
 	if (self) {
 		_name = name;

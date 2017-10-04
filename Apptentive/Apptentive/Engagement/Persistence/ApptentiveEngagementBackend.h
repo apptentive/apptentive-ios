@@ -22,8 +22,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithConversation:(ApptentiveConversation *)conversation manifest:(ApptentiveEngagementManifest *)manifest;
 
-- (ApptentiveInteraction *)interactionForEvent:(NSString *)event;
-- (ApptentiveInteraction *)interactionForInvocations:(NSArray *)invocations;
+- (nullable ApptentiveInteraction *)interactionForEvent:(NSString *)event;
+- (nullable ApptentiveInteraction *)interactionForInvocations:(NSArray *)invocations;
 
 @end
 

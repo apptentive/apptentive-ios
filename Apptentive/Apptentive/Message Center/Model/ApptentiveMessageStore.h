@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ApptentiveMessageStore : NSObject <NSSecureCoding>
 
 @property (readonly, strong, nonatomic) NSMutableArray *messages;
-@property (strong, nonatomic) NSString *lastMessageIdentifier;
+@property (nullable, strong, nonatomic) NSString *lastMessageIdentifier;
 
 @end
 

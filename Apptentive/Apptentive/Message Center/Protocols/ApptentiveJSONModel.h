@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (instancetype)newInstanceWithJSON:(NSDictionary *)json;
 - (void)updateWithJSON:(NSDictionary *)json;
-- (NSDictionary *)apiJSON;
+- (nullable NSDictionary *)apiJSON;
 
 @end
 

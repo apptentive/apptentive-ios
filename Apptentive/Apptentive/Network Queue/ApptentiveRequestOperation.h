@@ -47,7 +47,7 @@ extern NSErrorDomain const ApptentiveHTTPErrorDomain;
 /**
  The data task used to make the HTTP request.
  */
-@property (readonly, nonatomic) NSURLSessionDataTask *task;
+@property (readonly, nullable, nonatomic) NSURLSessionDataTask *task;
 
 /**
  The number of seconds for which the response should be considered up-to-date.
@@ -57,7 +57,7 @@ extern NSErrorDomain const ApptentiveHTTPErrorDomain;
 /**
  The object decoded from the response JSON, if any.
  */
-@property (readonly, nonatomic) NSObject *responseObject;
+@property (readonly, nullable, nonatomic) NSObject *responseObject;
 
 /**
  The ApptentiveRequest-implementing object corresponding to this operation.
@@ -89,8 +89,8 @@ extern NSErrorDomain const ApptentiveHTTPErrorDomain;
 
 - (void)processNetworkError:(NSError *)error __attribute__((objc_requires_super));
 - (void)processHTTPError:(NSError *)error withResponse:(NSHTTPURLResponse *)response responseData:(NSData *)responseData __attribute__((objc_requires_super));
-- (void)processResponse:(NSHTTPURLResponse *)response withObject:(NSObject *)responseObject __attribute__((objc_requires_super));
-- (void)retryTaskWithError:(NSError *)error __attribute__((objc_requires_super));
+- (void)processResponse:(NSHTTPURLResponse *)response withObject:(nullable NSObject *)responseObject __attribute__((objc_requires_super));
+- (void)retryTaskWithError:(nullable NSError *)error __attribute__((objc_requires_super));
 - (void)completeOperation __attribute__((objc_requires_super));
 
 @end
@@ -148,7 +148,7 @@ extern NSErrorDomain const ApptentiveHTTPErrorDomain;
  @param operation The request operation.
  @param error The error that the request encountered.
  */
-- (void)requestOperationWillRetry:(ApptentiveRequestOperation *)operation withError:(NSError *)error;
+- (void)requestOperationWillRetry:(ApptentiveRequestOperation *)operation withError:(nullable NSError *)error;
 
 /**
  Indicates that the request operation's request has succeeded.

@@ -20,12 +20,12 @@ extern NSString *const ATPersonLastUpdateValuePreferenceKey;
 /**
  The name associated with the person.
  */
-@property (copy, nonatomic) NSString *name;
+@property (copy, nullable, nonatomic) NSString *name;
 
 /**
  The email address associated with the person.
  */
-@property (copy, nonatomic) NSString *emailAddress;
+@property (copy, nullable, nonatomic) NSString *emailAddress;
 
 @end
 

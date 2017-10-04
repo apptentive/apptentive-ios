@@ -19,7 +19,7 @@ typedef BOOL (^ApptentiveConversationMetadataItemFilter)(ApptentiveConversationM
 
 @property (strong, nonatomic) NSMutableArray *items;
 
-- (ApptentiveConversationMetadataItem *)findItemFilter:(ApptentiveConversationMetadataItemFilter)filter;
+- (nullable ApptentiveConversationMetadataItem *)findItemFilter:(ApptentiveConversationMetadataItemFilter)filter;
 - (void)addItem:(ApptentiveConversationMetadataItem *)item;
 - (void)deleteItem:(ApptentiveConversationMetadataItem *)item;
 

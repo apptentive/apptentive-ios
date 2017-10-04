@@ -84,8 +84,8 @@ extern NSString *const ApptentiveAuthenticationDidFailNotificationKeyConversatio
  @param viewController The view controller from which to present message center
  @return Whether message center was displayed
  */
-- (BOOL)presentMessageCenterFromViewController:(UIViewController *)viewController;
-- (BOOL)presentMessageCenterFromViewController:(UIViewController *)viewController withCustomData:(nullable NSDictionary *)customData;
+- (BOOL)presentMessageCenterFromViewController:(nullable UIViewController *)viewController;
+- (BOOL)presentMessageCenterFromViewController:(nullable UIViewController *)viewController withCustomData:(nullable NSDictionary *)customData;
 
 - (void)dismissMessageCenterAnimated:(BOOL)animated completion:(void (^)(void))completion;
 

@@ -104,7 +104,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterMessageStatus) {
 - (ATMessageCenterMessageStatus)statusOfMessageAtIndexPath:(NSIndexPath *)indexPath;
 - (BOOL)shouldShowDateForMessageGroupAtIndex:(NSInteger)index;
 - (NSString *)senderOfMessageAtIndexPath:(NSIndexPath *)indexPath;
-- (NSURL *)imageURLOfSenderAtIndexPath:(NSIndexPath *)indexPath;
+- (nullable NSURL *)imageURLOfSenderAtIndexPath:(NSIndexPath *)indexPath;
 - (void)markAsReadMessageAtIndexPath:(NSIndexPath *)indexPath;
 
 - (void)sendMessage:(NSString *)message withAttachments:(NSArray *)attachments;

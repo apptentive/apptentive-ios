@@ -20,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) IBOutlet ApptentiveAttachButton *attachButton;
 @property (weak, nonatomic) IBOutlet ApptentiveMessageCenterViewController *viewController;
 
-@property (readonly, nonatomic) NSArray *attachments;
+@property (readonly, nullable, nonatomic) NSArray *attachments;
 @property (assign, nonatomic, getter=isActive) BOOL active;
 
 - (void)viewDidLoad;

@@ -41,7 +41,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSInteger)numberOfAnswersForQuestionAtIndex:(NSInteger)index;
 
 - (NSString *)textOfQuestionAtIndex:(NSInteger)index;
-- (NSAttributedString *)instructionTextOfQuestionAtIndex:(NSInteger)index;
+- (nullable NSAttributedString *)instructionTextOfQuestionAtIndex:(NSInteger)index;
 - (NSAttributedString *)placeholderTextOfAnswerAtIndexPath:(NSIndexPath *)indexPath;
 - (ATSurveyQuestionType)typeOfQuestionAtIndex:(NSInteger)index;
 - (ApptentiveSurveyAnswerType)typeOfAnswerAtIndexPath:(NSIndexPath *)indexPath;

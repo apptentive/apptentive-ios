@@ -8,6 +8,8 @@
 
 @class ApptentiveIndexedCollectionView;
 
+NS_ASSUME_NONNULL_BEGIN
+
 @protocol ApptentiveMessageCenterCell <NSObject>
 
 @property (weak, nonatomic) UITextView *messageLabel;
@@ -21,3 +23,5 @@
 @property (assign, nonatomic) BOOL messageLabelHidden;
 
 @end
+
+NS_ASSUME_NONNULL_END

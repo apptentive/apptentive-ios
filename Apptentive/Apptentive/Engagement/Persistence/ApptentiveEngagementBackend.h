@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class ApptentiveInteraction;
 @class ApptentiveConversation;
 @class ApptentiveEngagementManifest;
@@ -24,3 +26,5 @@
 - (ApptentiveInteraction *)interactionForInvocations:(NSArray *)invocations;
 
 @end
+
+NS_ASSUME_NONNULL_END

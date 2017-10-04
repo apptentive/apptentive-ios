@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 #define kApptentiveHostName @"apptentive.com"
 
 
@@ -49,3 +51,5 @@
 + (NSString *)formatAsTableRows:(NSArray<NSArray *> *)rows;
 
 @end
+
+NS_ASSUME_NONNULL_END

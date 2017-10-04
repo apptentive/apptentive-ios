@@ -11,6 +11,8 @@
 #import "ApptentiveMessageManager.h"
 #import <QuickLook/QuickLook.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 typedef NS_ENUM(NSInteger, ATMessageCenterMessageType) {
 	ATMessageCenterMessageTypeMessage,
 	ATMessageCenterMessageTypeReply,
@@ -136,3 +138,5 @@ typedef NS_ENUM(NSInteger, ATMessageCenterMessageStatus) {
 - (void)messageCenterViewModel:(ApptentiveMessageCenterViewModel *)viewModel messageProgressDidChange:(float)progress;
 
 @end
+
+NS_ASSUME_NONNULL_END

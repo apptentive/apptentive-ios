@@ -13,6 +13,8 @@
 #import "ApptentiveConversationManager.h"
 #import "ApptentiveClient.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 extern NSString *const ApptentiveAuthenticationDidFailNotification;
 extern NSString *const ApptentiveAuthenticationDidFailNotificationKeyErrorType;
 extern NSString *const ApptentiveAuthenticationDidFailNotificationKeyErrorMessage;
@@ -100,3 +102,5 @@ extern NSString *const ApptentiveAuthenticationDidFailNotificationKeyConversatio
 - (void)scheduleDeviceUpdate;
 
 @end
+
+NS_ASSUME_NONNULL_END

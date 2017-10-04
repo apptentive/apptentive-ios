@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import <QuickLook/QuickLook.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class ApptentiveAttachButton, ApptentiveMessageCenterViewController;
 
 
@@ -30,3 +32,5 @@
 
 @interface ApptentiveAttachmentController (QuickLook) <QLPreviewControllerDataSource>
 @end
+
+NS_ASSUME_NONNULL_END

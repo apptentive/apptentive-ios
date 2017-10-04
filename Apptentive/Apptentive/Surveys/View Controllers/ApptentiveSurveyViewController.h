@@ -10,6 +10,8 @@
 #import "ApptentiveSurveyCollectionView.h"
 #import "ApptentiveSurveyViewModel.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class ApptentiveInteractionController;
 
 
@@ -23,3 +25,5 @@
 @property (strong, nonatomic) ApptentiveInteractionController *interactionController;
 
 @end
+
+NS_ASSUME_NONNULL_END

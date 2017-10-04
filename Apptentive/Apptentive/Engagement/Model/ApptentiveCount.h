@@ -8,6 +8,8 @@
 
 #import "ApptentiveState.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 /**
  An `ApptentiveCount` records information about when and how often a code point
@@ -78,3 +80,5 @@
 - (void)invoke;
 
 @end
+
+NS_ASSUME_NONNULL_END

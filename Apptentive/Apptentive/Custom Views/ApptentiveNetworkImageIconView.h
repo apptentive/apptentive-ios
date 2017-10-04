@@ -8,6 +8,8 @@
 
 #import "ApptentiveNetworkImageView.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 typedef NS_ENUM(NSInteger, ATImageViewMaskType) {
 	ATImageViewMaskTypeNone = 0,
 	ATImageViewMaskTypeRound,
@@ -20,3 +22,5 @@ typedef NS_ENUM(NSInteger, ATImageViewMaskType) {
 @property (assign, nonatomic) ATImageViewMaskType maskType;
 
 @end
+
+NS_ASSUME_NONNULL_END

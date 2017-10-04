@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class ApptentiveConversationMetadataItem, ApptentiveConversation;
 
 typedef BOOL (^ApptentiveConversationMetadataItemFilter)(ApptentiveConversationMetadataItem *item);
@@ -24,3 +26,5 @@ typedef BOOL (^ApptentiveConversationMetadataItemFilter)(ApptentiveConversationM
 - (void)printAsTableWithTitle:(NSString *)title;
 
 @end
+
+NS_ASSUME_NONNULL_END

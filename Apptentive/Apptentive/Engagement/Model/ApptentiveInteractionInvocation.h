@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class ApptentiveInteractionUsageData, ApptentiveConversation;
 
 
@@ -25,3 +27,5 @@
 - (NSPredicate *)criteriaPredicate;
 
 @end
+
+NS_ASSUME_NONNULL_END

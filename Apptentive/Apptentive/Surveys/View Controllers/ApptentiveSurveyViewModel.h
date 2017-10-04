@@ -10,6 +10,8 @@
 #import "ApptentiveSurveyQuestion.h"
 #import "ApptentiveSurveyAnswer.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class ApptentiveSurvey, ApptentiveInteraction;
 
 @protocol ATSurveyViewModelDelegate
@@ -77,3 +79,5 @@
 - (void)viewModelValidationChanged:(ApptentiveSurveyViewModel *)viewModel isValid:(BOOL)valid;
 
 @end
+
+NS_ASSUME_NONNULL_END

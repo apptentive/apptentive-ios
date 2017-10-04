@@ -9,6 +9,8 @@
 #import "ApptentiveMessageCenterReplyCell.h"
 #import "ApptentiveMessageCenterCellProtocols.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class ApptentiveIndexedCollectionView;
 
 
@@ -19,3 +21,5 @@
 @property (assign, nonatomic) BOOL messageLabelHidden;
 
 @end
+
+NS_ASSUME_NONNULL_END

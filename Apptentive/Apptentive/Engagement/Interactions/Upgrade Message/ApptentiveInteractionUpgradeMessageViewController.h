@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class ApptentiveInteraction;
 @class ApptentiveInteractionController;
 
@@ -22,3 +24,5 @@
 @property (strong, nonatomic) ApptentiveInteractionController *interactionController;
 
 @end
+
+NS_ASSUME_NONNULL_END

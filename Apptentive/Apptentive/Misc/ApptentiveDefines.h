@@ -9,6 +9,8 @@
 #ifndef ApptentiveDefines_h
 #define ApptentiveDefines_h
 
+NS_ASSUME_NONNULL_BEGIN
+
 #import "ApptentiveLog.h"
 
 #define APPTENTIVE_CHECK_INIT_NOT_NIL_ARG(ARG)                                                    \
@@ -26,4 +28,7 @@
 #define APPTENTIVE_ABSTRACT_METHOD_CALLED \
 	ApptentiveAssertFail(@"Abstract method called: %@.%@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
 
+NS_ASSUME_NONNULL_END
+
 #endif /* ApptentiveDefines_h */
+

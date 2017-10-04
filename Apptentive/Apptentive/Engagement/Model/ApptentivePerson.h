@@ -8,6 +8,7 @@
 
 #import "ApptentiveCustomData.h"
 
+NS_ASSUME_NONNULL_BEGIN
 
 extern NSString *const ATPersonLastUpdateValuePreferenceKey;
 
@@ -35,3 +36,5 @@ extern NSString *const ATPersonLastUpdateValuePreferenceKey;
 @property (copy, nonatomic) NSString *emailAddress;
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "ApptentiveMessageCenterCellProtocols.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @interface ApptentiveMessageCenterMessageCell : UITableViewCell <ApptentiveMessageCenterCell>
 
@@ -17,3 +19,5 @@
 @property (assign, nonatomic) BOOL statusLabelHidden;
 
 @end
+
+NS_ASSUME_NONNULL_END

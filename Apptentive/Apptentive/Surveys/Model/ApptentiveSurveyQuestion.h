@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 typedef NS_ENUM(NSInteger, ATSurveyQuestionType) {
 	ATSurveyQuestionTypeSingleSelect,
 	ATSurveyQuestionTypeMultipleSelect,
@@ -40,3 +42,5 @@ typedef NS_ENUM(NSInteger, ATSurveyQuestionType) {
 @property (readonly, nonatomic) NSArray<ApptentiveSurveyAnswer *> *answers;
 
 @end
+
+NS_ASSUME_NONNULL_END

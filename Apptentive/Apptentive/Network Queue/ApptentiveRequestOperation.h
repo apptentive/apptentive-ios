@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "ApptentiveRequestProtocol.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @protocol ApptentiveRequestOperationDataSource;
 @class ApptentiveRequestOperationCallback;
 
@@ -169,3 +171,5 @@ extern NSErrorDomain const ApptentiveHTTPErrorDomain;
 - (void)requestOperation:(ApptentiveRequestOperation *)operation didFailWithError:(NSError *)error;
 
 @end
+
+NS_ASSUME_NONNULL_END

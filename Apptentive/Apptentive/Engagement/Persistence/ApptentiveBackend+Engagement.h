@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "ApptentiveBackend.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 extern NSString *const ATEngagementInstallDateKey;
 extern NSString *const ATEngagementUpgradeDateKey;
 extern NSString *const ATEngagementLastUsedVersionKey;
@@ -62,3 +64,5 @@ extern NSString *const ApptentiveEngagementMessageCenterEvent;
 //- (NSArray<NSString *> *)targetedLocalEvents;
 
 @end
+
+NS_ASSUME_NONNULL_END

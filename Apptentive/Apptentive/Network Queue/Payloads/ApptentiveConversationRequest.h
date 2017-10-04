@@ -8,9 +8,9 @@
 
 #import "ApptentiveRequest.h"
 
-@protocol ApptentiveAppInstall;
-
 NS_ASSUME_NONNULL_BEGIN
+
+@protocol ApptentiveAppInstall;
 
 
 @interface ApptentiveConversationRequest : ApptentiveRequest

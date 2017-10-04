@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "ApptentiveMessageCenterViewModel.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class ApptentiveMessageCenterInteraction;
 @class ApptentiveInteractionController;
 
@@ -23,3 +25,5 @@
 @property (strong, nonatomic) ApptentiveInteractionController *interactionController;
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import <UserNotifications/UserNotifications.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 //! Project version number for Apptentive.
 /** The Apptentive version number */
 FOUNDATION_EXPORT double ApptentiveVersionNumber;
@@ -22,8 +24,6 @@ FOUNDATION_EXPORT const unsigned char ApptentiveVersionString[];
 
 /** The platform that the SDK is built for. */
 #define kApptentivePlatformString @"iOS"
-
-NS_ASSUME_NONNULL_BEGIN
 
 /**
  A code corresponding to the reason that the Apptentive server authentication failed.

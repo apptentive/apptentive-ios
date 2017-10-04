@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class ApptentiveNetworkImageIconView;
 
 
@@ -22,3 +24,5 @@
 @property (assign, nonatomic) BOOL isOnScreen;
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -33,7 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
 	return @"application/json";
 }
 
-- (NSDictionary *)JSONDictionary {
+- (nullable NSDictionary *)JSONDictionary {
 	return nil;
 }
 

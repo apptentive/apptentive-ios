@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ApptentiveStoreProductViewController ()
 
-@property (nonatomic, strong) UIWindow *apptentiveAlertWindow;
+@property (nullable, strong, nonatomic) UIWindow *apptentiveAlertWindow;
 
 @end
 

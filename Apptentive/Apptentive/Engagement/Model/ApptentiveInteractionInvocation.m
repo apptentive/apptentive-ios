@@ -133,7 +133,7 @@ NS_ASSUME_NONNULL_BEGIN
 	return criteriaPredicate;
 }
 
-+ (NSCompoundPredicate *)compoundPredicateWithCriteria:(NSDictionary *)criteria {
++ (nullable NSCompoundPredicate *)compoundPredicateWithCriteria:(NSDictionary *)criteria {
 	NSMutableArray *subPredicates = [NSMutableArray array];
 
 	for (NSString *key in criteria) {
@@ -197,7 +197,7 @@ NS_ASSUME_NONNULL_BEGIN
 	return compoundPredicate;
 }
 
-+ (NSCompoundPredicate *)compoundPredicateWithType:(NSCompoundPredicateType)type criteriaArray:(NSArray *)criteriaArray {
++ (nullable NSCompoundPredicate *)compoundPredicateWithType:(NSCompoundPredicateType)type criteriaArray:(NSArray *)criteriaArray {
 	NSMutableArray *subPredicates = [NSMutableArray array];
 
 	for (NSDictionary *criteria in criteriaArray) {
@@ -214,7 +214,7 @@ NS_ASSUME_NONNULL_BEGIN
 	return compoundPredicate;
 }
 
-+ (NSCompoundPredicate *)compoundPredicateForKeyPath:(NSString *)keyPath operatorsAndValues:(NSDictionary *)operatorsAndValues {
++ (nullable NSCompoundPredicate *)compoundPredicateForKeyPath:(NSString *)keyPath operatorsAndValues:(NSDictionary *)operatorsAndValues {
 	NSMutableArray *subPredicates = [NSMutableArray array];
 
 	for (NSString *operatorString in operatorsAndValues) {
@@ -304,7 +304,7 @@ NS_ASSUME_NONNULL_BEGIN
 	return [self predicateWithLeftExpression:leftExpression rightExpression:rightExpression operatorType:operatorType];
 }
 
-+ (NSPredicate *)predicateWithLeftKeyPath:(NSString *)keyPath forObject:(NSDictionary *)context rightComplexObject:(NSDictionary *)rightComplexObject operatorType:(NSPredicateOperatorType)operatorType {
++ (nullable NSPredicate *)predicateWithLeftKeyPath:(NSString *)keyPath forObject:(NSDictionary *)context rightComplexObject:(NSDictionary *)rightComplexObject operatorType:(NSPredicateOperatorType)operatorType {
 	NSDictionary *leftComplexObject = [context valueForKeyPath:keyPath];
 	NSString *type = leftComplexObject[@"_type"];
 	NSString *rightType = rightComplexObject[@"_type"];

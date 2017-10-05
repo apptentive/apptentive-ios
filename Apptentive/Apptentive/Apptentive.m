@@ -710,7 +710,7 @@ static Apptentive *_sharedInstance;
 	}
 }
 
-- (BOOL)presentMessageCenterIfNeededForUserInfo:(NSDictionary *)userInfo fromViewController:(UIViewController *)viewController {
+- (BOOL)presentMessageCenterIfNeededForUserInfo:(NSDictionary *)userInfo fromViewController:(nullable UIViewController *)viewController {
 	NSDictionary *apptentivePayload = userInfo[@"apptentive"];
 
 	if (apptentivePayload == nil) {

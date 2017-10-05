@@ -99,12 +99,12 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 }
 
 - (IBAction)okButtonPressed:(id)sender {
-	[self dismissAnimated:YES completion:NULL withAction:ATInteractionUpgradeMessageOkPressed];
+	[self dismissAnimated:YES completion:nil withAction:ATInteractionUpgradeMessageOkPressed];
 
 	self.interactionController = nil;
 }
 
-- (void)dismissAnimated:(BOOL)animated completion:(void (^)(void))completion withAction:(ATInteractionUpgradeMessageAction)action {
+- (void)dismissAnimated:(BOOL)animated completion:(nullable void (^)(void))completion withAction:(ATInteractionUpgradeMessageAction)action {
 	[self.navigationController dismissViewControllerAnimated:animated completion:completion];
 
 	[self.upgradeMessageInteraction engage:ATInteractionUpgradeMessageEventLabelClose fromViewController:self.presentingViewController];

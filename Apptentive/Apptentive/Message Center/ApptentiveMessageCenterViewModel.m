@@ -32,7 +32,7 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 
 @interface ApptentiveMessageCenterViewModel ()
 
-@property (readonly, nonatomic) ApptentiveMessage *lastUserMessage;
+@property (readonly, nullable, nonatomic) ApptentiveMessage *lastUserMessage;
 @property (readonly, nonatomic) NSURLSession *attachmentDownloadSession;
 @property (readonly, nonatomic) NSMutableDictionary<NSValue *, NSIndexPath *> *taskIndexPaths;
 @property (nullable, strong, nonatomic) ApptentiveMessage *contextMessage;
@@ -289,7 +289,7 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 	return [self.dateFormatter stringFromDate:[self dateOfMessageGroupAtIndex:index]];
 }
 
-- (NSDate *)dateOfMessageGroupAtIndex:(NSInteger)index {
+- (nullable NSDate *)dateOfMessageGroupAtIndex:(NSInteger)index {
 	if ([self numberOfMessagesInGroup:index] > 0) {
 		ApptentiveMessage *message = [self messageAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:index]];
 
@@ -580,7 +580,7 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 	return [self.messageManager.messages objectAtIndex:indexPath.section];
 }
 
-- (ApptentiveMessage *)lastUserMessage {
+- (nullable ApptentiveMessage *)lastUserMessage {
 	for (ApptentiveMessage *message in self.messageManager.messages.reverseObjectEnumerator) {
 		if (message.inbound) {
 			return message;

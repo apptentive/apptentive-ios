@@ -30,7 +30,7 @@ NSString *const ATInteractionMessageCenterEventLabelAttachmentDelete = @"attachm
 
 @interface ApptentiveAttachmentController ()
 
-@property (strong, nonatomic) UIPopoverController *imagePickerPopoverController;
+@property (nullable, strong, nonatomic) UIPopoverController *imagePickerPopoverController;
 @property (strong, nonatomic) NSMutableArray *mutableAttachments;
 @property (assign, nonatomic) CGSize collectionViewFooterSize;
 @property (strong, nonatomic) NSNumberFormatter *numberFormatter;

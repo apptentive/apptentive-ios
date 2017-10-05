@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13189.4" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13165.3"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -42,7 +43,7 @@
                                     </constraints>
                                 </view>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bNv-Jb-zyu">
-                                    <rect key="frame" x="343" y="8" width="24" height="24"/>
+                                    <rect key="frame" x="351" y="8" width="24" height="24"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="24" id="Xwx-Am-SFS"/>
                                         <constraint firstAttribute="height" constant="24" id="nEz-Ba-c32"/>
@@ -90,7 +91,7 @@
                             <constraints>
                                 <constraint firstAttribute="centerY" secondItem="GdB-EU-leh" secondAttribute="centerY" constant="-59" id="0f3-sk-9Ax"/>
                                 <constraint firstItem="sQH-Xo-hct" firstAttribute="top" relation="greaterThanOrEqual" secondItem="jze-Ja-MtR" secondAttribute="bottom" constant="20" id="3aw-on-9Mc"/>
-                                <constraint firstAttribute="trailing" secondItem="bNv-Jb-zyu" secondAttribute="trailing" constant="8" id="8jH-TK-ekV"/>
+                                <constraint firstAttribute="trailingMargin" secondItem="bNv-Jb-zyu" secondAttribute="trailing" id="8jH-TK-ekV"/>
                                 <constraint firstItem="sQH-Xo-hct" firstAttribute="top" relation="greaterThanOrEqual" secondItem="GdB-EU-leh" secondAttribute="bottom" constant="17" id="Jnk-YP-nDi"/>
                                 <constraint firstAttribute="centerX" secondItem="jze-Ja-MtR" secondAttribute="centerX" id="KtR-Jf-Err"/>
                                 <constraint firstItem="sQH-Xo-hct" firstAttribute="leading" secondItem="3OP-Us-sTC" secondAttribute="leading" id="NDI-fO-fOS"/>
@@ -239,9 +240,9 @@
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="cFn-Go-Vab" firstAttribute="top" secondItem="Aj5-aD-yTM" secondAttribute="top" constant="8" id="CxU-3y-aw1"/>
-                                        <constraint firstItem="cFn-Go-Vab" firstAttribute="leading" secondItem="Aj5-aD-yTM" secondAttribute="leading" constant="8" id="RWE-GN-QNR"/>
+                                        <constraint firstItem="cFn-Go-Vab" firstAttribute="leading" secondItem="Aj5-aD-yTM" secondAttribute="leadingMargin" id="RWE-GN-QNR"/>
                                         <constraint firstAttribute="bottom" secondItem="cFn-Go-Vab" secondAttribute="bottom" constant="8" id="dCK-OT-OgO"/>
-                                        <constraint firstAttribute="trailing" secondItem="cFn-Go-Vab" secondAttribute="trailing" constant="8" id="fEx-cI-GDt"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="cFn-Go-Vab" secondAttribute="trailing" id="fEx-cI-GDt"/>
                                     </constraints>
                                     <connections>
                                         <outlet property="attachButton" destination="n0S-Y2-z5K" id="dmU-Le-K6H"/>
@@ -368,8 +369,8 @@
                                     <constraints>
                                         <constraint firstItem="PJM-ba-h4O" firstAttribute="top" secondItem="hjb-x8-sQN" secondAttribute="top" constant="8" id="Fmv-e7-KWF"/>
                                         <constraint firstAttribute="bottom" secondItem="PJM-ba-h4O" secondAttribute="bottom" constant="8" id="LOl-UG-WjO"/>
-                                        <constraint firstAttribute="trailing" secondItem="PJM-ba-h4O" secondAttribute="trailing" constant="8" id="fm1-Nv-MsG"/>
-                                        <constraint firstItem="PJM-ba-h4O" firstAttribute="leading" secondItem="hjb-x8-sQN" secondAttribute="leading" constant="8" id="wvd-ZI-Qfi"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="PJM-ba-h4O" secondAttribute="trailing" id="fm1-Nv-MsG"/>
+                                        <constraint firstItem="PJM-ba-h4O" firstAttribute="leading" secondItem="hjb-x8-sQN" secondAttribute="leadingMargin" id="wvd-ZI-Qfi"/>
                                     </constraints>
                                     <connections>
                                         <outlet property="buttonBar" destination="Pbw-4k-2h3" id="UwV-ex-xS9"/>

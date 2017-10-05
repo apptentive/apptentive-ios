@@ -75,7 +75,7 @@ NSString *const ApptentiveInteractionAppleRatingDialogEventLabelFallback = @"fal
 	}
 }
 
-- (void)invokeNotShownInteractionFromViewController:(UIViewController *)viewController withReason:(NSString *)notShownReason {
+- (void)invokeNotShownInteractionFromViewController:(UIViewController *)viewController withReason:(nullable NSString *)notShownReason {
 	NSDictionary *userInfo = nil;
 
 	if (notShownReason != nil) {

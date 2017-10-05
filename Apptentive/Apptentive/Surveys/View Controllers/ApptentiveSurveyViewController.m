@@ -50,7 +50,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) IBOutlet ApptentiveSurveySubmitButton *submitButton;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *missingRequiredItem;
 
-@property (strong, nonatomic) NSIndexPath *editingIndexPath;
+@property (nullable, strong, nonatomic) NSIndexPath *editingIndexPath;
 
 @property (readonly, nonatomic) CGFloat lineHeightOfQuestionFont;
 @property (assign, nonatomic) CGFloat iOS9ToolbarInset;

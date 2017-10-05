@@ -27,7 +27,7 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 
 @interface ApptentiveMessageManager ()
 
-@property (strong, nonatomic) ApptentiveRequestOperation *messageOperation;
+@property (nullable, strong, nonatomic) ApptentiveRequestOperation *messageOperation;
 @property (strong, nonatomic) NSTimer *messageFetchTimer;
 @property (strong, nonatomic) NSDictionary *currentCustomData;
 @property (readonly, nonatomic) NSMutableDictionary *messageIdentifierIndex;

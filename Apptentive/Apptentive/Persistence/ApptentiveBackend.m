@@ -54,7 +54,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 
 @interface ApptentiveBackend ()
 
-@property (strong, nonatomic) ApptentiveRequestOperation *configurationOperation;
+@property (nullable, strong, nonatomic) ApptentiveRequestOperation *configurationOperation;
 
 @property (assign, nonatomic) ATBackendState state;
 @property (assign, nonatomic) BOOL networkAvailable;

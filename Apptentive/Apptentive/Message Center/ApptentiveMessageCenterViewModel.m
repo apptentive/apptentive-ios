@@ -35,7 +35,7 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 @property (readonly, nonatomic) ApptentiveMessage *lastUserMessage;
 @property (readonly, nonatomic) NSURLSession *attachmentDownloadSession;
 @property (readonly, nonatomic) NSMutableDictionary<NSValue *, NSIndexPath *> *taskIndexPaths;
-@property (strong, nonatomic) ApptentiveMessage *contextMessage;
+@property (nullable, strong, nonatomic) ApptentiveMessage *contextMessage;
 
 @end
 

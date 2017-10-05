@@ -93,7 +93,7 @@
 	self.synthesizedPayload = payload;
 }
 
-- (nullable NSData *)payload {
+- (NSData *)payload {
 	return self.synthesizedPayload;
 }
 

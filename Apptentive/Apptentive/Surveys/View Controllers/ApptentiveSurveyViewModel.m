@@ -430,11 +430,11 @@ NSString *const ApptentiveInteractionSurveyEventLabelCancel = @"cancel";
 
 - (NSDictionary *)responseDictionaryForAnswerAtIndexPath:(NSIndexPath *)indexPath {
 	ApptentiveSurveyAnswer *answer = [self answerAtIndexPath:indexPath];
-	NSMutableDictionary *response;
+	NSMutableDictionary *response = [NSMutableDictionary dictionary];
 	NSString *answerIdentifier = answer.identifier;
 
 	if (answerIdentifier != nil) {
-		response = [NSMutableDictionary dictionaryWithObject:answerIdentifier forKey:@"id"];
+		[response setObject:answerIdentifier forKey:@"id"];
 
 		if (answer.type == ApptentiveSurveyAnswerTypeOther) {
 			response[@"value"] = [self trimmedTextAtIndexPath:indexPath] ?: @"";

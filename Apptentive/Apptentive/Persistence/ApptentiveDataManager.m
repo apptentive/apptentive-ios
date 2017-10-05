@@ -32,9 +32,9 @@ typedef enum {
 @interface ApptentiveDataManager ()
 
 
-@property (readwrite, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
-@property (readwrite, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
-@property (readwrite, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
+@property (readwrite, nullable, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
+@property (readwrite, nullable, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+@property (readwrite, nullable, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 
 @property (readwrite, nonatomic) BOOL didRemovePersistentStore;
 @property (readwrite, nonatomic) BOOL didFailToMigrateStore;

@@ -28,13 +28,13 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 @interface ApptentiveMessageManager ()
 
 @property (nullable, strong, nonatomic) ApptentiveRequestOperation *messageOperation;
-@property (strong, nonatomic) NSTimer *messageFetchTimer;
+@property (nullable, strong, nonatomic) NSTimer *messageFetchTimer;
 @property (strong, nonatomic) NSDictionary *currentCustomData;
 @property (readonly, nonatomic) NSMutableDictionary *messageIdentifierIndex;
 @property (readonly, nonatomic) ApptentiveMessageStore *messageStore;
 
 @property (readonly, nonatomic) NSString *messageStorePath;
-@property (copy, nonatomic) void (^backgroundFetchBlock)(UIBackgroundFetchResult);
+@property (nullable, copy, nonatomic) void (^backgroundFetchBlock)(UIBackgroundFetchResult);
 
 @end
 

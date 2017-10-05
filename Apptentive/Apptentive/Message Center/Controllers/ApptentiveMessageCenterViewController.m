@@ -83,7 +83,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 @property (strong, nonatomic) IBOutlet ApptentiveAttachmentController *attachmentController;
 
-@property (readonly, nonatomic) NSIndexPath *indexPathOfLastMessage;
+@property (readonly, nullable, nonatomic) NSIndexPath *indexPathOfLastMessage;
 
 @property (assign, nonatomic) ATMessageCenterState state;
 
@@ -1012,7 +1012,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	}
 }
 
-- (NSIndexPath *)indexPathOfLastMessage {
+- (nullable NSIndexPath *)indexPathOfLastMessage {
 	NSInteger lastSectionIndex = self.tableView.numberOfSections - 1;
 
 	if (lastSectionIndex == -1) {
@@ -1064,7 +1064,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	}];
 }
 
-- (void)resizeFooterView:(NSNotification *)notification {
+- (void)resizeFooterView:(nullable NSNotification *)notification {
 	CGFloat height = 0;
 
 	if (self.state == ATMessageCenterStateComposing || self.state == ATMessageCenterStateEmpty) {
@@ -1173,7 +1173,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[self scrollToLastMessageAnimated:YES];
 }
 
-- (void)updateHeaderFooterTextSize:(NSNotification *)notification {
+- (void)updateHeaderFooterTextSize:(nullable NSNotification *)notification {
 	self.greetingView.titleLabel.font = [self.viewModel.styleSheet fontForStyle:ApptentiveTextStyleHeaderTitle];
 	self.greetingView.messageLabel.font = [self.viewModel.styleSheet fontForStyle:ApptentiveTextStyleHeaderMessage];
 

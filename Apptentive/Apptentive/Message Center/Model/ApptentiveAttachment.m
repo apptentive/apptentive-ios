@@ -201,14 +201,14 @@ static NSString *const RemoteURLKey = @"remoteURL";
 
 #pragma mark - Private
 
-- (NSString *)filenameForThumbnailOfSize:(CGSize)size {
+- (nullable NSString *)filenameForThumbnailOfSize:(CGSize)size {
 	if (self.filename == nil) {
 		return nil;
 	}
 	return [NSString stringWithFormat:@"%@_%dx%d_fit.jpeg", self.filename.stringByDeletingPathExtension, (int)floor(size.width), (int)floor(size.height)];
 }
 
-- (UIImage *)createThumbnailOfSize:(CGSize)size {
+- (nullable UIImage *)createThumbnailOfSize:(CGSize)size {
 	CGImageSourceRef src = CGImageSourceCreateWithURL((__bridge CFURLRef)[NSURL fileURLWithPath:self.fullLocalPath], NULL);
 	if (src == NULL) {
 		return nil;

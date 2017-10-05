@@ -53,7 +53,7 @@ NSString *const ATInteractionEnjoymentDialogEventLabelNo = @"no";
 	return title;
 }
 
-- (NSString *)body {
+- (nullable NSString *)body {
 	NSString *body = self.interaction.configuration[@"body"] ?: nil;
 
 	return body;
@@ -78,7 +78,7 @@ NSString *const ATInteractionEnjoymentDialogEventLabelNo = @"no";
 // alert controller is dismissed. At that point we clear the reference to the
 // alert controller to break the retain cycle.
 
-- (UIAlertController *)alertControllerWithInteraction:(ApptentiveInteraction *)interaction {
+- (nullable UIAlertController *)alertControllerWithInteraction:(ApptentiveInteraction *)interaction {
 	if (!self.title && !self.body) {
 		ApptentiveLogError(@"Skipping display of Enjoyment Dialog that does not have a title or body.");
 		return nil;

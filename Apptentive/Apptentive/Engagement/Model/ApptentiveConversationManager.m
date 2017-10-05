@@ -52,7 +52,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 @interface ApptentiveConversationManager () <ApptentiveConversationDelegate>
 
-@property (strong, nonatomic) ApptentiveMessageManager *messageManager;
+@property (strong, nullable, nonatomic) ApptentiveMessageManager *messageManager;
 
 @property (strong, nullable, nonatomic) ApptentiveConversation *activeConversation;
 @property (strong, nullable, nonatomic) ApptentiveRequestOperation *manifestOperation;
@@ -61,7 +61,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 @property (readonly, nonatomic) NSString *metadataPath;
 @property (readonly, nonatomic) NSString *manifestPath;
 
-@property (copy, nonatomic) void (^loginCompletionBlock)(BOOL success, NSError *error);
+@property (nullable, copy, nonatomic) void (^loginCompletionBlock)(BOOL success, NSError *error);
 
 @end
 
@@ -110,7 +110,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	return false;
 }
 
-- (ApptentiveConversation *)loadConversation {
+- (nullable ApptentiveConversation *)loadConversation {
 	// we're going to scan metadata in attempt to find existing conversations
 	ApptentiveConversationMetadataItem *item;
 
@@ -200,7 +200,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	return anonymousConversation;
 }
 
-- (ApptentiveConversation *)loadConversationFromMetadataItem:(ApptentiveConversationMetadataItem *)item {
+- (nullable ApptentiveConversation *)loadConversationFromMetadataItem:(ApptentiveConversationMetadataItem *)item {
 	ApptentiveAssertNotNil(item, @"Conversation metadata item is nil");
 	if (item == nil) {
 		return nil;
@@ -559,7 +559,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	[self completeLoginSuccess:NO error:error];
 }
 
-- (void)completeLoginSuccess:(BOOL)success error:(NSError *)error {
+- (void)completeLoginSuccess:(BOOL)success error:(nullable NSError *)error {
 	self.loginCompletionBlock(success, error);
 	self.loginCompletionBlock = nil;
 }

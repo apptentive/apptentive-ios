@@ -23,7 +23,7 @@ typedef NS_ENUM(NSInteger, ATSurveyQuestionType) {
 
 @interface ApptentiveSurveyQuestion : NSObject
 
-- (instancetype)initWithJSON:(NSDictionary *)JSON;
+- (nullable instancetype)initWithJSON:(NSDictionary *)JSON;
 
 @property (readonly, nonatomic) ATSurveyQuestionType type;
 @property (readonly, nonatomic) NSString *identifier;

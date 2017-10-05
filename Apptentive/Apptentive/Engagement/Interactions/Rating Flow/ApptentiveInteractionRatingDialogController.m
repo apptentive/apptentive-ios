@@ -15,6 +15,8 @@
 #import "ApptentiveInteraction.h"
 #import "UIAlertController+Apptentive.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 NSString *const ATInteractionRatingDialogEventLabelLaunch = @"launch";
 NSString *const ATInteractionRatingDialogEventLabelCancel = @"cancel";
 NSString *const ATInteractionRatingDialogEventLabelRate = @"rate";
@@ -28,7 +30,7 @@ NSString *const ATInteractionRatingDialogEventLabelDecline = @"decline";
 	[self registerInteractionControllerClass:self forType:@"RatingDialog"];
 }
 
-- (void)presentInteractionFromViewController:(UIViewController *)viewController {
+- (void)presentInteractionFromViewController:(nullable UIViewController *)viewController {
 	[super presentInteractionFromViewController:viewController];
 
 	self.presentedViewController = [self alertControllerWithInteraction:self.interaction];
@@ -113,3 +115,5 @@ NSString *const ATInteractionRatingDialogEventLabelDecline = @"decline";
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

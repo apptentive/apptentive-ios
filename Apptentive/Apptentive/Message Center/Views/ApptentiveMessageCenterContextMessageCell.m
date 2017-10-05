@@ -8,6 +8,8 @@
 
 #import "ApptentiveMessageCenterContextMessageCell.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @implementation ApptentiveMessageCenterContextMessageCell
 
@@ -19,3 +21,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

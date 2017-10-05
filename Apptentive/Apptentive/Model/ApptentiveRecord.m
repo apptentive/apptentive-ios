@@ -7,8 +7,9 @@
 //
 
 #import "ApptentiveRecord.h"
-
 #import "NSDictionary+Apptentive.h"
+
+NS_ASSUME_NONNULL_BEGIN
 
 
 @implementation ApptentiveRecord
@@ -44,7 +45,7 @@
 	}
 }
 
-- (NSDictionary *)apiJSON {
+- (nullable NSDictionary *)apiJSON {
 	NSMutableDictionary *result = [NSMutableDictionary dictionary];
 	if (self.clientCreationTime != nil) {
 		result[@"client_created_at"] = self.clientCreationTime;
@@ -92,4 +93,7 @@
 	}
 	return NO;
 }
+
 @end
+
+NS_ASSUME_NONNULL_END

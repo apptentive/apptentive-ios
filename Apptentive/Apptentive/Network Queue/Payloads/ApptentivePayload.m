@@ -12,6 +12,8 @@
 #import "ApptentiveDefines.h"
 #import "ApptentiveJSONSerialization.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @implementation ApptentivePayload
 
@@ -67,7 +69,7 @@
 	return dictionary;
 }
 
-- (NSData *)payload {
+- (nullable NSData *)payload {
 	NSData *payloadData = [self marshalForSending];
 	if (self.encryptionKey != nil) {
 		return [payloadData apptentive_dataEncryptedWithKey:self.encryptionKey];
@@ -94,11 +96,11 @@
 	return payloadData;
 }
 
-- (NSArray *)attachments {
+- (nullable NSArray *)attachments {
 	return nil;
 }
 
-- (NSString *)localIdentifier {
+- (nullable NSString *)localIdentifier {
 	return nil;
 }
 
@@ -107,3 +109,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

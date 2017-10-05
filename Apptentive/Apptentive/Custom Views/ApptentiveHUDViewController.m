@@ -9,6 +9,8 @@
 #import "ApptentiveHUDViewController.h"
 #import "ApptentivePassThroughWindow.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @interface ApptentiveHUDViewController ()
 
@@ -121,3 +123,5 @@ static ApptentiveHUDViewController *currentHUD;
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

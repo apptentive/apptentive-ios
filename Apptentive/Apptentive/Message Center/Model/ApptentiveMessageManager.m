@@ -20,6 +20,8 @@
 #import "ApptentiveUtilities.h"
 #import "ApptentiveAttachment.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 static NSString *const MessageStoreFileName = @"messages-v1.archive";
 
 
@@ -451,3 +453,5 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

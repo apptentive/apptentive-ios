@@ -10,6 +10,8 @@
 #import "ApptentiveUtilities.h"
 #import "ApptentiveLog.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 NSString *const ApptentiveReachabilityStatusChanged = @"ATReachabilityStatusChanged";
 
 
@@ -140,4 +142,7 @@ static void ATReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkRea
 		SCNetworkReachabilityUnscheduleFromRunLoop(reachabilityRef, CFRunLoopGetMain(), kCFRunLoopDefaultMode);
 	}
 }
+
 @end
+
+NS_ASSUME_NONNULL_END

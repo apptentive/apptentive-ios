@@ -9,6 +9,8 @@
 #import "ApptentiveLogoutPayload.h"
 #import "ApptentiveDefines.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @implementation ApptentiveLogoutPayload
 
@@ -29,3 +31,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -17,6 +17,8 @@
 #import "ApptentiveSerialRequest.h"
 #import "ApptentiveSurveyResponsePayload.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 NSString *const ApptentiveInteractionSurveyEventLabelQuestionResponse = @"question_response";
 NSString *const ApptentiveInteractionSurveyEventLabelSubmit = @"submit";
 NSString *const ApptentiveInteractionSurveyEventLabelCancel = @"cancel";
@@ -101,7 +103,7 @@ NSString *const ApptentiveInteractionSurveyEventLabelCancel = @"cancel";
 	return [self questionAtIndex:index].value;
 }
 
-- (NSAttributedString *)instructionTextOfQuestionAtIndex:(NSInteger)index {
+- (nullable NSAttributedString *)instructionTextOfQuestionAtIndex:(NSInteger)index {
 	NSMutableArray *parts = [NSMutableArray array];
 	NSInteger redCharacterCount = 0;
 
@@ -451,3 +453,5 @@ NSString *const ApptentiveInteractionSurveyEventLabelCancel = @"cancel";
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

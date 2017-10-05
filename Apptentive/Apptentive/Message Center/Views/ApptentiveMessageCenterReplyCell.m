@@ -9,6 +9,8 @@
 #import "ApptentiveMessageCenterReplyCell.h"
 #import "ApptentiveNetworkImageIconView.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @implementation ApptentiveMessageCenterReplyCell
 
@@ -20,3 +22,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -8,6 +8,8 @@
 
 #import "ApptentivePerson.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 static NSString *const NameKey = @"name";
 static NSString *const EmailAddressKey = @"emailAddress";
 
@@ -19,7 +21,7 @@ static NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCus
 
 @implementation ApptentivePerson
 
-- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+- (nullable instancetype)initWithCoder:(NSCoder *)aDecoder {
 	self = [super initWithCoder:aDecoder];
 
 	if (self) {
@@ -101,7 +103,7 @@ static NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCus
 
 @implementation ApptentiveLegacyPerson
 
-- (id)initWithCoder:(NSCoder *)coder {
+- (nullable instancetype)initWithCoder:(NSCoder *)coder {
 	self = [super init];
 
 	if (self) {
@@ -113,3 +115,5 @@ static NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCus
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

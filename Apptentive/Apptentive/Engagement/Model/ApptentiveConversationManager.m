@@ -36,6 +36,8 @@
 #import "ApptentiveAppInstall.h"
 #import "ApptentiveJSONSerialization.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 static NSString *const ConversationMetadataFilename = @"conversation-v1.meta";
 static NSString *const ConversationFilename = @"conversation-v1.archive";
@@ -977,11 +979,11 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	[self saveMetadata];
 }
 
-- (ApptentiveConversation *)activeConversation {
+- (nullable ApptentiveConversation *)activeConversation {
 	return _activeConversation;
 }
 
-- (void)setActiveConversation:(ApptentiveConversation *)activeConversation {
+- (void)setActiveConversation:(nullable ApptentiveConversation *)activeConversation {
 	ApptentiveAssertOperationQueue(self.operationQueue);
 	_activeConversation = activeConversation;
 }
@@ -1031,3 +1033,5 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

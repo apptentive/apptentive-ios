@@ -15,6 +15,8 @@
 #import "ApptentiveInteraction.h"
 #import "UIAlertController+Apptentive.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 NSString *const ATInteractionEnjoymentDialogEventLabelLaunch = @"launch";
 NSString *const ATInteractionEnjoymentDialogEventLabelCancel = @"cancel";
 NSString *const ATInteractionEnjoymentDialogEventLabelYes = @"yes";
@@ -27,7 +29,7 @@ NSString *const ATInteractionEnjoymentDialogEventLabelNo = @"no";
 	[self registerInteractionControllerClass:self forType:@"EnjoymentDialog"];
 }
 
-- (void)presentInteractionFromViewController:(UIViewController *)viewController {
+- (void)presentInteractionFromViewController:(nullable UIViewController *)viewController {
 	[super presentInteractionFromViewController:viewController];
 
 	self.presentedViewController = [self alertControllerWithInteraction:self.interaction];
@@ -100,3 +102,5 @@ NSString *const ATInteractionEnjoymentDialogEventLabelNo = @"no";
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

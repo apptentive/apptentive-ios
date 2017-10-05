@@ -11,6 +11,8 @@
 #import "ApptentiveSDK.h"
 #import "ApptentiveAppRelease.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @implementation ApptentiveSDKAppReleasePayload
 
@@ -49,3 +51,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

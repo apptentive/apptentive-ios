@@ -14,6 +14,8 @@
 #import "ApptentiveAboutViewController.h"
 #import "ApptentiveAppConfiguration.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 typedef enum {
 	ATInteractionUpgradeMessageOkPressed,
 } ATInteractionUpgradeMessageAction;
@@ -108,7 +110,7 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 	[self.upgradeMessageInteraction engage:ATInteractionUpgradeMessageEventLabelClose fromViewController:self.presentingViewController];
 }
 
-- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+- (void)traitCollectionDidChange:(nullable UITraitCollection *)previousTraitCollection {
 	[super traitCollectionDidChange:previousTraitCollection];
 
 	BOOL isRegularHeight = self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassRegular;
@@ -133,4 +135,7 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 
 	self.webView.scrollView.contentInset = UIEdgeInsetsMake(topInset, 0.0, 0.0, 0.0);
 }
+
 @end
+
+NS_ASSUME_NONNULL_END

@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ApptentiveSurvey : NSObject
 
-- (instancetype)initWithJSON:(NSDictionary *)JSON;
+- (nullable instancetype)initWithJSON:(NSDictionary *)JSON;
 
 @property (readonly, nonatomic) NSString *title;
 @property (readonly, nonatomic) NSString *name;

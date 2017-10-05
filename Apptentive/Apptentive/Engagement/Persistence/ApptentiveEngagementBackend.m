@@ -16,6 +16,8 @@
 #import "ApptentiveEngagementManifest.h"
 #import "ApptentiveEngagementBackend.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @implementation ApptentiveEngagementBackend
 
@@ -29,14 +31,14 @@
 	return self;
 }
 
-- (ApptentiveInteraction *)interactionForEvent:(NSString *)event {
+- (nullable ApptentiveInteraction *)interactionForEvent:(NSString *)event {
 	NSArray *invocations = self.manifest.targets[event];
 	ApptentiveInteraction *interaction = [self interactionForInvocations:invocations];
 
 	return interaction;
 }
 
-- (ApptentiveInteraction *)interactionForInvocations:(NSArray *)invocations {
+- (nullable ApptentiveInteraction *)interactionForInvocations:(NSArray *)invocations {
 	NSString *interactionID = nil;
 
 	for (NSObject *invocationOrDictionary in invocations) {
@@ -70,4 +72,7 @@
 - (ApptentiveInteraction *)interactionForIdentifier:(NSString *)identifier {
 	return self.manifest.interactions[identifier];
 }
+
 @end
+
+NS_ASSUME_NONNULL_END

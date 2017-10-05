@@ -16,6 +16,8 @@
 #define APPTENTIVE_MIN_BACKOFF_DELAY 1.0
 #define APPTENTIVE_BACKOFF_MULTIPLIER 2.0
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @implementation ApptentiveClient
 
@@ -68,7 +70,7 @@
 
 #pragma mark - Creating request operations
 
-- (ApptentiveRequestOperation *)requestOperationWithRequest:(id<ApptentiveRequest>)request token:(NSString *)token delegate:(ApptentiveRequestOperationCallback *)delegate {
+- (ApptentiveRequestOperation *)requestOperationWithRequest:(id<ApptentiveRequest>)request token:(nullable NSString *)token delegate:(ApptentiveRequestOperationCallback *)delegate {
 	NSMutableURLRequest *URLRequest = [self URLRequestWithRequest:request];
 	if (token && !request.encrypted) {
 		[URLRequest addValue:[@"Bearer " stringByAppendingString:token] forHTTPHeaderField:@"Authorization"];
@@ -107,3 +109,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

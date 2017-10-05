@@ -9,6 +9,8 @@
 #import "ApptentiveDataManager.h"
 #import "ApptentiveDefines.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 // Used to indicate a database upgrade or check was in progress and didn't complete.
 NSString *const ATDataManagerUpgradeCanaryFilename = @"ATDataManagerUpgradeCanary";
 
@@ -392,4 +394,7 @@ typedef enum {
 	}
 	return success;
 }
+
 @end
+
+NS_ASSUME_NONNULL_END

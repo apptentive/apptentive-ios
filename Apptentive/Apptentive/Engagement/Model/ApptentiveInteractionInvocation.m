@@ -13,6 +13,8 @@
 #import "ApptentiveUtilities.h"
 #import "Apptentive_Private.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @implementation ApptentiveInteractionInvocation
 
@@ -56,7 +58,7 @@
 	return [description description];
 }
 
-- (id)initWithCoder:(NSCoder *)coder {
+- (nullable instancetype)initWithCoder:(NSCoder *)coder {
 	if ((self = [super init])) {
 		self.interactionID = [coder decodeObjectForKey:@"interactionID"];
 		self.priority = [coder decodeIntegerForKey:@"priority"];
@@ -72,7 +74,7 @@
 	[coder encodeObject:self.criteria forKey:@"criteria"];
 }
 
-- (id)copyWithZone:(NSZone *)zone {
+- (id)copyWithZone:(nullable NSZone *)zone {
 	ApptentiveInteractionInvocation *copy = [[ApptentiveInteractionInvocation alloc] init];
 
 	if (copy) {
@@ -452,3 +454,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

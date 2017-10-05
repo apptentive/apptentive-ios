@@ -38,6 +38,8 @@
 #define RANGE_FOOTER_VERTICAL_MARGIN 8
 #define RANGE_MINIMUM_WIDTH 27
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @interface ApptentiveSurveyViewController ()
 
@@ -670,3 +672,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

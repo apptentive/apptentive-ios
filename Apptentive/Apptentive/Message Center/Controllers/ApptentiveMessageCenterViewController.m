@@ -36,6 +36,8 @@
 
 #define FOOTER_ANIMATION_DURATION 0.10
 
+NS_ASSUME_NONNULL_BEGIN
+
 NSString *const ATInteractionMessageCenterEventLabelLaunch = @"launch";
 NSString *const ATInteractionMessageCenterEventLabelClose = @"close";
 NSString *const ATInteractionMessageCenterEventLabelAttach = @"attach";
@@ -145,7 +147,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	}
 }
 
-- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+- (void)traitCollectionDidChange:(nullable UITraitCollection *)previousTraitCollection {
 	[self.greetingView traitCollectionDidChange:previousTraitCollection];
 
 	[self resizeFooterView:nil];
@@ -416,7 +418,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 #pragma mark Table view delegate
 
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+- (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
 	if (![self.viewModel shouldShowDateForMessageGroupAtIndex:section]) {
 		return nil;
 	}
@@ -465,11 +467,11 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	return YES;
 }
 
-- (BOOL)tableView:(UITableView *)tableView canPerformAction:(SEL)action forRowAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
+- (BOOL)tableView:(UITableView *)tableView canPerformAction:(SEL)action forRowAtIndexPath:(NSIndexPath *)indexPath withSender:(nullable id)sender {
 	return action == @selector(copy:);
 }
 
-- (void)tableView:(UITableView *)tableView performAction:(SEL)action forRowAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
+- (void)tableView:(UITableView *)tableView performAction:(SEL)action forRowAtIndexPath:(NSIndexPath *)indexPath withSender:(nullable id)sender {
 	if (indexPath) {
 		[[UIPasteboard generalPasteboard] setValue:[self.viewModel textOfMessageAtIndexPath:indexPath] forPasteboardType:(__bridge NSString *)kUTTypeUTF8PlainText];
 	}
@@ -798,7 +800,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 #pragma mark - Key-value observing
 
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *, id> *)change context:(void *)context {
+- (void)observeValueForKeyPath:(nullable NSString *)keyPath ofObject:(nullable id)object change:(nullable NSDictionary<NSString *, id> *)change context:(nullable void *)context {
 	[self updateSendButtonEnabledStatus];
 }
 
@@ -1192,3 +1194,5 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

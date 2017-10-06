@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (copy, nonatomic) NSString *interactionID;
 @property (assign, nonatomic) NSInteger priority;
-@property (copy, nonatomic) NSDictionary *criteria;
+@property (nullable, copy, nonatomic) NSDictionary *criteria;
 
 + (ApptentiveInteractionInvocation *)invocationWithJSONDictionary:(NSDictionary *)jsonDictionary;
 + (NSArray *)invocationsWithJSONArray:(NSArray *)jsonArray;

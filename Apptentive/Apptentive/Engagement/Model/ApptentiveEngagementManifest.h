@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class ApptentiveInteraction;
 
 
@@ -73,3 +75,5 @@
 @property (readonly, nonatomic) NSDictionary *JSONDictionary;
 
 @end
+
+NS_ASSUME_NONNULL_END

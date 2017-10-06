@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import <SystemConfiguration/SystemConfiguration.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 typedef enum {
 	ApptentiveNetworkNotReachable,
 	ApptentiveNetworkWifiReachable,
@@ -24,3 +26,5 @@ extern NSString *const ApptentiveReachabilityStatusChanged;
 - (ApptentiveNetworkStatus)currentNetworkStatus;
 
 @end
+
+NS_ASSUME_NONNULL_END

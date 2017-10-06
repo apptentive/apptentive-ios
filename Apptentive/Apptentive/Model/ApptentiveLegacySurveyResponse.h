@@ -8,6 +8,8 @@
 
 #import "ApptentiveRecord.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class ApptentiveConversation;
 
 
@@ -30,3 +32,5 @@
 + (void)enqueueUnsentSurveyResponsesInContext:(NSManagedObjectContext *)context forConversation:(ApptentiveConversation *)conversation;
 
 @end
+
+NS_ASSUME_NONNULL_END

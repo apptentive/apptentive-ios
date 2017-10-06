@@ -14,6 +14,8 @@
 #import "ApptentiveAboutViewController.h"
 #import "ApptentiveAppConfiguration.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 typedef enum {
 	ATInteractionUpgradeMessageOkPressed,
 } ATInteractionUpgradeMessageAction;
@@ -97,18 +99,18 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 }
 
 - (IBAction)okButtonPressed:(id)sender {
-	[self dismissAnimated:YES completion:NULL withAction:ATInteractionUpgradeMessageOkPressed];
+	[self dismissAnimated:YES completion:nil withAction:ATInteractionUpgradeMessageOkPressed];
 
 	self.interactionController = nil;
 }
 
-- (void)dismissAnimated:(BOOL)animated completion:(void (^)(void))completion withAction:(ATInteractionUpgradeMessageAction)action {
+- (void)dismissAnimated:(BOOL)animated completion:(nullable void (^)(void))completion withAction:(ATInteractionUpgradeMessageAction)action {
 	[self.navigationController dismissViewControllerAnimated:animated completion:completion];
 
 	[self.upgradeMessageInteraction engage:ATInteractionUpgradeMessageEventLabelClose fromViewController:self.presentingViewController];
 }
 
-- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+- (void)traitCollectionDidChange:(nullable UITraitCollection *)previousTraitCollection {
 	[super traitCollectionDidChange:previousTraitCollection];
 
 	BOOL isRegularHeight = self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassRegular;
@@ -133,4 +135,7 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 
 	self.webView.scrollView.contentInset = UIEdgeInsetsMake(topInset, 0.0, 0.0, 0.0);
 }
+
 @end
+
+NS_ASSUME_NONNULL_END

@@ -10,6 +10,8 @@
 #import "ApptentiveInteraction.h"
 #import "ApptentiveInteractionInvocation.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 static NSString *const TargetsKey = @"targets";
 static NSString *const InteractionsKey = @"interactions";
 static NSString *const ExpiryKey = @"expiry";
@@ -123,7 +125,7 @@ static NSString *const ATEngagementInteractionsAppBuildNumberKey = @"ATEngagemen
 	}
 }
 
-- (instancetype)initWithCoder:(NSCoder *)coder {
+- (nullable instancetype)initWithCoder:(NSCoder *)coder {
 	self = [super init];
 
 	if (self) {
@@ -142,3 +144,5 @@ static NSString *const ATEngagementInteractionsAppBuildNumberKey = @"ATEngagemen
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -8,6 +8,8 @@
 
 #import "ApptentiveSerialRequestAttachment.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @implementation ApptentiveSerialRequestAttachment
 
@@ -26,7 +28,7 @@
 	return attachment;
 }
 
-- (NSData *)fileData {
+- (nullable NSData *)fileData {
 	NSData *fileData = nil;
 	if (self.path && [[NSFileManager defaultManager] fileExistsAtPath:self.path]) {
 		NSError *error = nil;
@@ -43,3 +45,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

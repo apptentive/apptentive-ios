@@ -8,6 +8,8 @@
 
 #import "ApptentiveState.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 /**
  An `ApptentiveCount` records information about when and how often a code point
@@ -35,7 +37,7 @@
 /**
  The time at which the code point or version was last invoked.
  */
-@property (readonly, strong, nonatomic) NSDate *lastInvoked;
+@property (readonly, nullable, strong, nonatomic) NSDate *lastInvoked;
 
 
 /**
@@ -52,7 +54,7 @@
  @param date The time at which the code point or version was last invoked.
  @return The newly-initialized count object.
  */
-- (instancetype)initWithTotalCount:(NSInteger)totalCount versionCount:(NSInteger)versionCount buildCount:(NSInteger)buildCount lastInvoked:(NSDate *)date;
+- (instancetype)initWithTotalCount:(NSInteger)totalCount versionCount:(NSInteger)versionCount buildCount:(NSInteger)buildCount lastInvoked:(nullable NSDate *)date;
 
 #pragma mark - Mutation
 
@@ -78,3 +80,5 @@
 - (void)invoke;
 
 @end
+
+NS_ASSUME_NONNULL_END

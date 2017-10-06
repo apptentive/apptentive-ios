@@ -19,6 +19,8 @@
 #import "ApptentiveMessageManager.h"
 #import "ApptentiveMessageSender.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @implementation ApptentiveLegacyMessage
 
@@ -109,3 +111,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

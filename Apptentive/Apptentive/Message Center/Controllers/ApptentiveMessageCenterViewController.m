@@ -36,6 +36,8 @@
 
 #define FOOTER_ANIMATION_DURATION 0.10
 
+NS_ASSUME_NONNULL_BEGIN
+
 NSString *const ATInteractionMessageCenterEventLabelLaunch = @"launch";
 NSString *const ATInteractionMessageCenterEventLabelClose = @"close";
 NSString *const ATInteractionMessageCenterEventLabelAttach = @"attach";
@@ -81,7 +83,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 @property (strong, nonatomic) IBOutlet ApptentiveAttachmentController *attachmentController;
 
-@property (readonly, nonatomic) NSIndexPath *indexPathOfLastMessage;
+@property (readonly, nullable, nonatomic) NSIndexPath *indexPathOfLastMessage;
 
 @property (assign, nonatomic) ATMessageCenterState state;
 
@@ -145,7 +147,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	}
 }
 
-- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+- (void)traitCollectionDidChange:(nullable UITraitCollection *)previousTraitCollection {
 	[self.greetingView traitCollectionDidChange:previousTraitCollection];
 
 	[self resizeFooterView:nil];
@@ -416,7 +418,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 #pragma mark Table view delegate
 
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+- (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
 	if (![self.viewModel shouldShowDateForMessageGroupAtIndex:section]) {
 		return nil;
 	}
@@ -465,11 +467,11 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	return YES;
 }
 
-- (BOOL)tableView:(UITableView *)tableView canPerformAction:(SEL)action forRowAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
+- (BOOL)tableView:(UITableView *)tableView canPerformAction:(SEL)action forRowAtIndexPath:(NSIndexPath *)indexPath withSender:(nullable id)sender {
 	return action == @selector(copy:);
 }
 
-- (void)tableView:(UITableView *)tableView performAction:(SEL)action forRowAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
+- (void)tableView:(UITableView *)tableView performAction:(SEL)action forRowAtIndexPath:(NSIndexPath *)indexPath withSender:(nullable id)sender {
 	if (indexPath) {
 		[[UIPasteboard generalPasteboard] setValue:[self.viewModel textOfMessageAtIndexPath:indexPath] forPasteboardType:(__bridge NSString *)kUTTypeUTF8PlainText];
 	}
@@ -798,7 +800,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 #pragma mark - Key-value observing
 
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *, id> *)change context:(void *)context {
+- (void)observeValueForKeyPath:(nullable NSString *)keyPath ofObject:(nullable id)object change:(nullable NSDictionary<NSString *, id> *)change context:(nullable void *)context {
 	[self updateSendButtonEnabledStatus];
 }
 
@@ -1010,7 +1012,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	}
 }
 
-- (NSIndexPath *)indexPathOfLastMessage {
+- (nullable NSIndexPath *)indexPathOfLastMessage {
 	NSInteger lastSectionIndex = self.tableView.numberOfSections - 1;
 
 	if (lastSectionIndex == -1) {
@@ -1036,7 +1038,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	}
 }
 
-- (void)scrollToFooterView:(NSNotification *)notification {
+- (void)scrollToFooterView:(nullable NSNotification *)notification {
 	[self.tableView scrollToRowAtIndexPath:self.indexPathOfLastMessage atScrollPosition:UITableViewScrollPositionTop animated:NO];
 	[self.tableView layoutIfNeeded];
 
@@ -1051,7 +1053,19 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	CGFloat toolbarHeight = self.navigationController.toolbarHidden ? 0 : CGRectGetHeight(self.navigationController.toolbar.bounds);
 
 	CGFloat heightOfVisibleView = fmin(CGRectGetMinY(localKeyboardRect), CGRectGetHeight(self.view.bounds) - toolbarHeight);
-	CGFloat verticalOffsetMaximum = fmax(-64, self.tableView.contentSize.height - heightOfVisibleView);
+
+#ifdef __IPHONE_11_0
+	if (@available(iOS 11.0, *)) {
+		CGFloat homeAreaHeight = self.tableView.safeAreaInsets.bottom - self.tableView.contentInset.bottom;
+
+		if (CGRectGetMinY(localKeyboardRect) >= CGRectGetMaxY(self.tableView.bounds)) {
+			// If keyboard is hidden, save room for the home "button"
+			heightOfVisibleView -= homeAreaHeight;
+		}
+	}
+#endif
+
+	CGFloat verticalOffsetMaximum = fmax(self.topLayoutGuide.length * -1, self.tableView.contentSize.height - heightOfVisibleView);
 
 	verticalOffset = fmin(verticalOffset, verticalOffsetMaximum);
 	CGPoint contentOffset = CGPointMake(0, verticalOffset);
@@ -1062,7 +1076,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	}];
 }
 
-- (void)resizeFooterView:(NSNotification *)notification {
+- (void)resizeFooterView:(nullable NSNotification *)notification {
 	CGFloat height = 0;
 
 	if (self.state == ATMessageCenterStateComposing || self.state == ATMessageCenterStateEmpty) {
@@ -1072,13 +1086,14 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 		CGRect localKeyboardRect = self.view.window ? [self.view.window convertRect:self.lastKnownKeyboardRect toView:self.tableView.superview] : self.lastKnownKeyboardRect;
 
-		UIEdgeInsets insets = self.tableView.contentInset;
+		CGFloat topContentInset = self.tableView.contentInset.top;
+		CGFloat homeAreaInset = 0;
 #ifdef __IPHONE_11_0
 		if (@available(iOS 11.0, *)) {
-			insets = self.tableView.safeAreaInsets;
+			topContentInset = self.tableView.safeAreaInsets.top;
+			homeAreaInset = fmax(0, self.tableView.safeAreaInsets.bottom - self.tableView.contentInset.bottom);
 		}
 #endif
-		CGFloat topContentInset = insets.top;
 
 		// Available space is between the top of the keyboard and the bottom of the navigation bar
 		height = fmin(CGRectGetMinY(localKeyboardRect), CGRectGetHeight(self.view.bounds)) - topContentInset;
@@ -1095,6 +1110,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 			} else {
 				height -= CGRectGetMaxY(self.rectOfLastMessage) + self.tableView.sectionFooterHeight;
 			}
+
+			height -= homeAreaInset;
 		}
 
 		// But don't shrink the thing until it's unusably small on e.g. 4S devices
@@ -1171,7 +1188,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[self scrollToLastMessageAnimated:YES];
 }
 
-- (void)updateHeaderFooterTextSize:(NSNotification *)notification {
+- (void)updateHeaderFooterTextSize:(nullable NSNotification *)notification {
 	self.greetingView.titleLabel.font = [self.viewModel.styleSheet fontForStyle:ApptentiveTextStyleHeaderTitle];
 	self.greetingView.messageLabel.font = [self.viewModel.styleSheet fontForStyle:ApptentiveTextStyleHeaderMessage];
 
@@ -1192,3 +1209,5 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

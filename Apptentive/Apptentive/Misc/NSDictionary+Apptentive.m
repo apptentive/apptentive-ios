@@ -8,14 +8,19 @@
 
 #import "NSDictionary+Apptentive.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @implementation NSDictionary (Apptentive)
 
-- (id)at_safeObjectForKey:(id)aKey {
+- (nullable id)at_safeObjectForKey:(id)aKey {
 	id result = [self objectForKey:aKey];
 	if (!result || [result isKindOfClass:[NSNull class]]) {
 		return nil;
 	}
 	return result;
 }
+
 @end
+
+NS_ASSUME_NONNULL_END

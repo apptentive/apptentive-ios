@@ -11,6 +11,8 @@
 #import "ApptentiveBackend+Engagement.h"
 #import "ApptentiveUtilities.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 NSString *const ATInteractionAboutViewInteractionKey = @"About";
 NSString *const ATInteractionAboutViewEventLabelLaunch = @"launch";
 NSString *const ATInteractionAboutViewEventLabelClose = @"close";
@@ -85,7 +87,7 @@ NSString *const ATInteractionAboutViewEventLabelClose = @"close";
 	[[UIApplication sharedApplication] openURL:components.URL];
 }
 
-- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+- (void)traitCollectionDidChange:(nullable UITraitCollection *)previousTraitCollection {
 	[super traitCollectionDidChange:previousTraitCollection];
 
 	BOOL isCompactHeight = self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassCompact;
@@ -108,3 +110,5 @@ NSString *const ATInteractionAboutViewEventLabelClose = @"close";
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

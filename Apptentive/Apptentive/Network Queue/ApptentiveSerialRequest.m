@@ -17,6 +17,8 @@
 #import "Apptentive_Private.h"
 #import "ApptentivePayloadDebug.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @implementation ApptentiveSerialRequest
 
@@ -167,3 +169,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

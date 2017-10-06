@@ -10,6 +10,8 @@
 #import "ApptentiveUtilities.h"
 #import "ApptentiveSerialRequest.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @implementation ApptentivePayloadDebug
 
@@ -74,3 +76,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

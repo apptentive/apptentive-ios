@@ -10,6 +10,8 @@
 #import "ApptentiveMessageSender.h"
 #import "ApptentiveAttachment.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 static NSString *const IdentifierKey = @"identifier";
 static NSString *const LocalIdentifierKey = @"localIdentifier";
 static NSString *const SentDateKey = @"sentDate";
@@ -95,7 +97,7 @@ static NSString *const InboundKey = @"inboundKey";
 	return self;
 }
 
-- (nullable instancetype)initWithBody:(NSString *)body attachments:(NSArray *)attachments automated:(BOOL)automated customData:(NSDictionary *)customData {
+- (nullable instancetype)initWithBody:(nullable NSString *)body attachments:(nullable NSArray *)attachments automated:(BOOL)automated customData:(nullable NSDictionary *)customData {
 	self = [super init];
 
 	if (self) {
@@ -114,7 +116,7 @@ static NSString *const InboundKey = @"inboundKey";
 	return self;
 }
 
-- (instancetype)initWithCoder:(NSCoder *)coder {
+- (nullable instancetype)initWithCoder:(NSCoder *)coder {
 	self = [super init];
 	if (self) {
 		_identifier = [coder decodeObjectOfClass:[NSString class] forKey:IdentifierKey];
@@ -144,7 +146,7 @@ static NSString *const InboundKey = @"inboundKey";
 	[coder encodeBool:self.inbound forKey:InboundKey];
 }
 
-- (id)copyWithZone:(NSZone *)zone {
+- (id)copyWithZone:(nullable NSZone *)zone {
 	ApptentiveMessage *copy = [[ApptentiveMessage alloc] initWithBody:self.body attachments:self.attachments automated:self.automated customData:self.customData];
 
 	copy.identifier = self.identifier;
@@ -209,3 +211,5 @@ static NSString *const InboundKey = @"inboundKey";
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

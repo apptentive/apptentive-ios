@@ -8,10 +8,12 @@
 
 #import "ApptentiveTableView.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @implementation ApptentiveTableView
 
-- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+- (void)traitCollectionDidChange:(nullable UITraitCollection *)previousTraitCollection {
 	[super traitCollectionDidChange:previousTraitCollection];
 
 	[self.tableHeaderView sizeToFit];
@@ -19,3 +21,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

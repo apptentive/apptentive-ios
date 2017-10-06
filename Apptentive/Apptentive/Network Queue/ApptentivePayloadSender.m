@@ -12,6 +12,8 @@
 #import "ApptentiveConversation.h"
 #import "ApptentivePayloadDebug.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 NSString * const ApptentiveBuildPayloadRequestsName = @"Build Payload Requests";
 
 
@@ -357,3 +359,5 @@ NSString * const ApptentiveBuildPayloadRequestsName = @"Build Payload Requests";
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

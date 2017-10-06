@@ -8,10 +8,12 @@
 
 #import "ApptentiveSurveyLayoutAttributes.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @implementation ApptentiveSurveyLayoutAttributes
 
-- (id)copyWithZone:(NSZone *)zone {
+- (id)copyWithZone:(nullable NSZone *)zone {
 	ApptentiveSurveyLayoutAttributes *result = [super copyWithZone:zone];
 
 	result.valid = self.valid;
@@ -32,3 +34,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

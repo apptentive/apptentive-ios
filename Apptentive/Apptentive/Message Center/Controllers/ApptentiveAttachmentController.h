@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import <QuickLook/QuickLook.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class ApptentiveAttachButton, ApptentiveMessageCenterViewController;
 
 
@@ -18,7 +20,7 @@
 @property (strong, nonatomic) IBOutlet ApptentiveAttachButton *attachButton;
 @property (weak, nonatomic) IBOutlet ApptentiveMessageCenterViewController *viewController;
 
-@property (readonly, nonatomic) NSArray *attachments;
+@property (readonly, nullable, nonatomic) NSArray *attachments;
 @property (assign, nonatomic, getter=isActive) BOOL active;
 
 - (void)viewDidLoad;
@@ -30,3 +32,5 @@
 
 @interface ApptentiveAttachmentController (QuickLook) <QLPreviewControllerDataSource>
 @end
+
+NS_ASSUME_NONNULL_END

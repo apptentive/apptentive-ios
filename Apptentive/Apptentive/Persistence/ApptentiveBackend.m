@@ -35,6 +35,8 @@
 
 @import CoreTelephony;
 
+NS_ASSUME_NONNULL_BEGIN
+
 NSString *const ApptentiveAuthenticationDidFailNotification = @"ApptentiveAuthenticationDidFailNotification";
 NSString *const ApptentiveAuthenticationDidFailNotificationKeyErrorType = @"errorType";
 NSString *const ApptentiveAuthenticationDidFailNotificationKeyErrorMessage = @"errorMessage";
@@ -52,7 +54,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 
 @interface ApptentiveBackend ()
 
-@property (strong, nonatomic) ApptentiveRequestOperation *configurationOperation;
+@property (nullable, strong, nonatomic) ApptentiveRequestOperation *configurationOperation;
 
 @property (assign, nonatomic) ATBackendState state;
 
@@ -461,11 +463,11 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 
 #pragma mark Message Center
 
-- (BOOL)presentMessageCenterFromViewController:(UIViewController *)viewController {
+- (BOOL)presentMessageCenterFromViewController:(nullable UIViewController *)viewController {
 	return [self presentMessageCenterFromViewController:viewController withCustomData:nil];
 }
 
-- (BOOL)presentMessageCenterFromViewController:(UIViewController *)viewController withCustomData:(NSDictionary *)customData {
+- (BOOL)presentMessageCenterFromViewController:(nullable UIViewController *)viewController withCustomData:(nullable NSDictionary *)customData {
 	if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateBackground) {
 		// Only present Message Center UI in Active state.
 		return NO;
@@ -656,3 +658,5 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

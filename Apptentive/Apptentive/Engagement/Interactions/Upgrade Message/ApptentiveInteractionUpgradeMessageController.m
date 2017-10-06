@@ -12,6 +12,8 @@
 #import "ApptentiveUtilities.h"
 #import "Apptentive_Private.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 NSString *const ATInteractionUpgradeMessageEventLabelLaunch = @"launch";
 NSString *const ATInteractionUpgradeMessageEventLabelDismiss = @"dismiss";
 
@@ -22,7 +24,7 @@ NSString *const ATInteractionUpgradeMessageEventLabelDismiss = @"dismiss";
 	[self registerInteractionControllerClass:self forType:@"UpgradeMessage"];
 }
 
-- (void)presentInteractionFromViewController:(UIViewController *)viewController {
+- (void)presentInteractionFromViewController:(nullable UIViewController *)viewController {
 	[super presentInteractionFromViewController:viewController];
 
 	ApptentiveNavigationController *navigationController = [[ApptentiveUtilities storyboard] instantiateViewControllerWithIdentifier:@"UpgradeMessageNavigation"];
@@ -49,3 +51,5 @@ NSString *const ATInteractionUpgradeMessageEventLabelDismiss = @"dismiss";
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -13,6 +13,8 @@
 #import "ApptentiveInteraction.h"
 #import "ApptentiveUtilities.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @implementation ApptentiveInteractionMessageCenterController
 
@@ -20,7 +22,7 @@
 	[self registerInteractionControllerClass:self forType:@"MessageCenter"];
 }
 
-- (void)presentInteractionFromViewController:(UIViewController *)viewController {
+- (void)presentInteractionFromViewController:(nullable UIViewController *)viewController {
 	[super presentInteractionFromViewController:viewController];
 
 	ApptentiveNavigationController *navigationController = [[ApptentiveUtilities storyboard] instantiateViewControllerWithIdentifier:@"MessageCenterNavigation"];
@@ -57,3 +59,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -14,6 +14,8 @@
 #import "UIAlertController+Apptentive.h"
 #import "ApptentiveStoreProductViewController.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 NSString *const ATInteractionAppStoreRatingEventLabelLaunch = @"launch";
 NSString *const ATInteractionAppStoreRatingEventLabelOpenAppStoreURL = @"open_app_store_url";
 NSString *const ATInteractionAppStoreRatingEventLabelOpenStoreKit = @"open_store_kit";
@@ -27,7 +29,7 @@ NSString *const ATInteractionAppStoreRatingEventLabelUnableToRate = @"unable_to_
 	[self registerInteractionControllerClass:self forType:@"AppStoreRating"];
 }
 
-- (void)presentInteractionFromViewController:(UIViewController *)viewController {
+- (void)presentInteractionFromViewController:(nullable UIViewController *)viewController {
 	[super presentInteractionFromViewController:viewController];
 
 	[self openAppStoreToRateApp];
@@ -177,5 +179,6 @@ NSString *const ATInteractionAppStoreRatingEventLabelUnableToRate = @"unable_to_
 	[self.interaction engage:ATInteractionAppStoreRatingEventLabelOpenMacAppStore fromViewController:self.presentingViewController];
 }
 
-
 @end
+
+NS_ASSUME_NONNULL_END

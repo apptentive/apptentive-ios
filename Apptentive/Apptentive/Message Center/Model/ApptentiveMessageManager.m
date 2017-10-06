@@ -20,19 +20,21 @@
 #import "ApptentiveUtilities.h"
 #import "ApptentiveAttachment.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 static NSString *const MessageStoreFileName = @"messages-v1.archive";
 
 
 @interface ApptentiveMessageManager ()
 
-@property (strong, nonatomic) ApptentiveRequestOperation *messageOperation;
-@property (strong, nonatomic) NSTimer *messageFetchTimer;
+@property (nullable, strong, nonatomic) ApptentiveRequestOperation *messageOperation;
+@property (nullable, strong, nonatomic) NSTimer *messageFetchTimer;
 @property (strong, nonatomic) NSDictionary *currentCustomData;
 @property (readonly, nonatomic) NSMutableDictionary *messageIdentifierIndex;
 @property (readonly, nonatomic) ApptentiveMessageStore *messageStore;
 
 @property (readonly, nonatomic) NSString *messageStorePath;
-@property (copy, nonatomic) void (^backgroundFetchBlock)(UIBackgroundFetchResult);
+@property (nullable, copy, nonatomic) void (^backgroundFetchBlock)(UIBackgroundFetchResult);
 
 @end
 
@@ -451,3 +453,5 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

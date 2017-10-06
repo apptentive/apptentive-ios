@@ -8,6 +8,8 @@
 
 #import "ApptentiveState.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class ApptentiveVersion;
 
 
@@ -116,3 +118,5 @@
 - (void)setOverridingStyles;
 
 @end
+
+NS_ASSUME_NONNULL_END

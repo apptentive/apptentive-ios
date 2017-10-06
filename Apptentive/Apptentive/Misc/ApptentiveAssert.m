@@ -8,6 +8,9 @@
 
 #import "ApptentiveAssert.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
+
 static ApptentiveAssertionCallback _callback;
 
 void ApptentiveSetAssertionCallback(ApptentiveAssertionCallback callback) {
@@ -29,3 +32,5 @@ void __ApptentiveAssertHelper(const char *expression, const char *file, int line
 		_callback([NSString stringWithUTF8String:file], line, message);
 	}
 }
+
+NS_ASSUME_NONNULL_END

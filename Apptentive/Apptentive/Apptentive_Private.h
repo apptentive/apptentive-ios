@@ -12,6 +12,8 @@
 #import <Apptentive/Apptentive.h>
 #endif
 
+NS_ASSUME_NONNULL_BEGIN
+
 extern NSNotificationName _Nonnull const ApptentiveCustomPersonDataChangedNotification;
 extern NSNotificationName _Nonnull const ApptentiveCustomDeviceDataChangedNotification;
 extern NSNotificationName _Nonnull const ApptentiveInteractionsDidUpdateNotification;
@@ -23,7 +25,6 @@ extern NSString * _Nonnull const ApptentiveCustomPersonDataPreferenceKey;
 
 @class ApptentiveMessage, ApptentiveBackend;
 
-NS_ASSUME_NONNULL_BEGIN
 
 @interface Apptentive ()
 

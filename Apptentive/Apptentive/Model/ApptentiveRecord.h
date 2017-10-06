@@ -8,8 +8,9 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
-
 #import "ApptentiveJSONModel.h"
+
+NS_ASSUME_NONNULL_BEGIN
 
 
 @interface ApptentiveRecord : NSManagedObject <ApptentiveJSONModel>
@@ -26,3 +27,5 @@
 - (BOOL)isCreationTimeEmpty;
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -8,8 +8,9 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
-
 #import "ApptentiveRecord.h"
+
+NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSInteger, ATPendingMessageState) {
 	ATPendingMessageStateNone = -1,
@@ -42,3 +43,5 @@ typedef NS_ENUM(NSInteger, ATPendingMessageState) {
 + (void)enqueueUnsentMessagesInContext:(NSManagedObjectContext *)context forConversation:(ApptentiveConversation *)conversation oldAttachmentPath:(NSString *)oldAttachmentPath newAttachmentPath:(NSString *)newAttachmentPath;
 
 @end
+
+NS_ASSUME_NONNULL_END

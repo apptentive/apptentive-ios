@@ -13,6 +13,8 @@
 #define GREETING_PORTRAIT_HEIGHT 258.0
 #define GREETING_LANDSCAPE_HEIGHT 128.0
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @interface ApptentiveMessageCenterGreetingView ()
 
@@ -40,7 +42,7 @@
 	[super awakeFromNib];
 }
 
-- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+- (void)traitCollectionDidChange:(nullable UITraitCollection *)previousTraitCollection {
 	[super traitCollectionDidChange:previousTraitCollection];
 
 	self.translatesAutoresizingMaskIntoConstraints = NO;
@@ -72,3 +74,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

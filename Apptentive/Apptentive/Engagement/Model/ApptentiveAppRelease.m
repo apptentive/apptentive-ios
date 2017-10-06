@@ -9,6 +9,8 @@
 #import "ApptentiveAppRelease.h"
 #import "ApptentiveVersion.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 static NSString *const TypeKey = @"type";
 static NSString *const VersionKey = @"version";
 static NSString *const BuildKey = @"build";
@@ -64,7 +66,7 @@ static NSString *const ATEngagementIsUpdateBuildKey = @"ATEngagementIsUpdateBuil
 	return self;
 }
 
-- (instancetype)initWithCoder:(NSCoder *)coder {
+- (nullable instancetype)initWithCoder:(NSCoder *)coder {
 	self = [super initWithCoder:coder];
 
 	if (self) {
@@ -189,3 +191,5 @@ static NSString *const ATEngagementIsUpdateBuildKey = @"ATEngagementIsUpdateBuil
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

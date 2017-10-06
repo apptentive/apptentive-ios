@@ -16,6 +16,8 @@
 #import "ApptentiveVersion.h"
 #import "ApptentiveConversationMetadataItem.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 static NSString *const AppReleaseKey = @"appRelease";
 static NSString *const SDKKey = @"SDK";
 static NSString *const PersonKey = @"person";
@@ -104,7 +106,7 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 	return self;
 }
 
-- (instancetype)initWithCoder:(NSCoder *)coder {
+- (nullable instancetype)initWithCoder:(NSCoder *)coder {
 	self = [super initWithCoder:coder];
 	if (self) {
 		_appRelease = [coder decodeObjectOfClass:[ApptentiveAppRelease class] forKey:AppReleaseKey];
@@ -434,7 +436,7 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 	[NSKeyedUnarchiver setClass:self forClassName:@"ATConversation"];
 }
 
-- (id)initWithCoder:(NSCoder *)coder {
+- (nullable instancetype)initWithCoder:(NSCoder *)coder {
 	self = [super init];
 
 	if (self) {
@@ -499,3 +501,5 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

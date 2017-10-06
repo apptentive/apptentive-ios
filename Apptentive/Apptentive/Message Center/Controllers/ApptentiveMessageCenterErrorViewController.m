@@ -12,6 +12,8 @@
 #import "ApptentiveBackend+Engagement.h"
 #import "ApptentiveUtilities.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 NSString *const ATInteractionMessageCenterErrorViewInteractionKey = @"MessageCenter";
 NSString *const ATInteractionMessageCenterEventLabelNoInteractionNoInternet = @"no_interaction_no_internet";
 NSString *const ATInteractionMessageCenterEventLabelNoInteractionAttempting = @"no_interaction_attempting";
@@ -74,3 +76,5 @@ NSString *const ATInteractionMessageCenterEventLabelNoInteractionClose = @"no_in
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

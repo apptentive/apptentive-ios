@@ -228,7 +228,7 @@
 		01A2D1A61E490A9700C2103A /* ApptentiveUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0901E490A9700C2103A /* ApptentiveUtilities.h */; };
 		01A2D1A71E490A9700C2103A /* ApptentiveUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0911E490A9700C2103A /* ApptentiveUtilities.m */; };
 		01A2D1A81E490A9700C2103A /* NSDictionary+Apptentive.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0921E490A9700C2103A /* NSDictionary+Apptentive.h */; };
-		01A2D1A91E490A9700C2103A /* NSDictionary+ApptentiveAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0931E490A9700C2103A /* NSDictionary+ApptentiveAdditions.m */; };
+		01A2D1A91E490A9700C2103A /* NSDictionary+Apptentive.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0931E490A9700C2103A /* NSDictionary+Apptentive.m */; };
 		01A2D1AA1E490A9700C2103A /* ApptentiveAppConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0951E490A9700C2103A /* ApptentiveAppConfiguration.h */; };
 		01A2D1AB1E490A9700C2103A /* ApptentiveAppConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0961E490A9700C2103A /* ApptentiveAppConfiguration.m */; };
 		01A2D1B21E490A9700C2103A /* ApptentiveLegacyEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D09D1E490A9700C2103A /* ApptentiveLegacyEvent.h */; };
@@ -654,7 +654,7 @@
 		01A2D0901E490A9700C2103A /* ApptentiveUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveUtilities.h; sourceTree = "<group>"; };
 		01A2D0911E490A9700C2103A /* ApptentiveUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveUtilities.m; sourceTree = "<group>"; };
 		01A2D0921E490A9700C2103A /* NSDictionary+Apptentive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+Apptentive.h"; sourceTree = "<group>"; };
-		01A2D0931E490A9700C2103A /* NSDictionary+ApptentiveAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+ApptentiveAdditions.m"; sourceTree = "<group>"; };
+		01A2D0931E490A9700C2103A /* NSDictionary+Apptentive.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+Apptentive.m"; sourceTree = "<group>"; };
 		01A2D0951E490A9700C2103A /* ApptentiveAppConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveAppConfiguration.h; sourceTree = "<group>"; };
 		01A2D0961E490A9700C2103A /* ApptentiveAppConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveAppConfiguration.m; sourceTree = "<group>"; };
 		01A2D09D1E490A9700C2103A /* ApptentiveLegacyEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveLegacyEvent.h; sourceTree = "<group>"; };
@@ -1390,7 +1390,7 @@
 				01A2D0901E490A9700C2103A /* ApptentiveUtilities.h */,
 				01A2D0911E490A9700C2103A /* ApptentiveUtilities.m */,
 				01A2D0921E490A9700C2103A /* NSDictionary+Apptentive.h */,
-				01A2D0931E490A9700C2103A /* NSDictionary+ApptentiveAdditions.m */,
+				01A2D0931E490A9700C2103A /* NSDictionary+Apptentive.m */,
 				01626EB71EB7D60C0064E73F /* NSData+Encryption.h */,
 				01626EB81EB7D60C0064E73F /* NSData+Encryption.m */,
 				EF8EE3A91EBBA5D00033E7A1 /* ApptentiveJWT.h */,
@@ -2089,7 +2089,7 @@
 				01A2D17D1E490A9700C2103A /* ApptentiveBannerViewController.m in Sources */,
 				EFC97A9F1F56303300BCC461 /* UIAlertController+Apptentive.m in Sources */,
 				01A2D1D71E490A9700C2103A /* ApptentiveBackend.m in Sources */,
-				01A2D1A91E490A9700C2103A /* NSDictionary+ApptentiveAdditions.m in Sources */,
+				01A2D1A91E490A9700C2103A /* NSDictionary+Apptentive.m in Sources */,
 				0140D60B1E83553C007B5130 /* ApptentiveLegacyFileAttachment.m in Sources */,
 				01A2D1951E490A9700C2103A /* ApptentiveMessageCenterMessageCell.m in Sources */,
 				EF8EE3A31EBA79EC0033E7A1 /* ATDataModel v5 to v6.xcmappingmodel in Sources */,

@@ -12,8 +12,11 @@
 #import "ApptentiveBackend.h"
 #import <MobileCoreServices/MobileCoreServices.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @implementation ApptentiveLegacyFileAttachment
+
 @dynamic localPath;
 @dynamic mimeType;
 @dynamic name;
@@ -50,3 +53,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -7,9 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
-
 #import "Apptentive.h"
 #import "ApptentiveLogTag.h"
+
+NS_ASSUME_NONNULL_BEGIN
 
 #define ApptentiveLogTagConversation [ApptentiveLogTag conversationTag]
 #define ApptentiveLogTagNetwork [ApptentiveLogTag networkTag]
@@ -27,3 +28,5 @@ void ApptentiveLogWarning(id arg, ...);
 void ApptentiveLogInfo(id arg, ...);
 void ApptentiveLogDebug(id arg, ...);
 void ApptentiveLogVerbose(id arg, ...);
+
+NS_ASSUME_NONNULL_END

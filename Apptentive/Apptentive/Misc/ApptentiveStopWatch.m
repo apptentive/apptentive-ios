@@ -9,6 +9,8 @@
 #import "ApptentiveStopWatch.h"
 
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface ApptentiveStopWatch ()
 
 @property (nonatomic, strong) NSDate *startDate;
@@ -39,3 +41,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

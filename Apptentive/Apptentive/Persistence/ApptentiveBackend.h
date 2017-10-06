@@ -13,6 +13,8 @@
 #import "ApptentiveConversationManager.h"
 #import "ApptentiveClient.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 extern NSString *const ApptentiveAuthenticationDidFailNotification;
 extern NSString *const ApptentiveAuthenticationDidFailNotificationKeyErrorType;
 extern NSString *const ApptentiveAuthenticationDidFailNotificationKeyErrorMessage;
@@ -45,11 +47,11 @@ extern NSString *const ApptentiveAuthenticationDidFailNotificationKeyConversatio
 
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (readonly, strong, nonatomic) NSString *supportDirectoryPath;
-@property (strong, nonatomic) UIViewController *presentedMessageCenterViewController;
+@property (strong, nullable, nonatomic) UIViewController *presentedMessageCenterViewController;
 
 @property (readonly, nonatomic) NSURLCache *imageCache;
 
-@property (copy, nonatomic) NSDictionary *currentCustomData;
+@property (copy, nullable, nonatomic) NSDictionary *currentCustomData;
 @property (copy, nonatomic) ApptentiveAuthenticationFailureCallback authenticationFailureCallback;
 
 @property (readonly, nonatomic) BOOL networkAvailable;
@@ -84,8 +86,8 @@ extern NSString *const ApptentiveAuthenticationDidFailNotificationKeyConversatio
  @param viewController The view controller from which to present message center
  @return Whether message center was displayed
  */
-- (BOOL)presentMessageCenterFromViewController:(UIViewController *)viewController;
-- (BOOL)presentMessageCenterFromViewController:(UIViewController *)viewController withCustomData:(NSDictionary *)customData;
+- (BOOL)presentMessageCenterFromViewController:(nullable UIViewController *)viewController;
+- (BOOL)presentMessageCenterFromViewController:(nullable UIViewController *)viewController withCustomData:(nullable NSDictionary *)customData;
 
 - (void)dismissMessageCenterAnimated:(BOOL)animated completion:(void (^)(void))completion;
 
@@ -102,3 +104,5 @@ extern NSString *const ApptentiveAuthenticationDidFailNotificationKeyConversatio
 - (void)scheduleDeviceUpdate;
 
 @end
+
+NS_ASSUME_NONNULL_END

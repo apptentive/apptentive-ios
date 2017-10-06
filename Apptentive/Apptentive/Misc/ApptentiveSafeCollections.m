@@ -9,6 +9,8 @@
 #import "ApptentiveSafeCollections.h"
 #import "ApptentiveAssert.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 id ApptentiveCollectionValue(id value) {
 	ApptentiveAssertNotNil(value, @"Value is nil");
 	return value ?: [NSNull null];
@@ -55,3 +57,5 @@ void ApptentiveArrayAddObject(NSMutableArray *array, id object) {
 		[array addObject:object];
 	}
 }
+
+NS_ASSUME_NONNULL_END

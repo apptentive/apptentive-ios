@@ -61,6 +61,12 @@
 - (void)viewDidLoad {
 	[super viewDidLoad];
 
+#ifdef __IPHONE_11_0
+	if (@available(iOS 11.0, *)) {
+		((UICollectionViewFlowLayout *)self.collectionViewLayout).sectionInsetReference = UICollectionViewFlowLayoutSectionInsetFromSafeArea;
+	}
+#endif
+
 	self.collectionView.allowsMultipleSelection = YES;
 	[self.collectionViewLayout registerClass:[ApptentiveSurveyQuestionBackgroundView class] forDecorationViewOfKind:@"QuestionBackground"];
 
@@ -69,6 +75,7 @@
 	self.headerView.greetingLabel.text = self.viewModel.greeting;
 	[self.headerView.infoButton setImage:[ApptentiveUtilities imageNamed:@"at_info"] forState:UIControlStateNormal];
 	self.headerView.infoButton.accessibilityLabel = ApptentiveLocalizedString(@"About Apptentive", @"Accessibility label for 'show about' button");
+	[self.submitButton setTitle:self.viewModel.submitButtonText forState:UIControlStateNormal];
 
 	((ApptentiveSurveyCollectionView *)self.collectionView).collectionHeaderView = self.headerView;
 	((ApptentiveSurveyCollectionView *)self.collectionView).collectionFooterView = self.footerView;
@@ -405,6 +412,13 @@
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
 	UIEdgeInsets sectionInset = ((UICollectionViewFlowLayout *)collectionViewLayout).sectionInset;
 
+#ifdef __IPHONE_11_0
+	if (@available(iOS 11.0, *)) {
+		sectionInset.left += self.view.safeAreaInsets.left;
+		sectionInset.right += self.view.safeAreaInsets.right;
+	}
+#endif
+
 	CGSize itemSize = CGSizeMake(collectionView.bounds.size.width - sectionInset.left - sectionInset.right, 44.0);
 
 	switch ([self.viewModel typeOfQuestionAtIndex:indexPath.section]) {
@@ -474,7 +488,16 @@
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
-	CGFloat headerWidth = CGRectGetWidth(collectionView.bounds);
+	UIEdgeInsets sectionInset = ((UICollectionViewFlowLayout *)self.collectionViewLayout).sectionInset;
+	
+#ifdef __IPHONE_11_0
+	if (@available(iOS 11.0, *)) {
+		sectionInset.left += self.view.safeAreaInsets.left;
+		sectionInset.right += self.view.safeAreaInsets.right;
+	}
+#endif
+
+	CGFloat headerWidth = CGRectGetWidth(collectionView.bounds) - sectionInset.left - sectionInset.right;
 	CGFloat labelWidth = headerWidth - QUESTION_HORIZONTAL_MARGIN;
 
 	UIFont *questionFont = [self.viewModel.styleSheet fontForStyle:UIFontTextStyleBody];
@@ -492,6 +515,14 @@
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section {
 	UIEdgeInsets sectionInset = ((UICollectionViewFlowLayout *)collectionViewLayout).sectionInset;
+
+#ifdef __IPHONE_11_0
+	if (@available(iOS 11.0, *)) {
+		sectionInset.left += self.view.safeAreaInsets.left;
+		sectionInset.right += self.view.safeAreaInsets.right;
+	}
+#endif
+
 	CGSize result = CGSizeMake(collectionView.bounds.size.width - sectionInset.left - sectionInset.right, 12.0);
 
 	if ([self.viewModel typeOfQuestionAtIndex:section] == ATSurveyQuestionTypeRange) {

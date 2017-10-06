@@ -63,6 +63,14 @@
 	NSInteger section = indexPath.section;
 	NSInteger numberOfItems = [self.collectionView.dataSource collectionView:self.collectionView numberOfItemsInSection:section];
 
+	UIEdgeInsets sectionInset = self.sectionInset;
+#ifdef __IPHONE_11_0
+	if (@available(iOS 11.0, *)) {
+		sectionInset.left += self.collectionView.safeAreaInsets.left;
+		sectionInset.right += self.collectionView.safeAreaInsets.right;
+	}
+#endif
+
 	UICollectionViewLayoutAttributes *attributesForFirstItem = nil;
 	UICollectionViewLayoutAttributes *attributesForLastItem = nil;
 	if (numberOfItems) {
@@ -87,7 +95,7 @@
 		layoutAttributes.backgroundColor = [(id<ApptentiveCollectionViewDataSource>)self.collectionView.dataSource backgroundColor];
 	}
 
-	layoutAttributes.frame = UIEdgeInsetsInsetRect(CGRectMake(origin.x, origin.y, size.width, size.height), self.sectionInset);
+	layoutAttributes.frame = UIEdgeInsetsInsetRect(CGRectMake(origin.x, origin.y, size.width, size.height), sectionInset);
 	layoutAttributes.zIndex = -1;
 
 	return layoutAttributes;

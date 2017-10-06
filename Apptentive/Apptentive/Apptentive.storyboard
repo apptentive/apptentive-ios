@@ -6,6 +6,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
@@ -1718,34 +1719,34 @@ Lines</string>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Do You Eat Beans?" textAlignment="natural" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TTZ-vQ-g60">
-                                    <rect key="frame" x="26" y="19" width="268" height="21"/>
+                                    <rect key="frame" x="18" y="19" width="284" height="21"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KBj-ej-Jg5">
-                                    <rect key="frame" x="7" y="64" width="306" height="1"/>
+                                    <rect key="frame" x="-1" y="64" width="322" height="1"/>
                                     <color key="backgroundColor" red="0.80000000000000004" green="0.80000000000000004" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="1" id="B7O-ax-v5C"/>
                                     </constraints>
                                 </view>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select between 1 and 3" textAlignment="natural" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mTb-NZ-av4">
-                                    <rect key="frame" x="26" y="42" width="132" height="15"/>
+                                    <rect key="frame" x="18" y="42" width="132" height="15"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                     <color key="textColor" red="0.68627450980392157" green="0.68627450980392157" blue="0.68627450980392157" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                             </subviews>
                             <constraints>
-                                <constraint firstAttribute="trailing" secondItem="KBj-ej-Jg5" secondAttribute="trailing" constant="7" id="4m0-P5-Du9"/>
+                                <constraint firstAttribute="trailingMargin" secondItem="KBj-ej-Jg5" secondAttribute="trailing" constant="-1" id="4m0-P5-Du9"/>
                                 <constraint firstItem="TTZ-vQ-g60" firstAttribute="top" secondItem="Bcl-nV-AHj" secondAttribute="top" constant="19" id="634-lY-n3c"/>
                                 <constraint firstItem="mTb-NZ-av4" firstAttribute="top" secondItem="TTZ-vQ-g60" secondAttribute="bottom" constant="2" id="88M-VC-6gy"/>
                                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="mTb-NZ-av4" secondAttribute="trailing" constant="19" id="K3M-ut-7N6"/>
                                 <constraint firstItem="mTb-NZ-av4" firstAttribute="leading" secondItem="TTZ-vQ-g60" secondAttribute="leading" id="T99-Uh-WUD"/>
-                                <constraint firstItem="TTZ-vQ-g60" firstAttribute="leading" secondItem="Bcl-nV-AHj" secondAttribute="leading" constant="26" id="TLz-R0-7so"/>
-                                <constraint firstItem="KBj-ej-Jg5" firstAttribute="leading" secondItem="Bcl-nV-AHj" secondAttribute="leading" constant="7" id="Uoh-gv-78y"/>
-                                <constraint firstAttribute="trailing" secondItem="TTZ-vQ-g60" secondAttribute="trailing" constant="26" id="X30-fr-3ax"/>
+                                <constraint firstItem="TTZ-vQ-g60" firstAttribute="leading" secondItem="Bcl-nV-AHj" secondAttribute="leadingMargin" constant="18" id="TLz-R0-7so"/>
+                                <constraint firstItem="KBj-ej-Jg5" firstAttribute="leading" secondItem="Bcl-nV-AHj" secondAttribute="leadingMargin" constant="-1" id="Uoh-gv-78y"/>
+                                <constraint firstAttribute="trailingMargin" secondItem="TTZ-vQ-g60" secondAttribute="trailing" constant="18" id="X30-fr-3ax"/>
                                 <constraint firstAttribute="bottom" secondItem="KBj-ej-Jg5" secondAttribute="bottom" constant="6" id="fsp-hs-n7w"/>
                             </constraints>
                             <connections>
@@ -1796,13 +1797,13 @@ Lines</string>
                             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         </view>
                         <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eQS-jv-07Q">
-                            <rect key="frame" x="282" y="24" width="30" height="34"/>
+                            <rect key="frame" x="274" y="24" width="30" height="34"/>
                             <connections>
                                 <action selector="showAbout:" destination="0Su-Sq-q29" eventType="touchUpInside" id="oe5-zj-xZf"/>
                             </connections>
                         </button>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Would you like to take a survey?!" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="220" translatesAutoresizingMaskIntoConstraints="NO" id="QJU-jb-fK0">
-                            <rect key="frame" x="19" y="19" width="251" height="40"/>
+                            <rect key="frame" x="19" y="19" width="243" height="40"/>
                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                             <color key="textColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <nil key="highlightedColor"/>
@@ -1817,15 +1818,15 @@ Lines</string>
                     </subviews>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
-                        <constraint firstAttribute="trailing" secondItem="QJU-jb-fK0" secondAttribute="trailing" constant="50" id="3M8-7U-DAv"/>
-                        <constraint firstAttribute="trailing" secondItem="eQS-jv-07Q" secondAttribute="trailing" constant="8" id="5o0-nM-4r0"/>
+                        <constraint firstItem="eQS-jv-07Q" firstAttribute="trailing" secondItem="QJU-jb-fK0" secondAttribute="trailingMargin" constant="50" id="3M8-7U-DAv"/>
+                        <constraint firstAttribute="trailingMargin" secondItem="eQS-jv-07Q" secondAttribute="trailing" id="5o0-nM-4r0"/>
                         <constraint firstAttribute="trailing" secondItem="kjO-RC-C9t" secondAttribute="trailing" id="7ki-29-dG1"/>
                         <constraint firstItem="kjO-RC-C9t" firstAttribute="top" relation="greaterThanOrEqual" secondItem="eQS-jv-07Q" secondAttribute="bottom" constant="24" id="FhP-NR-GO3"/>
                         <constraint firstAttribute="trailing" secondItem="hym-vX-x0x" secondAttribute="trailing" id="O7u-UU-rCY"/>
                         <constraint firstItem="kjO-RC-C9t" firstAttribute="leading" secondItem="5MM-w9-NsG" secondAttribute="leading" id="RHh-BL-x21"/>
                         <constraint firstItem="hym-vX-x0x" firstAttribute="top" secondItem="5MM-w9-NsG" secondAttribute="top" constant="-1000" id="YEn-ux-FqZ"/>
                         <constraint firstAttribute="bottom" secondItem="kjO-RC-C9t" secondAttribute="bottom" id="akX-ad-z1E"/>
-                        <constraint firstItem="QJU-jb-fK0" firstAttribute="leading" secondItem="5MM-w9-NsG" secondAttribute="leading" constant="19" id="fZv-8x-wkE"/>
+                        <constraint firstItem="QJU-jb-fK0" firstAttribute="leading" secondItem="5MM-w9-NsG" secondAttribute="leadingMargin" constant="3" id="fZv-8x-wkE"/>
                         <constraint firstItem="eQS-jv-07Q" firstAttribute="top" secondItem="5MM-w9-NsG" secondAttribute="top" constant="24" id="fsQ-O1-gcB"/>
                         <constraint firstItem="hym-vX-x0x" firstAttribute="leading" secondItem="5MM-w9-NsG" secondAttribute="leading" id="hnU-Vl-6cU"/>
                         <constraint firstAttribute="bottom" secondItem="QJU-jb-fK0" secondAttribute="bottom" constant="26" id="inw-Yq-JwN"/>

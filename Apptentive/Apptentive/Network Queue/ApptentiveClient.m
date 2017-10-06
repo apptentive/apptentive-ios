@@ -39,10 +39,8 @@
 			@"User-Agent": [NSString stringWithFormat:@"ApptentiveConnect/%@ (iOS)", kApptentiveVersionString],
 		};
 
-#if APPTENTIVE_DEBUG
 		configuration.requestCachePolicy = NSURLRequestReloadIgnoringCacheData;
 		configuration.URLCache = nil;
-#endif
 
 		_URLSession = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:delegateQueue];
 

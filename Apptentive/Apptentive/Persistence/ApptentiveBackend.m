@@ -57,7 +57,6 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 @property (nullable, strong, nonatomic) ApptentiveRequestOperation *configurationOperation;
 
 @property (assign, nonatomic) ATBackendState state;
-@property (assign, nonatomic) BOOL networkAvailable;
 
 @property (strong, nonatomic) CTTelephonyNetworkInfo *telephonyNetworkInfo;
 
@@ -68,6 +67,8 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 @property (readonly, nonatomic, getter=isMessageCenterInForeground) BOOL messageCenterInForeground;
 
 @property (assign, nonatomic) UIBackgroundTaskIdentifier backgroundTaskIdentifier;
+
+@property (strong, nonatomic) ApptentiveReachability *reachability;
 
 @end
 
@@ -103,7 +104,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 			}];
 		}
 
-		[ApptentiveReachability sharedReachability];
+		_reachability = [[ApptentiveReachability alloc] initWithHostname:self.baseURL.host];
 
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillEnterForegroundNotification:) name:UIApplicationWillEnterForegroundNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillTerminateNotification:) name:UIApplicationWillTerminateNotification object:nil];
@@ -435,8 +436,8 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 - (void)updateNetworkingForCurrentNetworkStatus {
 	BOOL networkWasAvailable = self.networkAvailable;
 
-	ApptentiveNetworkStatus status = [[ApptentiveReachability sharedReachability] currentNetworkStatus];
-	self.networkAvailable = (status != ApptentiveNetworkNotReachable);
+	ApptentiveNetworkStatus status = [self.reachability currentNetworkStatus];
+	_networkAvailable = (status != ApptentiveNetworkNotReachable);
 
 	[self.operationQueue addOperationWithBlock:^{
 		if (self.networkAvailable != networkWasAvailable) {

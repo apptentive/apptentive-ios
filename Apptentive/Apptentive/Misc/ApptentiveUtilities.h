@@ -10,8 +10,6 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-#define kApptentiveHostName @"apptentive.com"
-
 
 @interface ApptentiveUtilities : NSObject
 

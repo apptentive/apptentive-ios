@@ -25,18 +25,9 @@ NSString *const ApptentiveReachabilityStatusChanged = @"ATReachabilityStatusChan
 	SCNetworkReachabilityRef reachabilityRef;
 }
 
-+ (ApptentiveReachability *)sharedReachability {
-	static ApptentiveReachability *sharedSingleton = nil;
-	static dispatch_once_t onceToken;
-	dispatch_once(&onceToken, ^{
-		sharedSingleton = [[ApptentiveReachability alloc] init];
-	});
-	return sharedSingleton;
-}
-
-- (id)init {
+- (id)initWithHostname:(NSString *)hostname {
 	if ((self = [super init])) {
-		SCNetworkReachabilityRef reachability = SCNetworkReachabilityCreateWithName(NULL, [kApptentiveHostName UTF8String]);
+		SCNetworkReachabilityRef reachability = SCNetworkReachabilityCreateWithName(NULL, hostname.UTF8String);
 		if (reachability != NULL) {
 			reachabilityRef = reachability;
 			[self start];
@@ -52,15 +43,14 @@ static void ATReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkRea
 
 		ApptentiveReachability *reachability = (__bridge ApptentiveReachability *)info;
 
-		[[ApptentiveReachability sharedReachability] updateDeviceInfoWithCurrentNetworkType:reachability];
+		[reachability updateDeviceInfoWithCurrentNetworkType];
 
 		[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveReachabilityStatusChanged object:reachability];
 	}
 }
 
-- (void)updateDeviceInfoWithCurrentNetworkType:(ApptentiveReachability *)reachability {
-	//TODO: ATDeviceInfo is not currently being updated with the new network type.
-	ApptentiveNetworkStatus status = [reachability currentNetworkStatus];
+- (void)updateDeviceInfoWithCurrentNetworkType {
+	ApptentiveNetworkStatus status = [self currentNetworkStatus];
 
 	NSString *statusString = @"network not reachable";
 	if (status == ApptentiveNetworkWifiReachable) {

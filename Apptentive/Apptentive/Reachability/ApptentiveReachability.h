@@ -22,7 +22,7 @@ extern NSString *const ApptentiveReachabilityStatusChanged;
 
 @interface ApptentiveReachability : NSObject
 
-+ (ApptentiveReachability *)sharedReachability;
+- (instancetype)initWithHostname:(NSString *)hostname;
 - (ApptentiveNetworkStatus)currentNetworkStatus;
 
 @end

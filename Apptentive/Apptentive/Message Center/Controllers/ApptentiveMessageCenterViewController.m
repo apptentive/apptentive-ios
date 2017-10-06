@@ -1038,7 +1038,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	}
 }
 
-- (void)scrollToFooterView:(NSNotification *)notification {
+- (void)scrollToFooterView:(nullable NSNotification *)notification {
 	[self.tableView scrollToRowAtIndexPath:self.indexPathOfLastMessage atScrollPosition:UITableViewScrollPositionTop animated:NO];
 	[self.tableView layoutIfNeeded];
 

@@ -103,7 +103,6 @@
 	XCTAssertFalse([ApptentiveUtilities emailAddressIsValid:@"\n"], @"Shouldn't be valid");
 	//	XCTAssertFalse([ApptentiveUtilities emailAddressIsValid:@"foo@yarg"], @"Shouldn't be valid");
 	XCTAssertFalse([ApptentiveUtilities emailAddressIsValid:@""], @"empty string email shouldn't be valid");
-	XCTAssertFalse([ApptentiveUtilities emailAddressIsValid:nil], @"nil email shouldn't be valid");
 }
 
 // The JSON blobs loaded here should be identical to those for the Android SDK.

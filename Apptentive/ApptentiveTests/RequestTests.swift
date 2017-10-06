@@ -22,7 +22,7 @@ class RequestTests: XCTestCase {
 		conversation.person.emailAddress = "test@apptentive.com"
 
 		do {
-			if let JSONDictionary = try JSONSerialization.jsonObject(with: request.payload!, options: []) as? [String: Any], let appRelease = JSONDictionary["app_release"] as? [String: Any], let person = JSONDictionary["person"] as? [String: Any], let device = JSONDictionary["device"] as? [String: Any] {
+			if let JSONDictionary = try JSONSerialization.jsonObject(with: (request?.payload)!, options: []) as? [String: Any], let appRelease = JSONDictionary["app_release"] as? [String: Any], let person = JSONDictionary["person"] as? [String: Any], let device = JSONDictionary["device"] as? [String: Any] {
 				XCTAssertEqual(appRelease["type"] as? String, "ios")
 				XCTAssertEqual(appRelease["cf_bundle_short_version_string"] as? String, conversation.appRelease.version.versionString)
 				XCTAssertEqual(appRelease["cf_bundle_version"] as? String, conversation.appRelease.build.versionString)

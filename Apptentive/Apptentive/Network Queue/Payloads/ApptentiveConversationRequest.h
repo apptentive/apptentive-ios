@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (readonly, nonatomic) id<ApptentiveAppInstall> appInstall;
 
-- (instancetype)initWithAppInstall:(id<ApptentiveAppInstall>)appInstall;
+- (nullable instancetype)initWithAppInstall:(id<ApptentiveAppInstall>)appInstall;
 
 - (NSDictionary *)JSONDictionary;
 

@@ -17,12 +17,12 @@
 
 @implementation ApptentiveConversationRequest
 
-- (instancetype)initWithAppInstall:(id<ApptentiveAppInstall>)appInstall {
+- (nullable instancetype)initWithAppInstall:(id<ApptentiveAppInstall>)appInstall {
 	self = [super init];
 
-	ApptentiveAssertNotNil(appInstall.appRelease.JSONDictionary, @"App release JSON should not be nil");
-	ApptentiveAssertNotNil(appInstall.person.JSONDictionary, @"Person JSON should not be nil");
-	ApptentiveAssertNotNil(appInstall.device.JSONDictionary, @"Device JSON should not be nil");
+	APPTENTIVE_CHECK_INIT_NOT_NIL_ARG(appInstall.appRelease.JSONDictionary);
+	APPTENTIVE_CHECK_INIT_NOT_NIL_ARG(appInstall.person.JSONDictionary);
+	APPTENTIVE_CHECK_INIT_NOT_NIL_ARG(appInstall.device.JSONDictionary);
 
 	if (self) {
 		_appInstall = appInstall;

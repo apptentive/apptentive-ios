@@ -1051,7 +1051,19 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	CGFloat toolbarHeight = self.navigationController.toolbarHidden ? 0 : CGRectGetHeight(self.navigationController.toolbar.bounds);
 
 	CGFloat heightOfVisibleView = fmin(CGRectGetMinY(localKeyboardRect), CGRectGetHeight(self.view.bounds) - toolbarHeight);
-	CGFloat verticalOffsetMaximum = fmax(-64, self.tableView.contentSize.height - heightOfVisibleView);
+
+#ifdef __IPHONE_11_0
+	if (@available(iOS 11.0, *)) {
+		CGFloat homeAreaHeight = self.tableView.safeAreaInsets.bottom - self.tableView.contentInset.bottom;
+
+		if (CGRectGetMinY(localKeyboardRect) >= CGRectGetMaxY(self.tableView.bounds)) {
+			// If keyboard is hidden, save room for the home "button"
+			heightOfVisibleView -= homeAreaHeight;
+		}
+	}
+#endif
+
+	CGFloat verticalOffsetMaximum = fmax(self.topLayoutGuide.length * -1, self.tableView.contentSize.height - heightOfVisibleView);
 
 	verticalOffset = fmin(verticalOffset, verticalOffsetMaximum);
 	CGPoint contentOffset = CGPointMake(0, verticalOffset);
@@ -1072,13 +1084,14 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 		CGRect localKeyboardRect = self.view.window ? [self.view.window convertRect:self.lastKnownKeyboardRect toView:self.tableView.superview] : self.lastKnownKeyboardRect;
 
-		UIEdgeInsets insets = self.tableView.contentInset;
+		CGFloat topContentInset = self.tableView.contentInset.top;
+		CGFloat homeAreaInset = 0;
 #ifdef __IPHONE_11_0
 		if (@available(iOS 11.0, *)) {
-			insets = self.tableView.safeAreaInsets;
+			topContentInset = self.tableView.safeAreaInsets.top;
+			homeAreaInset = fmax(0, self.tableView.safeAreaInsets.bottom - self.tableView.contentInset.bottom);
 		}
 #endif
-		CGFloat topContentInset = insets.top;
 
 		// Available space is between the top of the keyboard and the bottom of the navigation bar
 		height = fmin(CGRectGetMinY(localKeyboardRect), CGRectGetHeight(self.view.bounds)) - topContentInset;
@@ -1095,6 +1108,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 			} else {
 				height -= CGRectGetMaxY(self.rectOfLastMessage) + self.tableView.sectionFooterHeight;
 			}
+
+			height -= homeAreaInset;
 		}
 
 		// But don't shrink the thing until it's unusably small on e.g. 4S devices

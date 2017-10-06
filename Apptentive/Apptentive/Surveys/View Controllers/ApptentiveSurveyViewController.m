@@ -69,6 +69,7 @@
 	self.headerView.greetingLabel.text = self.viewModel.greeting;
 	[self.headerView.infoButton setImage:[ApptentiveUtilities imageNamed:@"at_info"] forState:UIControlStateNormal];
 	self.headerView.infoButton.accessibilityLabel = ApptentiveLocalizedString(@"About Apptentive", @"Accessibility label for 'show about' button");
+	[self.submitButton setTitle:self.viewModel.submitButtonText forState:UIControlStateNormal];
 
 	((ApptentiveSurveyCollectionView *)self.collectionView).collectionHeaderView = self.headerView;
 	((ApptentiveSurveyCollectionView *)self.collectionView).collectionFooterView = self.footerView;

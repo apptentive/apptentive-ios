@@ -41,15 +41,14 @@ static void ATReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkRea
 
 		ApptentiveReachability *reachability = (__bridge ApptentiveReachability *)info;
 
-		[reachability updateDeviceInfoWithCurrentNetworkType:reachability];
+		[reachability updateDeviceInfoWithCurrentNetworkType];
 
 		[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveReachabilityStatusChanged object:reachability];
 	}
 }
 
-- (void)updateDeviceInfoWithCurrentNetworkType:(ApptentiveReachability *)reachability {
-	//TODO: ATDeviceInfo is not currently being updated with the new network type.
-	ApptentiveNetworkStatus status = [reachability currentNetworkStatus];
+- (void)updateDeviceInfoWithCurrentNetworkType {
+	ApptentiveNetworkStatus status = [self currentNetworkStatus];
 
 	NSString *statusString = @"network not reachable";
 	if (status == ApptentiveNetworkWifiReachable) {

@@ -8,6 +8,8 @@
 
 #import "NSMutableData+Types.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @implementation NSMutableData (Types)
 
@@ -31,3 +33,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

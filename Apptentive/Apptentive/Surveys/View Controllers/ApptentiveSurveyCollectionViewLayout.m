@@ -10,6 +10,8 @@
 #import "ApptentiveSurveyCollectionView.h"
 #import "ApptentiveSurveyLayoutAttributes.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @interface ApptentiveSurveyCollectionViewLayout ()
 
@@ -30,7 +32,7 @@
 	return self;
 }
 
-- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+- (nullable instancetype)initWithCoder:(NSCoder *)aDecoder {
 	self = [super initWithCoder:aDecoder];
 
 	if (self) {
@@ -59,7 +61,7 @@
 	return superSize;
 }
 
-- (UICollectionViewLayoutAttributes *)layoutAttributesForDecorationViewOfKind:(NSString *)decorationViewKind atIndexPath:(NSIndexPath *)indexPath {
+- (nullable UICollectionViewLayoutAttributes *)layoutAttributesForDecorationViewOfKind:(NSString *)decorationViewKind atIndexPath:(NSIndexPath *)indexPath {
 	NSInteger section = indexPath.section;
 	NSInteger numberOfItems = [self.collectionView.dataSource collectionView:self.collectionView numberOfItemsInSection:section];
 
@@ -101,7 +103,7 @@
 	return layoutAttributes;
 }
 
-- (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath {
+- (nullable UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath {
 	UICollectionViewLayoutAttributes *result = [[super layoutAttributesForItemAtIndexPath:indexPath] copy];
 
 	result.frame = CGRectOffset(result.frame, 0, [self headerHeight]);
@@ -109,7 +111,7 @@
 	return result;
 }
 
-- (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect {
+- (nullable NSArray *)layoutAttributesForElementsInRect:(CGRect)rect {
 	rect = CGRectOffset(rect, 0, -self.headerHeight);
 
 	NSArray *superAttributes = [super layoutAttributesForElementsInRect:rect];
@@ -155,3 +157,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

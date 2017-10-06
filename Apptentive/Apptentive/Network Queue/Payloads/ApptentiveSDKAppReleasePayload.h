@@ -8,9 +8,9 @@
 
 #import "ApptentivePayload.h"
 
-@class ApptentiveConversation;
-
 NS_ASSUME_NONNULL_BEGIN
+
+@class ApptentiveConversation;
 
 
 @interface ApptentiveSDKAppReleasePayload : ApptentivePayload

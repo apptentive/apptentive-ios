@@ -13,6 +13,8 @@
 #import "ApptentiveBackend.h"
 #import "ApptentiveEventPayload.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @implementation ApptentiveLegacyEvent
 
@@ -65,7 +67,7 @@
 	}
 }
 
-- (NSDictionary *)apiJSON {
+- (nullable NSDictionary *)apiJSON {
 	NSDictionary *parentJSON = [super apiJSON];
 	NSMutableDictionary *result = [[NSMutableDictionary alloc] init];
 
@@ -143,3 +145,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

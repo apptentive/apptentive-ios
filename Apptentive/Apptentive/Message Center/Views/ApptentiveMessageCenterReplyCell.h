@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "ApptentiveMessageCenterCellProtocols.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class ApptentiveNetworkImageIconView;
 
 
@@ -19,3 +21,5 @@
 @property (weak, nonatomic) IBOutlet UILabel *senderLabel;
 
 @end
+
+NS_ASSUME_NONNULL_END

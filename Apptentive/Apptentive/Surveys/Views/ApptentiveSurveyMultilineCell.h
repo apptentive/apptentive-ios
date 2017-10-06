@@ -8,6 +8,8 @@
 
 #import "ApptentiveSurveyAnswerCell.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @interface ApptentiveSurveyMultilineCell : ApptentiveSurveyAnswerCell
 
@@ -15,3 +17,5 @@
 @property (strong, nonatomic) IBOutlet UILabel *placeholderLabel;
 
 @end
+
+NS_ASSUME_NONNULL_END

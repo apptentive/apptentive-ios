@@ -12,6 +12,8 @@
 #import "ApptentiveBackend+Engagement.h"
 #import <StoreKit/StoreKit.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 NSString *const ApptentiveInteractionAppleRatingDialogEventLabelRequest = @"request";
 NSString *const ApptentiveInteractionAppleRatingDialogEventLabelShown = @"shown";
 NSString *const ApptentiveInteractionAppleRatingDialogEventLabelNotShown = @"not_shown";
@@ -33,7 +35,7 @@ NSString *const ApptentiveInteractionAppleRatingDialogEventLabelFallback = @"fal
 	[self registerInteractionControllerClass:self forType:@"AppleRatingDialog"];
 }
 
-- (void)presentInteractionFromViewController:(UIViewController *)viewController {
+- (void)presentInteractionFromViewController:(nullable UIViewController *)viewController {
 	[super presentInteractionFromViewController:viewController];
 
 	[self.interaction engage:ApptentiveInteractionAppleRatingDialogEventLabelRequest fromViewController:viewController];
@@ -73,7 +75,7 @@ NSString *const ApptentiveInteractionAppleRatingDialogEventLabelFallback = @"fal
 	}
 }
 
-- (void)invokeNotShownInteractionFromViewController:(UIViewController *)viewController withReason:(NSString *)notShownReason {
+- (void)invokeNotShownInteractionFromViewController:(UIViewController *)viewController withReason:(nullable NSString *)notShownReason {
 	NSDictionary *userInfo = nil;
 
 	if (notShownReason != nil) {
@@ -104,5 +106,6 @@ NSString *const ApptentiveInteractionAppleRatingDialogEventLabelFallback = @"fal
 	}
 }
 
-
 @end
+
+NS_ASSUME_NONNULL_END

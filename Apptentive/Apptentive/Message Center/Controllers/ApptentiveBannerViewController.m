@@ -12,6 +12,7 @@
 #define DISPLAY_DURATION 3.0
 #define ANIMATION_DURATION 0.33
 
+NS_ASSUME_NONNULL_BEGIN
 
 @interface ApptentiveBannerViewController ()
 
@@ -163,3 +164,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

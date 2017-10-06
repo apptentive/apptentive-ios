@@ -9,9 +9,13 @@
 #import <UIKit/UIKit.h>
 #import "ApptentiveMessageCenterCellProtocols.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @interface ApptentiveMessageCenterContextMessageCell : UITableViewCell <ApptentiveMessageCenterCell>
 
 @property (weak, nonatomic) IBOutlet UITextView *messageLabel;
 
 @end
+
+NS_ASSUME_NONNULL_END

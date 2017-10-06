@@ -20,6 +20,8 @@
 #import "ApptentiveDevice.h"
 #import "ApptentivePerson.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @implementation ApptentiveInteractionUsageData
 
@@ -165,3 +167,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

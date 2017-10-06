@@ -8,7 +8,10 @@
 
 #import "ApptentiveSurveyAnswerCell.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @implementation ApptentiveSurveyAnswerCell
-
 @end
+
+NS_ASSUME_NONNULL_END

@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @interface ApptentiveSurveyGreetingView : UIView
 
@@ -16,3 +18,5 @@
 @property (strong, nonatomic) IBOutlet UIView *borderView;
 
 @end
+
+NS_ASSUME_NONNULL_END

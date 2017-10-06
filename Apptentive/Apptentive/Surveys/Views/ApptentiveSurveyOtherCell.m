@@ -8,6 +8,8 @@
 
 #import "ApptentiveSurveyOtherCell.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @implementation ApptentiveSurveyOtherCell
 
@@ -19,7 +21,7 @@
 	[super awakeFromNib];
 }
 
-- (UIView *)snapshotViewAfterScreenUpdates:(BOOL)afterUpdates {
+- (nullable UIView *)snapshotViewAfterScreenUpdates:(BOOL)afterUpdates {
 	if (self.bounds.size.height > self.textField.frame.origin.y) {
 		return [super resizableSnapshotViewFromRect:self.bounds afterScreenUpdates:afterUpdates withCapInsets:UIEdgeInsetsMake(self.bounds.size.height / 2, 0, 0, 0)];
 	} else {
@@ -35,3 +37,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

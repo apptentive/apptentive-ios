@@ -10,6 +10,8 @@
 #import "ApptentiveAppInstall.h"
 #import "ApptentiveDefines.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @implementation ApptentiveExistingLoginRequest
 
@@ -28,5 +30,6 @@
 	return @{ @"token": self.appInstall.token };
 }
 
-
 @end
+
+NS_ASSUME_NONNULL_END

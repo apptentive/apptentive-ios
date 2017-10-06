@@ -9,6 +9,8 @@
 #import "ApptentiveDataManager.h"
 #import "ApptentiveDefines.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 // Used to indicate a database upgrade or check was in progress and didn't complete.
 NSString *const ATDataManagerUpgradeCanaryFilename = @"ATDataManagerUpgradeCanary";
 
@@ -30,9 +32,9 @@ typedef enum {
 @interface ApptentiveDataManager ()
 
 
-@property (readwrite, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
-@property (readwrite, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
-@property (readwrite, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
+@property (readwrite, nullable, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
+@property (readwrite, nullable, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+@property (readwrite, nullable, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 
 @property (readwrite, nonatomic) BOOL didRemovePersistentStore;
 @property (readwrite, nonatomic) BOOL didFailToMigrateStore;
@@ -392,4 +394,7 @@ typedef enum {
 	}
 	return success;
 }
+
 @end
+
+NS_ASSUME_NONNULL_END

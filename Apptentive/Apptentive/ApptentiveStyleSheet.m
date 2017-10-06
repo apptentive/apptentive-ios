@@ -9,6 +9,8 @@
 #import "ApptentiveStyleSheet.h"
 #import "Apptentive.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 ApptentiveStyleIdentifier ApptentiveTextStyleBody = @"com.apptentive.body";
 ApptentiveStyleIdentifier ApptentiveTextStyleHeaderTitle = @"com.apptentive.header.title";
 ApptentiveStyleIdentifier ApptentiveTextStyleHeaderMessage = @"com.apptentive.header.message";
@@ -487,3 +489,5 @@ ApptentiveStyleIdentifier ApptentiveColorContextBackground = @"com.apptentive.co
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -38,6 +38,8 @@
 #define RANGE_FOOTER_VERTICAL_MARGIN 8
 #define RANGE_MINIMUM_WIDTH 27
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @interface ApptentiveSurveyViewController ()
 
@@ -48,7 +50,7 @@
 @property (strong, nonatomic) IBOutlet ApptentiveSurveySubmitButton *submitButton;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *missingRequiredItem;
 
-@property (strong, nonatomic) NSIndexPath *editingIndexPath;
+@property (nullable, strong, nonatomic) NSIndexPath *editingIndexPath;
 
 @property (readonly, nonatomic) CGFloat lineHeightOfQuestionFont;
 @property (assign, nonatomic) CGFloat iOS9ToolbarInset;
@@ -701,3 +703,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

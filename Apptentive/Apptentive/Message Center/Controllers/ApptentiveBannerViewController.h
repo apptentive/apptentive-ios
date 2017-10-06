@@ -8,6 +8,8 @@
 
 #import "ApptentiveNetworkImageView.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @protocol ApptentiveBannerViewControllerDelegate;
 
 
@@ -28,3 +30,5 @@
 - (void)userDidTapBanner:(ApptentiveBannerViewController *)banner;
 
 @end
+
+NS_ASSUME_NONNULL_END

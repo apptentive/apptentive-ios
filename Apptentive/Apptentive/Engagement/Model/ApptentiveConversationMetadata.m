@@ -13,6 +13,8 @@
 
 #define VERSION 1
 
+NS_ASSUME_NONNULL_BEGIN
+
 static NSString *const ItemsKey = @"items";
 static NSString *const VersionKey = @"version";
 
@@ -33,7 +35,7 @@ static NSString *const VersionKey = @"version";
 	return self;
 }
 
-- (instancetype)initWithCoder:(NSCoder *)coder {
+- (nullable instancetype)initWithCoder:(NSCoder *)coder {
 	self = [super init];
 
 	if (self) {
@@ -64,7 +66,7 @@ static NSString *const VersionKey = @"version";
 
 #pragma mark - Filtering
 
-- (ApptentiveConversationMetadataItem *)findItemFilter:(ApptentiveConversationMetadataItemFilter)filter {
+- (nullable ApptentiveConversationMetadataItem *)findItemFilter:(ApptentiveConversationMetadataItemFilter)filter {
 	// TODO: ApptentiveAssertNotNull(filter);
 	if (filter != nil) {
 		for (id item in _items) {
@@ -152,3 +154,5 @@ static NSString *const VersionKey = @"version";
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

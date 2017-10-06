@@ -8,6 +8,10 @@
 
 #import "ApptentiveInteractionController.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @interface ApptentiveInteractionSurveyController : ApptentiveInteractionController
 @end
+
+NS_ASSUME_NONNULL_END

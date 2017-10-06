@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 #define kApptentiveHostName @"apptentive.com"
 
 
@@ -23,11 +25,11 @@
 + (UIStoryboard *)storyboard;
 + (UIImage *)imageNamed:(NSString *)name;
 + (NSURL *)apptentiveHomepageURL;
-+ (NSString *)appName;
++ (nullable NSString *)appName;
 
-+ (UIViewController *)rootViewControllerForCurrentWindow;
++ (nullable UIViewController *)rootViewControllerForCurrentWindow;
 + (UIViewController *)topViewController;
-+ (UIImage *)appIcon;
++ (nullable UIImage *)appIcon;
 
 + (NSString *)stringByEscapingForPredicate:(NSString *)string;
 + (NSString *)randomStringOfLength:(NSUInteger)length;
@@ -43,9 +45,11 @@
 
 + (BOOL)emailAddressIsValid:(NSString *)emailAddress;
 
-+ (NSData *)secureRandomDataOfLength:(NSUInteger)length;
++ (nullable NSData *)secureRandomDataOfLength:(NSUInteger)length;
 
 + (NSString *)stringByPaddingBase64:(NSString *)base64String;
 + (NSString *)formatAsTableRows:(NSArray<NSArray *> *)rows;
 
 @end
+
+NS_ASSUME_NONNULL_END

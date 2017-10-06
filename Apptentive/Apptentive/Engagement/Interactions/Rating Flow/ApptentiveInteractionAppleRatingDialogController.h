@@ -8,7 +8,10 @@
 
 #import "ApptentiveInteractionController.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @interface ApptentiveInteractionAppleRatingDialogController : ApptentiveInteractionController
-
 @end
+
+NS_ASSUME_NONNULL_END

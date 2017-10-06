@@ -19,6 +19,8 @@
 #import "ApptentiveSerialRequest.h"
 #import "ApptentiveAppConfiguration.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEngagementCachedInteractionsExpirationPreferenceKey";
 
 NSString *const ATEngagementCodePointHostAppVendorKey = @"local";
@@ -84,11 +86,11 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 	return [[ApptentiveInteraction apptentiveAppInteraction] engage:event fromViewController:nil];
 }
 
-- (BOOL)engageLocalEvent:(NSString *)event userInfo:(NSDictionary *)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData fromViewController:(UIViewController *)viewController {
+- (BOOL)engageLocalEvent:(NSString *)event userInfo:(nullable NSDictionary *)userInfo customData:(nullable NSDictionary *)customData extendedData:(nullable NSArray *)extendedData fromViewController:(nullable UIViewController *)viewController {
 	return [[ApptentiveInteraction localAppInteraction] engage:event fromViewController:viewController userInfo:userInfo customData:customData extendedData:extendedData];
 }
 
-- (BOOL)engageCodePoint:(NSString *)codePoint fromInteraction:(ApptentiveInteraction *)fromInteraction userInfo:(NSDictionary *)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData fromViewController:(UIViewController *)viewController {
+- (BOOL)engageCodePoint:(NSString *)codePoint fromInteraction:(nullable ApptentiveInteraction *)fromInteraction userInfo:(nullable NSDictionary *)userInfo customData:(nullable NSDictionary *)customData extendedData:(nullable NSArray *)extendedData fromViewController:(nullable UIViewController *)viewController {
 	ApptentiveLogInfo(@"Engage Apptentive event: %@", codePoint);
 	if (![self isReady]) {
 		return NO;
@@ -144,7 +146,7 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 	[self.conversationManager.activeConversation warmInteraction:interactionID];
 }
 
-- (void)presentInteraction:(ApptentiveInteraction *)interaction fromViewController:(UIViewController *)viewController {
+- (void)presentInteraction:(ApptentiveInteraction *)interaction fromViewController:(nullable UIViewController *)viewController {
 	if (!interaction) {
 		ApptentiveLogError(@"Attempting to present an interaction that does not exist!");
 		return;
@@ -186,3 +188,5 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

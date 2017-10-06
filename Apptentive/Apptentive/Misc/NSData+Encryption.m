@@ -11,6 +11,8 @@
 #import "NSData+Encryption.h"
 #import "ApptentiveUtilities.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @implementation NSData (Encryption)
 
@@ -25,7 +27,7 @@
 	return [self apptentive_dataEncryptedWithKey:key initializationVector:initializationVector];
 }
 
-- (NSData *)apptentive_dataEncryptedWithKey:(NSData *)key initializationVector:(NSData *)initializationVector {
+- (nullable NSData *)apptentive_dataEncryptedWithKey:(NSData *)key initializationVector:(NSData *)initializationVector {
 	if (key == nil) {
 		ApptentiveLogError(@"Unable to encrypt data: encryption key is nil");
 		return nil;
@@ -54,7 +56,7 @@
 	}
 }
 
-- (NSData *)apptentive_dataDecryptedWithKey:(NSData *)key {
+- (nullable NSData *)apptentive_dataDecryptedWithKey:(NSData *)key {
 	NSData *initializationVector = [self subdataWithRange:NSMakeRange(0, 16)];
 	NSData *inputData = [self subdataWithRange:NSMakeRange(16, self.length - 16)];
 
@@ -95,3 +97,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

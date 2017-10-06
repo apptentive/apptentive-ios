@@ -14,6 +14,8 @@
 #import "ApptentiveBackend.h"
 #import "ApptentiveJSONSerialization.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @interface ApptentiveRequestOperation () {
 	NSDate *_startDate;
@@ -169,7 +171,7 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 	}
 }
 
-- (void)processResponse:(NSHTTPURLResponse *)response withObject:(NSObject *)responseObject {
+- (void)processResponse:(NSHTTPURLResponse *)response withObject:(nullable NSObject *)responseObject {
 	_cacheLifetime = [self maxAgeFromResponse:response];
 	_responseObject = responseObject;
 
@@ -215,7 +217,7 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 	}
 }
 
-- (void)retryTaskWithError:(NSError *)error {
+- (void)retryTaskWithError:(nullable NSError *)error {
 	if (error != nil) {
 		ApptentiveLogError(ApptentiveLogTagNetwork, @"%@ %@ failed with error: %@", self.URLRequest.HTTPMethod, self.URLRequest.URL.absoluteString, error);
 	}
@@ -297,7 +299,7 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 	return -[_startDate timeIntervalSinceNow];
 }
 
-- (NSString *)name {
+- (nullable NSString *)name {
 	return [NSString stringWithFormat:@"Request Operation (%@ %@)", self.URLRequest.HTTPMethod, self.URLRequest.URL.absoluteString];
 }
 
@@ -320,16 +322,18 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 	}
 }
 
-- (void)requestOperationWillRetry:(ApptentiveRequestOperation *)operation withError:(NSError *)error {
+- (void)requestOperationWillRetry:(ApptentiveRequestOperation *)operation withError:(nullable NSError *)error {
 	if (self.operationRetryCallback) {
 		self.operationRetryCallback(operation, error);
 	}
 }
 
-- (void)requestOperation:(ApptentiveRequestOperation *)operation didFailWithError:(NSError *)error {
+- (void)requestOperation:(ApptentiveRequestOperation *)operation didFailWithError:(nullable NSError *)error {
 	if (self.operationFailCallback) {
 		self.operationFailCallback(operation, error);
 	}
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

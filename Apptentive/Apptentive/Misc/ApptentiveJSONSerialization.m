@@ -8,6 +8,8 @@
 
 #import "ApptentiveJSONSerialization.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 NSInteger ApptentiveJSONDeserializationErrorCode = -567;
 NSInteger ApptentiveJSONSerializationErrorCode = -568;
 
@@ -70,3 +72,5 @@ NSInteger ApptentiveJSONSerializationErrorCode = -568;
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

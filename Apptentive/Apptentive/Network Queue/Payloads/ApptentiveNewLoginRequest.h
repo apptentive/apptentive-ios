@@ -8,6 +8,10 @@
 
 #import "ApptentiveConversationRequest.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @interface ApptentiveNewLoginRequest : ApptentiveConversationRequest
 @end
+
+NS_ASSUME_NONNULL_END

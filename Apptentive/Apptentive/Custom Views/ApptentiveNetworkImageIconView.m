@@ -10,6 +10,8 @@
 #import "ApptentiveUtilities.h"
 #import "ApptentiveBackend.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @implementation ApptentiveNetworkImageIconView
 
@@ -62,3 +64,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

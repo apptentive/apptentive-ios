@@ -8,6 +8,8 @@
 
 #import "ApptentiveLogTag.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 static ApptentiveLogTag *_conversationTag;
 static ApptentiveLogTag *_networkTag;
 static ApptentiveLogTag *_payloadTag;
@@ -65,3 +67,5 @@ static ApptentiveLogTag *_storageTag;
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

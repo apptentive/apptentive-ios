@@ -9,10 +9,12 @@
 #import "ApptentiveLegacyConversationRequest.h"
 #import "ApptentiveConversation.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @implementation ApptentiveLegacyConversationRequest
 
-- (instancetype)initWithConversation:(ApptentiveConversation *)conversation {
+- (nullable instancetype)initWithConversation:(ApptentiveConversation *)conversation {
 	self = [super init];
 
 	if (self) {
@@ -43,3 +45,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

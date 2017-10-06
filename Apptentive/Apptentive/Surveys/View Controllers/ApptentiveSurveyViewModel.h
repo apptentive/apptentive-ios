@@ -10,6 +10,8 @@
 #import "ApptentiveSurveyQuestion.h"
 #import "ApptentiveSurveyAnswer.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class ApptentiveSurvey, ApptentiveInteraction;
 
 @protocol ATSurveyViewModelDelegate
@@ -39,7 +41,7 @@
 - (NSInteger)numberOfAnswersForQuestionAtIndex:(NSInteger)index;
 
 - (NSString *)textOfQuestionAtIndex:(NSInteger)index;
-- (NSAttributedString *)instructionTextOfQuestionAtIndex:(NSInteger)index;
+- (nullable NSAttributedString *)instructionTextOfQuestionAtIndex:(NSInteger)index;
 - (NSAttributedString *)placeholderTextOfAnswerAtIndexPath:(NSIndexPath *)indexPath;
 - (ATSurveyQuestionType)typeOfQuestionAtIndex:(NSInteger)index;
 - (ApptentiveSurveyAnswerType)typeOfAnswerAtIndexPath:(NSIndexPath *)indexPath;
@@ -77,3 +79,5 @@
 - (void)viewModelValidationChanged:(ApptentiveSurveyViewModel *)viewModel isValid:(BOOL)valid;
 
 @end
+
+NS_ASSUME_NONNULL_END

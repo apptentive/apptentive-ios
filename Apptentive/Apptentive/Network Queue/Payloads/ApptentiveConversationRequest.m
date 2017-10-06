@@ -12,14 +12,19 @@
 #import "ApptentiveDevice.h"
 #import "ApptentiveSDK.h"
 #import "ApptentiveAppRelease.h"
+#import "ApptentiveDefines.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 
 @implementation ApptentiveConversationRequest
 
-- (instancetype)initWithAppInstall:(id<ApptentiveAppInstall>)appInstall {
+- (nullable instancetype)initWithAppInstall:(id<ApptentiveAppInstall>)appInstall {
 	self = [super init];
+
+	APPTENTIVE_CHECK_INIT_NOT_NIL_ARG(appInstall.appRelease.JSONDictionary);
+	APPTENTIVE_CHECK_INIT_NOT_NIL_ARG(appInstall.person.JSONDictionary);
+	APPTENTIVE_CHECK_INIT_NOT_NIL_ARG(appInstall.device.JSONDictionary);
 
 	if (self) {
 		_appInstall = appInstall;

@@ -56,12 +56,24 @@ static ApptentiveLogMonitor * _sharedInstance;
 
 @end
 
+@interface ApptentiveLogMonitor ()
+
+@property (nonatomic, readonly) NSString *accessToken;
+@property (nonatomic, readonly) ApptentiveLogLevel logLevel;
+@property (nonatomic, readonly) NSArray *emailRecipients;
+@property (nonatomic, readonly, getter=isSessionRestored) BOOL sessionRestored;
+
+@end
+
 @implementation ApptentiveLogMonitor
 
 - (instancetype)initWithConfiguration:(ApptentiveLogMonitorConfigration *)configuration {
 	self = [super init];
 	if (self) {
-		// FIXME: init instance
+		_accessToken = configuration.accessToken;
+		_logLevel = configuration.logLevel;
+		_emailRecipients = configuration.emailRecipients;
+		_sessionRestored = configuration.isRestored;
 	}
 	return self;
 }
@@ -80,7 +92,8 @@ static ApptentiveLogMonitor * _sharedInstance;
 			configuration = [self readConfigurationFromClipboard];
 			if (configuration != nil) {
 				ApptentiveLogInfo(ApptentiveLogTagMonitor, @"Read log monitor configuration from clipboard: %@", configuration);
-				// FIXME: clear clipboard text
+				// clear pastboard text
+				[[UIPasteboard generalPasteboard] setString:@""];
 			}
 		}
 		

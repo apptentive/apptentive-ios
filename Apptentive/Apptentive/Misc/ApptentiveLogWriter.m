@@ -20,16 +20,12 @@
 #include <notify_keys.h>
 #include <sys/time.h>
 
-#import "ApptentiveUtilities.h"
-
 static aslmsg (*dd_asl_next)(aslresponse obj);
 static void (*dd_asl_release)(aslresponse obj);
 
 @interface ApptentiveLogWriter ()
 
 @property (nonatomic, readonly) NSString *path;
-@property (nonatomic, readonly) BOOL appendLogs;
-
 @property (nonatomic, assign) BOOL cancelled;
 
 @end
@@ -55,11 +51,10 @@ static void (*dd_asl_release)(aslresponse obj);
 	#endif
 }
 
-- (instancetype)initWithPath:(NSString *)path appendLogs:(BOOL)appendLogs {
+- (instancetype)initWithPath:(NSString *)path {
 	self = [super init];
 	if (self) {
 		_path = path;
-		_appendLogs = appendLogs;
 	}
 	return self;
 }
@@ -94,10 +89,6 @@ static void (*dd_asl_release)(aslresponse obj);
 	__block unsigned long long lastSeenID = 0;
 	
 	dispatch_queue_t callbackQueue = dispatch_queue_create("Apptentive Log Queue", DISPATCH_QUEUE_SERIAL);
-	
-	if (!_appendLogs) {
-		[ApptentiveUtilities deleteFileAtPath:_path];
-	}
 	
 	/*
 	 syslogd posts kNotifyASLDBUpdate (com.apple.system.logger.message)

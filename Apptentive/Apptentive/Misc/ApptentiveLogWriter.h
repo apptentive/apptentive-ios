@@ -10,7 +10,7 @@
 
 @interface ApptentiveLogWriter : NSObject
 
-- (instancetype)initWithPath:(NSString *)path appendLogs:(BOOL)appendLogs;
+- (instancetype)initWithPath:(NSString *)path;
 - (void)start;
 - (void)stop;
 

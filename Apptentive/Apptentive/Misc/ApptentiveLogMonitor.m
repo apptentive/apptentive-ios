@@ -8,12 +8,14 @@
 
 #import "ApptentiveLogMonitor.h"
 #import "ApptentiveUtilities.h"
+#import "ApptentiveLogWriter.h"
 
 static NSString * const KeyAccessToken = @"accessToken";
 static NSString * const KeyEmailRecipients = @"emailRecipients";
 static NSString * const KeyLogLevel = @"logLevel";
 
 static NSString * const ConfigurationStorageFile = @"apptentive-log-monitor.cfg";
+static NSString * const LogFileName = @"apptentive-log.txt";
 
 static ApptentiveLogMonitor * _sharedInstance;
 
@@ -62,6 +64,7 @@ static ApptentiveLogMonitor * _sharedInstance;
 @property (nonatomic, readonly) ApptentiveLogLevel logLevel;
 @property (nonatomic, readonly) NSArray *emailRecipients;
 @property (nonatomic, readonly, getter=isSessionRestored) BOOL sessionRestored;
+@property (nonatomic, readonly) ApptentiveLogWriter *logWriter;
 
 @end
 
@@ -79,7 +82,13 @@ static ApptentiveLogMonitor * _sharedInstance;
 }
 
 - (void)start {
+	NSString *logFilePath = [self logFilePath];
+	if (!_sessionRestored) {
+		[ApptentiveUtilities deleteFileAtPath:logFilePath];
+	}
 	
+	_logWriter = [[ApptentiveLogWriter alloc] initWithPath:logFilePath];
+	[_logWriter start];
 }
 
 + (BOOL)tryInitialize {
@@ -126,6 +135,11 @@ static ApptentiveLogMonitor * _sharedInstance;
 + (NSString *)configurationStoragePath {
 	NSString *cacheDirectory = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
 	return [cacheDirectory stringByAppendingPathComponent:ConfigurationStorageFile];
+}
+
+- (NSString *)logFilePath {
+	NSString *cacheDirectory = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
+	return [cacheDirectory stringByAppendingPathComponent:LogFileName];
 }
 
 @end

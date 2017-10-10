@@ -380,6 +380,8 @@
 		EF8EE3AC1EBBA5D00033E7A1 /* ApptentiveJWT.m in Sources */ = {isa = PBXBuildFile; fileRef = EF8EE3AA1EBBA5D00033E7A1 /* ApptentiveJWT.m */; };
 		EF9009901F8D370400DC5B56 /* ApptentiveLogMonitor.h in Headers */ = {isa = PBXBuildFile; fileRef = EF90098E1F8D370400DC5B56 /* ApptentiveLogMonitor.h */; };
 		EF9009911F8D370400DC5B56 /* ApptentiveLogMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = EF90098F1F8D370400DC5B56 /* ApptentiveLogMonitor.m */; };
+		EF9009941F8D64B800DC5B56 /* ApptentiveLogWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = EF9009921F8D64B800DC5B56 /* ApptentiveLogWriter.h */; };
+		EF9009951F8D64B800DC5B56 /* ApptentiveLogWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = EF9009931F8D64B800DC5B56 /* ApptentiveLogWriter.m */; };
 		EFC308D21EC52915006B6D36 /* ApptentiveStopWatch.h in Headers */ = {isa = PBXBuildFile; fileRef = EFC308D01EC52915006B6D36 /* ApptentiveStopWatch.h */; };
 		EFC308D31EC52915006B6D36 /* ApptentiveStopWatch.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC308D11EC52915006B6D36 /* ApptentiveStopWatch.m */; };
 		EFC308D71ECA6692006B6D36 /* ApptentiveLegacyConversationRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = EFC308D51ECA6692006B6D36 /* ApptentiveLegacyConversationRequest.h */; };
@@ -811,6 +813,8 @@
 		EF8EE3AA1EBBA5D00033E7A1 /* ApptentiveJWT.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveJWT.m; sourceTree = "<group>"; };
 		EF90098E1F8D370400DC5B56 /* ApptentiveLogMonitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveLogMonitor.h; sourceTree = "<group>"; };
 		EF90098F1F8D370400DC5B56 /* ApptentiveLogMonitor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveLogMonitor.m; sourceTree = "<group>"; };
+		EF9009921F8D64B800DC5B56 /* ApptentiveLogWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveLogWriter.h; sourceTree = "<group>"; };
+		EF9009931F8D64B800DC5B56 /* ApptentiveLogWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveLogWriter.m; sourceTree = "<group>"; };
 		EFC308D01EC52915006B6D36 /* ApptentiveStopWatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveStopWatch.h; sourceTree = "<group>"; };
 		EFC308D11EC52915006B6D36 /* ApptentiveStopWatch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveStopWatch.m; sourceTree = "<group>"; };
 		EFC308D51ECA6692006B6D36 /* ApptentiveLegacyConversationRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveLegacyConversationRequest.h; sourceTree = "<group>"; };
@@ -1387,6 +1391,8 @@
 				EFF3FE411E8C386E006AD2B4 /* ApptentiveLogTag.m */,
 				EF90098E1F8D370400DC5B56 /* ApptentiveLogMonitor.h */,
 				EF90098F1F8D370400DC5B56 /* ApptentiveLogMonitor.m */,
+				EF9009921F8D64B800DC5B56 /* ApptentiveLogWriter.h */,
+				EF9009931F8D64B800DC5B56 /* ApptentiveLogWriter.m */,
 				EF1812491E8084C80053BD68 /* ApptentiveSafeCollections.h */,
 				EF18124A1E8084C80053BD68 /* ApptentiveSafeCollections.m */,
 				EFC308D01EC52915006B6D36 /* ApptentiveStopWatch.h */,
@@ -1777,6 +1783,7 @@
 				0140D6021E8354A9007B5130 /* ApptentiveMessageSender.h in Headers */,
 				014508A81EAABEDE003326E7 /* ApptentiveInteractionsRequest.h in Headers */,
 				014508A01EAAB26D003326E7 /* ApptentiveConversationRequest.h in Headers */,
+				EF9009941F8D64B800DC5B56 /* ApptentiveLogWriter.h in Headers */,
 				0140D60E1E83553C007B5130 /* ApptentiveLegacyMessageSender.h in Headers */,
 				01A2D1F21E490A9700C2103A /* ApptentiveSurveyMultilineCell.h in Headers */,
 				01A2D0FD1E490A9700C2103A /* ApptentiveHUDViewController.h in Headers */,
@@ -2141,6 +2148,7 @@
 				01A2D1061E490A9700C2103A /* ApptentiveUnreadMessagesBadgeView.m in Sources */,
 				01A2D11A1E490A9700C2103A /* ApptentiveInteractionSurveyController.m in Sources */,
 				0134EB1B1EA9930200DA4925 /* ApptentiveDevicePayload.m in Sources */,
+				EF9009951F8D64B800DC5B56 /* ApptentiveLogWriter.m in Sources */,
 				01A2D1241E490A9700C2103A /* ApptentiveCustomData.m in Sources */,
 				01A2D1E31E490A9700C2103A /* ApptentiveSurveyCollectionViewLayout.m in Sources */,
 				01A2D1BF1E490A9700C2103A /* ApptentiveRecord.m in Sources */,

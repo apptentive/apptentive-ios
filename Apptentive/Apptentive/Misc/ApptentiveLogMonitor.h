@@ -31,7 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ApptentiveLogMonitor : NSObject
 
-+ (BOOL)tryInitializeWithConfiguration:(ApptentiveLogMonitorConfigration *)configuration;
++ (BOOL)tryInitialize;
 
 @end
 

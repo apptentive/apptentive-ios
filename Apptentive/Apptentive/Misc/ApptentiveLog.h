@@ -17,10 +17,12 @@ NS_ASSUME_NONNULL_BEGIN
 #define ApptentiveLogTagPayload [ApptentiveLogTag payloadTag]
 #define ApptentiveLogTagUtility [ApptentiveLogTag utilityTag]
 #define ApptentiveLogTagStorage [ApptentiveLogTag storageTag]
+#define ApptentiveLogTagMonitor [ApptentiveLogTag logMonitorTag]
 
 extern ApptentiveLogLevel ApptentiveLogGetLevel(void);
 extern void ApptentiveLogSetLevel(ApptentiveLogLevel level);
 extern BOOL ApptentiveCanLogLevel(ApptentiveLogLevel level);
+extern NSString *NSStringFromApptentiveLogLevel(ApptentiveLogLevel level);
 
 void ApptentiveLogCrit(id arg, ...);
 void ApptentiveLogError(id arg, ...);

@@ -152,4 +152,23 @@ BOOL ApptentiveCanLogLevel(ApptentiveLogLevel level) {
 	return shouldLogLevel(level);
 }
 
+NSString *NSStringFromApptentiveLogLevel(ApptentiveLogLevel level) {
+	switch (level) {
+		case ApptentiveLogLevelCrit:
+			return @"crit";
+		case ApptentiveLogLevelWarn:
+			return @"warn";
+		case ApptentiveLogLevelInfo:
+			return @"info";
+		case ApptentiveLogLevelDebug:
+			return @"debug";
+		case ApptentiveLogLevelError:
+			return @"error";
+		case ApptentiveLogLevelVerbose:
+			return @"verbose";
+		default:
+			return @"unknown";
+  	}
+}
+
 NS_ASSUME_NONNULL_END

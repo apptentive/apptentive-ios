@@ -20,12 +20,16 @@
 #include <notify_keys.h>
 #include <sys/time.h>
 
+#import "ApptentiveUtilities.h"
+
 static aslmsg (*dd_asl_next)(aslresponse obj);
 static void (*dd_asl_release)(aslresponse obj);
 
 @interface ApptentiveLogWriter ()
 
 @property (nonatomic, readonly) NSString *path;
+@property (nonatomic, readonly) BOOL appendLogs;
+
 @property (nonatomic, assign) BOOL cancelled;
 
 @end
@@ -55,6 +59,7 @@ static void (*dd_asl_release)(aslresponse obj);
 	self = [super init];
 	if (self) {
 		_path = path;
+		_appendLogs = appendLogs;
 	}
 	return self;
 }
@@ -89,6 +94,10 @@ static void (*dd_asl_release)(aslresponse obj);
 	__block unsigned long long lastSeenID = 0;
 	
 	dispatch_queue_t callbackQueue = dispatch_queue_create("Apptentive Log Queue", DISPATCH_QUEUE_SERIAL);
+	
+	if (!_appendLogs) {
+		[ApptentiveUtilities deleteFileAtPath:_path];
+	}
 	
 	/*
 	 syslogd posts kNotifyASLDBUpdate (com.apple.system.logger.message)
@@ -156,9 +165,9 @@ static void (*dd_asl_release)(aslresponse obj);
 	if ( messageCString == NULL )
 		return;
 	
-	int flag;
-	BOOL async;
-	
+//	int flag;
+//	BOOL async;
+//	
 //	const char* levelCString = asl_get(msg, ASL_KEY_LEVEL);
 //	switch (levelCString? atoi(levelCString) : 0) {
 //			// By default all NSLog's with a ASL_LEVEL_WARNING level

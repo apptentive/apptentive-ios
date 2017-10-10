@@ -61,6 +61,7 @@ static void (*dd_asl_release)(aslresponse obj);
 
 - (void)start {
 	_cancelled = NO;
+	
 	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
 		@autoreleasepool {
 			[self captureAslLogs];
@@ -87,6 +88,8 @@ static void (*dd_asl_release)(aslresponse obj);
 	unsigned long long startTime = timeval.tv_sec;
 	__block unsigned long long lastSeenID = 0;
 	
+	dispatch_queue_t callbackQueue = dispatch_queue_create("Apptentive Log Queue", DISPATCH_QUEUE_SERIAL);
+	
 	/*
 	 syslogd posts kNotifyASLDBUpdate (com.apple.system.logger.message)
 	 through the notify API when it saves messages to the ASL database.
@@ -97,7 +100,7 @@ static void (*dd_asl_release)(aslresponse obj);
 	 for the messages.
 	 */
 	int notifyToken = 0;  // Can be used to unregister with notify_cancel().
-	notify_register_dispatch(kNotifyASLDBUpdate, &notifyToken, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^(int token) {
+	notify_register_dispatch(kNotifyASLDBUpdate, &notifyToken, callbackQueue, ^(int token) {
 			 // At least one message has been posted; build a search query.
 			 @autoreleasepool {
 				 aslmsg query = asl_new(ASL_TYPE_QUERY);

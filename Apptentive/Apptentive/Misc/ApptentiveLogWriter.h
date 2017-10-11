@@ -10,6 +10,8 @@
 
 @interface ApptentiveLogWriter : NSObject
 
+@property (nonatomic, copy) void (^finishCallback)(NSString *path);
+
 - (instancetype)initWithPath:(NSString *)path;
 - (void)start;
 - (void)stop;

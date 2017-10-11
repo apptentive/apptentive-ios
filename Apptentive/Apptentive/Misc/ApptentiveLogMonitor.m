@@ -6,11 +6,14 @@
 //  Copyright © 2017 Apptentive, Inc. All rights reserved.
 //
 
+#import "Apptentive.h"
 #import "ApptentiveLogMonitor.h"
 #import "ApptentiveUtilities.h"
 #import "ApptentiveLogWriter.h"
 #import "ApptentiveJSONSerialization.h"
 #import "ApptentiveSafeCollections.h"
+
+#import <MessageUI/MessageUI.h>
 
 static NSString * const KeyAccessToken = @"accessToken";
 static NSString * const KeyEmailRecipients = @"emailRecipients";
@@ -62,13 +65,14 @@ static ApptentiveLogMonitor * _sharedInstance;
 
 @end
 
-@interface ApptentiveLogMonitor ()
+@interface ApptentiveLogMonitor () <MFMailComposeViewControllerDelegate>
 
 @property (nonatomic, readonly) NSString *accessToken;
 @property (nonatomic, readonly) ApptentiveLogLevel logLevel;
 @property (nonatomic, readonly) NSArray *emailRecipients;
 @property (nonatomic, readonly, getter=isSessionRestored) BOOL sessionRestored;
 @property (nonatomic, readonly) ApptentiveLogWriter *logWriter;
+@property (nonatomic, strong) UIWindow *mailComposeControllerWindow;
 
 @end
 
@@ -85,6 +89,9 @@ static ApptentiveLogMonitor * _sharedInstance;
 	return self;
 }
 
+#pragma mark -
+#pragma mark Life cycle
+
 - (void)start {
 	NSString *logFilePath = [self logFilePath];
 	if (!_sessionRestored) {
@@ -94,29 +101,45 @@ static ApptentiveLogMonitor * _sharedInstance;
 	_logWriter = [[ApptentiveLogWriter alloc] initWithPath:logFilePath];
 	[_logWriter start];
 	
-	// dispatch on the main thread to avoid UI-issues
-	dispatch_async(dispatch_get_main_queue(), ^{
-		// create a custom window to show UI on top of everything
-		UIWindow *window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-		
-		// create alert controller with "Send", "Continue" and "Discard" actions
-		UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Apptentive" message:@"Log Monitor" preferredStyle:UIAlertControllerStyleActionSheet];
-		[alertController addAction:[UIAlertAction actionWithTitle:@"Send Report" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-			window.hidden = YES;
-		}]];
-		[alertController addAction:[UIAlertAction actionWithTitle:@"Continue" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-			window.hidden = YES;
-		}]];
-		[alertController addAction:[UIAlertAction actionWithTitle:@"Discard Report" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
-			window.hidden = YES;
-		}]];
-		
-		window.rootViewController = [[UIViewController alloc] init];
-		window.windowLevel = UIWindowLevelAlert + 1;
-		window.hidden = NO; // don't use makeKeyAndVisible since we don't have any knowledge about the host app's UI
-		[window.rootViewController presentViewController:alertController animated:YES completion:nil];
-	});
+	if (_sessionRestored) {
+		// dispatch on the main thread to avoid UI-issues
+		dispatch_async(dispatch_get_main_queue(), ^{
+			// create a custom window to show UI on top of everything
+			UIWindow *window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+			
+			// create alert controller with "Send", "Continue" and "Discard" actions
+			UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Apptentive" message:@"Log Monitor" preferredStyle:UIAlertControllerStyleActionSheet];
+			[alertController addAction:[UIAlertAction actionWithTitle:@"Send Report" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+				window.hidden = YES;
+				id strongSelf = self; // avoid compiler warning
+				_logWriter.finishCallback = ^(NSString *path) {
+					[strongSelf sendReportWithLogFile:path];
+				};
+				[self stop];
+			}]];
+			[alertController addAction:[UIAlertAction actionWithTitle:@"Continue" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+				window.hidden = YES;
+			}]];
+			[alertController addAction:[UIAlertAction actionWithTitle:@"Discard Report" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+				window.hidden = YES;
+				[self stop];
+			}]];
+			
+			window.rootViewController = [[UIViewController alloc] init];
+			window.windowLevel = UIWindowLevelAlert + 1;
+			window.hidden = NO; // don't use makeKeyAndVisible since we don't have any knowledge about the host app's UI
+			[window.rootViewController presentViewController:alertController animated:YES completion:nil];
+		});
+	}
 }
+
+- (void)stop {
+	[_logWriter stop];
+	[ApptentiveLogMonitor clearConfiguration];
+}
+
+#pragma mark -
+#pragma mark Static initialization
 
 + (BOOL)tryInitialize {
 	@try {
@@ -147,8 +170,16 @@ static ApptentiveLogMonitor * _sharedInstance;
 	return NO;
 }
 
+#pragma mark -
+#pragma mark Configuration
+
 + (nullable ApptentiveLogMonitorConfigration *)readConfigurationFromStoragePath:(NSString *)path {
 	return [NSKeyedUnarchiver unarchiveObjectWithFile:path];
+}
+
++ (void)clearConfiguration {
+	NSString *filepath = [self configurationStoragePath];
+	[ApptentiveUtilities deleteFileAtPath:filepath];
 }
 
 + (void)writeConfiguration:(ApptentiveLogMonitorConfigration *)configuration toStoragePath:(NSString *)path {
@@ -200,6 +231,68 @@ static ApptentiveLogMonitor * _sharedInstance;
 	
 	return configuration;
 }
+
+#pragma mark -
+#pragma mark Report
+
+- (void)sendReportWithLogFile:(NSString *)path {
+	if (![MFMailComposeViewController canSendMail]) {
+		UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Apptentive Log Monitor" message:@"Unable to send email" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+		[alertView show];
+		return;
+	}
+	
+	NSDictionary *bundleInfo = [[NSBundle mainBundle] infoDictionary];
+	
+	// collecting system info
+	NSMutableString *messageBody = [NSMutableString new];
+	[messageBody appendFormat:@"SDK: %@\n", kApptentiveVersionString];
+	[messageBody appendFormat:@"Version: %@\n", [bundleInfo objectForKey:@"CFBundleShortVersionString"]];
+	[messageBody appendFormat:@"Build: %@\n", [bundleInfo objectForKey:@"CFBundleVersion"]];
+//	"Device", Build.MODEL,
+//	"OS", String.format("Android %s (API %s)", Build.VERSION.RELEASE, Build.VERSION.SDK_INT),
+//	"Locale", Locale.getDefault().getDisplayName()
+	
+	
+	NSString *emailTitle = [NSString stringWithFormat:@"%@ device logs (iOS)", [NSBundle mainBundle].bundleIdentifier];
+	
+	MFMailComposeViewController *mc = [[MFMailComposeViewController alloc] init];
+	mc.mailComposeDelegate = self;
+	[mc setSubject:emailTitle];
+	[mc setMessageBody:messageBody isHTML:NO];
+	[mc setToRecipients:_emailRecipients];
+	
+	// Get the resource path and read the file using NSData
+	NSString *filename = [path lastPathComponent];
+	NSData *fileData = [NSData dataWithContentsOfFile:path];
+	
+	// Determine the MIME type
+	NSString *mimeType = @"text/plain";
+	
+	// Add attachment
+	[mc addAttachmentData:fileData mimeType:mimeType fileName:filename];
+	
+	// Present mail view controller on screen in a separate window
+	self.mailComposeControllerWindow = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+	self.mailComposeControllerWindow.windowLevel = UIWindowLevelAlert + 1;
+	self.mailComposeControllerWindow.rootViewController = [[UIViewController alloc] init];
+	self.mailComposeControllerWindow.hidden = NO;
+	
+	[self.mailComposeControllerWindow.rootViewController presentViewController:mc animated:YES completion:NULL];
+}
+
+#pragma mark -
+#pragma mark MFMailComposeViewControllerDelegate
+
+- (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(nullable NSError *)error {
+	[controller dismissViewControllerAnimated:YES completion:^{
+		self.mailComposeControllerWindow.hidden = YES;
+		self.mailComposeControllerWindow = nil;
+	}];
+}
+
+#pragma mark -
+#pragma mark Helpers
 
 + (NSString *)configurationStoragePath {
 	NSString *cacheDirectory = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];

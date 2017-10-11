@@ -26,6 +26,7 @@ static void (*dd_asl_release)(aslresponse obj);
 @interface ApptentiveLogWriter ()
 
 @property (nonatomic, readonly) NSString *path;
+@property (nonatomic, readonly) dispatch_queue_t callbackQueue;
 @property (nonatomic, assign) BOOL cancelled;
 
 @end
@@ -61,6 +62,7 @@ static void (*dd_asl_release)(aslresponse obj);
 
 - (void)start {
 	_cancelled = NO;
+	_callbackQueue = dispatch_queue_create("Apptentive Log Queue", DISPATCH_QUEUE_SERIAL);
 	
 	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
 		@autoreleasepool {
@@ -70,7 +72,19 @@ static void (*dd_asl_release)(aslresponse obj);
 }
 
 - (void)stop {
-	_cancelled = YES;
+	dispatch_async(_callbackQueue, ^{
+		_cancelled = YES;
+		
+		if (_finishCallback) {
+			_finishCallback(_path);
+		}
+	});
+}
+
+- (void)waitUntilFinished {
+	dispatch_sync(_callbackQueue, ^{
+		// do nothing here: just need to make sure that log callback is finished
+	});
 }
 
 - (void)captureAslLogs {
@@ -88,8 +102,6 @@ static void (*dd_asl_release)(aslresponse obj);
 	unsigned long long startTime = timeval.tv_sec;
 	__block unsigned long long lastSeenID = 0;
 	
-	dispatch_queue_t callbackQueue = dispatch_queue_create("Apptentive Log Queue", DISPATCH_QUEUE_SERIAL);
-	
 	/*
 	 syslogd posts kNotifyASLDBUpdate (com.apple.system.logger.message)
 	 through the notify API when it saves messages to the ASL database.
@@ -100,9 +112,14 @@ static void (*dd_asl_release)(aslresponse obj);
 	 for the messages.
 	 */
 	int notifyToken = 0;  // Can be used to unregister with notify_cancel().
-	notify_register_dispatch(kNotifyASLDBUpdate, &notifyToken, callbackQueue, ^(int token) {
+	notify_register_dispatch(kNotifyASLDBUpdate, &notifyToken, _callbackQueue, ^(int token) {
 			 // At least one message has been posted; build a search query.
 			 @autoreleasepool {
+				 if (_cancelled) {
+					 notify_cancel(token);
+					 return;
+				 }
+				 
 				 aslmsg query = asl_new(ASL_TYPE_QUERY);
 				 char stringValue[64];
 				 
@@ -128,12 +145,6 @@ static void (*dd_asl_release)(aslresponse obj);
 				 }
 				 dd_asl_release(response);
 				 asl_free(query);
-				 
-				 if (_cancelled) {
-					 notify_cancel(token);
-					 return;
-				 }
-				 
 			 }
 		 });
 }

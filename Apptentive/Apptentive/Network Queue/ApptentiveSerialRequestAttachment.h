@@ -8,6 +8,8 @@
 
 #import <CoreData/CoreData.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class ApptentiveSerialRequest;
 
 
@@ -43,7 +45,7 @@
 /**
  The file data for the attachment.
  */
-@property (readonly, retain, nonatomic) NSData *fileData;
+@property (readonly, nullable, retain, nonatomic) NSData *fileData;
 
 /**
  Creates and returns a new attachment with the specified parameters.
@@ -57,3 +59,5 @@
 + (instancetype)queuedAttachmentWithName:(NSString *)name path:(NSString *)path MIMEType:(NSString *)mimeType inContext:(NSManagedObjectContext *)context;
 
 @end
+
+NS_ASSUME_NONNULL_END

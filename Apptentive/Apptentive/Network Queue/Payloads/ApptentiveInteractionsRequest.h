@@ -8,7 +8,9 @@
 
 #import "ApptentiveConversationBaseRequest.h"
 
+NS_ASSUME_NONNULL_BEGIN
 
 @interface ApptentiveInteractionsRequest : ApptentiveConversationBaseRequest
-
 @end
+
+NS_ASSUME_NONNULL_END

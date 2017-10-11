@@ -8,8 +8,15 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
+
 @protocol ApptentiveJSONModel <NSObject>
+
 + (instancetype)newInstanceWithJSON:(NSDictionary *)json;
 - (void)updateWithJSON:(NSDictionary *)json;
-- (NSDictionary *)apiJSON;
+- (nullable NSDictionary *)apiJSON;
+
 @end
+
+NS_ASSUME_NONNULL_END

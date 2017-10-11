@@ -36,6 +36,8 @@
 #import "ApptentiveAppInstall.h"
 #import "ApptentiveJSONSerialization.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 static NSString *const ConversationMetadataFilename = @"conversation-v1.meta";
 static NSString *const ConversationFilename = @"conversation-v1.archive";
@@ -50,7 +52,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 @interface ApptentiveConversationManager () <ApptentiveConversationDelegate>
 
-@property (strong, nonatomic) ApptentiveMessageManager *messageManager;
+@property (strong, nullable, nonatomic) ApptentiveMessageManager *messageManager;
 
 @property (strong, nullable, nonatomic) ApptentiveConversation *activeConversation;
 @property (strong, nullable, nonatomic) ApptentiveRequestOperation *manifestOperation;
@@ -59,7 +61,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 @property (readonly, nonatomic) NSString *metadataPath;
 @property (readonly, nonatomic) NSString *manifestPath;
 
-@property (copy, nonatomic) void (^loginCompletionBlock)(BOOL success, NSError *error);
+@property (nullable, copy, nonatomic) void (^loginCompletionBlock)(BOOL success, NSError *error);
 
 @end
 
@@ -108,7 +110,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	return false;
 }
 
-- (ApptentiveConversation *)loadConversation {
+- (nullable ApptentiveConversation *)loadConversation {
 	// we're going to scan metadata in attempt to find existing conversations
 	ApptentiveConversationMetadataItem *item;
 
@@ -120,10 +122,12 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		ApptentiveLogDebug(ApptentiveLogTagConversation, @"Loading logged-in conversation...");
 		ApptentiveConversation *loggedInConversation = [self loadConversationFromMetadataItem:item];
 
-		[self loadEngagementManfiest];
-		[self createMessageManagerForConversation:loggedInConversation];
+		if (loggedInConversation != nil) {
+			[self loadEngagementManfiest];
+			[self createMessageManagerForConversation:loggedInConversation];
 
-		return loggedInConversation;
+			return loggedInConversation;
+		}
 	}
 
 	// if no users were logged in previously - we might have an anonymous conversation
@@ -135,10 +139,12 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		ApptentiveLogDebug(ApptentiveLogTagConversation, @"Loading anonymous conversation...");
 		ApptentiveConversation *anonymousConversation = [self loadConversationFromMetadataItem:item];
 
-		[self loadEngagementManfiest];
-		[self createMessageManagerForConversation:anonymousConversation];
+		if (anonymousConversation != nil) {
+			[self loadEngagementManfiest];
+			[self createMessageManagerForConversation:anonymousConversation];
 
-		return anonymousConversation;
+			return anonymousConversation;
+		}
 	}
 
 	// check if we have a 'pending' anonymous conversation
@@ -148,8 +154,12 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	if (item != nil) {
 		ApptentiveLogDebug(ApptentiveLogTagConversation, @"Loading anonymous pending conversation...");
 		ApptentiveConversation *conversation = [self loadConversationFromMetadataItem:item];
-		[self fetchConversationToken:conversation];
-		return conversation;
+
+		if (conversation != nil) {
+			[self fetchConversationToken:conversation];
+
+			return conversation;
+		}
 	}
 	
 	// check if we have a 'pending' legacy conversation
@@ -159,8 +169,12 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	if (item != nil) {
 		ApptentiveLogDebug(ApptentiveLogTagConversation, @"Loading legacy pending conversation...");
 		ApptentiveConversation *conversation = [self loadConversationFromMetadataItem:item];
-		[self fetchLegacyConversation:conversation];
-		return conversation;
+
+		if (conversation != nil) {
+			[self fetchLegacyConversation:conversation];
+
+			return conversation;
+		}
 	}
 
 	// any remaining conversations are 'logged out', and we should not load them.
@@ -198,7 +212,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	return anonymousConversation;
 }
 
-- (ApptentiveConversation *)loadConversationFromMetadataItem:(ApptentiveConversationMetadataItem *)item {
+- (nullable ApptentiveConversation *)loadConversationFromMetadataItem:(ApptentiveConversationMetadataItem *)item {
 	ApptentiveAssertNotNil(item, @"Conversation metadata item is nil");
 	if (item == nil) {
 		return nil;
@@ -557,7 +571,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	[self completeLoginSuccess:NO error:error];
 }
 
-- (void)completeLoginSuccess:(BOOL)success error:(NSError *)error {
+- (void)completeLoginSuccess:(BOOL)success error:(nullable NSError *)error {
 	self.loginCompletionBlock(success, error);
 	self.loginCompletionBlock = nil;
 }
@@ -977,11 +991,11 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	[self saveMetadata];
 }
 
-- (ApptentiveConversation *)activeConversation {
+- (nullable ApptentiveConversation *)activeConversation {
 	return _activeConversation;
 }
 
-- (void)setActiveConversation:(ApptentiveConversation *)activeConversation {
+- (void)setActiveConversation:(nullable ApptentiveConversation *)activeConversation {
 	ApptentiveAssertOperationQueue(self.operationQueue);
 	_activeConversation = activeConversation;
 }
@@ -1031,3 +1045,5 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

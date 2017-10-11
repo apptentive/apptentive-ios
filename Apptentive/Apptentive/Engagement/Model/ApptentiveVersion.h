@@ -8,6 +8,7 @@
 
 #import "ApptentiveState.h"
 
+NS_ASSUME_NONNULL_BEGIN
 
 /**
  An `AppteniveVersion` represents a version number. In the preferred case, the
@@ -71,3 +72,5 @@
 - (BOOL)isEqualToVersion:(ApptentiveVersion *)version;
 
 @end
+
+NS_ASSUME_NONNULL_END

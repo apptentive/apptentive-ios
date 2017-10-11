@@ -11,6 +11,8 @@
 #import "ApptentiveBackend+Engagement.h"
 #import "ApptentiveUtilities.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 NSString *const ATInteractionAboutViewInteractionKey = @"About";
 NSString *const ATInteractionAboutViewEventLabelLaunch = @"launch";
 NSString *const ATInteractionAboutViewEventLabelClose = @"close";
@@ -24,13 +26,9 @@ NSString *const ATInteractionAboutViewEventLabelClose = @"close";
 @property (weak, nonatomic) IBOutlet UIButton *privacyButton;
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *imageViewHeightConstraint;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *aboutButtonTrailingConstraint;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *privacyButtonLeadingConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *aboutButtonPrivacyButtonVeritcalConstraint;
 
 
-@property (strong, nonatomic) NSArray *portraitConstraints;
-@property (strong, nonatomic) NSArray *landscapeConstraints;
 
 @end
 
@@ -51,18 +49,6 @@ NSString *const ATInteractionAboutViewEventLabelClose = @"close";
 	self.aboutLabel.text = ApptentiveLocalizedString(@"Apptentive is a service that allows you to have a conversation with the makers of this app. Your input and feedback can help to provide you with a better overall experience.\n\nYour feedback is hosted by Apptentive and is subject to both Apptentive’s privacy policy and the privacy policy of this app’s developer.", @"About apptentive introductory message");
 	[self.aboutButton setTitle:ApptentiveLocalizedString(@"Learn about Apptentive", @"About apptentive link button label") forState:UIControlStateNormal];
 	[self.privacyButton setTitle:ApptentiveLocalizedString(@"Apptentive’s Privacy Policy", @"About apptentive privacy button label") forState:UIControlStateNormal];
-
-	self.portraitConstraints = @[self.aboutButtonTrailingConstraint, self.privacyButtonLeadingConstraint, self.aboutButtonPrivacyButtonVeritcalConstraint];
-
-	self.landscapeConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:[about]-(16)-[privacy]" options:NSLayoutFormatAlignAllBaseline metrics:nil views:@{ @"about": self.aboutButton,
-		@"privacy": self.privacyButton }];
-
-	[NSLayoutConstraint deactivateConstraints:self.portraitConstraints];
-
-	[self.view addConstraints:self.landscapeConstraints];
-
-	[NSLayoutConstraint deactivateConstraints:self.landscapeConstraints];
-	[NSLayoutConstraint activateConstraints:self.portraitConstraints];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -85,26 +71,14 @@ NSString *const ATInteractionAboutViewEventLabelClose = @"close";
 	[[UIApplication sharedApplication] openURL:components.URL];
 }
 
-- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+- (void)traitCollectionDidChange:(nullable UITraitCollection *)previousTraitCollection {
 	[super traitCollectionDidChange:previousTraitCollection];
 
 	BOOL isCompactHeight = self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassCompact;
-	BOOL isCompactWidth = self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassCompact;
 
 	self.imageViewHeightConstraint.constant = isCompactHeight ? 44.0 : 100.0;
-	self.aboutLabel.preferredMaxLayoutWidth = CGRectGetWidth(self.view.bounds) - 40.0;
-
-	if (isCompactHeight && !isCompactWidth) {
-		[NSLayoutConstraint deactivateConstraints:self.portraitConstraints];
-		[NSLayoutConstraint activateConstraints:self.landscapeConstraints];
-
-		self.privacyButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
-	} else {
-		[NSLayoutConstraint deactivateConstraints:self.portraitConstraints];
-		[NSLayoutConstraint activateConstraints:self.portraitConstraints];
-
-		self.privacyButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-	}
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

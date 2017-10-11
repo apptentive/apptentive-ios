@@ -18,6 +18,7 @@
 #import "ApptentiveUtilities.h"
 #import "ApptentiveDefines.h"
 
+NS_ASSUME_NONNULL_BEGIN
 
 static NSString *const FileNameKey = @"filename";
 static NSString *const ContentTypeKey = @"contentType";
@@ -32,7 +33,7 @@ static NSString *const RemoteURLKey = @"remoteURL";
 	return YES;
 }
 
-- (instancetype)initWithJSON:(NSDictionary *)JSON {
+- (nullable instancetype)initWithJSON:(NSDictionary *)JSON {
 	self = [super init];
 
 	if (self) {
@@ -62,7 +63,7 @@ static NSString *const RemoteURLKey = @"remoteURL";
 	return self;
 }
 
-- (instancetype)initWithPath:(NSString *)path contentType:(NSString *)contentType name:(NSString *)name {
+- (nullable instancetype)initWithPath:(NSString *)path contentType:(NSString *)contentType name:(nullable NSString *)name {
 	self = [super init];
 
 	if (self) {
@@ -84,7 +85,7 @@ static NSString *const RemoteURLKey = @"remoteURL";
 	return self;
 }
 
-- (instancetype)initWithData:(NSData *)data contentType:(NSString *)contentType name:(NSString *)name attachmentDirectoryPath:(nonnull NSString *)attachmentDirectoryPath {
+- (nullable instancetype)initWithData:(NSData *)data contentType:(NSString *)contentType name:(nullable NSString *)name attachmentDirectoryPath:(nonnull NSString *)attachmentDirectoryPath {
 	self = [super init];
 
 	// TODO: check input data
@@ -105,7 +106,7 @@ static NSString *const RemoteURLKey = @"remoteURL";
 	return self;
 }
 
-- (instancetype)initWithCoder:(NSCoder *)coder {
+- (nullable instancetype)initWithCoder:(NSCoder *)coder {
 	self = [super init];
 	if (self) {
 		_filename = [coder decodeObjectOfClass:[NSString class] forKey:FileNameKey];
@@ -174,7 +175,7 @@ static NSString *const RemoteURLKey = @"remoteURL";
 	return [[self class] canCreateThumbnailForMIMEType:self.contentType];
 }
 
-- (UIImage *)thumbnailOfSize:(CGSize)size {
+- (nullable UIImage *)thumbnailOfSize:(CGSize)size {
 	NSString *filename = [self filenameForThumbnailOfSize:size];
 	if (!filename) {
 		return nil;
@@ -200,14 +201,14 @@ static NSString *const RemoteURLKey = @"remoteURL";
 
 #pragma mark - Private
 
-- (NSString *)filenameForThumbnailOfSize:(CGSize)size {
+- (nullable NSString *)filenameForThumbnailOfSize:(CGSize)size {
 	if (self.filename == nil) {
 		return nil;
 	}
 	return [NSString stringWithFormat:@"%@_%dx%d_fit.jpeg", self.filename.stringByDeletingPathExtension, (int)floor(size.width), (int)floor(size.height)];
 }
 
-- (UIImage *)createThumbnailOfSize:(CGSize)size {
+- (nullable UIImage *)createThumbnailOfSize:(CGSize)size {
 	CGImageSourceRef src = CGImageSourceCreateWithURL((__bridge CFURLRef)[NSURL fileURLWithPath:self.fullLocalPath], NULL);
 	if (src == NULL) {
 		return nil;
@@ -237,7 +238,7 @@ static NSString *const RemoteURLKey = @"remoteURL";
 	return thumbnailImage;
 }
 
-- (NSString *)fullLocalPathForFilename:(NSString *)filename {
+- (nullable NSString *)fullLocalPathForFilename:(NSString *)filename {
 	ApptentiveAssertNotEmpty(filename, @"Filename is required");
 	ApptentiveAssertNotEmpty(self.attachmentDirectoryPath, @"Attachment directory path must be set");
 
@@ -318,11 +319,11 @@ static NSString *const RemoteURLKey = @"remoteURL";
 
 @implementation ApptentiveAttachment (QuickLook)
 
-- (NSString *)previewItemTitle {
+- (nullable NSString *)previewItemTitle {
 	return self.name;
 }
 
-- (NSURL *)previewItemURL {
+- (nullable NSURL *)previewItemURL {
 	if (self.filename) {
 		return [NSURL fileURLWithPath:self.fullLocalPath];
 	} else {
@@ -333,3 +334,5 @@ static NSString *const RemoteURLKey = @"remoteURL";
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

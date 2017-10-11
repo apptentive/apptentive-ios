@@ -8,9 +8,13 @@
 
 #import <CoreData/CoreData.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @interface ApptentivePayloadDebug : NSObject
 
 + (void)printPayloadSendingQueueWithContext:(NSManagedObjectContext *)context title:(NSString *)title;
 
 @end
+
+NS_ASSUME_NONNULL_END

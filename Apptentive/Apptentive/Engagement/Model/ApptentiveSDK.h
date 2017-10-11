@@ -8,6 +8,8 @@
 
 #import "ApptentiveState.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class ApptentiveVersion;
 
 
@@ -77,3 +79,5 @@
 - (instancetype)initWithCurrentSDK;
 
 @end
+
+NS_ASSUME_NONNULL_END

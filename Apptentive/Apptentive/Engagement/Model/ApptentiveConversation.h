@@ -10,6 +10,8 @@
 #import "Apptentive.h"
 #import "ApptentiveAppInstall.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 typedef NS_ENUM(NSInteger, ApptentiveConversationState) {
 	ApptentiveConversationStateUndefined = 0,
 	ApptentiveConversationStateAnonymousPending,
@@ -347,3 +349,5 @@ extern NSString *NSStringFromApptentiveConversationState(ApptentiveConversationS
 - (void)setConversationIdentifier:(NSString *)identifier JWT:(NSString *)JWT;
 
 @end
+
+NS_ASSUME_NONNULL_END

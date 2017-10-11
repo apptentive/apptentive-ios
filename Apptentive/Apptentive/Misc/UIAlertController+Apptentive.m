@@ -10,9 +10,12 @@
 
 #import <objc/runtime.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
+
 @interface UIAlertController (Apptentive_Private)
 
-@property (nonatomic, strong) UIWindow *apptentiveAlertWindow;
+@property (nullable, strong, nonatomic) UIWindow *apptentiveAlertWindow;
 
 @end
 
@@ -20,11 +23,11 @@
 
 @dynamic apptentiveAlertWindow;
 
-- (void)setApptentiveAlertWindow:(UIWindow *)window {
+- (void)setApptentiveAlertWindow:(nullable UIWindow *)window {
 	objc_setAssociatedObject(self, @selector(apptentiveAlertWindow), window, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (UIWindow *)apptentiveAlertWindow {
+- (nullable UIWindow *)apptentiveAlertWindow {
 	return objc_getAssociatedObject(self, @selector(apptentiveAlertWindow));
 }
 
@@ -50,3 +53,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

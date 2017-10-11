@@ -9,6 +9,8 @@
 #import "ApptentiveInteractionNavigateToLink.h"
 #import "ApptentiveInteraction.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 NSString *const ATInteractionNavigateToLinkEventLabelNavigate = @"navigate";
 
 
@@ -18,7 +20,7 @@ NSString *const ATInteractionNavigateToLinkEventLabelNavigate = @"navigate";
 	[self registerInteractionControllerClass:self forType:@"NavigateToLink"];
 }
 
-- (void)presentInteractionFromViewController:(UIViewController *)viewController {
+- (void)presentInteractionFromViewController:(nullable UIViewController *)viewController {
 	[super presentInteractionFromViewController:viewController];
 
 	BOOL openedURL = NO;
@@ -52,3 +54,5 @@ NSString *const ATInteractionNavigateToLinkEventLabelNavigate = @"navigate";
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

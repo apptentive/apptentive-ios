@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @interface ApptentiveLogTag : NSObject
 
@@ -24,3 +26,5 @@
 + (ApptentiveLogTag *)storageTag;
 
 @end
+
+NS_ASSUME_NONNULL_END

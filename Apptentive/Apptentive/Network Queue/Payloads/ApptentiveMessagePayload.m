@@ -13,6 +13,8 @@
 #import "NSMutableData+Types.h"
 #import "ApptentiveAttachment.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @interface ApptentiveMessagePayload ()
 
@@ -74,7 +76,7 @@
 	return JSON;
 }
 
-- (NSData *)payload {
+- (nullable NSData *)payload {
 	BOOL encrypted = self.encrypted;
 
 	NSString *boundary = self.boundary;
@@ -149,12 +151,14 @@
 	return data;
 }
 
-- (NSArray *)attachments {
+- (nullable NSArray *)attachments {
 	return self.message.attachments ?: @[];
 }
 
-- (NSString *)localIdentifier {
+- (nullable NSString *)localIdentifier {
 	return self.message.localIdentifier;
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -8,9 +8,13 @@
 
 #import "ApptentiveRequest.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @interface ApptentiveConversationBaseRequest : ApptentiveRequest
 
 - (nullable instancetype)initWithConversationIdentifier:(NSString *_Nonnull)conversationIdentifier;
 
 @end
+
+NS_ASSUME_NONNULL_END

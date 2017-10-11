@@ -11,6 +11,8 @@
 
 #define PLACEHOLDER_SIZE CGSizeMake(37, 48)
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @interface ApptentiveAttachmentCell ()
 
@@ -94,3 +96,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

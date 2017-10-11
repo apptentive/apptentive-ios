@@ -12,6 +12,8 @@
 #import "ApptentiveBackend+Engagement.h"
 #import "ApptentiveUtilities.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 NSString *const ATInteractionMessageCenterErrorViewInteractionKey = @"MessageCenter";
 NSString *const ATInteractionMessageCenterEventLabelNoInteractionNoInternet = @"no_interaction_no_internet";
 NSString *const ATInteractionMessageCenterEventLabelNoInteractionAttempting = @"no_interaction_attempting";
@@ -37,7 +39,7 @@ NSString *const ATInteractionMessageCenterEventLabelNoInteractionClose = @"no_in
 
 	self.navigationItem.title = ApptentiveLocalizedString(@"Message Center", @"Message Center default title");
 
-	if ([ApptentiveReachability sharedReachability].currentNetworkStatus == ApptentiveNetworkNotReachable) {
+	if (!Apptentive.shared.backend.networkAvailable) {
 		self.imageView.image = [[ApptentiveUtilities imageNamed:@"at_network_error"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 		self.textLabel.text = ApptentiveLocalizedString(@"You must connect to the internet before you can send feedback.", @"Message Center configuration hasn't downloaded due to connection problem.");
 
@@ -74,3 +76,5 @@ NSString *const ATInteractionMessageCenterEventLabelNoInteractionClose = @"no_in
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

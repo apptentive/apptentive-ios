@@ -20,6 +20,8 @@
 #import "ApptentiveReachability.h"
 #import "ApptentiveDefines.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 NSString *const ATMessageCenterServerErrorDomain = @"com.apptentive.MessageCenterServerError";
 NSString *const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenterErrorMessages";
 NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
@@ -30,10 +32,10 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 
 @interface ApptentiveMessageCenterViewModel ()
 
-@property (readonly, nonatomic) ApptentiveMessage *lastUserMessage;
+@property (readonly, nullable, nonatomic) ApptentiveMessage *lastUserMessage;
 @property (readonly, nonatomic) NSURLSession *attachmentDownloadSession;
 @property (readonly, nonatomic) NSMutableDictionary<NSValue *, NSIndexPath *> *taskIndexPaths;
-@property (strong, nonatomic) ApptentiveMessage *contextMessage;
+@property (nullable, strong, nonatomic) ApptentiveMessage *contextMessage;
 
 @end
 
@@ -287,7 +289,7 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 	return [self.dateFormatter stringFromDate:[self dateOfMessageGroupAtIndex:index]];
 }
 
-- (NSDate *)dateOfMessageGroupAtIndex:(NSInteger)index {
+- (nullable NSDate *)dateOfMessageGroupAtIndex:(NSInteger)index {
 	if ([self numberOfMessagesInGroup:index] > 0) {
 		ApptentiveMessage *message = [self messageAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:index]];
 
@@ -330,7 +332,7 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 	return message.sender.name;
 }
 
-- (NSURL *)imageURLOfSenderAtIndexPath:(NSIndexPath *)indexPath {
+- (nullable NSURL *)imageURLOfSenderAtIndexPath:(NSIndexPath *)indexPath {
 	ApptentiveMessage *message = [self messageAtIndexPath:indexPath];
 	if (message.sender.profilePhotoURL) {
 		return message.sender.profilePhotoURL;
@@ -470,7 +472,7 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 	});
 }
 
-- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error {
+- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(nullable NSError *)error {
 	if (error == nil) return;
 
 	NSIndexPath *attachmentIndexPath = [self indexPathForTask:task];
@@ -531,7 +533,7 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 }
 
 - (BOOL)networkIsReachable {
-	return [[ApptentiveReachability sharedReachability] currentNetworkStatus] != ApptentiveNetworkNotReachable;
+	return Apptentive.shared.backend.networkAvailable;
 }
 
 - (BOOL)didSkipProfile {
@@ -542,11 +544,11 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 	[self.conversation setUserInfo:@(didSkipProfile) forKey:ATMessageCenterDidSkipProfileKey];
 }
 
-- (NSString *)draftMessage {
+- (nullable NSString *)draftMessage {
 	return self.conversation.userInfo[ATMessageCenterDraftMessageKey];
 }
 
-- (void)setDraftMessage:(NSString *)draftMessage {
+- (void)setDraftMessage:(nullable NSString *)draftMessage {
 	if (draftMessage) {
 		[self.conversation setUserInfo:draftMessage forKey:ATMessageCenterDraftMessageKey];
 	} else {
@@ -578,7 +580,7 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 	return [self.messageManager.messages objectAtIndex:indexPath.section];
 }
 
-- (ApptentiveMessage *)lastUserMessage {
+- (nullable ApptentiveMessage *)lastUserMessage {
 	for (ApptentiveMessage *message in self.messageManager.messages.reverseObjectEnumerator) {
 		if (message.inbound) {
 			return message;
@@ -589,3 +591,5 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

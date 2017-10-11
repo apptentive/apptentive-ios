@@ -13,6 +13,8 @@
 #import "ApptentiveUtilities.h"
 #import "Apptentive_Private.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @implementation ApptentiveInteractionInvocation
 
@@ -56,7 +58,7 @@
 	return [description description];
 }
 
-- (id)initWithCoder:(NSCoder *)coder {
+- (nullable instancetype)initWithCoder:(NSCoder *)coder {
 	if ((self = [super init])) {
 		self.interactionID = [coder decodeObjectForKey:@"interactionID"];
 		self.priority = [coder decodeIntegerForKey:@"priority"];
@@ -72,7 +74,7 @@
 	[coder encodeObject:self.criteria forKey:@"criteria"];
 }
 
-- (id)copyWithZone:(NSZone *)zone {
+- (id)copyWithZone:(nullable NSZone *)zone {
 	ApptentiveInteractionInvocation *copy = [[ApptentiveInteractionInvocation alloc] init];
 
 	if (copy) {
@@ -131,7 +133,7 @@
 	return criteriaPredicate;
 }
 
-+ (NSCompoundPredicate *)compoundPredicateWithCriteria:(NSDictionary *)criteria {
++ (nullable NSCompoundPredicate *)compoundPredicateWithCriteria:(NSDictionary *)criteria {
 	NSMutableArray *subPredicates = [NSMutableArray array];
 
 	for (NSString *key in criteria) {
@@ -195,7 +197,7 @@
 	return compoundPredicate;
 }
 
-+ (NSCompoundPredicate *)compoundPredicateWithType:(NSCompoundPredicateType)type criteriaArray:(NSArray *)criteriaArray {
++ (nullable NSCompoundPredicate *)compoundPredicateWithType:(NSCompoundPredicateType)type criteriaArray:(NSArray *)criteriaArray {
 	NSMutableArray *subPredicates = [NSMutableArray array];
 
 	for (NSDictionary *criteria in criteriaArray) {
@@ -212,7 +214,7 @@
 	return compoundPredicate;
 }
 
-+ (NSCompoundPredicate *)compoundPredicateForKeyPath:(NSString *)keyPath operatorsAndValues:(NSDictionary *)operatorsAndValues {
++ (nullable NSCompoundPredicate *)compoundPredicateForKeyPath:(NSString *)keyPath operatorsAndValues:(NSDictionary *)operatorsAndValues {
 	NSMutableArray *subPredicates = [NSMutableArray array];
 
 	for (NSString *operatorString in operatorsAndValues) {
@@ -302,7 +304,7 @@
 	return [self predicateWithLeftExpression:leftExpression rightExpression:rightExpression operatorType:operatorType];
 }
 
-+ (NSPredicate *)predicateWithLeftKeyPath:(NSString *)keyPath forObject:(NSDictionary *)context rightComplexObject:(NSDictionary *)rightComplexObject operatorType:(NSPredicateOperatorType)operatorType {
++ (nullable NSPredicate *)predicateWithLeftKeyPath:(NSString *)keyPath forObject:(NSDictionary *)context rightComplexObject:(NSDictionary *)rightComplexObject operatorType:(NSPredicateOperatorType)operatorType {
 	NSDictionary *leftComplexObject = [context valueForKeyPath:keyPath];
 	NSString *type = leftComplexObject[@"_type"];
 	NSString *rightType = rightComplexObject[@"_type"];
@@ -452,3 +454,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

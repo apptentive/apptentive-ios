@@ -10,9 +10,9 @@
 #import "ApptentiveRequestOperation.h"
 #import "ApptentiveMessage.h"
 
-@class ApptentiveConversation;
-
 NS_ASSUME_NONNULL_BEGIN
+
+@class ApptentiveConversation;
 
 
 @interface ApptentiveClient : NSObject <NSURLSessionDelegate, ApptentiveRequestOperationDataSource>

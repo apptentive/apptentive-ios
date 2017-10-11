@@ -8,6 +8,8 @@
 
 #import "ApptentiveLegacyMessageSender.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @implementation ApptentiveLegacyMessageSender
 
@@ -19,3 +21,5 @@
 @dynamic receivedMessages;
 
 @end
+
+NS_ASSUME_NONNULL_END

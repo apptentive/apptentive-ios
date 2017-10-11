@@ -8,6 +8,10 @@
 
 #import "ApptentiveInteractionController.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @interface ApptentiveInteractionTextModalController : ApptentiveInteractionController
 @end
+
+NS_ASSUME_NONNULL_END

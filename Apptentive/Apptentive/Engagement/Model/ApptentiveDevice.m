@@ -16,6 +16,8 @@
 #import <sys/utsname.h>
 #import <sys/sysctl.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 static NSString *const UUIDKey = @"UUID";
 static NSString *const OSNameKey = @"OSName";
 static NSString *const OSVersionKey = @"OSVersion";
@@ -112,7 +114,7 @@ static UIContentSizeCategory _currentContentSizeCategory;
 	return self;
 }
 
-- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+- (nullable instancetype)initWithCoder:(NSCoder *)aDecoder {
 	self = [super initWithCoder:aDecoder];
 
 	if (self) {
@@ -231,3 +233,5 @@ static UIContentSizeCategory _currentContentSizeCategory;
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

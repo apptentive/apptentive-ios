@@ -9,11 +9,13 @@
 #import "ApptentiveHUDViewController.h"
 #import "ApptentivePassThroughWindow.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @interface ApptentiveHUDViewController ()
 
 @property (strong, nonatomic) IBOutlet UIView *HUDView;
-@property (strong, nonatomic) UIWindow *hostWindow;
+@property (nullable, strong, nonatomic) UIWindow *hostWindow;
 @property (strong, nonatomic) UIWindow *shadowWindow;
 @property (strong, nonatomic) NSTimer *hideTimer;
 @property (strong, nonatomic) UIGestureRecognizer *tapGestureRecognizer;
@@ -121,3 +123,5 @@ static ApptentiveHUDViewController *currentHUD;
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

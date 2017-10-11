@@ -9,6 +9,8 @@
 #import "ApptentiveEngagement.h"
 #import "ApptentiveCount.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 static NSString *const InteractionsKey = @"interactions";
 static NSString *const CodePointsKey = @"codePoints";
 
@@ -42,7 +44,7 @@ static NSString *const ATEngagementInteractionsInvokesLastDateKey = @"ATEngageme
 	return self;
 }
 
-- (instancetype)initWithCoder:(NSCoder *)coder {
+- (nullable instancetype)initWithCoder:(NSCoder *)coder {
 	self = [super initWithCoder:coder];
 	if (self) {
 		_mutableInteractions = [coder decodeObjectOfClass:[NSMutableDictionary class] forKey:InteractionsKey];
@@ -159,3 +161,5 @@ static NSString *const ATEngagementInteractionsInvokesLastDateKey = @"ATEngageme
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

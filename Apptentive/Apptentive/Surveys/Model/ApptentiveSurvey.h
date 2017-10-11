@@ -8,12 +8,14 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class ApptentiveSurveyQuestion;
 
 
 @interface ApptentiveSurvey : NSObject
 
-- (instancetype)initWithJSON:(NSDictionary *)JSON;
+- (nullable instancetype)initWithJSON:(NSDictionary *)JSON;
 
 @property (readonly, nonatomic) NSString *title;
 @property (readonly, nonatomic) NSString *name;
@@ -27,3 +29,5 @@
 @property (readonly, nonatomic) NSString *validationErrorText;
 
 @end
+
+NS_ASSUME_NONNULL_END

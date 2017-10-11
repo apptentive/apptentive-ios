@@ -8,9 +8,13 @@
 
 #import "ApptentiveSurveyAnswerCell.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @interface ApptentiveSurveySingleLineCell : ApptentiveSurveyAnswerCell
 
 @property (strong, nonatomic) IBOutlet UITextField *textField;
 
 @end
+
+NS_ASSUME_NONNULL_END

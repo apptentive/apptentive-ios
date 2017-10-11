@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class ApptentiveInteractionUsageData, ApptentiveConversation;
 
 
@@ -15,7 +17,7 @@
 
 @property (copy, nonatomic) NSString *interactionID;
 @property (assign, nonatomic) NSInteger priority;
-@property (copy, nonatomic) NSDictionary *criteria;
+@property (nullable, copy, nonatomic) NSDictionary *criteria;
 
 + (ApptentiveInteractionInvocation *)invocationWithJSONDictionary:(NSDictionary *)jsonDictionary;
 + (NSArray *)invocationsWithJSONArray:(NSArray *)jsonArray;
@@ -25,3 +27,5 @@
 - (NSPredicate *)criteriaPredicate;
 
 @end
+
+NS_ASSUME_NONNULL_END

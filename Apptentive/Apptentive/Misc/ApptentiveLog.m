@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 static ApptentiveLogLevel _logLevel = ApptentiveLogLevelInfo;
 
 static const char * _Nonnull _logLevelNameLookup[] = {
+	"?", // ApptentiveLogLevelUndefined
 	"C", // ApptentiveLogLevelCrit,
 	"E", // ApptentiveLogLevelError,
 	"W", // ApptentiveLogLevelWarn,
@@ -167,8 +168,33 @@ NSString *NSStringFromApptentiveLogLevel(ApptentiveLogLevel level) {
 		case ApptentiveLogLevelVerbose:
 			return @"verbose";
 		default:
-			return @"unknown";
+			return @"undefined";
   	}
+}
+
+ApptentiveLogLevel ApptentiveLogLevelFromString(NSString *level) {
+	if ([level isEqualToString:@"crit"]) {
+		return ApptentiveLogLevelCrit;
+	}
+	if ([level isEqualToString:@"warn"]) {
+		return ApptentiveLogLevelWarn;
+	}
+	if ([level isEqualToString:@"info"]) {
+		return ApptentiveLogLevelInfo;
+	}
+	if ([level isEqualToString:@"debug"]) {
+		return ApptentiveLogLevelDebug;
+	}
+	if ([level isEqualToString:@"error"]) {
+		return ApptentiveLogLevelError;
+	}
+	if ([level isEqualToString:@"crit"]) {
+		return ApptentiveLogLevelCrit;
+	}
+	if ([level isEqualToString:@"verbose"] || [level isEqualToString:@"very_verbose"]) {
+		return ApptentiveLogLevelVerbose;
+	}
+	return ApptentiveLogLevelUndefined;
 }
 
 NS_ASSUME_NONNULL_END

@@ -25,6 +25,7 @@
 #import "ApptentiveMessageManager.h"
 #import "ApptentiveMessageSender.h"
 #import "ApptentiveAttachment.h"
+#import "ApptentiveLogMonitor.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -108,6 +109,8 @@ static Apptentive *_sharedInstance;
 	self = [super init];
 
 	if (self) {
+		[ApptentiveLogMonitor tryInitialize];
+		
 		_operationQueue = [[NSOperationQueue alloc] init];
 		_operationQueue.maxConcurrentOperationCount = 1;
 		_operationQueue.name = @"Apptentive Operation Queue";

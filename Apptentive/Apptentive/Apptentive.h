@@ -98,18 +98,20 @@ typedef NS_ENUM(NSInteger, ApptentivePushProvider) {
  Log levels supported by the logging system. Each level includes those above it on the list.
 */
 typedef NS_ENUM(NSUInteger, ApptentiveLogLevel) {
+	/** Undefined. */
+	ApptentiveLogLevelUndefined = 0,
 	/** Critical failure log messages. */
-	ApptentiveLogLevelCrit = 0,
+	ApptentiveLogLevelCrit = 1,
 	/** Error log messages. */
-	ApptentiveLogLevelError = 1,
+	ApptentiveLogLevelError = 2,
 	/** Warning log messages. */
-	ApptentiveLogLevelWarn = 2,
+	ApptentiveLogLevelWarn = 3,
 	/** Informational log messages. */
-	ApptentiveLogLevelInfo = 3,
+	ApptentiveLogLevelInfo = 4,
 	/** Log messages that are potentially useful for debugging. */
-	ApptentiveLogLevelDebug = 4,
+	ApptentiveLogLevelDebug = 5,
 	/** All possible log messages enabled. */
-	ApptentiveLogLevelVerbose = 5
+	ApptentiveLogLevelVerbose = 6
 };
 
 /**

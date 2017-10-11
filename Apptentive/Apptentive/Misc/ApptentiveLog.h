@@ -23,6 +23,7 @@ extern ApptentiveLogLevel ApptentiveLogGetLevel(void);
 extern void ApptentiveLogSetLevel(ApptentiveLogLevel level);
 extern BOOL ApptentiveCanLogLevel(ApptentiveLogLevel level);
 extern NSString *NSStringFromApptentiveLogLevel(ApptentiveLogLevel level);
+extern ApptentiveLogLevel ApptentiveLogLevelFromString(NSString *level);
 
 void ApptentiveLogCrit(id arg, ...);
 void ApptentiveLogError(id arg, ...);

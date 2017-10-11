@@ -18,6 +18,7 @@ extern NSInteger ApptentiveJSONSerializationErrorCode;
 
 + (NSData *)dataWithJSONObject:(id)obj options:(NSJSONWritingOptions)opt error:(NSError **)error;
 + (id)JSONObjectWithData:(NSData *)data error:(NSError **)error;
++ (id)JSONObjectWithString:(NSString *)string error:(NSError **)error;
 
 @end
 

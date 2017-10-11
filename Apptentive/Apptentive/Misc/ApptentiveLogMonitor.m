@@ -9,6 +9,8 @@
 #import "ApptentiveLogMonitor.h"
 #import "ApptentiveUtilities.h"
 #import "ApptentiveLogWriter.h"
+#import "ApptentiveJSONSerialization.h"
+#import "ApptentiveSafeCollections.h"
 
 static NSString * const KeyAccessToken = @"accessToken";
 static NSString * const KeyEmailRecipients = @"emailRecipients";
@@ -16,6 +18,8 @@ static NSString * const KeyLogLevel = @"logLevel";
 
 static NSString * const ConfigurationStorageFile = @"apptentive-log-monitor.cfg";
 static NSString * const LogFileName = @"apptentive-log.txt";
+
+static NSString * const DebugTextHeader = @"com.apptentive.debug";
 
 static ApptentiveLogMonitor * _sharedInstance;
 
@@ -89,6 +93,29 @@ static ApptentiveLogMonitor * _sharedInstance;
 	
 	_logWriter = [[ApptentiveLogWriter alloc] initWithPath:logFilePath];
 	[_logWriter start];
+	
+	// dispatch on the main thread to avoid UI-issues
+	dispatch_async(dispatch_get_main_queue(), ^{
+		// create a custom window to show UI on top of everything
+		UIWindow *window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+		
+		// create alert controller with "Send", "Continue" and "Discard" actions
+		UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Apptentive" message:@"Log Monitor" preferredStyle:UIAlertControllerStyleActionSheet];
+		[alertController addAction:[UIAlertAction actionWithTitle:@"Send Report" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+			window.hidden = YES;
+		}]];
+		[alertController addAction:[UIAlertAction actionWithTitle:@"Continue" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+			window.hidden = YES;
+		}]];
+		[alertController addAction:[UIAlertAction actionWithTitle:@"Discard Report" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+			window.hidden = YES;
+		}]];
+		
+		window.rootViewController = [[UIViewController alloc] init];
+		window.windowLevel = UIWindowLevelAlert + 1;
+		window.hidden = NO; // don't use makeKeyAndVisible since we don't have any knowledge about the host app's UI
+		[window.rootViewController presentViewController:alertController animated:YES completion:nil];
+	});
 }
 
 + (BOOL)tryInitialize {
@@ -129,7 +156,49 @@ static ApptentiveLogMonitor * _sharedInstance;
 }
 
 + (nullable ApptentiveLogMonitorConfigration *)readConfigurationFromClipboard {
-	return nil; // FIXME: read configuration from the clipboard
+	NSString *text = [UIPasteboard generalPasteboard].string;
+	
+	// trim white spaces
+	text = [text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+	
+	if (![text hasPrefix:DebugTextHeader]) {
+		return nil;
+	}
+	
+	NSString *payload = [text substringFromIndex:DebugTextHeader.length];
+	
+	NSError *error;
+	id json = [ApptentiveJSONSerialization JSONObjectWithString:payload error:&error];
+	if (json == nil) {
+		ApptentiveLogError(ApptentiveLogTagMonitor, @"Error while parsing json: %@", error);
+		return nil;
+	}
+	
+	if (![json isKindOfClass:[NSDictionary class]]) {
+		ApptentiveLogError(ApptentiveLogTagMonitor, @"Unexpected json format: %@", payload);
+		return nil;
+	}
+	
+	NSString *accessToken = ApptentiveDictionaryGetString(json, @"accessToken");
+	if (accessToken.length == 0) {
+		ApptentiveLogError(ApptentiveLogTagMonitor, @"Unexpected json format (missing access token): %@", payload);
+		return nil;
+	}
+	
+	ApptentiveLogMonitorConfigration *configuration = [[ApptentiveLogMonitorConfigration alloc] initWithAccessToken:accessToken];
+	
+	NSString *logLevelStr = ApptentiveDictionaryGetString(json, @"level");
+	ApptentiveLogLevel logLevel = ApptentiveLogLevelFromString(logLevelStr);
+	if (logLevel != ApptentiveLogLevelUndefined) {
+		configuration.logLevel = logLevel;
+	}
+	
+	NSArray *emailRecepients = ApptentiveDictionaryGetArray(json, @"recipients");
+	if (emailRecepients != nil) {
+		configuration.emailRecipients = emailRecepients;
+	}
+	
+	return configuration;
 }
 
 + (NSString *)configurationStoragePath {

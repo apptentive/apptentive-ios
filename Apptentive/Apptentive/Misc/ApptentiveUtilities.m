@@ -414,6 +414,13 @@ UIViewController *topChildViewController(UIViewController *viewController) {
 	return result;
 }
 
++ (NSString *)deviceMachine {
+	struct utsname systemInfo;
+	uname(&systemInfo);
+	
+	return [NSString stringWithCString:systemInfo.machine encoding:NSUTF8StringEncoding];
+}
+
 @end
 
 NS_ASSUME_NONNULL_END

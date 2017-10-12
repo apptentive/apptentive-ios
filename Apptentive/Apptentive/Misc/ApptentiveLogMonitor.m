@@ -282,10 +282,9 @@ static ApptentiveLogMonitor * _sharedInstance;
 	[messageBody appendFormat:@"SDK: %@\n", kApptentiveVersionString];
 	[messageBody appendFormat:@"Version: %@\n", [bundleInfo objectForKey:@"CFBundleShortVersionString"]];
 	[messageBody appendFormat:@"Build: %@\n", [bundleInfo objectForKey:@"CFBundleVersion"]];
-//	"Device", Build.MODEL,
-//	"OS", String.format("Android %s (API %s)", Build.VERSION.RELEASE, Build.VERSION.SDK_INT),
-//	"Locale", Locale.getDefault().getDisplayName()
-	
+	[messageBody appendFormat:@"Device: %@\n", [ApptentiveUtilities deviceMachine]];
+	[messageBody appendFormat:@"OS: %@\n", [UIDevice currentDevice].systemVersion];
+	[messageBody appendFormat:@"Locale: %@", [NSLocale currentLocale].localeIdentifier];
 	
 	NSString *emailTitle = [NSString stringWithFormat:@"%@ device logs (iOS)", [NSBundle mainBundle].bundleIdentifier];
 	
@@ -306,12 +305,14 @@ static ApptentiveLogMonitor * _sharedInstance;
 	[mc addAttachmentData:fileData mimeType:mimeType fileName:filename];
 	
 	// Present mail view controller on screen in a separate window
+	UIViewController *rootController = [UIViewController new];
+	
 	self.mailComposeControllerWindow = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
 	self.mailComposeControllerWindow.windowLevel = UIWindowLevelAlert + 1;
-	self.mailComposeControllerWindow.rootViewController = [[UIViewController alloc] init];
+	self.mailComposeControllerWindow.rootViewController = rootController;
 	self.mailComposeControllerWindow.hidden = NO;
 	
-	[self.mailComposeControllerWindow.rootViewController presentViewController:mc animated:YES completion:NULL];
+	[rootController presentViewController:mc animated:YES completion:nil];
 }
 
 #pragma mark -

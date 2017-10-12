@@ -40,9 +40,10 @@
 }
 
 - (void)appendMessage:(NSString *)message {
+	NSDate *timeStamp = [NSDate new];
 	dispatch_async(_writerQueue, ^{
 		if (self.running) {
-			[self writeMessage:message];
+			[self writeMessage:[[NSString alloc] initWithFormat:@"%@ %@\n", timeStamp, message]];
 		}
 	});
 }

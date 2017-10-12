@@ -34,6 +34,6 @@ void ApptentiveLogInfo(id arg, ...);
 void ApptentiveLogDebug(id arg, ...);
 void ApptentiveLogVerbose(id arg, ...);
 
-void ApptentiveSetLoggerCallback(ApptentiveLoggerCallback callback);
+void ApptentiveSetLoggerCallback(_Nullable ApptentiveLoggerCallback callback);
 
 NS_ASSUME_NONNULL_END

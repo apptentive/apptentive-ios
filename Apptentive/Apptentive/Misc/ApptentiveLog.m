@@ -145,7 +145,7 @@ void ApptentiveLogVerbose(id arg, ...) {
 	va_end(ap);
 }
 
-void ApptentiveSetLoggerCallback(ApptentiveLoggerCallback callback) {
+void ApptentiveSetLoggerCallback(_Nullable ApptentiveLoggerCallback callback) {
 	_logCallback = callback;
 }
 

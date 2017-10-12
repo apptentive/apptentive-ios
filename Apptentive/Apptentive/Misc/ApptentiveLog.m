@@ -11,6 +11,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 static ApptentiveLogLevel _logLevel = ApptentiveLogLevelInfo;
+static ApptentiveLoggerCallback _logCallback;
 
 static const char * _Nonnull _logLevelNameLookup[] = {
 	"?", // ApptentiveLogLevelUndefined
@@ -95,6 +96,10 @@ static void _ApptentiveLogHelper(ApptentiveLogLevel level, id arg, va_list ap) {
 		[fullMessage appendString:message];
 
 		NSLog(@"%@", fullMessage);
+		
+		if (_logCallback) {
+			_logCallback(level, fullMessage);
+		}
 	}
 }
 
@@ -140,6 +145,9 @@ void ApptentiveLogVerbose(id arg, ...) {
 	va_end(ap);
 }
 
+void ApptentiveSetLoggerCallback(ApptentiveLoggerCallback callback) {
+	_logCallback = callback;
+}
 
 ApptentiveLogLevel ApptentiveLogGetLevel(void) {
 	return _logLevel;

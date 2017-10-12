@@ -25,11 +25,15 @@ extern BOOL ApptentiveCanLogLevel(ApptentiveLogLevel level);
 extern NSString *NSStringFromApptentiveLogLevel(ApptentiveLogLevel level);
 extern ApptentiveLogLevel ApptentiveLogLevelFromString(NSString *level);
 
+typedef void(^ApptentiveLoggerCallback)(ApptentiveLogLevel level, NSString *message);
+
 void ApptentiveLogCrit(id arg, ...);
 void ApptentiveLogError(id arg, ...);
 void ApptentiveLogWarning(id arg, ...);
 void ApptentiveLogInfo(id arg, ...);
 void ApptentiveLogDebug(id arg, ...);
 void ApptentiveLogVerbose(id arg, ...);
+
+void ApptentiveSetLoggerCallback(ApptentiveLoggerCallback callback);
 
 NS_ASSUME_NONNULL_END

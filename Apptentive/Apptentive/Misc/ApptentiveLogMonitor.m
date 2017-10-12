@@ -98,8 +98,13 @@ static ApptentiveLogMonitor * _sharedInstance;
 		[ApptentiveUtilities deleteFileAtPath:logFilePath];
 	}
 	
-	_logWriter = [[ApptentiveLogWriter alloc] initWithPath:logFilePath];
-	[_logWriter start];
+	ApptentiveLogWriter *logWriter = [[ApptentiveLogWriter alloc] initWithPath:logFilePath];
+	ApptentiveSetLoggerCallback(^(ApptentiveLogLevel level, NSString *message) {
+		[logWriter appendMessage:message];
+	});
+	[logWriter start];
+	
+	_logWriter = logWriter;
 	
 	if (_sessionRestored) {
 		// dispatch on the main thread to avoid UI-issues
@@ -111,9 +116,9 @@ static ApptentiveLogMonitor * _sharedInstance;
 			UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Apptentive" message:@"Log Monitor" preferredStyle:UIAlertControllerStyleActionSheet];
 			[alertController addAction:[UIAlertAction actionWithTitle:@"Send Report" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
 				window.hidden = YES;
-				id strongSelf = self; // avoid compiler warning
-				_logWriter.finishCallback = ^(NSString *path) {
-					[strongSelf sendReportWithLogFile:path];
+				__weak id weakSelf = self;
+				_logWriter.finishCallback = ^(ApptentiveLogWriter *writer) {
+					[weakSelf sendReportWithLogFile:writer.path];
 				};
 				[self stop];
 			}]];
@@ -134,6 +139,7 @@ static ApptentiveLogMonitor * _sharedInstance;
 }
 
 - (void)stop {
+	ApptentiveSetLoggerCallback(nil);
 	[_logWriter stop];
 	[ApptentiveLogMonitor clearConfiguration];
 }
@@ -151,14 +157,15 @@ static ApptentiveLogMonitor * _sharedInstance;
 			configuration = [self readConfigurationFromClipboard];
 			if (configuration != nil) {
 				ApptentiveLogInfo(ApptentiveLogTagMonitor, @"Read log monitor configuration from clipboard: %@", configuration);
+				// save configuration
+				[self writeConfiguration:configuration toStoragePath:storagePath];
+				
 				// clear pastboard text
 				[[UIPasteboard generalPasteboard] setString:@""];
 			}
 		}
 		
 		if (configuration != nil) {
-			[self writeConfiguration:configuration toStoragePath:storagePath];
-			
 			_sharedInstance = [[ApptentiveLogMonitor alloc] initWithConfiguration:configuration];
 			[_sharedInstance start];
 			return YES;

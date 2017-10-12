@@ -109,39 +109,65 @@ static ApptentiveLogMonitor * _sharedInstance;
 	if (_sessionRestored) {
 		// dispatch on the main thread to avoid UI-issues
 		dispatch_async(dispatch_get_main_queue(), ^{
-			// create a custom window to show UI on top of everything
-			UIWindow *window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-			
-			// create alert controller with "Send", "Continue" and "Discard" actions
-			UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Apptentive" message:@"Log Monitor" preferredStyle:UIAlertControllerStyleActionSheet];
-			[alertController addAction:[UIAlertAction actionWithTitle:@"Send Report" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-				window.hidden = YES;
-				__weak id weakSelf = self;
-				_logWriter.finishCallback = ^(ApptentiveLogWriter *writer) {
-					[weakSelf sendReportWithLogFile:writer.path];
-				};
-				[self stop];
-			}]];
-			[alertController addAction:[UIAlertAction actionWithTitle:@"Continue" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-				window.hidden = YES;
-			}]];
-			[alertController addAction:[UIAlertAction actionWithTitle:@"Discard Report" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
-				window.hidden = YES;
-				[self stop];
-			}]];
-			
-			window.rootViewController = [[UIViewController alloc] init];
-			window.windowLevel = UIWindowLevelAlert + 1;
-			window.hidden = NO; // don't use makeKeyAndVisible since we don't have any knowledge about the host app's UI
-			[window.rootViewController presentViewController:alertController animated:YES completion:nil];
+			[self showReportUI];
 		});
 	}
+	
+	[self registerNotifications];
 }
 
 - (void)stop {
 	ApptentiveSetLoggerCallback(nil);
 	[_logWriter stop];
 	[ApptentiveLogMonitor clearConfiguration];
+	
+	[self unregisterNotifications];
+}
+
+#pragma mark -
+#pragma mark Notifications
+
+- (void)registerNotifications {
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillEnterForegroundNotification:) name:UIApplicationWillEnterForegroundNotification object:nil];
+}
+
+- (void)unregisterNotifications {
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)applicationWillEnterForegroundNotification:(NSNotification *)notification {
+	[self showReportUI];
+}
+
+#pragma mark -
+#pragma mark User Interactions
+
+- (void)showReportUI {
+	// create a custom window to show UI on top of everything
+	UIWindow *window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+	
+	// create alert controller with "Send", "Continue" and "Discard" actions
+	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Apptentive" message:@"Log Monitor" preferredStyle:UIAlertControllerStyleActionSheet];
+	[alertController addAction:[UIAlertAction actionWithTitle:@"Send Report" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+		window.hidden = YES;
+		__weak id weakSelf = self;
+		_logWriter.finishCallback = ^(ApptentiveLogWriter *writer) {
+			[weakSelf sendReportWithLogFile:writer.path];
+		};
+		[self stop];
+	}]];
+	[alertController addAction:[UIAlertAction actionWithTitle:@"Continue" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+		window.hidden = YES;
+	}]];
+	[alertController addAction:[UIAlertAction actionWithTitle:@"Discard Report" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+		window.hidden = YES;
+		[self stop];
+	}]];
+	
+	window.rootViewController = [[UIViewController alloc] init];
+	window.windowLevel = UIWindowLevelAlert + 1;
+	window.hidden = NO; // don't use makeKeyAndVisible since we don't have any knowledge about the host app's UI
+	[window.rootViewController presentViewController:alertController animated:YES completion:nil];
 }
 
 #pragma mark -

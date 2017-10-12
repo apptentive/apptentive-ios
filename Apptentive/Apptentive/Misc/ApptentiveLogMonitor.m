@@ -106,12 +106,10 @@ static ApptentiveLogMonitor * _sharedInstance;
 	
 	_logWriter = logWriter;
 	
-	if (_sessionRestored) {
-		// dispatch on the main thread to avoid UI-issues
-		dispatch_async(dispatch_get_main_queue(), ^{
-			[self showReportUI];
-		});
-	}
+	// dispatch on the main thread to avoid UI-issues
+	dispatch_async(dispatch_get_main_queue(), ^{
+		[self showReportUI];
+	});
 	
 	[self registerNotifications];
 }

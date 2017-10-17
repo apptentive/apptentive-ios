@@ -169,6 +169,10 @@ NSString *const ApptentiveInteractionSurveyEventLabelCancel = @"cancel";
 	return [self questionAtIndex:index].maximumLabel;
 }
 
+- (nullable NSString *)errorMessageAtIndex:(NSInteger)index {
+	return [self questionAtIndex:index].errorMessage;
+}
+
 - (BOOL)answerIsValidForQuestionAtIndex:(NSInteger)index {
 	return ![self.invalidQuestionIndexes containsIndex:index];
 }

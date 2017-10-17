@@ -35,6 +35,7 @@
 		_value = JSON[@"value"];
 		_placeholder = JSON[@"freeform_hint"];
 		_required = [JSON[@"required"] boolValue];
+		_errorMessage = JSON[@"error_message"];
 
 		if (_type == ATSurveyQuestionTypeMultipleSelect) {
 			_maximumSelectedCount = [JSON[@"max_selections"] integerValue];

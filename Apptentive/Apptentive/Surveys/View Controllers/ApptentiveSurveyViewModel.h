@@ -51,6 +51,8 @@
 - (NSString *)minimumLabelForQuestionAtIndex:(NSInteger)index;
 - (NSString *)maximumLabelForQuestionAtIndex:(NSInteger)index;
 
+- (nullable NSString *)errorMessageAtIndex:(NSInteger)index;
+
 - (BOOL)answerIsSelectedAtIndexPath:(NSIndexPath *)indexPath;
 - (BOOL)answerIsValidAtIndexPath:(NSIndexPath *)indexPath;
 - (BOOL)answerIsValidForQuestionAtIndex:(NSInteger)index;

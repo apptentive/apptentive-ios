@@ -155,6 +155,7 @@
 		ApptentiveAssertNotNil(firstInvalidQuestionIndex, @"Expected non-nil index");
 		if (firstInvalidQuestionIndex) {
 			[self.collectionView scrollToItemAtIndexPath:firstInvalidQuestionIndex atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:YES];
+			UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, [self.viewModel errorMessageAtIndex:firstInvalidQuestionIndex.section]);
 		}
 	}
 }

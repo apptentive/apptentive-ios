@@ -236,4 +236,10 @@
 	XCTAssertTrue([self.viewModel validate:YES]);
 }
 
+- (void)testErrorMessages {
+	XCTAssertEqualObjects([self.viewModel errorMessageAtIndex:1], @"You have to select one.");
+	XCTAssertEqualObjects([self.viewModel errorMessageAtIndex:3], @"You have to select one.");
+	XCTAssertEqualObjects([self.viewModel errorMessageAtIndex:4], @"You have selected too many or too few answers.");
+}
+
 @end

@@ -12,6 +12,7 @@
 #import "ApptentiveLogWriter.h"
 #import "ApptentiveJSONSerialization.h"
 #import "ApptentiveSafeCollections.h"
+#import "ApptentiveJWT.h"
 
 #import <MessageUI/MessageUI.h>
 
@@ -21,7 +22,7 @@ static NSString * const KeyLogLevel = @"logLevel";
 static NSString * const ConfigurationStorageFile = @"apptentive-log-monitor.cfg";
 static NSString * const LogFileName = @"apptentive-log.txt";
 
-static NSString * const DebugTextHeader = @"com.apptentive.debug";
+static NSString * const DebugTextHeader = @"com.apptentive.debug:";
 
 static ApptentiveLogMonitor * _sharedInstance;
 
@@ -56,7 +57,7 @@ static ApptentiveLogMonitor * _sharedInstance;
 }
 
 - (NSString *)description {
-	return [NSString stringWithFormat:@"accessToken=%@ logLevel=%@ recipients=%@ restored=%@", _accessToken, NSStringFromApptentiveLogLevel(_logLevel), [_emailRecipients componentsJoinedByString:@","], _restored ? @"YES" : @"NO"];
+	return [NSString stringWithFormat:@"logLevel=%@ recipients=%@ restored=%@", NSStringFromApptentiveLogLevel(_logLevel), [_emailRecipients componentsJoinedByString:@","], _restored ? @"YES" : @"NO"];
 }
 
 @end
@@ -77,7 +78,6 @@ static ApptentiveLogMonitor * _sharedInstance;
 - (instancetype)initWithConfiguration:(ApptentiveLogMonitorConfigration *)configuration {
 	self = [super init];
 	if (self) {
-		_accessToken = configuration.accessToken;
 		_logLevel = configuration.logLevel;
 		_emailRecipients = configuration.emailRecipients;
 		_sessionRestored = configuration.isRestored;
@@ -174,7 +174,13 @@ static ApptentiveLogMonitor * _sharedInstance;
 		if (configuration != nil) {
 			ApptentiveLogInfo(ApptentiveLogTagMonitor, @"Read log monitor configuration from persistent storage: %@", configuration);
 		} else {
-			configuration = [self readConfigurationFromClipboard];
+			NSString *accessToken = [self readAccessTokenFromClipboard];
+			if (![self syncVerifyAccessToken:accessToken]) {
+				ApptentiveLogError(ApptentiveLogTagMonitor, @"Can't start log monitor: access token verification failed");
+				return NO;
+			}
+			
+			configuration = [self readConfigurationFromToken:accessToken];
 			if (configuration != nil) {
 				ApptentiveLogInfo(ApptentiveLogTagMonitor, @"Read log monitor configuration from clipboard: %@", configuration);
 				// save configuration
@@ -198,6 +204,26 @@ static ApptentiveLogMonitor * _sharedInstance;
 }
 
 #pragma mark -
+#pragma mark Access Token
+
++ (nullable NSString *)readAccessTokenFromClipboard {
+	NSString *text = [UIPasteboard generalPasteboard].string;
+	
+	// trim white spaces
+	text = [text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+	
+	if (![text hasPrefix:DebugTextHeader]) {
+		return nil;
+	}
+	
+	return [text substringFromIndex:DebugTextHeader.length];
+}
+
++ (BOOL)syncVerifyAccessToken:(NSString *)accessToken {
+	return YES; // FIXME: send a sync request to verify access token
+}
+
+#pragma mark -
 #pragma mark Configuration
 
 + (nullable ApptentiveLogMonitorConfigration *)readConfigurationFromStoragePath:(NSString *)path {
@@ -213,46 +239,23 @@ static ApptentiveLogMonitor * _sharedInstance;
 	[NSKeyedArchiver archiveRootObject:configuration toFile:path];
 }
 
-+ (nullable ApptentiveLogMonitorConfigration *)readConfigurationFromClipboard {
-	NSString *text = [UIPasteboard generalPasteboard].string;
-	
-	// trim white spaces
-	text = [text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-	
-	if (![text hasPrefix:DebugTextHeader]) {
-		return nil;
-	}
-	
-	NSString *payload = [text substringFromIndex:DebugTextHeader.length];
-	
-	NSError *error;
-	id json = [ApptentiveJSONSerialization JSONObjectWithString:payload error:&error];
-	if (json == nil) {
-		ApptentiveLogError(ApptentiveLogTagMonitor, @"Error while parsing json: %@", error);
-		return nil;
-	}
-	
-	if (![json isKindOfClass:[NSDictionary class]]) {
-		ApptentiveLogError(ApptentiveLogTagMonitor, @"Unexpected json format: %@", payload);
-		return nil;
-	}
-	
-	NSString *accessToken = ApptentiveDictionaryGetString(json, @"accessToken");
-	if (accessToken.length == 0) {
-		ApptentiveLogError(ApptentiveLogTagMonitor, @"Unexpected json format (missing access token): %@", payload);
++ (nullable ApptentiveLogMonitorConfigration *)readConfigurationFromToken:(NSString *)token {
+	NSError *jwtError;
+	ApptentiveJWT *jwt = [ApptentiveJWT JWTWithContentOfString:token error:&jwtError];
+	if (jwtError != nil) {
+		ApptentiveLogError(ApptentiveLogTagMonitor, @"JWT parsing error: %@", jwtError);
 		return nil;
 	}
 	
 	ApptentiveLogMonitorConfigration *configuration = [[ApptentiveLogMonitorConfigration alloc] init];
-	configuration.accessToken = accessToken;
 	
-	NSString *logLevelStr = ApptentiveDictionaryGetString(json, @"level");
+	NSString *logLevelStr = ApptentiveDictionaryGetString(jwt.payload, @"level");
 	ApptentiveLogLevel logLevel = ApptentiveLogLevelFromString(logLevelStr);
 	if (logLevel != ApptentiveLogLevelUndefined) {
 		configuration.logLevel = logLevel;
 	}
 	
-	NSArray *emailRecepients = ApptentiveDictionaryGetArray(json, @"recipients");
+	NSArray *emailRecepients = ApptentiveDictionaryGetArray(jwt.payload, @"recipients");
 	if (emailRecepients != nil) {
 		configuration.emailRecipients = emailRecepients;
 	}

@@ -12,9 +12,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ApptentiveLogMonitorConfigration : NSObject
 
-/** Access token for session verification */
-@property (nonatomic, strong) NSString *accessToken;
-
 /** Email recipients for the log email */
 @property (nonatomic, strong) NSArray<NSString *> *emailRecipients;
 

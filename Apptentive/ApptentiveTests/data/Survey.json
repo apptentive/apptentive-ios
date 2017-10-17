@@ -44,7 +44,8 @@
 				"instructions" : "select one",
 				"required" : true,
 				"value" : "Multichoice Required",
-				"randomize" : false
+				"randomize" : false,
+				"error_message": "You have to select one."
 			},
 			{
 				"max_selections" : 2,
@@ -84,7 +85,8 @@
 				"required" : true,
 				"value" : "MultiSelect Required",
 				"randomize" : false,
-				"min_selections" : 0
+				"min_selections" : 0,
+				"error_message": "You have to select one."
 			},
 			{
 				"max_selections" : 3,
@@ -112,7 +114,8 @@
 				"required" : false,
 				"value" : "Multiselect Optional With Limits",
 				"randomize" : false,
-				"min_selections" : 1
+				"min_selections" : 1,
+				"error_message": "You have selected too many or too few answers."
 			},
 			{
 				"max_selections" : 3,

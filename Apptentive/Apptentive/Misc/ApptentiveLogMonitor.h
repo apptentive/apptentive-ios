@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ApptentiveLogMonitorConfigration : NSObject
 
 /** Access token for session verification */
-@property (nonatomic, readonly) NSString *accessToken;
+@property (nonatomic, strong) NSString *accessToken;
 
 /** Email recipients for the log email */
 @property (nonatomic, strong) NSArray<NSString *> *emailRecipients;
@@ -23,9 +23,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 /** True if configuration was restored from the persistent storage */
 @property (nonatomic, readonly, getter=isRestored) BOOL restored;
-
-/** Create a new configuration with an access token and default parameters */
-- (instancetype)initWithAccessToken:(NSString *)accessToken;
 
 @end
 

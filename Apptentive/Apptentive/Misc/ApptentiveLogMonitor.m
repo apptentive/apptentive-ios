@@ -15,7 +15,6 @@
 
 #import <MessageUI/MessageUI.h>
 
-static NSString * const KeyAccessToken = @"accessToken";
 static NSString * const KeyEmailRecipients = @"emailRecipients";
 static NSString * const KeyLogLevel = @"logLevel";
 
@@ -32,10 +31,9 @@ static ApptentiveLogMonitor * _sharedInstance;
 
 @implementation ApptentiveLogMonitorConfigration
 
-- (instancetype)initWithAccessToken:(NSString *)accessToken {
+- (instancetype)init {
 	self = [super init];
 	if (self) {
-		_accessToken = accessToken;
 		_emailRecipients = @[@"support@apptentive.com"];
 		_logLevel = ApptentiveLogLevelVerbose;
 	}
@@ -43,7 +41,6 @@ static ApptentiveLogMonitor * _sharedInstance;
 }
 
 - (void)encodeWithCoder:(NSCoder *)coder {
-	[coder encodeObject:_accessToken forKey:KeyAccessToken];
 	[coder encodeObject:[_emailRecipients componentsJoinedByString:@","] forKey:KeyEmailRecipients];
 	[coder encodeInt:(int)_logLevel forKey:KeyLogLevel];
 }
@@ -51,7 +48,6 @@ static ApptentiveLogMonitor * _sharedInstance;
 - (nullable instancetype)initWithCoder:(NSCoder *)decoder {
 	self = [super init];
 	if (self) {
-		_accessToken = [decoder decodeObjectForKey:KeyAccessToken];
 		_emailRecipients = [[decoder decodeObjectForKey:KeyEmailRecipients] componentsSeparatedByString:@","];
 		_logLevel = (ApptentiveLogLevel) [decoder decodeIntForKey:KeyLogLevel];
 		_restored = YES;
@@ -247,7 +243,8 @@ static ApptentiveLogMonitor * _sharedInstance;
 		return nil;
 	}
 	
-	ApptentiveLogMonitorConfigration *configuration = [[ApptentiveLogMonitorConfigration alloc] initWithAccessToken:accessToken];
+	ApptentiveLogMonitorConfigration *configuration = [[ApptentiveLogMonitorConfigration alloc] init];
+	configuration.accessToken = accessToken;
 	
 	NSString *logLevelStr = ApptentiveDictionaryGetString(json, @"level");
 	ApptentiveLogLevel logLevel = ApptentiveLogLevelFromString(logLevelStr);

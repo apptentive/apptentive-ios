@@ -93,7 +93,7 @@ NS_ASSUME_NONNULL_BEGIN
 	result[@"application/dt_compiler"] = self.conversation.appRelease.compiler;
 	result[@"application/dt_platform_build"] = self.conversation.appRelease.platformBuild;
 	result[@"application/dt_platform_name"] = self.conversation.appRelease.platformName;
-	result[@"application/dt_platform_version"] = self.conversation.appRelease.platformVersion;
+	result[@"application/dt_platform_version"] = [[ApptentiveVersion alloc] initWithString: self.conversation.appRelease.platformVersion];
 	result[@"application/dt_sdk_build"] = self.conversation.appRelease.SDKBuild;
 	result[@"application/dt_sdk_name"] = self.conversation.appRelease.SDKName;
 	result[@"application/dt_xcode"] = self.conversation.appRelease.Xcode;

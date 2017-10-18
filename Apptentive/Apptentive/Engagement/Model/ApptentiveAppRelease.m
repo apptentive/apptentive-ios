@@ -22,6 +22,14 @@ static NSString *const UpdateBuildKey = @"updateBuild";
 static NSString *const TimeAtInstallTotalKey = @"timeAtInstallTotal";
 static NSString *const TimeAtInstallVersionKey = @"timeAtInstallVersion";
 static NSString *const TimeAtInstallBuildKey = @"timeAtInstallBuild";
+static NSString *const CompilerKey = @"compiler";
+static NSString *const PlatformBuildKey = @"platformBuild";
+static NSString *const PlatformNameKey = @"platformName";
+static NSString *const PlatformVersionKey = @"platformVersion";
+static NSString *const SDKBuildKey = @"SDKBuild";
+static NSString *const SDKNameKey = @"SDKName";
+static NSString *const XcodeKey = @"Xcode";
+static NSString *const XcodeBuildKey = @"XcodeBuild";
 
 // Legacy keys
 static NSString *const ATConversationLastUpdateValuePreferenceKey = @"ATConversationLastUpdateValuePreferenceKey";
@@ -58,6 +66,17 @@ static NSString *const ATEngagementIsUpdateBuildKey = @"ATEngagementIsUpdateBuil
 		_build = [[ApptentiveVersion alloc] initWithString:[NSBundle mainBundle].infoDictionary[(NSString *)kCFBundleVersionKey]];
 		_hasAppStoreReceipt = [NSData dataWithContentsOfURL:[NSBundle mainBundle].appStoreReceiptURL] != nil;
 
+		_compiler = [NSBundle mainBundle].infoDictionary[@"DTCompiler"];
+		_platformBuild = [NSBundle mainBundle].infoDictionary[@"DTPlatformBuild"];
+		_platformName = [NSBundle mainBundle].infoDictionary[@"DTPlatformName"];
+		_platformVersion = [NSBundle mainBundle].infoDictionary[@"DTPlatformVersion"];
+		_SDKBuild = [NSBundle mainBundle].infoDictionary[@"DTSDKBuild"];
+		_SDKName = [NSBundle mainBundle].infoDictionary[@"DTSDKName"];
+		_Xcode = [NSBundle mainBundle].infoDictionary[@"DTXcode"];
+		_XcodeBuild = [NSBundle mainBundle].infoDictionary[@"DTXcodeBuild"];
+
+
+
 #ifdef APPTENTIVE_DEBUG
 		_debugBuild = YES;
 #endif
@@ -83,6 +102,15 @@ static NSString *const ATEngagementIsUpdateBuildKey = @"ATEngagementIsUpdateBuil
 		_timeAtInstallTotal = [coder decodeObjectOfClass:[NSDate class] forKey:TimeAtInstallTotalKey];
 		_timeAtInstallVersion = [coder decodeObjectOfClass:[NSDate class] forKey:TimeAtInstallVersionKey];
 		_timeAtInstallBuild = [coder decodeObjectOfClass:[NSDate class] forKey:TimeAtInstallBuildKey];
+
+		_compiler = [coder decodeObjectOfClass:[NSString class] forKey:CompilerKey];
+		_platformBuild = [coder decodeObjectOfClass:[NSString class] forKey:PlatformBuildKey];
+		_platformName = [coder decodeObjectOfClass:[NSString class] forKey:PlatformNameKey];
+		_platformVersion = [coder decodeObjectOfClass:[NSString class] forKey:PlatformVersionKey];
+		_SDKBuild = [coder decodeObjectOfClass:[NSString class] forKey:SDKBuildKey];
+		_SDKName = [coder decodeObjectOfClass:[NSString class] forKey:SDKNameKey];
+		_Xcode = [coder decodeObjectOfClass:[NSString class] forKey:XcodeKey];
+		_XcodeBuild = [coder decodeObjectOfClass:[NSString class] forKey:XcodeBuildKey];
 	}
 
 	return self;
@@ -104,6 +132,15 @@ static NSString *const ATEngagementIsUpdateBuildKey = @"ATEngagementIsUpdateBuil
 	[coder encodeObject:self.timeAtInstallTotal forKey:TimeAtInstallTotalKey];
 	[coder encodeObject:self.timeAtInstallVersion forKey:TimeAtInstallVersionKey];
 	[coder encodeObject:self.timeAtInstallBuild forKey:TimeAtInstallBuildKey];
+
+	[coder encodeObject:self.compiler forKey:CompilerKey];
+	[coder encodeObject:self.platformBuild forKey:PlatformBuildKey];
+	[coder encodeObject:self.platformName forKey:PlatformNameKey];
+	[coder encodeObject:self.platformVersion forKey:PlatformVersionKey];
+	[coder encodeObject:self.SDKBuild forKey:SDKBuildKey];
+	[coder encodeObject:self.SDKName forKey:SDKNameKey];
+	[coder encodeObject:self.Xcode forKey:XcodeKey];
+	[coder encodeObject:self.XcodeBuild forKey:XcodeBuildKey];
 }
 
 - (instancetype)initAndMigrate {
@@ -186,7 +223,15 @@ static NSString *const ATEngagementIsUpdateBuildKey = @"ATEngagementIsUpdateBuil
 		@"cf_bundle_version": NSStringFromSelector(@selector(buildString)),
 		@"app_store_receipt": NSStringFromSelector(@selector(appStoreReceiptDictionary)),
 		@"debug": NSStringFromSelector(@selector(boxedDebugBuild)),
-		@"overriding_styles": NSStringFromSelector(@selector(boxedOverridingStyles))
+		@"overriding_styles": NSStringFromSelector(@selector(boxedOverridingStyles)),
+		@"dt_compiler": NSStringFromSelector(@selector(compiler)),
+		@"dt_platform_build": NSStringFromSelector(@selector(platformBuild)),
+		@"dt_platform_name": NSStringFromSelector(@selector(platformName)),
+		@"dt_platform_version": NSStringFromSelector(@selector(platformVersion)),
+		@"dt_sdk_build": NSStringFromSelector(@selector(SDKBuild)),
+		@"dt_sdk_name": NSStringFromSelector(@selector(SDKName)),
+		@"dt_xcode": NSStringFromSelector(@selector(Xcode)),
+		@"dt_xcode_build": NSStringFromSelector(@selector(XcodeBuild))
 	};
 }
 

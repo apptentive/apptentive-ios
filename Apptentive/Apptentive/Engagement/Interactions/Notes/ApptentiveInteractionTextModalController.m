@@ -61,17 +61,7 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 		return nil;
 	}
 
-	NSString *layout = config[@"layout"];
-	UIAlertControllerStyle preferredStyle;
-	if ([layout isEqualToString:@"center"]) {
-		preferredStyle = UIAlertControllerStyleAlert;
-	} else if ([layout isEqualToString:@"bottom"]) {
-		preferredStyle = UIAlertControllerStyleActionSheet;
-	} else {
-		preferredStyle = UIAlertControllerStyleAlert;
-	}
-
-	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:preferredStyle];
+	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
 
 	BOOL cancelActionAdded = NO;
 	NSArray *actions = config[@"actions"];

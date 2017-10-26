@@ -177,8 +177,11 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		}
 	}
 
-	// any remaining conversations are 'logged out', and we should not load them.
-	if (self.conversationMetadata.items.count > 0) {
+	// The presence of a logged-out conversation means that we shouldn't start a new anonymous converstion or attempt to migrate a legacy conversation. No conversation should be active.
+	item = [self.conversationMetadata findItemFilter:^BOOL(ApptentiveConversationMetadataItem *item) {
+		return item.state == ApptentiveConversationStateLoggedOut;
+	}];
+	if (item != nil) {
 		ApptentiveLogDebug(ApptentiveLogTagConversation, @"Can't load conversation: only 'logged-out' conversations available");
 		return nil;
 	}
@@ -204,7 +207,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		return legacyConversation;
 	}
 
-	// no conversation available: create a new one
+	// no conversation available: create a new anonymous conversation
 	ApptentiveLogDebug(ApptentiveLogTagConversation, @"Can't load conversation: creating anonymous conversation...");
 	ApptentiveConversation *anonymousConversation = [[ApptentiveConversation alloc] initWithState:ApptentiveConversationStateAnonymousPending];
 	[self fetchConversationToken:anonymousConversation];

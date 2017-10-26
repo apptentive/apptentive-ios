@@ -211,7 +211,9 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 #pragma mark - As-needed tasks
 
 - (void)fetchConfigurationIfNeeded {
-	if (self.configurationOperation != nil || self.conversationManager.activeConversation.identifier == nil || !self.networkAvailable ||   [self.configuration.expiry timeIntervalSinceNow] > 0) {
+	ApptentiveConversation *conversation = self.conversationManager.activeConversation;
+
+	if (self.configurationOperation != nil || conversation.identifier == nil || !self.networkAvailable ||   [self.configuration.expiry timeIntervalSinceNow] > 0) {
 		return;
 	}
 
@@ -223,8 +225,6 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 	callback.operationFailCallback = ^(ApptentiveRequestOperation *operation, NSError *error) {
         self.configurationOperation = nil;
 	};
-
-	ApptentiveConversation *conversation = self.conversationManager.activeConversation;
 
 	self.configurationOperation = [self.client requestOperationWithRequest:[[ApptentiveConfigurationRequest alloc] initWithConversationIdentifier:conversation.identifier] token:conversation.token delegate:callback];
 

@@ -982,10 +982,8 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 #pragma mark - Metadata
 
-- (void)resume {
+- (void)completeHousekeepingTasks {
 	[self updateManifestIfNeeded];
-
-	[self.activeConversation checkForDiffs];
 
 	[self.messageManager checkForMessages];
 }

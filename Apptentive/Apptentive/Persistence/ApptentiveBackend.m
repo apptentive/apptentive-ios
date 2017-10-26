@@ -45,18 +45,11 @@ NSString *const ATInteractionAppEventLabelLaunch = @"launch";
 NSString *const ATInteractionAppEventLabelExit = @"exit";
 
 
-typedef NS_ENUM(NSInteger, ATBackendState) {
-	ATBackendStateStarting,
-	ATBackendStateWaitingForDataProtectionUnlock,
-	ATBackendStateReady
-};
-
-
 @interface ApptentiveBackend ()
 
 @property (nullable, strong, nonatomic) ApptentiveRequestOperation *configurationOperation;
 
-@property (assign, nonatomic) ATBackendState state;
+@property (assign, nonatomic) ApptentiveBackendState state;
 
 @property (strong, nonatomic) CTTelephonyNetworkInfo *telephonyNetworkInfo;
 
@@ -86,20 +79,20 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 		_baseURL = baseURL;
 		_storagePath = storagePath;
 
-		_state = ATBackendStateStarting;
+		_state = ApptentiveBackendStateStarting;
 		_operationQueue = operationQueue;
 		_supportDirectoryPath = [[ApptentiveUtilities applicationSupportPath] stringByAppendingPathComponent:storagePath];
 
 		if ([UIApplication sharedApplication] != nil && ![UIApplication sharedApplication].isProtectedDataAvailable) {
 			_operationQueue.suspended = YES;
-			_state = ATBackendStateWaitingForDataProtectionUnlock;
+			_state = ApptentiveBackendStateWaitingForDataProtectionUnlock;
 
 			__weak ApptentiveBackend *weakSelf = self;
 			[[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationProtectedDataDidBecomeAvailable object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *_Nonnull note) {
                 ApptentiveBackend *strongSelf = weakSelf;
                 if (strongSelf) {
                     strongSelf.operationQueue.suspended = NO;
-                    strongSelf.state = ATBackendStateStarting;
+                    strongSelf.state = ApptentiveBackendStateStarting;
                 }
 			}];
 		}
@@ -209,22 +202,16 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	}
 }
 
-#pragma mark Accessors
-
-- (BOOL)isReady {
-	return (self.state == ATBackendStateReady);
-}
-
 #pragma mark - Core Data stack
 
 - (NSManagedObjectContext *)managedObjectContext {
 	return [self.dataManager managedObjectContext];
 }
 
-#pragma mark -
+#pragma mark - As-needed tasks
 
-- (void)fetchConfiguration {
-	if (self.configurationOperation != nil || !self.isReady || !self.networkAvailable || [self.configuration.expiry timeIntervalSinceNow] > 0) {
+- (void)fetchConfigurationIfNeeded {
+	if (self.configurationOperation != nil || self.conversationManager.activeConversation.identifier == nil || !self.networkAvailable ||   [self.configuration.expiry timeIntervalSinceNow] > 0) {
 		return;
 	}
 
@@ -249,10 +236,10 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 }
 
 - (void)createSupportDirectoryIfNeeded {
-	if (![[NSFileManager defaultManager] fileExistsAtPath:self->_supportDirectoryPath]) {
+	if (![[NSFileManager defaultManager] fileExistsAtPath:self.supportDirectoryPath]) {
 		NSError *error;
-		if (![[NSFileManager defaultManager] createDirectoryAtPath:self->_supportDirectoryPath withIntermediateDirectories:YES attributes:nil error:&error]) {
-			ApptentiveLogError(@"Unable to create storage path “%@”: %@", self->_supportDirectoryPath, error);
+		if (![[NSFileManager defaultManager] createDirectoryAtPath:self.supportDirectoryPath withIntermediateDirectories:YES attributes:nil error:&error]) {
+			ApptentiveLogError(@"Unable to create storage path “%@”: %@", self.supportDirectoryPath, error);
 		}
 	}
 }
@@ -269,15 +256,21 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 
 	_payloadSender = [[ApptentivePayloadSender alloc] initWithBaseURL:self.baseURL apptentiveKey:self.apptentiveKey apptentiveSignature:self.apptentiveSignature managedObjectContext:self.managedObjectContext delegateQueue:self.operationQueue];
 
+	self.state = ApptentiveBackendStatePayloadDatabaseAvailable;
+
 	_imageCache = [[NSURLCache alloc] initWithMemoryCapacity:1 * 1024 * 1024 diskCapacity:10 * 1024 * 1024 diskPath:[self imageCachePath]];
 
 	[self.conversationManager loadActiveConversation];
 
-	[self.conversationManager.activeConversation checkForDiffs];
+	[self completeStartupAndResumeTasks];
+
+	[self addLaunchMetric];
 }
 
+// This is called when we're about to enter the background
 - (void)shutDown {
 	ApptentiveLogVerbose(@"Shutting down backend");
+	self.state = ApptentiveBackendStateShuttingDown;
 
 	[self.operationQueue addOperationWithBlock:^{
 		[self.conversationManager pause];
@@ -315,24 +308,15 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	[self.operationQueue addOperation:completeBackgroundTaskOperation];
 }
 
+// This is called on a warm launch
 - (void)resume {
-#if APPTENTIVE_DEBUG
-	[Apptentive.shared checkSDKConfiguration];
-
-	self.configuration.expiry = [NSDate distantPast];
-#endif
-
-	[self updateNetworkingForCurrentNetworkStatus];
-
-	if (self.networkAvailable) {
-		[self fetchConfiguration];
+	if (self.managedObjectContext != nil) {
+		self.state = ApptentiveBackendStatePayloadDatabaseAvailable;
 	}
 
-	[self.operationQueue addOperationWithBlock:^{
-		[self.conversationManager resume];
+	[self completeStartupAndResumeTasks];
 
-		[self processQueuedRecords];
-	}];
+	[self completeHousekeepingTasks];
 }
 
 // Note: must be called on main thread
@@ -359,15 +343,26 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	}
 }
 
-- (void)finishStartup {
-	self.state = ATBackendStateReady;
+// This is called on warm and cold launch
+- (void)completeStartupAndResumeTasks {
+#if APPTENTIVE_DEBUG
+	[Apptentive.shared checkSDKConfiguration];
+
+	self.configuration.expiry = [NSDate distantPast];
+#endif
 
 	[self updateNetworkingForCurrentNetworkStatus];
-	[self addLaunchMetric];
+}
 
-	if (self.networkAvailable) {
-		[self fetchConfiguration];
-	}
+// This should be called once we might have an active conversation, and perodically after that
+- (void)completeHousekeepingTasks {
+	[self fetchConfigurationIfNeeded];
+
+	[self.operationQueue addOperationWithBlock:^{
+		[self.conversationManager completeHousekeepingTasks];
+
+		[self processQueuedRecords];
+	}];
 }
 
 - (void)migrateLegacyCoreDataAndTaskQueueForConversation:(ApptentiveConversation *)conversation conversationDirectoryPath:(NSString *)directoryPath {
@@ -414,7 +409,7 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 - (void)processQueuedRecords {
 	ApptentiveAssertOperationQueue(self.operationQueue);
 
-	if (self.isReady && self.networkAvailable && self.conversationManager.activeConversation.token != nil) {
+	if (self.state == ApptentiveBackendStatePayloadDatabaseAvailable && self.networkAvailable && self.conversationManager.activeConversation.token != nil) {
 		[self.payloadSender createOperationsForQueuedRequestsInContext:self.managedObjectContext];
 	}
 }
@@ -439,18 +434,16 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	ApptentiveNetworkStatus status = [self.reachability currentNetworkStatus];
 	_networkAvailable = (status != ApptentiveNetworkNotReachable);
 
-	[self.operationQueue addOperationWithBlock:^{
-		if (self.networkAvailable != networkWasAvailable) {
-			if (self.networkAvailable) {
-				[self.client resetBackoffDelay];
-				[self.payloadSender resetBackoffDelay];
+	if (self.networkAvailable != networkWasAvailable) {
+		if (self.networkAvailable) {
+			[self.client resetBackoffDelay];
+			[self.payloadSender resetBackoffDelay];
 
-				[self processQueuedRecords];
-			} else {
-				[self.payloadSender cancelNetworkOperations];
-			}
+			[self completeHousekeepingTasks];
+		} else {
+			[self.payloadSender cancelNetworkOperations];
 		}
-	}];
+	}
 }
 
 - (void)addLaunchMetric {
@@ -579,12 +572,11 @@ typedef NS_ENUM(NSInteger, ATBackendState) {
 	// Anonymous pending conversations will not yet have a token, so we can't finish starting up yet in that case.
 	if (conversation.state != ApptentiveConversationStateAnonymousPending &&
 		conversation.state != ApptentiveConversationStateLegacyPending) {
-		if (self.state != ATBackendStateReady) {
-			[self finishStartup];
-		}
 
 		if (conversation.state == ApptentiveConversationStateAnonymous) {
 			[self.payloadSender updateQueuedRequestsInContext:self.managedObjectContext withConversation:conversation];
+
+			[self completeHousekeepingTasks];
 		}
 	}
 

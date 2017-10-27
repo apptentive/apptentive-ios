@@ -149,7 +149,9 @@ static ApptentiveLogMonitor * _sharedInstance;
 		window.hidden = YES;
 		__weak id weakSelf = self;
 		_logWriter.finishCallback = ^(ApptentiveLogWriter *writer) {
-			[weakSelf sendReportWithLogFile:writer.path];
+			dispatch_async(dispatch_get_main_queue(), ^{
+				[weakSelf sendReportWithLogFile:writer.path];
+			});
 		};
 		[self stop];
 	}]];

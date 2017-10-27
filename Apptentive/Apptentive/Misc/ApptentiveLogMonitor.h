@@ -25,7 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ApptentiveLogMonitor : NSObject
 
-+ (BOOL)tryInitialize;
++ (BOOL)tryInitializeWithBaseURL:(NSURL *)baseURL appKey:(NSString *)appKey signature:(NSString *)appSignature;
 
 @end
 

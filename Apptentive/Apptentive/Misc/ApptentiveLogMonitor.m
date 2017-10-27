@@ -13,6 +13,7 @@
 #import "ApptentiveJSONSerialization.h"
 #import "ApptentiveSafeCollections.h"
 #import "ApptentiveJWT.h"
+#import "ApptentiveJSONSerialization.h"
 
 #import <MessageUI/MessageUI.h>
 
@@ -64,6 +65,7 @@ static ApptentiveLogMonitor * _sharedInstance;
 
 @interface ApptentiveLogMonitor () <MFMailComposeViewControllerDelegate>
 
+@property (nonatomic, readonly) NSURL *baseURL;
 @property (nonatomic, readonly) NSString *accessToken;
 @property (nonatomic, readonly) ApptentiveLogLevel logLevel;
 @property (nonatomic, readonly) NSArray *emailRecipients;
@@ -75,9 +77,10 @@ static ApptentiveLogMonitor * _sharedInstance;
 
 @implementation ApptentiveLogMonitor
 
-- (instancetype)initWithConfiguration:(ApptentiveLogMonitorConfigration *)configuration {
+- (instancetype)initWithBaseURL:(NSURL *)baseURL configuration:(ApptentiveLogMonitorConfigration *)configuration {
 	self = [super init];
 	if (self) {
+		_baseURL = baseURL;
 		_logLevel = configuration.logLevel;
 		_emailRecipients = configuration.emailRecipients;
 		_sessionRestored = configuration.isRestored;
@@ -167,7 +170,7 @@ static ApptentiveLogMonitor * _sharedInstance;
 #pragma mark -
 #pragma mark Static initialization
 
-+ (BOOL)tryInitialize {
++ (BOOL)tryInitializeWithBaseURL:(NSURL *)baseURL appKey:(NSString *)appKey signature:(NSString *)appSignature {
 	@try {
 		NSString *storagePath = [self configurationStoragePath];
 		ApptentiveLogMonitorConfigration *configuration = [self readConfigurationFromStoragePath:storagePath];
@@ -175,7 +178,7 @@ static ApptentiveLogMonitor * _sharedInstance;
 			ApptentiveLogInfo(ApptentiveLogTagMonitor, @"Read log monitor configuration from persistent storage: %@", configuration);
 		} else {
 			NSString *accessToken = [self readAccessTokenFromClipboard];
-			if (![self syncVerifyAccessToken:accessToken]) {
+			if (![self syncVerifyAccessToken:accessToken baseURL:baseURL appKey:appKey signature:appSignature]) {
 				ApptentiveLogError(ApptentiveLogTagMonitor, @"Can't start log monitor: access token verification failed");
 				return NO;
 			}
@@ -192,7 +195,7 @@ static ApptentiveLogMonitor * _sharedInstance;
 		}
 		
 		if (configuration != nil) {
-			_sharedInstance = [[ApptentiveLogMonitor alloc] initWithConfiguration:configuration];
+			_sharedInstance = [[ApptentiveLogMonitor alloc] initWithBaseURL:baseURL configuration:configuration];
 			[_sharedInstance start];
 			return YES;
 		}
@@ -219,8 +222,50 @@ static ApptentiveLogMonitor * _sharedInstance;
 	return [text substringFromIndex:DebugTextHeader.length];
 }
 
-+ (BOOL)syncVerifyAccessToken:(NSString *)accessToken {
-	return YES; // FIXME: send a sync request to verify access token
++ (BOOL)syncVerifyAccessToken:(NSString *)accessToken baseURL:(NSURL *)baseURL appKey:(NSString *)appKey signature:(NSString *)appSignature {
+	if (accessToken.length == 0) {
+		return NO;
+	}
+	
+	NSData *body = [ApptentiveJSONSerialization dataWithJSONObject:@{@"debug_token" : accessToken} options:0 error:nil];
+	
+	NSDictionary *headers = @{
+	  @"X-API-Version": kApptentiveAPIVersionString,
+	  @"APPTENTIVE-KEY": appKey,
+	  @"APPTENTIVE-SIGNATURE": appSignature,
+	  @"Content-Type": @"application/json",
+	  @"Accept": @"application/json",
+	  @"User-Agent": [NSString stringWithFormat:@"ApptentiveConnect/%@ (iOS)", kApptentiveVersionString]
+    };
+	
+	NSURL *URL = [NSURL URLWithString:@"debug_token/verify" relativeToURL:baseURL];
+	NSDictionary *json = [self loadJsonFromURL:URL body:body headers:headers];
+	return ApptentiveDictionaryGetString(json, @"valid");
+}
+
++ (NSDictionary *)loadJsonFromURL:(NSURL *)URL body:(NSData *)body headers:(NSDictionary *)headers {
+	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:URL];
+	NSURLResponse *response;
+	NSError *requestError;
+	NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&requestError];
+	if (requestError != nil) {
+		ApptentiveLogError(@"Unable to load json from URL: %@", requestError);
+		return nil;
+	}
+	
+	NSError *jsonError;
+	id object = [ApptentiveJSONSerialization JSONObjectWithData:data error:&jsonError];
+	if (jsonError != nil) {
+		ApptentiveLogError(@"Unable to parse json from URL: %@", requestError);
+		return nil;
+	}
+	
+	if (![object isKindOfClass:[NSDictionary class]]) {
+		ApptentiveLogError(@"Unexpected json object: %@", object);
+		return nil;
+	}
+	
+	return object;
 }
 
 #pragma mark -

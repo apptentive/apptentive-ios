@@ -26,6 +26,11 @@ void ApptentiveDictionarySetKeyValue(NSMutableDictionary *dictionary, id<NSCopyi
 BOOL ApptentiveDictionaryTrySetKeyValue(NSMutableDictionary *dictionary, id<NSCopying> key, id value);
 
 /**
+ Safely retrieves BOOL from a dictionary (or returns NO if failed)
+ */
+BOOL ApptentiveDictionaryGetBool(NSDictionary *dictionary, id<NSCopying> key);
+
+/**
  Safely retrieves string from a dictionary (or returns nil if failed)
  */
 NSString * _Nullable ApptentiveDictionaryGetString (NSDictionary *dictionary, id<NSCopying> key);

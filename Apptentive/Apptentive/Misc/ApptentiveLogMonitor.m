@@ -173,6 +173,21 @@ static ApptentiveLogMonitor * _sharedInstance;
 #pragma mark Static initialization
 
 + (BOOL)tryInitializeWithBaseURL:(NSURL *)baseURL appKey:(NSString *)appKey signature:(NSString *)appSignature {
+	if (baseURL == nil) {
+		ApptentiveLogError(ApptentiveLogTagMonitor, @"Unable to initialize log monitor: base URL is nil");
+		return NO;
+	}
+	
+	if (appKey.length == 0) {
+		ApptentiveLogError(ApptentiveLogTagMonitor, @"Unable to initialize log monitor: app key is nil or empty");
+		return NO;
+	}
+	
+	if (appSignature.length == 0) {
+		ApptentiveLogError(ApptentiveLogTagMonitor, @"Unable to initialize log monitor: app signature is nil or empty");
+		return NO;
+	}
+	
 	@try {
 		NSString *storagePath = [self configurationStoragePath];
 		ApptentiveLogMonitorConfigration *configuration = [self readConfigurationFromStoragePath:storagePath];

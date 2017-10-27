@@ -238,13 +238,19 @@ static ApptentiveLogMonitor * _sharedInstance;
 	  @"User-Agent": [NSString stringWithFormat:@"ApptentiveConnect/%@ (iOS)", kApptentiveVersionString]
     };
 	
-	NSURL *URL = [NSURL URLWithString:@"debug_token/verify" relativeToURL:baseURL];
+	NSURL *URL = [NSURL URLWithString:@"/debug_token/verify" relativeToURL:baseURL];
 	NSDictionary *json = [self loadJsonFromURL:URL body:body headers:headers];
-	return ApptentiveDictionaryGetString(json, @"valid");
+	return ApptentiveDictionaryGetBool(json, @"valid");
 }
 
 + (NSDictionary *)loadJsonFromURL:(NSURL *)URL body:(NSData *)body headers:(NSDictionary *)headers {
 	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:URL];
+	for (NSString *key in headers) {
+		[request setValue:headers[key] forHTTPHeaderField:key];
+	}
+	request.HTTPBody = body;
+	request.HTTPMethod = @"POST";
+	
 	NSURLResponse *response;
 	NSError *requestError;
 	NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&requestError];

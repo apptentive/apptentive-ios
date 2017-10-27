@@ -109,7 +109,7 @@ static Apptentive *_sharedInstance;
 	self = [super init];
 
 	if (self) {
-		[ApptentiveLogMonitor tryInitializeWithBaseURL:_baseURL appKey:configuration.apptentiveKey signature:configuration.apptentiveSignature];
+		[ApptentiveLogMonitor tryInitializeWithBaseURL:configuration.baseURL appKey:configuration.apptentiveKey signature:configuration.apptentiveSignature];
 		
 		_operationQueue = [[NSOperationQueue alloc] init];
 		_operationQueue.maxConcurrentOperationCount = 1;

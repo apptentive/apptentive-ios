@@ -109,13 +109,16 @@ static Apptentive *_sharedInstance;
 	self = [super init];
 
 	if (self) {
+		// it's important to set the log level first and the initialize log monitor
+		// otherwise the log monitor configuration would be overwritten by
+		// the SDK configuration
+		ApptentiveLogSetLevel(configuration.logLevel);
+		
 		[ApptentiveLogMonitor tryInitializeWithBaseURL:configuration.baseURL appKey:configuration.apptentiveKey signature:configuration.apptentiveSignature];
 		
 		_operationQueue = [[NSOperationQueue alloc] init];
 		_operationQueue.maxConcurrentOperationCount = 1;
 		_operationQueue.name = @"Apptentive Operation Queue";
-
-		ApptentiveLogSetLevel(configuration.logLevel);
 
 		_style = [[ApptentiveStyleSheet alloc] init];
 		_apptentiveKey = configuration.apptentiveKey;

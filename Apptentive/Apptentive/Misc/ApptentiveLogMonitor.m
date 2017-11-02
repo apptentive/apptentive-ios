@@ -68,6 +68,7 @@ static ApptentiveLogMonitor * _sharedInstance;
 @property (nonatomic, readonly) NSURL *baseURL;
 @property (nonatomic, readonly) NSString *accessToken;
 @property (nonatomic, readonly) ApptentiveLogLevel logLevel;
+@property (nonatomic, readonly) ApptentiveLogLevel originalLogLevel;
 @property (nonatomic, readonly) NSArray *emailRecipients;
 @property (nonatomic, readonly, getter=isSessionRestored) BOOL sessionRestored;
 @property (nonatomic, readonly) ApptentiveLogWriter *logWriter;
@@ -81,6 +82,7 @@ static ApptentiveLogMonitor * _sharedInstance;
 	self = [super init];
 	if (self) {
 		_baseURL = baseURL;
+		_originalLogLevel = ApptentiveLogGetLevel();
 		_logLevel = configuration.logLevel;
 		_emailRecipients = configuration.emailRecipients;
 		_sessionRestored = configuration.isRestored;
@@ -92,6 +94,9 @@ static ApptentiveLogMonitor * _sharedInstance;
 #pragma mark Life cycle
 
 - (void)start {
+	ApptentiveLogSetLevel(_logLevel);
+	ApptentiveLogInfo(ApptentiveLogTagMonitor, @"Override log level %@ -> %@", NSStringFromApptentiveLogLevel(_originalLogLevel), NSStringFromApptentiveLogLevel(_logLevel));
+	
 	NSString *logFilePath = [self logFilePath];
 	if (!_sessionRestored) {
 		[ApptentiveUtilities deleteFileAtPath:logFilePath];
@@ -114,10 +119,19 @@ static ApptentiveLogMonitor * _sharedInstance;
 }
 
 - (void)stop {
+	// restore the original log level
+	ApptentiveLogSetLevel(_originalLogLevel);
+	
+	// remove log callbacks
 	ApptentiveSetLoggerCallback(nil);
+	
+	// stop writting logs
 	[_logWriter stop];
+	
+	// delete store configuration
 	[ApptentiveLogMonitor clearConfiguration];
 	
+	// stop notifications
 	[self unregisterNotifications];
 }
 

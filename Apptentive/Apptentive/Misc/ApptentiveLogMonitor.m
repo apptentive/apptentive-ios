@@ -116,9 +116,13 @@ static ApptentiveLogMonitor * _sharedInstance;
 	});
 	
 	[self registerNotifications];
+	
+	ApptentiveLogInfo(ApptentiveLogTagMonitor, @"Troubleshooting mode enabled");
 }
 
 - (void)stop {
+	ApptentiveLogInfo(ApptentiveLogTagMonitor, @"Troubleshooting mode disabled");
+	
 	// restore the original log level
 	ApptentiveLogSetLevel(_originalLogLevel);
 	

@@ -196,7 +196,6 @@ static ApptentiveLogMonitor * _sharedInstance;
 		} else {
 			NSString *accessToken = [self readAccessTokenFromClipboard];
 			if (![self syncVerifyAccessToken:accessToken baseURL:baseURL appKey:appKey signature:appSignature]) {
-				ApptentiveLogError(ApptentiveLogTagMonitor, @"Can't start log monitor: access token verification failed");
 				return NO;
 			}
 			
@@ -244,6 +243,9 @@ static ApptentiveLogMonitor * _sharedInstance;
 		return NO;
 	}
 	
+	ApptentiveLogInfo(ApptentiveLogTagMonitor, @"Starting access token verification: %@", accessToken);
+	
+	NSDate *startDate = [NSDate new];
 	NSData *body = [ApptentiveJSONSerialization dataWithJSONObject:@{@"debug_token" : accessToken} options:0 error:nil];
 	
 	NSDictionary *headers = @{
@@ -257,7 +259,18 @@ static ApptentiveLogMonitor * _sharedInstance;
 	
 	NSURL *URL = [NSURL URLWithString:@"/debug_token/verify" relativeToURL:baseURL];
 	NSDictionary *json = [self loadJsonFromURL:URL body:body headers:headers];
-	return ApptentiveDictionaryGetBool(json, @"valid");
+	NSTimeInterval duration = -[startDate timeIntervalSinceNow];
+	
+	if (json == nil) {
+		ApptentiveLogError(ApptentiveLogTagMonitor, @"Access token verification failed: invalid server response (took %g sec)", duration);
+		
+		return NO;
+	}
+	
+	BOOL valid =  ApptentiveDictionaryGetBool(json, @"valid");
+	ApptentiveLogInfo(ApptentiveLogTagMonitor, @"Access token is %@ (took %g sec)", valid ? @"valid" : @"invalid", duration);
+	
+	return valid;
 }
 
 + (NSDictionary *)loadJsonFromURL:(NSURL *)URL body:(NSData *)body headers:(NSDictionary *)headers {

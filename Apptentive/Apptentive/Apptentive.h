@@ -514,7 +514,7 @@ typedef NS_ENUM(NSUInteger, ApptentiveLogLevel) {
 
  */
 
-- (BOOL)didReceveUserNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void(^)(void))completionHandler;
+- (BOOL)didReceveUserNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void(^)(void))completionHandler NS_AVAILABLE_IOS(10_0);
 
 ///-------------------------------------
 /// @name Attach Text, Images, and Files

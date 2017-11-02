@@ -10,6 +10,8 @@
 #import "ApptentiveUtilities.h"
 #import "ApptentiveJSONSerialization.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 static NSString *const kApptentiveErrorDomain = @"com.apptentive";
 
 inline static NSError *_createError(NSString *format, ...) {
@@ -118,3 +120,5 @@ static NSDictionary *_Nullable _decodeBase64Json(NSString *string, NSError **err
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

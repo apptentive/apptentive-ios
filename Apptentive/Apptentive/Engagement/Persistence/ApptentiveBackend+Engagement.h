@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "ApptentiveBackend.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 extern NSString *const ATEngagementInstallDateKey;
 extern NSString *const ATEngagementUpgradeDateKey;
 extern NSString *const ATEngagementLastUsedVersionKey;
@@ -46,14 +48,14 @@ extern NSString *const ApptentiveEngagementMessageCenterEvent;
 + (NSString *)codePointForVendor:(NSString *)vendor interactionType:(NSString *)interactionType event:(NSString *)event;
 
 - (BOOL)engageApptentiveAppEvent:(NSString *)event;
-- (BOOL)engageLocalEvent:(NSString *)event userInfo:(NSDictionary *)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData fromViewController:(UIViewController *)viewController;
+- (BOOL)engageLocalEvent:(NSString *)event userInfo:(nullable NSDictionary *)userInfo customData:(nullable NSDictionary *)customData extendedData:(nullable NSArray *)extendedData fromViewController:(nullable UIViewController *)viewController;
 
-- (BOOL)engageCodePoint:(NSString *)codePoint fromInteraction:(ApptentiveInteraction *)fromInteraction userInfo:(NSDictionary *)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData fromViewController:(UIViewController *)viewController;
+- (BOOL)engageCodePoint:(NSString *)codePoint fromInteraction:(nullable ApptentiveInteraction *)fromInteraction userInfo:(nullable NSDictionary *)userInfo customData:(nullable NSDictionary *)customData extendedData:(nullable NSArray *)extendedData fromViewController:(nullable UIViewController *)viewController;
 
 - (void)codePointWasSeen:(NSString *)codePoint;
 - (void)interactionWasSeen:(NSString *)interactionID;
 
-- (void)presentInteraction:(ApptentiveInteraction *)interaction fromViewController:(UIViewController *)viewController;
+- (void)presentInteraction:(ApptentiveInteraction *)interaction fromViewController:(nullable UIViewController *)viewController;
 
 // Used for debugging only.
 //@property (copy, nonatomic) NSData *engagementManifestJSON;
@@ -62,3 +64,5 @@ extern NSString *const ApptentiveEngagementMessageCenterEvent;
 //- (NSArray<NSString *> *)targetedLocalEvents;
 
 @end
+
+NS_ASSUME_NONNULL_END

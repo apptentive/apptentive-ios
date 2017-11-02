@@ -9,6 +9,8 @@
 #import "ApptentiveAppConfiguration.h"
 #import "ApptentiveDefines.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 static NSString *const SupportDisplayNameKey = @"supportDisplayName";
 static NSString *const SupportDisplayEmailKey = @"supportDisplayEmail";
 static NSString *const SupportImageURLKey = @"supportImageURL";
@@ -103,7 +105,7 @@ static NSString *const ATAppConfigurationMessageCenterBackgroundRefreshIntervalK
 	[ApptentiveMessageCenterConfiguration deleteMigratedData];
 }
 
-- (instancetype)initWithCoder:(NSCoder *)coder {
+- (nullable instancetype)initWithCoder:(NSCoder *)coder {
 	self = [super init];
 
 	if (self) {
@@ -191,7 +193,7 @@ static NSString *const ATAppConfigurationMessageCenterBackgroundRefreshIntervalK
 	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATAppConfigurationMessageCenterBackgroundRefreshIntervalKey];
 }
 
-- (instancetype)initWithCoder:(NSCoder *)coder {
+- (nullable instancetype)initWithCoder:(NSCoder *)coder {
 	self = [super init];
 
 	if (self) {
@@ -223,3 +225,5 @@ static NSString *const ATAppConfigurationMessageCenterBackgroundRefreshIntervalK
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

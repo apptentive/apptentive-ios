@@ -13,6 +13,8 @@
 #import "Apptentive_Private.h"
 #import "ApptentiveInteractionController.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @implementation ApptentiveInteraction
 
@@ -58,7 +60,7 @@
 	return [description description];
 }
 
-- (id)initWithCoder:(NSCoder *)coder {
+- (nullable instancetype)initWithCoder:(NSCoder *)coder {
 	if ((self = [super init])) {
 		self.identifier = [coder decodeObjectForKey:@"identifier"];
 		self.priority = [coder decodeIntegerForKey:@"priority"];
@@ -77,7 +79,7 @@
 	[coder encodeObject:self.version forKey:@"version"];
 }
 
-- (id)copyWithZone:(NSZone *)zone {
+- (id)copyWithZone:(nullable NSZone *)zone {
 	ApptentiveInteraction *copy = [[[self class] allocWithZone:zone] init];
 
 	if (copy) {
@@ -100,18 +102,20 @@
 	return [ApptentiveBackend codePointForVendor:self.vendor interactionType:self.type event:event];
 }
 
-- (BOOL)engage:(NSString *)event fromViewController:(UIViewController *)viewController {
+- (BOOL)engage:(NSString *)event fromViewController:(nullable UIViewController *)viewController {
 	return [self engage:event fromViewController:viewController userInfo:nil];
 }
 
-- (BOOL)engage:(NSString *)event fromViewController:(UIViewController *)viewController userInfo:(NSDictionary *)userInfo {
+- (BOOL)engage:(NSString *)event fromViewController:(nullable UIViewController *)viewController userInfo:(nullable NSDictionary *)userInfo {
 	return [self engage:event fromViewController:viewController userInfo:userInfo customData:nil extendedData:nil];
 }
 
-- (BOOL)engage:(NSString *)event fromViewController:(UIViewController *)viewController userInfo:(NSDictionary *)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData {
+- (BOOL)engage:(NSString *)event fromViewController:(nullable UIViewController *)viewController userInfo:(nullable NSDictionary *)userInfo customData:(nullable NSDictionary *)customData extendedData:(nullable NSArray *)extendedData {
 	NSString *codePoint = [self codePointForEvent:event];
 
 	return [Apptentive.shared.backend engageCodePoint:codePoint fromInteraction:self userInfo:userInfo customData:customData extendedData:extendedData fromViewController:viewController];
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

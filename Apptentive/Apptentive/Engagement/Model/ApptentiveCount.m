@@ -8,6 +8,8 @@
 
 #import "ApptentiveCount.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 static NSString *const TotalCountKey = @"totalCount";
 static NSString *const VersionCountKey = @"versionCount";
 static NSString *const BuildCountKey = @"buildCount";
@@ -20,7 +22,7 @@ static NSString *const LastInvokedKey = @"lastInvoked";
 	return [self initWithTotalCount:0 versionCount:0 buildCount:0 lastInvoked:nil];
 }
 
-- (instancetype)initWithTotalCount:(NSInteger)totalCount versionCount:(NSInteger)versionCount buildCount:(NSInteger)buildCount lastInvoked:(NSDate *)date {
+- (instancetype)initWithTotalCount:(NSInteger)totalCount versionCount:(NSInteger)versionCount buildCount:(NSInteger)buildCount lastInvoked:(nullable NSDate *)date {
 	self = [super init];
 	if (self) {
 		_totalCount = totalCount;
@@ -31,7 +33,7 @@ static NSString *const LastInvokedKey = @"lastInvoked";
 	return self;
 }
 
-- (instancetype)initWithCoder:(NSCoder *)coder {
+- (nullable instancetype)initWithCoder:(NSCoder *)coder {
 	self = [super initWithCoder:coder];
 	if (self) {
 		_totalCount = [coder decodeIntegerForKey:TotalCountKey];
@@ -111,3 +113,5 @@ static NSString *const LastInvokedKey = @"lastInvoked";
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

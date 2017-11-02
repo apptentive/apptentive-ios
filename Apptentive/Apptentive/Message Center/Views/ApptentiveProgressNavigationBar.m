@@ -8,10 +8,12 @@
 
 #import "ApptentiveProgressNavigationBar.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @implementation ApptentiveProgressNavigationBar
 
-- (instancetype)initWithCoder:(NSCoder *)coder {
+- (nullable instancetype)initWithCoder:(NSCoder *)coder {
 	self = [super initWithCoder:coder];
 	if (self) {
 		[self addProgressView];
@@ -45,3 +47,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

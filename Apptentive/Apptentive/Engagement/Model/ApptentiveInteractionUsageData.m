@@ -20,6 +20,8 @@
 #import "ApptentiveDevice.h"
 #import "ApptentivePerson.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @implementation ApptentiveInteractionUsageData
 
@@ -88,6 +90,14 @@
 	result[@"application/cf_bundle_short_version_string"] = [self versionObjectWithVersion:self.conversation.appRelease.version];
 	result[@"application/cf_bundle_version"] = [self versionObjectWithVersion:self.conversation.appRelease.build];
 	result[@"application/debug"] = @(self.conversation.appRelease.debugBuild);
+	result[@"application/dt_compiler"] = self.conversation.appRelease.compiler;
+	result[@"application/dt_platform_build"] = self.conversation.appRelease.platformBuild;
+	result[@"application/dt_platform_name"] = self.conversation.appRelease.platformName;
+	result[@"application/dt_platform_version"] = [[ApptentiveVersion alloc] initWithString: self.conversation.appRelease.platformVersion];
+	result[@"application/dt_sdk_build"] = self.conversation.appRelease.SDKBuild;
+	result[@"application/dt_sdk_name"] = self.conversation.appRelease.SDKName;
+	result[@"application/dt_xcode"] = self.conversation.appRelease.Xcode;
+	result[@"application/dt_xcode_build"] = self.conversation.appRelease.XcodeBuild;
 
 	result[@"sdk/version"] = [self versionObjectWithVersion:self.conversation.SDK.version];
 	result[@"sdk/distribution"] = self.conversation.SDK.distributionName;
@@ -165,3 +175,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

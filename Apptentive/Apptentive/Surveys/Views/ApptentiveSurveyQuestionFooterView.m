@@ -8,7 +8,10 @@
 
 #import "ApptentiveSurveyQuestionFooterView.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @implementation ApptentiveSurveyQuestionFooterView
-
 @end
+
+NS_ASSUME_NONNULL_END

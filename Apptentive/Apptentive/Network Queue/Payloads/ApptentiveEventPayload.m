@@ -8,6 +8,8 @@
 
 #import "ApptentiveEventPayload.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @implementation ApptentiveEventPayload
 
@@ -77,3 +79,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

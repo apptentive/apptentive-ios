@@ -11,6 +11,8 @@
 #import "ApptentiveMessageManager.h"
 #import <QuickLook/QuickLook.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 typedef NS_ENUM(NSInteger, ATMessageCenterMessageType) {
 	ATMessageCenterMessageTypeMessage,
 	ATMessageCenterMessageTypeReply,
@@ -86,7 +88,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterMessageStatus) {
 @property (readonly, nonatomic) BOOL networkIsReachable;
 
 @property (assign, nonatomic) BOOL didSkipProfile;
-@property (strong, nonatomic) NSString *draftMessage;
+@property (strong, nullable, nonatomic) NSString *draftMessage;
 
 - (instancetype)initWithConversation:(ApptentiveConversation *)conversation interaction:(ApptentiveInteraction *)interaction messageManager:(ApptentiveMessageManager *)messageManager;
 - (void)start;
@@ -102,7 +104,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterMessageStatus) {
 - (ATMessageCenterMessageStatus)statusOfMessageAtIndexPath:(NSIndexPath *)indexPath;
 - (BOOL)shouldShowDateForMessageGroupAtIndex:(NSInteger)index;
 - (NSString *)senderOfMessageAtIndexPath:(NSIndexPath *)indexPath;
-- (NSURL *)imageURLOfSenderAtIndexPath:(NSIndexPath *)indexPath;
+- (nullable NSURL *)imageURLOfSenderAtIndexPath:(NSIndexPath *)indexPath;
 - (void)markAsReadMessageAtIndexPath:(NSIndexPath *)indexPath;
 
 - (void)sendMessage:(NSString *)message withAttachments:(NSArray *)attachments;
@@ -136,3 +138,5 @@ typedef NS_ENUM(NSInteger, ATMessageCenterMessageStatus) {
 - (void)messageCenterViewModel:(ApptentiveMessageCenterViewModel *)viewModel messageProgressDidChange:(float)progress;
 
 @end
+
+NS_ASSUME_NONNULL_END

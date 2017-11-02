@@ -9,10 +9,12 @@
 #import "ApptentiveSurveyQuestion.h"
 #import "ApptentiveSurveyAnswer.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @implementation ApptentiveSurveyQuestion
 
-- (instancetype)initWithJSON:(NSDictionary *)JSON {
+- (nullable instancetype)initWithJSON:(NSDictionary *)JSON {
 	self = [super init];
 
 	if (self) {
@@ -72,3 +74,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

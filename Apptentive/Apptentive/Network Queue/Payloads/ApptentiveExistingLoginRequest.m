@@ -10,10 +10,12 @@
 #import "ApptentiveAppInstall.h"
 #import "ApptentiveDefines.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @implementation ApptentiveExistingLoginRequest
 
-- (instancetype)initWithAppInstall:(id<ApptentiveAppInstall>)appInstall {
+- (nullable instancetype)initWithAppInstall:(id<ApptentiveAppInstall>)appInstall {
 	APPTENTIVE_CHECK_INIT_NOT_EMPTY_ARG(appInstall.token);
 	APPTENTIVE_CHECK_INIT_NOT_EMPTY_ARG(appInstall.identifier);
 
@@ -28,5 +30,6 @@
 	return @{ @"token": self.appInstall.token };
 }
 
-
 @end
+
+NS_ASSUME_NONNULL_END

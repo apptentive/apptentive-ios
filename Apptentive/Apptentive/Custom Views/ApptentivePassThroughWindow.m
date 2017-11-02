@@ -8,10 +8,12 @@
 
 #import "ApptentivePassThroughWindow.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @implementation ApptentivePassThroughWindow
 
-- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
+- (nullable UIView *)hitTest:(CGPoint)point withEvent:(nullable UIEvent *)event {
 	id hitView = [super hitTest:point withEvent:event];
 
 	// Ignore clicks in window or its root view
@@ -23,3 +25,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

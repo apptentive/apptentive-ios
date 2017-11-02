@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 typedef NS_ENUM(NSInteger, ATMessageCenterStatusMode) {
 	ATMessageCenterStatusModeNotSet = 0,
 	ATMessageCenterStatusModeEmpty,
@@ -24,3 +26,5 @@ typedef NS_ENUM(NSInteger, ATMessageCenterStatusMode) {
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
 
 @end
+
+NS_ASSUME_NONNULL_END

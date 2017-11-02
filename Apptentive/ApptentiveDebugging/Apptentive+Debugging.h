@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "Apptentive_Private.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class ApptentiveConversation;
 
 typedef NS_OPTIONS(NSInteger, ApptentiveDebuggingOptions) {
@@ -20,7 +22,6 @@ typedef NS_OPTIONS(NSInteger, ApptentiveDebuggingOptions) {
 
 extern NSNotificationName _Nonnull const ApptentiveConversationChangedNotification;
 
-NS_ASSUME_NONNULL_BEGIN
 
 @interface Apptentive ()
 
@@ -59,8 +60,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSString *)conversationDescriptionAtIndex:(NSInteger)index;
 - (BOOL)conversationIsActiveAtIndex:(NSInteger)index;
 - (void)deleteConversationAtIndex:(NSInteger)index;
-
-- (void)resetSDK;
 
 - (void)startObservingConversation;
 

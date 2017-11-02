@@ -7,6 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <UserNotifications/UserNotifications.h>
+
+NS_ASSUME_NONNULL_BEGIN
 
 //! Project version number for Apptentive.
 /** The Apptentive version number */
@@ -17,12 +20,10 @@ FOUNDATION_EXPORT double ApptentiveVersionNumber;
 FOUNDATION_EXPORT const unsigned char ApptentiveVersionString[];
 
 /** The version number of the Apptentive SDK. */
-#define kApptentiveVersionString @"4.0.5"
+#define kApptentiveVersionString @"4.0.7"
 
 /** The platform that the SDK is built for. */
 #define kApptentivePlatformString @"iOS"
-
-NS_ASSUME_NONNULL_BEGIN
 
 /**
  A code corresponding to the reason that the Apptentive server authentication failed.
@@ -383,7 +384,7 @@ typedef NS_ENUM(NSUInteger, ApptentiveLogLevel) {
 
  @return `YES` if Message Center was presented, `NO` otherwise.
  */
-- (BOOL)presentMessageCenterFromViewController:(UIViewController *)viewController withCustomData:(nullable NSDictionary *)customData;
+- (BOOL)presentMessageCenterFromViewController:(nullable UIViewController *)viewController withCustomData:(nullable NSDictionary *)customData;
 
 /**
  Dismisses Message Center.
@@ -497,7 +498,23 @@ typedef NS_ENUM(NSUInteger, ApptentiveLogLevel) {
  @param viewController The view controller Message Center may be presented from.
  @return `YES` if the notification was sent by Apptentive, `NO` otherwise.
  */
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
 - (BOOL)didReceiveLocalNotification:(UILocalNotification *)notification fromViewController:(UIViewController *)viewController NS_SWIFT_NAME(didReceiveLocalNotification(_:from:));
+#pragma clang diagnostic pop
+
+/**
+ Forwards a user notification from your user notification center delegate to Apptentive.
+ In the event that this method returns `NO`, your code must call the completion handler. 
+
+ @param response The notification response
+ @param completionHandler The completion handler that will be called if the notification was sent by Apptentive
+ @return `YES` if the notification was sent by Apptentive, `NO` otherwise.
+
+ */
+
+- (BOOL)didReceveUserNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void(^)(void))completionHandler;
 
 ///-------------------------------------
 /// @name Attach Text, Images, and Files

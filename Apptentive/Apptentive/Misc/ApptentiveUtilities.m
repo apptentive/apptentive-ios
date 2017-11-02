@@ -13,9 +13,7 @@
 #import <sys/utsname.h>
 #import <sys/sysctl.h>
 
-#define KINDA_EQUALS(a, b) (fabs(a - b) < 0.1)
-#define DEG_TO_RAD(angle) ((M_PI * angle) / 180.0)
-#define RAD_TO_DEG(radians) (radians * (180.0 / M_PI))
+NS_ASSUME_NONNULL_BEGIN
 
 
 UIViewController *topChildViewController(UIViewController *viewController) {
@@ -94,7 +92,7 @@ UIViewController *topChildViewController(UIViewController *viewController) {
 	return [NSURL URLWithString:@"http://www.apptentive.com/"];
 }
 
-+ (NSString *)appName {
++ (nullable NSString *)appName {
 	NSString *displayName = nil;
 
 	NSArray *appNameKeys = [NSArray arrayWithObjects:@"CFBundleDisplayName", (NSString *)kCFBundleNameKey, nil];
@@ -119,7 +117,7 @@ UIViewController *topChildViewController(UIViewController *viewController) {
 	return displayName;
 }
 
-+ (UIViewController *)rootViewControllerForCurrentWindow {
++ (nullable UIViewController *)rootViewControllerForCurrentWindow {
 	UIWindow *window = nil;
 	for (UIWindow *tmpWindow in [[UIApplication sharedApplication] windows]) {
 		if ([[tmpWindow screen] isEqual:[UIScreen mainScreen]] && [tmpWindow isKeyWindow]) {
@@ -141,7 +139,7 @@ UIViewController *topChildViewController(UIViewController *viewController) {
 	return topChildViewController([UIApplication sharedApplication].delegate.window.rootViewController);
 }
 
-+ (UIImage *)appIcon {
++ (nullable UIImage *)appIcon {
 	static UIImage *iconFile = nil;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
@@ -327,7 +325,8 @@ UIViewController *topChildViewController(UIViewController *viewController) {
 					result[key] = newValue;
 				}
 
-				i++, j++;
+				i++;
+				j++;
 			}
 		} else if (comp == NSOrderedAscending) {
 			// New key appeared
@@ -360,7 +359,7 @@ UIViewController *topChildViewController(UIViewController *viewController) {
 	return isValid;
 }
 
-+ (NSData *)secureRandomDataOfLength:(NSUInteger)numberOfBytes {
++ (nullable NSData *)secureRandomDataOfLength:(NSUInteger)numberOfBytes {
 	NSMutableData *randomData = [[NSMutableData alloc] initWithLength:numberOfBytes];
 
 	int result = SecRandomCopyBytes(kSecRandomDefault, numberOfBytes, randomData.mutableBytes);
@@ -416,3 +415,5 @@ UIViewController *topChildViewController(UIViewController *viewController) {
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

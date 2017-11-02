@@ -8,13 +8,15 @@
 
 #import "ApptentiveState.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @implementation ApptentiveState
 + (BOOL)supportsSecureCoding {
 	return YES;
 }
 
-- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+- (nullable instancetype)initWithCoder:(NSCoder *)aDecoder {
 	return [super init];
 }
 
@@ -51,3 +53,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

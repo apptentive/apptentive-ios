@@ -8,9 +8,11 @@
 
 #import "ApptentiveLog.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 static ApptentiveLogLevel _logLevel = ApptentiveLogLevelInfo;
 
-static const char *_logLevelNameLookup[] = {
+static const char * _Nonnull _logLevelNameLookup[] = {
 	"C", // ApptentiveLogLevelCrit,
 	"E", // ApptentiveLogLevelError,
 	"W", // ApptentiveLogLevelWarn,
@@ -149,3 +151,5 @@ void ApptentiveLogSetLevel(ApptentiveLogLevel level) {
 BOOL ApptentiveCanLogLevel(ApptentiveLogLevel level) {
 	return shouldLogLevel(level);
 }
+
+NS_ASSUME_NONNULL_END

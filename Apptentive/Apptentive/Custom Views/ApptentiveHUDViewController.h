@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @interface ApptentiveHUDViewController : UIViewController
 
@@ -20,3 +22,5 @@
 - (void)showInAlertWindow;
 
 @end
+
+NS_ASSUME_NONNULL_END

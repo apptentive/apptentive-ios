@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 typedef void (^ApptentiveAssertionCallback)(NSString *filename, NSInteger line, NSString *message);
 
 extern void ApptentiveSetAssertionCallback(ApptentiveAssertionCallback callback);
@@ -65,3 +67,5 @@ extern void ApptentiveSetAssertionCallback(ApptentiveAssertionCallback callback)
 	if (NSOperationQueue.currentQueue != (expression)) __ApptentiveAssertHelper(#expression, __FILE__, __LINE__, __PRETTY_FUNCTION__, @"Unexpected operation queue: %@", NSOperationQueue.currentQueue)
 
 void __ApptentiveAssertHelper(const char *expression, const char *file, int line, const char *function, ...);
+
+NS_ASSUME_NONNULL_END

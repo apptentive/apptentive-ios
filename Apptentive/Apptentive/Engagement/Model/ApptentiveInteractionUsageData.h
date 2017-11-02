@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "ApptentiveInteraction.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class ApptentiveConversation;
 
 
@@ -25,3 +27,5 @@
 + (void)keyPathWasSeen:(NSString *)keyPath;
 
 @end
+
+NS_ASSUME_NONNULL_END

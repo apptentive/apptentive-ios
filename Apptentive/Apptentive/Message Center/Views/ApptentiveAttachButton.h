@@ -8,9 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @interface ApptentiveAttachButton : UIButton
 
 @property (assign, nonatomic) NSInteger badgeValue;
 
 @end
+
+NS_ASSUME_NONNULL_END

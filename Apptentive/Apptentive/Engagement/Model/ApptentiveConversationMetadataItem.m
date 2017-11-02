@@ -11,6 +11,8 @@
 
 #define VERSION 1
 
+NS_ASSUME_NONNULL_BEGIN
+
 static NSString *const StateKey = @"state";
 static NSString *const ConversationIdentifierKey = @"conversationIdentifier";
 static NSString *const ConversationLocalIdentifierKey = @"conversationLocalIdentifier";
@@ -23,7 +25,7 @@ static NSString *const JWTKey = @"JWT";
 
 @implementation ApptentiveConversationMetadataItem
 
-- (instancetype)initWithConversationLocalIdentifier:(NSString *)conversationLocalIdentifier conversationIdentifier:(NSString *)conversationIdentifier directoryName:(NSString *)filename {
+- (nullable instancetype)initWithConversationLocalIdentifier:(NSString *)conversationLocalIdentifier conversationIdentifier:(nullable NSString *)conversationIdentifier directoryName:(NSString *)filename {
 	self = [super init];
 
 	if (self) {
@@ -42,7 +44,7 @@ static NSString *const JWTKey = @"JWT";
 	return YES;
 }
 
-- (instancetype)initWithCoder:(NSCoder *)coder {
+- (nullable instancetype)initWithCoder:(NSCoder *)coder {
 	self = [super init];
 
 	if (self) {
@@ -109,3 +111,5 @@ static NSString *const JWTKey = @"JWT";
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

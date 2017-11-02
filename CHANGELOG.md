@@ -1,3 +1,14 @@
+2017-10-10 frankus, weeebox v4.0.7
+----------------------------------
+Version 4.0.7 updates Messsage Center and Surveys to adapt to the iPhone X
+screen and fixes parts of the SDK that in rare instances could cause a
+crash. It also adds a new method for better compatibility with the User
+Notifications framework.
+
+2017-09-26 frankus, weeebox v4.0.6
+----------------------------------
+Version 4.0.6 creates a unified background task handler that should address several remaining issues with apps not exiting cleanly. It also prevents an app from crashing when the SDK is not able to intialize properly. Finally it fixes several instances where core data managed objects were being accessed on the wrong queue.
+
 2017-09-06 frankus, weeebox v4.0.5
 ----------------------------------
 Version 4.0.5 fixes an error where a background task expiration handler was not called correctly, which could result in a crash. It also adds an experimental feature where passing `nil` for the view controller parameter of the `engage` method will present interactions in a new window.

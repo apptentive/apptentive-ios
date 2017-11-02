@@ -8,6 +8,8 @@
 
 #import "ApptentiveSurveyAnswerCell.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @interface ApptentiveSurveyChoiceCell : ApptentiveSurveyAnswerCell
 
@@ -17,3 +19,5 @@
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *buttonTopConstraint;
 
 @end
+
+NS_ASSUME_NONNULL_END

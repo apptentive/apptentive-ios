@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class ApptentiveInteraction;
 
 
@@ -20,10 +22,12 @@
 
 @property (readonly, nonatomic) ApptentiveInteraction *interaction;
 @property (strong, nonatomic) UIViewController *presentingViewController;
-@property (strong, nonatomic) UIViewController *presentedViewController;
+@property (strong, nullable, nonatomic) UIViewController *presentedViewController;
 @property (readonly, nonatomic) NSString *programmaticDismissEventLabel;
 
-- (void)presentInteractionFromViewController:(UIViewController *)viewController NS_REQUIRES_SUPER;
+- (void)presentInteractionFromViewController:(nullable UIViewController *)viewController NS_REQUIRES_SUPER;
 - (void)dismissInteractionNotification:(NSNotification *)notification NS_REQUIRES_SUPER;
 
 @end
+
+NS_ASSUME_NONNULL_END

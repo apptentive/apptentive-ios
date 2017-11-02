@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 extern NSInteger ApptentiveJSONDeserializationErrorCode;
 extern NSInteger ApptentiveJSONSerializationErrorCode;
 
@@ -18,3 +20,5 @@ extern NSInteger ApptentiveJSONSerializationErrorCode;
 + (id)JSONObjectWithData:(NSData *)data error:(NSError **)error;
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -7,16 +7,17 @@
 //
 
 #import "ApptentiveNetworkImageView.h"
-
 #import "ApptentiveBackend.h"
 #import "Apptentive_Private.h"
+
+NS_ASSUME_NONNULL_BEGIN
 
 
 @interface ApptentiveNetworkImageView ()
 
-@property (strong, nonatomic) NSURLConnection *connection;
-@property (strong, nonatomic) NSURLResponse *response;
-@property (strong, nonatomic) NSMutableData *imageData;
+@property (nullable, strong, nonatomic) NSURLConnection *connection;
+@property (nullable, strong, nonatomic) NSURLResponse *response;
+@property (nullable, strong, nonatomic) NSMutableData *imageData;
 
 @end
 
@@ -124,3 +125,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

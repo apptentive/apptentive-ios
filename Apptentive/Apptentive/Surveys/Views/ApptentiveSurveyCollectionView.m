@@ -8,6 +8,8 @@
 
 #import "ApptentiveSurveyCollectionView.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @interface ApptentiveSurveyCollectionView ()
 
@@ -66,7 +68,14 @@
 	CGRect headerFrame = [self layoutAttributesForSupplementaryElementOfKind:UICollectionElementKindSectionHeader atIndexPath:indexPath].frame;
 
 	// Make sure we don't scroll off the bottom of the content + footer
-	headerFrame.origin.y = fmin(headerFrame.origin.y - self.contentInset.top, self.contentSize.height - CGRectGetHeight(self.bounds) + self.contentInset.bottom);
+	UIEdgeInsets contentInset = self.contentInset;
+#ifdef __IPHONE_11_0
+	if (@available(iOS 11.0, *)) {
+		contentInset = self.safeAreaInsets;
+	}
+#endif
+
+	headerFrame.origin.y = fmin(headerFrame.origin.y - contentInset.top, self.contentSize.height - CGRectGetHeight(self.bounds) + contentInset.bottom);
 
 	[self setContentOffset:headerFrame.origin animated:animated];
 }
@@ -74,8 +83,15 @@
 - (void)layoutSubviews {
 	[super layoutSubviews];
 
+	UIEdgeInsets contentInset = self.contentInset;
+#ifdef __IPHONE_11_0
+	if (@available(iOS 11.0, *)) {
+		contentInset = self.safeAreaInsets;
+	}
+#endif
+
 	CGFloat top = [self.collectionViewLayout collectionViewContentSize].height - CGRectGetHeight(self.collectionFooterView.bounds);
-	top = fmax(top, CGRectGetHeight(self.bounds) - CGRectGetHeight(self.collectionFooterView.bounds) - self.contentInset.top - self.contentInset.bottom);
+	top = fmax(top, CGRectGetHeight(self.bounds) - CGRectGetHeight(self.collectionFooterView.bounds) - contentInset.top - contentInset.bottom);
 
 	self.footerConstraint.constant = top;
 
@@ -83,3 +99,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

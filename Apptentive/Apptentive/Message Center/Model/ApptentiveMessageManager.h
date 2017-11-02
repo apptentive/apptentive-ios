@@ -11,6 +11,8 @@
 #import "ApptentiveMessage.h"
 #import "ApptentivePayloadSender.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class ApptentiveMessageStore, ApptentiveClient;
 @protocol ApptentiveMessageManagerDelegate;
 
@@ -72,3 +74,5 @@
 - (void)messageManager:(ApptentiveMessageManager *)manager messageSendProgressDidUpdate:(float)progress;
 
 @end
+
+NS_ASSUME_NONNULL_END

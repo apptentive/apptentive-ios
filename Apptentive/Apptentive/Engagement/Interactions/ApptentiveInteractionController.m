@@ -10,6 +10,9 @@
 #import "ApptentiveInteraction.h"
 #import "Apptentive_Private.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
+
 static NSDictionary *interactionControllerClassRegistry;
 static NSString *const ApptentiveInteractionEventLabelCancel = @"cancel";
 
@@ -59,7 +62,7 @@ static NSString *const ApptentiveInteractionEventLabelCancel = @"cancel";
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (void)presentInteractionFromViewController:(UIViewController *)viewController {
+- (void)presentInteractionFromViewController:(nullable UIViewController *)viewController {
 	self.presentingViewController = viewController;
 }
 
@@ -79,3 +82,5 @@ static NSString *const ApptentiveInteractionEventLabelCancel = @"cancel";
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

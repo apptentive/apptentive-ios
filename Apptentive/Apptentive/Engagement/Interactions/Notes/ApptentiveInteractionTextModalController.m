@@ -14,6 +14,9 @@
 #import "ApptentiveInteraction.h"
 #import "UIAlertController+Apptentive.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
+
 NSString *const ATInteractionTextModalEventLabelLaunch = @"launch";
 NSString *const ATInteractionTextModalEventLabelCancel = @"cancel";
 NSString *const ATInteractionTextModalEventLabelDismiss = @"dismiss";
@@ -28,7 +31,7 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 	[self registerInteractionControllerClass:self forType:@"TextModal"];
 }
 
-- (void)presentInteractionFromViewController:(UIViewController *)viewController {
+- (void)presentInteractionFromViewController:(nullable UIViewController *)viewController {
 	[super presentInteractionFromViewController:viewController];
 
 	self.presentedViewController = [self alertControllerWithInteraction:self.interaction];
@@ -58,17 +61,7 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 		return nil;
 	}
 
-	NSString *layout = config[@"layout"];
-	UIAlertControllerStyle preferredStyle;
-	if ([layout isEqualToString:@"center"]) {
-		preferredStyle = UIAlertControllerStyleAlert;
-	} else if ([layout isEqualToString:@"bottom"]) {
-		preferredStyle = UIAlertControllerStyleActionSheet;
-	} else {
-		preferredStyle = UIAlertControllerStyleAlert;
-	}
-
-	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:preferredStyle];
+	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
 
 	BOOL cancelActionAdded = NO;
 	NSArray *actions = config[@"actions"];
@@ -199,3 +192,5 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -8,6 +8,8 @@
 
 #import "ApptentiveMessageCenterInputView.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @interface ApptentiveMessageCenterInputView ()
 
@@ -63,7 +65,7 @@
 	self.sendBar.layer.borderColor = self.borderColor.CGColor;
 }
 
-- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+- (void)traitCollectionDidChange:(nullable UITraitCollection *)previousTraitCollection {
 	[super traitCollectionDidChange:previousTraitCollection];
 
 	CGFloat outerVerticalSpace = self.regularOuterVerticalSpace;
@@ -89,3 +91,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

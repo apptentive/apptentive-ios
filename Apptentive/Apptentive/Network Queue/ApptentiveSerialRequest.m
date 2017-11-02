@@ -17,6 +17,8 @@
 #import "Apptentive_Private.h"
 #import "ApptentivePayloadDebug.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @implementation ApptentiveSerialRequest
 
@@ -33,8 +35,15 @@
 @dynamic payload;
 @dynamic encrypted;
 
+@synthesize messageIdentifier = _messageIdentifier;
+
 + (BOOL)enqueuePayload:(ApptentivePayload *)payload forConversation:(ApptentiveConversation *)conversation usingAuthToken:(nullable NSString *)authToken inContext:(NSManagedObjectContext *)context {
 	ApptentiveAssertOperationQueue(Apptentive.shared.operationQueue);
+	
+	ApptentiveAssertNotNil(context, @"Context is nil");
+	if (context == nil) {
+		return NO;
+	}
 
 	ApptentiveAssertNotNil(payload, @"Attempted to enqueue nil payload");
 	if (payload == nil) {
@@ -151,10 +160,14 @@
 	if (self.conversationIdentifier.length > 0 && [self.path containsString:@"<cid>"]) {
 		self.path = [self.path stringByReplacingOccurrencesOfString:@"<cid>" withString:self.conversationIdentifier];
 	}
+
+	_messageIdentifier = [self.identifier copy];
 }
 
 - (BOOL)isMessageRequest {
-	return [self.type isEqualToString:@"message"]; // TODO: get rid of literal string
+	return self.messageIdentifier != nil;
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

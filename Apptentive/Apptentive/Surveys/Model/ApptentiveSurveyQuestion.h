@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 typedef NS_ENUM(NSInteger, ATSurveyQuestionType) {
 	ATSurveyQuestionTypeSingleSelect,
 	ATSurveyQuestionTypeMultipleSelect,
@@ -21,7 +23,7 @@ typedef NS_ENUM(NSInteger, ATSurveyQuestionType) {
 
 @interface ApptentiveSurveyQuestion : NSObject
 
-- (instancetype)initWithJSON:(NSDictionary *)JSON;
+- (nullable instancetype)initWithJSON:(NSDictionary *)JSON;
 
 @property (readonly, nonatomic) ATSurveyQuestionType type;
 @property (readonly, nonatomic) NSString *identifier;
@@ -42,3 +44,5 @@ typedef NS_ENUM(NSInteger, ATSurveyQuestionType) {
 @property (readonly, nonatomic) NSArray<ApptentiveSurveyAnswer *> *answers;
 
 @end
+
+NS_ASSUME_NONNULL_END

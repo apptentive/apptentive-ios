@@ -10,6 +10,8 @@
 #import "ApptentiveSDK.h"
 #import "ApptentiveVersion.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 static NSString *const VersionKey = @"version";
 static NSString *const ProgrammingLanguageKey = @"programmingLanguage";
 static NSString *const AuthorNameKey = @"authorName";
@@ -92,7 +94,7 @@ static ApptentiveVersion *_distributionVersion;
 	return self;
 }
 
-- (instancetype)initWithCoder:(NSCoder *)coder {
+- (nullable instancetype)initWithCoder:(NSCoder *)coder {
 	self = [super initWithCoder:coder];
 
 	if (self) {
@@ -167,3 +169,5 @@ static ApptentiveVersion *_distributionVersion;
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

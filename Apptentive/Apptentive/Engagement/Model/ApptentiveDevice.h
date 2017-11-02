@@ -8,6 +8,8 @@
 
 #import "ApptentiveCustomData.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 extern NSString *const ATDeviceLastUpdateValuePreferenceKey;
 
 @class ApptentiveVersion;
@@ -123,3 +125,5 @@ extern NSString *const ATDeviceLastUpdateValuePreferenceKey;
 @property (class, strong, nonatomic) UIContentSizeCategory contentSizeCategory;
 
 @end
+
+NS_ASSUME_NONNULL_END

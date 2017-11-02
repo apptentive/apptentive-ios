@@ -8,6 +8,8 @@
 
 #import "ApptentiveVersion.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 static NSString *const VersionStringKey = @"versionString";
 static NSString *const MajorKey = @"major";
 static NSString *const MinorKey = @"minor";
@@ -49,7 +51,7 @@ static NSString *const PatchKey = @"patch";
 	return self;
 }
 
-- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+- (nullable instancetype)initWithCoder:(NSCoder *)aDecoder {
 	self = [super initWithCoder:aDecoder];
 
 	if (self) {
@@ -100,3 +102,5 @@ static NSString *const PatchKey = @"patch";
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

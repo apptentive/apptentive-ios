@@ -8,6 +8,8 @@
 
 #import "ApptentiveCustomData.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 static NSString *const CustomDataKey = @"customData";
 static NSString *const IdentifierKey = @"identifier";
 
@@ -41,7 +43,7 @@ static NSString *const IdentifierKey = @"identifier";
 	return self;
 }
 
-- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+- (nullable instancetype)initWithCoder:(NSCoder *)aDecoder {
 	self = [super initWithCoder:aDecoder];
 
 	if (self) {
@@ -103,3 +105,5 @@ static NSString *const IdentifierKey = @"identifier";
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

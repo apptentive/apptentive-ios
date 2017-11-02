@@ -8,6 +8,8 @@
 
 #import "ApptentiveInteractionsRequest.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @implementation ApptentiveInteractionsRequest
 
@@ -16,3 +18,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

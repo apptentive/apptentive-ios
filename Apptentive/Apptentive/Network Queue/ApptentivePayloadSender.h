@@ -8,6 +8,8 @@
 
 #import "ApptentiveClient.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @protocol ApptentivePayloadSenderDelegate;
 
 @class ApptentiveClient;
@@ -60,6 +62,8 @@ typedef NS_ENUM(NSInteger, ApptentiveQueueStatus) {
  */
 @property (readonly, nonatomic) ApptentiveQueueStatus status;
 
+@property (readonly, weak, nonatomic) NSOperation *saveContextOperation;
+
 @end
 
 @protocol ApptentivePayloadSenderDelegate <NSObject>
@@ -68,3 +72,5 @@ typedef NS_ENUM(NSInteger, ApptentiveQueueStatus) {
 - (void)payloadSenderProgressDidChange:(ApptentivePayloadSender *)sender toValue:(double)value;
 
 @end
+
+NS_ASSUME_NONNULL_END

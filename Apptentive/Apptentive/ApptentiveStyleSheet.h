@@ -35,6 +35,15 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @interface ApptentiveStyleSheet : NSObject <ApptentiveStyle>
 
+
+/**
+ Creates a stylesheet by loading a property list from the specified file URL.
+
+ @param stylePropertyListURL A file URL pointing to a style sheet property list.
+ @return The newly-initialized style sheet, or nil if there was an error.
+ */
+- (nullable instancetype)initWithContentsOfURL:(NSURL *)stylePropertyListURL;
+
 /// The font family to be used in the Apptentive UI
 @property (copy, nonatomic) NSString *fontFamily;
 

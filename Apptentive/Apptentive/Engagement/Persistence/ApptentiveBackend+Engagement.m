@@ -11,11 +11,15 @@
 #import "ApptentiveInteraction.h"
 #import "ApptentiveInteractionInvocation.h"
 #import "Apptentive_Private.h"
-#import "ApptentiveBackend+Metrics.h"
 #import "ApptentiveInteractionController.h"
 #import "ApptentiveEngagement.h"
 #import "ApptentiveEngagementManifest.h"
 #import "ApptentiveEngagementBackend.h"
+#import "ApptentiveEventPayload.h"
+#import "ApptentiveSerialRequest.h"
+#import "ApptentiveAppConfiguration.h"
+
+NS_ASSUME_NONNULL_BEGIN
 
 NSString *const ATEngagementCachedInteractionsExpirationPreferenceKey = @"ATEngagementCachedInteractionsExpirationPreferenceKey";
 
@@ -82,15 +86,21 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 	return [[ApptentiveInteraction apptentiveAppInteraction] engage:event fromViewController:nil];
 }
 
-- (BOOL)engageLocalEvent:(NSString *)event userInfo:(NSDictionary *)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData fromViewController:(UIViewController *)viewController {
+- (BOOL)engageLocalEvent:(NSString *)event userInfo:(nullable NSDictionary *)userInfo customData:(nullable NSDictionary *)customData extendedData:(nullable NSArray *)extendedData fromViewController:(nullable UIViewController *)viewController {
 	return [[ApptentiveInteraction localAppInteraction] engage:event fromViewController:viewController userInfo:userInfo customData:customData extendedData:extendedData];
 }
 
-- (BOOL)engageCodePoint:(NSString *)codePoint fromInteraction:(ApptentiveInteraction *)fromInteraction userInfo:(NSDictionary *)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData fromViewController:(UIViewController *)viewController {
-	ApptentiveLogInfo(@"Engage Apptentive event: %@", codePoint);
-	if (![self isReady]) {
+- (BOOL)engageCodePoint:(NSString *)codePoint fromInteraction:(nullable ApptentiveInteraction *)fromInteraction userInfo:(nullable NSDictionary *)userInfo customData:(nullable NSDictionary *)customData extendedData:(nullable NSArray *)extendedData fromViewController:(nullable UIViewController *)viewController {
+	if (self.state != ApptentiveBackendStatePayloadDatabaseAvailable) {
+		[self.operationQueue addOperationWithBlock:^{
+			[self engageCodePoint:codePoint fromInteraction:fromInteraction userInfo:userInfo customData:customData extendedData:extendedData fromViewController:viewController];
+		}];
+
+		ApptentiveLogInfo(@"Backend not ready. Deferring engagement of %@", codePoint);
 		return NO;
 	}
+
+	ApptentiveLogInfo(@"Engage Apptentive event: %@", codePoint);
 
 	// TODO: Do this on the background queue?
 	ApptentiveConversation *conversation = self.conversationManager.activeConversation;
@@ -142,7 +152,7 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 	[self.conversationManager.activeConversation warmInteraction:interactionID];
 }
 
-- (void)presentInteraction:(ApptentiveInteraction *)interaction fromViewController:(UIViewController *)viewController {
+- (void)presentInteraction:(ApptentiveInteraction *)interaction fromViewController:(nullable UIViewController *)viewController {
 	if (!interaction) {
 		ApptentiveLogError(@"Attempting to present an interaction that does not exist!");
 		return;
@@ -165,4 +175,24 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 	[controller presentInteractionFromViewController:viewController];
 }
 
+- (void)conversation:(ApptentiveConversation *)conversation addMetricWithName:(NSString *)name fromInteraction:(ApptentiveInteraction *)fromInteraction info:(NSDictionary *)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData {
+	ApptentiveAssertOperationQueue(self.operationQueue);
+
+	if (self.configuration.metricsEnabled == NO || name == nil || conversation.state == ApptentiveConversationStateLoggedOut) {
+		return;
+	}
+
+	ApptentiveEventPayload *payload = [[ApptentiveEventPayload alloc] initWithLabel:name];
+	payload.interactionIdentifier = fromInteraction.identifier;
+	payload.userInfo = userInfo;
+	payload.customData = customData;
+	payload.extendedData = extendedData;
+
+	[ApptentiveSerialRequest enqueuePayload:payload forConversation:conversation usingAuthToken:conversation.token inContext:self.managedObjectContext];
+
+	[self processQueuedRecords];
+}
+
 @end
+
+NS_ASSUME_NONNULL_END

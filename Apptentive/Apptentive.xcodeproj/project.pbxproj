@@ -221,8 +221,6 @@
 		01A2D19B1E490A9700C2103A /* ApptentiveMessageCenterStatusView.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0831E490A9700C2103A /* ApptentiveMessageCenterStatusView.m */; };
 		01A2D19C1E490A9700C2103A /* ApptentiveProgressNavigationBar.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0841E490A9700C2103A /* ApptentiveProgressNavigationBar.h */; };
 		01A2D19D1E490A9700C2103A /* ApptentiveProgressNavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0851E490A9700C2103A /* ApptentiveProgressNavigationBar.m */; };
-		01A2D19E1E490A9700C2103A /* ApptentiveBackend+Metrics.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0871E490A9700C2103A /* ApptentiveBackend+Metrics.h */; };
-		01A2D19F1E490A9700C2103A /* ApptentiveBackend+Metrics.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0881E490A9700C2103A /* ApptentiveBackend+Metrics.m */; };
 		01A2D1A01E490A9700C2103A /* ApptentiveConnect-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D08A1E490A9700C2103A /* ApptentiveConnect-Prefix.pch */; };
 		01A2D1A11E490A9700C2103A /* ApptentiveJSONSerialization.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D08B1E490A9700C2103A /* ApptentiveJSONSerialization.h */; };
 		01A2D1A21E490A9700C2103A /* ApptentiveJSONSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D08C1E490A9700C2103A /* ApptentiveJSONSerialization.m */; };
@@ -230,7 +228,7 @@
 		01A2D1A61E490A9700C2103A /* ApptentiveUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0901E490A9700C2103A /* ApptentiveUtilities.h */; };
 		01A2D1A71E490A9700C2103A /* ApptentiveUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0911E490A9700C2103A /* ApptentiveUtilities.m */; };
 		01A2D1A81E490A9700C2103A /* NSDictionary+Apptentive.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0921E490A9700C2103A /* NSDictionary+Apptentive.h */; };
-		01A2D1A91E490A9700C2103A /* NSDictionary+ApptentiveAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0931E490A9700C2103A /* NSDictionary+ApptentiveAdditions.m */; };
+		01A2D1A91E490A9700C2103A /* NSDictionary+Apptentive.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0931E490A9700C2103A /* NSDictionary+Apptentive.m */; };
 		01A2D1AA1E490A9700C2103A /* ApptentiveAppConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0951E490A9700C2103A /* ApptentiveAppConfiguration.h */; };
 		01A2D1AB1E490A9700C2103A /* ApptentiveAppConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0961E490A9700C2103A /* ApptentiveAppConfiguration.m */; };
 		01A2D1B21E490A9700C2103A /* ApptentiveLegacyEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D09D1E490A9700C2103A /* ApptentiveLegacyEvent.h */; };
@@ -649,8 +647,6 @@
 		01A2D0831E490A9700C2103A /* ApptentiveMessageCenterStatusView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveMessageCenterStatusView.m; sourceTree = "<group>"; };
 		01A2D0841E490A9700C2103A /* ApptentiveProgressNavigationBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveProgressNavigationBar.h; sourceTree = "<group>"; };
 		01A2D0851E490A9700C2103A /* ApptentiveProgressNavigationBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveProgressNavigationBar.m; sourceTree = "<group>"; };
-		01A2D0871E490A9700C2103A /* ApptentiveBackend+Metrics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ApptentiveBackend+Metrics.h"; sourceTree = "<group>"; };
-		01A2D0881E490A9700C2103A /* ApptentiveBackend+Metrics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ApptentiveBackend+Metrics.m"; sourceTree = "<group>"; };
 		01A2D08A1E490A9700C2103A /* ApptentiveConnect-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ApptentiveConnect-Prefix.pch"; sourceTree = "<group>"; };
 		01A2D08B1E490A9700C2103A /* ApptentiveJSONSerialization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveJSONSerialization.h; sourceTree = "<group>"; };
 		01A2D08C1E490A9700C2103A /* ApptentiveJSONSerialization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveJSONSerialization.m; sourceTree = "<group>"; };
@@ -658,7 +654,7 @@
 		01A2D0901E490A9700C2103A /* ApptentiveUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveUtilities.h; sourceTree = "<group>"; };
 		01A2D0911E490A9700C2103A /* ApptentiveUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveUtilities.m; sourceTree = "<group>"; };
 		01A2D0921E490A9700C2103A /* NSDictionary+Apptentive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+Apptentive.h"; sourceTree = "<group>"; };
-		01A2D0931E490A9700C2103A /* NSDictionary+ApptentiveAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+ApptentiveAdditions.m"; sourceTree = "<group>"; };
+		01A2D0931E490A9700C2103A /* NSDictionary+Apptentive.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+Apptentive.m"; sourceTree = "<group>"; };
 		01A2D0951E490A9700C2103A /* ApptentiveAppConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveAppConfiguration.h; sourceTree = "<group>"; };
 		01A2D0961E490A9700C2103A /* ApptentiveAppConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveAppConfiguration.m; sourceTree = "<group>"; };
 		01A2D09D1E490A9700C2103A /* ApptentiveLegacyEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveLegacyEvent.h; sourceTree = "<group>"; };
@@ -933,7 +929,6 @@
 				01A2D0021E490A9700C2103A /* Images */,
 				01A2D0441E490A9700C2103A /* localization */,
 				01A2D05A1E490A9700C2103A /* Message Center */,
-				01A2D0861E490A9700C2103A /* Metrics */,
 				01A2D0891E490A9700C2103A /* Misc */,
 				01A2D0941E490A9700C2103A /* Model */,
 				01A2D0B71E490A9700C2103A /* Networking */,
@@ -1373,15 +1368,6 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
-		01A2D0861E490A9700C2103A /* Metrics */ = {
-			isa = PBXGroup;
-			children = (
-				01A2D0871E490A9700C2103A /* ApptentiveBackend+Metrics.h */,
-				01A2D0881E490A9700C2103A /* ApptentiveBackend+Metrics.m */,
-			);
-			path = Metrics;
-			sourceTree = "<group>";
-		};
 		01A2D0891E490A9700C2103A /* Misc */ = {
 			isa = PBXGroup;
 			children = (
@@ -1404,7 +1390,7 @@
 				01A2D0901E490A9700C2103A /* ApptentiveUtilities.h */,
 				01A2D0911E490A9700C2103A /* ApptentiveUtilities.m */,
 				01A2D0921E490A9700C2103A /* NSDictionary+Apptentive.h */,
-				01A2D0931E490A9700C2103A /* NSDictionary+ApptentiveAdditions.m */,
+				01A2D0931E490A9700C2103A /* NSDictionary+Apptentive.m */,
 				01626EB71EB7D60C0064E73F /* NSData+Encryption.h */,
 				01626EB81EB7D60C0064E73F /* NSData+Encryption.m */,
 				EF8EE3A91EBBA5D00033E7A1 /* ApptentiveJWT.h */,
@@ -1675,7 +1661,6 @@
 				017477261EA92BED00A0A949 /* ApptentiveEventPayload.h in Headers */,
 				01A2D18D1E490A9700C2103A /* ApptentiveMessageCenterCellProtocols.h in Headers */,
 				01A2D0F81E490A9700C2103A /* Apptentive_Private.h in Headers */,
-				01A2D19E1E490A9700C2103A /* ApptentiveBackend+Metrics.h in Headers */,
 				01A2D1DE1E490A9700C2103A /* ApptentiveSurveyAnswer.h in Headers */,
 				01E8E2361E6E096D00786738 /* ApptentiveInteractionAppleRatingDialogController.h in Headers */,
 				01A2D12F1E490A9700C2103A /* ApptentiveInteractionUsageData.h in Headers */,
@@ -1869,7 +1854,7 @@
 		01A2CF881E49062700C2103A /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0820;
+				LastUpgradeCheck = 0900;
 				ORGANIZATIONNAME = "Apptentive, Inc.";
 				TargetAttributes = {
 					01A2CF901E49062700C2103A = {
@@ -1880,7 +1865,7 @@
 					01A2CF991E49062800C2103A = {
 						CreatedOnToolsVersion = 8.2.1;
 						DevelopmentTeam = 86WML2UN43;
-						LastSwiftMigration = 0820;
+						LastSwiftMigration = 0900;
 						ProvisioningStyle = Automatic;
 					};
 					01A2D27B1E49609100C2103A = {
@@ -2068,7 +2053,6 @@
 				0174772D1EA92BED00A0A949 /* ApptentiveSurveyResponsePayload.m in Sources */,
 				0145089D1EAAB0F1003326E7 /* ApptentiveConfigurationRequest.m in Sources */,
 				01A2D1A21E490A9700C2103A /* ApptentiveJSONSerialization.m in Sources */,
-				01A2D19F1E490A9700C2103A /* ApptentiveBackend+Metrics.m in Sources */,
 				01A2D1931E490A9700C2103A /* ApptentiveMessageCenterInputView.m in Sources */,
 				01626EBA1EB7D60C0064E73F /* NSData+Encryption.m in Sources */,
 				01A2D1771E490A9700C2103A /* ApptentiveMessageCenterViewModel.m in Sources */,
@@ -2105,7 +2089,7 @@
 				01A2D17D1E490A9700C2103A /* ApptentiveBannerViewController.m in Sources */,
 				EFC97A9F1F56303300BCC461 /* UIAlertController+Apptentive.m in Sources */,
 				01A2D1D71E490A9700C2103A /* ApptentiveBackend.m in Sources */,
-				01A2D1A91E490A9700C2103A /* NSDictionary+ApptentiveAdditions.m in Sources */,
+				01A2D1A91E490A9700C2103A /* NSDictionary+Apptentive.m in Sources */,
 				0140D60B1E83553C007B5130 /* ApptentiveLegacyFileAttachment.m in Sources */,
 				01A2D1951E490A9700C2103A /* ApptentiveMessageCenterMessageCell.m in Sources */,
 				EF8EE3A31EBA79EC0033E7A1 /* ATDataModel v5 to v6.xcmappingmodel in Sources */,
@@ -2279,7 +2263,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -2287,7 +2273,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -2312,6 +2302,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-ObjC";
 				SDKROOT = iphoneos;
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -2328,7 +2319,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -2336,7 +2329,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -2359,6 +2356,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -2420,7 +2418,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "ApptentiveTests/ApptentiveTests-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
 			};
 			name = Debug;
 		};
@@ -2435,7 +2433,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.apptentive.ApptentiveTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "ApptentiveTests/ApptentiveTests-Bridging-Header.h";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
 			};
 			name = Release;
 		};

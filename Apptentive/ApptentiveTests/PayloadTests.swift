@@ -87,11 +87,7 @@ class PayloadTests: XCTestCase {
 	}
 
 	func testSDKAppReleasePayload() {
-		guard let conversation = ApptentiveConversation(state: .anonymous) else {
-			XCTFail("can't create conversation")
-			return
-		}
-
+		let conversation = ApptentiveConversation(state: .anonymous)
 		let payload = ApptentiveSDKAppReleasePayload(conversation: conversation)
 
 		do {

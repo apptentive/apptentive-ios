@@ -12,6 +12,8 @@
 #import "ApptentiveSDK.h"
 #import "ApptentiveAppRelease.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @implementation ApptentiveAppInstall
 
@@ -23,7 +25,7 @@
 @synthesize SDK = _SDK;
 @synthesize appRelease = _appRelease;
 
-- (instancetype)initWithToken:(NSString *)token identifier:(NSString *)identifier {
+- (instancetype)initWithToken:(nullable NSString *)token identifier:(nullable NSString *)identifier {
 	self = [super init];
 	if (self) {
 		_token = token;
@@ -38,3 +40,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

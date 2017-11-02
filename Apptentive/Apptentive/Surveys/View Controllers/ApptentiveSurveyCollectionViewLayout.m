@@ -10,6 +10,8 @@
 #import "ApptentiveSurveyCollectionView.h"
 #import "ApptentiveSurveyLayoutAttributes.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @interface ApptentiveSurveyCollectionViewLayout ()
 
@@ -30,7 +32,7 @@
 	return self;
 }
 
-- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+- (nullable instancetype)initWithCoder:(NSCoder *)aDecoder {
 	self = [super initWithCoder:aDecoder];
 
 	if (self) {
@@ -47,15 +49,29 @@
 		ApptentiveSurveyCollectionView *myCollectionView = (ApptentiveSurveyCollectionView *)self.collectionView;
 		superSize.height += CGRectGetHeight(myCollectionView.collectionHeaderView.bounds) + CGRectGetHeight(myCollectionView.collectionFooterView.bounds) + self.sectionInset.top + self.sectionInset.bottom;
 
-		superSize.height = fmax(superSize.height, CGRectGetHeight(self.collectionView.bounds) - self.collectionView.contentInset.top - self.collectionView.contentInset.bottom);
+		UIEdgeInsets contentInset = self.collectionView.contentInset;
+#ifdef __IPHONE_11_0
+		if (@available(iOS 11.0, *)) {
+			contentInset = self.collectionView.safeAreaInsets;
+		}
+#endif
+		superSize.height = fmax(superSize.height, CGRectGetHeight(self.collectionView.bounds) - contentInset.top - contentInset.bottom);
 	}
 
 	return superSize;
 }
 
-- (UICollectionViewLayoutAttributes *)layoutAttributesForDecorationViewOfKind:(NSString *)decorationViewKind atIndexPath:(NSIndexPath *)indexPath {
+- (nullable UICollectionViewLayoutAttributes *)layoutAttributesForDecorationViewOfKind:(NSString *)decorationViewKind atIndexPath:(NSIndexPath *)indexPath {
 	NSInteger section = indexPath.section;
 	NSInteger numberOfItems = [self.collectionView.dataSource collectionView:self.collectionView numberOfItemsInSection:section];
+
+	UIEdgeInsets sectionInset = self.sectionInset;
+#ifdef __IPHONE_11_0
+	if (@available(iOS 11.0, *)) {
+		sectionInset.left += self.collectionView.safeAreaInsets.left;
+		sectionInset.right += self.collectionView.safeAreaInsets.right;
+	}
+#endif
 
 	UICollectionViewLayoutAttributes *attributesForFirstItem = nil;
 	UICollectionViewLayoutAttributes *attributesForLastItem = nil;
@@ -81,13 +97,13 @@
 		layoutAttributes.backgroundColor = [(id<ApptentiveCollectionViewDataSource>)self.collectionView.dataSource backgroundColor];
 	}
 
-	layoutAttributes.frame = UIEdgeInsetsInsetRect(CGRectMake(origin.x, origin.y, size.width, size.height), self.sectionInset);
+	layoutAttributes.frame = UIEdgeInsetsInsetRect(CGRectMake(origin.x, origin.y, size.width, size.height), sectionInset);
 	layoutAttributes.zIndex = -1;
 
 	return layoutAttributes;
 }
 
-- (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath {
+- (nullable UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath {
 	UICollectionViewLayoutAttributes *result = [[super layoutAttributesForItemAtIndexPath:indexPath] copy];
 
 	result.frame = CGRectOffset(result.frame, 0, [self headerHeight]);
@@ -95,7 +111,7 @@
 	return result;
 }
 
-- (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect {
+- (nullable NSArray *)layoutAttributesForElementsInRect:(CGRect)rect {
 	rect = CGRectOffset(rect, 0, -self.headerHeight);
 
 	NSArray *superAttributes = [super layoutAttributesForElementsInRect:rect];
@@ -141,3 +157,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

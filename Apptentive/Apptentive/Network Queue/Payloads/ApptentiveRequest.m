@@ -10,6 +10,8 @@
 #import "ApptentiveDefines.h"
 #import "ApptentiveJSONSerialization.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @implementation ApptentiveRequest
 
@@ -31,11 +33,11 @@
 	return @"application/json";
 }
 
-- (NSDictionary *)JSONDictionary {
+- (nullable NSDictionary *)JSONDictionary {
 	return nil;
 }
 
-- (NSData *)payload {
+- (nullable NSData *)payload {
 	if (self.JSONDictionary == nil) {
 		return nil;
 	}
@@ -58,3 +60,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

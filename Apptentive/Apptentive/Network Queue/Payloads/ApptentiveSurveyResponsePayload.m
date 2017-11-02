@@ -8,6 +8,8 @@
 
 #import "ApptentiveSurveyResponsePayload.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @implementation ApptentiveSurveyResponsePayload
 
@@ -54,3 +56,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

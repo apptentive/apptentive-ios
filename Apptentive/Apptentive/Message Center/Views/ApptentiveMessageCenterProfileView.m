@@ -8,6 +8,8 @@
 
 #import "ApptentiveMessageCenterProfileView.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @interface ApptentiveMessageCenterProfileView ()
 
@@ -72,7 +74,7 @@
 	self.buttonBar.layer.borderColor = self.borderColor.CGColor;
 }
 
-- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+- (void)traitCollectionDidChange:(nullable UITraitCollection *)previousTraitCollection {
 	[super traitCollectionDidChange:previousTraitCollection];
 
 	// Deactivate all, then selectively re-activate
@@ -138,3 +140,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

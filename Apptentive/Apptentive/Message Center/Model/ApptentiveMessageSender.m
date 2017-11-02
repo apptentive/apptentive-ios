@@ -8,6 +8,8 @@
 
 #import "ApptentiveMessageSender.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 static NSString *const NameKey = @"name";
 static NSString *const IdentifierKey = @"identifier";
 static NSString *const ProfilePhotoURLKey = @"profilePhotoURL";
@@ -19,7 +21,7 @@ static NSString *const ProfilePhotoURLKey = @"profilePhotoURL";
 	return YES;
 }
 
-- (instancetype)initWithJSON:(NSDictionary *)JSON {
+- (nullable instancetype)initWithJSON:(NSDictionary *)JSON {
 	self = [super init];
 
 	if (self) {
@@ -45,7 +47,7 @@ static NSString *const ProfilePhotoURLKey = @"profilePhotoURL";
 	return self;
 }
 
-- (instancetype)initWithName:(NSString *)name identifier:(NSString *)identifier profilePhotoURL:(nullable NSURL *)profilePhotoURL {
+- (nullable instancetype)initWithName:(nullable NSString *)name identifier:(NSString *)identifier profilePhotoURL:(nullable NSURL *)profilePhotoURL {
 	self = [super init];
 
 	if (self) {
@@ -62,7 +64,7 @@ static NSString *const ProfilePhotoURLKey = @"profilePhotoURL";
 	return self;
 }
 
-- (instancetype)initWithCoder:(NSCoder *)coder {
+- (nullable instancetype)initWithCoder:(NSCoder *)coder {
 	self = [super init];
 	if (self) {
 		_name = [coder decodeObjectOfClass:[NSString class] forKey:NameKey];
@@ -79,3 +81,5 @@ static NSString *const ProfilePhotoURLKey = @"profilePhotoURL";
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

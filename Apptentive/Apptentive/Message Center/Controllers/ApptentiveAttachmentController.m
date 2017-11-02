@@ -14,6 +14,8 @@
 #import "Apptentive_Private.h"
 #import "ApptentiveAttachment.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 #define MAX_NUMBER_OF_ATTACHMENTS 4
 #define ATTACHMENT_MARGIN CGSizeMake(16.0, 15.0)
 #define ATTACHMENT_INSET UIEdgeInsetsMake(8, 8, 8, 8)
@@ -28,7 +30,7 @@ NSString *const ATInteractionMessageCenterEventLabelAttachmentDelete = @"attachm
 
 @interface ApptentiveAttachmentController ()
 
-@property (strong, nonatomic) UIPopoverController *imagePickerPopoverController;
+@property (nullable, strong, nonatomic) UIPopoverController *imagePickerPopoverController;
 @property (strong, nonatomic) NSMutableArray *mutableAttachments;
 @property (assign, nonatomic) CGSize collectionViewFooterSize;
 @property (strong, nonatomic) NSNumberFormatter *numberFormatter;
@@ -86,11 +88,11 @@ NSString *const ATInteractionMessageCenterEventLabelAttachmentDelete = @"attachm
 	[NSKeyedArchiver archiveRootObject:self.mutableAttachments toFile:self.archivePath];
 }
 
-- (UIResponder *)nextResponder {
+- (nullable UIResponder *)nextResponder {
 	return self.viewController;
 }
 
-- (NSArray<ApptentiveAttachment *> *)attachments {
+- (nullable NSArray<ApptentiveAttachment *> *)attachments {
 	if (_attachments == nil) {
 		NSMutableArray *attachments = [NSMutableArray array];
 		NSInteger index = 1;
@@ -118,7 +120,7 @@ NSString *const ATInteractionMessageCenterEventLabelAttachmentDelete = @"attachm
 	return YES;
 }
 
-- (UIView *)inputView {
+- (nullable UIView *)inputView {
 	return self.collectionView;
 }
 
@@ -300,3 +302,5 @@ NSString *const ATInteractionMessageCenterEventLabelAttachmentDelete = @"attachm
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

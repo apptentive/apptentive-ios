@@ -12,6 +12,8 @@
 #import "ApptentiveBackend.h"
 #import "ApptentiveSurveyResponsePayload.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 
 @implementation ApptentiveLegacySurveyResponse
 
@@ -48,7 +50,7 @@
 	}
 }
 
-- (NSDictionary *)apiJSON {
+- (nullable NSDictionary *)apiJSON {
 	NSDictionary *superJSON = [super apiJSON];
 	NSMutableDictionary *survey = [NSMutableDictionary dictionary];
 	survey[@"id"] = self.surveyID;
@@ -87,3 +89,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

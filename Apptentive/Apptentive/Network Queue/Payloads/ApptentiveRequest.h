@@ -6,10 +6,12 @@
 //  Copyright © 2017 Apptentive, Inc. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import "ApptentiveRequestProtocol.h"
+
+NS_ASSUME_NONNULL_BEGIN
 
 
 @interface ApptentiveRequest : NSObject <ApptentiveRequest>
-
 @end
+
+NS_ASSUME_NONNULL_END

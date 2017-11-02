@@ -20,19 +20,21 @@
 #import "ApptentiveUtilities.h"
 #import "ApptentiveAttachment.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 static NSString *const MessageStoreFileName = @"messages-v1.archive";
 
 
 @interface ApptentiveMessageManager ()
 
-@property (strong, nonatomic) ApptentiveRequestOperation *messageOperation;
-@property (strong, nonatomic) NSTimer *messageFetchTimer;
+@property (nullable, strong, nonatomic) ApptentiveRequestOperation *messageOperation;
+@property (nullable, strong, nonatomic) NSTimer *messageFetchTimer;
 @property (strong, nonatomic) NSDictionary *currentCustomData;
 @property (readonly, nonatomic) NSMutableDictionary *messageIdentifierIndex;
 @property (readonly, nonatomic) ApptentiveMessageStore *messageStore;
 
 @property (readonly, nonatomic) NSString *messageStorePath;
-@property (copy, nonatomic) void (^backgroundFetchBlock)(UIBackgroundFetchResult);
+@property (nullable, copy, nonatomic) void (^backgroundFetchBlock)(UIBackgroundFetchResult);
 
 @end
 
@@ -201,6 +203,13 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 
 	ApptentiveAssertOperationQueue(Apptentive.shared.backend.operationQueue);
 
+	BOOL needsSave = NO;
+
+	if (self.messageStore.lastMessageIdentifier != lastDownloadedMessageIdentifier) {
+		self.messageStore.lastMessageIdentifier = lastDownloadedMessageIdentifier;
+		needsSave = YES;
+	}
+
 	if (addedMessages.count + updatedMessages.count > 0) {
 		// Add local messages that aren't yet on server's list
 		for (ApptentiveMessage *message in self.messages) {
@@ -245,13 +254,16 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 			[self.delegate messageManagerDidEndUpdates:self];
 		});
 
-		self.messageStore.lastMessageIdentifier = lastDownloadedMessageIdentifier;
-		[self saveMessageStore];
+		needsSave = YES;
 
 		[self messageFetchCompleted:YES];
 		[self updateUnreadCount];
 	} else {
 		[self messageFetchCompleted:NO];
+	}
+
+	if (needsSave) {
+		[self saveMessageStore];
 	}
 }
 
@@ -441,3 +453,5 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

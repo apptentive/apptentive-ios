@@ -15,7 +15,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ApptentiveNetworkImageView : UIImageView <NSURLConnectionDelegate, NSURLConnectionDataDelegate>
 @property (copy, nonatomic) NSURL *imageURL;
-@property (assign, nonatomic) BOOL useCache;
 @property (weak, nonatomic) id<ApptentiveNetworkImageViewDelegate> delegate;
 @end
 

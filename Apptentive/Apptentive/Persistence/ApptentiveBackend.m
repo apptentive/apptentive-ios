@@ -258,8 +258,6 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 
 	self.state = ApptentiveBackendStatePayloadDatabaseAvailable;
 
-	_imageCache = [[NSURLCache alloc] initWithMemoryCapacity:1 * 1024 * 1024 diskCapacity:10 * 1024 * 1024 diskPath:[self imageCachePath]];
-
 	[self.conversationManager loadActiveConversation];
 
 	[self completeStartupAndResumeTasks];
@@ -627,15 +625,6 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 		return nil;
 	}
 	return newPath;
-}
-
-- (NSString *)imageCachePath {
-	NSString *cachePath = [self cacheDirectoryPath];
-	if (!cachePath) {
-		return nil;
-	}
-	NSString *imageCachePath = [cachePath stringByAppendingPathComponent:@"images.cache"];
-	return imageCachePath;
 }
 
 - (NSString *)configurationPath {

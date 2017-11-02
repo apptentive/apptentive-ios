@@ -56,8 +56,6 @@ typedef NS_ENUM(NSInteger, ApptentiveBackendState) {
 @property (readonly, strong, nonatomic) NSString *supportDirectoryPath;
 @property (strong, nullable, nonatomic) UIViewController *presentedMessageCenterViewController;
 
-@property (readonly, nonatomic) NSURLCache *imageCache;
-
 @property (copy, nullable, nonatomic) NSDictionary *currentCustomData;
 @property (copy, nonatomic) ApptentiveAuthenticationFailureCallback authenticationFailureCallback;
 

@@ -83,24 +83,13 @@ static ApptentiveHUDViewController *currentHUD;
 	self.interval = self.interval ?: 2.0;
 	self.animationDuration = fmin(self.animationDuration ?: 0.25, self.interval / 2.0);
 
-	BOOL mustSizeWindow = ![[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){9, 0, 0}];
-
-	if (mustSizeWindow) {
-		self.hostWindow = [[ApptentivePassThroughWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-	} else {
-		self.hostWindow = [[ApptentivePassThroughWindow alloc] init];
-	}
-
+	self.hostWindow = [[ApptentivePassThroughWindow alloc] init];
 	self.previousKeyWindow = [UIApplication sharedApplication].keyWindow;
 
 	[self.hostWindow makeKeyAndVisible];
 	self.hostWindow.rootViewController = self;
 	self.hostWindow.windowLevel = UIWindowLevelAlert;
 	self.hostWindow.backgroundColor = [UIColor clearColor];
-
-	if (mustSizeWindow) {
-		self.hostWindow.frame = [UIScreen mainScreen].bounds;
-	}
 
 	self.HUDView.alpha = 0.0;
 	[UIView animateWithDuration:self.animationDuration animations:^{

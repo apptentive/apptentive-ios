@@ -939,8 +939,9 @@ static Apptentive *_sharedInstance;
 - (nullable instancetype)initWithCoder:(NSCoder *)aDecoder {
 	self = [super initWithCoder:aDecoder];
 	if (self) {
-		if (!([UINavigationBar appearance].barTintColor || [UINavigationBar appearanceWhenContainedIn:[ApptentiveNavigationController class], nil].barTintColor)) {
-			[UINavigationBar appearanceWhenContainedIn:[ApptentiveNavigationController class], nil].barTintColor = [UIColor whiteColor];
+
+		if (!([UINavigationBar appearance].barTintColor || [UINavigationBar appearanceWhenContainedInInstancesOfClasses:@[ [ApptentiveNavigationController class] ]].barTintColor)) {
+			[UINavigationBar appearanceWhenContainedInInstancesOfClasses:@[ [ApptentiveNavigationController class] ]].barTintColor = [UIColor whiteColor];
 		}
 	}
 	return self;

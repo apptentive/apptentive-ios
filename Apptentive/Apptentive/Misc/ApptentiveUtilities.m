@@ -166,9 +166,7 @@ UIViewController *topChildViewController(UIViewController *viewController) {
 }
 
 + (NSString *)stringByEscapingForPredicate:(NSString *)string {
-	CFStringRef result = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)string, (CFStringRef) @"$#", (CFStringRef)NULL, kCFStringEncodingUTF8);
-
-	return CFBridgingRelease(result);
+	return [string stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet characterSetWithCharactersInString:@"$#"]];
 }
 
 + (NSString *)randomStringOfLength:(NSUInteger)length {

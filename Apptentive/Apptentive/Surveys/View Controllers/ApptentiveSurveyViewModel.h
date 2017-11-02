@@ -37,6 +37,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (readonly, nonatomic) NSString *thankYouText;
 @property (readonly, nonatomic) NSString *missingRequiredItemText;
 
+@property (readonly, nonatomic) NSIndexPath *firstInvalidAnswerIndexPath;
+
 - (NSInteger)numberOfQuestionsInSurvey;
 - (NSInteger)numberOfAnswersForQuestionAtIndex:(NSInteger)index;
 
@@ -50,6 +52,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSString *)textOfChoiceAtIndexPath:(NSIndexPath *)indexPath;
 - (NSString *)minimumLabelForQuestionAtIndex:(NSInteger)index;
 - (NSString *)maximumLabelForQuestionAtIndex:(NSInteger)index;
+
+- (nullable NSString *)errorMessageAtIndex:(NSInteger)index;
 
 - (BOOL)answerIsSelectedAtIndexPath:(NSIndexPath *)indexPath;
 - (BOOL)answerIsValidAtIndexPath:(NSIndexPath *)indexPath;

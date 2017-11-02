@@ -39,6 +39,8 @@ typedef NS_ENUM(NSInteger, ATSurveyQuestionType) {
 @property (readonly, nonatomic) NSString *minimumLabel;
 @property (readonly, nonatomic) NSString *maximumLabel;
 
+@property (readonly, nullable, nonatomic) NSString *errorMessage;
+
 @property (readonly, nonatomic) NSArray<ApptentiveSurveyAnswer *> *answers;
 
 @end

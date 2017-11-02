@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (strong, nonatomic) IBOutlet UIView *HUDView;
 @property (nullable, strong, nonatomic) UIWindow *hostWindow;
-@property (strong, nonatomic) UIWindow *shadowWindow;
+@property (strong, nonatomic) UIWindow *previousKeyWindow;
 @property (strong, nonatomic) NSTimer *hideTimer;
 @property (strong, nonatomic) UIGestureRecognizer *tapGestureRecognizer;
 
@@ -91,7 +91,9 @@ static ApptentiveHUDViewController *currentHUD;
 		self.hostWindow = [[ApptentivePassThroughWindow alloc] init];
 	}
 
-	self.hostWindow.hidden = NO;
+	self.previousKeyWindow = [UIApplication sharedApplication].keyWindow;
+
+	[self.hostWindow makeKeyAndVisible];
 	self.hostWindow.rootViewController = self;
 	self.hostWindow.windowLevel = UIWindowLevelAlert;
 	self.hostWindow.backgroundColor = [UIColor clearColor];
@@ -110,11 +112,14 @@ static ApptentiveHUDViewController *currentHUD;
 
 - (IBAction)hide:(id)sender {
 	[self.hideTimer invalidate];
+
 	[UIView animateWithDuration:self.animationDuration animations:^{
 		self.HUDView.alpha = 0;
 	} completion:^(BOOL finished) {
 		self.hostWindow.hidden = YES;
+		[self.previousKeyWindow makeKeyWindow];
 		self.hostWindow = nil;
+		UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil);
 	}];
 }
 

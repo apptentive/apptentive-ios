@@ -130,6 +130,10 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 	self.tableView.estimatedRowHeight = 66.0;
 	self.tableView.rowHeight = UITableViewAutomaticDimension;
+
+	ApptentiveProgressNavigationBar *navigationBar = (ApptentiveProgressNavigationBar *)self.navigationController.navigationBar;
+
+	navigationBar.progressView.hidden = YES;
 }
 
 - (void)dealloc {
@@ -248,6 +252,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.messageInputView.messageView.textContainerInset = UIEdgeInsetsMake(TEXT_VIEW_VERTICAL_INSET, TEXT_VIEW_VERTICAL_INSET, TEXT_VIEW_VERTICAL_INSET, TEXT_VIEW_VERTICAL_INSET);
 	[self.messageInputView.clearButton setImage:[[ApptentiveUtilities imageNamed:@"at_close"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
 
+	self.messageInputView.messageView.accessibilityHint = self.viewModel.composerPlaceholderText;
 	self.messageInputView.placeholderLabel.text = self.viewModel.composerPlaceholderText;
 	self.messageInputView.placeholderLabel.textColor = [self.viewModel.styleSheet colorForStyle:ApptentiveColorTextInputPlaceholder];
 
@@ -280,7 +285,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	if (self.viewModel.profileRequested) {
 		UIBarButtonItem *profileButtonItem = [[UIBarButtonItem alloc] initWithImage:[ApptentiveUtilities imageNamed:@"at_account"] landscapeImagePhone:[ApptentiveUtilities imageNamed:@"at_account"] style:UIBarButtonItemStylePlain target:self action:@selector(showWho:)];
 		profileButtonItem.accessibilityLabel = ApptentiveLocalizedString(@"Profile", @"Accessibility label for 'edit profile' button");
-		profileButtonItem.accessibilityHint = ApptentiveLocalizedString(@"Displays name and email editor.", @"Accessibility hint for 'edit profile' button");
+		profileButtonItem.accessibilityHint = ApptentiveLocalizedString(@"Allows editing of your name and email.", @"Accessibility hint for 'edit profile' button");
 		self.navigationItem.leftBarButtonItem = profileButtonItem;
 
 		self.profileView.containerView.backgroundColor = [self.viewModel.styleSheet colorForStyle:ApptentiveColorBackground];
@@ -499,10 +504,20 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	}
 
 	if (self.state != ATMessageCenterStateWhoCard && self.state != ATMessageCenterStateComposing) {
+		ATMessageCenterState oldState = self.state;
+		
 		[self updateState];
-
+		
 		[self resizeFooterView:nil];
 		[self scrollToLastMessageAnimated:YES];
+		
+		if (self.state == ATMessageCenterStateSending && oldState == ATMessageCenterStateConfirmed) {
+			UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, self.statusView.statusLabel);
+			
+			if (self.viewModel.statusBody.length > 0) {
+				UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, self.viewModel.statusBody);
+			}
+		}
 	}
 }
 
@@ -697,9 +712,19 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		return;
 	}
 
+	BOOL cancelReturnsToComposer = !self.attachmentController.active;
+
+	[self.messageInputView.messageView resignFirstResponder];
+
 	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:self.viewModel.composerCloseConfirmBody message:nil preferredStyle:UIAlertControllerStyleActionSheet];
 
-	[alertController addAction:[UIAlertAction actionWithTitle:self.viewModel.composerCloseCancelButtonTitle style:UIAlertActionStyleCancel handler:nil]];
+	[alertController addAction:[UIAlertAction actionWithTitle:self.viewModel.composerCloseCancelButtonTitle style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+		if (cancelReturnsToComposer) {
+			[self.messageInputView.messageView becomeFirstResponder];
+		} else {
+			[self.attachmentController becomeFirstResponder];
+		}
+	}]];
 	[alertController addAction:[UIAlertAction actionWithTitle:self.viewModel.composerCloseDiscardButtonTitle style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
 		[self discardDraft];
 	}]];
@@ -776,6 +801,9 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		[self.view endEditing:YES];
 		[self resizeFooterView:nil];
 	}
+
+	UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, @"Profile Saved");
+	UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification,  self.navigationItem.leftBarButtonItem);
 }
 
 - (IBAction)skipWho:(id)sender {
@@ -792,6 +820,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[self updateState];
 	[self.view endEditing:YES];
 	[self resizeFooterView:nil];
+
+	UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification,  self.navigationItem.leftBarButtonItem);
 }
 
 - (IBAction)showAbout:(id)sender {

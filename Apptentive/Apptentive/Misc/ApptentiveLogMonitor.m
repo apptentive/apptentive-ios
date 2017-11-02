@@ -13,6 +13,7 @@
 #import "ApptentiveJSONSerialization.h"
 #import "ApptentiveSafeCollections.h"
 #import "ApptentiveJWT.h"
+#import "ApptentiveJSONSerialization.h"
 
 #import <MessageUI/MessageUI.h>
 
@@ -64,6 +65,7 @@ static ApptentiveLogMonitor * _sharedInstance;
 
 @interface ApptentiveLogMonitor () <MFMailComposeViewControllerDelegate>
 
+@property (nonatomic, readonly) NSURL *baseURL;
 @property (nonatomic, readonly) NSString *accessToken;
 @property (nonatomic, readonly) ApptentiveLogLevel logLevel;
 @property (nonatomic, readonly) NSArray *emailRecipients;
@@ -75,9 +77,10 @@ static ApptentiveLogMonitor * _sharedInstance;
 
 @implementation ApptentiveLogMonitor
 
-- (instancetype)initWithConfiguration:(ApptentiveLogMonitorConfigration *)configuration {
+- (instancetype)initWithBaseURL:(NSURL *)baseURL configuration:(ApptentiveLogMonitorConfigration *)configuration {
 	self = [super init];
 	if (self) {
+		_baseURL = baseURL;
 		_logLevel = configuration.logLevel;
 		_emailRecipients = configuration.emailRecipients;
 		_sessionRestored = configuration.isRestored;
@@ -146,7 +149,9 @@ static ApptentiveLogMonitor * _sharedInstance;
 		window.hidden = YES;
 		__weak id weakSelf = self;
 		_logWriter.finishCallback = ^(ApptentiveLogWriter *writer) {
-			[weakSelf sendReportWithLogFile:writer.path];
+			dispatch_async(dispatch_get_main_queue(), ^{
+				[weakSelf sendReportWithLogFile:writer.path];
+			});
 		};
 		[self stop];
 	}]];
@@ -167,7 +172,22 @@ static ApptentiveLogMonitor * _sharedInstance;
 #pragma mark -
 #pragma mark Static initialization
 
-+ (BOOL)tryInitialize {
++ (BOOL)tryInitializeWithBaseURL:(NSURL *)baseURL appKey:(NSString *)appKey signature:(NSString *)appSignature {
+	if (baseURL == nil) {
+		ApptentiveLogError(ApptentiveLogTagMonitor, @"Unable to initialize log monitor: base URL is nil");
+		return NO;
+	}
+	
+	if (appKey.length == 0) {
+		ApptentiveLogError(ApptentiveLogTagMonitor, @"Unable to initialize log monitor: app key is nil or empty");
+		return NO;
+	}
+	
+	if (appSignature.length == 0) {
+		ApptentiveLogError(ApptentiveLogTagMonitor, @"Unable to initialize log monitor: app signature is nil or empty");
+		return NO;
+	}
+	
 	@try {
 		NSString *storagePath = [self configurationStoragePath];
 		ApptentiveLogMonitorConfigration *configuration = [self readConfigurationFromStoragePath:storagePath];
@@ -175,8 +195,7 @@ static ApptentiveLogMonitor * _sharedInstance;
 			ApptentiveLogInfo(ApptentiveLogTagMonitor, @"Read log monitor configuration from persistent storage: %@", configuration);
 		} else {
 			NSString *accessToken = [self readAccessTokenFromClipboard];
-			if (![self syncVerifyAccessToken:accessToken]) {
-				ApptentiveLogError(ApptentiveLogTagMonitor, @"Can't start log monitor: access token verification failed");
+			if (![self syncVerifyAccessToken:accessToken baseURL:baseURL appKey:appKey signature:appSignature]) {
 				return NO;
 			}
 			
@@ -192,7 +211,7 @@ static ApptentiveLogMonitor * _sharedInstance;
 		}
 		
 		if (configuration != nil) {
-			_sharedInstance = [[ApptentiveLogMonitor alloc] initWithConfiguration:configuration];
+			_sharedInstance = [[ApptentiveLogMonitor alloc] initWithBaseURL:baseURL configuration:configuration];
 			[_sharedInstance start];
 			return YES;
 		}
@@ -219,8 +238,70 @@ static ApptentiveLogMonitor * _sharedInstance;
 	return [text substringFromIndex:DebugTextHeader.length];
 }
 
-+ (BOOL)syncVerifyAccessToken:(NSString *)accessToken {
-	return YES; // FIXME: send a sync request to verify access token
++ (BOOL)syncVerifyAccessToken:(NSString *)accessToken baseURL:(NSURL *)baseURL appKey:(NSString *)appKey signature:(NSString *)appSignature {
+	if (accessToken.length == 0) {
+		return NO;
+	}
+	
+	ApptentiveLogInfo(ApptentiveLogTagMonitor, @"Starting access token verification: %@", accessToken);
+	
+	NSDate *startDate = [NSDate new];
+	NSData *body = [ApptentiveJSONSerialization dataWithJSONObject:@{@"debug_token" : accessToken} options:0 error:nil];
+	
+	NSDictionary *headers = @{
+	  @"X-API-Version": kApptentiveAPIVersionString,
+	  @"APPTENTIVE-KEY": appKey,
+	  @"APPTENTIVE-SIGNATURE": appSignature,
+	  @"Content-Type": @"application/json",
+	  @"Accept": @"application/json",
+	  @"User-Agent": [NSString stringWithFormat:@"ApptentiveConnect/%@ (iOS)", kApptentiveVersionString]
+    };
+	
+	NSURL *URL = [NSURL URLWithString:@"/debug_token/verify" relativeToURL:baseURL];
+	NSDictionary *json = [self loadJsonFromURL:URL body:body headers:headers];
+	NSTimeInterval duration = -[startDate timeIntervalSinceNow];
+	
+	if (json == nil) {
+		ApptentiveLogError(ApptentiveLogTagMonitor, @"Access token verification failed: invalid server response (took %g sec)", duration);
+		
+		return NO;
+	}
+	
+	BOOL valid =  ApptentiveDictionaryGetBool(json, @"valid");
+	ApptentiveLogInfo(ApptentiveLogTagMonitor, @"Access token is %@ (took %g sec)", valid ? @"valid" : @"invalid", duration);
+	
+	return valid;
+}
+
++ (NSDictionary *)loadJsonFromURL:(NSURL *)URL body:(NSData *)body headers:(NSDictionary *)headers {
+	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:URL];
+	for (NSString *key in headers) {
+		[request setValue:headers[key] forHTTPHeaderField:key];
+	}
+	request.HTTPBody = body;
+	request.HTTPMethod = @"POST";
+	
+	NSURLResponse *response;
+	NSError *requestError;
+	NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&requestError];
+	if (requestError != nil) {
+		ApptentiveLogError(@"Unable to load json from URL: %@", requestError);
+		return nil;
+	}
+	
+	NSError *jsonError;
+	id object = [ApptentiveJSONSerialization JSONObjectWithData:data error:&jsonError];
+	if (jsonError != nil) {
+		ApptentiveLogError(@"Unable to parse json from URL: %@", requestError);
+		return nil;
+	}
+	
+	if (![object isKindOfClass:[NSDictionary class]]) {
+		ApptentiveLogError(@"Unexpected json object: %@", object);
+		return nil;
+	}
+	
+	return object;
 }
 
 #pragma mark -

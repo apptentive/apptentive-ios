@@ -27,6 +27,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (BOOL)tryInitializeWithBaseURL:(NSURL *)baseURL appKey:(NSString *)appKey signature:(NSString *)appSignature;
 
++ (instancetype)sharedInstance;
+
+- (void)resume;
+
 @end
 
 NS_ASSUME_NONNULL_END

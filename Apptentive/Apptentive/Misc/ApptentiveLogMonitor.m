@@ -121,9 +121,11 @@ static ApptentiveLogMonitor * _sharedInstance;
 		[self showReportUI];
 	});
 	
-	[self registerNotifications];
-	
 	ApptentiveLogInfo(ApptentiveLogTagMonitor, @"Troubleshooting mode enabled");
+}
+
+- (void)resume {
+	[self showReportUI];
 }
 
 - (void)stop {
@@ -140,24 +142,6 @@ static ApptentiveLogMonitor * _sharedInstance;
 	
 	// delete store configuration
 	[ApptentiveLogMonitor clearConfiguration];
-	
-	// stop notifications
-	[self unregisterNotifications];
-}
-
-#pragma mark -
-#pragma mark Notifications
-
-- (void)registerNotifications {
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillEnterForegroundNotification:) name:UIApplicationWillEnterForegroundNotification object:nil];
-}
-
-- (void)unregisterNotifications {
-	[[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
-- (void)applicationWillEnterForegroundNotification:(NSNotification *)notification {
-	[self showReportUI];
 }
 
 #pragma mark -
@@ -168,7 +152,7 @@ static ApptentiveLogMonitor * _sharedInstance;
 	UIWindow *window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
 	
 	// create alert controller with "Send", "Continue" and "Discard" actions
-	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Apptentive" message:@"Log Monitor" preferredStyle:UIAlertControllerStyleActionSheet];
+	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Apptentive" message:@"Troubleshooting mode" preferredStyle:UIAlertControllerStyleActionSheet];
 	[alertController addAction:[UIAlertAction actionWithTitle:@"Send Report" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
 		window.hidden = YES;
 		__weak id weakSelf = self;
@@ -255,6 +239,10 @@ static ApptentiveLogMonitor * _sharedInstance;
 	}
 	
 	return NO;
+}
+
++ (instancetype)sharedInstance {
+	return _sharedInstance;
 }
 
 #pragma mark -

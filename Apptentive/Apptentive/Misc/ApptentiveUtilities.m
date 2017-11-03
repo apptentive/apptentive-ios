@@ -166,7 +166,7 @@ UIViewController *topChildViewController(UIViewController *viewController) {
 }
 
 + (NSString *)stringByEscapingForPredicate:(NSString *)string {
-	return [string stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet characterSetWithCharactersInString:@"$#"]];
+	return [string stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
 }
 
 + (NSString *)randomStringOfLength:(NSUInteger)length {

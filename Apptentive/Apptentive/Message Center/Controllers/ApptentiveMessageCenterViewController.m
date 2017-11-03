@@ -249,7 +249,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.messageInputView.messageView.textContainerInset = UIEdgeInsetsMake(TEXT_VIEW_VERTICAL_INSET, TEXT_VIEW_VERTICAL_INSET, TEXT_VIEW_VERTICAL_INSET, TEXT_VIEW_VERTICAL_INSET);
 	[self.messageInputView.clearButton setImage:[[ApptentiveUtilities imageNamed:@"at_close"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
 
-	self.messageInputView.messageView.accessibilityHint = self.viewModel.composerPlaceholderText;
+	self.messageInputView.messageView.accessibilityHint = [NSString stringWithFormat:@"%@. %@", self.viewModel.composerTitle, self.viewModel.composerPlaceholderText];
 	self.messageInputView.placeholderLabel.text = self.viewModel.composerPlaceholderText;
 	self.messageInputView.placeholderLabel.textColor = [self.viewModel.styleSheet colorForStyle:ApptentiveColorTextInputPlaceholder];
 

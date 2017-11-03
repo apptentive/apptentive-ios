@@ -17,11 +17,17 @@
 
 #import <MessageUI/MessageUI.h>
 
+// These constants are defined in Apptentive-Private.h but the compiler is "unhappy" if
+// this file is imported here (TODO: figure it out)
+extern NSNotificationName _Nonnull const ApptentiveManifestRawDataDidReceiveNotification;
+extern NSString * _Nonnull const ApptentiveManifestRawDataKey;
+
 static NSString * const KeyEmailRecipients = @"emailRecipients";
 static NSString * const KeyLogLevel = @"logLevel";
 
 static NSString * const ConfigurationStorageFile = @"apptentive-log-monitor.cfg";
 static NSString * const LogFileName = @"apptentive-log.txt";
+static NSString * const ManifestFileName = @"apptentive-manifest.txt";
 
 static NSString * const DebugTextHeader = @"com.apptentive.debug:";
 
@@ -97,7 +103,7 @@ static ApptentiveLogMonitor * _sharedInstance;
 	ApptentiveLogSetLevel(_logLevel);
 	ApptentiveLogInfo(ApptentiveLogTagMonitor, @"Override log level %@ -> %@", NSStringFromApptentiveLogLevel(_originalLogLevel), NSStringFromApptentiveLogLevel(_logLevel));
 	
-	NSString *logFilePath = [self logFilePath];
+	NSString *logFilePath = [ApptentiveLogMonitor logFilePath];
 	if (!_sessionRestored) {
 		[ApptentiveUtilities deleteFileAtPath:logFilePath];
 	}
@@ -168,7 +174,7 @@ static ApptentiveLogMonitor * _sharedInstance;
 		__weak id weakSelf = self;
 		_logWriter.finishCallback = ^(ApptentiveLogWriter *writer) {
 			dispatch_async(dispatch_get_main_queue(), ^{
-				[weakSelf sendReportWithLogFile:writer.path];
+				[weakSelf sendReportWithAttachedFiles:@[writer.path, [ApptentiveLogMonitor manifestFilePath]]];
 			});
 		};
 		[self stop];
@@ -205,6 +211,17 @@ static ApptentiveLogMonitor * _sharedInstance;
 		ApptentiveLogError(ApptentiveLogTagMonitor, @"Unable to initialize log monitor: app signature is nil or empty");
 		return NO;
 	}
+	
+	// Store raw manifest data each time the update is received
+	NSString *manifestPath = [ApptentiveLogMonitor manifestFilePath];
+	[[NSNotificationCenter defaultCenter] addObserverForName:ApptentiveManifestRawDataDidReceiveNotification
+													  object:nil
+													   queue:nil
+												  usingBlock:^(NSNotification * _Nonnull note) {
+		 NSData *data = note.userInfo[ApptentiveManifestRawDataKey];
+		 ApptentiveAssertNotNil(data, @"Missing manifest data");
+		 [data writeToFile:manifestPath atomically:YES];
+    }];
 	
 	@try {
 		NSString *storagePath = [self configurationStoragePath];
@@ -365,7 +382,7 @@ static ApptentiveLogMonitor * _sharedInstance;
 #pragma mark -
 #pragma mark Report
 
-- (void)sendReportWithLogFile:(NSString *)path {
+- (void)sendReportWithAttachedFiles:(NSArray<NSString *> *)files {
 	if (![MFMailComposeViewController canSendMail]) {
 		UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Apptentive Log Monitor" message:@"Unable to send email" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 		[alertView show];
@@ -392,14 +409,17 @@ static ApptentiveLogMonitor * _sharedInstance;
 	[mc setToRecipients:_emailRecipients];
 	
 	// Get the resource path and read the file using NSData
-	NSString *filename = [path lastPathComponent];
-	NSData *fileData = [NSData dataWithContentsOfFile:path];
+	for (NSString *path in files) {
+		NSString *filename = [path lastPathComponent];
+		NSData *fileData = [NSData dataWithContentsOfFile:path];
+		if (fileData.length == 0) {
+			ApptentiveLogError(ApptentiveLogTagMonitor, @"Attachment file does not exist or empty: %@", path);
+			continue;
+		}
 	
-	// Determine the MIME type
-	NSString *mimeType = @"text/plain";
-	
-	// Add attachment
-	[mc addAttachmentData:fileData mimeType:mimeType fileName:filename];
+		// Add attachment
+		[mc addAttachmentData:fileData mimeType:@"text/plain" fileName:filename];
+	}
 	
 	// Present mail view controller on screen in a separate window
 	UIViewController *rootController = [UIViewController new];
@@ -426,13 +446,20 @@ static ApptentiveLogMonitor * _sharedInstance;
 #pragma mark Helpers
 
 + (NSString *)configurationStoragePath {
-	NSString *cacheDirectory = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
-	return [cacheDirectory stringByAppendingPathComponent:ConfigurationStorageFile];
+	return [self cacheDirectoryPath:ConfigurationStorageFile];
 }
 
-- (NSString *)logFilePath {
++ (NSString *)logFilePath {
+	return [self cacheDirectoryPath:LogFileName];
+}
+
++ (NSString *)manifestFilePath {
+	return [self cacheDirectoryPath:ManifestFileName];
+}
+
++ (NSString *)cacheDirectoryPath:(NSString *)path {
 	NSString *cacheDirectory = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
-	return [cacheDirectory stringByAppendingPathComponent:LogFileName];
+	return [cacheDirectory stringByAppendingPathComponent:path];
 }
 
 @end

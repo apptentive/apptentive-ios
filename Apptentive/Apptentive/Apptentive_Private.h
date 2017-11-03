@@ -18,10 +18,13 @@ extern NSNotificationName _Nonnull const ApptentiveCustomPersonDataChangedNotifi
 extern NSNotificationName _Nonnull const ApptentiveCustomDeviceDataChangedNotification;
 extern NSNotificationName _Nonnull const ApptentiveInteractionsDidUpdateNotification;
 extern NSNotificationName _Nonnull const ApptentiveInteractionsShouldDismissNotification;
+extern NSNotificationName _Nonnull const ApptentiveManifestRawDataDidReceiveNotification;
+
 extern NSString * _Nonnull const ApptentiveInteractionsShouldDismissAnimatedKey;
 extern NSNotificationName _Nonnull const ApptentiveConversationCreatedNotification;
 extern NSString * _Nonnull const ApptentiveCustomDeviceDataPreferenceKey;
 extern NSString * _Nonnull const ApptentiveCustomPersonDataPreferenceKey;
+extern NSString * _Nonnull const ApptentiveManifestRawDataKey;
 
 @class ApptentiveMessage, ApptentiveBackend;
 

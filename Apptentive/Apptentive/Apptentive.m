@@ -41,12 +41,14 @@ NSNotificationName const ApptentiveCustomDeviceDataChangedNotification = @"Appte
 NSNotificationName const ApptentiveInteractionsDidUpdateNotification = @"ApptentiveInteractionsDidUpdateNotification";
 NSNotificationName const ApptentiveInteractionsShouldDismissNotification = @"ApptentiveInteractionsShouldDismissNotification";
 NSNotificationName const ApptentiveConversationCreatedNotification = @"ApptentiveConversationCreatedNotification";
+NSNotificationName const ApptentiveManifestRawDataDidReceiveNotification = @"ApptentiveManifestRawDataDidReceiveNotification";
 
 NSString *const ApptentiveSurveyIDKey = @"ApptentiveSurveyIDKey";
 NSString *const ApptentiveInteractionsShouldDismissAnimatedKey = @"ApptentiveInteractionsShouldDismissAnimatedKey";
 
 NSString *const ApptentiveCustomDeviceDataPreferenceKey = @"ApptentiveCustomDeviceDataPreferenceKey";
 NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPersonDataPreferenceKey";
+NSString *const ApptentiveManifestRawDataKey = @"ApptentiveManifestRawDataKey";
 
 NSString *const ApptentiveErrorDomain = @"com.apptentive";
 

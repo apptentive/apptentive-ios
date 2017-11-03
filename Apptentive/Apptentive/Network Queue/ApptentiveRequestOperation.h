@@ -60,6 +60,11 @@ extern NSErrorDomain const ApptentiveHTTPErrorDomain;
 @property (readonly, nullable, nonatomic) NSObject *responseObject;
 
 /**
+ The raw response data, if any.
+ */
+@property (readonly, nullable, nonatomic) NSData *responseData;
+
+/**
  The ApptentiveRequest-implementing object corresponding to this operation.
  */
 @property (strong, nonatomic) id<ApptentiveRequest> request;

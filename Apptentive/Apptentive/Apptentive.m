@@ -137,6 +137,8 @@ static Apptentive *_sharedInstance;
 			[ApptentiveSDK setDistributionName:configuration.distributionName];
 			[ApptentiveSDK setDistributionVersion:[[ApptentiveVersion alloc] initWithString:configuration.distributionVersion]];
 		}
+		
+		[self registerNotifications];
 
 		ApptentiveLogInfo(@"Apptentive SDK Version %@", [ApptentiveSDK SDKVersion].versionString);
 	}
@@ -896,6 +898,26 @@ static Apptentive *_sharedInstance;
 
 - (void)setAuthenticationFailureCallback:(ApptentiveAuthenticationFailureCallback)authenticationFailureCallback {
 	self.backend.authenticationFailureCallback = authenticationFailureCallback;
+}
+
+#pragma mark -
+#pragma mark Notifications
+
+- (void)registerNotifications {
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillEnterForegroundNotification:) name:UIApplicationWillEnterForegroundNotification object:nil];
+}
+
+- (void)applicationWillEnterForegroundNotification:(NSNotification *)notification {
+	ApptentiveLogMonitor *logMonitor = [ApptentiveLogMonitor sharedInstance];
+	if (logMonitor) {
+		ApptentiveLogDebug(ApptentiveLogTagMonitor, @"Resuming log monitor...");
+		[logMonitor resume];
+	} else {
+		ApptentiveLogDebug(ApptentiveLogTagMonitor, @"Trying to initialize log monitor...");
+		[ApptentiveLogMonitor tryInitializeWithBaseURL:self.baseURL
+												appKey:self.apptentiveKey
+											 signature:self.apptentiveSignature];
+	}
 }
 
 #pragma mark -

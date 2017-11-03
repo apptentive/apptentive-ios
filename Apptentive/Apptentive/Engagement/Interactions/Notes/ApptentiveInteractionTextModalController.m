@@ -51,7 +51,7 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 
 #pragma mark UIAlertController
 
-- (UIAlertController *)alertControllerWithInteraction:(ApptentiveInteraction *)interaction {
+- (nullable UIAlertController *)alertControllerWithInteraction:(ApptentiveInteraction *)interaction {
 	NSDictionary *config = interaction.configuration;
 	NSString *title = config[@"title"];
 	NSString *message = config[@"body"];

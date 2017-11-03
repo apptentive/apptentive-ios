@@ -15,59 +15,45 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ApptentiveNetworkImageView ()
 
-@property (nullable, strong, nonatomic) NSURLConnection *connection;
-@property (nullable, strong, nonatomic) NSURLResponse *response;
-@property (nullable, strong, nonatomic) NSMutableData *imageData;
+@property (nullable, strong, nonatomic) NSURLSessionDataTask *task;
 
 @end
 
 
 @implementation ApptentiveNetworkImageView
 
-- (id)initWithFrame:(CGRect)frame {
-	self = [super initWithFrame:frame];
-	if (self) {
-		// Initialization code
-		_useCache = YES;
-	}
-	return self;
-}
-
-- (void)awakeFromNib {
-	[super awakeFromNib];
-	self.useCache = YES;
-}
-
 - (void)dealloc {
-	[_connection cancel];
+	[_task cancel];
 }
 
 - (void)restartDownload {
-	if (self.connection) {
-		[self.connection cancel];
-		self.connection = nil;
+	if (self.task) {
+		[self.task cancel];
+		self.task = nil;
 	}
-	if (self.imageURL) {
-		NSURLRequest *request = [NSURLRequest requestWithURL:self.imageURL];
 
-		NSURLCache *cache = [[Apptentive sharedConnection].backend imageCache];
-		BOOL cacheHit = NO;
-		if (cache) {
-			NSCachedURLResponse *cachedResponse = [cache cachedResponseForRequest:request];
-			if (cachedResponse && self.useCache) {
-				UIImage *i = [UIImage imageWithData:cachedResponse.data];
-				if (i) {
-					self.image = i;
-					cacheHit = YES;
+	if (self.imageURL) {
+		self.task = [[NSURLSession sharedSession] dataTaskWithURL:self.imageURL completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+			if (data == nil) {
+				ApptentiveLogError(@"Unable to download image at %@: %@", self.imageURL, error);
+				self.task = nil;
+
+				if ([self.delegate respondsToSelector:@selector(networkImageView:didFailWithError:)]) {
+					dispatch_async(dispatch_get_main_queue(), ^{
+						[self.delegate networkImageView:self didFailWithError:error];
+					});
+				}
+			} else {
+				UIImage *newImage = [UIImage imageWithData:data];
+				if (newImage) {
+					dispatch_async(dispatch_get_main_queue(), ^{
+						self.image = newImage;
+					});
 				}
 			}
-		}
+		}];
 
-		if (!cacheHit) {
-			self.connection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:NO];
-			[self.connection scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
-			[self.connection start];
-		}
+		[self.task resume];
 	}
 }
 
@@ -75,52 +61,6 @@ NS_ASSUME_NONNULL_BEGIN
 	if (_imageURL != anImageURL || self.image == nil) {
 		_imageURL = [anImageURL copy];
 		[self restartDownload];
-	}
-}
-
-#pragma mark NSURLConnectionDelegate
-- (void)connection:(NSURLConnection *)aConnection didFailWithError:(NSError *)error {
-	if (aConnection == self.connection) {
-		ApptentiveLogError(@"Unable to download image at %@: %@", self.imageURL, error);
-		self.connection = nil;
-
-		if ([self.delegate respondsToSelector:@selector(networkImageView:didFailWithError:)]) {
-			[self.delegate networkImageView:self didFailWithError:error];
-		}
-	}
-}
-
-#pragma mark NSURLConnectionDataDelegate
-- (void)connection:(NSURLConnection *)aConnection didReceiveResponse:(NSURLResponse *)aResponse {
-	if (aConnection == self.connection) {
-		self.imageData = [[NSMutableData alloc] init];
-		self.response = [aResponse copy];
-	}
-}
-
-- (void)connection:(NSURLConnection *)aConnection didReceiveData:(NSData *)data {
-	if (aConnection == self.connection) {
-		[self.imageData appendData:data];
-	}
-}
-
-- (void)connectionDidFinishLoading:(NSURLConnection *)aConnection {
-	if (self.connection == aConnection) {
-		UIImage *newImage = [UIImage imageWithData:self.imageData];
-		if (newImage) {
-			self.image = newImage;
-			if (self.useCache) {
-				NSURLRequest *request = [NSURLRequest requestWithURL:self.imageURL];
-				NSURLCache *cache = [[Apptentive sharedConnection].backend imageCache];
-				NSCachedURLResponse *cachedResponse = [[NSCachedURLResponse alloc] initWithResponse:self.response data:self.imageData userInfo:nil storagePolicy:NSURLCacheStorageAllowed];
-				[cache storeCachedResponse:cachedResponse forRequest:request];
-				cachedResponse = nil;
-
-				if ([self.delegate respondsToSelector:@selector(networkImageViewDidLoad:)]) {
-					[self.delegate networkImageViewDidLoad:self];
-				}
-			}
-		}
 	}
 }
 

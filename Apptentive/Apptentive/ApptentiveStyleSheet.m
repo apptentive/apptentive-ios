@@ -265,29 +265,18 @@ NSString * const FontOverridesKey = @"FontOverrides";
 	static NSArray *_UIKitTextStyles;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-		if ([[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){ 9, 0, 0}]) {
 		_UIKitTextStyles = @[
-							 UIFontTextStyleBody,
-							 UIFontTextStyleCallout,
-							 UIFontTextStyleCaption1,
-							 UIFontTextStyleCaption2,
-							 UIFontTextStyleFootnote,
-							 UIFontTextStyleHeadline,
-							 UIFontTextStyleSubheadline,
-							 UIFontTextStyleTitle1,
-							 UIFontTextStyleTitle2,
-							 UIFontTextStyleTitle3,
-							 ];
-		} else {
-			_UIKitTextStyles = @[
-								 UIFontTextStyleBody,
-								 UIFontTextStyleCaption1,
-								 UIFontTextStyleCaption2,
-								 UIFontTextStyleFootnote,
-								 UIFontTextStyleHeadline,
-								 UIFontTextStyleSubheadline,
-								 ];
-		}
+						 UIFontTextStyleBody,
+						 UIFontTextStyleCallout,
+						 UIFontTextStyleCaption1,
+						 UIFontTextStyleCaption2,
+						 UIFontTextStyleFootnote,
+						 UIFontTextStyleHeadline,
+						 UIFontTextStyleSubheadline,
+						 UIFontTextStyleTitle1,
+						 UIFontTextStyleTitle2,
+						 UIFontTextStyleTitle3,
+						 ];
 	});
 	return _UIKitTextStyles;
 }

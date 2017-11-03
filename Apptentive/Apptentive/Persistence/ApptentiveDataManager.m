@@ -250,7 +250,7 @@ typedef enum {
 
 	NSError *error = nil;
 
-	NSDictionary *sourceMetadata = [NSPersistentStoreCoordinator metadataForPersistentStoreOfType:sourceStoreType URL:sourceStoreURL error:&error];
+	NSDictionary *sourceMetadata = [NSPersistentStoreCoordinator metadataForPersistentStoreOfType:sourceStoreType URL:sourceStoreURL options:nil error:&error];
 	if (sourceMetadata == nil) {
 		return YES;
 	}
@@ -266,7 +266,7 @@ typedef enum {
 }
 
 - (BOOL)progressivelyMigrateURL:(NSURL *)sourceStoreURL ofType:(NSString *)type toModel:(NSManagedObjectModel *)finalModel error:(NSError **)error {
-	NSDictionary *sourceMetadata = [NSPersistentStoreCoordinator metadataForPersistentStoreOfType:type URL:sourceStoreURL error:error];
+	NSDictionary *sourceMetadata = [NSPersistentStoreCoordinator metadataForPersistentStoreOfType:type URL:sourceStoreURL options:nil error:error];
 	if (sourceMetadata == nil) {
 		return NO;
 	}

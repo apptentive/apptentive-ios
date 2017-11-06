@@ -25,6 +25,7 @@
 #import "ApptentiveMessageManager.h"
 #import "ApptentiveMessageSender.h"
 #import "ApptentiveAttachment.h"
+#import "ApptentiveLogMonitor.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -40,12 +41,14 @@ NSNotificationName const ApptentiveCustomDeviceDataChangedNotification = @"Appte
 NSNotificationName const ApptentiveInteractionsDidUpdateNotification = @"ApptentiveInteractionsDidUpdateNotification";
 NSNotificationName const ApptentiveInteractionsShouldDismissNotification = @"ApptentiveInteractionsShouldDismissNotification";
 NSNotificationName const ApptentiveConversationCreatedNotification = @"ApptentiveConversationCreatedNotification";
+NSNotificationName const ApptentiveManifestRawDataDidReceiveNotification = @"ApptentiveManifestRawDataDidReceiveNotification";
 
 NSString *const ApptentiveSurveyIDKey = @"ApptentiveSurveyIDKey";
 NSString *const ApptentiveInteractionsShouldDismissAnimatedKey = @"ApptentiveInteractionsShouldDismissAnimatedKey";
 
 NSString *const ApptentiveCustomDeviceDataPreferenceKey = @"ApptentiveCustomDeviceDataPreferenceKey";
 NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPersonDataPreferenceKey";
+NSString *const ApptentiveManifestRawDataKey = @"ApptentiveManifestRawDataKey";
 
 NSString *const ApptentiveErrorDomain = @"com.apptentive";
 
@@ -108,11 +111,16 @@ static Apptentive *_sharedInstance;
 	self = [super init];
 
 	if (self) {
+		// it's important to set the log level first and the initialize log monitor
+		// otherwise the log monitor configuration would be overwritten by
+		// the SDK configuration
+		ApptentiveLogSetLevel(configuration.logLevel);
+		
+		[ApptentiveLogMonitor tryInitializeWithBaseURL:configuration.baseURL appKey:configuration.apptentiveKey signature:configuration.apptentiveSignature];
+		
 		_operationQueue = [[NSOperationQueue alloc] init];
 		_operationQueue.maxConcurrentOperationCount = 1;
 		_operationQueue.name = @"Apptentive Operation Queue";
-
-		ApptentiveLogSetLevel(configuration.logLevel);
 
 		_style = [[ApptentiveStyleSheet alloc] init];
 		_apptentiveKey = configuration.apptentiveKey;
@@ -129,6 +137,8 @@ static Apptentive *_sharedInstance;
 			[ApptentiveSDK setDistributionName:configuration.distributionName];
 			[ApptentiveSDK setDistributionVersion:[[ApptentiveVersion alloc] initWithString:configuration.distributionVersion]];
 		}
+		
+		[self registerNotifications];
 
 		ApptentiveLogInfo(@"Apptentive SDK Version %@", [ApptentiveSDK SDKVersion].versionString);
 	}
@@ -894,6 +904,26 @@ static Apptentive *_sharedInstance;
 
 - (void)setAuthenticationFailureCallback:(ApptentiveAuthenticationFailureCallback)authenticationFailureCallback {
 	self.backend.authenticationFailureCallback = authenticationFailureCallback;
+}
+
+#pragma mark -
+#pragma mark Notifications
+
+- (void)registerNotifications {
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillEnterForegroundNotification:) name:UIApplicationWillEnterForegroundNotification object:nil];
+}
+
+- (void)applicationWillEnterForegroundNotification:(NSNotification *)notification {
+	ApptentiveLogMonitor *logMonitor = [ApptentiveLogMonitor sharedInstance];
+	if (logMonitor) {
+		ApptentiveLogDebug(ApptentiveLogTagMonitor, @"Resuming log monitor...");
+		[logMonitor resume];
+	} else {
+		ApptentiveLogDebug(ApptentiveLogTagMonitor, @"Trying to initialize log monitor...");
+		[ApptentiveLogMonitor tryInitializeWithBaseURL:self.baseURL
+												appKey:self.apptentiveKey
+											 signature:self.apptentiveSignature];
+	}
 }
 
 #pragma mark -

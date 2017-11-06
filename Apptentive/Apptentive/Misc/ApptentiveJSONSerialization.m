@@ -71,6 +71,11 @@ NSInteger ApptentiveJSONSerializationErrorCode = -568;
 	}
 }
 
++ (id)JSONObjectWithString:(NSString *)string error:(NSError **)error {
+	NSData *data = [string dataUsingEncoding:NSUTF8StringEncoding];
+	return [self JSONObjectWithData:data error:error];
+}
+
 @end
 
 NS_ASSUME_NONNULL_END

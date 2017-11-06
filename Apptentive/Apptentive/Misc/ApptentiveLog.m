@@ -11,8 +11,10 @@
 NS_ASSUME_NONNULL_BEGIN
 
 static ApptentiveLogLevel _logLevel = ApptentiveLogLevelInfo;
+static ApptentiveLoggerCallback _logCallback;
 
 static const char * _Nonnull _logLevelNameLookup[] = {
+	"?", // ApptentiveLogLevelUndefined
 	"C", // ApptentiveLogLevelCrit,
 	"E", // ApptentiveLogLevelError,
 	"W", // ApptentiveLogLevelWarn,
@@ -94,6 +96,10 @@ static void _ApptentiveLogHelper(ApptentiveLogLevel level, id arg, va_list ap) {
 		[fullMessage appendString:message];
 
 		NSLog(@"%@", fullMessage);
+		
+		if (_logCallback) {
+			_logCallback(level, fullMessage);
+		}
 	}
 }
 
@@ -139,6 +145,9 @@ void ApptentiveLogVerbose(id arg, ...) {
 	va_end(ap);
 }
 
+void ApptentiveSetLoggerCallback(_Nullable ApptentiveLoggerCallback callback) {
+	_logCallback = callback;
+}
 
 ApptentiveLogLevel ApptentiveLogGetLevel(void) {
 	return _logLevel;
@@ -150,6 +159,50 @@ void ApptentiveLogSetLevel(ApptentiveLogLevel level) {
 
 BOOL ApptentiveCanLogLevel(ApptentiveLogLevel level) {
 	return shouldLogLevel(level);
+}
+
+NSString *NSStringFromApptentiveLogLevel(ApptentiveLogLevel level) {
+	switch (level) {
+		case ApptentiveLogLevelCrit:
+			return @"crit";
+		case ApptentiveLogLevelWarn:
+			return @"warn";
+		case ApptentiveLogLevelInfo:
+			return @"info";
+		case ApptentiveLogLevelDebug:
+			return @"debug";
+		case ApptentiveLogLevelError:
+			return @"error";
+		case ApptentiveLogLevelVerbose:
+			return @"verbose";
+		default:
+			return @"undefined";
+  	}
+}
+
+ApptentiveLogLevel ApptentiveLogLevelFromString(NSString *level) {
+	if ([level isEqualToString:@"crit"]) {
+		return ApptentiveLogLevelCrit;
+	}
+	if ([level isEqualToString:@"warn"]) {
+		return ApptentiveLogLevelWarn;
+	}
+	if ([level isEqualToString:@"info"]) {
+		return ApptentiveLogLevelInfo;
+	}
+	if ([level isEqualToString:@"debug"]) {
+		return ApptentiveLogLevelDebug;
+	}
+	if ([level isEqualToString:@"error"]) {
+		return ApptentiveLogLevelError;
+	}
+	if ([level isEqualToString:@"crit"]) {
+		return ApptentiveLogLevelCrit;
+	}
+	if ([level isEqualToString:@"verbose"] || [level isEqualToString:@"very_verbose"]) {
+		return ApptentiveLogLevelVerbose;
+	}
+	return ApptentiveLogLevelUndefined;
 }
 
 NS_ASSUME_NONNULL_END

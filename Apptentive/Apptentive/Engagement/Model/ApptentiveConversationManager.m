@@ -671,6 +671,14 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	[self.loginRequestOperation cancel];
 }
 
+- (void)notifyRawManifestResponseDataReceived:(NSData *)data {
+	ApptentiveAssertNotNil(data, @"Missing manifest raw data");
+	if (data) {
+		NSDictionary *userInfo = @{ ApptentiveManifestRawDataKey : data };
+		[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveManifestRawDataDidReceiveNotification object:nil userInfo:userInfo];
+	}
+}
+
 - (void)processManifestResponse:(NSDictionary *)manifestResponse cacheLifetime:(NSTimeInterval)cacheLifetime {
 	_manifest = [[ApptentiveEngagementManifest alloc] initWithJSONDictionary:manifestResponse cacheLifetime:cacheLifetime];
 
@@ -938,7 +946,8 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 	ApptentiveRequestOperationCallback *callback = [ApptentiveRequestOperationCallback new];
 	callback.operationFinishCallback = ^(ApptentiveRequestOperation *operation) {
-        [self processManifestResponse:(NSDictionary *)operation.responseObject cacheLifetime:operation.cacheLifetime];
+		[self processManifestResponse:(NSDictionary *)operation.responseObject cacheLifetime:operation.cacheLifetime];
+		[self notifyRawManifestResponseDataReceived:operation.responseData];
         self.manifestOperation = nil;
 	};
 	callback.operationFailCallback = ^(ApptentiveRequestOperation *operation, NSError *error) {

@@ -6,6 +6,7 @@
 //  Copyright © 2017 Apptentive, Inc. All rights reserved.
 //
 
+#import "Apptentive.h"
 #import "ApptentiveRequest.h"
 #import "ApptentiveDefines.h"
 #import "ApptentiveJSONSerialization.h"
@@ -16,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 @implementation ApptentiveRequest
 
 - (NSString *)apiVersion {
-	return @"9";
+	return kApptentiveAPIVersionString;
 }
 
 - (NSString *)path {

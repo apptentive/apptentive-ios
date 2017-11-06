@@ -251,8 +251,8 @@ static ApptentiveLogMonitor * _sharedInstance;
 + (nullable NSString *)readAccessTokenFromClipboard {
 	NSString *text = [UIPasteboard generalPasteboard].string;
 	
-	// trim white spaces
-	text = [text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+	// remove white spaces
+	text = [text stringByReplacingOccurrencesOfString:@"\\s" withString:@"" options:NSRegularExpressionSearch range:NSMakeRange(0, text.length)];
 	
 	if (![text hasPrefix:DebugTextHeader]) {
 		return nil;

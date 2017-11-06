@@ -381,14 +381,16 @@ static ApptentiveLogMonitor * _sharedInstance;
 	
 	// collecting system info
 	NSMutableString *messageBody = [NSMutableString new];
-	[messageBody appendFormat:@"SDK: %@\n", kApptentiveVersionString];
-	[messageBody appendFormat:@"Version: %@\n", [bundleInfo objectForKey:@"CFBundleShortVersionString"]];
-	[messageBody appendFormat:@"Build: %@\n", [bundleInfo objectForKey:@"CFBundleVersion"]];
-	[messageBody appendFormat:@"Device: %@\n", [ApptentiveUtilities deviceMachine]];
-	[messageBody appendFormat:@"OS: %@\n", [UIDevice currentDevice].systemVersion];
+	[messageBody appendString:@"This email may contain sensitive content.\n Please review before sending.\n\n"];
+	[messageBody appendFormat:@"App Bundle Identifier: %@\n", [NSBundle mainBundle].bundleIdentifier];
+	[messageBody appendFormat:@"App Version: %@\n", [bundleInfo objectForKey:@"CFBundleShortVersionString"]];
+	[messageBody appendFormat:@"App Build: %@\n", [bundleInfo objectForKey:@"CFBundleVersion"]];
+	[messageBody appendFormat:@"Apptentive SDK: %@\n", kApptentiveVersionString];
+	[messageBody appendFormat:@"Device Model: %@\n", [ApptentiveUtilities deviceMachine]];
+	[messageBody appendFormat:@"iOS Version: %@\n", [UIDevice currentDevice].systemVersion];
 	[messageBody appendFormat:@"Locale: %@", [NSLocale currentLocale].localeIdentifier];
 	
-	NSString *emailTitle = [NSString stringWithFormat:@"%@ device logs (iOS)", [NSBundle mainBundle].bundleIdentifier];
+	NSString *emailTitle = [NSString stringWithFormat:@"%@ (iOS)", [NSBundle mainBundle].infoDictionary[@"CFBundleName"]];
 	
 	MFMailComposeViewController *mc = [[MFMailComposeViewController alloc] init];
 	mc.mailComposeDelegate = self;

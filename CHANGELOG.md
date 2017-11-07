@@ -1,3 +1,15 @@
+2017-11-06 frankus, weeebox v4.1.0
+----------------------------------
+###Improvements
+
+- Improved accessibility of Surveys and Message center for the visually impaired
+- Added the ability to enable troubleshooting mode in the SDK, and easily email logs to Apptentive support
+
+###Bugs Fixed
+
+- Fix Message Center styling bug on iPhone X in landscape mode
+- Fix delay before events can be engaged when SDK initializes
+
 2017-10-10 frankus, weeebox v4.0.7
 ----------------------------------
 Version 4.0.7 updates Messsage Center and Surveys to adapt to the iPhone X

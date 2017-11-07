@@ -206,14 +206,14 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 		}
 
 		// See if any of the non-custom device attributes have changed
-		[self.device updateWithCurrentDeviceValues];
-
 		[self checkForDeviceDiffs];
 	}
 }
 
 - (void)checkForDeviceDiffs {
 	ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Diffing device");
+
+	[self.device updateWithCurrentDeviceValues];
 
 	NSDictionary *deviceDiffs = [ApptentiveUtilities diffDictionary:self.device.JSONDictionary againstDictionary:self.lastSentDevice];
 

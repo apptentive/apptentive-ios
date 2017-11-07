@@ -24,6 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (ApptentiveLogTag *)payloadTag;
 + (ApptentiveLogTag *)utilityTag;
 + (ApptentiveLogTag *)storageTag;
++ (ApptentiveLogTag *)logMonitorTag;
 
 @end
 

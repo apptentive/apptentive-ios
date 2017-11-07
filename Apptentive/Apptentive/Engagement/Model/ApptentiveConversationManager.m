@@ -177,8 +177,11 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		}
 	}
 
-	// any remaining conversations are 'logged out', and we should not load them.
-	if (self.conversationMetadata.items.count > 0) {
+	// The presence of a logged-out conversation means that we shouldn't start a new anonymous converstion or attempt to migrate a legacy conversation. No conversation should be active.
+	item = [self.conversationMetadata findItemFilter:^BOOL(ApptentiveConversationMetadataItem *item) {
+		return item.state == ApptentiveConversationStateLoggedOut;
+	}];
+	if (item != nil) {
 		ApptentiveLogDebug(ApptentiveLogTagConversation, @"Can't load conversation: only 'logged-out' conversations available");
 		return nil;
 	}
@@ -204,7 +207,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		return legacyConversation;
 	}
 
-	// no conversation available: create a new one
+	// no conversation available: create a new anonymous conversation
 	ApptentiveLogDebug(ApptentiveLogTagConversation, @"Can't load conversation: creating anonymous conversation...");
 	ApptentiveConversation *anonymousConversation = [[ApptentiveConversation alloc] initWithState:ApptentiveConversationStateAnonymousPending];
 	[self fetchConversationToken:anonymousConversation];
@@ -668,6 +671,14 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	[self.loginRequestOperation cancel];
 }
 
+- (void)notifyRawManifestResponseDataReceived:(NSData *)data {
+	ApptentiveAssertNotNil(data, @"Missing manifest raw data");
+	if (data) {
+		NSDictionary *userInfo = @{ ApptentiveManifestRawDataKey : data };
+		[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveManifestRawDataDidReceiveNotification object:nil userInfo:userInfo];
+	}
+}
+
 - (void)processManifestResponse:(NSDictionary *)manifestResponse cacheLifetime:(NSTimeInterval)cacheLifetime {
 	_manifest = [[ApptentiveEngagementManifest alloc] initWithJSONDictionary:manifestResponse cacheLifetime:cacheLifetime];
 
@@ -935,7 +946,8 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 	ApptentiveRequestOperationCallback *callback = [ApptentiveRequestOperationCallback new];
 	callback.operationFinishCallback = ^(ApptentiveRequestOperation *operation) {
-        [self processManifestResponse:(NSDictionary *)operation.responseObject cacheLifetime:operation.cacheLifetime];
+		[self processManifestResponse:(NSDictionary *)operation.responseObject cacheLifetime:operation.cacheLifetime];
+		[self notifyRawManifestResponseDataReceived:operation.responseData];
         self.manifestOperation = nil;
 	};
 	callback.operationFailCallback = ^(ApptentiveRequestOperation *operation, NSError *error) {
@@ -979,10 +991,8 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 #pragma mark - Metadata
 
-- (void)resume {
+- (void)completeHousekeepingTasks {
 	[self updateManifestIfNeeded];
-
-	[self.activeConversation checkForDiffs];
 
 	[self.messageManager checkForMessages];
 }

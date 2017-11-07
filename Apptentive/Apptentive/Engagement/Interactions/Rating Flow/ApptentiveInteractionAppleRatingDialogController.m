@@ -40,9 +40,8 @@ NSString *const ApptentiveInteractionAppleRatingDialogEventLabelFallback = @"fal
 
 	[self.interaction engage:ApptentiveInteractionAppleRatingDialogEventLabelRequest fromViewController:viewController];
 
-// Guard against not having store review controller class in OS and/or SDK
-#ifdef __IPHONE_10_3
-	if ([[SKStoreReviewController class] respondsToSelector:@selector(requestReview)]) {
+	// Guard against not having store review controller class in OS and/or SDK
+	if (@available(iOS 10.3, *)) {
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowDidBecomeVisible:) name:UIWindowDidBecomeVisibleNotification object:nil];
 
 		[SKStoreReviewController performSelector:@selector(requestReview)];
@@ -52,9 +51,6 @@ NSString *const ApptentiveInteractionAppleRatingDialogEventLabelFallback = @"fal
 	} else {
 		[self invokeNotShownInteractionFromViewController:viewController withReason:@"os too old"];
 	}
-#else
-	[self invokeNotShownInteractionFromViewController:viewController withReason:@"tools too old"];
-#endif
 }
 
 - (void)windowDidBecomeVisible:(NSNotification *)notification {

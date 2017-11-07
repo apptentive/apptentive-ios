@@ -15,7 +15,7 @@ static ApptentiveLogTag *_networkTag;
 static ApptentiveLogTag *_payloadTag;
 static ApptentiveLogTag *_utilityTag;
 static ApptentiveLogTag *_storageTag;
-
+static ApptentiveLogTag *_logMonitorTag;
 
 @implementation ApptentiveLogTag
 
@@ -27,6 +27,7 @@ static ApptentiveLogTag *_storageTag;
 		_payloadTag = [ApptentiveLogTag logTagWithName:@"PAYLOAD" enabled:YES];
 		_utilityTag = [ApptentiveLogTag logTagWithName:@"UTILITY" enabled:YES];
 		_storageTag = [ApptentiveLogTag logTagWithName:@"STORAGE" enabled:YES];
+		_logMonitorTag = [ApptentiveLogTag logTagWithName:@"LOG_MONITOR" enabled:YES];
 	}
 }
 
@@ -64,6 +65,10 @@ static ApptentiveLogTag *_storageTag;
 
 + (ApptentiveLogTag *)storageTag {
 	return _storageTag;
+}
+
++ (ApptentiveLogTag *)logMonitorTag {
+	return _logMonitorTag;
 }
 
 @end

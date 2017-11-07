@@ -171,6 +171,10 @@ NSString *const ApptentiveInteractionSurveyEventLabelCancel = @"cancel";
 	return [self questionAtIndex:index].maximumLabel;
 }
 
+- (nullable NSString *)errorMessageAtIndex:(NSInteger)index {
+	return [self questionAtIndex:index].errorMessage;
+}
+
 - (BOOL)answerIsValidForQuestionAtIndex:(NSInteger)index {
 	return ![self.invalidQuestionIndexes containsIndex:index];
 }
@@ -335,6 +339,15 @@ NSString *const ApptentiveInteractionSurveyEventLabelCancel = @"cancel";
 	}
 
 	return self.invalidQuestionIndexes.count == 0;
+}
+
+- (NSIndexPath *)firstInvalidAnswerIndexPath {
+	__block NSUInteger minIndex = NSNotFound;
+	[self.invalidQuestionIndexes enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
+		minIndex = MIN(minIndex, idx);
+	}];
+	
+	return minIndex != NSNotFound ? [NSIndexPath indexPathForItem:0 inSection:minIndex] : nil;
 }
 
 - (NSDictionary *)answers {

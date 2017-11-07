@@ -48,6 +48,8 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSString *)stringByPaddingBase64:(NSString *)base64String;
 + (NSString *)formatAsTableRows:(NSArray<NSArray *> *)rows;
 
++ (NSString *)deviceMachine;
+
 @end
 
 NS_ASSUME_NONNULL_END

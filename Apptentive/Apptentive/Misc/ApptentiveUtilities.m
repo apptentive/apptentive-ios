@@ -166,9 +166,7 @@ UIViewController *topChildViewController(UIViewController *viewController) {
 }
 
 + (NSString *)stringByEscapingForPredicate:(NSString *)string {
-	CFStringRef result = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)string, (CFStringRef) @"$#", (CFStringRef)NULL, kCFStringEncodingUTF8);
-
-	return CFBridgingRelease(result);
+	return [string stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
 }
 
 + (NSString *)randomStringOfLength:(NSUInteger)length {
@@ -412,6 +410,13 @@ UIViewController *topChildViewController(UIViewController *viewController) {
 	[result appendString:line];
 
 	return result;
+}
+
++ (NSString *)deviceMachine {
+	struct utsname systemInfo;
+	uname(&systemInfo);
+	
+	return [NSString stringWithCString:systemInfo.machine encoding:NSUTF8StringEncoding];
 }
 
 @end

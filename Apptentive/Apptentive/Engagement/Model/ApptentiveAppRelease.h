@@ -89,6 +89,54 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 /**
+ The compiler used to compile the app.
+ */
+@property (readonly, strong, nonatomic) NSString *compiler;
+
+
+/**
+ The build number of the platform for which the app was built.
+ */
+@property (readonly, strong, nonatomic) NSString *platformBuild;
+
+
+/**
+ The name of the platform for which the app was built.
+ */
+@property (readonly, strong, nonatomic) NSString *platformName;
+
+
+/**
+ The version of the platform for which the app was built.
+ */
+@property (readonly, strong, nonatomic) NSString *platformVersion;
+
+
+/**
+ The (iOS) SDK build against which the app was linked.
+ */
+@property (readonly, strong, nonatomic) NSString *SDKBuild;
+
+
+/**
+ The (iOS) SDK name against which the app was linked.
+ */
+@property (readonly, strong, nonatomic) NSString *SDKName;
+
+
+/**
+ The Xcode version with which the app was built.
+ */
+@property (readonly, strong, nonatomic) NSString *Xcode;
+
+
+/**
+ The Xcode build with which the app was built.
+ */
+@property (readonly, strong, nonatomic) NSString *XcodeBuild;
+
+
+/**
  Initializes an `ApptentiveAppRelease` object by inspecting the running app,
  primarily values in the app's `Info.plist` file.
 

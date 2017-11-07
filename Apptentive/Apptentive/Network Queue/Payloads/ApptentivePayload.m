@@ -42,7 +42,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 - (NSString *)apiVersion {
-	return @"9";
+	return kApptentiveAPIVersionString;
 }
 
 - (NSString *)path {

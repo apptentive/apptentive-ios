@@ -36,6 +36,21 @@ ApptentiveStyleIdentifier ApptentiveColorMessageBackground = @"com.apptentive.co
 ApptentiveStyleIdentifier ApptentiveColorReplyBackground = @"com.apptentive.color.replyBackground";
 ApptentiveStyleIdentifier ApptentiveColorContextBackground = @"com.apptentive.color.contextBackground";
 
+NSString * const FontFamilyKey = @"FontFamily";
+NSString * const LightFaceAttributeKey = @"LightFaceAttribute";
+NSString * const RegularFaceAttributeKey = @"RegularFaceAttribute";
+NSString * const MediumFaceAttributeKey = @"MediumFaceAttribute";
+NSString * const BoldFaceAttributeKey = @"BoldFaceAttribute";
+NSString * const PrimaryColorKey = @"PrimaryColor";
+NSString * const SecondaryColorKey = @"SecondaryColor";
+NSString * const FailureColorKey = @"FailureColor";
+NSString * const BackgroundColorKey = @"BackgroundColor";
+NSString * const SeparatorColorKey = @"SeparatorColor";
+NSString * const CollectionBackgroundColorKey = @"CollectionBackgroundColor";
+NSString * const PlaceholderColorKey = @"PlaceholderColor";
+NSString * const SizeAdjustmentKey = @"SizeAdjustment";
+NSString * const ColorOverridesKey = @"ColorOverrides";
+NSString * const FontOverridesKey = @"FontOverrides";
 
 @interface ApptentiveStyleSheet ()
 
@@ -250,29 +265,18 @@ ApptentiveStyleIdentifier ApptentiveColorContextBackground = @"com.apptentive.co
 	static NSArray *_UIKitTextStyles;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-		if ([[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){ 9, 0, 0}]) {
 		_UIKitTextStyles = @[
-							 UIFontTextStyleBody,
-							 UIFontTextStyleCallout,
-							 UIFontTextStyleCaption1,
-							 UIFontTextStyleCaption2,
-							 UIFontTextStyleFootnote,
-							 UIFontTextStyleHeadline,
-							 UIFontTextStyleSubheadline,
-							 UIFontTextStyleTitle1,
-							 UIFontTextStyleTitle2,
-							 UIFontTextStyleTitle3,
-							 ];
-		} else {
-			_UIKitTextStyles = @[
-								 UIFontTextStyleBody,
-								 UIFontTextStyleCaption1,
-								 UIFontTextStyleCaption2,
-								 UIFontTextStyleFootnote,
-								 UIFontTextStyleHeadline,
-								 UIFontTextStyleSubheadline,
-								 ];
-		}
+						 UIFontTextStyleBody,
+						 UIFontTextStyleCallout,
+						 UIFontTextStyleCaption1,
+						 UIFontTextStyleCaption2,
+						 UIFontTextStyleFootnote,
+						 UIFontTextStyleHeadline,
+						 UIFontTextStyleSubheadline,
+						 UIFontTextStyleTitle1,
+						 UIFontTextStyleTitle2,
+						 UIFontTextStyleTitle3,
+						 ];
 	});
 	return _UIKitTextStyles;
 }
@@ -332,7 +336,7 @@ ApptentiveStyleIdentifier ApptentiveColorContextBackground = @"com.apptentive.co
 
 		_sizeAdjustment = 1.0;
 
-		_secondaryColor = [UIColor colorWithRed:142.0 / 255.0 green:142.0 / 255.0 blue:147.0 / 255.0 alpha:1.0];
+		_secondaryColor = [UIColor colorWithRed:118.0 / 255.0 green:118.0 / 255.0 blue:122.0 / 255.0 alpha:1.0];
 		_failureColor = [UIColor colorWithRed:218.0 / 255.0 green:53.0 / 255.0 blue:71.0 / 255.0 alpha:1.0];
 
 		_fontDescriptorOverrides = [NSMutableDictionary dictionary];
@@ -341,8 +345,88 @@ ApptentiveStyleIdentifier ApptentiveColorContextBackground = @"com.apptentive.co
 	return self;
 }
 
-- (void)dealloc {
-	[[NSNotificationCenter defaultCenter] removeObserver:self];
+- (nullable instancetype)initWithContentsOfURL:(NSURL *)stylePropertyListURL {
+	self = [self init];
+
+	if (self) {
+		NSDictionary *propertyList = [NSDictionary dictionaryWithContentsOfURL:stylePropertyListURL];
+
+		if (propertyList == nil) {
+			ApptentiveLogError(@"Style property list at URL %@ was unable to be loaded.", stylePropertyListURL);
+			return nil;
+		}
+
+		_fontFamily = propertyList[FontFamilyKey] ?: _fontFamily;
+		_lightFaceAttribute = propertyList[LightFaceAttributeKey] ?: _lightFaceAttribute;
+		_regularFaceAttribute = propertyList[RegularFaceAttributeKey] ?: _regularFaceAttribute;
+		_mediumFaceAttribute = propertyList[MediumFaceAttributeKey] ?: _mediumFaceAttribute;
+		_boldFaceAttribute = propertyList[BoldFaceAttributeKey] ?: _boldFaceAttribute;
+
+		_sizeAdjustment = propertyList[SizeAdjustmentKey] ? [propertyList[SizeAdjustmentKey] doubleValue] : _sizeAdjustment;
+
+		_primaryColor = [[self class] colorFromHexString:propertyList[PrimaryColorKey]] ?: _primaryColor;
+		_secondaryColor = [[self class] colorFromHexString:propertyList[SecondaryColorKey]] ?: _secondaryColor;
+		_failureColor = [[self class] colorFromHexString:propertyList[FailureColorKey]] ?: _failureColor;
+		_backgroundColor = [[self class] colorFromHexString:propertyList[BackgroundColorKey]] ?: _backgroundColor;
+		_separatorColor = [[self class] colorFromHexString:propertyList[SeparatorColorKey]] ?: _separatorColor;
+		_collectionBackgroundColor = [[self class] colorFromHexString:propertyList[CollectionBackgroundColorKey]] ?: _collectionBackgroundColor;
+		_placeholderColor = [[self class] colorFromHexString:propertyList[PlaceholderColorKey]] ?: _placeholderColor;
+
+		NSDictionary *colorOverrides = propertyList[ColorOverridesKey];
+
+		if ([colorOverrides isKindOfClass:[NSDictionary class]]) {
+			for (ApptentiveStyleIdentifier style in colorOverrides) {
+				UIColor *color = [[self class] colorFromHexString:colorOverrides[style]];
+				if (color) {
+					[self setColor:color forStyle:style];
+				} else {
+					ApptentiveLogError(@"Property list color override for style %@ is not a valid hex string (e.g. #A1B2C3).", style);
+				}
+			}
+		} else {
+			ApptentiveLogError(@"Property list color overrides is not a valid dictionary.");
+		}
+
+		NSDictionary *fontOverrides = propertyList[FontOverridesKey];
+
+		if ([fontOverrides isKindOfClass:[NSDictionary class]]) {
+			for (ApptentiveStyleIdentifier style in fontOverrides) {
+				NSString *fontName = fontOverrides[style][@"font"];
+				NSNumber *fontSize = fontOverrides[style][@"size"];
+
+				if (![fontName isKindOfClass:[NSString class]] || ![fontSize isKindOfClass:[NSNumber class]]) {
+					ApptentiveLogError(@"Property list font override for style %@ has missing or invalid `font` (string) or `size` (number) value.");
+					continue;
+				}
+
+				UIFontDescriptor *fontDescriptor = [UIFontDescriptor fontDescriptorWithName:fontName size:fontSize.doubleValue];
+
+				if (fontDescriptor != nil) {
+					[self setFontDescriptor:fontDescriptor forStyle:style];
+				} else {
+					ApptentiveLogError(@"Unable to create font descriptor with name %@ and size %f", fontName, fontSize.doubleValue);
+				}
+			}
+		} else {
+			ApptentiveLogError(@"Property list font overrides is not a valid dictionary.");
+		}
+	}
+
+	return self;
+}
+
++ (nullable UIColor *)colorFromHexString:(NSString *)hexString {
+	if (hexString == nil) {
+		return nil;
+	}
+
+	unsigned rgbValue = 0;
+	NSScanner *scanner = [NSScanner scannerWithString:hexString];
+	if ([scanner scanString:@"#" intoString:NULL] && [scanner scanHexInt:&rgbValue]) {
+		return [UIColor colorWithRed:((rgbValue & 0xFF0000) >> 16) / 255.0 green:((rgbValue & 0xFF00) >> 8) / 255.0 blue:(rgbValue & 0xFF) / 255.0 alpha:1.0];
+	} else {
+		return nil;
+	}
 }
 
 - (UIColor *)appearanceColorForClass:(Class)klass property:(SEL)propertySelector default:(UIColor *)defaultColor {
@@ -396,7 +480,7 @@ ApptentiveStyleIdentifier ApptentiveColorContextBackground = @"com.apptentive.co
 	attributes[UIFontDescriptorFamilyAttribute] = self.fontFamily;
 	attributes[UIFontDescriptorSizeAttribute] = @(size.doubleValue * self.sizeAdjustment);
 
-	if (face) {
+	if (face.length > 0) {
 		attributes[UIFontDescriptorFaceAttribute] = face;
 	}
 

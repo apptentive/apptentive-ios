@@ -25,6 +25,7 @@
 #import "ApptentiveMessageManager.h"
 #import "ApptentiveMessageSender.h"
 #import "ApptentiveAttachment.h"
+#import "ApptentiveLogMonitor.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -40,12 +41,14 @@ NSNotificationName const ApptentiveCustomDeviceDataChangedNotification = @"Appte
 NSNotificationName const ApptentiveInteractionsDidUpdateNotification = @"ApptentiveInteractionsDidUpdateNotification";
 NSNotificationName const ApptentiveInteractionsShouldDismissNotification = @"ApptentiveInteractionsShouldDismissNotification";
 NSNotificationName const ApptentiveConversationCreatedNotification = @"ApptentiveConversationCreatedNotification";
+NSNotificationName const ApptentiveManifestRawDataDidReceiveNotification = @"ApptentiveManifestRawDataDidReceiveNotification";
 
 NSString *const ApptentiveSurveyIDKey = @"ApptentiveSurveyIDKey";
 NSString *const ApptentiveInteractionsShouldDismissAnimatedKey = @"ApptentiveInteractionsShouldDismissAnimatedKey";
 
 NSString *const ApptentiveCustomDeviceDataPreferenceKey = @"ApptentiveCustomDeviceDataPreferenceKey";
 NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCustomPersonDataPreferenceKey";
+NSString *const ApptentiveManifestRawDataKey = @"ApptentiveManifestRawDataKey";
 
 NSString *const ApptentiveErrorDomain = @"com.apptentive";
 
@@ -108,11 +111,16 @@ static Apptentive *_sharedInstance;
 	self = [super init];
 
 	if (self) {
+		// it's important to set the log level first and the initialize log monitor
+		// otherwise the log monitor configuration would be overwritten by
+		// the SDK configuration
+		ApptentiveLogSetLevel(configuration.logLevel);
+		
+		[ApptentiveLogMonitor tryInitializeWithBaseURL:configuration.baseURL appKey:configuration.apptentiveKey signature:configuration.apptentiveSignature];
+		
 		_operationQueue = [[NSOperationQueue alloc] init];
 		_operationQueue.maxConcurrentOperationCount = 1;
 		_operationQueue.name = @"Apptentive Operation Queue";
-
-		ApptentiveLogSetLevel(configuration.logLevel);
 
 		_style = [[ApptentiveStyleSheet alloc] init];
 		_apptentiveKey = configuration.apptentiveKey;
@@ -129,6 +137,8 @@ static Apptentive *_sharedInstance;
 			[ApptentiveSDK setDistributionName:configuration.distributionName];
 			[ApptentiveSDK setDistributionVersion:[[ApptentiveVersion alloc] initWithString:configuration.distributionVersion]];
 		}
+		
+		[self registerNotifications];
 
 		ApptentiveLogInfo(@"Apptentive SDK Version %@", [ApptentiveSDK SDKVersion].versionString);
 	}
@@ -738,22 +748,28 @@ static Apptentive *_sharedInstance;
 	NSDictionary *apptentiveUserInfo = @{ @"apptentive": userInfo[@"apptentive"] };
 	NSString *soundName = userInfo[@"apptentive"][@"sound"];
 
-	if ([UNUserNotificationCenter class] && [[UNUserNotificationCenter currentNotificationCenter].delegate respondsToSelector:@selector(userNotificationCenter:didReceiveNotificationResponse:withCompletionHandler:)]) {
-		UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
-		content.title = title;
-		content.body = body;
-		content.userInfo = apptentiveUserInfo;
-		content.sound = [soundName isEqualToString:@"default"] ? [UNNotificationSound defaultSound] : [UNNotificationSound soundNamed:soundName];
+	if (@available(iOS 10.0, *)) {
+		if ([[UNUserNotificationCenter currentNotificationCenter].delegate respondsToSelector:@selector(userNotificationCenter:didReceiveNotificationResponse:withCompletionHandler:)]) {
+			UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
+			content.title = title;
+			content.body = body;
+			content.userInfo = apptentiveUserInfo;
+			content.sound = [soundName isEqualToString:@"default"] ? [UNNotificationSound defaultSound] : [UNNotificationSound soundNamed:soundName];
 
-		UNTimeIntervalNotificationTrigger *trigger = [UNTimeIntervalNotificationTrigger triggerWithTimeInterval:1 repeats:NO];
-		UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:@"com.apptentive" content:content trigger:trigger];
+			UNTimeIntervalNotificationTrigger *trigger = [UNTimeIntervalNotificationTrigger triggerWithTimeInterval:1 repeats:NO];
+			UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:@"com.apptentive" content:content trigger:trigger];
 
-		[UNUserNotificationCenter.currentNotificationCenter addNotificationRequest:request withCompletionHandler:^(NSError * _Nullable error) {
-			if (error) {
-				ApptentiveLogError(@"Error posting local notification: %@", error);
-			}
-		}];
-	} else if ([[UIApplication sharedApplication].delegate respondsToSelector:@selector(application:didReceiveLocalNotification:)]) {
+			[UNUserNotificationCenter.currentNotificationCenter addNotificationRequest:request withCompletionHandler:^(NSError * _Nullable error) {
+				if (error) {
+					ApptentiveLogError(@"Error posting local notification: %@", error);
+				}
+			}];
+
+			return;
+		}
+	}
+
+	if ([[UIApplication sharedApplication].delegate respondsToSelector:@selector(application:didReceiveLocalNotification:)]) {
 		UILocalNotification *localNotification = [[UILocalNotification alloc] init];
 		localNotification.alertTitle = title;
 		localNotification.alertBody = body;
@@ -891,6 +907,26 @@ static Apptentive *_sharedInstance;
 }
 
 #pragma mark -
+#pragma mark Notifications
+
+- (void)registerNotifications {
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillEnterForegroundNotification:) name:UIApplicationWillEnterForegroundNotification object:nil];
+}
+
+- (void)applicationWillEnterForegroundNotification:(NSNotification *)notification {
+	ApptentiveLogMonitor *logMonitor = [ApptentiveLogMonitor sharedInstance];
+	if (logMonitor) {
+		ApptentiveLogDebug(ApptentiveLogTagMonitor, @"Resuming log monitor...");
+		[logMonitor resume];
+	} else {
+		ApptentiveLogDebug(ApptentiveLogTagMonitor, @"Trying to initialize log monitor...");
+		[ApptentiveLogMonitor tryInitializeWithBaseURL:self.baseURL
+												appKey:self.apptentiveKey
+											 signature:self.apptentiveSignature];
+	}
+}
+
+#pragma mark -
 #pragma mark Logging System
 
 - (ApptentiveLogLevel)logLevel {
@@ -933,8 +969,9 @@ static Apptentive *_sharedInstance;
 - (nullable instancetype)initWithCoder:(NSCoder *)aDecoder {
 	self = [super initWithCoder:aDecoder];
 	if (self) {
-		if (!([UINavigationBar appearance].barTintColor || [UINavigationBar appearanceWhenContainedIn:[ApptentiveNavigationController class], nil].barTintColor)) {
-			[UINavigationBar appearanceWhenContainedIn:[ApptentiveNavigationController class], nil].barTintColor = [UIColor whiteColor];
+
+		if (!([UINavigationBar appearance].barTintColor || [UINavigationBar appearanceWhenContainedInInstancesOfClasses:@[ [ApptentiveNavigationController class] ]].barTintColor)) {
+			[UINavigationBar appearanceWhenContainedInInstancesOfClasses:@[ [ApptentiveNavigationController class] ]].barTintColor = [UIColor whiteColor];
 		}
 	}
 	return self;

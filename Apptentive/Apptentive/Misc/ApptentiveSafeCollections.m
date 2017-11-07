@@ -33,6 +33,15 @@ BOOL ApptentiveDictionaryTrySetKeyValue(NSMutableDictionary *dictionary, id<NSCo
 	return NO;
 }
 
+BOOL ApptentiveDictionaryGetBool(NSDictionary *dictionary, id<NSCopying> key) {
+	ApptentiveAssertNotNil(key, @"Key is nil");
+	if (key != nil) {
+		id value = dictionary[key];
+		return [value isKindOfClass:[NSNumber class]] ? [value boolValue] : NO;
+	}
+	return NO;
+}
+
 NSString *ApptentiveDictionaryGetString(NSDictionary *dictionary, id<NSCopying> key) {
 	ApptentiveAssertNotNil(key, @"Key is nil");
 	if (key != nil) {

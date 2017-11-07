@@ -53,7 +53,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, strong, nonatomic) NSIndexPath *editingIndexPath;
 
 @property (readonly, nonatomic) CGFloat lineHeightOfQuestionFont;
-@property (assign, nonatomic) CGFloat iOS9ToolbarInset;
+@property (assign, nonatomic) CGFloat toolbarInset;
 
 @end
 
@@ -158,6 +158,13 @@ NS_ASSUME_NONNULL_BEGIN
 			[HUD showInAlertWindow];
 			HUD.textLabel.text = self.viewModel.thankYouText;
 			HUD.imageView.image = [ApptentiveUtilities imageNamed:@"at_thanks"];
+		}
+	} else {
+		NSIndexPath *firstInvalidQuestionIndex = self.viewModel.firstInvalidAnswerIndexPath;
+		ApptentiveAssertNotNil(firstInvalidQuestionIndex, @"Expected non-nil index");
+		if (firstInvalidQuestionIndex) {
+			[self.collectionView scrollToItemAtIndexPath:firstInvalidQuestionIndex atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:YES];
+			UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, [self.viewModel errorMessageAtIndex:firstInvalidQuestionIndex.section]);
 		}
 	}
 }
@@ -622,19 +629,12 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - Keyboard adjustment for iOS 7 & 8
 
 - (void)adjustForKeyboard:(NSNotification *)notification {
-	CGRect keyboardRect = [self.view.window convertRect:[notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue] toView:self.collectionView.superview];
-
-	// iOS 8 doesn't seem to adjust the contentInset for the keyboard
-	if (![[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){9, 0, 0}]) {
-		self.collectionView.contentInset = UIEdgeInsetsMake(self.collectionView.contentInset.top, self.collectionView.contentInset.left, CGRectGetHeight(self.collectionView.bounds) - keyboardRect.origin.y, self.collectionView.contentInset.right);
-
-		[self.collectionViewLayout invalidateLayout];
-	} else if (self.iOS9ToolbarInset != 0) {
+	if (self.toolbarInset != 0) {
 		// Remove any additional inset we added for hiding the toolbar when the keyboard was visible.
 		UIEdgeInsets contentInset = self.collectionView.contentInset;
-		contentInset.bottom += self.iOS9ToolbarInset;
+		contentInset.bottom += self.toolbarInset;
 		self.collectionView.contentInset = contentInset;
-		self.iOS9ToolbarInset = 0;
+		self.toolbarInset = 0;
 	}
 
 	CGFloat duration = ((NSNumber *)notification.userInfo[UIKeyboardAnimationDurationUserInfoKey]).doubleValue;
@@ -671,7 +671,7 @@ NS_ASSUME_NONNULL_BEGIN
 			insets.bottom -= toolbarAdjustment;
 
 			// On iOS9, we need to remember to remove that inset once the keyboard is dismissed.
-			self.iOS9ToolbarInset = toolbarAdjustment;
+			self.toolbarInset = toolbarAdjustment;
 
 			self.collectionView.contentInset = insets;
 			self.collectionView.contentOffset = contentOffset;

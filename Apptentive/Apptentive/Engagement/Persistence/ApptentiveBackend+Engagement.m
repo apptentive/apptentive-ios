@@ -91,10 +91,16 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 }
 
 - (BOOL)engageCodePoint:(NSString *)codePoint fromInteraction:(nullable ApptentiveInteraction *)fromInteraction userInfo:(nullable NSDictionary *)userInfo customData:(nullable NSDictionary *)customData extendedData:(nullable NSArray *)extendedData fromViewController:(nullable UIViewController *)viewController {
-	ApptentiveLogInfo(@"Engage Apptentive event: %@", codePoint);
-	if (![self isReady]) {
+	if (self.state != ApptentiveBackendStatePayloadDatabaseAvailable) {
+		[self.operationQueue addOperationWithBlock:^{
+			[self engageCodePoint:codePoint fromInteraction:fromInteraction userInfo:userInfo customData:customData extendedData:extendedData fromViewController:viewController];
+		}];
+
+		ApptentiveLogInfo(@"Backend not ready. Deferring engagement of %@", codePoint);
 		return NO;
 	}
+
+	ApptentiveLogInfo(@"Engage Apptentive event: %@", codePoint);
 
 	// TODO: Do this on the background queue?
 	ApptentiveConversation *conversation = self.conversationManager.activeConversation;

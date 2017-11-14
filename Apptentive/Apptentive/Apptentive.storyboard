@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13526" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13524"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -818,6 +819,7 @@
                     <rect key="frame" x="0.0" y="0.0" width="320" height="140"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <viewLayoutGuide key="safeArea" id="NUY-af-zCW"/>
                     <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="pPU-dU-ggo">
                         <size key="itemSize" width="76" height="123"/>
                         <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -906,10 +908,6 @@
         <scene sceneID="G8v-Qy-vVc">
             <objects>
                 <viewController id="98M-gg-3nj" userLabel="Message Center Error View" customClass="ApptentiveMessageCenterErrorViewController" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="YsJ-93-sdE"/>
-                        <viewControllerLayoutGuide type="bottom" id="PBq-M4-PKi"/>
-                    </layoutGuides>
                     <view key="view" contentMode="center" id="yHY-Np-JOn">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -933,12 +931,13 @@
                         </subviews>
                         <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstAttribute="centerX" secondItem="GVd-IK-yfR" secondAttribute="centerX" id="36k-QD-PQI"/>
+                            <constraint firstItem="87v-qZ-06b" firstAttribute="centerX" secondItem="GVd-IK-yfR" secondAttribute="centerX" id="36k-QD-PQI"/>
                             <constraint firstAttribute="centerY" secondItem="GVd-IK-yfR" secondAttribute="centerY" id="8QX-wA-uqg"/>
-                            <constraint firstAttribute="centerX" secondItem="MWx-dJ-sZ0" secondAttribute="centerX" id="BO5-wU-k2W"/>
+                            <constraint firstItem="87v-qZ-06b" firstAttribute="centerX" secondItem="MWx-dJ-sZ0" secondAttribute="centerX" id="BO5-wU-k2W"/>
                             <constraint firstItem="MWx-dJ-sZ0" firstAttribute="top" secondItem="GVd-IK-yfR" secondAttribute="bottom" constant="16" id="JNK-Th-fzD"/>
                             <constraint firstAttribute="centerY" secondItem="GVd-IK-yfR" secondAttribute="centerY" id="cFk-Xy-VPj"/>
                         </constraints>
+                        <viewLayoutGuide key="safeArea" id="87v-qZ-06b"/>
                     </view>
                     <navigationItem key="navigationItem" title="Message Center" id="SBs-rU-p7L">
                         <barButtonItem key="rightBarButtonItem" systemItem="cancel" id="ebc-H0-O6o">
@@ -960,10 +959,6 @@
         <scene sceneID="pcU-LA-MMv">
             <objects>
                 <viewController storyboardIdentifier="Banner" id="dl0-K5-Mv3" customClass="ApptentiveBannerViewController" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="5SP-sQ-HE0"/>
-                        <viewControllerLayoutGuide type="bottom" id="2nO-7a-cCZ"/>
-                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="OZg-SV-V5r">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="68"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1018,9 +1013,10 @@
                         <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="Y7l-8U-XGR" firstAttribute="top" secondItem="OZg-SV-V5r" secondAttribute="top" id="IMt-IL-sk1"/>
-                            <constraint firstAttribute="trailing" secondItem="Y7l-8U-XGR" secondAttribute="trailing" id="KEh-ps-GN1"/>
-                            <constraint firstItem="Y7l-8U-XGR" firstAttribute="leading" secondItem="OZg-SV-V5r" secondAttribute="leading" id="yOz-KY-Dkh"/>
+                            <constraint firstItem="ubG-2S-J1b" firstAttribute="trailing" secondItem="Y7l-8U-XGR" secondAttribute="trailing" id="KEh-ps-GN1"/>
+                            <constraint firstItem="Y7l-8U-XGR" firstAttribute="leading" secondItem="ubG-2S-J1b" secondAttribute="leading" id="yOz-KY-Dkh"/>
                         </constraints>
+                        <viewLayoutGuide key="safeArea" id="ubG-2S-J1b"/>
                     </view>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="320" height="68"/>
@@ -1051,10 +1047,6 @@
         <scene sceneID="zxj-fk-0sF">
             <objects>
                 <viewController storyboardIdentifier="About" hidesBottomBarWhenPushed="YES" id="Vhy-th-mTJ" customClass="ApptentiveAboutViewController" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="Eyb-YH-mrA"/>
-                        <viewControllerLayoutGuide type="bottom" id="S8h-gc-fXf"/>
-                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="RoE-zy-OMj">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1103,14 +1095,15 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
                             <constraint firstItem="1rw-GH-jIp" firstAttribute="top" secondItem="agg-cE-9mQ" secondAttribute="bottom" constant="16" id="9LH-ZT-D8Y"/>
                             <constraint firstItem="agg-cE-9mQ" firstAttribute="leading" secondItem="RoE-zy-OMj" secondAttribute="leading" id="CcI-t8-YhZ"/>
                             <constraint firstItem="q23-yH-i1B" firstAttribute="leading" secondItem="Nvk-9F-cXD" secondAttribute="leading" id="G8C-9g-FTH"/>
-                            <constraint firstItem="1rw-GH-jIp" firstAttribute="leading" secondItem="RoE-zy-OMj" secondAttribute="leadingMargin" id="GMq-5X-m0w"/>
+                            <constraint firstItem="1rw-GH-jIp" firstAttribute="leading" secondItem="8dJ-MO-Uf3" secondAttribute="leading" constant="16" id="GMq-5X-m0w"/>
                             <constraint firstItem="q23-yH-i1B" firstAttribute="trailing" secondItem="Nvk-9F-cXD" secondAttribute="trailing" id="GcY-9v-1JM"/>
-                            <constraint firstItem="agg-cE-9mQ" firstAttribute="top" secondItem="Eyb-YH-mrA" secondAttribute="bottom" id="e3P-Jk-WOq"/>
+                            <constraint firstItem="agg-cE-9mQ" firstAttribute="top" secondItem="8dJ-MO-Uf3" secondAttribute="top" id="e3P-Jk-WOq"/>
                             <constraint firstAttribute="trailing" secondItem="agg-cE-9mQ" secondAttribute="trailing" id="iX8-TZ-rAa"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="1rw-GH-jIp" secondAttribute="trailing" id="o5R-Iq-53P"/>
+                            <constraint firstItem="8dJ-MO-Uf3" firstAttribute="trailing" secondItem="1rw-GH-jIp" secondAttribute="trailing" constant="16" id="o5R-Iq-53P"/>
                             <constraint firstItem="q23-yH-i1B" firstAttribute="top" secondItem="1rw-GH-jIp" secondAttribute="bottom" constant="16" id="sHi-hO-iAc"/>
                             <constraint firstItem="q23-yH-i1B" firstAttribute="leading" secondItem="1rw-GH-jIp" secondAttribute="leading" id="yCd-Wo-JTe"/>
                         </constraints>
+                        <viewLayoutGuide key="safeArea" id="8dJ-MO-Uf3"/>
                     </view>
                     <navigationItem key="navigationItem" title="About" id="e9j-6Q-izr"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
@@ -1166,10 +1159,6 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
         <scene sceneID="ZBg-KV-iHb">
             <objects>
                 <viewController storyboardIdentifier="UpgradeMessage" id="WnK-TF-euS" customClass="ApptentiveInteractionUpgradeMessageViewController" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="0Ue-5m-Q56"/>
-                        <viewControllerLayoutGuide type="bottom" id="NG4-sw-fgI"/>
-                    </layoutGuides>
                     <view key="view" opaque="NO" contentMode="scaleToFill" id="b8z-vy-rbq">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -1247,21 +1236,22 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="vx8-CS-yG8" firstAttribute="top" secondItem="MnL-J4-fWD" secondAttribute="bottom" id="3ny-FL-Obk"/>
-                            <constraint firstAttribute="bottom" secondItem="C1y-qz-EY6" secondAttribute="bottom" id="FYd-XW-HAf"/>
+                            <constraint firstItem="hp0-Nz-dcE" firstAttribute="bottom" secondItem="C1y-qz-EY6" secondAttribute="bottom" id="FYd-XW-HAf"/>
                             <constraint firstItem="MnL-J4-fWD" firstAttribute="top" secondItem="yxR-nt-lVu" secondAttribute="bottom" id="Fxl-10-DJP"/>
-                            <constraint firstAttribute="trailing" secondItem="MnL-J4-fWD" secondAttribute="trailing" constant="44" id="HWQ-Pe-8zk"/>
+                            <constraint firstItem="hp0-Nz-dcE" firstAttribute="trailing" secondItem="MnL-J4-fWD" secondAttribute="trailing" constant="44" id="HWQ-Pe-8zk"/>
                             <constraint firstItem="oVM-16-SXc" firstAttribute="top" secondItem="yxR-nt-lVu" secondAttribute="bottom" constant="-40" id="K1P-fS-udB"/>
-                            <constraint firstAttribute="bottom" secondItem="vx8-CS-yG8" secondAttribute="bottom" constant="33" id="Kff-Wn-7H3"/>
+                            <constraint firstItem="hp0-Nz-dcE" firstAttribute="bottom" secondItem="vx8-CS-yG8" secondAttribute="bottom" constant="33" id="Kff-Wn-7H3"/>
                             <constraint firstItem="yxR-nt-lVu" firstAttribute="top" secondItem="b8z-vy-rbq" secondAttribute="top" id="UZP-PE-5Se"/>
                             <constraint firstItem="C1y-qz-EY6" firstAttribute="leading" secondItem="b8z-vy-rbq" secondAttribute="leading" id="WjY-YU-oaC"/>
                             <constraint firstItem="yxR-nt-lVu" firstAttribute="leading" secondItem="b8z-vy-rbq" secondAttribute="leading" id="ij6-wr-LL5"/>
                             <constraint firstAttribute="trailing" secondItem="C1y-qz-EY6" secondAttribute="trailing" id="kkm-WJ-jro"/>
-                            <constraint firstItem="MnL-J4-fWD" firstAttribute="leading" secondItem="b8z-vy-rbq" secondAttribute="leading" constant="44" id="ks6-dF-FhJ"/>
+                            <constraint firstItem="MnL-J4-fWD" firstAttribute="leading" secondItem="hp0-Nz-dcE" secondAttribute="leading" constant="44" id="ks6-dF-FhJ"/>
                             <constraint firstItem="vx8-CS-yG8" firstAttribute="leading" secondItem="b8z-vy-rbq" secondAttribute="leading" id="m0P-Ho-EWM"/>
                             <constraint firstAttribute="trailing" secondItem="vx8-CS-yG8" secondAttribute="trailing" id="mo5-RZ-xdU"/>
-                            <constraint firstAttribute="centerX" secondItem="oVM-16-SXc" secondAttribute="centerX" id="qXJ-xh-8Gf"/>
+                            <constraint firstItem="hp0-Nz-dcE" firstAttribute="centerX" secondItem="oVM-16-SXc" secondAttribute="centerX" id="qXJ-xh-8Gf"/>
                             <constraint firstAttribute="trailing" secondItem="yxR-nt-lVu" secondAttribute="trailing" id="xrT-Nm-Hwh"/>
                         </constraints>
+                        <viewLayoutGuide key="safeArea" id="hp0-Nz-dcE"/>
                     </view>
                     <navigationItem key="navigationItem" id="GRj-Kr-Eah"/>
                     <connections>
@@ -1832,6 +1822,7 @@ Lines</string>
                         <constraint firstItem="QJU-jb-fK0" firstAttribute="top" secondItem="5MM-w9-NsG" secondAttribute="top" constant="19" id="j86-Xc-x2p"/>
                         <constraint firstAttribute="bottom" secondItem="hym-vX-x0x" secondAttribute="bottom" id="o7f-uU-vfB"/>
                     </constraints>
+                    <viewLayoutGuide key="safeArea" id="H9x-X5-ni1"/>
                     <connections>
                         <outlet property="borderView" destination="kjO-RC-C9t" id="gjK-IH-cQv"/>
                         <outlet property="borderViewHeight" destination="BYb-xi-ZnV" id="RTk-wS-BmV"/>
@@ -1866,6 +1857,7 @@ Lines</string>
                         <constraint firstItem="W2C-ze-Odt" firstAttribute="centerX" secondItem="bBK-pb-4Z7" secondAttribute="centerX" id="W5Y-vq-irv"/>
                         <constraint firstItem="j6Y-7N-uj9" firstAttribute="top" secondItem="bBK-pb-4Z7" secondAttribute="top" id="sOs-gn-9Hl"/>
                     </constraints>
+                    <viewLayoutGuide key="safeArea" id="SNv-iB-3hH"/>
                 </view>
             </objects>
             <point key="canvasLocation" x="303" y="2832"/>

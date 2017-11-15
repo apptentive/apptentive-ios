@@ -1,3 +1,10 @@
+2017-11-13 frankus, weeebox v4.1.1
+----------------------------------
+###Bugs Fixed
+
+- Fix rare crash in ApptentivePayloadSender when a request is cancelled
+- Fix About Apptentive and Upgrade Message layout on iPhone X
+
 2017-11-06 frankus, weeebox v4.1.0
 ----------------------------------
 ###Improvements

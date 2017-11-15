@@ -306,7 +306,12 @@ static ApptentiveLogMonitor * _sharedInstance;
 	
 	NSURLResponse *response;
 	NSError *requestError;
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
 	NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&requestError];
+#pragma clang diagnostic pop
+
 	if (requestError != nil) {
 		ApptentiveLogError(@"Unable to load json from URL: %@", requestError);
 		return nil;
@@ -372,8 +377,13 @@ static ApptentiveLogMonitor * _sharedInstance;
 
 - (void)sendReportWithAttachedFiles:(NSArray<NSString *> *)files {
 	if (![MFMailComposeViewController canSendMail]) {
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
 		UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Apptentive Log Monitor" message:@"Unable to send email" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 		[alertView show];
+#pragma clang diagnostic pop
+
 		return;
 	}
 	

@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (strong, nonatomic) IBOutlet UIView *HUDView;
 @property (nullable, strong, nonatomic) UIWindow *hostWindow;
-@property (strong, nonatomic) UIWindow *shadowWindow;
+@property (strong, nonatomic) UIWindow *previousKeyWindow;
 @property (strong, nonatomic) NSTimer *hideTimer;
 @property (strong, nonatomic) UIGestureRecognizer *tapGestureRecognizer;
 
@@ -83,22 +83,13 @@ static ApptentiveHUDViewController *currentHUD;
 	self.interval = self.interval ?: 2.0;
 	self.animationDuration = fmin(self.animationDuration ?: 0.25, self.interval / 2.0);
 
-	BOOL mustSizeWindow = ![[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){9, 0, 0}];
+	self.hostWindow = [[ApptentivePassThroughWindow alloc] init];
+	self.previousKeyWindow = [UIApplication sharedApplication].keyWindow;
 
-	if (mustSizeWindow) {
-		self.hostWindow = [[ApptentivePassThroughWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-	} else {
-		self.hostWindow = [[ApptentivePassThroughWindow alloc] init];
-	}
-
-	self.hostWindow.hidden = NO;
+	[self.hostWindow makeKeyAndVisible];
 	self.hostWindow.rootViewController = self;
 	self.hostWindow.windowLevel = UIWindowLevelAlert;
 	self.hostWindow.backgroundColor = [UIColor clearColor];
-
-	if (mustSizeWindow) {
-		self.hostWindow.frame = [UIScreen mainScreen].bounds;
-	}
 
 	self.HUDView.alpha = 0.0;
 	[UIView animateWithDuration:self.animationDuration animations:^{
@@ -110,11 +101,14 @@ static ApptentiveHUDViewController *currentHUD;
 
 - (IBAction)hide:(id)sender {
 	[self.hideTimer invalidate];
+
 	[UIView animateWithDuration:self.animationDuration animations:^{
 		self.HUDView.alpha = 0;
 	} completion:^(BOOL finished) {
 		self.hostWindow.hidden = YES;
+		[self.previousKeyWindow makeKeyWindow];
 		self.hostWindow = nil;
+		UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil);
 	}];
 }
 

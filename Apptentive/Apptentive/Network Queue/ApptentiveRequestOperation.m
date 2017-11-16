@@ -108,7 +108,7 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 
 		[self willChangeValueForKey:@"isExecuting"];
 		_task = [self.dataSource.URLSession dataTaskWithRequest:self.URLRequest completionHandler:^(NSData *_Nullable data, NSURLResponse *_Nullable response, NSError *_Nullable error) {
-			if (self.isCancelled) {
+			if (self.isCancelled || error.code == NSURLErrorCancelled) {
 				return;
 			} else if (!response) {
 				[self processNetworkError:error];
@@ -155,6 +155,7 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 		BOOL shouldFinish = self.isExecuting;
 
 		[self willChangeValueForKey:@"isCancelled"];
+		_wasCancelled = YES;
 		[self.task cancel];
 		[self didChangeValueForKey:@"isCancelled"];
 

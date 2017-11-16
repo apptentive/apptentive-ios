@@ -20,7 +20,7 @@ FOUNDATION_EXPORT double ApptentiveVersionNumber;
 FOUNDATION_EXPORT const unsigned char ApptentiveVersionString[];
 
 /** The version number of the Apptentive SDK. */
-#define kApptentiveVersionString @"4.0.7"
+#define kApptentiveVersionString @"4.0.8"
 
 /** The platform that the SDK is built for. */
 #define kApptentivePlatformString @"iOS"
@@ -514,7 +514,7 @@ typedef NS_ENUM(NSUInteger, ApptentiveLogLevel) {
 
  */
 
-- (BOOL)didReceveUserNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void(^)(void))completionHandler;
+- (BOOL)didReceveUserNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void(^)(void))completionHandler NS_AVAILABLE_IOS(10_0);
 
 ///-------------------------------------
 /// @name Attach Text, Images, and Files

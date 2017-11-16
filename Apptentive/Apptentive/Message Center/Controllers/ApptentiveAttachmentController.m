@@ -30,7 +30,7 @@ NSString *const ATInteractionMessageCenterEventLabelAttachmentDelete = @"attachm
 
 @interface ApptentiveAttachmentController ()
 
-@property (nullable, strong, nonatomic) UIPopoverController *imagePickerPopoverController;
+@property (nullable, weak, nonatomic) UIPopoverPresentationController *imagePickerPopoverController;
 @property (strong, nonatomic) NSMutableArray *mutableAttachments;
 @property (assign, nonatomic) CGSize collectionViewFooterSize;
 @property (strong, nonatomic) NSNumberFormatter *numberFormatter;
@@ -260,7 +260,7 @@ NSString *const ATInteractionMessageCenterEventLabelAttachmentDelete = @"attachm
 
 - (void)dismissImagePicker:(UIImagePickerController *)imagePicker {
 	if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
-		[self.imagePickerPopoverController dismissPopoverAnimated:YES];
+		[self.imagePickerPopoverController.presentedViewController dismissViewControllerAnimated:YES completion:nil];
 		self.imagePickerPopoverController = nil;
 	} else {
 		[self.viewController.navigationController dismissViewControllerAnimated:YES completion:nil];
@@ -274,18 +274,15 @@ NSString *const ATInteractionMessageCenterEventLabelAttachmentDelete = @"attachm
 	imagePicker.sourceType = sourceType;
 	imagePicker.allowsEditing = NO;
 
-	if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
-		self.imagePickerPopoverController = [[UIPopoverController alloc] initWithContentViewController:imagePicker];
-		self.imagePickerPopoverController.delegate = self;
+	if (UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+		imagePicker.modalPresentationStyle = UIModalPresentationPopover;
 
-		CGRect fromRect = (sender == self.attachButton) ? self.attachButton.frame : sender.superview.frame;
-		UIView *inView = (sender == self.attachButton) ? self.attachButton.superview : self.collectionView;
-		[self.imagePickerPopoverController presentPopoverFromRect:fromRect inView:inView permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
-	} else {
-		imagePicker.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-
-		[self.viewController.navigationController presentViewController:imagePicker animated:YES completion:nil];
+		self.imagePickerPopoverController = imagePicker.popoverPresentationController;
+		self.imagePickerPopoverController.sourceRect = (sender == self.attachButton) ? self.attachButton.frame : sender.superview.frame;
+		self.imagePickerPopoverController.sourceView = (sender == self.attachButton) ? self.attachButton.superview : self.collectionView;
 	}
+
+	[self.viewController.navigationController presentViewController:imagePicker animated:YES completion:nil];
 }
 
 @end

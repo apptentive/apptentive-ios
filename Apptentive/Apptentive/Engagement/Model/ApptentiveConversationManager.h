@@ -49,7 +49,7 @@ extern NSString *const ApptentiveConversationStateDidChangeNotificationKeyConver
 
 - (BOOL)saveMetadata;
 
-- (void)resume;
+- (void)completeHousekeepingTasks;
 
 - (void)pause;
 

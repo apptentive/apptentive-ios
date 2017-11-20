@@ -41,440 +41,415 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 
 @implementation ApptentiveMessageManager
 
-- (instancetype)initWithStoragePath:(NSString *)storagePath client:(ApptentiveClient *)client pollingInterval:(NSTimeInterval)pollingInterval conversation:(ApptentiveConversation *)conversation operationQueue:(NSOperationQueue *)operationQueue
-{
-    self = [super init];
+- (instancetype)initWithStoragePath:(NSString *)storagePath client:(ApptentiveClient *)client pollingInterval:(NSTimeInterval)pollingInterval conversation:(ApptentiveConversation *)conversation operationQueue:(NSOperationQueue *)operationQueue {
+	self = [super init];
 
-    if (self) {
-        ApptentiveAssertNotNil(storagePath, @"Storage path is nil");
-        ApptentiveAssertNotNil(conversation, @"Conversation is nil");
+	if (self) {
+		ApptentiveAssertNotNil(storagePath, @"Storage path is nil");
+		ApptentiveAssertNotNil(conversation, @"Conversation is nil");
 
-        // TODO: return nil if any of the params are nil
+		// TODO: return nil if any of the params are nil
 
-        _conversation = conversation;
-        _storagePath = storagePath;
-        _client = client;
-        _operationQueue = operationQueue;
+		_conversation = conversation;
+		_storagePath = storagePath;
+		_client = client;
+		_operationQueue = operationQueue;
 
-        _messageIdentifierIndex = [NSMutableDictionary dictionary];
-        _messageStore = [NSKeyedUnarchiver unarchiveObjectWithFile:self.messageStorePath] ?: [[ApptentiveMessageStore alloc] init];
+		_messageIdentifierIndex = [NSMutableDictionary dictionary];
+		_messageStore = [NSKeyedUnarchiver unarchiveObjectWithFile:self.messageStorePath] ?: [[ApptentiveMessageStore alloc] init];
 
-        for (ApptentiveMessage *message in _messageStore.messages) {
-            for (ApptentiveAttachment *attachment in message.attachments) {
-                attachment.attachmentDirectoryPath = self.attachmentDirectoryPath;
-            }
-        }
+		for (ApptentiveMessage *message in _messageStore.messages) {
+			for (ApptentiveAttachment *attachment in message.attachments) {
+				attachment.attachmentDirectoryPath = self.attachmentDirectoryPath;
+			}
+		}
 
-        [self updateUnreadCount];
+		[self updateUnreadCount];
 
-        NSError *error;
-        if (![[NSFileManager defaultManager] createDirectoryAtPath:self.attachmentDirectoryPath withIntermediateDirectories:YES attributes:nil error:&error]) {
-            ApptentiveAssertTrue(NO, @"Unable to create attachments directory “%@” (%@)", self.attachmentDirectoryPath, error);
-            return nil;
-        }
+		NSError *error;
+		if (![[NSFileManager defaultManager] createDirectoryAtPath:self.attachmentDirectoryPath withIntermediateDirectories:YES attributes:nil error:&error]) {
+			ApptentiveAssertTrue(NO, @"Unable to create attachments directory “%@” (%@)", self.attachmentDirectoryPath, error);
+			return nil;
+		}
 
-        for (ApptentiveMessage *message in _messageStore.messages) {
-            ApptentiveAssertNotNil(message.localIdentifier, @"Missing localIdentifier on message in archive");
-            if (message.localIdentifier == nil) {
-                continue;
-            }
+		for (ApptentiveMessage *message in _messageStore.messages) {
+			ApptentiveAssertNotNil(message.localIdentifier, @"Missing localIdentifier on message in archive");
+			if (message.localIdentifier == nil) {
+				continue;
+			}
 
-            _messageIdentifierIndex[message.localIdentifier] = message;
-        }
+			_messageIdentifierIndex[message.localIdentifier] = message;
+		}
 
-        // Use setter to initialize timer
-        self.pollingInterval = pollingInterval;
-    }
+		// Use setter to initialize timer
+		self.pollingInterval = pollingInterval;
+	}
 
-    return self;
+	return self;
 }
 
-- (void)stop
-{
-    [self stopPolling];
-    [self deleteCachedAttachments];
+- (void)stop {
+	[self stopPolling];
+	[self deleteCachedAttachments];
 }
 
-- (void)checkForMessages
-{
-    if (self.messageOperation != nil || self.conversationIdentifier == nil) {
-        return;
-    }
+- (void)checkForMessages {
+	if (self.messageOperation != nil || self.conversationIdentifier == nil) {
+		return;
+	}
 
-    ApptentiveRequestOperationCallback *callback = [ApptentiveRequestOperationCallback new];
-    callback.operationFinishCallback = ^(ApptentiveRequestOperation *operation) {
-        self.messageOperation = nil;
-        [self processMessageOperationResponse:operation];
-    };
-    callback.operationFailCallback = ^(ApptentiveRequestOperation *operation, NSError *error) {
-        self.messageOperation = nil;
-    };
+	ApptentiveRequestOperationCallback *callback = [ApptentiveRequestOperationCallback new];
+	callback.operationFinishCallback = ^(ApptentiveRequestOperation *operation) {
+	  self.messageOperation = nil;
+	  [self processMessageOperationResponse:operation];
+	};
+	callback.operationFailCallback = ^(ApptentiveRequestOperation *operation, NSError *error) {
+	  self.messageOperation = nil;
+	};
 
-    ApptentiveMessageGetRequest *request = [[ApptentiveMessageGetRequest alloc] initWithConversationIdentifier:self.conversationIdentifier];
-    request.lastMessageIdentifier = self.messageStore.lastMessageIdentifier;
+	ApptentiveMessageGetRequest *request = [[ApptentiveMessageGetRequest alloc] initWithConversationIdentifier:self.conversationIdentifier];
+	request.lastMessageIdentifier = self.messageStore.lastMessageIdentifier;
 
-    self.messageOperation = [self.client requestOperationWithRequest:request token:self.conversation.token delegate:callback];
+	self.messageOperation = [self.client requestOperationWithRequest:request token:self.conversation.token delegate:callback];
 
-    [self.client.networkQueue addOperation:self.messageOperation];
+	[self.client.networkQueue addOperation:self.messageOperation];
 }
 
-- (void)checkForMessagesInBackground:(void (^)(UIBackgroundFetchResult))completionHandler
-{
-    self.backgroundFetchBlock = completionHandler;
+- (void)checkForMessagesInBackground:(void (^)(UIBackgroundFetchResult))completionHandler {
+	self.backgroundFetchBlock = completionHandler;
 
-    [self checkForMessages];
+	[self checkForMessages];
 }
 
-- (NSInteger)numberOfMessages
-{
-    return self.messages.count;
+- (NSInteger)numberOfMessages {
+	return self.messages.count;
 }
 
-- (NSArray<ApptentiveMessage *> *)messages
-{
-    return self.messageStore.messages;
+- (NSArray<ApptentiveMessage *> *)messages {
+	return self.messageStore.messages;
 }
 
-- (NSString *)messageStorePath
-{
-    return [self.storagePath stringByAppendingPathComponent:MessageStoreFileName];
+- (NSString *)messageStorePath {
+	return [self.storagePath stringByAppendingPathComponent:MessageStoreFileName];
 }
 
-- (BOOL)saveMessageStore
-{
-    return [NSKeyedArchiver archiveRootObject:self.messageStore toFile:self.messageStorePath];
+- (BOOL)saveMessageStore {
+	return [NSKeyedArchiver archiveRootObject:self.messageStore toFile:self.messageStorePath];
 }
 
-- (NSString *)attachmentDirectoryPath
-{
-    return [[self class] attachmentDirectoryPathForConversationDirectory:self.storagePath];
+- (NSString *)attachmentDirectoryPath {
+	return [[self class] attachmentDirectoryPathForConversationDirectory:self.storagePath];
 }
 
-+ (NSString *)attachmentDirectoryPathForConversationDirectory:(NSString *)conversationDirectory
-{
-    NSString *result = [conversationDirectory stringByAppendingPathComponent:@"Attachments"];
++ (NSString *)attachmentDirectoryPathForConversationDirectory:(NSString *)conversationDirectory {
+	NSString *result = [conversationDirectory stringByAppendingPathComponent:@"Attachments"];
 
-    if (![[NSFileManager defaultManager] fileExistsAtPath:result]) {
-        NSError *error;
+	if (![[NSFileManager defaultManager] fileExistsAtPath:result]) {
+		NSError *error;
 
-        if (![[NSFileManager defaultManager] createDirectoryAtPath:result withIntermediateDirectories:YES attributes:nil error:&error]) {
-            ApptentiveLogError(@"Unable to create attachments directory (%@): %@", result, error);
-            return nil;
-        }
-    }
+		if (![[NSFileManager defaultManager] createDirectoryAtPath:result withIntermediateDirectories:YES attributes:nil error:&error]) {
+			ApptentiveLogError(@"Unable to create attachments directory (%@): %@", result, error);
+			return nil;
+		}
+	}
 
-    return result;
+	return result;
 }
 
 #pragma mark Request Operation Delegate
 
-- (void)processMessageOperationResponse:(ApptentiveRequestOperation *)operation
-{
-    NSArray *messageListJSON = [operation.responseObject valueForKey:@"messages"];
+- (void)processMessageOperationResponse:(ApptentiveRequestOperation *)operation {
+	NSArray *messageListJSON = [operation.responseObject valueForKey:@"messages"];
 
-    if (messageListJSON == nil) {
-        ApptentiveLogError(@"Unexpected response from /messages endpoint");
-        return;
-    }
+	if (messageListJSON == nil) {
+		ApptentiveLogError(@"Unexpected response from /messages endpoint");
+		return;
+	}
 
-    NSMutableArray *mutableMessages = [NSMutableArray arrayWithCapacity:messageListJSON.count];
-    NSMutableDictionary *mutableMessageIdentifierIndex = [NSMutableDictionary dictionaryWithCapacity:messageListJSON.count];
-    NSMutableArray *addedMessages = [NSMutableArray array];
-    NSMutableArray *updatedMessages = [NSMutableArray array];
-    NSString *lastDownloadedMessageIdentifier;
+	NSMutableArray *mutableMessages = [NSMutableArray arrayWithCapacity:messageListJSON.count];
+	NSMutableDictionary *mutableMessageIdentifierIndex = [NSMutableDictionary dictionaryWithCapacity:messageListJSON.count];
+	NSMutableArray *addedMessages = [NSMutableArray array];
+	NSMutableArray *updatedMessages = [NSMutableArray array];
+	NSString *lastDownloadedMessageIdentifier;
 
-    // Correlate messages from server with local messages
-    for (NSDictionary *messageJSON in messageListJSON) {
-        ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithJSON:messageJSON];
+	// Correlate messages from server with local messages
+	for (NSDictionary *messageJSON in messageListJSON) {
+		ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithJSON:messageJSON];
 
-        if (message) {
-            ApptentiveMessage *previousVersion = [self.messageIdentifierIndex[message.localIdentifier] copy];
+		if (message) {
+			ApptentiveMessage *previousVersion = [self.messageIdentifierIndex[message.localIdentifier] copy];
 
-            if (previousVersion != nil) {
-                ApptentiveMessageState previousState = previousVersion.state;
+			if (previousVersion != nil) {
+				ApptentiveMessageState previousState = previousVersion.state;
 
-                // Update with server identifier and date
-                message = [previousVersion mergedWith:message];
+				// Update with server identifier and date
+				message = [previousVersion mergedWith:message];
 
-                if (previousState != message.state) {
-                    ApptentiveArrayAddObject(updatedMessages, message);
-                }
-            } else {
-                ApptentiveArrayAddObject(addedMessages, message);
-            }
+				if (previousState != message.state) {
+					ApptentiveArrayAddObject(updatedMessages, message);
+				}
+			} else {
+				ApptentiveArrayAddObject(addedMessages, message);
+			}
 
-            ApptentiveArrayAddObject(mutableMessages, message);
-            ApptentiveDictionarySetKeyValue(mutableMessageIdentifierIndex, message.localIdentifier, message);
+			ApptentiveArrayAddObject(mutableMessages, message);
+			ApptentiveDictionarySetKeyValue(mutableMessageIdentifierIndex, message.localIdentifier, message);
 
-            lastDownloadedMessageIdentifier = message.identifier;
-        } else {
-            ApptentiveLogError(@"Unable to create message from JSON: %@", messageJSON);
-        }
-    }
+			lastDownloadedMessageIdentifier = message.identifier;
+		} else {
+			ApptentiveLogError(@"Unable to create message from JSON: %@", messageJSON);
+		}
+	}
 
-    ApptentiveAssertOperationQueue(Apptentive.shared.backend.operationQueue);
+	ApptentiveAssertOperationQueue(Apptentive.shared.backend.operationQueue);
 
-    BOOL needsSave = NO;
+	BOOL needsSave = NO;
 
-    if (self.messageStore.lastMessageIdentifier != lastDownloadedMessageIdentifier) {
-        self.messageStore.lastMessageIdentifier = lastDownloadedMessageIdentifier;
-        needsSave = YES;
-    }
+	if (self.messageStore.lastMessageIdentifier != lastDownloadedMessageIdentifier) {
+		self.messageStore.lastMessageIdentifier = lastDownloadedMessageIdentifier;
+		needsSave = YES;
+	}
 
-    if (addedMessages.count + updatedMessages.count > 0) {
-        // Add local messages that aren't yet on server's list
-        for (ApptentiveMessage *message in self.messages) {
-            ApptentiveMessage *newVersion = mutableMessageIdentifierIndex[message.localIdentifier];
+	if (addedMessages.count + updatedMessages.count > 0) {
+		// Add local messages that aren't yet on server's list
+		for (ApptentiveMessage *message in self.messages) {
+			ApptentiveMessage *newVersion = mutableMessageIdentifierIndex[message.localIdentifier];
 
-            if (newVersion == nil) {
-                ApptentiveArrayAddObject(mutableMessages, message);
-                ApptentiveDictionarySetKeyValue(mutableMessageIdentifierIndex, message.localIdentifier, message);
-            }
-        }
+			if (newVersion == nil) {
+				ApptentiveArrayAddObject(mutableMessages, message);
+				ApptentiveDictionarySetKeyValue(mutableMessageIdentifierIndex, message.localIdentifier, message);
+			}
+		}
 
-        // Sort by sent date
-        [mutableMessages sortUsingDescriptors:@[ [NSSortDescriptor sortDescriptorWithKey:@"sentDate" ascending:YES] ]];
+		// Sort by sent date
+		[mutableMessages sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"sentDate" ascending:YES]]];
 
-        // But make sure any context message always sorts to end of list
-        if (self.messages.lastObject.automated) {
-            NSString *lastContextMessageIdentifier = self.messages.lastObject.localIdentifier;
-            ApptentiveAssertNotNil(lastContextMessageIdentifier, @"Last context message identifier is nil");
-            ApptentiveMessage *lastContextMessage = lastContextMessageIdentifier ? mutableMessageIdentifierIndex[lastContextMessageIdentifier] : nil;
-            ApptentiveAssertNotNil(lastContextMessage, @"Can't find last context message with identifier: %@", lastContextMessageIdentifier);
-            if (lastContextMessage != nil) {
-                [mutableMessages removeObject:lastContextMessage];
-                [mutableMessages addObject:lastContextMessage];
-            }
-        }
+		// But make sure any context message always sorts to end of list
+		if (self.messages.lastObject.automated) {
+			NSString *lastContextMessageIdentifier = self.messages.lastObject.localIdentifier;
+			ApptentiveAssertNotNil(lastContextMessageIdentifier, @"Last context message identifier is nil");
+			ApptentiveMessage *lastContextMessage = lastContextMessageIdentifier ? mutableMessageIdentifierIndex[lastContextMessageIdentifier] : nil;
+			ApptentiveAssertNotNil(lastContextMessage, @"Can't find last context message with identifier: %@", lastContextMessageIdentifier);
+			if (lastContextMessage != nil) {
+				[mutableMessages removeObject:lastContextMessage];
+				[mutableMessages addObject:lastContextMessage];
+			}
+		}
 
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            [self.delegate messageManagerWillBeginUpdates:self];
+		dispatch_sync(dispatch_get_main_queue(), ^{
+		  [self.delegate messageManagerWillBeginUpdates:self];
 
-            [self.messageStore.messages removeAllObjects];
-            [self.messageStore.messages addObjectsFromArray:mutableMessages];
-            _messageIdentifierIndex = mutableMessageIdentifierIndex;
+		  [self.messageStore.messages removeAllObjects];
+		  [self.messageStore.messages addObjectsFromArray:mutableMessages];
+		  _messageIdentifierIndex = mutableMessageIdentifierIndex;
 
-            for (ApptentiveMessage *newMessage in addedMessages) {
-                [self.delegate messageManager:self didInsertMessage:newMessage atIndex:[self.messages indexOfObject:newMessage]];
-            }
+		  for (ApptentiveMessage *newMessage in addedMessages) {
+			  [self.delegate messageManager:self didInsertMessage:newMessage atIndex:[self.messages indexOfObject:newMessage]];
+		  }
 
-            for (ApptentiveMessage *updatedMessage in updatedMessages) {
-                [self.delegate messageManager:self didUpdateMessage:updatedMessage atIndex:[self.messages indexOfObject:updatedMessage]];
-            }
+		  for (ApptentiveMessage *updatedMessage in updatedMessages) {
+			  [self.delegate messageManager:self didUpdateMessage:updatedMessage atIndex:[self.messages indexOfObject:updatedMessage]];
+		  }
 
-            [self.delegate messageManagerDidEndUpdates:self];
-        });
+		  [self.delegate messageManagerDidEndUpdates:self];
+		});
 
-        needsSave = YES;
+		needsSave = YES;
 
-        [self messageFetchCompleted:YES];
-        [self updateUnreadCount];
-    } else {
-        [self messageFetchCompleted:NO];
-    }
+		[self messageFetchCompleted:YES];
+		[self updateUnreadCount];
+	} else {
+		[self messageFetchCompleted:NO];
+	}
 
-    if (needsSave) {
-        [self saveMessageStore];
-    }
+	if (needsSave) {
+		[self saveMessageStore];
+	}
 }
 
 #pragma mark - Polling
 
-- (void)stopPolling
-{
-    [self.messageFetchTimer invalidate];
-    self.messageFetchTimer = nil;
+- (void)stopPolling {
+	[self.messageFetchTimer invalidate];
+	self.messageFetchTimer = nil;
 }
 
-- (void)setPollingInterval:(NSTimeInterval)pollingInterval
-{
-    if (_pollingInterval != pollingInterval) {
-        [self stopPolling];
+- (void)setPollingInterval:(NSTimeInterval)pollingInterval {
+	if (_pollingInterval != pollingInterval) {
+		[self stopPolling];
 
-        _pollingInterval = pollingInterval;
+		_pollingInterval = pollingInterval;
 
-        self.messageFetchTimer = [NSTimer timerWithTimeInterval:pollingInterval target:self selector:@selector(checkForMessages) userInfo:nil repeats:YES];
-        [[NSRunLoop mainRunLoop] addTimer:self.messageFetchTimer forMode:NSDefaultRunLoopMode];
-    }
+		self.messageFetchTimer = [NSTimer timerWithTimeInterval:pollingInterval target:self selector:@selector(checkForMessages) userInfo:nil repeats:YES];
+		[[NSRunLoop mainRunLoop] addTimer:self.messageFetchTimer forMode:NSDefaultRunLoopMode];
+	}
 }
 
 #pragma mark - Sending Messages
 
-- (void)sendMessage:(ApptentiveMessage *)message
-{
-    [self.operationQueue addOperationWithBlock:^{
-        message.sender = [[ApptentiveMessageSender alloc] initWithName:nil identifier:self.localUserIdentifier profilePhotoURL:nil];
+- (void)sendMessage:(ApptentiveMessage *)message {
+	[self.operationQueue addOperationWithBlock:^{
+	  message.sender = [[ApptentiveMessageSender alloc] initWithName:nil identifier:self.localUserIdentifier profilePhotoURL:nil];
 
-        [self enqueueMessageForSending:message];
+	  [self enqueueMessageForSending:message];
 
-        [self appendMessage:message];
-    }];
+	  [self appendMessage:message];
+	}];
 }
 
-- (void)enqueueMessageForSendingOnBackgroundQueue:(ApptentiveMessage *)message
-{
-    [self.operationQueue addOperationWithBlock:^{
-        [self enqueueMessageForSending:message];
-    }];
+- (void)enqueueMessageForSendingOnBackgroundQueue:(ApptentiveMessage *)message {
+	[self.operationQueue addOperationWithBlock:^{
+	  [self enqueueMessageForSending:message];
+	}];
 }
 
-- (void)enqueueMessageForSending:(ApptentiveMessage *)message
-{
-    ApptentiveAssertOperationQueue(self.operationQueue);
+- (void)enqueueMessageForSending:(ApptentiveMessage *)message {
+	ApptentiveAssertOperationQueue(self.operationQueue);
 
-    NSString *previousLocalIdentifier = message.localIdentifier;
-    ApptentiveConversation *conversation = Apptentive.shared.backend.conversationManager.activeConversation;
+	NSString *previousLocalIdentifier = message.localIdentifier;
+	ApptentiveConversation *conversation = Apptentive.shared.backend.conversationManager.activeConversation;
 
-    ApptentiveMessagePayload *payload = [[ApptentiveMessagePayload alloc] initWithMessage:message];
+	ApptentiveMessagePayload *payload = [[ApptentiveMessagePayload alloc] initWithMessage:message];
 
-    [ApptentiveSerialRequest enqueuePayload:payload forConversation:conversation usingAuthToken:conversation.token inContext:Apptentive.shared.backend.managedObjectContext];
+	[ApptentiveSerialRequest enqueuePayload:payload forConversation:conversation usingAuthToken:conversation.token inContext:Apptentive.shared.backend.managedObjectContext];
 
-    [Apptentive.shared.backend processQueuedRecords];
+	[Apptentive.shared.backend processQueuedRecords];
 
-    // Update the message ID index for messages that were previously appended.
-    // (i.e. context messages).
-    if (previousLocalIdentifier) {
-        [self.messageIdentifierIndex removeObjectForKey:previousLocalIdentifier];
-        ApptentiveDictionarySetKeyValue(self.messageIdentifierIndex, message.localIdentifier, message);
-    }
+	// Update the message ID index for messages that were previously appended.
+	// (i.e. context messages).
+	if (previousLocalIdentifier) {
+		[self.messageIdentifierIndex removeObjectForKey:previousLocalIdentifier];
+		ApptentiveDictionarySetKeyValue(self.messageIdentifierIndex, message.localIdentifier, message);
+	}
 
-    message.state = ApptentiveMessageStateWaiting;
+	message.state = ApptentiveMessageStateWaiting;
 }
 
 #pragma mark - Client message delelgate
 
-- (void)payloadSender:(ApptentivePayloadSender *)sender setState:(ApptentiveMessageState)state forMessageWithLocalIdentifier:(NSString *)localIdentifier
-{
-    ApptentiveAssertNotNil(localIdentifier, @"Missing localIdentifier when updating message");
-    if (localIdentifier == nil) {
-        return;
-    }
+- (void)payloadSender:(ApptentivePayloadSender *)sender setState:(ApptentiveMessageState)state forMessageWithLocalIdentifier:(NSString *)localIdentifier {
+	ApptentiveAssertNotNil(localIdentifier, @"Missing localIdentifier when updating message");
+	if (localIdentifier == nil) {
+		return;
+	}
 
-    ApptentiveMessage *message = self.messageIdentifierIndex[localIdentifier];
+	ApptentiveMessage *message = self.messageIdentifierIndex[localIdentifier];
 
-    if (message) {
-        message.state = state;
-        NSInteger index = [self.messages indexOfObject:message];
+	if (message) {
+		message.state = state;
+		NSInteger index = [self.messages indexOfObject:message];
 
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.delegate messageManagerWillBeginUpdates:self];
-            [self.delegate messageManager:self didUpdateMessage:message atIndex:index];
-            [self.delegate messageManagerDidEndUpdates:self];
-        });
-    }
+		dispatch_async(dispatch_get_main_queue(), ^{
+		  [self.delegate messageManagerWillBeginUpdates:self];
+		  [self.delegate messageManager:self didUpdateMessage:message atIndex:index];
+		  [self.delegate messageManagerDidEndUpdates:self];
+		});
+	}
 }
 
-- (void)payloadSenderProgressDidChange:(ApptentivePayloadSender *)sender toValue:(double)value
-{
-    [self.delegate messageManager:self messageSendProgressDidUpdate:value];
+- (void)payloadSenderProgressDidChange:(ApptentivePayloadSender *)sender toValue:(double)value {
+	[self.delegate messageManager:self messageSendProgressDidUpdate:value];
 }
 
-- (void)appendMessage:(ApptentiveMessage *)message
-{
-    ApptentiveAssertNotNil(message.localIdentifier, @"Missing localIdentifier when appending message");
-    if (message.localIdentifier == nil) {
-        return;
-    }
+- (void)appendMessage:(ApptentiveMessage *)message {
+	ApptentiveAssertNotNil(message.localIdentifier, @"Missing localIdentifier when appending message");
+	if (message.localIdentifier == nil) {
+		return;
+	}
 
-    NSInteger index = self.messages.count;
-    ApptentiveArrayAddObject(self.messageStore.messages, message);
-    ApptentiveDictionarySetKeyValue(self.messageIdentifierIndex, message.localIdentifier, message);
+	NSInteger index = self.messages.count;
+	ApptentiveArrayAddObject(self.messageStore.messages, message);
+	ApptentiveDictionarySetKeyValue(self.messageIdentifierIndex, message.localIdentifier, message);
 
-    if (self.delegate) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.delegate messageManagerWillBeginUpdates:self];
-            [self.delegate messageManager:self didInsertMessage:message atIndex:index];
-            [self.delegate messageManagerDidEndUpdates:self];
-        });
-    }
+	if (self.delegate) {
+		dispatch_async(dispatch_get_main_queue(), ^{
+		  [self.delegate messageManagerWillBeginUpdates:self];
+		  [self.delegate messageManager:self didInsertMessage:message atIndex:index];
+		  [self.delegate messageManagerDidEndUpdates:self];
+		});
+	}
 
-    [self saveMessageStore];
+	[self saveMessageStore];
 }
 
-- (void)removeMessage:(ApptentiveMessage *)message
-{
-    NSInteger index = [self.messageStore.messages indexOfObject:message];
+- (void)removeMessage:(ApptentiveMessage *)message {
+	NSInteger index = [self.messageStore.messages indexOfObject:message];
 
-    ApptentiveAssertTrue(index != NSNotFound, @"Unable to find message to remove");
-    if (index == NSNotFound) {
-        return;
-    }
+	ApptentiveAssertTrue(index != NSNotFound, @"Unable to find message to remove");
+	if (index == NSNotFound) {
+		return;
+	}
 
-    [self.messageStore.messages removeObjectAtIndex:index];
+	[self.messageStore.messages removeObjectAtIndex:index];
 
-    ApptentiveAssertNotNil(message.localIdentifier, @"Message to remove missing localIdentifier");
-    if (message.localIdentifier == nil) {
-        return;
-    }
+	ApptentiveAssertNotNil(message.localIdentifier, @"Message to remove missing localIdentifier");
+	if (message.localIdentifier == nil) {
+		return;
+	}
 
-    [self.messageIdentifierIndex removeObjectForKey:message.localIdentifier];
+	[self.messageIdentifierIndex removeObjectForKey:message.localIdentifier];
 
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.delegate messageManagerWillBeginUpdates:self];
-        [self.delegate messageManager:self didDeleteMessage:message atIndex:index];
-        [self.delegate messageManagerDidEndUpdates:self];
-    });
+	dispatch_async(dispatch_get_main_queue(), ^{
+	  [self.delegate messageManagerWillBeginUpdates:self];
+	  [self.delegate messageManager:self didDeleteMessage:message atIndex:index];
+	  [self.delegate messageManagerDidEndUpdates:self];
+	});
 
-    [self saveMessageStore];
+	[self saveMessageStore];
 }
 
-- (void)updateUnreadCount
-{
-    NSInteger unreadCount = 0;
-    for (ApptentiveMessage *message in self.messages) {
-        if (message.state == ApptentiveMessageStateUnread) {
-            unreadCount++;
-        }
-    }
+- (void)updateUnreadCount {
+	NSInteger unreadCount = 0;
+	for (ApptentiveMessage *message in self.messages) {
+		if (message.state == ApptentiveMessageStateUnread) {
+			unreadCount++;
+		}
+	}
 
-    if (_unreadCount != unreadCount) {
-        _unreadCount = unreadCount;
+	if (_unreadCount != unreadCount) {
+		_unreadCount = unreadCount;
 
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveMessageCenterUnreadCountChangedNotification object:self userInfo:@{ @"count" : @(unreadCount) }];
-        });
-    }
+		dispatch_async(dispatch_get_main_queue(), ^{
+		  [[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveMessageCenterUnreadCountChangedNotification object:self userInfo:@{ @"count": @(unreadCount) }];
+		});
+	}
 }
 
 #pragma mark - Attachments
 
-- (void)deleteCachedAttachments
-{
-    for (ApptentiveMessage *message in self.messageStore.messages) {
-        for (ApptentiveAttachment *attachment in message.attachments) {
-            [attachment deleteLocalContent];
-        }
-    }
+- (void)deleteCachedAttachments {
+	for (ApptentiveMessage *message in self.messageStore.messages) {
+		for (ApptentiveAttachment *attachment in message.attachments) {
+			[attachment deleteLocalContent];
+		}
+	}
 
-    [self saveMessageStore];
+	[self saveMessageStore];
 }
 
 #pragma mark - Private
 
-- (void)messageFetchCompleted:(BOOL)success
-{
-    UIBackgroundFetchResult fetchResult = success ? UIBackgroundFetchResultNewData : UIBackgroundFetchResultFailed;
+- (void)messageFetchCompleted:(BOOL)success {
+	UIBackgroundFetchResult fetchResult = success ? UIBackgroundFetchResultNewData : UIBackgroundFetchResultFailed;
 
-    if (self.backgroundFetchBlock) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            self.backgroundFetchBlock(fetchResult);
+	if (self.backgroundFetchBlock) {
+		dispatch_async(dispatch_get_main_queue(), ^{
+		  self.backgroundFetchBlock(fetchResult);
 
-            self.backgroundFetchBlock = nil;
-        });
-    }
+		  self.backgroundFetchBlock = nil;
+		});
+	}
 }
 
 #pragma mark -
 #pragma mark Properties
 
-- (NSString *)conversationIdentifier
-{
-    return self.conversation.identifier;
+- (NSString *)conversationIdentifier {
+	return self.conversation.identifier;
 }
 
-- (NSString *)localUserIdentifier
-{
-    return self.conversation.person.identifier;
+- (NSString *)localUserIdentifier {
+	return self.conversation.person.identifier;
 }
 
 @end

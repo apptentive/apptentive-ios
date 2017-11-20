@@ -13,11 +13,11 @@
 NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSInteger, ATPendingMessageState) {
-    ATPendingMessageStateNone = -1,
-    ATPendingMessageStateComposing = 0,
-    ATPendingMessageStateSending,
-    ATPendingMessageStateConfirmed,
-    ATPendingMessageStateError
+	ATPendingMessageStateNone = -1,
+	ATPendingMessageStateComposing = 0,
+	ATPendingMessageStateSending,
+	ATPendingMessageStateConfirmed,
+	ATPendingMessageStateError
 };
 
 @class ATMessageDisplayType, ApptentiveLegacyMessageSender, ApptentiveConversation;

@@ -41,24 +41,23 @@ static NSString *const ATCurrentConversationPreferenceKey = @"ATCurrentConversat
 static NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKey";
 static NSString *const ATMessageCenterDidSkipProfileKey = @"ATMessageCenterDidSkipProfileKey";
 
-NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState state)
-{
-    switch (state) {
-        case ApptentiveConversationStateUndefined:
-            return @"undefined";
-        case ApptentiveConversationStateAnonymousPending:
-            return @"anonymous pending";
-        case ApptentiveConversationStateLegacyPending:
-            return @"legacy pending";
-        case ApptentiveConversationStateAnonymous:
-            return @"anonymous";
-        case ApptentiveConversationStateLoggedIn:
-            return @"logged-in";
-        case ApptentiveConversationStateLoggedOut:
-            return @"logged-out";
-    }
+NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState state) {
+	switch (state) {
+		case ApptentiveConversationStateUndefined:
+			return @"undefined";
+		case ApptentiveConversationStateAnonymousPending:
+			return @"anonymous pending";
+		case ApptentiveConversationStateLegacyPending:
+			return @"legacy pending";
+		case ApptentiveConversationStateAnonymous:
+			return @"anonymous";
+		case ApptentiveConversationStateLoggedIn:
+			return @"logged-in";
+		case ApptentiveConversationStateLoggedOut:
+			return @"logged-out";
+	}
 
-    return @"unknown";
+	return @"unknown";
 }
 
 
@@ -87,370 +86,344 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 
 @implementation ApptentiveConversation
 
-- (instancetype)initWithState:(ApptentiveConversationState)state
-{
-    self = [super init];
-    if (self) {
-        _localIdentifier = [[NSUUID UUID] UUIDString];
-        _state = state;
-        _appRelease = [[ApptentiveAppRelease alloc] initWithCurrentAppRelease];
-        _SDK = [[ApptentiveSDK alloc] initWithCurrentSDK];
-        _person = [[ApptentivePerson alloc] init];
-        _device = [[ApptentiveDevice alloc] initWithCurrentDevice];
-        _engagement = [[ApptentiveEngagement alloc] init];
-        _mutableUserInfo = [[NSMutableDictionary alloc] init];
+- (instancetype)initWithState:(ApptentiveConversationState)state {
+	self = [super init];
+	if (self) {
+		_localIdentifier = [[NSUUID UUID] UUIDString];
+		_state = state;
+		_appRelease = [[ApptentiveAppRelease alloc] initWithCurrentAppRelease];
+		_SDK = [[ApptentiveSDK alloc] initWithCurrentSDK];
+		_person = [[ApptentivePerson alloc] init];
+		_device = [[ApptentiveDevice alloc] initWithCurrentDevice];
+		_engagement = [[ApptentiveEngagement alloc] init];
+		_mutableUserInfo = [[NSMutableDictionary alloc] init];
 
-        _directoryName = [NSUUID UUID].UUIDString;
+		_directoryName = [NSUUID UUID].UUIDString;
 
-        _lastSentDevice = @{};
-        _lastSentPerson = @{};
-    }
-    return self;
+		_lastSentDevice = @{};
+		_lastSentPerson = @{};
+	}
+	return self;
 }
 
-- (nullable instancetype)initWithCoder:(NSCoder *)coder
-{
-    self = [super initWithCoder:coder];
-    if (self) {
-        _appRelease = [coder decodeObjectOfClass:[ApptentiveAppRelease class] forKey:AppReleaseKey];
-        _SDK = [coder decodeObjectOfClass:[ApptentiveSDK class] forKey:SDKKey];
-        _person = [coder decodeObjectOfClass:[ApptentivePerson class] forKey:PersonKey];
-        _device = [coder decodeObjectOfClass:[ApptentiveDevice class] forKey:DeviceKey];
-        _engagement = [coder decodeObjectOfClass:[ApptentiveEngagement class] forKey:EngagementKey];
-        _token = [coder decodeObjectOfClass:[NSString class] forKey:TokenKey];
-        _legacyToken = [coder decodeObjectOfClass:[NSString class] forKey:LegacyTokenKey];
-        _lastMessageID = [coder decodeObjectOfClass:[NSString class] forKey:LastMessageIDKey];
-        _mutableUserInfo = [coder decodeObjectOfClass:[NSMutableDictionary class] forKey:MutableUserInfoKey];
-        _identifier = [coder decodeObjectOfClass:[NSString class] forKey:IdentifierKey];
-        _localIdentifier = [coder decodeObjectOfClass:[NSString class] forKey:LocalIdentifierKey] ?: [[NSUUID UUID] UUIDString];
-        _directoryName = [coder decodeObjectOfClass:[NSString class] forKey:DirectoryNameKey];
-        _lastSentDevice = [coder decodeObjectOfClass:[NSDictionary class] forKey:LastSentDeviceKey];
-        _lastSentPerson = [coder decodeObjectOfClass:[NSDictionary class] forKey:LastSentPersonKey];
-    }
-    return self;
+- (nullable instancetype)initWithCoder:(NSCoder *)coder {
+	self = [super initWithCoder:coder];
+	if (self) {
+		_appRelease = [coder decodeObjectOfClass:[ApptentiveAppRelease class] forKey:AppReleaseKey];
+		_SDK = [coder decodeObjectOfClass:[ApptentiveSDK class] forKey:SDKKey];
+		_person = [coder decodeObjectOfClass:[ApptentivePerson class] forKey:PersonKey];
+		_device = [coder decodeObjectOfClass:[ApptentiveDevice class] forKey:DeviceKey];
+		_engagement = [coder decodeObjectOfClass:[ApptentiveEngagement class] forKey:EngagementKey];
+		_token = [coder decodeObjectOfClass:[NSString class] forKey:TokenKey];
+		_legacyToken = [coder decodeObjectOfClass:[NSString class] forKey:LegacyTokenKey];
+		_lastMessageID = [coder decodeObjectOfClass:[NSString class] forKey:LastMessageIDKey];
+		_mutableUserInfo = [coder decodeObjectOfClass:[NSMutableDictionary class] forKey:MutableUserInfoKey];
+		_identifier = [coder decodeObjectOfClass:[NSString class] forKey:IdentifierKey];
+		_localIdentifier = [coder decodeObjectOfClass:[NSString class] forKey:LocalIdentifierKey] ?: [[NSUUID UUID] UUIDString];
+		_directoryName = [coder decodeObjectOfClass:[NSString class] forKey:DirectoryNameKey];
+		_lastSentDevice = [coder decodeObjectOfClass:[NSDictionary class] forKey:LastSentDeviceKey];
+		_lastSentPerson = [coder decodeObjectOfClass:[NSDictionary class] forKey:LastSentPersonKey];
+	}
+	return self;
 }
 
-- (void)encodeWithCoder:(NSCoder *)coder
-{
-    [super encodeWithCoder:coder];
-    [coder encodeObject:self.appRelease forKey:AppReleaseKey];
-    [coder encodeObject:self.SDK forKey:SDKKey];
-    [coder encodeObject:self.person forKey:PersonKey];
-    [coder encodeObject:self.device forKey:DeviceKey];
-    [coder encodeObject:self.engagement forKey:EngagementKey];
-    [coder encodeObject:self.token forKey:TokenKey];
-    [coder encodeObject:self.legacyToken forKey:LegacyTokenKey];
-    [coder encodeObject:self.lastMessageID forKey:LastMessageIDKey];
-    [coder encodeObject:self.mutableUserInfo forKey:MutableUserInfoKey];
-    [coder encodeObject:self.identifier forKey:IdentifierKey];
-    [coder encodeObject:self.localIdentifier forKey:LocalIdentifierKey];
-    [coder encodeObject:self.directoryName forKey:DirectoryNameKey];
-    [coder encodeObject:self.lastSentDevice forKey:LastSentDeviceKey];
-    [coder encodeObject:self.lastSentPerson forKey:LastSentPersonKey];
-    [coder encodeObject:@1 forKey:ArchiveVersionKey];
+- (void)encodeWithCoder:(NSCoder *)coder {
+	[super encodeWithCoder:coder];
+	[coder encodeObject:self.appRelease forKey:AppReleaseKey];
+	[coder encodeObject:self.SDK forKey:SDKKey];
+	[coder encodeObject:self.person forKey:PersonKey];
+	[coder encodeObject:self.device forKey:DeviceKey];
+	[coder encodeObject:self.engagement forKey:EngagementKey];
+	[coder encodeObject:self.token forKey:TokenKey];
+	[coder encodeObject:self.legacyToken forKey:LegacyTokenKey];
+	[coder encodeObject:self.lastMessageID forKey:LastMessageIDKey];
+	[coder encodeObject:self.mutableUserInfo forKey:MutableUserInfoKey];
+	[coder encodeObject:self.identifier forKey:IdentifierKey];
+	[coder encodeObject:self.localIdentifier forKey:LocalIdentifierKey];
+	[coder encodeObject:self.directoryName forKey:DirectoryNameKey];
+	[coder encodeObject:self.lastSentDevice forKey:LastSentDeviceKey];
+	[coder encodeObject:self.lastSentPerson forKey:LastSentPersonKey];
+	[coder encodeObject:@1 forKey:ArchiveVersionKey];
 }
 
-- (void)setToken:(NSString *)token conversationID:(NSString *)conversationID personID:(NSString *)personID deviceID:(NSString *)deviceID
-{
-    [self setConversationIdentifier:conversationID JWT:token];
-    self.person.identifier = personID;
-    self.device.identifier = deviceID;
+- (void)setToken:(NSString *)token conversationID:(NSString *)conversationID personID:(NSString *)personID deviceID:(NSString *)deviceID {
+	[self setConversationIdentifier:conversationID JWT:token];
+	self.person.identifier = personID;
+	self.device.identifier = deviceID;
 }
 
-- (void)setConversationIdentifier:(NSString *)identifier JWT:(NSString *)JWT
-{
-    _identifier = [identifier copy];
-    _token = [JWT copy];
+- (void)setConversationIdentifier:(NSString *)identifier JWT:(NSString *)JWT {
+	_identifier = [identifier copy];
+	_token = [JWT copy];
 }
 
-- (void)checkForDiffs
-{
-    @synchronized(self)
-    {
-        ApptentiveAppRelease *currentAppRelease = [[ApptentiveAppRelease alloc] initWithCurrentAppRelease];
-        if (self.appRelease.overridingStyles) {
-            [currentAppRelease setOverridingStyles];
-        }
+- (void)checkForDiffs {
+	@synchronized(self) {
+		ApptentiveAppRelease *currentAppRelease = [[ApptentiveAppRelease alloc] initWithCurrentAppRelease];
+		if (self.appRelease.overridingStyles) {
+			[currentAppRelease setOverridingStyles];
+		}
 
-        ApptentiveSDK *currentSDK = [[ApptentiveSDK alloc] initWithCurrentSDK];
+		ApptentiveSDK *currentSDK = [[ApptentiveSDK alloc] initWithCurrentSDK];
 
-        BOOL conversationNeedsUpdate = NO;
+		BOOL conversationNeedsUpdate = NO;
 
-        NSDictionary *appReleaseDiffs = [ApptentiveUtilities diffDictionary:currentAppRelease.JSONDictionary againstDictionary:self.appRelease.JSONDictionary];
+		NSDictionary *appReleaseDiffs = [ApptentiveUtilities diffDictionary:currentAppRelease.JSONDictionary againstDictionary:self.appRelease.JSONDictionary];
 
-        if (appReleaseDiffs.count > 0) {
-            ApptentiveLogDebug(ApptentiveLogTagConversation, @"App release did change.");
-            conversationNeedsUpdate = YES;
+		if (appReleaseDiffs.count > 0) {
+			ApptentiveLogDebug(ApptentiveLogTagConversation, @"App release did change.");
+			conversationNeedsUpdate = YES;
 
-            if (![currentAppRelease.version isEqualToVersion:self.appRelease.version]) {
-                [self.appRelease resetVersion];
-                [self.engagement resetVersion];
-            }
+			if (![currentAppRelease.version isEqualToVersion:self.appRelease.version]) {
+				[self.appRelease resetVersion];
+				[self.engagement resetVersion];
+			}
 
-            if (![currentAppRelease.build isEqualToVersion:self.appRelease.build]) {
-                [self.appRelease resetBuild];
-                [self.engagement resetBuild];
-            }
+			if (![currentAppRelease.build isEqualToVersion:self.appRelease.build]) {
+				[self.appRelease resetBuild];
+				[self.engagement resetBuild];
+			}
 
-            _appRelease = currentAppRelease;
-        }
+			_appRelease = currentAppRelease;
+		}
 
-        NSDictionary *SDKDiffs = [ApptentiveUtilities diffDictionary:currentSDK.JSONDictionary againstDictionary:self.SDK.JSONDictionary];
+		NSDictionary *SDKDiffs = [ApptentiveUtilities diffDictionary:currentSDK.JSONDictionary againstDictionary:self.SDK.JSONDictionary];
 
-        if (SDKDiffs.count > 0) {
-            ApptentiveLogDebug(ApptentiveLogTagConversation, @"SDK did change.");
+		if (SDKDiffs.count > 0) {
+			ApptentiveLogDebug(ApptentiveLogTagConversation, @"SDK did change.");
 
-            conversationNeedsUpdate = YES;
+			conversationNeedsUpdate = YES;
 
-            _SDK = currentSDK;
-        }
+			_SDK = currentSDK;
+		}
 
-        if (conversationNeedsUpdate) {
-            [self notifyConversationChanged];
+		if (conversationNeedsUpdate) {
+			[self notifyConversationChanged];
 
-            if ([_delegate respondsToSelector:@selector(conversationAppReleaseOrSDKDidChange:)]) {
-                [_delegate conversationAppReleaseOrSDKDidChange:self];
-            }
-        }
+			if ([_delegate respondsToSelector:@selector(conversationAppReleaseOrSDKDidChange:)]) {
+				[_delegate conversationAppReleaseOrSDKDidChange:self];
+			}
+		}
 
-        // See if any of the non-custom device attributes have changed
-        [self checkForDeviceDiffs];
-    }
+		// See if any of the non-custom device attributes have changed
+		[self checkForDeviceDiffs];
+	}
 }
 
-- (void)checkForDeviceDiffs
-{
-    ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Diffing device");
+- (void)checkForDeviceDiffs {
+	ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Diffing device");
 
-    [self.device updateWithCurrentDeviceValues];
+	[self.device updateWithCurrentDeviceValues];
 
-    NSDictionary *deviceDiffs = [ApptentiveUtilities diffDictionary:self.device.JSONDictionary againstDictionary:self.lastSentDevice];
+	NSDictionary *deviceDiffs = [ApptentiveUtilities diffDictionary:self.device.JSONDictionary againstDictionary:self.lastSentDevice];
 
-    if (deviceDiffs.count > 0) {
-        ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Device diffs found: %@", deviceDiffs);
+	if (deviceDiffs.count > 0) {
+		ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Device diffs found: %@", deviceDiffs);
 
-        [self.delegate conversation:self deviceDidChange:deviceDiffs];
-        self.lastSentDevice = self.device.JSONDictionary;
-    }
+		[self.delegate conversation:self deviceDidChange:deviceDiffs];
+		self.lastSentDevice = self.device.JSONDictionary;
+	}
 }
 
-- (void)checkForPersonDiffs
-{
-    ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Diffing person");
+- (void)checkForPersonDiffs {
+	ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Diffing person");
 
-    NSDictionary *personDiffs = [ApptentiveUtilities diffDictionary:self.person.JSONDictionary againstDictionary:self.lastSentPerson];
+	NSDictionary *personDiffs = [ApptentiveUtilities diffDictionary:self.person.JSONDictionary againstDictionary:self.lastSentPerson];
 
-    if (personDiffs.count > 0) {
-        ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Person diffs found: %@", personDiffs);
+	if (personDiffs.count > 0) {
+		ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Person diffs found: %@", personDiffs);
 
-        [self.delegate conversation:self personDidChange:personDiffs];
-        self.lastSentPerson = self.person.JSONDictionary;
-    }
+		[self.delegate conversation:self personDidChange:personDiffs];
+		self.lastSentPerson = self.person.JSONDictionary;
+	}
 }
 
-- (void)notifyConversationChanged
-{
-    if ([_delegate respondsToSelector:@selector(conversationDidChange:)]) {
-        [_delegate conversationDidChange:self];
-    }
+- (void)notifyConversationChanged {
+	if ([_delegate respondsToSelector:@selector(conversationDidChange:)]) {
+		[_delegate conversationDidChange:self];
+	}
 }
 
-- (void)notifyConversationEngagementDidChange
-{
-    [self notifyConversationChanged];
+- (void)notifyConversationEngagementDidChange {
+	[self notifyConversationChanged];
 
-    if ([_delegate respondsToSelector:@selector(conversationEngagementDidChange:)]) {
-        [_delegate conversationEngagementDidChange:self];
-    }
+	if ([_delegate respondsToSelector:@selector(conversationEngagementDidChange:)]) {
+		[_delegate conversationEngagementDidChange:self];
+	}
 }
 
-- (void)warmCodePoint:(NSString *)codePoint
-{
-    [self.engagement warmCodePoint:codePoint];
+- (void)warmCodePoint:(NSString *)codePoint {
+	[self.engagement warmCodePoint:codePoint];
 }
 
-- (void)engageCodePoint:(NSString *)codePoint
-{
-    [self.engagement engageCodePoint:codePoint];
+- (void)engageCodePoint:(NSString *)codePoint {
+	[self.engagement engageCodePoint:codePoint];
 
-    [self notifyConversationEngagementDidChange];
+	[self notifyConversationEngagementDidChange];
 }
 
-- (void)warmInteraction:(NSString *)codePoint
-{
-    [self.engagement warmInteraction:codePoint];
+- (void)warmInteraction:(NSString *)codePoint {
+	[self.engagement warmInteraction:codePoint];
 }
 
-- (void)engageInteraction:(NSString *)interactionIdentifier
-{
-    [self.engagement engageInteraction:interactionIdentifier];
+- (void)engageInteraction:(NSString *)interactionIdentifier {
+	[self.engagement engageInteraction:interactionIdentifier];
 
-    [self notifyConversationEngagementDidChange];
+	[self notifyConversationEngagementDidChange];
 }
 
-- (void)didOverrideStyles
-{
-    if (!self.appRelease.overridingStyles) {
-        [self.appRelease setOverridingStyles];
+- (void)didOverrideStyles {
+	if (!self.appRelease.overridingStyles) {
+		[self.appRelease setOverridingStyles];
 
-        [self checkForDiffs];
-    }
+		[self checkForDiffs];
+	}
 }
 
-- (void)didDownloadMessagesUpTo:(NSString *)lastMessageID
-{
-    _lastMessageID = lastMessageID;
+- (void)didDownloadMessagesUpTo:(NSString *)lastMessageID {
+	_lastMessageID = lastMessageID;
 }
 
-- (NSDate *)currentTime
-{
-    return [NSDate date];
+- (NSDate *)currentTime {
+	return [NSDate date];
 }
 
-- (instancetype)initAndMigrate
-{
-    if (![[NSUserDefaults standardUserDefaults] objectForKey:@"ATEngagementInstallDateKey"]) {
-        return nil;
-    }
+- (instancetype)initAndMigrate {
+	if (![[NSUserDefaults standardUserDefaults] objectForKey:@"ATEngagementInstallDateKey"]) {
+		return nil;
+	}
 
-    self = [super init];
+	self = [super init];
 
-    if (self) {
-        _state = ApptentiveConversationStateLegacyPending;
-        _appRelease = [[ApptentiveAppRelease alloc] initAndMigrate];
-        _SDK = [[ApptentiveSDK alloc] initAndMigrate];
-        _person = [[ApptentivePerson alloc] initAndMigrate];
-        _device = [[ApptentiveDevice alloc] initAndMigrate];
-        _engagement = [[ApptentiveEngagement alloc] initAndMigrate];
+	if (self) {
+		_state = ApptentiveConversationStateLegacyPending;
+		_appRelease = [[ApptentiveAppRelease alloc] initAndMigrate];
+		_SDK = [[ApptentiveSDK alloc] initAndMigrate];
+		_person = [[ApptentivePerson alloc] initAndMigrate];
+		_device = [[ApptentiveDevice alloc] initAndMigrate];
+		_engagement = [[ApptentiveEngagement alloc] initAndMigrate];
 
-        _directoryName = [NSUUID UUID].UUIDString;
-        _localIdentifier = [NSUUID UUID].UUIDString;
+		_directoryName = [NSUUID UUID].UUIDString;
+		_localIdentifier = [NSUUID UUID].UUIDString;
 
-        NSData *legacyConversationData = [[NSUserDefaults standardUserDefaults] dataForKey:ATCurrentConversationPreferenceKey];
+		NSData *legacyConversationData = [[NSUserDefaults standardUserDefaults] dataForKey:ATCurrentConversationPreferenceKey];
 
-        if (legacyConversationData != nil) {
-            [NSKeyedUnarchiver setClass:[ApptentiveLegacyConversation class] forClassName:@"ApptentiveConversation"];
-            [NSKeyedUnarchiver setClass:[ApptentiveLegacyConversation class] forClassName:@"ATConversation"];
+		if (legacyConversationData != nil) {
+			[NSKeyedUnarchiver setClass:[ApptentiveLegacyConversation class] forClassName:@"ApptentiveConversation"];
+			[NSKeyedUnarchiver setClass:[ApptentiveLegacyConversation class] forClassName:@"ATConversation"];
 
-            ApptentiveLegacyConversation *legacyConversation = (ApptentiveLegacyConversation *)[NSKeyedUnarchiver unarchiveObjectWithData:legacyConversationData];
+			ApptentiveLegacyConversation *legacyConversation = (ApptentiveLegacyConversation *)[NSKeyedUnarchiver unarchiveObjectWithData:legacyConversationData];
 
-            [NSKeyedUnarchiver setClass:[self class] forClassName:@"ApptentiveConversation"];
+			[NSKeyedUnarchiver setClass:[self class] forClassName:@"ApptentiveConversation"];
 
-            // we only need a legacy token here: jwt-token and conversation id would be fetched later
-            _legacyToken = legacyConversation.token;
-            _person.identifier = legacyConversation.personID;
-            _device.identifier = legacyConversation.deviceID;
-        }
+			// we only need a legacy token here: jwt-token and conversation id would be fetched later
+			_legacyToken = legacyConversation.token;
+			_person.identifier = legacyConversation.personID;
+			_device.identifier = legacyConversation.deviceID;
+		}
 
-        _mutableUserInfo = [NSMutableDictionary dictionary];
+		_mutableUserInfo = [NSMutableDictionary dictionary];
 
-        NSString *draftMessage = [[NSUserDefaults standardUserDefaults] stringForKey:ATMessageCenterDraftMessageKey];
+		NSString *draftMessage = [[NSUserDefaults standardUserDefaults] stringForKey:ATMessageCenterDraftMessageKey];
 
-        if (draftMessage) {
-            [_mutableUserInfo setObject:draftMessage forKey:ATMessageCenterDraftMessageKey];
-        }
+		if (draftMessage) {
+			[_mutableUserInfo setObject:draftMessage forKey:ATMessageCenterDraftMessageKey];
+		}
 
-        [_mutableUserInfo setObject:@([[NSUserDefaults standardUserDefaults] boolForKey:ATMessageCenterDidSkipProfileKey]) forKey:ATMessageCenterDidSkipProfileKey];
+		[_mutableUserInfo setObject:@([[NSUserDefaults standardUserDefaults] boolForKey:ATMessageCenterDidSkipProfileKey]) forKey:ATMessageCenterDidSkipProfileKey];
 
-        // Migrate last sent device if available
-        _lastSentDevice = [[NSUserDefaults standardUserDefaults] dictionaryForKey:ATDeviceLastUpdateValuePreferenceKey][@"device"] ?: @{};
+		// Migrate last sent device if available
+		_lastSentDevice = [[NSUserDefaults standardUserDefaults] dictionaryForKey:ATDeviceLastUpdateValuePreferenceKey][@"device"] ?: @{};
 
-        // Migrate last sent person if available
-        NSData *lastSentPersondata = [[NSUserDefaults standardUserDefaults] dataForKey:ATPersonLastUpdateValuePreferenceKey];
+		// Migrate last sent person if available
+		NSData *lastSentPersondata = [[NSUserDefaults standardUserDefaults] dataForKey:ATPersonLastUpdateValuePreferenceKey];
 
-        if (lastSentPersondata != nil) {
-            NSDictionary *person = [NSKeyedUnarchiver unarchiveObjectWithData:lastSentPersondata];
-            if ([person isKindOfClass:[NSDictionary class]]) {
-                _lastSentPerson = person[@"person"];
-            } else {
-                _lastSentPerson = @{};
-            }
-        } else {
-            _lastSentPerson = @{};
-        }
-    }
+		if (lastSentPersondata != nil) {
+			NSDictionary *person = [NSKeyedUnarchiver unarchiveObjectWithData:lastSentPersondata];
+			if ([person isKindOfClass:[NSDictionary class]]) {
+				_lastSentPerson = person[@"person"];
+			} else {
+				_lastSentPerson = @{};
+			}
+		} else {
+			_lastSentPerson = @{};
+		}
+	}
 
-    return self;
+	return self;
 }
 
-- (void)updateWithCurrentValues
-{
-    _SDK = [[ApptentiveSDK alloc] initWithCurrentSDK];
-    _appRelease = [[ApptentiveAppRelease alloc] initWithCurrentAppRelease];
-    _state = ApptentiveConversationStateAnonymousPending;
+- (void)updateWithCurrentValues {
+	_SDK = [[ApptentiveSDK alloc] initWithCurrentSDK];
+	_appRelease = [[ApptentiveAppRelease alloc] initWithCurrentAppRelease];
+	_state = ApptentiveConversationStateAnonymousPending;
 
-    [self.device updateWithCurrentDeviceValues];
+	[self.device updateWithCurrentDeviceValues];
 }
 
-- (BOOL)hasActiveState
-{
-    return _state == ApptentiveConversationStateAnonymous || _state == ApptentiveConversationStateLoggedIn;
+- (BOOL)hasActiveState {
+	return _state == ApptentiveConversationStateAnonymous || _state == ApptentiveConversationStateLoggedIn;
 }
 
-+ (void)deleteMigratedData
-{
-    [ApptentiveAppRelease deleteMigratedData];
-    [ApptentiveSDK deleteMigratedData];
-    [ApptentivePerson deleteMigratedData];
-    [ApptentiveDevice deleteMigratedData];
-    [ApptentiveEngagement deleteMigratedData];
++ (void)deleteMigratedData {
+	[ApptentiveAppRelease deleteMigratedData];
+	[ApptentiveSDK deleteMigratedData];
+	[ApptentivePerson deleteMigratedData];
+	[ApptentiveDevice deleteMigratedData];
+	[ApptentiveEngagement deleteMigratedData];
 
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:ATCurrentConversationPreferenceKey];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATCurrentConversationPreferenceKey];
 }
 
-- (NSDictionary *)userInfo
-{
-    return [NSDictionary dictionaryWithDictionary:self.mutableUserInfo];
+- (NSDictionary *)userInfo {
+	return [NSDictionary dictionaryWithDictionary:self.mutableUserInfo];
 }
 
-- (void)setUserInfo:(NSObject *)object forKey:(NSString *)key
-{
-    if (object != nil && key != nil) {
-        [self.mutableUserInfo setObject:object forKey:key];
+- (void)setUserInfo:(NSObject *)object forKey:(NSString *)key {
+	if (object != nil && key != nil) {
+		[self.mutableUserInfo setObject:object forKey:key];
 
-        [self notifyConversationChanged];
+		[self notifyConversationChanged];
 
-        if ([_delegate respondsToSelector:@selector(conversationUserInfoDidChange:)]) {
-            [_delegate conversationUserInfoDidChange:self];
-        }
-    } else {
-        ApptentiveLogError(ApptentiveLogTagConversation, @"Attempting to set user info with nil key and/or value");
-    }
+		if ([_delegate respondsToSelector:@selector(conversationUserInfoDidChange:)]) {
+			[_delegate conversationUserInfoDidChange:self];
+		}
+	} else {
+		ApptentiveLogError(ApptentiveLogTagConversation, @"Attempting to set user info with nil key and/or value");
+	}
 }
 
-- (void)removeUserInfoForKey:(NSString *)key
-{
-    if (key != nil) {
-        [self.mutableUserInfo removeObjectForKey:key];
-    } else {
-        ApptentiveLogError(ApptentiveLogTagConversation, @"Attempting to set user info with nil key and/or value");
-    }
+- (void)removeUserInfoForKey:(NSString *)key {
+	if (key != nil) {
+		[self.mutableUserInfo removeObjectForKey:key];
+	} else {
+		ApptentiveLogError(ApptentiveLogTagConversation, @"Attempting to set user info with nil key and/or value");
+	}
 }
 
 #pragma mark - Mutability
 
-- (id)mutableCopy
-{
-    ApptentiveMutableConversation *result = [[ApptentiveMutableConversation alloc] init];
-    result.state = self.state;
-    result.token = self.token;
-    result.legacyToken = self.legacyToken;
-    result.userId = self.userId;
-    result.encryptionKey = self.encryptionKey;
-    result.appRelease = self.appRelease;
-    result.SDK = self.SDK;
-    result.person = self.person;
-    result.device = self.device;
-    result.engagement = self.engagement;
-    result.mutableUserInfo = self.mutableUserInfo;
-    result.lastSentPerson = self.lastSentPerson;
-    result.lastSentDevice = self.lastSentDevice;
-    result.identifier = self.identifier;
-    result.localIdentifier = self.localIdentifier;
-    result.lastMessageID = self.lastMessageID;
-    result.delegate = self.delegate;
-    result.directoryName = self.directoryName;
-    return result;
+- (id)mutableCopy {
+	ApptentiveMutableConversation *result = [[ApptentiveMutableConversation alloc] init];
+	result.state = self.state;
+	result.token = self.token;
+	result.legacyToken = self.legacyToken;
+	result.userId = self.userId;
+	result.encryptionKey = self.encryptionKey;
+	result.appRelease = self.appRelease;
+	result.SDK = self.SDK;
+	result.person = self.person;
+	result.device = self.device;
+	result.engagement = self.engagement;
+	result.mutableUserInfo = self.mutableUserInfo;
+	result.lastSentPerson = self.lastSentPerson;
+	result.lastSentDevice = self.lastSentDevice;
+	result.identifier = self.identifier;
+	result.localIdentifier = self.localIdentifier;
+	result.lastMessageID = self.lastMessageID;
+	result.delegate = self.delegate;
+	result.directoryName = self.directoryName;
+	return result;
 }
 
 
@@ -459,29 +432,26 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 
 @implementation ApptentiveLegacyConversation
 
-+ (void)load
-{
-    [NSKeyedUnarchiver setClass:self forClassName:@"ATConversation"];
++ (void)load {
+	[NSKeyedUnarchiver setClass:self forClassName:@"ATConversation"];
 }
 
-- (nullable instancetype)initWithCoder:(NSCoder *)coder
-{
-    self = [super init];
+- (nullable instancetype)initWithCoder:(NSCoder *)coder {
+	self = [super init];
 
-    if (self) {
-        _token = [coder decodeObjectForKey:@"token"];
-        _personID = [coder decodeObjectForKey:@"personID"];
-        _deviceID = [coder decodeObjectForKey:@"deviceID"];
-    }
+	if (self) {
+		_token = [coder decodeObjectForKey:@"token"];
+		_personID = [coder decodeObjectForKey:@"personID"];
+		_deviceID = [coder decodeObjectForKey:@"deviceID"];
+	}
 
-    return self;
+	return self;
 }
 
-- (void)encodeWithCoder:(NSCoder *)coder
-{
-    [coder encodeObject:self.token forKey:@"token"];
-    [coder encodeObject:self.personID forKey:@"personID"];
-    [coder encodeObject:self.deviceID forKey:@"deviceID"];
+- (void)encodeWithCoder:(NSCoder *)coder {
+	[coder encodeObject:self.token forKey:@"token"];
+	[coder encodeObject:self.personID forKey:@"personID"];
+	[coder encodeObject:self.deviceID forKey:@"deviceID"];
 }
 
 @end
@@ -519,17 +489,15 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 
 // FIXME: remove these methods
 
-- (void)setToken:(NSString *)token conversationID:(NSString *)conversationID personID:(NSString *)personID deviceID:(NSString *)deviceID
-{
-    [self setConversationIdentifier:conversationID JWT:token];
-    self.person.identifier = personID;
-    self.device.identifier = deviceID;
+- (void)setToken:(NSString *)token conversationID:(NSString *)conversationID personID:(NSString *)personID deviceID:(NSString *)deviceID {
+	[self setConversationIdentifier:conversationID JWT:token];
+	self.person.identifier = personID;
+	self.device.identifier = deviceID;
 }
 
-- (void)setConversationIdentifier:(NSString *)identifier JWT:(NSString *)JWT
-{
-    self.identifier = identifier;
-    self.token = JWT;
+- (void)setConversationIdentifier:(NSString *)identifier JWT:(NSString *)JWT {
+	self.identifier = identifier;
+	self.token = JWT;
 }
 
 @end

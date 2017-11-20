@@ -21,60 +21,56 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation ApptentiveEngagementBackend
 
-- (instancetype)initWithConversation:(ApptentiveConversation *)conversation manifest:(ApptentiveEngagementManifest *)manifest
-{
-    self = [super init];
-    if (self) {
-        // TODO: check for nil
-        _conversation = conversation;
-        _manifest = manifest;
-    }
-    return self;
+- (instancetype)initWithConversation:(ApptentiveConversation *)conversation manifest:(ApptentiveEngagementManifest *)manifest {
+	self = [super init];
+	if (self) {
+		// TODO: check for nil
+		_conversation = conversation;
+		_manifest = manifest;
+	}
+	return self;
 }
 
-- (nullable ApptentiveInteraction *)interactionForEvent:(NSString *)event
-{
-    NSArray *invocations = self.manifest.targets[event];
-    ApptentiveInteraction *interaction = [self interactionForInvocations:invocations];
+- (nullable ApptentiveInteraction *)interactionForEvent:(NSString *)event {
+	NSArray *invocations = self.manifest.targets[event];
+	ApptentiveInteraction *interaction = [self interactionForInvocations:invocations];
 
-    return interaction;
+	return interaction;
 }
 
-- (nullable ApptentiveInteraction *)interactionForInvocations:(NSArray *)invocations
-{
-    NSString *interactionID = nil;
+- (nullable ApptentiveInteraction *)interactionForInvocations:(NSArray *)invocations {
+	NSString *interactionID = nil;
 
-    for (NSObject *invocationOrDictionary in invocations) {
-        ApptentiveInteractionInvocation *invocation = nil;
+	for (NSObject *invocationOrDictionary in invocations) {
+		ApptentiveInteractionInvocation *invocation = nil;
 
-        // Allow parsing of ATInteractionInvocation and NSDictionary invocation objects
-        if ([invocationOrDictionary isKindOfClass:[ApptentiveInteractionInvocation class]]) {
-            invocation = (ApptentiveInteractionInvocation *)invocationOrDictionary;
-        } else if ([invocationOrDictionary isKindOfClass:[NSDictionary class]]) {
-            invocation = [ApptentiveInteractionInvocation invocationWithJSONDictionary:((NSDictionary *)invocationOrDictionary)];
-        } else {
-            ApptentiveLogError(@"Attempting to parse an invocation that is neither an ATInteractionInvocation or NSDictionary.");
-        }
+		// Allow parsing of ATInteractionInvocation and NSDictionary invocation objects
+		if ([invocationOrDictionary isKindOfClass:[ApptentiveInteractionInvocation class]]) {
+			invocation = (ApptentiveInteractionInvocation *)invocationOrDictionary;
+		} else if ([invocationOrDictionary isKindOfClass:[NSDictionary class]]) {
+			invocation = [ApptentiveInteractionInvocation invocationWithJSONDictionary:((NSDictionary *)invocationOrDictionary)];
+		} else {
+			ApptentiveLogError(@"Attempting to parse an invocation that is neither an ATInteractionInvocation or NSDictionary.");
+		}
 
-        if (invocation && [invocation isKindOfClass:[ApptentiveInteractionInvocation class]]) {
-            if ([invocation criteriaAreMetForConversation:self.conversation]) {
-                interactionID = invocation.interactionID;
-                break;
-            }
-        }
-    }
+		if (invocation && [invocation isKindOfClass:[ApptentiveInteractionInvocation class]]) {
+			if ([invocation criteriaAreMetForConversation:self.conversation]) {
+				interactionID = invocation.interactionID;
+				break;
+			}
+		}
+	}
 
-    ApptentiveInteraction *interaction = nil;
-    if (interactionID) {
-        interaction = [self interactionForIdentifier:interactionID];
-    }
+	ApptentiveInteraction *interaction = nil;
+	if (interactionID) {
+		interaction = [self interactionForIdentifier:interactionID];
+	}
 
-    return interaction;
+	return interaction;
 }
 
-- (ApptentiveInteraction *)interactionForIdentifier:(NSString *)identifier
-{
-    return self.manifest.interactions[identifier];
+- (ApptentiveInteraction *)interactionForIdentifier:(NSString *)identifier {
+	return self.manifest.interactions[identifier];
 }
 
 @end

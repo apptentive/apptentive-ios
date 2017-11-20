@@ -21,28 +21,24 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation ApptentiveStopWatch
 
-+ (instancetype)stopWatch
-{
-    return [[self alloc] init];
++ (instancetype)stopWatch {
+	return [[self alloc] init];
 }
 
-- (instancetype)init
-{
-    self = [super init];
-    if (self) {
-        _startDate = [[NSDate alloc] init];
-    }
-    return self;
+- (instancetype)init {
+	self = [super init];
+	if (self) {
+		_startDate = [[NSDate alloc] init];
+	}
+	return self;
 }
 
-- (NSTimeInterval)elapsedSeconds
-{
-    return -[self.startDate timeIntervalSinceNow];
+- (NSTimeInterval)elapsedSeconds {
+	return -[self.startDate timeIntervalSinceNow];
 }
 
-- (NSTimeInterval)elapsedMilliseconds
-{
-    return [self elapsedSeconds] * 1000;
+- (NSTimeInterval)elapsedMilliseconds {
+	return [self elapsedSeconds] * 1000;
 }
 
 @end

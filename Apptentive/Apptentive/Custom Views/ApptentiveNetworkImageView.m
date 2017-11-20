@@ -22,50 +22,47 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation ApptentiveNetworkImageView
 
-- (void)dealloc
-{
-    [_task cancel];
+- (void)dealloc {
+	[_task cancel];
 }
 
-- (void)restartDownload
-{
-    if (self.task) {
-        [self.task cancel];
-        self.task = nil;
-    }
+- (void)restartDownload {
+	if (self.task) {
+		[self.task cancel];
+		self.task = nil;
+	}
 
-    if (self.imageURL) {
-        self.task = [[NSURLSession sharedSession] dataTaskWithURL:self.imageURL
-                                                completionHandler:^(NSData *_Nullable data, NSURLResponse *_Nullable response, NSError *_Nullable error) {
-                                                    if (data == nil) {
-                                                        ApptentiveLogError(@"Unable to download image at %@: %@", self.imageURL, error);
-                                                        self.task = nil;
+	if (self.imageURL) {
+		self.task = [[NSURLSession sharedSession] dataTaskWithURL:self.imageURL
+												completionHandler:^(NSData *_Nullable data, NSURLResponse *_Nullable response, NSError *_Nullable error) {
+												  if (data == nil) {
+													  ApptentiveLogError(@"Unable to download image at %@: %@", self.imageURL, error);
+													  self.task = nil;
 
-                                                        if ([self.delegate respondsToSelector:@selector(networkImageView:didFailWithError:)]) {
-                                                            dispatch_async(dispatch_get_main_queue(), ^{
-                                                                [self.delegate networkImageView:self didFailWithError:error];
-                                                            });
-                                                        }
-                                                    } else {
-                                                        UIImage *newImage = [UIImage imageWithData:data];
-                                                        if (newImage) {
-                                                            dispatch_async(dispatch_get_main_queue(), ^{
-                                                                self.image = newImage;
-                                                            });
-                                                        }
-                                                    }
-                                                }];
+													  if ([self.delegate respondsToSelector:@selector(networkImageView:didFailWithError:)]) {
+														  dispatch_async(dispatch_get_main_queue(), ^{
+															[self.delegate networkImageView:self didFailWithError:error];
+														  });
+													  }
+												  } else {
+													  UIImage *newImage = [UIImage imageWithData:data];
+													  if (newImage) {
+														  dispatch_async(dispatch_get_main_queue(), ^{
+															self.image = newImage;
+														  });
+													  }
+												  }
+												}];
 
-        [self.task resume];
-    }
+		[self.task resume];
+	}
 }
 
-- (void)setImageURL:(NSURL *)anImageURL
-{
-    if (_imageURL != anImageURL || self.image == nil) {
-        _imageURL = [anImageURL copy];
-        [self restartDownload];
-    }
+- (void)setImageURL:(NSURL *)anImageURL {
+	if (_imageURL != anImageURL || self.image == nil) {
+		_imageURL = [anImageURL copy];
+		[self restartDownload];
+	}
 }
 
 @end

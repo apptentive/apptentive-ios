@@ -22,91 +22,89 @@ NS_ASSUME_NONNULL_BEGIN
 @dynamic dictionaryData;
 @dynamic label;
 
-+ (void)enqueueUnsentEventsInContext:(NSManagedObjectContext *)context forConversation:(ApptentiveConversation *)conversation
-{
-    ApptentiveAssertNotNil(context, @"Context is nil");
-    ApptentiveAssertNotNil(conversation, @"Conversation is nil");
++ (void)enqueueUnsentEventsInContext:(NSManagedObjectContext *)context forConversation:(ApptentiveConversation *)conversation {
+	ApptentiveAssertNotNil(context, @"Context is nil");
+	ApptentiveAssertNotNil(conversation, @"Conversation is nil");
 
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"ATEvent"];
+	NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"ATEvent"];
 
-    NSError *error;
-    NSArray *unsentEvents = [context executeFetchRequest:request error:&error];
+	NSError *error;
+	NSArray *unsentEvents = [context executeFetchRequest:request error:&error];
 
-    if (unsentEvents == nil) {
-        ApptentiveLogError(@"Unable to retrieve unsent events: %@", error);
-        return;
-    }
+	if (unsentEvents == nil) {
+		ApptentiveLogError(@"Unable to retrieve unsent events: %@", error);
+		return;
+	}
 
-    for (ApptentiveLegacyEvent *event in unsentEvents) {
-        ApptentiveEventPayload *payload = [[ApptentiveEventPayload alloc] initWithLabel:event.label];
-        ApptentiveAssertNotNil(payload, @"Failed to create an event payload");
+	for (ApptentiveLegacyEvent *event in unsentEvents) {
+		ApptentiveEventPayload *payload = [[ApptentiveEventPayload alloc] initWithLabel:event.label];
+		ApptentiveAssertNotNil(payload, @"Failed to create an event payload");
 
-        // Add custom data, interaction identifier, and extended data
-        if (event.dictionaryData != nil) {
-            NSDictionary *dictionaryData = [NSKeyedUnarchiver unarchiveObjectWithData:event.dictionaryData];
+		// Add custom data, interaction identifier, and extended data
+		if (event.dictionaryData != nil) {
+			NSDictionary *dictionaryData = [NSKeyedUnarchiver unarchiveObjectWithData:event.dictionaryData];
 
-            payload.customData = dictionaryData[@"custom_data"];
+			payload.customData = dictionaryData[@"custom_data"];
 
-            payload.interactionIdentifier = dictionaryData[@"interaction_id"];
+			payload.interactionIdentifier = dictionaryData[@"interaction_id"];
 
-            NSMutableArray *extendedData = [NSMutableArray array];
-            NSArray *extendedDataKeys = @[ @"commerce", @"location", @"time" ];
-            for (NSString *key in dictionaryData) {
-                if ([extendedDataKeys containsObject:key]) {
-                    [extendedData addObject:@{key : dictionaryData[key]}];
-                }
-            }
+			NSMutableArray *extendedData = [NSMutableArray array];
+			NSArray *extendedDataKeys = @[@"commerce", @"location", @"time"];
+			for (NSString *key in dictionaryData) {
+				if ([extendedDataKeys containsObject:key]) {
+					[extendedData addObject:@{key: dictionaryData[key]}];
+				}
+			}
 
-            payload.extendedData = extendedData;
-        }
+			payload.extendedData = extendedData;
+		}
 
-        if (payload != nil) {
-            [ApptentiveSerialRequest enqueuePayload:payload forConversation:conversation usingAuthToken:conversation.token inContext:context];
-        }
+		if (payload != nil) {
+			[ApptentiveSerialRequest enqueuePayload:payload forConversation:conversation usingAuthToken:conversation.token inContext:context];
+		}
 
-        [context deleteObject:event];
-    }
+		[context deleteObject:event];
+	}
 }
 
-- (nullable NSDictionary *)apiJSON
-{
-    NSDictionary *parentJSON = [super apiJSON];
-    NSMutableDictionary *result = [[NSMutableDictionary alloc] init];
+- (nullable NSDictionary *)apiJSON {
+	NSDictionary *parentJSON = [super apiJSON];
+	NSMutableDictionary *result = [[NSMutableDictionary alloc] init];
 
-    if (parentJSON) {
-        [result addEntriesFromDictionary:parentJSON];
-    }
-    if (self.label != nil) {
-        result[@"label"] = self.label;
-    }
-    if (self.dictionaryData) {
-        NSDictionary *dictionary = [self dictionaryForCurrentData];
-        [result addEntriesFromDictionary:dictionary];
-    }
+	if (parentJSON) {
+		[result addEntriesFromDictionary:parentJSON];
+	}
+	if (self.label != nil) {
+		result[@"label"] = self.label;
+	}
+	if (self.dictionaryData) {
+		NSDictionary *dictionary = [self dictionaryForCurrentData];
+		[result addEntriesFromDictionary:dictionary];
+	}
 
-    if (self.pendingEventID != nil) {
-        result[@"nonce"] = self.pendingEventID;
-    }
+	if (self.pendingEventID != nil) {
+		result[@"nonce"] = self.pendingEventID;
+	}
 
-    // Monitor that the Event payload has not been dropped on retry
-    if (!result) {
-        ApptentiveLogError(@"Event json should not be nil.");
-    }
-    if (result.count == 0) {
-        ApptentiveLogError(@"Event json should return a result.");
-    }
-    if (!result[@"label"]) {
-        ApptentiveLogError(@"Event json should include a `label`.");
-        return nil;
-    }
-    if (!result[@"nonce"]) {
-        ApptentiveLogError(@"Event json should include a `nonce`.");
-        return nil;
-    }
+	// Monitor that the Event payload has not been dropped on retry
+	if (!result) {
+		ApptentiveLogError(@"Event json should not be nil.");
+	}
+	if (result.count == 0) {
+		ApptentiveLogError(@"Event json should return a result.");
+	}
+	if (!result[@"label"]) {
+		ApptentiveLogError(@"Event json should include a `label`.");
+		return nil;
+	}
+	if (!result[@"nonce"]) {
+		ApptentiveLogError(@"Event json should include a `nonce`.");
+		return nil;
+	}
 
-    NSDictionary *apiJSON = @{ @"event" : result };
+	NSDictionary *apiJSON = @{ @"event": result };
 
-    return apiJSON;
+	return apiJSON;
 }
 
 //- (void)addEntriesFromDictionary:(NSDictionary *)incomingDictionary {
@@ -124,28 +122,26 @@ NS_ASSUME_NONNULL_BEGIN
 //}
 //
 #pragma mark Private
-- (NSDictionary *)dictionaryForCurrentData
-{
-    if (self.dictionaryData == nil) {
-        return @{};
-    } else {
-        NSDictionary *result = nil;
-        @try {
-            result = [NSKeyedUnarchiver unarchiveObjectWithData:self.dictionaryData];
-        } @catch (NSException *exception) {
-            ApptentiveLogError(@"Unable to unarchive event: %@", exception);
-        }
-        return result;
-    }
+- (NSDictionary *)dictionaryForCurrentData {
+	if (self.dictionaryData == nil) {
+		return @{};
+	} else {
+		NSDictionary *result = nil;
+		@try {
+			result = [NSKeyedUnarchiver unarchiveObjectWithData:self.dictionaryData];
+		} @catch (NSException *exception) {
+			ApptentiveLogError(@"Unable to unarchive event: %@", exception);
+		}
+		return result;
+	}
 }
 
-- (NSData *)dataForDictionary:(NSDictionary *)dictionary
-{
-    if (dictionary == nil) {
-        return nil;
-    } else {
-        return [NSKeyedArchiver archivedDataWithRootObject:dictionary];
-    }
+- (NSData *)dataForDictionary:(NSDictionary *)dictionary {
+	if (dictionary == nil) {
+		return nil;
+	} else {
+		return [NSKeyedArchiver archivedDataWithRootObject:dictionary];
+	}
 }
 
 @end

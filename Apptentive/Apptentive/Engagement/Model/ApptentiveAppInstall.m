@@ -25,19 +25,18 @@ NS_ASSUME_NONNULL_BEGIN
 @synthesize SDK = _SDK;
 @synthesize appRelease = _appRelease;
 
-- (instancetype)initWithToken:(nullable NSString *)token identifier:(nullable NSString *)identifier
-{
-    self = [super init];
-    if (self) {
-        _token = token;
-        _identifier = identifier;
+- (instancetype)initWithToken:(nullable NSString *)token identifier:(nullable NSString *)identifier {
+	self = [super init];
+	if (self) {
+		_token = token;
+		_identifier = identifier;
 
-        _person = [[ApptentivePerson alloc] init];
-        _device = [[ApptentiveDevice alloc] initWithCurrentDevice];
-        _SDK = [[ApptentiveSDK alloc] initWithCurrentSDK];
-        _appRelease = [[ApptentiveAppRelease alloc] initWithCurrentAppRelease];
-    }
-    return self;
+		_person = [[ApptentivePerson alloc] init];
+		_device = [[ApptentiveDevice alloc] initWithCurrentDevice];
+		_SDK = [[ApptentiveSDK alloc] initWithCurrentSDK];
+		_appRelease = [[ApptentiveAppRelease alloc] initWithCurrentAppRelease];
+	}
+	return self;
 }
 
 @end

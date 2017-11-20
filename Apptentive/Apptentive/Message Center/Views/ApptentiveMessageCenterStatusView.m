@@ -21,42 +21,41 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation ApptentiveMessageCenterStatusView
 
-- (void)setMode:(ATMessageCenterStatusMode)mode
-{
-    if (_mode != mode) {
-        _mode = mode;
+- (void)setMode:(ATMessageCenterStatusMode)mode {
+	if (_mode != mode) {
+		_mode = mode;
 
-        UIImage *statusImage;
+		UIImage *statusImage;
 
-        switch (mode) {
-            case ATMessageCenterStatusModeNetworkError:
-                statusImage = [[ApptentiveUtilities imageNamed:@"at_network_error"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-                break;
+		switch (mode) {
+			case ATMessageCenterStatusModeNetworkError:
+				statusImage = [[ApptentiveUtilities imageNamed:@"at_network_error"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+				break;
 
-            case ATMessageCenterStatusModeHTTPError:
-                statusImage = [[ApptentiveUtilities imageNamed:@"at_error_wait"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-                break;
+			case ATMessageCenterStatusModeHTTPError:
+				statusImage = [[ApptentiveUtilities imageNamed:@"at_error_wait"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+				break;
 
-            default:
-                statusImage = nil;
-                break;
-        }
+			default:
+				statusImage = nil;
+				break;
+		}
 
-        self.imageView.image = statusImage;
+		self.imageView.image = statusImage;
 
-        if ([self.constraints containsObject:self.imageStatusSpacing] && statusImage == nil) {
-            [self removeConstraint:self.imageStatusSpacing];
-        } else if (statusImage != nil) {
-            [self addConstraint:self.imageStatusSpacing];
-        }
+		if ([self.constraints containsObject:self.imageStatusSpacing] && statusImage == nil) {
+			[self removeConstraint:self.imageStatusSpacing];
+		} else if (statusImage != nil) {
+			[self addConstraint:self.imageStatusSpacing];
+		}
 
-        [UIView animateWithDuration:0.25
-                         animations:^{
-                             self.imageView.alpha = statusImage ? 1.0 : 0.0;
+		[UIView animateWithDuration:0.25
+						 animations:^{
+						   self.imageView.alpha = statusImage ? 1.0 : 0.0;
 
-                             [self layoutIfNeeded];
-                         }];
-    }
+						   [self layoutIfNeeded];
+						 }];
+	}
 }
 
 @end

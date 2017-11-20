@@ -16,56 +16,48 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation ApptentiveRequest
 
-- (NSString *)apiVersion
-{
-    return kApptentiveAPIVersionString;
+- (NSString *)apiVersion {
+	return kApptentiveAPIVersionString;
 }
 
-- (NSString *)path
-{
-    APPTENTIVE_ABSTRACT_METHOD_CALLED
+- (NSString *)path {
+	APPTENTIVE_ABSTRACT_METHOD_CALLED
 
-    return @"";
+	return @"";
 }
 
-- (NSString *)method
-{
-    return @"GET";
+- (NSString *)method {
+	return @"GET";
 }
 
-- (NSString *)contentType
-{
-    return @"application/json";
+- (NSString *)contentType {
+	return @"application/json";
 }
 
-- (nullable NSDictionary *)JSONDictionary
-{
-    return nil;
+- (nullable NSDictionary *)JSONDictionary {
+	return nil;
 }
 
-- (nullable NSData *)payload
-{
-    if (self.JSONDictionary == nil) {
-        return nil;
-    }
+- (nullable NSData *)payload {
+	if (self.JSONDictionary == nil) {
+		return nil;
+	}
 
-    NSError *error;
-    NSData *payloadData = [ApptentiveJSONSerialization dataWithJSONObject:self.JSONDictionary options:0 error:&error];
+	NSError *error;
+	NSData *payloadData = [ApptentiveJSONSerialization dataWithJSONObject:self.JSONDictionary options:0 error:&error];
 
-    ApptentiveAssertNotNil(payloadData, @"JSONDictionary was not serializable into JSON data (%@)", error);
+	ApptentiveAssertNotNil(payloadData, @"JSONDictionary was not serializable into JSON data (%@)", error);
 
-    return payloadData;
+	return payloadData;
 }
 
-- (BOOL)encrypted
-{
-    return NO;
+- (BOOL)encrypted {
+	return NO;
 }
 
-- (NSString *)conversationIdentifier
-{
-    APPTENTIVE_ABSTRACT_METHOD_CALLED
-    return @"INVALID";
+- (NSString *)conversationIdentifier {
+	APPTENTIVE_ABSTRACT_METHOD_CALLED
+	return @"INVALID";
 }
 
 @end

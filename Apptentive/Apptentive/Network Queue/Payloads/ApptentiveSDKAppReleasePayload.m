@@ -16,44 +16,38 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation ApptentiveSDKAppReleasePayload
 
-- (instancetype)initWithConversation:(ApptentiveConversation *)conversation
-{
-    self = [super init];
+- (instancetype)initWithConversation:(ApptentiveConversation *)conversation {
+	self = [super init];
 
-    if (self) {
-        _conversation = conversation;
-    }
+	if (self) {
+		_conversation = conversation;
+	}
 
-    return self;
+	return self;
 }
 
-- (NSString *)type
-{
-    return @"sdk_app_release";
+- (NSString *)type {
+	return @"sdk_app_release";
 }
 
-- (NSString *)path
-{
-    return @"conversations/<cid>/app_release";
+- (NSString *)path {
+	return @"conversations/<cid>/app_release";
 }
 
-- (NSString *)method
-{
-    return @"PUT";
+- (NSString *)method {
+	return @"PUT";
 }
 
-- (NSString *)containerName
-{
-    return @"app_release";
+- (NSString *)containerName {
+	return @"app_release";
 }
 
-- (NSDictionary *)contents
-{
-    // Combine app release and SDK JSON payloads
-    NSMutableDictionary *appReleaseJSON = [self.conversation.appRelease.JSONDictionary mutableCopy];
-    [appReleaseJSON addEntriesFromDictionary:self.conversation.SDK.JSONDictionary];
+- (NSDictionary *)contents {
+	// Combine app release and SDK JSON payloads
+	NSMutableDictionary *appReleaseJSON = [self.conversation.appRelease.JSONDictionary mutableCopy];
+	[appReleaseJSON addEntriesFromDictionary:self.conversation.SDK.JSONDictionary];
 
-    return appReleaseJSON;
+	return appReleaseJSON;
 }
 
 @end

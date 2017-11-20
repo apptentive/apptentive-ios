@@ -14,10 +14,10 @@ NS_ASSUME_NONNULL_BEGIN
 @class ApptentiveConversation;
 
 typedef NS_OPTIONS(NSInteger, ApptentiveDebuggingOptions) {
-    ApptentiveDebuggingOptionsNone = 0,
-    ApptentiveDebuggingOptionsShowDebugPanel = 1 << 0,
-    ApptentiveDebuggingOptionsLogHTTPFailures = 1 << 1,
-    ApptentiveDebuggingOptionsLogAllHTTPRequests = 1 << 2,
+	ApptentiveDebuggingOptionsNone = 0,
+	ApptentiveDebuggingOptionsShowDebugPanel = 1 << 0,
+	ApptentiveDebuggingOptionsLogHTTPFailures = 1 << 1,
+	ApptentiveDebuggingOptionsLogAllHTTPRequests = 1 << 2,
 };
 
 extern NSNotificationName _Nonnull const ApptentiveConversationChangedNotification;

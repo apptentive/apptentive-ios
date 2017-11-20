@@ -33,154 +33,138 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation ApptentiveBannerViewController
 
-+ (instancetype)bannerWithImageURL:(NSURL *)imageURL title:(NSString *)title message:(NSString *)message
-{
-    static ApptentiveBannerViewController *_currentBanner;
++ (instancetype)bannerWithImageURL:(NSURL *)imageURL title:(NSString *)title message:(NSString *)message {
+	static ApptentiveBannerViewController *_currentBanner;
 
-    if (_currentBanner != nil) {
-        [_currentBanner hide:self];
-    }
+	if (_currentBanner != nil) {
+		[_currentBanner hide:self];
+	}
 
-    ApptentiveBannerViewController *banner = [[ApptentiveUtilities storyboard] instantiateViewControllerWithIdentifier:@"Banner"];
+	ApptentiveBannerViewController *banner = [[ApptentiveUtilities storyboard] instantiateViewControllerWithIdentifier:@"Banner"];
 
-    banner.imageURL = imageURL;
-    banner.titleText = title;
-    banner.messageText = message;
+	banner.imageURL = imageURL;
+	banner.titleText = title;
+	banner.messageText = message;
 
-    return banner;
+	return banner;
 }
 
-- (void)show
-{
-    UIWindow *mainWindow = [UIApplication sharedApplication].delegate.window;
+- (void)show {
+	UIWindow *mainWindow = [UIApplication sharedApplication].delegate.window;
 
-    self.window = [[UIWindow alloc] initWithFrame:mainWindow.bounds];
-    self.window.rootViewController = self;
-    self.window.windowLevel = UIWindowLevelAlert;
+	self.window = [[UIWindow alloc] initWithFrame:mainWindow.bounds];
+	self.window.rootViewController = self;
+	self.window.windowLevel = UIWindowLevelAlert;
 
-    [self.window makeKeyAndVisible];
+	[self.window makeKeyAndVisible];
 
-    self.hideTimer = [NSTimer scheduledTimerWithTimeInterval:DISPLAY_DURATION target:self selector:@selector(hide:) userInfo:nil repeats:NO];
+	self.hideTimer = [NSTimer scheduledTimerWithTimeInterval:DISPLAY_DURATION target:self selector:@selector(hide:) userInfo:nil repeats:NO];
 
-    self.topConstraint.constant = -CGRectGetHeight(self.bannerView.bounds);
-    [self.view layoutIfNeeded];
+	self.topConstraint.constant = -CGRectGetHeight(self.bannerView.bounds);
+	[self.view layoutIfNeeded];
 
-    self.topConstraint.constant = 0;
+	self.topConstraint.constant = 0;
 
-    [UIView animateWithDuration:ANIMATION_DURATION
-                     animations:^{
-                         [self.view layoutIfNeeded];
-                         self.window.frame = self.bannerView.frame;
-                     }];
+	[UIView animateWithDuration:ANIMATION_DURATION
+					 animations:^{
+					   [self.view layoutIfNeeded];
+					   self.window.frame = self.bannerView.frame;
+					 }];
 }
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
+- (void)viewDidLoad {
+	[super viewDidLoad];
 
-    self.imageURL = _imageURL;
-    self.titleText = _titleText;
-    self.messageText = _messageText;
+	self.imageURL = _imageURL;
+	self.titleText = _titleText;
+	self.messageText = _messageText;
 }
 
-- (void)dealloc
-{
-    self.window.rootViewController = nil;
-    [self.hideTimer invalidate];
+- (void)dealloc {
+	self.window.rootViewController = nil;
+	[self.hideTimer invalidate];
 }
 
 #if __IPHONE_OS_VERSION_MAX_ALLOWED < 90000
-- (NSUInteger)supportedInterfaceOrientations
-{
+- (NSUInteger)supportedInterfaceOrientations {
 #else
-- (UIInterfaceOrientationMask)supportedInterfaceOrientations
-{
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
 #endif
-    return UIInterfaceOrientationMaskAll;
+	return UIInterfaceOrientationMaskAll;
 }
 
-- (BOOL)prefersStatusBarHidden
-{
-    return [UIApplication sharedApplication].statusBarHidden;
+- (BOOL)prefersStatusBarHidden {
+	return [UIApplication sharedApplication].statusBarHidden;
 }
 
-- (void)viewDidLayoutSubviews
-{
-    self.imageView.layer.cornerRadius = CGRectGetHeight(self.imageView.bounds) / 2.0;
+- (void)viewDidLayoutSubviews {
+	self.imageView.layer.cornerRadius = CGRectGetHeight(self.imageView.bounds) / 2.0;
 }
 
-- (void)setHasIcon:(BOOL)hasIcon
-{
-    self.imageView.hidden = !hasIcon;
+- (void)setHasIcon:(BOOL)hasIcon {
+	self.imageView.hidden = !hasIcon;
 
-    if (hasIcon) {
-        if (![self.bannerView.constraints containsObject:self.iconSpacingConstraint]) {
-            [self.bannerView addConstraint:self.iconSpacingConstraint];
-        }
-        self.imageView.hidden = NO;
-    } else {
-        if ([self.bannerView.constraints containsObject:self.iconSpacingConstraint]) {
-            [self.bannerView removeConstraint:self.iconSpacingConstraint];
-        }
-        self.imageView.hidden = YES;
-    }
+	if (hasIcon) {
+		if (![self.bannerView.constraints containsObject:self.iconSpacingConstraint]) {
+			[self.bannerView addConstraint:self.iconSpacingConstraint];
+		}
+		self.imageView.hidden = NO;
+	} else {
+		if ([self.bannerView.constraints containsObject:self.iconSpacingConstraint]) {
+			[self.bannerView removeConstraint:self.iconSpacingConstraint];
+		}
+		self.imageView.hidden = YES;
+	}
 }
 
-- (void)setImageURL:(NSURL *)imageURL
-{
-    _imageURL = imageURL;
+- (void)setImageURL:(NSURL *)imageURL {
+	_imageURL = imageURL;
 
-    self.imageView.imageURL = imageURL;
+	self.imageView.imageURL = imageURL;
 }
 
-- (void)setTitleText:(NSString *)titleText
-{
-    _titleText = titleText;
+- (void)setTitleText:(NSString *)titleText {
+	_titleText = titleText;
 
-    self.titleLabel.text = titleText;
+	self.titleLabel.text = titleText;
 }
 
-- (void)setMessageText:(NSString *)messageText
-{
-    _messageText = messageText;
+- (void)setMessageText:(NSString *)messageText {
+	_messageText = messageText;
 
-    self.messageLabel.text = messageText;
+	self.messageLabel.text = messageText;
 }
 
 #pragma mark - Image view delegate
 
-- (void)networkImageViewDidLoad:(ApptentiveNetworkImageView *)imageView
-{
-    self.hasIcon = YES;
+- (void)networkImageViewDidLoad:(ApptentiveNetworkImageView *)imageView {
+	self.hasIcon = YES;
 }
 
-- (void)networkImageView:(ApptentiveNetworkImageView *)imageView didFailWithError:(NSError *)error
-{
-    self.hasIcon = NO;
+- (void)networkImageView:(ApptentiveNetworkImageView *)imageView didFailWithError:(NSError *)error {
+	self.hasIcon = NO;
 }
 
 #pragma mark - Actions
 
-- (IBAction)hide:(id)sender
-{
-    self.topConstraint.constant = -CGRectGetHeight(self.bannerView.bounds);
+- (IBAction)hide:(id)sender {
+	self.topConstraint.constant = -CGRectGetHeight(self.bannerView.bounds);
 
-    [UIView animateWithDuration:ANIMATION_DURATION
-        animations:^{
-            [self.view layoutIfNeeded];
-        }
-        completion:^(BOOL finished) {
-            [self.window resignKeyWindow];
+	[UIView animateWithDuration:ANIMATION_DURATION
+		animations:^{
+		  [self.view layoutIfNeeded];
+		}
+		completion:^(BOOL finished) {
+		  [self.window resignKeyWindow];
 
-            self.window.rootViewController = nil;
-        }];
+		  self.window.rootViewController = nil;
+		}];
 }
 
-- (IBAction)tap:(id)sender
-{
-    [self.delegate userDidTapBanner:self];
+- (IBAction)tap:(id)sender {
+	[self.delegate userDidTapBanner:self];
 
-    [self hide:sender];
+	[self hide:sender];
 }
 
 @end

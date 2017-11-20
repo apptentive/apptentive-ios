@@ -24,14 +24,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @dynamic apptentiveAlertWindow;
 
-- (void)setApptentiveAlertWindow:(nullable UIWindow *)window
-{
-    objc_setAssociatedObject(self, @selector(apptentiveAlertWindow), window, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+- (void)setApptentiveAlertWindow:(nullable UIWindow *)window {
+	objc_setAssociatedObject(self, @selector(apptentiveAlertWindow), window, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (nullable UIWindow *)apptentiveAlertWindow
-{
-    return objc_getAssociatedObject(self, @selector(apptentiveAlertWindow));
+- (nullable UIWindow *)apptentiveAlertWindow {
+	return objc_getAssociatedObject(self, @selector(apptentiveAlertWindow));
 }
 
 @end
@@ -39,23 +37,21 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation UIAlertController (Apptentive)
 
-- (void)apptentive_presentAnimated:(BOOL)animated completion:(void (^__nullable)(void))completion
-{
-    self.apptentiveAlertWindow = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    self.apptentiveAlertWindow.rootViewController = [[UIViewController alloc] init];
-    self.apptentiveAlertWindow.windowLevel = UIWindowLevelAlert + 1;
-    [self.apptentiveAlertWindow makeKeyAndVisible];
-    [self.apptentiveAlertWindow.rootViewController presentViewController:self animated:animated completion:completion];
+- (void)apptentive_presentAnimated:(BOOL)animated completion:(void (^__nullable)(void))completion {
+	self.apptentiveAlertWindow = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+	self.apptentiveAlertWindow.rootViewController = [[UIViewController alloc] init];
+	self.apptentiveAlertWindow.windowLevel = UIWindowLevelAlert + 1;
+	[self.apptentiveAlertWindow makeKeyAndVisible];
+	[self.apptentiveAlertWindow.rootViewController presentViewController:self animated:animated completion:completion];
 }
 
-- (void)viewDidDisappear:(BOOL)animated
-{
-    [super viewDidDisappear:animated];
+- (void)viewDidDisappear:(BOOL)animated {
+	[super viewDidDisappear:animated];
 
-    if (self.presentingViewController == nil) {
-        self.apptentiveAlertWindow.hidden = YES;
-        self.apptentiveAlertWindow = nil;
-    }
+	if (self.presentingViewController == nil) {
+		self.apptentiveAlertWindow.hidden = YES;
+		self.apptentiveAlertWindow = nil;
+	}
 }
 
 @end

@@ -24,40 +24,38 @@ NSString *const ATInteractionSurveyEventLabelLaunch = @"launch";
 
 @implementation ApptentiveInteractionSurveyController
 
-+ (void)load
-{
-    [self registerInteractionControllerClass:self forType:@"Survey"];
++ (void)load {
+	[self registerInteractionControllerClass:self forType:@"Survey"];
 }
 
-- (void)presentInteractionFromViewController:(nullable UIViewController *)viewController
-{
-    [super presentInteractionFromViewController:viewController];
+- (void)presentInteractionFromViewController:(nullable UIViewController *)viewController {
+	[super presentInteractionFromViewController:viewController];
 
-    ApptentiveNavigationController *navigationController = [[ApptentiveUtilities storyboard] instantiateViewControllerWithIdentifier:@"SurveyNavigation"];
-    ApptentiveSurveyViewModel *viewModel = [[ApptentiveSurveyViewModel alloc] initWithInteraction:self.interaction];
-    if (viewModel) {
-        ApptentiveSurveyViewController *surveyViewController = navigationController.viewControllers.firstObject;
+	ApptentiveNavigationController *navigationController = [[ApptentiveUtilities storyboard] instantiateViewControllerWithIdentifier:@"SurveyNavigation"];
+	ApptentiveSurveyViewModel *viewModel = [[ApptentiveSurveyViewModel alloc] initWithInteraction:self.interaction];
+	if (viewModel) {
+		ApptentiveSurveyViewController *surveyViewController = navigationController.viewControllers.firstObject;
 
-        surveyViewController.viewModel = viewModel;
+		surveyViewController.viewModel = viewModel;
 
-        // Add owning reference to self so we stick around until VC is dismissed
-        surveyViewController.interactionController = self;
+		// Add owning reference to self so we stick around until VC is dismissed
+		surveyViewController.interactionController = self;
 
-        self.presentedViewController = navigationController;
+		self.presentedViewController = navigationController;
 
-        if (viewController != nil) {
-            [viewController presentViewController:navigationController animated:YES completion:nil];
-        } else {
-            [navigationController presentAnimated:YES completion:nil];
-        }
-    }
+		if (viewController != nil) {
+			[viewController presentViewController:navigationController animated:YES completion:nil];
+		} else {
+			[navigationController presentAnimated:YES completion:nil];
+		}
+	}
 
-    ApptentiveAssertNotNil(self.interaction.identifier, @"Interaction identifier is nil");
-    if (self.interaction.identifier != nil) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveSurveyShownNotification object:@{ApptentiveSurveyIDKey : self.interaction.identifier}];
-    }
+	ApptentiveAssertNotNil(self.interaction.identifier, @"Interaction identifier is nil");
+	if (self.interaction.identifier != nil) {
+		[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveSurveyShownNotification object:@{ApptentiveSurveyIDKey: self.interaction.identifier}];
+	}
 
-    [self.interaction engage:ATInteractionSurveyEventLabelLaunch fromViewController:viewController];
+	[self.interaction engage:ATInteractionSurveyEventLabelLaunch fromViewController:viewController];
 }
 
 @end

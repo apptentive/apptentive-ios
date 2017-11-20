@@ -32,30 +32,30 @@ FOUNDATION_EXPORT const unsigned char ApptentiveVersionString[];
  A code corresponding to the reason that the Apptentive server authentication failed.
  */
 typedef NS_ENUM(NSInteger, ApptentiveAuthenticationFailureReason) {
-    /** An unknown authentication failure. */
-    ApptentiveAuthenticationFailureReasonUnknown,
-    /** An invalid JWT algorithm was used. */
-    ApptentiveAuthenticationFailureReasonInvalidAlgorithm,
-    /** A malformed JWT was encountered. */
-    ApptentiveAuthenticationFailureReasonMalformedToken,
-    /** An invalid JWT was encountered. */
-    ApptentiveAuthenticationFailureReasonInvalidToken,
-    /** A required subclaim was missing. */
-    ApptentiveAuthenticationFailureReasonMissingSubClaim,
-    /** A subclaim didn't match the logged-in session. */
-    ApptentiveAuthenticationFailureReasonMismatchedSubClaim,
-    /** An invalid subclaim was encountered. */
-    ApptentiveAuthenticationFailureReasonInvalidSubClaim,
-    /** The JWT expired. */
-    ApptentiveAuthenticationFailureReasonExpiredToken,
-    /** The JWT was revoked. */
-    ApptentiveAuthenticationFailureReasonRevokedToken,
-    /** The Apptentive App Key was missing. */
-    ApptentiveAuthenticationFailureReasonMissingAppKey,
-    /** The Apptentive App Signature was missing */
-    ApptentiveAuthenticationFailureReasonMissingAppSignature,
-    /** In invalid combination of an Apptentive App Key and an Apptentive App Signature was found. */
-    ApptentiveAuthenticationFailureReasonInvalidKeySignaturePair
+	/** An unknown authentication failure. */
+	ApptentiveAuthenticationFailureReasonUnknown,
+	/** An invalid JWT algorithm was used. */
+	ApptentiveAuthenticationFailureReasonInvalidAlgorithm,
+	/** A malformed JWT was encountered. */
+	ApptentiveAuthenticationFailureReasonMalformedToken,
+	/** An invalid JWT was encountered. */
+	ApptentiveAuthenticationFailureReasonInvalidToken,
+	/** A required subclaim was missing. */
+	ApptentiveAuthenticationFailureReasonMissingSubClaim,
+	/** A subclaim didn't match the logged-in session. */
+	ApptentiveAuthenticationFailureReasonMismatchedSubClaim,
+	/** An invalid subclaim was encountered. */
+	ApptentiveAuthenticationFailureReasonInvalidSubClaim,
+	/** The JWT expired. */
+	ApptentiveAuthenticationFailureReasonExpiredToken,
+	/** The JWT was revoked. */
+	ApptentiveAuthenticationFailureReasonRevokedToken,
+	/** The Apptentive App Key was missing. */
+	ApptentiveAuthenticationFailureReasonMissingAppKey,
+	/** The Apptentive App Signature was missing */
+	ApptentiveAuthenticationFailureReasonMissingAppSignature,
+	/** In invalid combination of an Apptentive App Key and an Apptentive App Signature was found. */
+	ApptentiveAuthenticationFailureReasonInvalidKeySignaturePair
 };
 
 /** A block used to notify your app that an authenticated request failed to authenticate. */
@@ -87,34 +87,34 @@ extern NSString *const ApptentiveSurveyIDKey;
 
 /** Supported Push Providers for use in `setPushNotificationIntegration:withDeviceToken:` */
 typedef NS_ENUM(NSInteger, ApptentivePushProvider) {
-    /** Specifies the Apptentive push provider. */
-    ApptentivePushProviderApptentive,
-    /** Specifies the Urban Airship push provider. */
-    ApptentivePushProviderUrbanAirship,
-    /** Specifies the Amazon Simple Notification Service push provider. */
-    ApptentivePushProviderAmazonSNS,
-    /** Specifies the Parse push provider. */
-    ApptentivePushProviderParse,
+	/** Specifies the Apptentive push provider. */
+	ApptentivePushProviderApptentive,
+	/** Specifies the Urban Airship push provider. */
+	ApptentivePushProviderUrbanAirship,
+	/** Specifies the Amazon Simple Notification Service push provider. */
+	ApptentivePushProviderAmazonSNS,
+	/** Specifies the Parse push provider. */
+	ApptentivePushProviderParse,
 };
 
 /**
  Log levels supported by the logging system. Each level includes those above it on the list.
 */
 typedef NS_ENUM(NSUInteger, ApptentiveLogLevel) {
-    /** Undefined. */
-    ApptentiveLogLevelUndefined = 0,
-    /** Critical failure log messages. */
-    ApptentiveLogLevelCrit = 1,
-    /** Error log messages. */
-    ApptentiveLogLevelError = 2,
-    /** Warning log messages. */
-    ApptentiveLogLevelWarn = 3,
-    /** Informational log messages. */
-    ApptentiveLogLevelInfo = 4,
-    /** Log messages that are potentially useful for debugging. */
-    ApptentiveLogLevelDebug = 5,
-    /** All possible log messages enabled. */
-    ApptentiveLogLevelVerbose = 6
+	/** Undefined. */
+	ApptentiveLogLevelUndefined = 0,
+	/** Critical failure log messages. */
+	ApptentiveLogLevelCrit = 1,
+	/** Error log messages. */
+	ApptentiveLogLevelError = 2,
+	/** Warning log messages. */
+	ApptentiveLogLevelWarn = 3,
+	/** Informational log messages. */
+	ApptentiveLogLevelInfo = 4,
+	/** Log messages that are potentially useful for debugging. */
+	ApptentiveLogLevelDebug = 5,
+	/** All possible log messages enabled. */
+	ApptentiveLogLevelVerbose = 6
 };
 
 /**
@@ -324,13 +324,13 @@ typedef NS_ENUM(NSUInteger, ApptentiveLogLevel) {
  @return An extended data dictionary representing a commerce transaction, to be included in an event's extended data.
  */
 + (NSDictionary *)extendedDataCommerceWithTransactionID:(nullable NSString *)transactionID
-                                            affiliation:(nullable NSString *)affiliation
-                                                revenue:(nullable NSNumber *)revenue
-                                               shipping:(nullable NSNumber *)shipping
-                                                    tax:(nullable NSNumber *)tax
-                                               currency:(nullable NSString *)currency
-                                          commerceItems:(nullable NSArray<NSDictionary *> *)commerceItems
-    NS_SWIFT_NAME(extendedData(transactionID:affiliation:revenue:shipping:tax:currency:commerceItems:));
+											affiliation:(nullable NSString *)affiliation
+												revenue:(nullable NSNumber *)revenue
+											   shipping:(nullable NSNumber *)shipping
+													tax:(nullable NSNumber *)tax
+											   currency:(nullable NSString *)currency
+										  commerceItems:(nullable NSArray<NSDictionary *> *)commerceItems
+	NS_SWIFT_NAME(extendedData(transactionID:affiliation:revenue:shipping:tax:currency:commerceItems:));
 
 /**
  Used to specify a commercial transaction (consisting of a single item) in an event's extended data.
@@ -345,12 +345,12 @@ typedef NS_ENUM(NSUInteger, ApptentiveLogLevel) {
  @return An extended data dictionary representing a single item in a commerce transaction, to be included in an event's extended data.
  */
 + (NSDictionary *)extendedDataCommerceItemWithItemID:(nullable NSString *)itemID
-                                                name:(nullable NSString *)name
-                                            category:(nullable NSString *)category
-                                               price:(nullable NSNumber *)price
-                                            quantity:(nullable NSNumber *)quantity
-                                            currency:(nullable NSString *)currency
-    NS_SWIFT_NAME(extendedData(itemID:name:category:price:quantity:currency:));
+												name:(nullable NSString *)name
+											category:(nullable NSString *)category
+											   price:(nullable NSNumber *)price
+											quantity:(nullable NSNumber *)quantity
+											currency:(nullable NSString *)currency
+	NS_SWIFT_NAME(extendedData(itemID:name:category:price:quantity:currency:));
 
 ///--------------------
 /// @name Presenting UI

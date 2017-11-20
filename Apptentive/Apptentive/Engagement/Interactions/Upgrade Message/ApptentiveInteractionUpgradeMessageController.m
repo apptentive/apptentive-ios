@@ -20,37 +20,34 @@ NSString *const ATInteractionUpgradeMessageEventLabelDismiss = @"dismiss";
 
 @implementation ApptentiveInteractionUpgradeMessageController
 
-+ (void)load
-{
-    [self registerInteractionControllerClass:self forType:@"UpgradeMessage"];
++ (void)load {
+	[self registerInteractionControllerClass:self forType:@"UpgradeMessage"];
 }
 
-- (void)presentInteractionFromViewController:(nullable UIViewController *)viewController
-{
-    [super presentInteractionFromViewController:viewController];
+- (void)presentInteractionFromViewController:(nullable UIViewController *)viewController {
+	[super presentInteractionFromViewController:viewController];
 
-    ApptentiveNavigationController *navigationController = [[ApptentiveUtilities storyboard] instantiateViewControllerWithIdentifier:@"UpgradeMessageNavigation"];
-    ApptentiveInteractionUpgradeMessageViewController *result = (ApptentiveInteractionUpgradeMessageViewController *)navigationController.viewControllers.firstObject;
+	ApptentiveNavigationController *navigationController = [[ApptentiveUtilities storyboard] instantiateViewControllerWithIdentifier:@"UpgradeMessageNavigation"];
+	ApptentiveInteractionUpgradeMessageViewController *result = (ApptentiveInteractionUpgradeMessageViewController *)navigationController.viewControllers.firstObject;
 
-    result.upgradeMessageInteraction = self.interaction;
+	result.upgradeMessageInteraction = self.interaction;
 
-    // Add owning reference to self so we stick around until VC is dismissed.
-    result.interactionController = self;
+	// Add owning reference to self so we stick around until VC is dismissed.
+	result.interactionController = self;
 
-    self.presentedViewController = navigationController;
+	self.presentedViewController = navigationController;
 
-    if (viewController != nil) {
-        [viewController presentViewController:navigationController animated:YES completion:nil];
-    } else {
-        [navigationController presentAnimated:YES completion:nil];
-    }
+	if (viewController != nil) {
+		[viewController presentViewController:navigationController animated:YES completion:nil];
+	} else {
+		[navigationController presentAnimated:YES completion:nil];
+	}
 
-    [result.upgradeMessageInteraction engage:ATInteractionUpgradeMessageEventLabelLaunch fromViewController:viewController];
+	[result.upgradeMessageInteraction engage:ATInteractionUpgradeMessageEventLabelLaunch fromViewController:viewController];
 }
 
-- (NSString *)programmaticDismissEventLabel
-{
-    return ATInteractionUpgradeMessageEventLabelDismiss;
+- (NSString *)programmaticDismissEventLabel {
+	return ATInteractionUpgradeMessageEventLabelDismiss;
 }
 
 @end

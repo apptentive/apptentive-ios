@@ -25,59 +25,53 @@ NSString *const ATInteractionEnjoymentDialogEventLabelNo = @"no";
 
 @implementation ApptentiveInteractionEnjoymentDialogController
 
-+ (void)load
-{
-    [self registerInteractionControllerClass:self forType:@"EnjoymentDialog"];
++ (void)load {
+	[self registerInteractionControllerClass:self forType:@"EnjoymentDialog"];
 }
 
-- (void)presentInteractionFromViewController:(nullable UIViewController *)viewController
-{
-    [super presentInteractionFromViewController:viewController];
+- (void)presentInteractionFromViewController:(nullable UIViewController *)viewController {
+	[super presentInteractionFromViewController:viewController];
 
-    self.presentedViewController = [self alertControllerWithInteraction:self.interaction];
+	self.presentedViewController = [self alertControllerWithInteraction:self.interaction];
 
-    if (self.presentedViewController) {
-        if (viewController != nil) {
-            [viewController presentViewController:self.presentedViewController
-                                         animated:YES
-                                       completion:^{
-                                           [self.interaction engage:ATInteractionEnjoymentDialogEventLabelLaunch fromViewController:viewController];
-                                       }];
-        } else {
-            [(UIAlertController *)self.presentedViewController apptentive_presentAnimated:YES
-                                                                               completion:^{
-                                                                                   [self.interaction engage:ATInteractionEnjoymentDialogEventLabelLaunch fromViewController:nil];
-                                                                               }];
-        }
-    }
+	if (self.presentedViewController) {
+		if (viewController != nil) {
+			[viewController presentViewController:self.presentedViewController
+										 animated:YES
+									   completion:^{
+										 [self.interaction engage:ATInteractionEnjoymentDialogEventLabelLaunch fromViewController:viewController];
+									   }];
+		} else {
+			[(UIAlertController *)self.presentedViewController apptentive_presentAnimated:YES
+																			   completion:^{
+																				 [self.interaction engage:ATInteractionEnjoymentDialogEventLabelLaunch fromViewController:nil];
+																			   }];
+		}
+	}
 }
 
-- (NSString *)title
-{
-    NSString *title = self.interaction.configuration[@"title"] ?: [NSString stringWithFormat:ApptentiveLocalizedString(@"Do you love %@?", @"Title for enjoyment alert view. Parameter is app name."), [ApptentiveUtilities appName]];
+- (NSString *)title {
+	NSString *title = self.interaction.configuration[@"title"] ?: [NSString stringWithFormat:ApptentiveLocalizedString(@"Do you love %@?", @"Title for enjoyment alert view. Parameter is app name."), [ApptentiveUtilities appName]];
 
-    return title;
+	return title;
 }
 
-- (nullable NSString *)body
-{
-    NSString *body = self.interaction.configuration[@"body"] ?: nil;
+- (nullable NSString *)body {
+	NSString *body = self.interaction.configuration[@"body"] ?: nil;
 
-    return body;
+	return body;
 }
 
-- (NSString *)yesText
-{
-    NSString *yesText = self.interaction.configuration[@"yes_text"] ?: ApptentiveLocalizedString(@"Yes", @"yes");
+- (NSString *)yesText {
+	NSString *yesText = self.interaction.configuration[@"yes_text"] ?: ApptentiveLocalizedString(@"Yes", @"yes");
 
-    return yesText;
+	return yesText;
 }
 
-- (NSString *)noText
-{
-    NSString *noText = self.interaction.configuration[@"no_text"] ?: ApptentiveLocalizedString(@"No", @"no");
+- (NSString *)noText {
+	NSString *noText = self.interaction.configuration[@"no_text"] ?: ApptentiveLocalizedString(@"No", @"no");
 
-    return noText;
+	return noText;
 }
 
 #pragma mark UIAlertController
@@ -87,32 +81,31 @@ NSString *const ATInteractionEnjoymentDialogEventLabelNo = @"no";
 // alert controller is dismissed. At that point we clear the reference to the
 // alert controller to break the retain cycle.
 
-- (nullable UIAlertController *)alertControllerWithInteraction:(ApptentiveInteraction *)interaction
-{
-    if (!self.title && !self.body) {
-        ApptentiveLogError(@"Skipping display of Enjoyment Dialog that does not have a title or body.");
-        return nil;
-    }
+- (nullable UIAlertController *)alertControllerWithInteraction:(ApptentiveInteraction *)interaction {
+	if (!self.title && !self.body) {
+		ApptentiveLogError(@"Skipping display of Enjoyment Dialog that does not have a title or body.");
+		return nil;
+	}
 
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:self.title message:self.body preferredStyle:UIAlertControllerStyleAlert];
+	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:self.title message:self.body preferredStyle:UIAlertControllerStyleAlert];
 
-    [alertController addAction:[UIAlertAction actionWithTitle:self.noText
-                                                        style:UIAlertActionStyleDefault
-                                                      handler:^(UIAlertAction *action) {
-                                                          [self.interaction engage:ATInteractionEnjoymentDialogEventLabelNo fromViewController:self.presentingViewController];
+	[alertController addAction:[UIAlertAction actionWithTitle:self.noText
+														style:UIAlertActionStyleDefault
+													  handler:^(UIAlertAction *action) {
+														[self.interaction engage:ATInteractionEnjoymentDialogEventLabelNo fromViewController:self.presentingViewController];
 
-                                                          self.presentedViewController = nil;
-                                                      }]];
+														self.presentedViewController = nil;
+													  }]];
 
-    [alertController addAction:[UIAlertAction actionWithTitle:self.yesText
-                                                        style:UIAlertActionStyleDefault
-                                                      handler:^(UIAlertAction *action) {
-                                                          [self.interaction engage:ATInteractionEnjoymentDialogEventLabelYes fromViewController:self.presentingViewController];
+	[alertController addAction:[UIAlertAction actionWithTitle:self.yesText
+														style:UIAlertActionStyleDefault
+													  handler:^(UIAlertAction *action) {
+														[self.interaction engage:ATInteractionEnjoymentDialogEventLabelYes fromViewController:self.presentingViewController];
 
-                                                          self.presentedViewController = nil;
-                                                      }]];
+														self.presentedViewController = nil;
+													  }]];
 
-    return alertController;
+	return alertController;
 }
 
 @end

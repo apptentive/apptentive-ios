@@ -22,73 +22,70 @@ NS_ASSUME_NONNULL_BEGIN
 @dynamic surveyID;
 @dynamic pendingState;
 
-+ (void)enqueueUnsentSurveyResponsesInContext:(NSManagedObjectContext *)context forConversation:(ApptentiveConversation *)conversation
-{
-    ApptentiveAssertNotNil(context, @"Context is nil");
-    ApptentiveAssertNotNil(conversation, @"Conversation is nil");
++ (void)enqueueUnsentSurveyResponsesInContext:(NSManagedObjectContext *)context forConversation:(ApptentiveConversation *)conversation {
+	ApptentiveAssertNotNil(context, @"Context is nil");
+	ApptentiveAssertNotNil(conversation, @"Conversation is nil");
 
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"ATSurveyResponse"];
+	NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"ATSurveyResponse"];
 
-    NSError *error;
-    NSArray *unsentSurveyResponses = [context executeFetchRequest:request error:&error];
+	NSError *error;
+	NSArray *unsentSurveyResponses = [context executeFetchRequest:request error:&error];
 
-    if (unsentSurveyResponses == nil) {
-        ApptentiveLogError(@"Unable to retrieve unsent events: %@", error);
-        return;
-    }
+	if (unsentSurveyResponses == nil) {
+		ApptentiveLogError(@"Unable to retrieve unsent events: %@", error);
+		return;
+	}
 
-    for (ApptentiveLegacySurveyResponse *response in unsentSurveyResponses) {
-        NSDictionary *JSON = response.apiJSON[@"survey"];
+	for (ApptentiveLegacySurveyResponse *response in unsentSurveyResponses) {
+		NSDictionary *JSON = response.apiJSON[@"survey"];
 
-        ApptentiveSurveyResponsePayload *payload = [[ApptentiveSurveyResponsePayload alloc] initWithAnswers:JSON[@"answers"] identifier:JSON[@"id"]];
-        ApptentiveAssertNotNil(payload, @"Failed to create a survey response payload");
+		ApptentiveSurveyResponsePayload *payload = [[ApptentiveSurveyResponsePayload alloc] initWithAnswers:JSON[@"answers"] identifier:JSON[@"id"]];
+		ApptentiveAssertNotNil(payload, @"Failed to create a survey response payload");
 
-        if (payload != nil) {
-            [ApptentiveSerialRequest enqueuePayload:payload forConversation:conversation usingAuthToken:conversation.token inContext:context];
-        }
+		if (payload != nil) {
+			[ApptentiveSerialRequest enqueuePayload:payload forConversation:conversation usingAuthToken:conversation.token inContext:context];
+		}
 
-        [context deleteObject:response];
-    }
+		[context deleteObject:response];
+	}
 }
 
-- (nullable NSDictionary *)apiJSON
-{
-    NSDictionary *superJSON = [super apiJSON];
-    NSMutableDictionary *survey = [NSMutableDictionary dictionary];
-    survey[@"id"] = self.surveyID;
-    if (self.pendingSurveyResponseID != nil) {
-        survey[@"nonce"] = self.pendingSurveyResponseID;
-    }
-    NSDictionary *answers = [self dictionaryForAnswers];
-    if (answers) {
-        survey[@"answers"] = answers;
-    }
-    if ([superJSON objectForKey:@"client_created_at"]) {
-        survey[@"client_created_at"] = superJSON[@"client_created_at"];
-    }
-    if ([superJSON objectForKey:@"client_created_at_utc_offset"]) {
-        survey[@"client_created_at_utc_offset"] = superJSON[@"client_created_at_utc_offset"];
-    }
+- (nullable NSDictionary *)apiJSON {
+	NSDictionary *superJSON = [super apiJSON];
+	NSMutableDictionary *survey = [NSMutableDictionary dictionary];
+	survey[@"id"] = self.surveyID;
+	if (self.pendingSurveyResponseID != nil) {
+		survey[@"nonce"] = self.pendingSurveyResponseID;
+	}
+	NSDictionary *answers = [self dictionaryForAnswers];
+	if (answers) {
+		survey[@"answers"] = answers;
+	}
+	if ([superJSON objectForKey:@"client_created_at"]) {
+		survey[@"client_created_at"] = superJSON[@"client_created_at"];
+	}
+	if ([superJSON objectForKey:@"client_created_at_utc_offset"]) {
+		survey[@"client_created_at_utc_offset"] = superJSON[@"client_created_at_utc_offset"];
+	}
 
-    NSDictionary *result = @{ @"survey" : survey };
-    return result;
+	NSDictionary *result = @{ @"survey": survey };
+	return result;
 }
 
 #pragma mark Private
 
-- (NSDictionary *)dictionaryForAnswers
-{
-    if (self.answersData == nil) {
-        return @{};
-    } else {
-        NSDictionary *result = nil;
-        @try {
-            result = [NSKeyedUnarchiver unarchiveObjectWithData:self.answersData];
-        } @catch (NSException *exception) {
-            ApptentiveLogError(@"Unable to unarchive answers data: %@", exception);
-        }
-        return result;
-    }
+- (NSDictionary *)dictionaryForAnswers {
+	if (self.answersData == nil) {
+		return @{};
+	} else {
+		NSDictionary *result = nil;
+		@try {
+			result = [NSKeyedUnarchiver unarchiveObjectWithData:self.answersData];
+		} @catch (NSException *exception) {
+			ApptentiveLogError(@"Unable to unarchive answers data: %@", exception);
+		}
+		return result;
+	}
 }
 
 @end

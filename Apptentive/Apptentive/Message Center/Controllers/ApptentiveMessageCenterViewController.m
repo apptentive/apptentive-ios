@@ -130,6 +130,10 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 	self.tableView.estimatedRowHeight = 66.0;
 	self.tableView.rowHeight = UITableViewAutomaticDimension;
+
+	ApptentiveProgressNavigationBar *navigationBar = (ApptentiveProgressNavigationBar *)self.navigationController.navigationBar;
+
+	navigationBar.progressView.hidden = YES;
 }
 
 - (void)dealloc {
@@ -449,6 +453,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 			// Fall through
 		case ATMessageCenterMessageTypeMessage:
 			cell.contentView.backgroundColor = [self.viewModel.styleSheet colorForStyle:ApptentiveColorMessageBackground];
+			cell.backgroundColor = [self.viewModel.styleSheet colorForStyle:ApptentiveColorMessageBackground];
 			break;
 
 		case ATMessageCenterMessageTypeCompoundReply:
@@ -456,10 +461,12 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 			// Fall through
 		case ATMessageCenterMessageTypeReply:
 			cell.contentView.backgroundColor = [self.viewModel.styleSheet colorForStyle:ApptentiveColorReplyBackground];
+			cell.backgroundColor = [self.viewModel.styleSheet colorForStyle:ApptentiveColorReplyBackground];
 			break;
 
 		case ATMessageCenterMessageTypeContextMessage:
 			cell.contentView.backgroundColor = [self.viewModel.styleSheet colorForStyle:ApptentiveColorContextBackground];
+			cell.backgroundColor = [self.viewModel.styleSheet colorForStyle:ApptentiveColorContextBackground];
 	}
 }
 

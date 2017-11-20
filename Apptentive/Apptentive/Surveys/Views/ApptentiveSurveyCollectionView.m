@@ -64,11 +64,6 @@ NS_ASSUME_NONNULL_BEGIN
 	[self.collectionViewLayout invalidateLayout];
 }
 
-- (void)scrollToItemAtIndexPath:(NSIndexPath *)indexPath atScrollPosition:(UICollectionViewScrollPosition)scrollPosition animated:(BOOL)animated {
-	// The OS calls this incompetently and screws up our positioning.
-	return;
-}
-
 - (void)scrollHeaderAtIndexPathToTop:(NSIndexPath *)indexPath animated:(BOOL)animated {
 	CGRect headerFrame = [self layoutAttributesForSupplementaryElementOfKind:UICollectionElementKindSectionHeader atIndexPath:indexPath].frame;
 

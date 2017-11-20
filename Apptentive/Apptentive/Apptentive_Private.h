@@ -20,11 +20,11 @@ extern NSNotificationName _Nonnull const ApptentiveInteractionsDidUpdateNotifica
 extern NSNotificationName _Nonnull const ApptentiveInteractionsShouldDismissNotification;
 extern NSNotificationName _Nonnull const ApptentiveManifestRawDataDidReceiveNotification;
 
-extern NSString * _Nonnull const ApptentiveInteractionsShouldDismissAnimatedKey;
+extern NSString *_Nonnull const ApptentiveInteractionsShouldDismissAnimatedKey;
 extern NSNotificationName _Nonnull const ApptentiveConversationCreatedNotification;
-extern NSString * _Nonnull const ApptentiveCustomDeviceDataPreferenceKey;
-extern NSString * _Nonnull const ApptentiveCustomPersonDataPreferenceKey;
-extern NSString * _Nonnull const ApptentiveManifestRawDataKey;
+extern NSString *_Nonnull const ApptentiveCustomDeviceDataPreferenceKey;
+extern NSString *_Nonnull const ApptentiveCustomPersonDataPreferenceKey;
+extern NSString *_Nonnull const ApptentiveManifestRawDataKey;
 
 @class ApptentiveMessage, ApptentiveBackend;
 
@@ -63,7 +63,7 @@ extern NSString * _Nonnull const ApptentiveManifestRawDataKey;
 
 /*! Replacement for NSLocalizedString within ApptentiveConnect. Pulls
  localized strings out of the resource bundle. */
-extern NSString *ApptentiveLocalizedString(NSString *key, NSString * _Nullable comment);
+extern NSString *ApptentiveLocalizedString(NSString *key, NSString *_Nullable comment);
 
 extern ApptentiveAuthenticationFailureReason parseAuthenticationFailureReason(NSString *reason);
 
@@ -74,9 +74,10 @@ extern ApptentiveAuthenticationFailureReason parseAuthenticationFailureReason(NS
 
 @end
 
+
 @interface ApptentiveNavigationController (UIWindow)
 
-- (void)presentAnimated:(BOOL)animated completion:(void (^ __nullable)(void))completion;
+- (void)presentAnimated:(BOOL)animated completion:(void (^__nullable)(void))completion;
 
 @end
 

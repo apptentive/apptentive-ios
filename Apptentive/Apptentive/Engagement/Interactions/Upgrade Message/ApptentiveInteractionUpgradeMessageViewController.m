@@ -7,17 +7,17 @@
 //
 
 #import "ApptentiveInteractionUpgradeMessageViewController.h"
-#import "Apptentive_Private.h"
-#import "ApptentiveInteraction.h"
-#import "ApptentiveBackend.h"
-#import "ApptentiveUtilities.h"
 #import "ApptentiveAboutViewController.h"
 #import "ApptentiveAppConfiguration.h"
+#import "ApptentiveBackend.h"
+#import "ApptentiveInteraction.h"
+#import "ApptentiveUtilities.h"
+#import "Apptentive_Private.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 typedef enum {
-	ATInteractionUpgradeMessageOkPressed,
+    ATInteractionUpgradeMessageOkPressed,
 } ATInteractionUpgradeMessageAction;
 
 NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
@@ -45,95 +45,101 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 
 @implementation ApptentiveInteractionUpgradeMessageViewController
 
-- (void)viewDidLoad {
-	[super viewDidLoad];
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
 
-	// Borders
-	self.appIconContainer.layer.borderColor = [UIColor colorWithWhite:0.87 alpha:1.0].CGColor;
-	self.appIconContainer.layer.borderWidth = 1.0 / [UIScreen mainScreen].scale;
+    // Borders
+    self.appIconContainer.layer.borderColor = [UIColor colorWithWhite:0.87 alpha:1.0].CGColor;
+    self.appIconContainer.layer.borderWidth = 1.0 / [UIScreen mainScreen].scale;
 
-	self.OKButton.layer.borderColor = [UIColor colorWithWhite:0.87 alpha:1.0].CGColor;
-	self.OKButton.layer.borderWidth = 1.0 / [UIScreen mainScreen].scale;
+    self.OKButton.layer.borderColor = [UIColor colorWithWhite:0.87 alpha:1.0].CGColor;
+    self.OKButton.layer.borderWidth = 1.0 / [UIScreen mainScreen].scale;
 
-	// App icon
-	if ([[self.upgradeMessageInteraction.configuration objectForKey:@"show_app_icon"] boolValue]) {
-		[self.appIconView setImage:[ApptentiveUtilities appIcon]];
+    // App icon
+    if ([[self.upgradeMessageInteraction.configuration objectForKey:@"show_app_icon"] boolValue]) {
+        [self.appIconView setImage:[ApptentiveUtilities appIcon]];
 
-		// Rounded corners
-		UIImage *maskImage = [ApptentiveUtilities imageNamed:@"at_update_icon_mask"];
-		CALayer *maskLayer = [[CALayer alloc] init];
-		maskLayer.contents = (id)maskImage.CGImage;
-		maskLayer.frame = self.appIconView.bounds;
-		self.appIconView.layer.mask = maskLayer;
-		maskLayer = nil;
-	} else {
-		self.appIconView.hidden = YES;
-	}
+        // Rounded corners
+        UIImage *maskImage = [ApptentiveUtilities imageNamed:@"at_update_icon_mask"];
+        CALayer *maskLayer = [[CALayer alloc] init];
+        maskLayer.contents = (id)maskImage.CGImage;
+        maskLayer.frame = self.appIconView.bounds;
+        self.appIconView.layer.mask = maskLayer;
+        maskLayer = nil;
+    } else {
+        self.appIconView.hidden = YES;
+    }
 
-	// Powered by Apptentive logo
-	if ([[self.upgradeMessageInteraction.configuration objectForKey:@"show_powered_by"] boolValue] && !Apptentive.shared.backend.configuration.hideBranding) {
-		self.poweredByApptentiveLogo.text = ApptentiveLocalizedString(@"Powered by", @"Powered by followed by Apptentive logo.");
-		UIImage *poweredByApptentiveIcon = [ApptentiveUtilities imageNamed:@"at_update_logo"];
-		[self.poweredByApptentiveIconView setImage:poweredByApptentiveIcon];
-	} else {
-		self.OKButtonBottomSpace.constant = 0.0;
-		self.poweredByBackground.hidden = YES;
-	}
+    // Powered by Apptentive logo
+    if ([[self.upgradeMessageInteraction.configuration objectForKey:@"show_powered_by"] boolValue] && !Apptentive.shared.backend.configuration.hideBranding) {
+        self.poweredByApptentiveLogo.text = ApptentiveLocalizedString(@"Powered by", @"Powered by followed by Apptentive logo.");
+        UIImage *poweredByApptentiveIcon = [ApptentiveUtilities imageNamed:@"at_update_logo"];
+        [self.poweredByApptentiveIconView setImage:poweredByApptentiveIcon];
+    } else {
+        self.OKButtonBottomSpace.constant = 0.0;
+        self.poweredByBackground.hidden = YES;
+    }
 
-	// Web view
-	NSString *html = [self.upgradeMessageInteraction.configuration objectForKey:@"body"];
-	[self.webView loadHTMLString:html baseURL:[NSURL URLWithString:@"http://"]];
-	self.webView.scrollView.showsHorizontalScrollIndicator = NO;
-	self.webView.scrollView.showsVerticalScrollIndicator = NO;
+    // Web view
+    NSString *html = [self.upgradeMessageInteraction.configuration objectForKey:@"body"];
+    [self.webView loadHTMLString:html baseURL:[NSURL URLWithString:@"http://"]];
+    self.webView.scrollView.showsHorizontalScrollIndicator = NO;
+    self.webView.scrollView.showsVerticalScrollIndicator = NO;
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-	[super viewWillAppear:animated];
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
 
-	[self.navigationController setNavigationBarHidden:YES animated:animated];
+    [self.navigationController setNavigationBarHidden:YES animated:animated];
 }
 
-- (IBAction)showAbout:(id)sender {
-	[(ApptentiveNavigationController *)self.navigationController pushAboutApptentiveViewController];
-	[self.navigationController setNavigationBarHidden:NO animated:YES];
+- (IBAction)showAbout:(id)sender
+{
+    [(ApptentiveNavigationController *)self.navigationController pushAboutApptentiveViewController];
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
 }
 
-- (IBAction)okButtonPressed:(id)sender {
-	[self dismissAnimated:YES completion:nil withAction:ATInteractionUpgradeMessageOkPressed];
+- (IBAction)okButtonPressed:(id)sender
+{
+    [self dismissAnimated:YES completion:nil withAction:ATInteractionUpgradeMessageOkPressed];
 
-	self.interactionController = nil;
+    self.interactionController = nil;
 }
 
-- (void)dismissAnimated:(BOOL)animated completion:(nullable void (^)(void))completion withAction:(ATInteractionUpgradeMessageAction)action {
-	[self.navigationController dismissViewControllerAnimated:animated completion:completion];
+- (void)dismissAnimated:(BOOL)animated completion:(nullable void (^)(void))completion withAction:(ATInteractionUpgradeMessageAction)action
+{
+    [self.navigationController dismissViewControllerAnimated:animated completion:completion];
 
-	[self.upgradeMessageInteraction engage:ATInteractionUpgradeMessageEventLabelClose fromViewController:self.presentingViewController];
+    [self.upgradeMessageInteraction engage:ATInteractionUpgradeMessageEventLabelClose fromViewController:self.presentingViewController];
 }
 
-- (void)traitCollectionDidChange:(nullable UITraitCollection *)previousTraitCollection {
-	[super traitCollectionDidChange:previousTraitCollection];
+- (void)traitCollectionDidChange:(nullable UITraitCollection *)previousTraitCollection
+{
+    [super traitCollectionDidChange:previousTraitCollection];
 
-	BOOL isRegularHeight = self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassRegular;
-	CGFloat topInset = 0.0;
+    BOOL isRegularHeight = self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassRegular;
+    CGFloat topInset = 0.0;
 
-	if (isRegularHeight) {
-		topInset = self.appIconView.hidden ? 50.0 : 90.0;
+    if (isRegularHeight) {
+        topInset = self.appIconView.hidden ? 50.0 : 90.0;
 
-		self.appIconContainerHeight.constant = 124.0;
-		self.OKButtonHeight.constant = 44.0;
+        self.appIconContainerHeight.constant = 124.0;
+        self.OKButtonHeight.constant = 44.0;
 
-		if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
-			self.OKButtonBottomSpace.constant = 0.0;
-			self.poweredByBottomSpace.constant = 44.0;
-		}
-	} else {
-		topInset = self.appIconView.hidden ? 33.0 : 73.0;
+        if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+            self.OKButtonBottomSpace.constant = 0.0;
+            self.poweredByBottomSpace.constant = 44.0;
+        }
+    } else {
+        topInset = self.appIconView.hidden ? 33.0 : 73.0;
 
-		self.appIconContainerHeight.constant = 73.0;
-		self.OKButtonHeight.constant = 33.0;
-	}
+        self.appIconContainerHeight.constant = 73.0;
+        self.OKButtonHeight.constant = 33.0;
+    }
 
-	self.webView.scrollView.contentInset = UIEdgeInsetsMake(topInset, 0.0, 0.0, 0.0);
+    self.webView.scrollView.contentInset = UIEdgeInsetsMake(topInset, 0.0, 0.0, 0.0);
 }
 
 @end

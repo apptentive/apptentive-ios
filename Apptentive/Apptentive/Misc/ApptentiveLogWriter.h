@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
+
 @interface ApptentiveLogWriter : NSObject
 
 @property (nonatomic, readonly) NSString *path;

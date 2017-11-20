@@ -19,66 +19,76 @@ static NSString *const ApptentiveInteractionEventLabelCancel = @"cancel";
 
 @implementation ApptentiveInteractionController
 
-+ (void)registerInteractionControllerClass:(Class) class forType:(NSString *)type {
-	static dispatch_once_t onceToken;
-	dispatch_once(&onceToken, ^{
++ (void)registerInteractionControllerClass:(Class) class forType:(NSString *)type
+{
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
         interactionControllerClassRegistry = @{};
-	});
+    });
 
-	@synchronized([ApptentiveInteractionController class]) {
-		NSMutableDictionary *registry = [interactionControllerClassRegistry mutableCopy];
-		registry[type] = class;
-		interactionControllerClassRegistry = [NSDictionary dictionaryWithDictionary:registry];
-	}
+    @synchronized([ApptentiveInteractionController class])
+    {
+        NSMutableDictionary *registry = [interactionControllerClassRegistry mutableCopy];
+        registry[type] = class;
+        interactionControllerClassRegistry = [NSDictionary dictionaryWithDictionary:registry];
+    }
 }
 
-	+ (Class)interactionControllerClassWithType : (NSString *)type {
-	Class result;
-	@synchronized([ApptentiveInteractionController class]) {
-		result = interactionControllerClassRegistry[type];
-	}
-	return result;
+    + (Class)interactionControllerClassWithType : (NSString *)type
+{
+    Class result;
+    @synchronized([ApptentiveInteractionController class])
+    {
+        result = interactionControllerClassRegistry[type];
+    }
+    return result;
 }
 
-+ (instancetype)interactionControllerWithInteraction:(ApptentiveInteraction *)interaction {
-	Class controllerClass = [self interactionControllerClassWithType:interaction.type] ?: [self class];
++ (instancetype)interactionControllerWithInteraction:(ApptentiveInteraction *)interaction
+{
+    Class controllerClass = [self interactionControllerClassWithType:interaction.type] ?: [self class];
 
-	return [[controllerClass alloc] initWithInteraction:interaction];
+    return [[controllerClass alloc] initWithInteraction:interaction];
 }
 
-- (instancetype)initWithInteraction:(ApptentiveInteraction *)interaction {
-	self = [super init];
+- (instancetype)initWithInteraction:(ApptentiveInteraction *)interaction
+{
+    self = [super init];
 
-	if (self) {
-		_interaction = interaction;
+    if (self) {
+        _interaction = interaction;
 
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dismissInteractionNotification:) name:ApptentiveInteractionsShouldDismissNotification object:nil];
-	}
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dismissInteractionNotification:) name:ApptentiveInteractionsShouldDismissNotification object:nil];
+    }
 
-	return self;
+    return self;
 }
 
-- (void)dealloc {
-	[[NSNotificationCenter defaultCenter] removeObserver:self];
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (void)presentInteractionFromViewController:(nullable UIViewController *)viewController {
-	self.presentingViewController = viewController;
+- (void)presentInteractionFromViewController:(nullable UIViewController *)viewController
+{
+    self.presentingViewController = viewController;
 }
 
-- (void)dismissInteractionNotification:(NSNotification *)notification {
-	BOOL animated = [notification.userInfo[ApptentiveInteractionsShouldDismissAnimatedKey] boolValue];
+- (void)dismissInteractionNotification:(NSNotification *)notification
+{
+    BOOL animated = [notification.userInfo[ApptentiveInteractionsShouldDismissAnimatedKey] boolValue];
 
-	[self.presentedViewController dismissViewControllerAnimated:animated completion:nil];
+    [self.presentedViewController dismissViewControllerAnimated:animated completion:nil];
 
-	// Ordinarily we would engage in the completion block of the -dismiss method, but that screws up event ordering during logout.
-	[self.interaction engage:self.programmaticDismissEventLabel fromViewController:nil userInfo:@{ @"cause": @"notification" }];
+    // Ordinarily we would engage in the completion block of the -dismiss method, but that screws up event ordering during logout.
+    [self.interaction engage:self.programmaticDismissEventLabel fromViewController:nil userInfo:@{ @"cause" : @"notification" }];
 
-	self.presentedViewController = nil;
+    self.presentedViewController = nil;
 }
 
-- (NSString *)programmaticDismissEventLabel {
-	return ApptentiveInteractionEventLabelCancel;
+- (NSString *)programmaticDismissEventLabel
+{
+    return ApptentiveInteractionEventLabelCancel;
 }
 
 @end

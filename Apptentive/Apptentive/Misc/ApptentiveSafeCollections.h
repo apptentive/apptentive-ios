@@ -33,12 +33,12 @@ BOOL ApptentiveDictionaryGetBool(NSDictionary *dictionary, id<NSCopying> key);
 /**
  Safely retrieves string from a dictionary (or returns nil if failed)
  */
-NSString * _Nullable ApptentiveDictionaryGetString (NSDictionary *dictionary, id<NSCopying> key);
+NSString *_Nullable ApptentiveDictionaryGetString(NSDictionary *dictionary, id<NSCopying> key);
 
 /**
  Safely retrieves array from a dictionary (or returns nil if failed)
  */
-NSArray * _Nullable ApptentiveDictionaryGetArray(NSDictionary *dictionary, id<NSCopying> key);
+NSArray *_Nullable ApptentiveDictionaryGetArray(NSDictionary *dictionary, id<NSCopying> key);
 
 /**
  Safely adds an object to the array.

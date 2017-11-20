@@ -7,12 +7,12 @@
 //
 
 #import "ApptentiveInteractionAppStoreController.h"
-#import "Apptentive_Private.h"
-#import "ApptentiveUtilities.h"
-#import "ApptentiveInteraction.h"
 #import "ApptentiveBackend+Engagement.h"
-#import "UIAlertController+Apptentive.h"
+#import "ApptentiveInteraction.h"
 #import "ApptentiveStoreProductViewController.h"
+#import "ApptentiveUtilities.h"
+#import "Apptentive_Private.h"
+#import "UIAlertController+Apptentive.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -25,158 +25,172 @@ NSString *const ATInteractionAppStoreRatingEventLabelUnableToRate = @"unable_to_
 
 @implementation ApptentiveInteractionAppStoreController
 
-+ (void)load {
-	[self registerInteractionControllerClass:self forType:@"AppStoreRating"];
++ (void)load
+{
+    [self registerInteractionControllerClass:self forType:@"AppStoreRating"];
 }
 
-- (void)presentInteractionFromViewController:(nullable UIViewController *)viewController {
-	[super presentInteractionFromViewController:viewController];
+- (void)presentInteractionFromViewController:(nullable UIViewController *)viewController
+{
+    [super presentInteractionFromViewController:viewController];
 
-	[self openAppStoreToRateApp];
+    [self openAppStoreToRateApp];
 }
 
-- (NSString *)appID {
-	NSString *appID = self.interaction.configuration[@"store_id"];
-	if (appID.length == 0) {
-		appID = [Apptentive sharedConnection].appID;
-	}
+- (NSString *)appID
+{
+    NSString *appID = self.interaction.configuration[@"store_id"];
+    if (appID.length == 0) {
+        appID = [Apptentive sharedConnection].appID;
+    }
 
-	return appID;
+    return appID;
 }
 
-- (void)openAppStoreToRateApp {
-	NSString *method = self.interaction.configuration[@"method"];
+- (void)openAppStoreToRateApp
+{
+    NSString *method = self.interaction.configuration[@"method"];
 
-	if ([method isEqualToString:@"app_store"]) {
-		[self openAppStoreViaURL];
-	} else if ([method isEqualToString:@"store_kit"]) {
-		[self openAppStoreViaStoreKit];
-	} else if ([method isEqualToString:@"mac_app_store"]) {
-		[self openMacAppStore];
-	} else {
-		[self legacyOpenAppStoreToRateApp];
-	}
+    if ([method isEqualToString:@"app_store"]) {
+        [self openAppStoreViaURL];
+    } else if ([method isEqualToString:@"store_kit"]) {
+        [self openAppStoreViaStoreKit];
+    } else if ([method isEqualToString:@"mac_app_store"]) {
+        [self openMacAppStore];
+    } else {
+        [self legacyOpenAppStoreToRateApp];
+    }
 }
 
-- (void)legacyOpenAppStoreToRateApp {
+- (void)legacyOpenAppStoreToRateApp
+{
 #if TARGET_IPHONE_SIMULATOR
-	[self showUnableToOpenAppStoreDialog];
+    [self showUnableToOpenAppStoreDialog];
 #else
-	if ([self shouldOpenAppStoreViaStoreKit]) {
-		[self openAppStoreViaStoreKit];
-	} else {
-		[self openAppStoreViaURL];
-	}
+    if ([self shouldOpenAppStoreViaStoreKit]) {
+        [self openAppStoreViaStoreKit];
+    } else {
+        [self openAppStoreViaURL];
+    }
 #endif
 }
 
-- (void)showUnableToOpenAppStoreDialog {
-	[self.interaction engage:ATInteractionAppStoreRatingEventLabelUnableToRate fromViewController:self.presentingViewController];
+- (void)showUnableToOpenAppStoreDialog
+{
+    [self.interaction engage:ATInteractionAppStoreRatingEventLabelUnableToRate fromViewController:self.presentingViewController];
 
-	NSString *title;
-	NSString *message;
-	NSString *cancelButtonTitle;
+    NSString *title;
+    NSString *message;
+    NSString *cancelButtonTitle;
 #if TARGET_IPHONE_SIMULATOR
-	title = ApptentiveLocalizedString(@"Unable to open the App Store", @"iOS simulator unable to load the App store title");
-	message = ApptentiveLocalizedString(@"The iOS Simulator is unable to open the App Store app. Please try again on a real iOS device.", @"iOS simulator unable to load the App store message");
+    title = ApptentiveLocalizedString(@"Unable to open the App Store", @"iOS simulator unable to load the App store title");
+    message = ApptentiveLocalizedString(@"The iOS Simulator is unable to open the App Store app. Please try again on a real iOS device.", @"iOS simulator unable to load the App store message");
 #else
-	title = ApptentiveLocalizedString(@"Oops!", @"Unable to load the App Store title");
-	message = ApptentiveLocalizedString(@"Unable to load the App Store", @"Unable to load the App Store message");
+    title = ApptentiveLocalizedString(@"Oops!", @"Unable to load the App Store title");
+    message = ApptentiveLocalizedString(@"Unable to load the App Store", @"Unable to load the App Store message");
 #endif
-	cancelButtonTitle = ApptentiveLocalizedString(@"OK", @"OK button title");
+    cancelButtonTitle = ApptentiveLocalizedString(@"OK", @"OK button title");
 
 
-	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
-	[alertController addAction:[UIAlertAction actionWithTitle:cancelButtonTitle style:UIAlertActionStyleCancel handler:nil]];
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+    [alertController addAction:[UIAlertAction actionWithTitle:cancelButtonTitle style:UIAlertActionStyleCancel handler:nil]];
 
-	if (self.presentingViewController != nil) {
-		[self.presentingViewController presentViewController:alertController animated:YES completion:nil];
-	} else {
-		[alertController apptentive_presentAnimated:YES completion:nil];
-	}
+    if (self.presentingViewController != nil) {
+        [self.presentingViewController presentViewController:alertController animated:YES completion:nil];
+    } else {
+        [alertController apptentive_presentAnimated:YES completion:nil];
+    }
 }
 
-- (BOOL)shouldOpenAppStoreViaStoreKit {
-	return ([SKStoreProductViewController class] != NULL && [self appID]);
+- (BOOL)shouldOpenAppStoreViaStoreKit
+{
+    return ([SKStoreProductViewController class] != NULL && [self appID]);
 }
 
-- (NSURL *)URLForRatingApp {
-	NSString *urlString = self.interaction.configuration[@"url"];
+- (NSURL *)URLForRatingApp
+{
+    NSString *urlString = self.interaction.configuration[@"url"];
 
-	NSURL *ratingURL = (urlString) ? [NSURL URLWithString:urlString] : [self legacyURLForRatingApp];
+    NSURL *ratingURL = (urlString) ? [NSURL URLWithString:urlString] : [self legacyURLForRatingApp];
 
-	return ratingURL;
+    return ratingURL;
 }
 
-- (NSURL *)legacyURLForRatingApp {
-	NSString *URLString = nil;
+- (NSURL *)legacyURLForRatingApp
+{
+    NSString *URLString = nil;
 
-	URLString = [NSString stringWithFormat:@"itms-apps://itunes.apple.com/app/id%@?action=write-review", [self appID]];
+    URLString = [NSString stringWithFormat:@"itms-apps://itunes.apple.com/app/id%@?action=write-review", [self appID]];
 
-	return [NSURL URLWithString:URLString];
+    return [NSURL URLWithString:URLString];
 }
 
-- (void)openAppStoreViaURL {
-	if ([self appID]) {
-		NSURL *url = [self URLForRatingApp];
+- (void)openAppStoreViaURL
+{
+    if ([self appID]) {
+        NSURL *url = [self URLForRatingApp];
 
-		BOOL attemptToOpenURL = [[UIApplication sharedApplication] canOpenURL:url];
+        BOOL attemptToOpenURL = [[UIApplication sharedApplication] canOpenURL:url];
 
-		// In iOS 9, `canOpenURL:` returns NO unless that URL scheme has been added to LSApplicationQueriesSchemes.
-		if (!attemptToOpenURL) {
-			attemptToOpenURL = YES;
-		}
+        // In iOS 9, `canOpenURL:` returns NO unless that URL scheme has been added to LSApplicationQueriesSchemes.
+        if (!attemptToOpenURL) {
+            attemptToOpenURL = YES;
+        }
 
-		if (attemptToOpenURL) {
-			[self.interaction engage:ATInteractionAppStoreRatingEventLabelOpenAppStoreURL fromViewController:self.presentingViewController];
+        if (attemptToOpenURL) {
+            [self.interaction engage:ATInteractionAppStoreRatingEventLabelOpenAppStoreURL fromViewController:self.presentingViewController];
 
-			BOOL openedURL = [[UIApplication sharedApplication] openURL:url];
-			if (!openedURL) {
-				ApptentiveLogError(@"Could not open App Store URL: %@", url);
-			}
-		} else {
-			ApptentiveLogError(@"No application can open the URL: %@", url);
-			[self showUnableToOpenAppStoreDialog];
-		}
-	} else {
-		ApptentiveLogError(@"Could not open App Store because App ID is not set. Set the `appID` property locally, or configure it remotely via the Apptentive dashboard.");
+            BOOL openedURL = [[UIApplication sharedApplication] openURL:url];
+            if (!openedURL) {
+                ApptentiveLogError(@"Could not open App Store URL: %@", url);
+            }
+        } else {
+            ApptentiveLogError(@"No application can open the URL: %@", url);
+            [self showUnableToOpenAppStoreDialog];
+        }
+    } else {
+        ApptentiveLogError(@"Could not open App Store because App ID is not set. Set the `appID` property locally, or configure it remotely via the Apptentive dashboard.");
 
-		[self showUnableToOpenAppStoreDialog];
-	}
+        [self showUnableToOpenAppStoreDialog];
+    }
 }
 
-- (void)openAppStoreViaStoreKit {
-	if ([SKStoreProductViewController class] != NULL && [self appID]) {
-		ApptentiveStoreProductViewController *vc = [[ApptentiveStoreProductViewController alloc] init];
-		vc.delegate = self;
-		[vc loadProductWithParameters:@{ SKStoreProductParameterITunesItemIdentifier: self.appID } completionBlock:^(BOOL result, NSError *error) {
-			if (error) {
-				ApptentiveLogError(@"Error loading product view: %@", error);
-				[self showUnableToOpenAppStoreDialog];
-			} else {
-				[self.interaction engage:ATInteractionAppStoreRatingEventLabelOpenStoreKit fromViewController:self.presentingViewController];
-				
-				UIViewController *presentingVC = self.presentingViewController;
+- (void)openAppStoreViaStoreKit
+{
+    if ([SKStoreProductViewController class] != NULL && [self appID]) {
+        ApptentiveStoreProductViewController *vc = [[ApptentiveStoreProductViewController alloc] init];
+        vc.delegate = self;
+        [vc loadProductWithParameters:@{ SKStoreProductParameterITunesItemIdentifier : self.appID }
+                      completionBlock:^(BOOL result, NSError *error) {
+                          if (error) {
+                              ApptentiveLogError(@"Error loading product view: %@", error);
+                              [self showUnableToOpenAppStoreDialog];
+                          } else {
+                              [self.interaction engage:ATInteractionAppStoreRatingEventLabelOpenStoreKit fromViewController:self.presentingViewController];
 
-				if (presentingVC != nil) {
-					[presentingVC presentViewController:vc animated:YES completion:nil];
-				} else {
-					[vc presentAnimated:YES completion:nil];
-				}
-			}
-		}];
-	} else {
-		[self showUnableToOpenAppStoreDialog];
-	}
+                              UIViewController *presentingVC = self.presentingViewController;
+
+                              if (presentingVC != nil) {
+                                  [presentingVC presentViewController:vc animated:YES completion:nil];
+                              } else {
+                                  [vc presentAnimated:YES completion:nil];
+                              }
+                          }
+                      }];
+    } else {
+        [self showUnableToOpenAppStoreDialog];
+    }
 }
 
 #pragma mark SKStoreProductViewControllerDelegate
-- (void)productViewControllerDidFinish:(SKStoreProductViewController *)productViewController {
-	[productViewController dismissViewControllerAnimated:YES completion:NULL];
+- (void)productViewControllerDidFinish:(SKStoreProductViewController *)productViewController
+{
+    [productViewController dismissViewControllerAnimated:YES completion:NULL];
 }
 
-- (void)openMacAppStore {
-	[self.interaction engage:ATInteractionAppStoreRatingEventLabelOpenMacAppStore fromViewController:self.presentingViewController];
+- (void)openMacAppStore
+{
+    [self.interaction engage:ATInteractionAppStoreRatingEventLabelOpenMacAppStore fromViewController:self.presentingViewController];
 }
 
 @end

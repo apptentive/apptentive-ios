@@ -6,10 +6,10 @@
 //  Copyright © 2017 Apptentive, Inc. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import "ApptentiveConversation.h"
 #import "ApptentiveRequestOperation.h"
 #import <CoreData/CoreData.h>
+#import <Foundation/Foundation.h>
 
 @class ApptentiveConversationMetadata, ApptentiveConversationMetadataItem, ApptentiveConversation, ApptentiveClient, ApptentiveEngagementManifest, ApptentiveAppConfiguration, ApptentiveMessageManager;
 

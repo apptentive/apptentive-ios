@@ -7,11 +7,11 @@
 //
 
 #import "ApptentiveInteractionTextModalController.h"
-#import "ApptentiveUtilities.h"
-#import "ApptentiveInteractionInvocation.h"
 #import "ApptentiveBackend+Engagement.h"
-#import "Apptentive_Private.h"
 #import "ApptentiveInteraction.h"
+#import "ApptentiveInteractionInvocation.h"
+#import "ApptentiveUtilities.h"
+#import "Apptentive_Private.h"
 #import "UIAlertController+Apptentive.h"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -27,90 +27,97 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 
 @implementation ApptentiveInteractionTextModalController
 
-+ (void)load {
-	[self registerInteractionControllerClass:self forType:@"TextModal"];
++ (void)load
+{
+    [self registerInteractionControllerClass:self forType:@"TextModal"];
 }
 
-- (void)presentInteractionFromViewController:(nullable UIViewController *)viewController {
-	[super presentInteractionFromViewController:viewController];
+- (void)presentInteractionFromViewController:(nullable UIViewController *)viewController
+{
+    [super presentInteractionFromViewController:viewController];
 
-	self.presentedViewController = [self alertControllerWithInteraction:self.interaction];
+    self.presentedViewController = [self alertControllerWithInteraction:self.interaction];
 
-	if (self.presentedViewController) {
-		if (viewController != nil) {
-			[viewController presentViewController:self.presentedViewController animated:YES completion:^{
-				[self.interaction engage:ATInteractionTextModalEventLabelLaunch fromViewController:viewController];
-			}];
-		} else {
-			[(UIAlertController *)self.presentedViewController apptentive_presentAnimated:YES completion:^{
-				[self.interaction engage:ATInteractionTextModalEventLabelLaunch fromViewController:nil];
-			}];
-		}
-	}
+    if (self.presentedViewController) {
+        if (viewController != nil) {
+            [viewController presentViewController:self.presentedViewController
+                                         animated:YES
+                                       completion:^{
+                                           [self.interaction engage:ATInteractionTextModalEventLabelLaunch fromViewController:viewController];
+                                       }];
+        } else {
+            [(UIAlertController *)self.presentedViewController apptentive_presentAnimated:YES
+                                                                               completion:^{
+                                                                                   [self.interaction engage:ATInteractionTextModalEventLabelLaunch fromViewController:nil];
+                                                                               }];
+        }
+    }
 }
 
 #pragma mark UIAlertController
 
-- (nullable UIAlertController *)alertControllerWithInteraction:(ApptentiveInteraction *)interaction {
-	NSDictionary *config = interaction.configuration;
-	NSString *title = config[@"title"];
-	NSString *message = config[@"body"];
+- (nullable UIAlertController *)alertControllerWithInteraction:(ApptentiveInteraction *)interaction
+{
+    NSDictionary *config = interaction.configuration;
+    NSString *title = config[@"title"];
+    NSString *message = config[@"body"];
 
-	if (!title && !message) {
-		ApptentiveLogError(@"Skipping display of Apptentive Note that does not have a title and body.");
-		return nil;
-	}
+    if (!title && !message) {
+        ApptentiveLogError(@"Skipping display of Apptentive Note that does not have a title and body.");
+        return nil;
+    }
 
-	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
 
-	BOOL cancelActionAdded = NO;
-	NSArray *actions = config[@"actions"];
+    BOOL cancelActionAdded = NO;
+    NSArray *actions = config[@"actions"];
 
-	for (NSUInteger i = 0; i < actions.count; i++) {
-		NSDictionary *actionForButton = actions[i];
+    for (NSUInteger i = 0; i < actions.count; i++) {
+        NSDictionary *actionForButton = actions[i];
 
-		// Action position saved here and sent when button is tapped.
-		NSMutableDictionary *actionConfig = [NSMutableDictionary dictionary];
-		actionConfig[@"position"] = @(i);
-		[actionConfig addEntriesFromDictionary:actionForButton];
+        // Action position saved here and sent when button is tapped.
+        NSMutableDictionary *actionConfig = [NSMutableDictionary dictionary];
+        actionConfig[@"position"] = @(i);
+        [actionConfig addEntriesFromDictionary:actionForButton];
 
-		UIAlertAction *alertAction = [self alertActionWithConfiguration:actionConfig];
+        UIAlertAction *alertAction = [self alertActionWithConfiguration:actionConfig];
 
-		// Adding more than one cancel action to the alert causes crash.
-		// 'NSInternalInconsistencyException', reason: 'UIAlertController can only have one action with a style of UIAlertActionStyleCancel'
-		if (alertAction.style == UIAlertActionStyleCancel) {
-			if (!cancelActionAdded) {
-				cancelActionAdded = YES;
-			} else {
-				// Additional cancel buttons are ignored.
-				ApptentiveLogError(@"Apptentive Notes cannot have more than one cancel button.");
-				continue;
-			}
-		}
+        // Adding more than one cancel action to the alert causes crash.
+        // 'NSInternalInconsistencyException', reason: 'UIAlertController can only have one action with a style of UIAlertActionStyleCancel'
+        if (alertAction.style == UIAlertActionStyleCancel) {
+            if (!cancelActionAdded) {
+                cancelActionAdded = YES;
+            } else {
+                // Additional cancel buttons are ignored.
+                ApptentiveLogError(@"Apptentive Notes cannot have more than one cancel button.");
+                continue;
+            }
+        }
 
-		if (alertAction) {
-			[alertController addAction:alertAction];
-		}
-	}
+        if (alertAction) {
+            [alertController addAction:alertAction];
+        }
+    }
 
-	return alertController;
+    return alertController;
 }
 
 #pragma mark Alert Button Actions
 
-- (UIAlertAction *)alertActionWithConfiguration:(NSDictionary *)actionConfig {
-	NSString *title = actionConfig[@"label"];
+- (UIAlertAction *)alertActionWithConfiguration:(NSDictionary *)actionConfig
+{
+    NSString *title = actionConfig[@"label"];
 
-	// Better to use default button text than to potentially create an un-cancelable alert with no buttons.
-	// Exception: 'Actions added to UIAlertController must have a title'
-	if (!title) {
-		ApptentiveLogError(@"Apptentive Note button action does not have a title!");
-		title = ApptentiveLocalizedString(@"OK", @"OK");
-	}
+    // Better to use default button text than to potentially create an un-cancelable alert with no buttons.
+    // Exception: 'Actions added to UIAlertController must have a title'
+    if (!title) {
+        ApptentiveLogError(@"Apptentive Note button action does not have a title!");
+        title = ApptentiveLocalizedString(@"OK", @"OK");
+    }
 
-	UIAlertActionStyle style = UIAlertActionStyleDefault;
-	// Future support for configuration of different UIAlertActionStyles
-	/*
+    UIAlertActionStyle style = UIAlertActionStyleDefault;
+    // Future support for configuration of different UIAlertActionStyles
+    /*
 	NSString *styleString = actionConfig[@"style"];
 	UIAlertActionStyle style;
 	if ([styleString isEqualToString:@"default"]) {
@@ -124,71 +131,75 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 	}
 	*/
 
-	NSString *actionType = actionConfig[@"action"];
-	alertActionHandler actionHandler = nil;
-	if ([actionType isEqualToString:@"dismiss"]) {
-		actionHandler = [self createButtonHandlerBlockDismiss:actionConfig];
-	} else if ([actionType isEqualToString:@"interaction"]) {
-		actionHandler = [self createButtonHandlerBlockInteractionAction:actionConfig];
-	} else {
-		ApptentiveLogError(@"Apptentive note contains an unknown action.");
-	}
+    NSString *actionType = actionConfig[@"action"];
+    alertActionHandler actionHandler = nil;
+    if ([actionType isEqualToString:@"dismiss"]) {
+        actionHandler = [self createButtonHandlerBlockDismiss:actionConfig];
+    } else if ([actionType isEqualToString:@"interaction"]) {
+        actionHandler = [self createButtonHandlerBlockInteractionAction:actionConfig];
+    } else {
+        ApptentiveLogError(@"Apptentive note contains an unknown action.");
+    }
 
-	UIAlertAction *alertAction = [UIAlertAction actionWithTitle:title style:style handler:actionHandler];
+    UIAlertAction *alertAction = [UIAlertAction actionWithTitle:title style:style handler:actionHandler];
 
-	// Future support for configuration of enabled/disabled actions
-	/*
+    // Future support for configuration of enabled/disabled actions
+    /*
 	BOOL enabled = actionConfig[@"enabled"] ? [actionConfig[@"enabled"] boolValue] : YES;
 	alertAction.enabled = enabled;
 	*/
 
-	return alertAction;
+    return alertAction;
 }
 
-- (void)dismissAction:(NSDictionary *)actionConfig {
-	NSDictionary *userInfo = @{ @"label": (actionConfig[@"label"] ?: [NSNull null]),
-		@"position": (actionConfig[@"position"] ?: [NSNull null]),
-		@"action_id": (actionConfig[@"id"] ?: [NSNull null]),
-	};
+- (void)dismissAction:(NSDictionary *)actionConfig
+{
+    NSDictionary *userInfo = @{ @"label" : (actionConfig[@"label"] ?: [NSNull null]),
+                                @"position" : (actionConfig[@"position"] ?: [NSNull null]),
+                                @"action_id" : (actionConfig[@"id"] ?: [NSNull null]),
+    };
 
-	[self.interaction engage:ATInteractionTextModalEventLabelDismiss fromViewController:self.presentingViewController userInfo:userInfo];
+    [self.interaction engage:ATInteractionTextModalEventLabelDismiss fromViewController:self.presentingViewController userInfo:userInfo];
 
-	self.presentedViewController = nil;
+    self.presentedViewController = nil;
 }
 
-- (alertActionHandler)createButtonHandlerBlockDismiss:(NSDictionary *)actionConfig {
-	return [^(UIAlertAction *alertAction) {
-		[self dismissAction:actionConfig];
-	} copy];
+- (alertActionHandler)createButtonHandlerBlockDismiss:(NSDictionary *)actionConfig
+{
+    return [^(UIAlertAction *alertAction) {
+        [self dismissAction:actionConfig];
+    } copy];
 }
 
-- (void)interactionAction:(NSDictionary *)actionConfig {
-	ApptentiveInteraction *interaction = nil;
-	NSArray *invocations = actionConfig[@"invokes"];
-	if (invocations) {
-		// TODO: Do this on the background queue?
-		interaction = [[Apptentive sharedConnection].backend interactionForInvocations:invocations];
-	}
+- (void)interactionAction:(NSDictionary *)actionConfig
+{
+    ApptentiveInteraction *interaction = nil;
+    NSArray *invocations = actionConfig[@"invokes"];
+    if (invocations) {
+        // TODO: Do this on the background queue?
+        interaction = [[Apptentive sharedConnection].backend interactionForInvocations:invocations];
+    }
 
-	NSDictionary *userInfo = @{ @"label": (actionConfig[@"label"] ?: [NSNull null]),
-		@"position": (actionConfig[@"position"] ?: [NSNull null]),
-		@"invoked_interaction_id": (interaction.identifier ?: [NSNull null]),
-		@"action_id": (actionConfig[@"id"] ?: [NSNull null]),
-	};
+    NSDictionary *userInfo = @{ @"label" : (actionConfig[@"label"] ?: [NSNull null]),
+                                @"position" : (actionConfig[@"position"] ?: [NSNull null]),
+                                @"invoked_interaction_id" : (interaction.identifier ?: [NSNull null]),
+                                @"action_id" : (actionConfig[@"id"] ?: [NSNull null]),
+    };
 
-	[self.interaction engage:ATInteractionTextModalEventLabelInteraction fromViewController:self.presentingViewController userInfo:userInfo];
+    [self.interaction engage:ATInteractionTextModalEventLabelInteraction fromViewController:self.presentingViewController userInfo:userInfo];
 
-	if (interaction) {
-		[[Apptentive sharedConnection].backend presentInteraction:interaction fromViewController:self.presentingViewController];
-	}
+    if (interaction) {
+        [[Apptentive sharedConnection].backend presentInteraction:interaction fromViewController:self.presentingViewController];
+    }
 
-	self.presentedViewController = nil;
+    self.presentedViewController = nil;
 }
 
-- (alertActionHandler)createButtonHandlerBlockInteractionAction:(NSDictionary *)actionConfig {
-	return [^(UIAlertAction *alertAction) {
-		[self interactionAction:actionConfig];
-	} copy];
+- (alertActionHandler)createButtonHandlerBlockInteractionAction:(NSDictionary *)actionConfig
+{
+    return [^(UIAlertAction *alertAction) {
+        [self interactionAction:actionConfig];
+    } copy];
 }
 
 @end

@@ -14,21 +14,20 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 #define APPTENTIVE_CHECK_INIT_NOT_NIL_ARG(ARG)                                                    \
-	if ((ARG) == nil) {                                                                           \
-		ApptentiveLogError(@"Can't init %@: '" #ARG "' is nil", NSStringFromClass([self class])); \
-		return nil;                                                                               \
-	}
+    if ((ARG) == nil) {                                                                           \
+        ApptentiveLogError(@"Can't init %@: '" #ARG "' is nil", NSStringFromClass([self class])); \
+        return nil;                                                                               \
+    }
 
 #define APPTENTIVE_CHECK_INIT_NOT_EMPTY_ARG(ARG)                                                           \
-	if ((ARG).length == 0) {                                                                               \
-		ApptentiveLogError(@"Can't init %@: '" #ARG "' is nil or empty", NSStringFromClass([self class])); \
-		return nil;                                                                                        \
-	}
+    if ((ARG).length == 0) {                                                                               \
+        ApptentiveLogError(@"Can't init %@: '" #ARG "' is nil or empty", NSStringFromClass([self class])); \
+        return nil;                                                                                        \
+    }
 
 #define APPTENTIVE_ABSTRACT_METHOD_CALLED \
-	ApptentiveAssertFail(@"Abstract method called: %@.%@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
+    ApptentiveAssertFail(@"Abstract method called: %@.%@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
 
 NS_ASSUME_NONNULL_END
 
 #endif /* ApptentiveDefines_h */
-

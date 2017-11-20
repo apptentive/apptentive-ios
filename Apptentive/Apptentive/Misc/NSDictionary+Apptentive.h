@@ -10,6 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+
 @interface NSDictionary (Apptentive)
 /*! Doesn't return NSNull objects. */
 - (nullable id)at_safeObjectForKey:(id)aKey;

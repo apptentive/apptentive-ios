@@ -7,9 +7,9 @@
 //
 
 #import "ApptentiveAboutViewController.h"
-#import "Apptentive_Private.h"
 #import "ApptentiveBackend+Engagement.h"
 #import "ApptentiveUtilities.h"
+#import "Apptentive_Private.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -29,54 +29,59 @@ NSString *const ATInteractionAboutViewEventLabelClose = @"close";
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *aboutButtonPrivacyButtonVeritcalConstraint;
 
 
-
 @end
 
 
 @implementation ApptentiveAboutViewController
 
-- (NSString *)codePointForEvent:(NSString *)event {
-	return [ApptentiveBackend codePointForVendor:ATEngagementCodePointApptentiveVendorKey interactionType:ATInteractionAboutViewInteractionKey event:event];
+- (NSString *)codePointForEvent:(NSString *)event
+{
+    return [ApptentiveBackend codePointForVendor:ATEngagementCodePointApptentiveVendorKey interactionType:ATInteractionAboutViewInteractionKey event:event];
 }
 
-- (void)viewDidLoad {
-	[super viewDidLoad];
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
 
-	[Apptentive.shared.backend engageCodePoint:[self codePointForEvent:ATInteractionAboutViewEventLabelLaunch] fromInteraction:nil userInfo:nil customData:nil extendedData:nil fromViewController:self];
+    [Apptentive.shared.backend engageCodePoint:[self codePointForEvent:ATInteractionAboutViewEventLabelLaunch] fromInteraction:nil userInfo:nil customData:nil extendedData:nil fromViewController:self];
 
-	self.imageView.image = [ApptentiveUtilities imageNamed:@"at_apptentive_logo"];
-	// TODO: Look into localizing the storyboard instead
-	self.aboutLabel.text = ApptentiveLocalizedString(@"Apptentive is a service that allows you to have a conversation with the makers of this app. Your input and feedback can help to provide you with a better overall experience.\n\nYour feedback is hosted by Apptentive and is subject to both Apptentive’s privacy policy and the privacy policy of this app’s developer.", @"About apptentive introductory message");
-	[self.aboutButton setTitle:ApptentiveLocalizedString(@"Learn about Apptentive", @"About apptentive link button label") forState:UIControlStateNormal];
-	[self.privacyButton setTitle:ApptentiveLocalizedString(@"Apptentive’s Privacy Policy", @"About apptentive privacy button label") forState:UIControlStateNormal];
+    self.imageView.image = [ApptentiveUtilities imageNamed:@"at_apptentive_logo"];
+    // TODO: Look into localizing the storyboard instead
+    self.aboutLabel.text = ApptentiveLocalizedString(@"Apptentive is a service that allows you to have a conversation with the makers of this app. Your input and feedback can help to provide you with a better overall experience.\n\nYour feedback is hosted by Apptentive and is subject to both Apptentive’s privacy policy and the privacy policy of this app’s developer.", @"About apptentive introductory message");
+    [self.aboutButton setTitle:ApptentiveLocalizedString(@"Learn about Apptentive", @"About apptentive link button label") forState:UIControlStateNormal];
+    [self.privacyButton setTitle:ApptentiveLocalizedString(@"Apptentive’s Privacy Policy", @"About apptentive privacy button label") forState:UIControlStateNormal];
 }
 
-- (void)viewWillDisappear:(BOOL)animated {
-	[super viewWillDisappear:animated];
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
 
-	[Apptentive.shared.backend engageCodePoint:[self codePointForEvent:ATInteractionAboutViewEventLabelClose] fromInteraction:nil userInfo:nil customData:nil extendedData:nil fromViewController:self];
+    [Apptentive.shared.backend engageCodePoint:[self codePointForEvent:ATInteractionAboutViewEventLabelClose] fromInteraction:nil userInfo:nil customData:nil extendedData:nil fromViewController:self];
 }
 
-- (IBAction)learnMore:(id)sender {
-	NSURLComponents *components = [NSURLComponents componentsWithString:@"http://www.apptentive.com/"];
-	components.queryItems = @[[[NSURLQueryItem alloc] initWithName:@"source" value:[NSBundle mainBundle].bundleIdentifier]];
+- (IBAction)learnMore:(id)sender
+{
+    NSURLComponents *components = [NSURLComponents componentsWithString:@"http://www.apptentive.com/"];
+    components.queryItems = @[ [[NSURLQueryItem alloc] initWithName:@"source" value:[NSBundle mainBundle].bundleIdentifier] ];
 
-	[[UIApplication sharedApplication] openURL:components.URL];
+    [[UIApplication sharedApplication] openURL:components.URL];
 }
 
-- (IBAction)showPrivacy:(id)sender {
-	NSURLComponents *components = [NSURLComponents componentsWithString:@"http://www.apptentive.com/privacy/"];
-	components.queryItems = @[[[NSURLQueryItem alloc] initWithName:@"source" value:[NSBundle mainBundle].bundleIdentifier]];
+- (IBAction)showPrivacy:(id)sender
+{
+    NSURLComponents *components = [NSURLComponents componentsWithString:@"http://www.apptentive.com/privacy/"];
+    components.queryItems = @[ [[NSURLQueryItem alloc] initWithName:@"source" value:[NSBundle mainBundle].bundleIdentifier] ];
 
-	[[UIApplication sharedApplication] openURL:components.URL];
+    [[UIApplication sharedApplication] openURL:components.URL];
 }
 
-- (void)traitCollectionDidChange:(nullable UITraitCollection *)previousTraitCollection {
-	[super traitCollectionDidChange:previousTraitCollection];
+- (void)traitCollectionDidChange:(nullable UITraitCollection *)previousTraitCollection
+{
+    [super traitCollectionDidChange:previousTraitCollection];
 
-	BOOL isCompactHeight = self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassCompact;
+    BOOL isCompactHeight = self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassCompact;
 
-	self.imageViewHeightConstraint.constant = isCompactHeight ? 44.0 : 100.0;
+    self.imageViewHeightConstraint.constant = isCompactHeight ? 44.0 : 100.0;
 }
 
 @end

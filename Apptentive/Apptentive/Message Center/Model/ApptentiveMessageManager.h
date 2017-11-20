@@ -6,10 +6,10 @@
 //  Copyright © 2017 Apptentive, Inc. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-#import "ApptentiveRequestOperation.h"
 #import "ApptentiveMessage.h"
 #import "ApptentivePayloadSender.h"
+#import "ApptentiveRequestOperation.h"
+#import <UIKit/UIKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

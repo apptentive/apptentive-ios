@@ -10,6 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+
 @interface ApptentiveProgressNavigationBar : UINavigationBar
 
 @property (readonly, nonatomic) UIProgressView *progressView;

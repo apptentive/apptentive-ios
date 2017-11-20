@@ -6,12 +6,12 @@
 //  Copyright 2011 Apptentive, Inc.. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
+#import <UIKit/UIKit.h>
 
-#import "ApptentiveMessage.h"
-#import "ApptentiveConversationManager.h"
 #import "ApptentiveClient.h"
+#import "ApptentiveConversationManager.h"
+#import "ApptentiveMessage.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -21,10 +21,10 @@ extern NSString *const ApptentiveAuthenticationDidFailNotificationKeyErrorMessag
 extern NSString *const ApptentiveAuthenticationDidFailNotificationKeyConversationIdentifier;
 
 typedef NS_ENUM(NSInteger, ApptentiveBackendState) {
-	ApptentiveBackendStateStarting,
-	ApptentiveBackendStateWaitingForDataProtectionUnlock,
-	ApptentiveBackendStatePayloadDatabaseAvailable,
-	ApptentiveBackendStateShuttingDown
+    ApptentiveBackendStateStarting,
+    ApptentiveBackendStateWaitingForDataProtectionUnlock,
+    ApptentiveBackendStatePayloadDatabaseAvailable,
+    ApptentiveBackendStateShuttingDown
 };
 
 @class ApptentiveConversation, ApptentiveEngagementManifest, ApptentiveAppConfiguration, ApptentiveMessageCenterViewController, ApptentiveMessageManager, ApptentivePayloadSender;

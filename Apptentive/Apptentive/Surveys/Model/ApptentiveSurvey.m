@@ -7,39 +7,40 @@
 //
 
 #import "ApptentiveSurvey.h"
-#import "ApptentiveSurveyQuestion.h"
 #import "ApptentiveSafeCollections.h"
+#import "ApptentiveSurveyQuestion.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 
 @implementation ApptentiveSurvey
 
-- (nullable instancetype)initWithJSON:(NSDictionary *)JSON {
-	self = [super init];
+- (nullable instancetype)initWithJSON:(NSDictionary *)JSON
+{
+    self = [super init];
 
-	if (self) {
-		_title = JSON[@"title"];
-		_name = JSON[@"name"];
-		_surveyDescription = JSON[@"description"];
-		_showSuccessMessage = [JSON[@"show_success_message"] boolValue];
-		_successMessage = JSON[@"success_message"];
-		_viewPeriod = [JSON[@"view_period"] doubleValue];
-		_submitText = JSON[@"submit_text"];
-		_requiredText = JSON[@"required_text"];
-		_validationErrorText = JSON[@"validation_error"];
+    if (self) {
+        _title = JSON[@"title"];
+        _name = JSON[@"name"];
+        _surveyDescription = JSON[@"description"];
+        _showSuccessMessage = [JSON[@"show_success_message"] boolValue];
+        _successMessage = JSON[@"success_message"];
+        _viewPeriod = [JSON[@"view_period"] doubleValue];
+        _submitText = JSON[@"submit_text"];
+        _requiredText = JSON[@"required_text"];
+        _validationErrorText = JSON[@"validation_error"];
 
-		NSMutableArray *mutableQuestions = [NSMutableArray array];
+        NSMutableArray *mutableQuestions = [NSMutableArray array];
 
-		for (NSDictionary *questionJSON in JSON[@"questions"]) {
-			ApptentiveSurveyQuestion *question = [[ApptentiveSurveyQuestion alloc] initWithJSON:questionJSON];
-			ApptentiveArrayAddObject(mutableQuestions, question);
-		}
+        for (NSDictionary *questionJSON in JSON[@"questions"]) {
+            ApptentiveSurveyQuestion *question = [[ApptentiveSurveyQuestion alloc] initWithJSON:questionJSON];
+            ApptentiveArrayAddObject(mutableQuestions, question);
+        }
 
-		_questions = [mutableQuestions copy];
-	}
+        _questions = [mutableQuestions copy];
+    }
 
-	return self;
+    return self;
 }
 
 @end

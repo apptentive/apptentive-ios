@@ -8,13 +8,13 @@
 
 #import <XCTest/XCTest.h>
 
-#import "ApptentiveConversation.h"
+#import "ApptentiveAppDataContainer.h"
 #import "ApptentiveAppRelease.h"
-#import "ApptentivePerson.h"
+#import "ApptentiveConversation.h"
+#import "ApptentiveCount.h"
 #import "ApptentiveDevice.h"
 #import "ApptentiveEngagement.h"
-#import "ApptentiveCount.h"
-#import "ApptentiveAppDataContainer.h"
+#import "ApptentivePerson.h"
 
 #import "ApptentiveDataManager.h"
 
@@ -33,14 +33,16 @@
 
 @implementation ApptentiveConversationMigrationTests
 
-- (void)setUp {
-	[super setUp];
-	// Put setup code here. This method is called before the invocation of each test method in the class.
+- (void)setUp
+{
+    [super setUp];
+    // Put setup code here. This method is called before the invocation of each test method in the class.
 }
 
-- (void)tearDown {
-	// Put teardown code here. This method is called after the invocation of each test method in the class.
-	[super tearDown];
+- (void)tearDown
+{
+    // Put teardown code here. This method is called after the invocation of each test method in the class.
+    [super tearDown];
 }
 
 // This is not working in the travis environment.

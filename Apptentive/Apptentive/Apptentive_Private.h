@@ -40,8 +40,8 @@ extern NSString *_Nonnull const ApptentiveManifestRawDataKey;
 @property (readonly, nonatomic) NSURL *baseURL;
 @property (readonly, nonatomic) ApptentiveBackend *backend;
 
-@property (copy, nonatomic, nullable) NSDictionary *pushUserInfo;
-@property (strong, nonatomic, nullable) UIViewController *pushViewController;
+//@property (copy, nonatomic, nullable) NSDictionary *pushUserInfo;
+//@property (strong, nonatomic, nullable) UIViewController *pushViewController;
 
 @property (readonly, nonatomic) id<ApptentiveStyle> style;
 @property (readonly, nonatomic) BOOL didAccessStyleSheet;

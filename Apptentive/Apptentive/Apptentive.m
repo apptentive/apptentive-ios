@@ -620,7 +620,7 @@ static Apptentive *_sharedInstance;
 					   }];
 }
 
-- (BOOL)didReceiveRemoteNotification:(NSDictionary *)userInfo fromViewController:(UIViewController *)viewController fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
+- (BOOL)didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
 	NSDictionary *apptentivePayload = [userInfo objectForKey:@"apptentive"];
 
 	if (apptentivePayload != nil) {
@@ -693,6 +693,10 @@ static Apptentive *_sharedInstance;
 	return (apptentivePayload != nil);
 }
 
+- (BOOL)didReceiveRemoteNotification:(NSDictionary *)userInfo fromViewController:(UIViewController *)viewController fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
+	return [self didReceiveRemoteNotification:userInfo fetchCompletionHandler:completionHandler];
+}
+
 - (BOOL)didReceiveLocalNotification:(UILocalNotification *)notification fromViewController:(UIViewController *)viewController {
 	if ([self presentMessageCenterIfNeededForUserInfo:notification.userInfo fromViewController:viewController]) {
 		ApptentiveLogInfo(@"Apptentive local notification received.");
@@ -706,7 +710,11 @@ static Apptentive *_sharedInstance;
 }
 
 - (BOOL)didReceveUserNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)(void))completionHandler {
-	if ([self presentMessageCenterIfNeededForUserInfo:response.notification.request.content.userInfo fromViewController:nil]) {
+	return [self didReceveUserNotificationResponse:response fromViewController:nil withCompletionHandler:completionHandler];
+}
+
+- (BOOL)didReceveUserNotificationResponse:(UNNotificationResponse *)response fromViewController:(nullable UIViewController *)viewController withCompletionHandler:(void (^)(void))completionHandler {
+	if ([self presentMessageCenterIfNeededForUserInfo:response.notification.request.content.userInfo fromViewController:viewController]) {
 		ApptentiveLogInfo(@"Apptentive user notification received.");
 
 		if (completionHandler != nil) {
@@ -717,6 +725,20 @@ static Apptentive *_sharedInstance;
 	} else {
 		ApptentiveLogInfo(@"Non-apptentive user notification received.");
 
+		return NO;
+	}
+}
+
+- (BOOL)willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler {
+	if (notification.request.content.userInfo[@"apptentive"] != nil) {
+		if ([notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
+			completionHandler(UNNotificationPresentationOptionNone);
+		} else {
+			completionHandler(UNNotificationPresentationOptionAlert);
+		}
+
+		return YES;
+	} else {
 		return NO;
 	}
 }
@@ -745,7 +767,7 @@ static Apptentive *_sharedInstance;
 	ApptentiveLogInfo(@"Silent push notification received. Posting local notification");
 
 	NSString *title = [ApptentiveUtilities appName];
-	NSString *body = userInfo[@"apptentive"][@"alert"] ?: NSLocalizedString(@"A new message awaits you in Message Center", @"Default push alert body");
+	NSString *body = userInfo[@"apptentive"][@"alert"] ?: userInfo[@"aps"][@"alert"] ?: NSLocalizedString(@"A new message awaits you in Message Center", @"Default push alert body");
 	NSDictionary *apptentiveUserInfo = @{ @"apptentive": userInfo[@"apptentive"] };
 	NSString *soundName = userInfo[@"apptentive"][@"sound"];
 
@@ -783,6 +805,14 @@ static Apptentive *_sharedInstance;
 		ApptentiveLogError(@"Your app is not properly configured to accept Apptentive Message Center push notifications.");
 		ApptentiveLogError(@"Please see the push notification section of the integration guide for assistance: https://learn.apptentive.com/knowledge-base/ios-integration-reference/#push-notifications");
 	}
+}
+
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)(void))completionHandler {
+	[self didReceveUserNotificationResponse:response fromViewController:nil withCompletionHandler:completionHandler];
+}
+
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler {
+	[self willPresentNotification:notification withCompletionHandler:completionHandler];
 }
 
 - (void)dismissMessageCenterAnimated:(BOOL)animated completion:(nullable void (^)(void))completion {

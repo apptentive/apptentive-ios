@@ -201,7 +201,7 @@ typedef NS_ENUM(NSUInteger, ApptentiveLogLevel) {
  with a value of the id of the survey that was sent.
 
  */
-@interface Apptentive : NSObject
+@interface Apptentive : NSObject <UNUserNotificationCenterDelegate>
 
 ///---------------------------------
 /// @name Basic Usage
@@ -460,23 +460,7 @@ typedef NS_ENUM(NSUInteger, ApptentiveLogLevel) {
 - (void)setPushNotificationIntegration:(ApptentivePushProvider)pushProvider withDeviceToken:(NSData *)deviceToken NS_SWIFT_NAME(setPushProvider(_:deviceToken:));
 
 /**
- Forwards a push notification from your application delegate to Apptentive Connect.
-
- If the push notification originated from Apptentive, Message Center will be presented from the view controller
- when the notification is tapped.
-
- @param userInfo The `userInfo` dictionary of the notification.
- @param viewController The view controller Message Center may be presented from.
-
- @return `YES` if the notification was sent by Apptentive, `NO` otherwise.
- */
-- (BOOL)didReceiveRemoteNotification:(NSDictionary *)userInfo fromViewController:(UIViewController *)viewController;
-
-/**
  Forwards a push notification from your application delegate to Apptentive.
-
- If the push notification originated from Apptentive, Message Center will be presented from the view controller
- when the notification is tapped.
 
  Apptentive will attempt to fetch Messages Center messages in the background when the notification is received.
 
@@ -489,12 +473,36 @@ typedef NS_ENUM(NSUInteger, ApptentiveLogLevel) {
  If the notification was not sent by Apptentive, the parent app is responsible for calling the `completionHandler` block.
 
  @param userInfo The `userInfo` dictionary of the notification.
+ @param completionHandler The block to execute when the message fetch operation is complete.
+
+ @return `YES` if the notification was sent by Apptentive, `NO` otherwise.
+ */
+- (BOOL)didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler;
+
+/**
+ Forwards a push notification from your application delegate to Apptentive.
+
+ Deprecated. The value passed to `fromViewController` is ignored. Use `-didReceveRemoteNotification:fetchCompletionHandler` instead.
+
+ @param userInfo The `userInfo` dictionary of the notification.
  @param viewController The view controller Message Center may be presented from.
  @param completionHandler The block to execute when the message fetch operation is complete.
 
  @return `YES` if the notification was sent by Apptentive, `NO` otherwise.
  */
-- (BOOL)didReceiveRemoteNotification:(NSDictionary *)userInfo fromViewController:(UIViewController *)viewController fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler;
+- (BOOL)didReceiveRemoteNotification:(NSDictionary *)userInfo fromViewController:(UIViewController *)viewController fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler DEPRECATED_ATTRIBUTE;
+
+/**
+ Forwards a push notification from your application delegate to Apptentive Connect.
+
+ Deprecated. The value passed to `fromViewController` is ignored. Use `-didReceiveRemoteNotification:fetchCompletionHandler:` instead.
+
+ @param userInfo The `userInfo` dictionary of the notification.
+ @param viewController The view controller Message Center may be presented from.
+
+ @return `YES` if the notification was sent by Apptentive, `NO` otherwise.
+ */
+- (BOOL)didReceiveRemoteNotification:(NSDictionary *)userInfo fromViewController:(UIViewController *)viewController DEPRECATED_ATTRIBUTE;
 
 /**
  Forwards a local notification from your application delegate to Apptentive.
@@ -503,7 +511,6 @@ typedef NS_ENUM(NSUInteger, ApptentiveLogLevel) {
  @param viewController The view controller Message Center may be presented from.
  @return `YES` if the notification was sent by Apptentive, `NO` otherwise.
  */
-
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 - (BOOL)didReceiveLocalNotification:(UILocalNotification *)notification fromViewController:(UIViewController *)viewController NS_SWIFT_NAME(didReceiveLocalNotification(_:from:));
@@ -514,12 +521,33 @@ typedef NS_ENUM(NSUInteger, ApptentiveLogLevel) {
  In the event that this method returns `NO`, your code must call the completion handler. 
 
  @param response The notification response
- @param completionHandler The completion handler that will be called if the notification was sent by Apptentive
+ @param viewController The view controller to present Message Center from. If absent, Message Center will be presented in a new window.
+ @param completionHandler The completion handler that will be called if the notification was sent by Apptentive.
  @return `YES` if the notification was sent by Apptentive, `NO` otherwise.
 
  */
+- (BOOL)didReceveUserNotificationResponse:(UNNotificationResponse *)response fromViewController:(nullable UIViewController *)viewController withCompletionHandler:(void(^)(void))completionHandler NS_AVAILABLE_IOS(10_0);
 
+/**
+ Forwards a user notification from your user notification center delegate to Apptentive.
+ In the event that this method returns `NO`, your code must call the completion handler.
+
+ @param response The notification response
+ @param completionHandler The completion handler that will be called if the notification was sent by Apptentive
+ @return `YES` if the notification was sent by Apptentive, `NO` otherwise.
+
+*/
 - (BOOL)didReceveUserNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)(void))completionHandler NS_AVAILABLE_IOS(10_0);
+
+/**
+ Tells the system to display an alert, if appropriate, for a notification.
+ In the event that this method returns `NO`, your code must call the completion handler.
+
+ @param notification The notification
+ @param completionHandler The completion handler that will be called if the notification was sent by Apptentive
+ @return `YES` if the notification was sent by Apptentive, `NO` otherwise.
+ */
+- (BOOL)willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler;
 
 ///-------------------------------------
 /// @name Attach Text, Images, and Files

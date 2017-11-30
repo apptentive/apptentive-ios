@@ -7,12 +7,12 @@
 //
 
 #import "ApptentiveRequestOperation.h"
-#import "ApptentiveRequestProtocol.h"
-#import "ApptentiveSerialRequest.h"
-#import "ApptentiveJSONSerialization.h"
-#import "ApptentiveSafeCollections.h"
 #import "ApptentiveBackend.h"
 #import "ApptentiveJSONSerialization.h"
+#import "ApptentiveJSONSerialization.h"
+#import "ApptentiveRequestProtocol.h"
+#import "ApptentiveSafeCollections.h"
+#import "ApptentiveSerialRequest.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -36,7 +36,7 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 	static NSIndexSet *_okStatusCodes;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-		_okStatusCodes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(200, 100)]; // 2xx status codes
+	  _okStatusCodes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(200, 100)]; // 2xx status codes
 	});
 
 	return _okStatusCodes;
@@ -46,7 +46,7 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 	static NSIndexSet *_clientErrorStatusCodes;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-		_clientErrorStatusCodes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(400, 100)]; // 4xx status codes
+	  _clientErrorStatusCodes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(400, 100)]; // 4xx status codes
 
 	});
 
@@ -57,7 +57,7 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 	static NSIndexSet *_serverErrorStatusCodes;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-		_serverErrorStatusCodes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(500, 100)]; // 5xx status codes
+	  _serverErrorStatusCodes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(500, 100)]; // 5xx status codes
 
 	});
 
@@ -107,37 +107,38 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 		}
 
 		[self willChangeValueForKey:@"isExecuting"];
-		_task = [self.dataSource.URLSession dataTaskWithRequest:self.URLRequest completionHandler:^(NSData *_Nullable data, NSURLResponse *_Nullable response, NSError *_Nullable error) {
-			if (self.isCancelled || error.code == NSURLErrorCancelled) {
-				return;
-			} else if (!response) {
-				[self processNetworkError:error];
-			} else {
-				NSHTTPURLResponse *URLResponse = (NSHTTPURLResponse *)response;
-				_responseData = data; // Store "raw" response data to access from the callback
+		_task = [self.dataSource.URLSession dataTaskWithRequest:self.URLRequest
+											  completionHandler:^(NSData *_Nullable data, NSURLResponse *_Nullable response, NSError *_Nullable error) {
+												if (self.isCancelled || error.code == NSURLErrorCancelled) {
+													return;
+												} else if (!response) {
+													[self processNetworkError:error];
+												} else {
+													NSHTTPURLResponse *URLResponse = (NSHTTPURLResponse *)response;
+													_responseData = data; // Store "raw" response data to access from the callback
 
-				if ([[[self class] okStatusCodes] containsIndex:URLResponse.statusCode]) {
-					NSObject *responseObject = nil;
+													if ([[[self class] okStatusCodes] containsIndex:URLResponse.statusCode]) {
+														NSObject *responseObject = nil;
 
-					if (URLResponse.statusCode != 204) { // "No Content"
-						responseObject = [ApptentiveJSONSerialization JSONObjectWithData:data error:&error];
+														if (URLResponse.statusCode != 204) { // "No Content"
+															responseObject = [ApptentiveJSONSerialization JSONObjectWithData:data error:&error];
 
-						if (responseObject == nil) { // Decoding error
-							[self processHTTPError:error withResponse:URLResponse responseData:data];
-						}
-					}
+															if (responseObject == nil) { // Decoding error
+																[self processHTTPError:error withResponse:URLResponse responseData:data];
+															}
+														}
 
-					[self processResponse:URLResponse withObject:responseObject];
-				} else {
-					[self processHTTPError:error withResponse:URLResponse responseData:data];
-				}
+														[self processResponse:URLResponse withObject:responseObject];
+													} else {
+														[self processHTTPError:error withResponse:URLResponse responseData:data];
+													}
 
-				// check if request failed due to an authentication failure
-				if (URLResponse.statusCode == 401) {
-					[self processAuthenticationFailureResponseData:data];
-				}
-			}
-		}];
+													// check if request failed due to an authentication failure
+													if (URLResponse.statusCode == 401) {
+														[self processAuthenticationFailureResponseData:data];
+													}
+												}
+											  }];
 
 		[self.task resume];
 		[self didChangeValueForKey:@"isExecuting"];
@@ -146,7 +147,7 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 		ApptentiveLogVerbose(ApptentiveLogTagNetwork, @"Headers: %@%@", self.URLRequest.allHTTPHeaderFields, self.URLRequest.HTTPBody.length > 0 ? [NSString stringWithFormat:@"\n-----------PAYLOAD BEGIN-----------\n%@\n-----------PAYLOAD END-----------", [[NSString alloc] initWithData:self.URLRequest.HTTPBody encoding:NSUTF8StringEncoding]] : @"");
 
 		[self.dataSource.URLSession.delegateQueue addOperationWithBlock:^{
-			[self.delegate requestOperationDidStart:self];
+		  [self.delegate requestOperationDidStart:self];
 		}];
 	}
 }
@@ -165,7 +166,7 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 			_wasCompleted = YES;
 
 			[self.dataSource.URLSession.delegateQueue addOperationWithBlock:^{
-				[self.delegate requestOperation:self didFailWithError:nil];
+			  [self.delegate requestOperation:self didFailWithError:nil];
 			}];
 
 			[self didChangeValueForKey:@"isFinished"];
@@ -231,7 +232,7 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 	[self.dataSource increaseBackoffDelay];
 
 	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(self.dataSource.backoffDelay * NSEC_PER_SEC)), dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0), ^{
-		[self startTask];
+	  [self startTask];
 	});
 }
 
@@ -252,11 +253,13 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 	NSString *errorType = ApptentiveDictionaryGetString(jsonObject, @"error_type") ?: @"UNKNOWN";
 	NSString *errorMessage = ApptentiveDictionaryGetString(jsonObject, @"error") ?: @"Unknown error";
 
-	[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveAuthenticationDidFailNotification object:nil userInfo:@{
-		ApptentiveAuthenticationDidFailNotificationKeyErrorType: errorType,
-		ApptentiveAuthenticationDidFailNotificationKeyErrorMessage: errorMessage,
-		ApptentiveAuthenticationDidFailNotificationKeyConversationIdentifier: conversationIdentifier
-	}];
+	[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveAuthenticationDidFailNotification
+														object:nil
+													  userInfo:@{
+														  ApptentiveAuthenticationDidFailNotificationKeyErrorType: errorType,
+														  ApptentiveAuthenticationDidFailNotificationKeyErrorMessage: errorMessage,
+														  ApptentiveAuthenticationDidFailNotificationKeyConversationIdentifier: conversationIdentifier
+													  }];
 }
 
 - (void)completeOperation {

@@ -76,7 +76,6 @@ static NSString *const ATEngagementIsUpdateBuildKey = @"ATEngagementIsUpdateBuil
 		_XcodeBuild = [NSBundle mainBundle].infoDictionary[@"DTXcodeBuild"];
 
 
-
 #ifdef APPTENTIVE_DEBUG
 		_debugBuild = YES;
 #endif

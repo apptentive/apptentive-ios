@@ -7,11 +7,11 @@
 //
 
 #import "ApptentiveMessagePayload.h"
+#import "ApptentiveAttachment.h"
 #import "ApptentiveMessage.h"
 #import "ApptentiveUtilities.h"
 #import "NSData+Encryption.h"
 #import "NSMutableData+Types.h"
-#import "ApptentiveAttachment.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

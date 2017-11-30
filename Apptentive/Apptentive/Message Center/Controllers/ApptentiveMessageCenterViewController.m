@@ -7,25 +7,25 @@
 //
 
 #import "ApptentiveMessageCenterViewController.h"
-#import "ApptentiveMessageCenterGreetingView.h"
-#import "ApptentiveMessageCenterStatusView.h"
-#import "ApptentiveMessageCenterInputView.h"
-#import "ApptentiveMessageCenterProfileView.h"
-#import "ApptentiveMessageCenterMessageCell.h"
-#import "ApptentiveMessageCenterReplyCell.h"
-#import "ApptentiveMessageCenterContextMessageCell.h"
-#import "ApptentiveCompoundMessageCell.h"
-#import "ApptentiveInteraction.h"
-#import "Apptentive_Private.h"
-#import "ApptentiveNetworkImageView.h"
-#import "ApptentiveUtilities.h"
-#import "ApptentiveNetworkImageIconView.h"
-#import "ApptentiveProgressNavigationBar.h"
 #import "ApptentiveAboutViewController.h"
 #import "ApptentiveAttachButton.h"
-#import "ApptentiveAttachmentController.h"
-#import "ApptentiveIndexedCollectionView.h"
 #import "ApptentiveAttachmentCell.h"
+#import "ApptentiveAttachmentController.h"
+#import "ApptentiveCompoundMessageCell.h"
+#import "ApptentiveIndexedCollectionView.h"
+#import "ApptentiveInteraction.h"
+#import "ApptentiveMessageCenterContextMessageCell.h"
+#import "ApptentiveMessageCenterGreetingView.h"
+#import "ApptentiveMessageCenterInputView.h"
+#import "ApptentiveMessageCenterMessageCell.h"
+#import "ApptentiveMessageCenterProfileView.h"
+#import "ApptentiveMessageCenterReplyCell.h"
+#import "ApptentiveMessageCenterStatusView.h"
+#import "ApptentiveNetworkImageIconView.h"
+#import "ApptentiveNetworkImageView.h"
+#import "ApptentiveProgressNavigationBar.h"
+#import "ApptentiveUtilities.h"
+#import "Apptentive_Private.h"
 #import <MobileCoreServices/UTCoreTypes.h>
 
 #define HEADER_LABEL_HEIGHT 64.0
@@ -156,12 +156,12 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
 	[coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> _Nonnull context) {
-		// If the old cached keyboard rect overlaps the screen, assume it's moving off screen.
-		if (CGRectGetMinY(self.lastKnownKeyboardRect) <= CGRectGetHeight(self.view.bounds)) {
-			self.lastKnownKeyboardRect = CGRectMake(0, CGRectGetHeight(self.view.bounds), self.lastKnownKeyboardRect.size.width, self.lastKnownKeyboardRect.size.height);
-		}
+	  // If the old cached keyboard rect overlaps the screen, assume it's moving off screen.
+	  if (CGRectGetMinY(self.lastKnownKeyboardRect) <= CGRectGetHeight(self.view.bounds)) {
+		  self.lastKnownKeyboardRect = CGRectMake(0, CGRectGetHeight(self.view.bounds), self.lastKnownKeyboardRect.size.width, self.lastKnownKeyboardRect.size.height);
+	  }
 
-		[self resizeFooterView:nil];
+	  [self resizeFooterView:nil];
 	} completion:^(id<UIViewControllerTransitionCoordinatorContext> _Nonnull context){
 	}];
 }
@@ -446,7 +446,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	switch ([self.viewModel cellTypeAtIndexPath:indexPath]) {
 		case ATMessageCenterMessageTypeCompoundMessage:
 			((id<ApptentiveMessageCenterCompoundCell>)cell).collectionView.backgroundColor = [self.viewModel.styleSheet colorForStyle:ApptentiveColorMessageBackground];
-			// Fall through
+		// Fall through
 		case ATMessageCenterMessageTypeMessage:
 			cell.contentView.backgroundColor = [self.viewModel.styleSheet colorForStyle:ApptentiveColorMessageBackground];
 			cell.backgroundColor = [self.viewModel.styleSheet colorForStyle:ApptentiveColorMessageBackground];
@@ -454,7 +454,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 		case ATMessageCenterMessageTypeCompoundReply:
 			((id<ApptentiveMessageCenterCompoundCell>)cell).collectionView.backgroundColor = [self.viewModel.styleSheet colorForStyle:ApptentiveColorReplyBackground];
-			// Fall through
+		// Fall through
 		case ATMessageCenterMessageTypeReply:
 			cell.contentView.backgroundColor = [self.viewModel.styleSheet colorForStyle:ApptentiveColorReplyBackground];
 			cell.backgroundColor = [self.viewModel.styleSheet colorForStyle:ApptentiveColorReplyBackground];
@@ -503,15 +503,15 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 	if (self.state != ATMessageCenterStateWhoCard && self.state != ATMessageCenterStateComposing) {
 		ATMessageCenterState oldState = self.state;
-		
+
 		[self updateState];
-		
+
 		[self resizeFooterView:nil];
 		[self scrollToLastMessageAnimated:YES];
-		
+
 		if (self.state == ATMessageCenterStateSending && oldState == ATMessageCenterStateConfirmed) {
 			UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, self.statusView.statusLabel);
-			
+
 			if (self.viewModel.statusBody.length > 0) {
 				UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, self.viewModel.statusBody);
 			}
@@ -629,9 +629,10 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		offset.y += overflow + textView.textContainerInset.bottom;
 
 		// Cannot animate with setContentOffset:animated: or caret will not appear
-		[UIView animateWithDuration:.2 animations:^{
-			[textView setContentOffset:offset];
-		}];
+		[UIView animateWithDuration:.2
+						 animations:^{
+						   [textView setContentOffset:offset];
+						 }];
 	}
 }
 
@@ -671,9 +672,10 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 	UIViewController *presentingViewController = self.presentingViewController;
 
-	[self dismissViewControllerAnimated:YES completion:^{
-		[self.viewModel.interaction engage:ATInteractionMessageCenterEventLabelClose fromViewController:presentingViewController];
-	}];
+	[self dismissViewControllerAnimated:YES
+							 completion:^{
+							   [self.viewModel.interaction engage:ATInteractionMessageCenterEventLabelClose fromViewController:presentingViewController];
+							 }];
 
 	self.interactionController = nil;
 }
@@ -686,8 +688,10 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.attachmentController.active = NO;
 
 	if ([self shouldShowProfileViewBeforeComposing:NO]) {
-		[self.viewModel.interaction engage:ATInteractionMessageCenterEventLabelProfileOpen fromViewController:self userInfo:@{ @"required": @(self.viewModel.profileRequired),
-			@"trigger": @"automatic" }];
+		[self.viewModel.interaction engage:ATInteractionMessageCenterEventLabelProfileOpen
+						fromViewController:self
+								  userInfo:@{ @"required": @(self.viewModel.profileRequired),
+									  @"trigger": @"automatic" }];
 
 		self.state = ATMessageCenterStateWhoCard;
 	} else {
@@ -716,16 +720,20 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:self.viewModel.composerCloseConfirmBody message:nil preferredStyle:UIAlertControllerStyleActionSheet];
 
-	[alertController addAction:[UIAlertAction actionWithTitle:self.viewModel.composerCloseCancelButtonTitle style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-		if (cancelReturnsToComposer) {
-			[self.messageInputView.messageView becomeFirstResponder];
-		} else {
-			[self.attachmentController becomeFirstResponder];
-		}
-	}]];
-	[alertController addAction:[UIAlertAction actionWithTitle:self.viewModel.composerCloseDiscardButtonTitle style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
-		[self discardDraft];
-	}]];
+	[alertController addAction:[UIAlertAction actionWithTitle:self.viewModel.composerCloseCancelButtonTitle
+														style:UIAlertActionStyleCancel
+													  handler:^(UIAlertAction *_Nonnull action) {
+														if (cancelReturnsToComposer) {
+															[self.messageInputView.messageView becomeFirstResponder];
+														} else {
+															[self.attachmentController becomeFirstResponder];
+														}
+													  }]];
+	[alertController addAction:[UIAlertAction actionWithTitle:self.viewModel.composerCloseDiscardButtonTitle
+														style:UIAlertActionStyleDestructive
+													  handler:^(UIAlertAction *action) {
+														[self discardDraft];
+													  }]];
 
 	[self presentViewController:alertController animated:YES completion:nil];
 	alertController.popoverPresentationController.sourceView = sender.superview;
@@ -745,8 +753,10 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[self.profileView.saveButton setTitle:self.viewModel.profileEditSaveButtonTitle forState:UIControlStateNormal];
 	[self.profileView.skipButton setTitle:self.viewModel.profileEditSkipButtonTitle forState:UIControlStateNormal];
 
-	[self.viewModel.interaction engage:ATInteractionMessageCenterEventLabelProfileOpen fromViewController:self userInfo:@{ @"required": @(self.viewModel.profileRequired),
-		@"trigger": @"button" }];
+	[self.viewModel.interaction engage:ATInteractionMessageCenterEventLabelProfileOpen
+					fromViewController:self
+							  userInfo:@{ @"required": @(self.viewModel.profileRequired),
+								  @"trigger": @"button" }];
 
 	self.state = ATMessageCenterStateWhoCard;
 
@@ -783,8 +793,10 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	}
 
 	if (self.profileView.emailField.text != self.viewModel.personEmailAddress) {
-		[self.viewModel.interaction engage:ATInteractionMessageCenterEventLabelProfileEmail fromViewController:self userInfo:@{ @"length": @(self.profileView.emailField.text.length),
-			@"valid": @([ApptentiveUtilities emailAddressIsValid:self.profileView.emailField.text]) }];
+		[self.viewModel.interaction engage:ATInteractionMessageCenterEventLabelProfileEmail
+						fromViewController:self
+								  userInfo:@{ @"length": @(self.profileView.emailField.text.length),
+									  @"valid": @([ApptentiveUtilities emailAddressIsValid:self.profileView.emailField.text]) }];
 	}
 
 	[self.viewModel setPersonName:self.profileView.nameField.text emailAddress:self.profileView.emailField.text];
@@ -801,7 +813,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	}
 
 	UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, @"Profile Saved");
-	UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification,  self.navigationItem.leftBarButtonItem);
+	UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, self.navigationItem.leftBarButtonItem);
 }
 
 - (IBAction)skipWho:(id)sender {
@@ -819,7 +831,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[self.view endEditing:YES];
 	[self resizeFooterView:nil];
 
-	UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification,  self.navigationItem.leftBarButtonItem);
+	UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, self.navigationItem.leftBarButtonItem);
 }
 
 - (IBAction)showAbout:(id)sender {
@@ -903,8 +915,10 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 - (void)updateState {
 	if ([self shouldShowProfileViewBeforeComposing:YES]) {
-		[self.viewModel.interaction engage:ATInteractionMessageCenterEventLabelProfileOpen fromViewController:self userInfo:@{ @"required": @(self.viewModel.profileRequired),
-			@"trigger": @"automatic" }];
+		[self.viewModel.interaction engage:ATInteractionMessageCenterEventLabelProfileOpen
+						fromViewController:self
+								  userInfo:@{ @"required": @(self.viewModel.profileRequired),
+									  @"trigger": @"automatic" }];
 
 		self.state = ATMessageCenterStateWhoCard;
 	} else if (!self.viewModel.hasNonContextMessages) {
@@ -1030,12 +1044,14 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 			self.activeFooterView = newFooter;
 			[self resizeFooterView:nil];
 
-			[UIView animateWithDuration:0.25 animations:^{
-				newFooter.alpha = 1;
-				oldFooter.alpha = 0;
-			} completion:^(BOOL finished) {
-				oldFooter.hidden = YES;
-			}];
+			[UIView animateWithDuration:0.25
+				animations:^{
+				  newFooter.alpha = 1;
+				  oldFooter.alpha = 0;
+				}
+				completion:^(BOOL finished) {
+				  oldFooter.hidden = YES;
+				}];
 		}
 	}
 }
@@ -1099,9 +1115,10 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	CGPoint contentOffset = CGPointMake(0, verticalOffset);
 
 	CGFloat duration = notification ? [notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue] : 0.25;
-	[UIView animateWithDuration:duration animations:^{
-			self.tableView.contentOffset = contentOffset;
-	}];
+	[UIView animateWithDuration:duration
+					 animations:^{
+					   self.tableView.contentOffset = contentOffset;
+					 }];
 }
 
 - (void)resizeFooterView:(nullable NSNotification *)notification {
@@ -1156,11 +1173,12 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 	frame.size.height = height;
 
-	[UIView animateWithDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue] animations:^{
-		self.tableView.tableFooterView.frame = frame;
-		[self.tableView.tableFooterView layoutIfNeeded];
-		self.tableView.tableFooterView = self.tableView.tableFooterView;
-	}];
+	[UIView animateWithDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]
+					 animations:^{
+					   self.tableView.tableFooterView.frame = frame;
+					   [self.tableView.tableFooterView layoutIfNeeded];
+					   self.tableView.tableFooterView = self.tableView.tableFooterView;
+					 }];
 }
 
 - (void)keyboardDidShow:(NSNotification *)notification {

@@ -8,10 +8,10 @@
 
 #import "ApptentiveInteractionMessageCenterController.h"
 #import "ApptentiveBackend.h"
-#import "Apptentive_Private.h"
-#import "ApptentiveMessageCenterViewController.h"
 #import "ApptentiveInteraction.h"
+#import "ApptentiveMessageCenterViewController.h"
 #import "ApptentiveUtilities.h"
+#import "Apptentive_Private.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

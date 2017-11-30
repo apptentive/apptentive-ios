@@ -10,15 +10,15 @@
 #import "ApptentiveAttachment.h"
 #import "ApptentiveMessageSender.h"
 
-#import "ApptentiveBackend.h"
 #import "Apptentive.h"
-#import "Apptentive_Private.h"
 #import "ApptentiveAttachmentCell.h"
-#import "ApptentiveUtilities.h"
+#import "ApptentiveBackend.h"
+#import "ApptentiveDefines.h"
 #import "ApptentiveInteraction.h"
 #import "ApptentivePerson.h"
 #import "ApptentiveReachability.h"
-#import "ApptentiveDefines.h"
+#import "ApptentiveUtilities.h"
+#import "Apptentive_Private.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -358,9 +358,9 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 
 	if (message.state == ApptentiveMessageStateUnread) {
 		[self.messageManager.operationQueue addOperationWithBlock:^{
-			message.state = ApptentiveMessageStateRead;
-			[self.messageManager updateUnreadCount];
-			[self.messageManager saveMessageStore];
+		  message.state = ApptentiveMessageStateRead;
+		  [self.messageManager updateUnreadCount];
+		  [self.messageManager saveMessageStore];
 		}];
 	}
 }
@@ -454,13 +454,13 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 	}
 
 	dispatch_async(dispatch_get_main_queue(), ^{
-		// -completeMoveToStorageFor: must be called on main thread.
-		[[self fileAttachmentAtIndexPath:attachmentIndexPath] completeMoveToStorageFor:finalLocation];
-		[self.delegate messageCenterViewModel:self didLoadAttachmentThumbnailAtIndexPath:attachmentIndexPath];
+	  // -completeMoveToStorageFor: must be called on main thread.
+	  [[self fileAttachmentAtIndexPath:attachmentIndexPath] completeMoveToStorageFor:finalLocation];
+	  [self.delegate messageCenterViewModel:self didLoadAttachmentThumbnailAtIndexPath:attachmentIndexPath];
 
-		[self.messageManager.operationQueue addOperationWithBlock:^{
-			[self.messageManager saveMessageStore];
-		}];
+	  [self.messageManager.operationQueue addOperationWithBlock:^{
+		[self.messageManager saveMessageStore];
+	  }];
 	});
 }
 
@@ -468,7 +468,7 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 	NSIndexPath *attachmentIndexPath = [self indexPathForTask:downloadTask];
 
 	dispatch_async(dispatch_get_main_queue(), ^{
-        [self.delegate messageCenterViewModel:self attachmentDownloadAtIndexPath:attachmentIndexPath didProgress:(double) totalBytesWritten / (double) totalBytesExpectedToWrite];
+	  [self.delegate messageCenterViewModel:self attachmentDownloadAtIndexPath:attachmentIndexPath didProgress:(double)totalBytesWritten / (double)totalBytesExpectedToWrite];
 	});
 }
 
@@ -479,7 +479,7 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 	[self removeTask:task];
 
 	dispatch_async(dispatch_get_main_queue(), ^{
-		[self.delegate messageCenterViewModel:self didFailToLoadAttachmentThumbnailAtIndexPath:attachmentIndexPath error:error];
+	  [self.delegate messageCenterViewModel:self didFailToLoadAttachmentThumbnailAtIndexPath:attachmentIndexPath error:error];
 	});
 }
 

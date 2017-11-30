@@ -8,15 +8,15 @@
 //
 
 #import "ApptentiveAttachment.h"
-#import <MobileCoreServices/MobileCoreServices.h>
 #import <ImageIO/ImageIO.h>
+#import <MobileCoreServices/MobileCoreServices.h>
 
 // TODO: see if we can remove/inject these dependencies
-#import "Apptentive_Private.h"
 #import "ApptentiveBackend.h"
+#import "ApptentiveDefines.h"
 #import "ApptentiveMessageManager.h"
 #import "ApptentiveUtilities.h"
-#import "ApptentiveDefines.h"
+#import "Apptentive_Private.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -254,21 +254,21 @@ static NSString *const RemoteURLKey = @"remoteURL";
 	static NSSet *thumbnailableMIMETypes;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-		CFArrayRef thumbnailableUTIs = CGImageSourceCopyTypeIdentifiers();
+	  CFArrayRef thumbnailableUTIs = CGImageSourceCopyTypeIdentifiers();
 
-		NSMutableSet *mimeTypes = [NSMutableSet set];
+	  NSMutableSet *mimeTypes = [NSMutableSet set];
 
-		for (CFIndex i = 0; i < CFArrayGetCount(thumbnailableUTIs); i ++) {
-			CFStringRef UTI = CFArrayGetValueAtIndex(thumbnailableUTIs, i);
-			CFStringRef localMIMEType = UTTypeCopyPreferredTagWithClass(UTI, kUTTagClassMIMEType);
-			if (localMIMEType) {
-				[mimeTypes addObject:(__bridge id _Nonnull)(localMIMEType)];
-				CFRelease(localMIMEType);
-			}
-		}
+	  for (CFIndex i = 0; i < CFArrayGetCount(thumbnailableUTIs); i++) {
+		  CFStringRef UTI = CFArrayGetValueAtIndex(thumbnailableUTIs, i);
+		  CFStringRef localMIMEType = UTTypeCopyPreferredTagWithClass(UTI, kUTTagClassMIMEType);
+		  if (localMIMEType) {
+			  [mimeTypes addObject:(__bridge id _Nonnull)(localMIMEType)];
+			  CFRelease(localMIMEType);
+		  }
+	  }
 
-		thumbnailableMIMETypes = [NSSet setWithSet:mimeTypes];
-		CFRelease(thumbnailableUTIs);
+	  thumbnailableMIMETypes = [NSSet setWithSet:mimeTypes];
+	  CFRelease(thumbnailableUTIs);
 	});
 
 	return [thumbnailableMIMETypes containsObject:MIMEType];

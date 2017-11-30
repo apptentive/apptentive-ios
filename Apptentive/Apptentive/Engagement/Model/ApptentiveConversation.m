@@ -8,13 +8,13 @@
 
 #import "ApptentiveConversation.h"
 #import "ApptentiveAppRelease.h"
-#import "ApptentiveSDK.h"
-#import "ApptentivePerson.h"
+#import "ApptentiveConversationMetadataItem.h"
 #import "ApptentiveDevice.h"
 #import "ApptentiveEngagement.h"
+#import "ApptentivePerson.h"
+#import "ApptentiveSDK.h"
 #import "ApptentiveUtilities.h"
 #import "ApptentiveVersion.h"
-#import "ApptentiveConversationMetadataItem.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

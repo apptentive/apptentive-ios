@@ -6,8 +6,8 @@
 //  Copyright © 2016 Apptentive, Inc. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import "ApptentiveRequestProtocol.h"
+#import <Foundation/Foundation.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

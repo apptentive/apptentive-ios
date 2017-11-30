@@ -8,10 +8,10 @@
 
 #import "ApptentiveInteraction.h"
 #import "ApptentiveBackend+Engagement.h"
+#import "ApptentiveInteractionController.h"
 #import "ApptentiveInteractionUsageData.h"
 #import "ApptentiveUtilities.h"
 #import "Apptentive_Private.h"
-#import "ApptentiveInteractionController.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

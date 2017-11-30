@@ -49,8 +49,20 @@ static ApptentiveHUDViewController *currentHUD;
 	[self.view addSubview:self.HUDView];
 
 	[self.view addConstraints:@[
-		[NSLayoutConstraint constraintWithItem:self.HUDView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0.0],
-		[NSLayoutConstraint constraintWithItem:self.HUDView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0.0]
+		[NSLayoutConstraint constraintWithItem:self.HUDView
+									 attribute:NSLayoutAttributeCenterX
+									 relatedBy:NSLayoutRelationEqual
+										toItem:self.view
+									 attribute:NSLayoutAttributeCenterX
+									multiplier:1.0
+									  constant:0.0],
+		[NSLayoutConstraint constraintWithItem:self.HUDView
+									 attribute:NSLayoutAttributeCenterY
+									 relatedBy:NSLayoutRelationEqual
+										toItem:self.view
+									 attribute:NSLayoutAttributeCenterY
+									multiplier:1.0
+									  constant:0.0]
 	]];
 
 	self.textLabel = [[UILabel alloc] initWithFrame:CGRectZero];
@@ -92,9 +104,10 @@ static ApptentiveHUDViewController *currentHUD;
 	self.hostWindow.backgroundColor = [UIColor clearColor];
 
 	self.HUDView.alpha = 0.0;
-	[UIView animateWithDuration:self.animationDuration animations:^{
-		self.HUDView.alpha = 1;
-	}];
+	[UIView animateWithDuration:self.animationDuration
+					 animations:^{
+					   self.HUDView.alpha = 1;
+					 }];
 
 	self.hideTimer = [NSTimer scheduledTimerWithTimeInterval:self.interval target:self selector:@selector(hide:) userInfo:nil repeats:NO];
 }
@@ -102,14 +115,16 @@ static ApptentiveHUDViewController *currentHUD;
 - (IBAction)hide:(id)sender {
 	[self.hideTimer invalidate];
 
-	[UIView animateWithDuration:self.animationDuration animations:^{
-		self.HUDView.alpha = 0;
-	} completion:^(BOOL finished) {
-		self.hostWindow.hidden = YES;
-		[self.previousKeyWindow makeKeyWindow];
-		self.hostWindow = nil;
-		UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil);
-	}];
+	[UIView animateWithDuration:self.animationDuration
+		animations:^{
+		  self.HUDView.alpha = 0;
+		}
+		completion:^(BOOL finished) {
+		  self.hostWindow.hidden = YES;
+		  [self.previousKeyWindow makeKeyWindow];
+		  self.hostWindow = nil;
+		  UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil);
+		}];
 }
 
 - (BOOL)shouldAutorotate {

@@ -7,17 +7,17 @@
 //
 
 #import "ApptentiveBackend+Engagement.h"
-#import "ApptentiveBackend.h"
-#import "ApptentiveInteraction.h"
-#import "ApptentiveInteractionInvocation.h"
-#import "Apptentive_Private.h"
-#import "ApptentiveInteractionController.h"
-#import "ApptentiveEngagement.h"
-#import "ApptentiveEngagementManifest.h"
-#import "ApptentiveEngagementBackend.h"
-#import "ApptentiveEventPayload.h"
-#import "ApptentiveSerialRequest.h"
 #import "ApptentiveAppConfiguration.h"
+#import "ApptentiveBackend.h"
+#import "ApptentiveEngagement.h"
+#import "ApptentiveEngagementBackend.h"
+#import "ApptentiveEngagementManifest.h"
+#import "ApptentiveEventPayload.h"
+#import "ApptentiveInteraction.h"
+#import "ApptentiveInteractionController.h"
+#import "ApptentiveInteractionInvocation.h"
+#import "ApptentiveSerialRequest.h"
+#import "Apptentive_Private.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -93,7 +93,7 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 - (BOOL)engageCodePoint:(NSString *)codePoint fromInteraction:(nullable ApptentiveInteraction *)fromInteraction userInfo:(nullable NSDictionary *)userInfo customData:(nullable NSDictionary *)customData extendedData:(nullable NSArray *)extendedData fromViewController:(nullable UIViewController *)viewController {
 	if (self.state != ApptentiveBackendStatePayloadDatabaseAvailable) {
 		[self.operationQueue addOperationWithBlock:^{
-			[self engageCodePoint:codePoint fromInteraction:fromInteraction userInfo:userInfo customData:customData extendedData:extendedData fromViewController:viewController];
+		  [self engageCodePoint:codePoint fromInteraction:fromInteraction userInfo:userInfo customData:customData extendedData:extendedData fromViewController:viewController];
 		}];
 
 		ApptentiveLogInfo(@"Backend not ready. Deferring engagement of %@", codePoint);
@@ -111,7 +111,7 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 	}
 
 	[self.operationQueue addOperationWithBlock:^{
-        [self conversation:conversation addMetricWithName:codePoint fromInteraction:fromInteraction info:userInfo customData:customData extendedData:extendedData];
+	  [self conversation:conversation addMetricWithName:codePoint fromInteraction:fromInteraction info:userInfo customData:customData extendedData:extendedData];
 	}];
 
 	// FIXME: Race condition when trying to modify and save conversation from different threads
@@ -127,7 +127,7 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 	ApptentiveInteraction *interaction = [engagementBackend interactionForEvent:codePoint];
 	if (interaction) {
 		ApptentiveLogInfo(@"--Running valid %@ interaction.", interaction.type);
-		
+
 		if (viewController != nil && (!viewController.isViewLoaded || viewController.view.window == nil)) {
 			ApptentiveLogError(@"Attempting to present interaction on a view controller whose view is not visible in a window. Using a separate window instead.");
 			viewController = nil;
@@ -160,7 +160,7 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 
 	if (![[NSThread currentThread] isMainThread]) {
 		dispatch_async(dispatch_get_main_queue(), ^{
-			[self presentInteraction:interaction fromViewController:viewController];
+		  [self presentInteraction:interaction fromViewController:viewController];
 		});
 		return;
 	}

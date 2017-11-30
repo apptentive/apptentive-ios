@@ -6,9 +6,9 @@
 //  Copyright © 2016 Apptentive, Inc. All rights reserved.
 //
 
-#import <XCTest/XCTest.h>
-#import "ApptentiveStyleSheet.h"
 #import "Apptentive.h"
+#import "ApptentiveStyleSheet.h"
+#import <XCTest/XCTest.h>
 
 
 @interface ApptentiveStyleSheetTests : XCTestCase

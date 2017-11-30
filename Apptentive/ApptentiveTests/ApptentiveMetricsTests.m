@@ -6,8 +6,8 @@
 //  Copyright (c) 2011 Apptentive. All rights reserved.
 //
 
-#import <XCTest/XCTest.h>
 #import "Apptentive.h"
+#import <XCTest/XCTest.h>
 
 
 @interface ApptentiveMetricsTests : XCTestCase

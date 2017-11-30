@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ApptentiveStoreProductViewController : SKStoreProductViewController
 
-- (void)presentAnimated:(BOOL)animated completion:(void (^ __nullable)(void))completion;
+- (void)presentAnimated:(BOOL)animated completion:(void (^__nullable)(void))completion;
 
 @end
 

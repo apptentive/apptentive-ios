@@ -6,9 +6,9 @@
 //  Copyright (c) 2012 Apptentive, Inc. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import <CoreData/CoreData.h>
 #import "ApptentiveRecord.h"
+#import <CoreData/CoreData.h>
+#import <Foundation/Foundation.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

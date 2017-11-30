@@ -22,7 +22,7 @@ static NSString *const ApptentiveInteractionEventLabelCancel = @"cancel";
 + (void)registerInteractionControllerClass:(Class) class forType:(NSString *)type {
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-        interactionControllerClassRegistry = @{};
+	  interactionControllerClassRegistry = @{};
 	});
 
 	@synchronized([ApptentiveInteractionController class]) {

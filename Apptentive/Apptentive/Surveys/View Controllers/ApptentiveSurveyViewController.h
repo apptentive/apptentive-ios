@@ -6,9 +6,9 @@
 //  Copyright © 2016 Apptentive, Inc. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
 #import "ApptentiveSurveyCollectionView.h"
 #import "ApptentiveSurveyViewModel.h"
+#import <UIKit/UIKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

@@ -7,8 +7,8 @@
 //
 
 #import "ApptentiveJWT.h"
-#import "ApptentiveUtilities.h"
 #import "ApptentiveJSONSerialization.h"
+#import "ApptentiveUtilities.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

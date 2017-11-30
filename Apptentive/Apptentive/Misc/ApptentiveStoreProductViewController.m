@@ -17,9 +17,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
+
 @implementation ApptentiveStoreProductViewController
 
-- (void)presentAnimated:(BOOL)animated completion:(void (^ __nullable)(void))completion {
+- (void)presentAnimated:(BOOL)animated completion:(void (^__nullable)(void))completion {
 	self.apptentiveAlertWindow = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
 	self.apptentiveAlertWindow.rootViewController = [[UIViewController alloc] init];
 	self.apptentiveAlertWindow.windowLevel = UIWindowLevelAlert + 1;
@@ -29,7 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)viewDidDisappear:(BOOL)animated {
 	[super viewDidDisappear:animated];
-	
+
 	if (self.presentingViewController == nil) {
 		self.apptentiveAlertWindow.hidden = YES;
 		self.apptentiveAlertWindow = nil;

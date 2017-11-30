@@ -7,9 +7,9 @@
 //
 
 #import "ApptentiveInteractionAppleRatingDialogController.h"
+#import "ApptentiveBackend+Engagement.h"
 #import "ApptentiveInteraction.h"
 #import "Apptentive_Private.h"
-#import "ApptentiveBackend+Engagement.h"
 #import <StoreKit/StoreKit.h>
 
 NS_ASSUME_NONNULL_BEGIN

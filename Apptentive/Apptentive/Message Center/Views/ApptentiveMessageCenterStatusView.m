@@ -49,11 +49,12 @@ NS_ASSUME_NONNULL_BEGIN
 			[self addConstraint:self.imageStatusSpacing];
 		}
 
-		[UIView animateWithDuration:0.25 animations:^{
-			self.imageView.alpha = statusImage ? 1.0 : 0.0;
-			
-			[self layoutIfNeeded];
-		}];
+		[UIView animateWithDuration:0.25
+						 animations:^{
+						   self.imageView.alpha = statusImage ? 1.0 : 0.0;
+
+						   [self layoutIfNeeded];
+						 }];
 	}
 }
 

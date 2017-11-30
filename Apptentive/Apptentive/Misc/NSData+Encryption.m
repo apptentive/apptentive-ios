@@ -8,8 +8,8 @@
 
 #import <CommonCrypto/CommonCrypto.h>
 
-#import "NSData+Encryption.h"
 #import "ApptentiveUtilities.h"
+#import "NSData+Encryption.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

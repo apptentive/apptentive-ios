@@ -6,9 +6,9 @@
 //  Copyright 2011 Apptentive, Inc.. All rights reserved.
 //
 
-#import <XCTest/XCTest.h>
-#import <UIKit/UIKit.h>
 #import "ApptentiveUtilities.h"
+#import <UIKit/UIKit.h>
+#import <XCTest/XCTest.h>
 
 
 @interface ApptentiveUtilitiesTests : XCTestCase

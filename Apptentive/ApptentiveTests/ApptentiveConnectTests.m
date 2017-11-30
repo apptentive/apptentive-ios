@@ -6,12 +6,12 @@
 //  Copyright 2011 Apptentive, Inc.. All rights reserved.
 //
 
-#import <XCTest/XCTest.h>
 #import "Apptentive.h"
-#import "ApptentiveUtilities.h"
 #import "ApptentiveConversation.h"
-#import "ApptentivePerson.h"
 #import "ApptentiveDevice.h"
+#import "ApptentivePerson.h"
+#import "ApptentiveUtilities.h"
+#import <XCTest/XCTest.h>
 
 
 @interface ApptentiveConnectTests : XCTestCase

@@ -7,10 +7,10 @@
 //
 
 #import "ApptentiveAppInstall.h"
-#import "ApptentivePerson.h"
-#import "ApptentiveDevice.h"
-#import "ApptentiveSDK.h"
 #import "ApptentiveAppRelease.h"
+#import "ApptentiveDevice.h"
+#import "ApptentivePerson.h"
+#import "ApptentiveSDK.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

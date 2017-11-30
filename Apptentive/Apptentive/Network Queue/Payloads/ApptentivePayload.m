@@ -7,10 +7,10 @@
 //
 
 #import "ApptentivePayload.h"
-#import "ApptentiveUtilities.h"
-#import "NSData+Encryption.h"
 #import "ApptentiveDefines.h"
 #import "ApptentiveJSONSerialization.h"
+#import "ApptentiveUtilities.h"
+#import "NSData+Encryption.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

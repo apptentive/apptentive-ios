@@ -7,11 +7,11 @@
 //
 
 #import "ApptentiveInteractionTextModalController.h"
-#import "ApptentiveUtilities.h"
-#import "ApptentiveInteractionInvocation.h"
 #import "ApptentiveBackend+Engagement.h"
-#import "Apptentive_Private.h"
 #import "ApptentiveInteraction.h"
+#import "ApptentiveInteractionInvocation.h"
+#import "ApptentiveUtilities.h"
+#import "Apptentive_Private.h"
 #import "UIAlertController+Apptentive.h"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -38,13 +38,16 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 
 	if (self.presentedViewController) {
 		if (viewController != nil) {
-			[viewController presentViewController:self.presentedViewController animated:YES completion:^{
-				[self.interaction engage:ATInteractionTextModalEventLabelLaunch fromViewController:viewController];
-			}];
+			[viewController presentViewController:self.presentedViewController
+										 animated:YES
+									   completion:^{
+										 [self.interaction engage:ATInteractionTextModalEventLabelLaunch fromViewController:viewController];
+									   }];
 		} else {
-			[(UIAlertController *)self.presentedViewController apptentive_presentAnimated:YES completion:^{
-				[self.interaction engage:ATInteractionTextModalEventLabelLaunch fromViewController:nil];
-			}];
+			[(UIAlertController *)self.presentedViewController apptentive_presentAnimated:YES
+																			   completion:^{
+																				 [self.interaction engage:ATInteractionTextModalEventLabelLaunch fromViewController:nil];
+																			   }];
 		}
 	}
 }
@@ -158,7 +161,7 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 
 - (alertActionHandler)createButtonHandlerBlockDismiss:(NSDictionary *)actionConfig {
 	return [^(UIAlertAction *alertAction) {
-		[self dismissAction:actionConfig];
+	  [self dismissAction:actionConfig];
 	} copy];
 }
 
@@ -187,7 +190,7 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 
 - (alertActionHandler)createButtonHandlerBlockInteractionAction:(NSDictionary *)actionConfig {
 	return [^(UIAlertAction *alertAction) {
-		[self interactionAction:actionConfig];
+	  [self interactionAction:actionConfig];
 	} copy];
 }
 

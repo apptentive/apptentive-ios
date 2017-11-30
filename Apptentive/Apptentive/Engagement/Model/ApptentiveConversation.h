@@ -6,9 +6,9 @@
 //  Copyright © 2016 Apptentive, Inc. All rights reserved.
 //
 
-#import "ApptentiveState.h"
 #import "Apptentive.h"
 #import "ApptentiveAppInstall.h"
+#import "ApptentiveState.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

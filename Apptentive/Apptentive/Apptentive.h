@@ -519,7 +519,7 @@ typedef NS_ENUM(NSUInteger, ApptentiveLogLevel) {
 
  */
 
-- (BOOL)didReceveUserNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void(^)(void))completionHandler NS_AVAILABLE_IOS(10_0);
+- (BOOL)didReceveUserNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)(void))completionHandler NS_AVAILABLE_IOS(10_0);
 
 ///-------------------------------------
 /// @name Attach Text, Images, and Files
@@ -720,7 +720,7 @@ typedef NS_ENUM(NSUInteger, ApptentiveLogLevel) {
 
  Deprecation Note: when a suitable view controller is not available for presenting interactions,
  the system will now use a new window to present Apptentive UI. */
-- (UIViewController *)viewControllerForInteractionsWithConnection:(Apptentive *)connection NS_SWIFT_NAME(viewControllerForInteractions(with:)) DEPRECATED_ATTRIBUTE;
+- (UIViewController *)viewControllerForInteractionsWithConnection:(Apptentive *)connection NS_SWIFT_NAME(viewControllerForInteractions(with:))DEPRECATED_ATTRIBUTE;
 
 @end
 

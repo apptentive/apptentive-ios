@@ -8,13 +8,13 @@
 
 #import <XCTest/XCTest.h>
 
-#import "ApptentiveConversation.h"
+#import "ApptentiveAppDataContainer.h"
 #import "ApptentiveAppRelease.h"
-#import "ApptentivePerson.h"
+#import "ApptentiveConversation.h"
+#import "ApptentiveCount.h"
 #import "ApptentiveDevice.h"
 #import "ApptentiveEngagement.h"
-#import "ApptentiveCount.h"
-#import "ApptentiveAppDataContainer.h"
+#import "ApptentivePerson.h"
 
 #import "ApptentiveDataManager.h"
 

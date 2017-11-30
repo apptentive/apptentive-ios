@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 Apptentive, Inc. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import "Apptentive_Private.h"
+#import <Foundation/Foundation.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

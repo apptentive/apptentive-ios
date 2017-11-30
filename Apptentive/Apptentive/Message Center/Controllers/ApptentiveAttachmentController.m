@@ -7,12 +7,12 @@
 //
 
 #import "ApptentiveAttachmentController.h"
-#import "ApptentiveAttachmentCell.h"
 #import "ApptentiveAttachButton.h"
-#import "ApptentiveMessageCenterViewController.h"
-#import "ApptentiveInteraction.h"
-#import "Apptentive_Private.h"
 #import "ApptentiveAttachment.h"
+#import "ApptentiveAttachmentCell.h"
+#import "ApptentiveInteraction.h"
+#import "ApptentiveMessageCenterViewController.h"
+#import "Apptentive_Private.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

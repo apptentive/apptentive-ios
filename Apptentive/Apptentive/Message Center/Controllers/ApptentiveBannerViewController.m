@@ -14,6 +14,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+
 @interface ApptentiveBannerViewController ()
 
 @property (strong, nonatomic) ApptentiveBannerViewController *cyclicReference;
@@ -64,10 +65,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 	self.topConstraint.constant = 0;
 
-	[UIView animateWithDuration:ANIMATION_DURATION animations:^{
-		[self.view layoutIfNeeded];
-		self.window.frame = self.bannerView.frame;
-	}];
+	[UIView animateWithDuration:ANIMATION_DURATION
+					 animations:^{
+					   [self.view layoutIfNeeded];
+					   self.window.frame = self.bannerView.frame;
+					 }];
 }
 
 - (void)viewDidLoad {
@@ -148,13 +150,15 @@ NS_ASSUME_NONNULL_BEGIN
 - (IBAction)hide:(id)sender {
 	self.topConstraint.constant = -CGRectGetHeight(self.bannerView.bounds);
 
-	[UIView animateWithDuration:ANIMATION_DURATION animations:^{
-		[self.view layoutIfNeeded];
-	} completion:^(BOOL finished) {
-		[self.window resignKeyWindow];
-		
-		self.window.rootViewController = nil;
-	}];
+	[UIView animateWithDuration:ANIMATION_DURATION
+		animations:^{
+		  [self.view layoutIfNeeded];
+		}
+		completion:^(BOOL finished) {
+		  [self.window resignKeyWindow];
+
+		  self.window.rootViewController = nil;
+		}];
 }
 
 - (IBAction)tap:(id)sender {

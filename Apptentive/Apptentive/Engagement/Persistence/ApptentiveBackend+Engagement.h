@@ -6,8 +6,8 @@
 //  Copyright (c) 2013 Apptentive, Inc. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
 #import "ApptentiveBackend.h"
+#import <UIKit/UIKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

@@ -7,12 +7,12 @@
 //
 
 #import "ApptentiveInteractionUpgradeMessageViewController.h"
-#import "Apptentive_Private.h"
-#import "ApptentiveInteraction.h"
-#import "ApptentiveBackend.h"
-#import "ApptentiveUtilities.h"
 #import "ApptentiveAboutViewController.h"
 #import "ApptentiveAppConfiguration.h"
+#import "ApptentiveBackend.h"
+#import "ApptentiveInteraction.h"
+#import "ApptentiveUtilities.h"
+#import "Apptentive_Private.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

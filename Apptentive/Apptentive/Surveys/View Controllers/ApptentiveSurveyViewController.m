@@ -7,22 +7,22 @@
 //
 
 #import "ApptentiveSurveyViewController.h"
-#import "ApptentiveSurveyViewModel.h"
 #import "ApptentiveSurveyAnswerCell.h"
 #import "ApptentiveSurveyChoiceCell.h"
-#import "ApptentiveSurveyOtherCell.h"
-#import "ApptentiveSurveySingleLineCell.h"
-#import "ApptentiveSurveyMultilineCell.h"
-#import "ApptentiveSurveyQuestionView.h"
-#import "ApptentiveSurveyQuestionFooterView.h"
 #import "ApptentiveSurveyCollectionViewLayout.h"
-#import "ApptentiveSurveyQuestionBackgroundView.h"
-#import "ApptentiveSurveySubmitButton.h"
 #import "ApptentiveSurveyGreetingView.h"
+#import "ApptentiveSurveyMultilineCell.h"
+#import "ApptentiveSurveyOtherCell.h"
+#import "ApptentiveSurveyQuestionBackgroundView.h"
+#import "ApptentiveSurveyQuestionFooterView.h"
+#import "ApptentiveSurveyQuestionView.h"
+#import "ApptentiveSurveySingleLineCell.h"
+#import "ApptentiveSurveySubmitButton.h"
+#import "ApptentiveSurveyViewModel.h"
 
 #import "ApptentiveHUDViewController.h"
-#import "Apptentive_Private.h"
 #import "ApptentiveUtilities.h"
+#import "Apptentive_Private.h"
 
 // These need to match the values from the storyboard
 #define QUESTION_HORIZONTAL_MARGIN 52.0
@@ -105,7 +105,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 	self.toolbarItems = @[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil],
 		self.missingRequiredItem,
-		[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil]];
+		[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
+													  target:nil
+													  action:nil]];
 
 	self.navigationController.toolbar.translucent = NO;
 	self.navigationController.toolbar.barTintColor = [style colorForStyle:ApptentiveColorFailure];
@@ -149,9 +151,10 @@ NS_ASSUME_NONNULL_BEGIN
 		[self.viewModel submit];
 
 		UIViewController *presentingViewController = self.presentingViewController;
-		[self dismissViewControllerAnimated:YES completion:^{
-			[self.viewModel didSubmit:presentingViewController];
-		}];
+		[self dismissViewControllerAnimated:YES
+								 completion:^{
+								   [self.viewModel didSubmit:presentingViewController];
+								 }];
 
 		if (self.viewModel.showThankYou) {
 			ApptentiveHUDViewController *HUD = [[ApptentiveHUDViewController alloc] init];
@@ -171,9 +174,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (IBAction)close:(id)sender {
 	UIViewController *presentingViewController = self.presentingViewController;
-	[self dismissViewControllerAnimated:YES completion:^{
-		[self.viewModel didCancel:presentingViewController];
-	}];
+	[self dismissViewControllerAnimated:YES
+							 completion:^{
+							   [self.viewModel didCancel:presentingViewController];
+							 }];
 
 	self.interactionController = nil;
 }
@@ -498,7 +502,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
 	UIEdgeInsets sectionInset = ((UICollectionViewFlowLayout *)self.collectionViewLayout).sectionInset;
-	
+
 #ifdef __IPHONE_11_0
 	if (@available(iOS 11.0, *)) {
 		sectionInset.left += self.view.safeAreaInsets.left;
@@ -566,10 +570,10 @@ NS_ASSUME_NONNULL_BEGIN
 	cell.placeholderLabel.hidden = textView.text.length > 0;
 
 	[self.collectionView performBatchUpdates:^{
-		[self.viewModel setText:textView.text forAnswerAtIndexPath:indexPath];
-		CGPoint contentOffset = self.collectionView.contentOffset;
-		[self.collectionViewLayout invalidateLayout];
-		self.collectionView.contentOffset = contentOffset;
+	  [self.viewModel setText:textView.text forAnswerAtIndexPath:indexPath];
+	  CGPoint contentOffset = self.collectionView.contentOffset;
+	  [self.collectionViewLayout invalidateLayout];
+	  self.collectionView.contentOffset = contentOffset;
 	} completion:nil];
 }
 
@@ -638,14 +642,15 @@ NS_ASSUME_NONNULL_BEGIN
 	}
 
 	CGFloat duration = ((NSNumber *)notification.userInfo[UIKeyboardAnimationDurationUserInfoKey]).doubleValue;
-	[UIView animateWithDuration:duration animations:^{
-		CGPoint contentOffset = self.collectionView.contentOffset;
-		[self.collectionView layoutIfNeeded];
-		self.collectionView.contentOffset = contentOffset;
-		if (self.editingIndexPath && [self.viewModel typeOfAnswerAtIndexPath:self.editingIndexPath] != ApptentiveSurveyAnswerTypeOther) {
-			[(ApptentiveSurveyCollectionView *)self.collectionView scrollHeaderAtIndexPathToTop:self.editingIndexPath animated:NO];
-		}
-	}];
+	[UIView animateWithDuration:duration
+					 animations:^{
+					   CGPoint contentOffset = self.collectionView.contentOffset;
+					   [self.collectionView layoutIfNeeded];
+					   self.collectionView.contentOffset = contentOffset;
+					   if (self.editingIndexPath && [self.viewModel typeOfAnswerAtIndexPath:self.editingIndexPath] != ApptentiveSurveyAnswerTypeOther) {
+						   [(ApptentiveSurveyCollectionView *)self.collectionView scrollHeaderAtIndexPathToTop:self.editingIndexPath animated:NO];
+					   }
+					 }];
 }
 
 #pragma mark - Private
@@ -660,23 +665,24 @@ NS_ASSUME_NONNULL_BEGIN
 	CGFloat toolbarAdjustment = (hidden ? -1 : 1) * CGRectGetHeight(self.navigationController.toolbar.bounds);
 	BOOL scrolledAllTheWayDown = self.collectionView.contentOffset.y >= bottomContentOffset - toolbarAdjustment;
 
-	[UIView animateWithDuration:0.2 animations:^{
-		if (!keyboardVisible && scrolledAllTheWayDown) {
-			self.collectionView.contentOffset = CGPointMake(0, bottomContentOffset + toolbarAdjustment);
-		} else if (keyboardVisible && hidden) {
-			// If we're hiding the toolbar with the keyboard visible, we need to add in a bit more bottom inset to keep things from moving around.
-			UIEdgeInsets insets = self.collectionView.contentInset;
-			CGPoint contentOffset = self.collectionView.contentOffset;
+	[UIView animateWithDuration:0.2
+					 animations:^{
+					   if (!keyboardVisible && scrolledAllTheWayDown) {
+						   self.collectionView.contentOffset = CGPointMake(0, bottomContentOffset + toolbarAdjustment);
+					   } else if (keyboardVisible && hidden) {
+						   // If we're hiding the toolbar with the keyboard visible, we need to add in a bit more bottom inset to keep things from moving around.
+						   UIEdgeInsets insets = self.collectionView.contentInset;
+						   CGPoint contentOffset = self.collectionView.contentOffset;
 
-			insets.bottom -= toolbarAdjustment;
+						   insets.bottom -= toolbarAdjustment;
 
-			// On iOS9, we need to remember to remove that inset once the keyboard is dismissed.
-			self.toolbarInset = toolbarAdjustment;
+						   // On iOS9, we need to remember to remove that inset once the keyboard is dismissed.
+						   self.toolbarInset = toolbarAdjustment;
 
-			self.collectionView.contentInset = insets;
-			self.collectionView.contentOffset = contentOffset;
-		}
-	}];
+						   self.collectionView.contentInset = insets;
+						   self.collectionView.contentOffset = contentOffset;
+					   }
+					 }];
 
 	[self.navigationController setToolbarHidden:hidden animated:YES];
 }
@@ -684,21 +690,23 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)maybeAnimateOtherSizeChangeAtIndexPath:(NSIndexPath *)indexPath {
 	if ([self.viewModel typeOfAnswerAtIndexPath:indexPath] == ApptentiveSurveyAnswerTypeOther) {
 		BOOL showing = [self.viewModel answerIsSelectedAtIndexPath:indexPath];
-		[UIView animateWithDuration:0.25 animations:^{
-			[self.collectionViewLayout invalidateLayout];
-		} completion:^(BOOL finished) {
-			ApptentiveSurveyOtherCell *cell = (ApptentiveSurveyOtherCell *)[self.collectionView cellForItemAtIndexPath:indexPath];
-
-			if (showing) {
-				[cell.textField becomeFirstResponder];
-				cell.isAccessibilityElement = NO;
-				UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, cell.textField);
-			} else {
-				[cell.textField resignFirstResponder];
-				cell.isAccessibilityElement = YES;
-				UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, cell);
+		[UIView animateWithDuration:0.25
+			animations:^{
+			  [self.collectionViewLayout invalidateLayout];
 			}
-		}];
+			completion:^(BOOL finished) {
+			  ApptentiveSurveyOtherCell *cell = (ApptentiveSurveyOtherCell *)[self.collectionView cellForItemAtIndexPath:indexPath];
+
+			  if (showing) {
+				  [cell.textField becomeFirstResponder];
+				  cell.isAccessibilityElement = NO;
+				  UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, cell.textField);
+			  } else {
+				  [cell.textField resignFirstResponder];
+				  cell.isAccessibilityElement = YES;
+				  UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, cell);
+			  }
+			}];
 	}
 }
 

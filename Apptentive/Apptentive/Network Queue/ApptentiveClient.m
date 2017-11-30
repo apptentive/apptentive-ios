@@ -7,9 +7,9 @@
 //
 
 #import "ApptentiveClient.h"
-#import "ApptentiveMessageGetRequest.h"
 #import "ApptentiveConfigurationRequest.h"
 #import "ApptentiveConversationRequest.h"
+#import "ApptentiveMessageGetRequest.h"
 
 #import "ApptentiveSerialRequest.h"
 

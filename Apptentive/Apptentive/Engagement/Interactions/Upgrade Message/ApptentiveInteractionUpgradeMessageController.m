@@ -7,8 +7,8 @@
 //
 
 #import "ApptentiveInteractionUpgradeMessageController.h"
-#import "ApptentiveInteractionUpgradeMessageViewController.h"
 #import "ApptentiveInteraction.h"
+#import "ApptentiveInteractionUpgradeMessageViewController.h"
 #import "ApptentiveUtilities.h"
 #import "Apptentive_Private.h"
 

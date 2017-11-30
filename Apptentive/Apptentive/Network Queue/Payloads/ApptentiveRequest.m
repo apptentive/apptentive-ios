@@ -7,9 +7,9 @@
 //
 
 #import "Apptentive.h"
-#import "ApptentiveRequest.h"
 #import "ApptentiveDefines.h"
 #import "ApptentiveJSONSerialization.h"
+#import "ApptentiveRequest.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

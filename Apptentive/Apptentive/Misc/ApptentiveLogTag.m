@@ -17,6 +17,7 @@ static ApptentiveLogTag *_utilityTag;
 static ApptentiveLogTag *_storageTag;
 static ApptentiveLogTag *_logMonitorTag;
 
+
 @implementation ApptentiveLogTag
 
 

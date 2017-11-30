@@ -7,10 +7,10 @@
 //
 
 #import "ApptentiveLegacySurveyResponse.h"
-#import "ApptentiveSerialRequest.h"
-#import "Apptentive_Private.h"
 #import "ApptentiveBackend.h"
+#import "ApptentiveSerialRequest.h"
 #import "ApptentiveSurveyResponsePayload.h"
+#import "Apptentive_Private.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

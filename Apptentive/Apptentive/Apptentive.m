@@ -7,25 +7,25 @@
 //
 
 #import "Apptentive.h"
-#import "Apptentive_Private.h"
-#import "ApptentiveBackend.h"
-#import "ApptentiveBackend+Engagement.h"
-#import "ApptentiveInteraction.h"
-#import "ApptentiveUtilities.h"
-#import "ApptentiveMessageCenterViewController.h"
-#import "ApptentiveBannerViewController.h"
-#import "ApptentiveUnreadMessagesBadgeView.h"
 #import "ApptentiveAboutViewController.h"
-#import "ApptentiveStyleSheet.h"
 #import "ApptentiveAppConfiguration.h"
-#import "ApptentivePerson.h"
+#import "ApptentiveAttachment.h"
+#import "ApptentiveBackend+Engagement.h"
+#import "ApptentiveBackend.h"
+#import "ApptentiveBannerViewController.h"
 #import "ApptentiveDevice.h"
-#import "ApptentiveSDK.h"
-#import "ApptentiveVersion.h"
+#import "ApptentiveInteraction.h"
+#import "ApptentiveLogMonitor.h"
+#import "ApptentiveMessageCenterViewController.h"
 #import "ApptentiveMessageManager.h"
 #import "ApptentiveMessageSender.h"
-#import "ApptentiveAttachment.h"
-#import "ApptentiveLogMonitor.h"
+#import "ApptentivePerson.h"
+#import "ApptentiveSDK.h"
+#import "ApptentiveStyleSheet.h"
+#import "ApptentiveUnreadMessagesBadgeView.h"
+#import "ApptentiveUtilities.h"
+#import "ApptentiveVersion.h"
+#import "Apptentive_Private.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -115,9 +115,9 @@ static Apptentive *_sharedInstance;
 		// otherwise the log monitor configuration would be overwritten by
 		// the SDK configuration
 		ApptentiveLogSetLevel(configuration.logLevel);
-		
+
 		[ApptentiveLogMonitor tryInitializeWithBaseURL:configuration.baseURL appKey:configuration.apptentiveKey signature:configuration.apptentiveSignature];
-		
+
 		_operationQueue = [[NSOperationQueue alloc] init];
 		_operationQueue.maxConcurrentOperationCount = 1;
 		_operationQueue.name = @"Apptentive Operation Queue";
@@ -137,7 +137,7 @@ static Apptentive *_sharedInstance;
 			[ApptentiveSDK setDistributionName:configuration.distributionName];
 			[ApptentiveSDK setDistributionVersion:[[ApptentiveVersion alloc] initWithString:configuration.distributionVersion]];
 		}
-		
+
 		[self registerNotifications];
 
 		ApptentiveLogInfo(@"Apptentive SDK Version %@", [ApptentiveSDK SDKVersion].versionString);
@@ -174,9 +174,9 @@ static Apptentive *_sharedInstance;
 		_didAccessStyleSheet = YES;
 
 		[self.operationQueue addOperationWithBlock:^{
-			if (self.backend.conversationManager.activeConversation) {
-				[self.backend.conversationManager.activeConversation didOverrideStyles];
-			}
+		  if (self.backend.conversationManager.activeConversation) {
+			  [self.backend.conversationManager.activeConversation didOverrideStyles];
+		  }
 		}];
 	}
 }
@@ -187,8 +187,8 @@ static Apptentive *_sharedInstance;
 
 - (void)setPersonName:(nullable NSString *)personName {
 	[self.operationQueue addOperationWithBlock:^{
-		self.backend.conversationManager.activeConversation.person.name = personName;
-		[self.backend schedulePersonUpdate];
+	  self.backend.conversationManager.activeConversation.person.name = personName;
+	  [self.backend schedulePersonUpdate];
 	}];
 }
 
@@ -198,150 +198,150 @@ static Apptentive *_sharedInstance;
 
 - (void)setPersonEmailAddress:(nullable NSString *)personEmailAddress {
 	[self.operationQueue addOperationWithBlock:^{
-		self.backend.conversationManager.activeConversation.person.emailAddress = personEmailAddress;
-		[self.backend schedulePersonUpdate];
+	  self.backend.conversationManager.activeConversation.person.emailAddress = personEmailAddress;
+	  [self.backend schedulePersonUpdate];
 	}];
 }
 
 - (void)sendAttachmentText:(NSString *)text {
 	[self.operationQueue addOperationWithBlock:^{
-		if (self.backend.conversationManager.activeConversation == nil) {
-			ApptentiveLogError(@"Attempting to send message with no active conversation.");
-			return;
-		}
+	  if (self.backend.conversationManager.activeConversation == nil) {
+		  ApptentiveLogError(@"Attempting to send message with no active conversation.");
+		  return;
+	  }
 
-		ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:text attachments:nil automated:NO customData:nil];
-		ApptentiveAssertNotNil(message, @"Message is nil");
+	  ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:text attachments:nil automated:NO customData:nil];
+	  ApptentiveAssertNotNil(message, @"Message is nil");
 
-		if (message != nil) {
-            if (self.messageManager) {
-                [self.messageManager enqueueMessageForSending:message];
-            } else {
-                ApptentiveLogError(@"Unable to send attachment text: message manager is not initialized");
-            }
-		}
+	  if (message != nil) {
+		  if (self.messageManager) {
+			  [self.messageManager enqueueMessageForSending:message];
+		  } else {
+			  ApptentiveLogError(@"Unable to send attachment text: message manager is not initialized");
+		  }
+	  }
 	}];
 }
 
 - (void)sendAttachmentImage:(UIImage *)image {
 	[self.operationQueue addOperationWithBlock:^{
-		if (self.backend.conversationManager.activeConversation == nil) {
-			ApptentiveLogError(@"Attempting to send message with no active conversation.");
-			return;
-		}
+	  if (self.backend.conversationManager.activeConversation == nil) {
+		  ApptentiveLogError(@"Attempting to send message with no active conversation.");
+		  return;
+	  }
 
-		if (image == nil) {
-			ApptentiveLogError(@"Unable to send image attachment: image is nil");
-			return;
-		}
+	  if (image == nil) {
+		  ApptentiveLogError(@"Unable to send image attachment: image is nil");
+		  return;
+	  }
 
-		NSData *imageData = UIImageJPEGRepresentation(image, 0.95);
-		if (imageData == nil) {
-			ApptentiveLogError(@"Unable to send image attachment: image data is invalid");
-			return;
-		}
+	  NSData *imageData = UIImageJPEGRepresentation(image, 0.95);
+	  if (imageData == nil) {
+		  ApptentiveLogError(@"Unable to send image attachment: image data is invalid");
+		  return;
+	  }
 
-		if (self.backend.conversationManager.messageManager == nil) {
-			ApptentiveLogError(@"Unable to send attachment file: message manager is not initialized");
-			return;
-		}
+	  if (self.backend.conversationManager.messageManager == nil) {
+		  ApptentiveLogError(@"Unable to send attachment file: message manager is not initialized");
+		  return;
+	  }
 
-		ApptentiveAttachment *attachment = [[ApptentiveAttachment alloc] initWithData:imageData contentType:@"image/jpeg" name:nil attachmentDirectoryPath:self.backend.conversationManager.messageManager.attachmentDirectoryPath];
-		ApptentiveAssertNotNil(attachment, @"Attachment is nil");
-		if (attachment != nil) {
-			ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:nil attachments:@[attachment] automated:NO customData:nil];
-			ApptentiveAssertNotNil(message, @"Message is nil");
+	  ApptentiveAttachment *attachment = [[ApptentiveAttachment alloc] initWithData:imageData contentType:@"image/jpeg" name:nil attachmentDirectoryPath:self.backend.conversationManager.messageManager.attachmentDirectoryPath];
+	  ApptentiveAssertNotNil(attachment, @"Attachment is nil");
+	  if (attachment != nil) {
+		  ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:nil attachments:@[attachment] automated:NO customData:nil];
+		  ApptentiveAssertNotNil(message, @"Message is nil");
 
-			if (message != nil) {
-                if (self.messageManager) {
-                    [self.messageManager enqueueMessageForSending:message];
-                } else {
-                    ApptentiveLogError(@"Unable to send attachment image: message manager is not initialized");
-                }
-			}
-		}
+		  if (message != nil) {
+			  if (self.messageManager) {
+				  [self.messageManager enqueueMessageForSending:message];
+			  } else {
+				  ApptentiveLogError(@"Unable to send attachment image: message manager is not initialized");
+			  }
+		  }
+	  }
 	}];
 }
 
 - (void)sendAttachmentFile:(NSData *)fileData withMimeType:(NSString *)mimeType {
 	[self.operationQueue addOperationWithBlock:^{
-		if (self.backend.conversationManager.activeConversation == nil) {
-			ApptentiveLogError(@"Attempting to send message with no active conversation.");
-			return;
-		}
+	  if (self.backend.conversationManager.activeConversation == nil) {
+		  ApptentiveLogError(@"Attempting to send message with no active conversation.");
+		  return;
+	  }
 
-		if (fileData == nil) {
-			ApptentiveLogError(@"Unable to send attachment file: file data is nil");
-			return;
-		}
+	  if (fileData == nil) {
+		  ApptentiveLogError(@"Unable to send attachment file: file data is nil");
+		  return;
+	  }
 
-		if (mimeType.length == 0) {
-			ApptentiveLogError(@"Unable to send attachment file: mime-type is nil or empty");
-			return;
-		}
+	  if (mimeType.length == 0) {
+		  ApptentiveLogError(@"Unable to send attachment file: mime-type is nil or empty");
+		  return;
+	  }
 
-		if (self.backend.conversationManager.messageManager == nil) {
-			ApptentiveLogError(@"Unable to send attachment file: message manager is not initialized");
-			return;
-		}
+	  if (self.backend.conversationManager.messageManager == nil) {
+		  ApptentiveLogError(@"Unable to send attachment file: message manager is not initialized");
+		  return;
+	  }
 
-		ApptentiveAttachment *attachment = [[ApptentiveAttachment alloc] initWithData:fileData contentType:mimeType name:nil attachmentDirectoryPath:self.backend.conversationManager.messageManager.attachmentDirectoryPath];
-		ApptentiveAssertNotNil(attachment, @"Attachment is nil");
+	  ApptentiveAttachment *attachment = [[ApptentiveAttachment alloc] initWithData:fileData contentType:mimeType name:nil attachmentDirectoryPath:self.backend.conversationManager.messageManager.attachmentDirectoryPath];
+	  ApptentiveAssertNotNil(attachment, @"Attachment is nil");
 
-		if (attachment != nil) {
-			ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:nil attachments:@[attachment] automated:NO customData:nil];
+	  if (attachment != nil) {
+		  ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:nil attachments:@[attachment] automated:NO customData:nil];
 
-			ApptentiveAssertNotNil(message, @"Message is nil");
-            if (message != nil) {
-                if (self.messageManager) {
-                    [self.messageManager enqueueMessageForSending:message];
-                } else {
-                    ApptentiveLogError(@"Unable to send attachment file: message manager is not initialized");
-                }
-            }
-		}
+		  ApptentiveAssertNotNil(message, @"Message is nil");
+		  if (message != nil) {
+			  if (self.messageManager) {
+				  [self.messageManager enqueueMessageForSending:message];
+			  } else {
+				  ApptentiveLogError(@"Unable to send attachment file: message manager is not initialized");
+			  }
+		  }
+	  }
 	}];
 }
 
 - (void)addCustomDeviceDataString:(NSString *)string withKey:(NSString *)key {
 	[self.operationQueue addOperationWithBlock:^{
-		[self.backend.conversationManager.activeConversation.device addCustomString:string withKey:key];
-		[self.backend scheduleDeviceUpdate];
+	  [self.backend.conversationManager.activeConversation.device addCustomString:string withKey:key];
+	  [self.backend scheduleDeviceUpdate];
 	}];
 }
 
 - (void)addCustomDeviceDataNumber:(NSNumber *)number withKey:(NSString *)key {
 	[self.operationQueue addOperationWithBlock:^{
-		[self.backend.conversationManager.activeConversation.device addCustomNumber:number withKey:key];
-		[self.backend scheduleDeviceUpdate];
+	  [self.backend.conversationManager.activeConversation.device addCustomNumber:number withKey:key];
+	  [self.backend scheduleDeviceUpdate];
 	}];
 }
 
 - (void)addCustomDeviceDataBool:(BOOL)boolValue withKey:(NSString *)key {
 	[self.operationQueue addOperationWithBlock:^{
-		[self.backend.conversationManager.activeConversation.device addCustomBool:boolValue withKey:key];
-		[self.backend scheduleDeviceUpdate];
+	  [self.backend.conversationManager.activeConversation.device addCustomBool:boolValue withKey:key];
+	  [self.backend scheduleDeviceUpdate];
 	}];
 }
 
 - (void)addCustomPersonDataString:(NSString *)string withKey:(NSString *)key {
 	[self.operationQueue addOperationWithBlock:^{
-		[self.backend.conversationManager.activeConversation.person addCustomString:string withKey:key];
-		[self.backend schedulePersonUpdate];
+	  [self.backend.conversationManager.activeConversation.person addCustomString:string withKey:key];
+	  [self.backend schedulePersonUpdate];
 	}];
 }
 
 - (void)addCustomPersonDataNumber:(NSNumber *)number withKey:(NSString *)key {
 	[self.operationQueue addOperationWithBlock:^{
-		[self.backend.conversationManager.activeConversation.person addCustomNumber:number withKey:key];
-		[self.backend schedulePersonUpdate];
+	  [self.backend.conversationManager.activeConversation.person addCustomNumber:number withKey:key];
+	  [self.backend schedulePersonUpdate];
 	}];
 }
 
 - (void)addCustomPersonDataBool:(BOOL)boolValue withKey:(NSString *)key {
 	[self.operationQueue addOperationWithBlock:^{
-		[self.backend.conversationManager.activeConversation.person addCustomBool:boolValue withKey:key];
-		[self.backend schedulePersonUpdate];
+	  [self.backend.conversationManager.activeConversation.person addCustomBool:boolValue withKey:key];
+	  [self.backend schedulePersonUpdate];
 	}];
 }
 
@@ -383,15 +383,15 @@ static Apptentive *_sharedInstance;
 
 - (void)removeCustomPersonDataWithKey:(NSString *)key {
 	[self.operationQueue addOperationWithBlock:^{
-		[self.backend.conversationManager.activeConversation.person removeCustomValueWithKey:key];
-		[self.backend schedulePersonUpdate];
+	  [self.backend.conversationManager.activeConversation.person removeCustomValueWithKey:key];
+	  [self.backend schedulePersonUpdate];
 	}];
 }
 
 - (void)removeCustomDeviceDataWithKey:(NSString *)key {
 	[self.operationQueue addOperationWithBlock:^{
-		[self.backend.conversationManager.activeConversation.device removeCustomValueWithKey:key];
-		[self.backend scheduleDeviceUpdate];
+	  [self.backend.conversationManager.activeConversation.device removeCustomValueWithKey:key];
+	  [self.backend scheduleDeviceUpdate];
 	}];
 }
 
@@ -427,22 +427,22 @@ static Apptentive *_sharedInstance;
 								ntohl(tokenBytes[6]), ntohl(tokenBytes[7])];
 
 	[self.operationQueue addOperationWithBlock:^{
-		ApptentiveDevice *device = self.backend.conversationManager.activeConversation.device;
+	  ApptentiveDevice *device = self.backend.conversationManager.activeConversation.device;
 
-		NSMutableDictionary *integrationConfiguration = [device.integrationConfiguration mutableCopy] ?: [NSMutableDictionary dictionary];
+	  NSMutableDictionary *integrationConfiguration = [device.integrationConfiguration mutableCopy] ?: [NSMutableDictionary dictionary];
 
-		[integrationConfiguration removeObjectForKey:[self integrationKeyForPushProvider:ApptentivePushProviderApptentive]];
-		[integrationConfiguration removeObjectForKey:[self integrationKeyForPushProvider:ApptentivePushProviderUrbanAirship]];
-		[integrationConfiguration removeObjectForKey:[self integrationKeyForPushProvider:ApptentivePushProviderAmazonSNS]];
-		[integrationConfiguration removeObjectForKey:[self integrationKeyForPushProvider:ApptentivePushProviderParse]];
+	  [integrationConfiguration removeObjectForKey:[self integrationKeyForPushProvider:ApptentivePushProviderApptentive]];
+	  [integrationConfiguration removeObjectForKey:[self integrationKeyForPushProvider:ApptentivePushProviderUrbanAirship]];
+	  [integrationConfiguration removeObjectForKey:[self integrationKeyForPushProvider:ApptentivePushProviderAmazonSNS]];
+	  [integrationConfiguration removeObjectForKey:[self integrationKeyForPushProvider:ApptentivePushProviderParse]];
 
-		ApptentiveDictionarySetKeyValue(integrationConfiguration, [self integrationKeyForPushProvider:pushProvider], @{ @"token": token });
+	  ApptentiveDictionarySetKeyValue(integrationConfiguration, [self integrationKeyForPushProvider:pushProvider], @{ @"token": token });
 
-		ApptentiveDevice.integrationConfiguration = integrationConfiguration;
+	  ApptentiveDevice.integrationConfiguration = integrationConfiguration;
 
-		device.integrationConfiguration = integrationConfiguration;
+	  device.integrationConfiguration = integrationConfiguration;
 
-		[self.backend scheduleDeviceUpdate];
+	  [self.backend scheduleDeviceUpdate];
 	}];
 }
 
@@ -463,19 +463,19 @@ static Apptentive *_sharedInstance;
 
 - (void)addIntegration:(NSString *)integration withConfiguration:(NSDictionary *)configuration {
 	[self.operationQueue addOperationWithBlock:^{
-		NSMutableDictionary *integrationConfiguration = [self.backend.conversationManager.activeConversation.device.integrationConfiguration mutableCopy];
-		ApptentiveDictionarySetKeyValue(integrationConfiguration, integration, configuration);
-		self.backend.conversationManager.activeConversation.device.integrationConfiguration = integrationConfiguration;
-		[self.backend scheduleDeviceUpdate];
+	  NSMutableDictionary *integrationConfiguration = [self.backend.conversationManager.activeConversation.device.integrationConfiguration mutableCopy];
+	  ApptentiveDictionarySetKeyValue(integrationConfiguration, integration, configuration);
+	  self.backend.conversationManager.activeConversation.device.integrationConfiguration = integrationConfiguration;
+	  [self.backend scheduleDeviceUpdate];
 	}];
 }
 
 - (void)removeIntegration:(NSString *)integration {
 	[self.operationQueue addOperationWithBlock:^{
-		NSMutableDictionary *integrationConfiguration = [self.backend.conversationManager.activeConversation.device.integrationConfiguration mutableCopy];
-		[integrationConfiguration removeObjectForKey:integration];
-		self.backend.conversationManager.activeConversation.device.integrationConfiguration = integrationConfiguration;
-		[self.backend scheduleDeviceUpdate];
+	  NSMutableDictionary *integrationConfiguration = [self.backend.conversationManager.activeConversation.device.integrationConfiguration mutableCopy];
+	  [integrationConfiguration removeObjectForKey:integration];
+	  self.backend.conversationManager.activeConversation.device.integrationConfiguration = integrationConfiguration;
+	  [self.backend scheduleDeviceUpdate];
 	}];
 }
 
@@ -614,8 +614,10 @@ static Apptentive *_sharedInstance;
 }
 
 - (BOOL)didReceiveRemoteNotification:(NSDictionary *)userInfo fromViewController:(UIViewController *)viewController {
-	return [self didReceiveRemoteNotification:userInfo fromViewController:viewController fetchCompletionHandler:^void(UIBackgroundFetchResult result){
-	}];
+	return [self didReceiveRemoteNotification:userInfo
+						   fromViewController:viewController
+					   fetchCompletionHandler:^void(UIBackgroundFetchResult result){
+					   }];
 }
 
 - (BOOL)didReceiveRemoteNotification:(NSDictionary *)userInfo fromViewController:(UIViewController *)viewController fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
@@ -624,66 +626,65 @@ static Apptentive *_sharedInstance;
 	if (apptentivePayload != nil) {
 		UIApplicationState applicationState = [UIApplication sharedApplication].applicationState;
 		[self.operationQueue addOperationWithBlock:^{
-			BOOL shouldCallCompletionHandler = YES;
+		  BOOL shouldCallCompletionHandler = YES;
 
-			if ([apptentivePayload[@"conversation_id"] isEqualToString:self.backend.conversationManager.activeConversation.identifier]) {
-				ApptentiveLogInfo(@"Push notification received for active conversation. userInfo: %@", userInfo);
+		  if ([apptentivePayload[@"conversation_id"] isEqualToString:self.backend.conversationManager.activeConversation.identifier]) {
+			  ApptentiveLogInfo(@"Push notification received for active conversation. userInfo: %@", userInfo);
 
-				switch (applicationState) {
-					case UIApplicationStateBackground: {
-						NSNumber *contentAvailable = userInfo[@"aps"][@"content-available"];
-						if (contentAvailable.boolValue) {
-							shouldCallCompletionHandler = NO;
-                            if (self.messageManager) {
-                                [self.messageManager checkForMessagesInBackground:completionHandler];
-                            } else {
-                                ApptentiveLogError(@"Can't check for incoming messages: message manager is not initialized");
-                            }
-						}
+			  switch (applicationState) {
+				  case UIApplicationStateBackground: {
+					  NSNumber *contentAvailable = userInfo[@"aps"][@"content-available"];
+					  if (contentAvailable.boolValue) {
+						  shouldCallCompletionHandler = NO;
+						  if (self.messageManager) {
+							  [self.messageManager checkForMessagesInBackground:completionHandler];
+						  } else {
+							  ApptentiveLogError(@"Can't check for incoming messages: message manager is not initialized");
+						  }
+					  }
 
-						if (userInfo[@"aps"][@"alert"] == nil) {
-							ApptentiveLogInfo(@"Silent push notification received. Posting local notification");
+					  if (userInfo[@"aps"][@"alert"] == nil) {
+						  ApptentiveLogInfo(@"Silent push notification received. Posting local notification");
 
-							dispatch_async(dispatch_get_main_queue(), ^{
-								[self fireLocalNotificationWithUserInfo:userInfo];
-							});
-						}
+						  dispatch_async(dispatch_get_main_queue(), ^{
+							[self fireLocalNotificationWithUserInfo:userInfo];
+						  });
+					  }
 
-						break;
-					}
-					case UIApplicationStateInactive:
-						// Present Apptentive UI later, when Application State is Active
-						self.pushUserInfo = userInfo;
-						self.pushViewController = viewController;
-						break;
-					case UIApplicationStateActive:
-						self.pushUserInfo = nil;
-						self.pushViewController = nil;
+					  break;
+				  }
+				  case UIApplicationStateInactive:
+					  // Present Apptentive UI later, when Application State is Active
+					  self.pushUserInfo = userInfo;
+					  self.pushViewController = viewController;
+					  break;
+				  case UIApplicationStateActive:
+					  self.pushUserInfo = nil;
+					  self.pushViewController = nil;
 
-						NSString *action = [apptentivePayload objectForKey:@"action"];
-						if ([action isEqualToString:@"pmc"]) {
-							dispatch_async(dispatch_get_main_queue(), ^{
-								[self presentMessageCenterFromViewController:viewController];
-							});
-						} else {
-                            if (self.messageManager) {
-                                [self.messageManager checkForMessages];
-                            } else {
-                                ApptentiveLogError(@"Can't check for incoming messages: message manager is not initialized");
-                            }
-                            
-						}
-						break;
-				}
-			} else {
-				ApptentiveLogInfo(@"Push notification received for conversation that is not active. Active conversation ID is %@, push conversation ID is %@", self.backend.conversationManager.activeConversation.identifier, apptentivePayload[@"conversation_id"]);
-			}
+					  NSString *action = [apptentivePayload objectForKey:@"action"];
+					  if ([action isEqualToString:@"pmc"]) {
+						  dispatch_async(dispatch_get_main_queue(), ^{
+							[self presentMessageCenterFromViewController:viewController];
+						  });
+					  } else {
+						  if (self.messageManager) {
+							  [self.messageManager checkForMessages];
+						  } else {
+							  ApptentiveLogError(@"Can't check for incoming messages: message manager is not initialized");
+						  }
+					  }
+					  break;
+			  }
+		  } else {
+			  ApptentiveLogInfo(@"Push notification received for conversation that is not active. Active conversation ID is %@, push conversation ID is %@", self.backend.conversationManager.activeConversation.identifier, apptentivePayload[@"conversation_id"]);
+		  }
 
-			if (shouldCallCompletionHandler && completionHandler) {
-				dispatch_async(dispatch_get_main_queue(), ^{
-					completionHandler(UIBackgroundFetchResultNoData);
-				});
-			}
+		  if (shouldCallCompletionHandler && completionHandler) {
+			  dispatch_async(dispatch_get_main_queue(), ^{
+				completionHandler(UIBackgroundFetchResultNoData);
+			  });
+		  }
 		}];
 	} else {
 		ApptentiveLogInfo(@"Non-apptentive push notification received.");
@@ -759,11 +760,12 @@ static Apptentive *_sharedInstance;
 			UNTimeIntervalNotificationTrigger *trigger = [UNTimeIntervalNotificationTrigger triggerWithTimeInterval:1 repeats:NO];
 			UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:@"com.apptentive" content:content trigger:trigger];
 
-			[UNUserNotificationCenter.currentNotificationCenter addNotificationRequest:request withCompletionHandler:^(NSError * _Nullable error) {
-				if (error) {
-					ApptentiveLogError(@"Error posting local notification: %@", error);
-				}
-			}];
+			[UNUserNotificationCenter.currentNotificationCenter addNotificationRequest:request
+																 withCompletionHandler:^(NSError *_Nullable error) {
+																   if (error) {
+																	   ApptentiveLogError(@"Error posting local notification: %@", error);
+																   }
+																 }];
 
 			return;
 		}
@@ -865,17 +867,17 @@ static Apptentive *_sharedInstance;
 
 - (void)logInWithToken:(NSString *)token completion:(void (^)(BOOL, NSError *_Nonnull))completion {
 	void (^wrappingCompletion)(BOOL success, NSError *_Nonnull error) = ^(BOOL success, NSError *_Nonnull error) {
-		if (success) {
-			[self.backend engageApptentiveAppEvent:@"login"];
-		}
+	  if (success) {
+		  [self.backend engageApptentiveAppEvent:@"login"];
+	  }
 
-		if (completion != nil) {
-			completion(success, error);
-		}
+	  if (completion != nil) {
+		  completion(success, error);
+	  }
 	};
 
 	[self.operationQueue addOperationWithBlock:^{
-		[self.backend.conversationManager logInWithToken:token completion:wrappingCompletion];
+	  [self.backend.conversationManager logInWithToken:token completion:wrappingCompletion];
 	}];
 }
 
@@ -883,18 +885,18 @@ static Apptentive *_sharedInstance;
 	[self dismissAllInteractions:NO];
 
 	[self.operationQueue addOperationWithBlock:^{
-		if (self.backend.conversationManager.activeConversation.state != ApptentiveConversationStateLoggedIn) {
-			ApptentiveLogError(@"Attempting to log out of a conversation that is not logged in.");
-			return;
-		}
+	  if (self.backend.conversationManager.activeConversation.state != ApptentiveConversationStateLoggedIn) {
+		  ApptentiveLogError(@"Attempting to log out of a conversation that is not logged in.");
+		  return;
+	  }
 
-		[self.backend engageApptentiveAppEvent:@"logout"];
+	  [self.backend engageApptentiveAppEvent:@"logout"];
 
-		// To ensure that the logout event payload gets added before the logout payload,
-		// use a separate block to run the actual logout operation.
-		[self.operationQueue addOperationWithBlock:^{
-			[self.backend.conversationManager endActiveConversation];
-		}];
+	  // To ensure that the logout event payload gets added before the logout payload,
+	  // use a separate block to run the actual logout operation.
+	  [self.operationQueue addOperationWithBlock:^{
+		[self.backend.conversationManager endActiveConversation];
+	  }];
 	}];
 }
 
@@ -956,11 +958,13 @@ static Apptentive *_sharedInstance;
 
 @end
 
+
 @interface ApptentiveNavigationController ()
 
 @property (nullable, nonatomic, strong) UIWindow *apptentiveAlertWindow;
 
 @end
+
 
 @implementation ApptentiveNavigationController
 
@@ -969,15 +973,14 @@ static Apptentive *_sharedInstance;
 - (nullable instancetype)initWithCoder:(NSCoder *)aDecoder {
 	self = [super initWithCoder:aDecoder];
 	if (self) {
-
-		if (!([UINavigationBar appearance].barTintColor || [UINavigationBar appearanceWhenContainedInInstancesOfClasses:@[ [ApptentiveNavigationController class] ]].barTintColor)) {
-			[UINavigationBar appearanceWhenContainedInInstancesOfClasses:@[ [ApptentiveNavigationController class] ]].barTintColor = [UIColor whiteColor];
+		if (!([UINavigationBar appearance].barTintColor || [UINavigationBar appearanceWhenContainedInInstancesOfClasses:@[[ApptentiveNavigationController class]]].barTintColor)) {
+			[UINavigationBar appearanceWhenContainedInInstancesOfClasses:@[[ApptentiveNavigationController class]]].barTintColor = [UIColor whiteColor];
 		}
 	}
 	return self;
 }
 
-- (void)presentAnimated:(BOOL)animated completion:(void (^ __nullable)(void))completion {
+- (void)presentAnimated:(BOOL)animated completion:(void (^__nullable)(void))completion {
 	self.apptentiveAlertWindow = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
 	self.apptentiveAlertWindow.rootViewController = [[UIViewController alloc] init];
 	self.apptentiveAlertWindow.windowLevel = UIWindowLevelAlert + 1;
@@ -987,7 +990,7 @@ static Apptentive *_sharedInstance;
 
 - (void)viewDidDisappear:(BOOL)animated {
 	[super viewDidDisappear:animated];
-	
+
 	if (self.presentingViewController == nil) {
 		self.apptentiveAlertWindow.hidden = YES;
 		self.apptentiveAlertWindow = nil;
@@ -1001,7 +1004,7 @@ static Apptentive *_sharedInstance;
 
 @end
 
-NSString *ApptentiveLocalizedString(NSString *key, NSString * _Nullable comment) {
+NSString *ApptentiveLocalizedString(NSString *key, NSString *_Nullable comment) {
 	static NSBundle *bundle = nil;
 	if (!bundle) {
 		bundle = [ApptentiveUtilities resourceBundle];

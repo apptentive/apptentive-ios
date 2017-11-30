@@ -7,18 +7,18 @@
 //
 
 #import "ApptentiveMessageManager.h"
-#import "ApptentiveMessage.h"
-#import "ApptentiveMessageSender.h"
-#import "ApptentiveSerialRequest.h"
-#import "ApptentiveMessageStore.h"
-#import "Apptentive_Private.h"
-#import "ApptentiveBackend.h"
-#import "ApptentiveMessagePayload.h"
-#import "ApptentiveMessageGetRequest.h"
-#import "ApptentiveClient.h"
-#import "ApptentivePerson.h"
-#import "ApptentiveUtilities.h"
 #import "ApptentiveAttachment.h"
+#import "ApptentiveBackend.h"
+#import "ApptentiveClient.h"
+#import "ApptentiveMessage.h"
+#import "ApptentiveMessageGetRequest.h"
+#import "ApptentiveMessagePayload.h"
+#import "ApptentiveMessageSender.h"
+#import "ApptentiveMessageStore.h"
+#import "ApptentivePerson.h"
+#import "ApptentiveSerialRequest.h"
+#import "ApptentiveUtilities.h"
+#import "Apptentive_Private.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -100,11 +100,11 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 
 	ApptentiveRequestOperationCallback *callback = [ApptentiveRequestOperationCallback new];
 	callback.operationFinishCallback = ^(ApptentiveRequestOperation *operation) {
-        self.messageOperation = nil;
-        [self processMessageOperationResponse:operation];
+	  self.messageOperation = nil;
+	  [self processMessageOperationResponse:operation];
 	};
 	callback.operationFailCallback = ^(ApptentiveRequestOperation *operation, NSError *error) {
-        self.messageOperation = nil;
+	  self.messageOperation = nil;
 	};
 
 	ApptentiveMessageGetRequest *request = [[ApptentiveMessageGetRequest alloc] initWithConversationIdentifier:self.conversationIdentifier];
@@ -237,21 +237,21 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 		}
 
 		dispatch_sync(dispatch_get_main_queue(), ^{
-			[self.delegate messageManagerWillBeginUpdates:self];
+		  [self.delegate messageManagerWillBeginUpdates:self];
 
-			[self.messageStore.messages removeAllObjects];
-			[self.messageStore.messages addObjectsFromArray:mutableMessages];
-			_messageIdentifierIndex = mutableMessageIdentifierIndex;
+		  [self.messageStore.messages removeAllObjects];
+		  [self.messageStore.messages addObjectsFromArray:mutableMessages];
+		  _messageIdentifierIndex = mutableMessageIdentifierIndex;
 
-			for (ApptentiveMessage *newMessage in addedMessages) {
-				[self.delegate messageManager:self didInsertMessage:newMessage atIndex:[self.messages indexOfObject:newMessage]];
-			}
+		  for (ApptentiveMessage *newMessage in addedMessages) {
+			  [self.delegate messageManager:self didInsertMessage:newMessage atIndex:[self.messages indexOfObject:newMessage]];
+		  }
 
-			for (ApptentiveMessage *updatedMessage in updatedMessages) {
-				[self.delegate messageManager:self didUpdateMessage:updatedMessage atIndex:[self.messages indexOfObject:updatedMessage]];
-			}
+		  for (ApptentiveMessage *updatedMessage in updatedMessages) {
+			  [self.delegate messageManager:self didUpdateMessage:updatedMessage atIndex:[self.messages indexOfObject:updatedMessage]];
+		  }
 
-			[self.delegate messageManagerDidEndUpdates:self];
+		  [self.delegate messageManagerDidEndUpdates:self];
 		});
 
 		needsSave = YES;
@@ -289,17 +289,17 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 
 - (void)sendMessage:(ApptentiveMessage *)message {
 	[self.operationQueue addOperationWithBlock:^{
-        message.sender = [[ApptentiveMessageSender alloc] initWithName:nil identifier:self.localUserIdentifier profilePhotoURL:nil];
-        
-        [self enqueueMessageForSending:message];
-        
-        [self appendMessage:message];
+	  message.sender = [[ApptentiveMessageSender alloc] initWithName:nil identifier:self.localUserIdentifier profilePhotoURL:nil];
+
+	  [self enqueueMessageForSending:message];
+
+	  [self appendMessage:message];
 	}];
 }
 
 - (void)enqueueMessageForSendingOnBackgroundQueue:(ApptentiveMessage *)message {
 	[self.operationQueue addOperationWithBlock:^{
-		[self enqueueMessageForSending:message];
+	  [self enqueueMessageForSending:message];
 	}];
 }
 
@@ -340,9 +340,9 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 		NSInteger index = [self.messages indexOfObject:message];
 
 		dispatch_async(dispatch_get_main_queue(), ^{
-			[self.delegate messageManagerWillBeginUpdates:self];
-			[self.delegate messageManager:self didUpdateMessage:message atIndex:index];
-			[self.delegate messageManagerDidEndUpdates:self];
+		  [self.delegate messageManagerWillBeginUpdates:self];
+		  [self.delegate messageManager:self didUpdateMessage:message atIndex:index];
+		  [self.delegate messageManagerDidEndUpdates:self];
 		});
 	}
 }
@@ -363,9 +363,9 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 
 	if (self.delegate) {
 		dispatch_async(dispatch_get_main_queue(), ^{
-			[self.delegate messageManagerWillBeginUpdates:self];
-			[self.delegate messageManager:self didInsertMessage:message atIndex:index];
-			[self.delegate messageManagerDidEndUpdates:self];
+		  [self.delegate messageManagerWillBeginUpdates:self];
+		  [self.delegate messageManager:self didInsertMessage:message atIndex:index];
+		  [self.delegate messageManagerDidEndUpdates:self];
 		});
 	}
 
@@ -390,9 +390,9 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 	[self.messageIdentifierIndex removeObjectForKey:message.localIdentifier];
 
 	dispatch_async(dispatch_get_main_queue(), ^{
-		[self.delegate messageManagerWillBeginUpdates:self];
-		[self.delegate messageManager:self didDeleteMessage:message atIndex:index];
-		[self.delegate messageManagerDidEndUpdates:self];
+	  [self.delegate messageManagerWillBeginUpdates:self];
+	  [self.delegate messageManager:self didDeleteMessage:message atIndex:index];
+	  [self.delegate messageManagerDidEndUpdates:self];
 	});
 
 	[self saveMessageStore];
@@ -410,7 +410,7 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 		_unreadCount = unreadCount;
 
 		dispatch_async(dispatch_get_main_queue(), ^{
-			[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveMessageCenterUnreadCountChangedNotification object:self userInfo:@{ @"count": @(unreadCount) }];
+		  [[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveMessageCenterUnreadCountChangedNotification object:self userInfo:@{ @"count": @(unreadCount) }];
 		});
 	}
 }
@@ -434,9 +434,9 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 
 	if (self.backgroundFetchBlock) {
 		dispatch_async(dispatch_get_main_queue(), ^{
-			self.backgroundFetchBlock(fetchResult);
+		  self.backgroundFetchBlock(fetchResult);
 
-			self.backgroundFetchBlock = nil;
+		  self.backgroundFetchBlock = nil;
 		});
 	}
 }

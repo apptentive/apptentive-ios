@@ -594,6 +594,8 @@ static Apptentive *_sharedInstance;
 	return commerceItem;
 }
 
+#pragma mark - Message Center
+
 - (BOOL)canShowMessageCenter {
 	NSString *messageCenterCodePoint = [[ApptentiveInteraction apptentiveAppInteraction] codePointForEvent:ApptentiveEngagementMessageCenterEvent];
 	return [self.backend canShowInteractionForCodePoint:messageCenterCodePoint];
@@ -613,11 +615,34 @@ static Apptentive *_sharedInstance;
 	return [self.backend presentMessageCenterFromViewController:viewController withCustomData:allowedCustomMessageData];
 }
 
+- (void)dismissMessageCenterAnimated:(BOOL)animated completion:(nullable void (^)(void))completion {
+	[self.backend dismissMessageCenterAnimated:animated completion:completion];
+}
+
+- (NSUInteger)unreadMessageCount {
+	return [self.backend unreadMessageCount];
+}
+
+- (UIView *)unreadMessageCountAccessoryView:(BOOL)apptentiveHeart {
+	if (apptentiveHeart) {
+		return [ApptentiveUnreadMessagesBadgeView unreadMessageCountViewBadgeWithApptentiveHeart];
+	} else {
+		return [ApptentiveUnreadMessagesBadgeView unreadMessageCountViewBadge];
+	}
+}
+
+#pragma mark Push and local notifications
+
+// This method is deprecated and just relays to the non-deprecated method
 - (BOOL)didReceiveRemoteNotification:(NSDictionary *)userInfo fromViewController:(UIViewController *)viewController {
 	return [self didReceiveRemoteNotification:userInfo
-						   fromViewController:viewController
 					   fetchCompletionHandler:^void(UIBackgroundFetchResult result){
 					   }];
+}
+
+// This method is deprecated and just relays to the non-deprecated method
+- (BOOL)didReceiveRemoteNotification:(NSDictionary *)userInfo fromViewController:(UIViewController *)viewController fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
+	return [self didReceiveRemoteNotification:userInfo fetchCompletionHandler:completionHandler];
 }
 
 - (BOOL)didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
@@ -626,75 +651,50 @@ static Apptentive *_sharedInstance;
 	if (apptentivePayload != nil) {
 		UIApplicationState applicationState = [UIApplication sharedApplication].applicationState;
 		[self.operationQueue addOperationWithBlock:^{
-		  BOOL shouldCallCompletionHandler = YES;
+			BOOL shouldCallCompletionHandler = YES;
 
-		  if ([apptentivePayload[@"conversation_id"] isEqualToString:self.backend.conversationManager.activeConversation.identifier]) {
-			  ApptentiveLogInfo(@"Push notification received for active conversation. userInfo: %@", userInfo);
+			// Make sure the push is for the currently logged-in conversation
+			if ([apptentivePayload[@"conversation_id"] isEqualToString:self.backend.conversationManager.activeConversation.identifier]) {
+				ApptentiveLogInfo(@"Push notification received for active conversation. userInfo: %@", userInfo);
+				NSNumber *contentAvailable = userInfo[@"aps"][@"content-available"];
 
-			  switch (applicationState) {
-				  case UIApplicationStateBackground: {
-					  NSNumber *contentAvailable = userInfo[@"aps"][@"content-available"];
-					  if (contentAvailable.boolValue) {
-						  shouldCallCompletionHandler = NO;
-						  if (self.messageManager) {
-							  [self.messageManager checkForMessagesInBackground:completionHandler];
-						  } else {
-							  ApptentiveLogError(@"Can't check for incoming messages: message manager is not initialized");
-						  }
-					  }
+				// The content available flag should be set, which indicates that we want to download new messages
+				if (contentAvailable.boolValue) {
 
-					  if (userInfo[@"aps"][@"alert"] == nil) {
-						  ApptentiveLogInfo(@"Silent push notification received. Posting local notification");
+					// The completion handler call should be deferred until the message request concludes
+					shouldCallCompletionHandler = NO;
+					if (self.messageManager) {
+						[self.messageManager checkForMessagesInBackground:completionHandler];
+					} else {
+						ApptentiveLogError(@"Can't check for incoming messages: message manager is not initialized");
+					}
+				}
 
-						  dispatch_async(dispatch_get_main_queue(), ^{
-							[self fireLocalNotificationWithUserInfo:userInfo];
-						  });
-					  }
+				// A missing aps.alert indicates that this is a silent push, so since we want to display a banner it has to be via a local notification.
+				// We also want to fire a local notification if the app is in the foreground (in which banners aren't shown normally),
+				// which will trigger the "open message center" logic (or if using the UserNotifications framework, show a banner in-app)
+				if (userInfo[@"aps"][@"alert"] == nil || applicationState == UIApplicationStateActive) {
+					ApptentiveLogInfo(@"Silent push notification received or app in foreground. Posting local notification");
 
-					  break;
-				  }
-				  case UIApplicationStateInactive:
-					  // Present Apptentive UI later, when Application State is Active
-					  self.pushUserInfo = userInfo;
-					  self.pushViewController = viewController;
-					  break;
-				  case UIApplicationStateActive:
-					  self.pushUserInfo = nil;
-					  self.pushViewController = nil;
+					dispatch_async(dispatch_get_main_queue(), ^{
+						[self fireLocalNotificationWithUserInfo:userInfo];
+					});
+				}
+			} else {
+				ApptentiveLogInfo(@"Push notification received for conversation that is not active. Active conversation ID is %@, push conversation ID is %@", self.backend.conversationManager.activeConversation.identifier, apptentivePayload[@"conversation_id"]);
+			}
 
-					  NSString *action = [apptentivePayload objectForKey:@"action"];
-					  if ([action isEqualToString:@"pmc"]) {
-						  dispatch_async(dispatch_get_main_queue(), ^{
-							[self presentMessageCenterFromViewController:viewController];
-						  });
-					  } else {
-						  if (self.messageManager) {
-							  [self.messageManager checkForMessages];
-						  } else {
-							  ApptentiveLogError(@"Can't check for incoming messages: message manager is not initialized");
-						  }
-					  }
-					  break;
-			  }
-		  } else {
-			  ApptentiveLogInfo(@"Push notification received for conversation that is not active. Active conversation ID is %@, push conversation ID is %@", self.backend.conversationManager.activeConversation.identifier, apptentivePayload[@"conversation_id"]);
-		  }
-
-		  if (shouldCallCompletionHandler && completionHandler) {
-			  dispatch_async(dispatch_get_main_queue(), ^{
-				completionHandler(UIBackgroundFetchResultNoData);
-			  });
-		  }
+			if (shouldCallCompletionHandler && completionHandler) {
+				dispatch_async(dispatch_get_main_queue(), ^{
+					completionHandler(UIBackgroundFetchResultNoData);
+				});
+			}
 		}];
 	} else {
 		ApptentiveLogInfo(@"Non-apptentive push notification received.");
 	}
 
 	return (apptentivePayload != nil);
-}
-
-- (BOOL)didReceiveRemoteNotification:(NSDictionary *)userInfo fromViewController:(UIViewController *)viewController fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
-	return [self didReceiveRemoteNotification:userInfo fetchCompletionHandler:completionHandler];
 }
 
 - (BOOL)didReceiveLocalNotification:(UILocalNotification *)notification fromViewController:(UIViewController *)viewController {
@@ -713,6 +713,7 @@ static Apptentive *_sharedInstance;
 	return [self didReceveUserNotificationResponse:response fromViewController:nil withCompletionHandler:completionHandler];
 }
 
+// We allow passing a view controller to present Message Center from when the user has tapped a notification banner
 - (BOOL)didReceveUserNotificationResponse:(UNNotificationResponse *)response fromViewController:(nullable UIViewController *)viewController withCompletionHandler:(void (^)(void))completionHandler {
 	if ([self presentMessageCenterIfNeededForUserInfo:response.notification.request.content.userInfo fromViewController:viewController]) {
 		ApptentiveLogInfo(@"Apptentive user notification received.");
@@ -729,6 +730,7 @@ static Apptentive *_sharedInstance;
 	}
 }
 
+// This method allows us to display a banner in-app when a local notification is ready to fire, rather than just opening message center
 - (BOOL)willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler {
 	if (notification.request.content.userInfo[@"apptentive"] != nil) {
 		if ([notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
@@ -807,48 +809,17 @@ static Apptentive *_sharedInstance;
 	}
 }
 
+#pragma mark - UNUserNotificationCenterDelegate methods
+
+// These two methods implement UNUserNotificationCenterDelegate, so you can just set the Apptentive singleton as the delegate.
+// (You still have to register and respond to push notifications in the App Delegate, however).
+
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)(void))completionHandler {
 	[self didReceveUserNotificationResponse:response fromViewController:nil withCompletionHandler:completionHandler];
 }
 
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler {
 	[self willPresentNotification:notification withCompletionHandler:completionHandler];
-}
-
-- (void)dismissMessageCenterAnimated:(BOOL)animated completion:(nullable void (^)(void))completion {
-	[self.backend dismissMessageCenterAnimated:animated completion:completion];
-}
-
-- (NSUInteger)unreadMessageCount {
-	return [self.backend unreadMessageCount];
-}
-
-- (UIView *)unreadMessageCountAccessoryView:(BOOL)apptentiveHeart {
-	if (apptentiveHeart) {
-		return [ApptentiveUnreadMessagesBadgeView unreadMessageCountViewBadgeWithApptentiveHeart];
-	} else {
-		return [ApptentiveUnreadMessagesBadgeView unreadMessageCountViewBadge];
-	}
-}
-
-#pragma mark - Message notification banner
-
-- (void)showNotificationBannerForMessage:(ApptentiveMessage *)message {
-	if (self.backend.configuration.messageCenter.notificationPopupEnabled && [message isKindOfClass:[ApptentiveMessage class]]) {
-		// TODO: Display something if body is empty
-		ApptentiveMessage *textMessage = (ApptentiveMessage *)message;
-		NSURL *profilePhotoURL = textMessage.sender.profilePhotoURL;
-
-		ApptentiveBannerViewController *banner = [ApptentiveBannerViewController bannerWithImageURL:profilePhotoURL title:textMessage.sender.name message:textMessage.body];
-
-		banner.delegate = self;
-
-		[banner show];
-	}
-}
-
-- (void)userDidTapBanner:(ApptentiveBannerViewController *)banner {
-	[self presentMessageCenterFromViewController:[self viewControllerForInteractions]];
 }
 
 - (UIViewController *)viewControllerForInteractions {
@@ -861,6 +832,7 @@ static Apptentive *_sharedInstance;
 	}
 #pragma clang diagnostic pop
 }
+#pragma mark - Dismiss interactions
 
 - (void)dismissAllInteractions:(BOOL)animated {
 	[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveInteractionsShouldDismissNotification object:self userInfo:@{ ApptentiveInteractionsShouldDismissAnimatedKey: @(animated) }];

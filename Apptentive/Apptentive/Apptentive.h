@@ -526,7 +526,7 @@ typedef NS_ENUM(NSUInteger, ApptentiveLogLevel) {
  @return `YES` if the notification was sent by Apptentive, `NO` otherwise.
 
  */
-- (BOOL)didReceveUserNotificationResponse:(UNNotificationResponse *)response fromViewController:(nullable UIViewController *)viewController withCompletionHandler:(void(^)(void))completionHandler NS_AVAILABLE_IOS(10_0);
+- (BOOL)didReceveUserNotificationResponse:(UNNotificationResponse *)response fromViewController:(nullable UIViewController *)viewController withCompletionHandler:(void (^)(void))completionHandler NS_AVAILABLE_IOS(10_0);
 
 /**
  Forwards a user notification from your user notification center delegate to Apptentive.

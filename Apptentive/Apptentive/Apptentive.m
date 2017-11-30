@@ -651,44 +651,43 @@ static Apptentive *_sharedInstance;
 	if (apptentivePayload != nil) {
 		UIApplicationState applicationState = [UIApplication sharedApplication].applicationState;
 		[self.operationQueue addOperationWithBlock:^{
-			BOOL shouldCallCompletionHandler = YES;
+		  BOOL shouldCallCompletionHandler = YES;
 
-			// Make sure the push is for the currently logged-in conversation
-			if ([apptentivePayload[@"conversation_id"] isEqualToString:self.backend.conversationManager.activeConversation.identifier]) {
-				ApptentiveLogInfo(@"Push notification received for active conversation. userInfo: %@", userInfo);
-				NSNumber *contentAvailable = userInfo[@"aps"][@"content-available"];
+		  // Make sure the push is for the currently logged-in conversation
+		  if ([apptentivePayload[@"conversation_id"] isEqualToString:self.backend.conversationManager.activeConversation.identifier]) {
+			  ApptentiveLogInfo(@"Push notification received for active conversation. userInfo: %@", userInfo);
+			  NSNumber *contentAvailable = userInfo[@"aps"][@"content-available"];
 
-				// The content available flag should be set, which indicates that we want to download new messages
-				if (contentAvailable.boolValue) {
+			  // The content available flag should be set, which indicates that we want to download new messages
+			  if (contentAvailable.boolValue) {
+				  // The completion handler call should be deferred until the message request concludes
+				  shouldCallCompletionHandler = NO;
+				  if (self.messageManager) {
+					  [self.messageManager checkForMessagesInBackground:completionHandler];
+				  } else {
+					  ApptentiveLogError(@"Can't check for incoming messages: message manager is not initialized");
+				  }
+			  }
 
-					// The completion handler call should be deferred until the message request concludes
-					shouldCallCompletionHandler = NO;
-					if (self.messageManager) {
-						[self.messageManager checkForMessagesInBackground:completionHandler];
-					} else {
-						ApptentiveLogError(@"Can't check for incoming messages: message manager is not initialized");
-					}
-				}
+			  // A missing aps.alert indicates that this is a silent push, so since we want to display a banner it has to be via a local notification.
+			  // We also want to fire a local notification if the app is in the foreground (in which banners aren't shown normally),
+			  // which will trigger the "open message center" logic (or if using the UserNotifications framework, show a banner in-app)
+			  if (userInfo[@"aps"][@"alert"] == nil || applicationState == UIApplicationStateActive) {
+				  ApptentiveLogInfo(@"Silent push notification received or app in foreground. Posting local notification");
 
-				// A missing aps.alert indicates that this is a silent push, so since we want to display a banner it has to be via a local notification.
-				// We also want to fire a local notification if the app is in the foreground (in which banners aren't shown normally),
-				// which will trigger the "open message center" logic (or if using the UserNotifications framework, show a banner in-app)
-				if (userInfo[@"aps"][@"alert"] == nil || applicationState == UIApplicationStateActive) {
-					ApptentiveLogInfo(@"Silent push notification received or app in foreground. Posting local notification");
+				  dispatch_async(dispatch_get_main_queue(), ^{
+					[self fireLocalNotificationWithUserInfo:userInfo];
+				  });
+			  }
+		  } else {
+			  ApptentiveLogInfo(@"Push notification received for conversation that is not active. Active conversation ID is %@, push conversation ID is %@", self.backend.conversationManager.activeConversation.identifier, apptentivePayload[@"conversation_id"]);
+		  }
 
-					dispatch_async(dispatch_get_main_queue(), ^{
-						[self fireLocalNotificationWithUserInfo:userInfo];
-					});
-				}
-			} else {
-				ApptentiveLogInfo(@"Push notification received for conversation that is not active. Active conversation ID is %@, push conversation ID is %@", self.backend.conversationManager.activeConversation.identifier, apptentivePayload[@"conversation_id"]);
-			}
-
-			if (shouldCallCompletionHandler && completionHandler) {
-				dispatch_async(dispatch_get_main_queue(), ^{
-					completionHandler(UIBackgroundFetchResultNoData);
-				});
-			}
+		  if (shouldCallCompletionHandler && completionHandler) {
+			  dispatch_async(dispatch_get_main_queue(), ^{
+				completionHandler(UIBackgroundFetchResultNoData);
+			  });
+		  }
 		}];
 	} else {
 		ApptentiveLogInfo(@"Non-apptentive push notification received.");

@@ -26,6 +26,7 @@
 #import "ApptentiveUtilities.h"
 #import "ApptentiveVersion.h"
 #import "Apptentive_Private.h"
+#import "ApptentiveDispatchQueue.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -118,9 +119,7 @@ static Apptentive *_sharedInstance;
 
 		[ApptentiveLogMonitor tryInitializeWithBaseURL:configuration.baseURL appKey:configuration.apptentiveKey signature:configuration.apptentiveSignature];
 
-		_operationQueue = [[NSOperationQueue alloc] init];
-		_operationQueue.maxConcurrentOperationCount = 1;
-		_operationQueue.name = @"Apptentive Operation Queue";
+		_operationQueue = [ApptentiveDispatchQueue createQueueWithName:@"Apptentive Main Queue" concurrencyType:ApptentiveDispatchQueueConcurrencyTypeSerial];
 
 		_style = [[ApptentiveStyleSheet alloc] init];
 		_apptentiveKey = configuration.apptentiveKey;
@@ -173,7 +172,7 @@ static Apptentive *_sharedInstance;
 	if (!self.didAccessStyleSheet) {
 		_didAccessStyleSheet = YES;
 
-		[self.operationQueue addOperationWithBlock:^{
+		[self.operationQueue dispatchAsync:^{
 		  if (self.backend.conversationManager.activeConversation) {
 			  [self.backend.conversationManager.activeConversation didOverrideStyles];
 		  }
@@ -186,7 +185,7 @@ static Apptentive *_sharedInstance;
 }
 
 - (void)setPersonName:(nullable NSString *)personName {
-	[self.operationQueue addOperationWithBlock:^{
+	[self.operationQueue dispatchAsync:^{
 	  self.backend.conversationManager.activeConversation.person.name = personName;
 	  [self.backend schedulePersonUpdate];
 	}];
@@ -197,14 +196,14 @@ static Apptentive *_sharedInstance;
 }
 
 - (void)setPersonEmailAddress:(nullable NSString *)personEmailAddress {
-	[self.operationQueue addOperationWithBlock:^{
+	[self.operationQueue dispatchAsync:^{
 	  self.backend.conversationManager.activeConversation.person.emailAddress = personEmailAddress;
 	  [self.backend schedulePersonUpdate];
 	}];
 }
 
 - (void)sendAttachmentText:(NSString *)text {
-	[self.operationQueue addOperationWithBlock:^{
+	[self.operationQueue dispatchAsync:^{
 	  if (self.backend.conversationManager.activeConversation == nil) {
 		  ApptentiveLogError(@"Attempting to send message with no active conversation.");
 		  return;
@@ -224,7 +223,7 @@ static Apptentive *_sharedInstance;
 }
 
 - (void)sendAttachmentImage:(UIImage *)image {
-	[self.operationQueue addOperationWithBlock:^{
+	[self.operationQueue dispatchAsync:^{
 	  if (self.backend.conversationManager.activeConversation == nil) {
 		  ApptentiveLogError(@"Attempting to send message with no active conversation.");
 		  return;
@@ -264,7 +263,7 @@ static Apptentive *_sharedInstance;
 }
 
 - (void)sendAttachmentFile:(NSData *)fileData withMimeType:(NSString *)mimeType {
-	[self.operationQueue addOperationWithBlock:^{
+	[self.operationQueue dispatchAsync:^{
 	  if (self.backend.conversationManager.activeConversation == nil) {
 		  ApptentiveLogError(@"Attempting to send message with no active conversation.");
 		  return;
@@ -304,42 +303,42 @@ static Apptentive *_sharedInstance;
 }
 
 - (void)addCustomDeviceDataString:(NSString *)string withKey:(NSString *)key {
-	[self.operationQueue addOperationWithBlock:^{
+	[self.operationQueue dispatchAsync:^{
 	  [self.backend.conversationManager.activeConversation.device addCustomString:string withKey:key];
 	  [self.backend scheduleDeviceUpdate];
 	}];
 }
 
 - (void)addCustomDeviceDataNumber:(NSNumber *)number withKey:(NSString *)key {
-	[self.operationQueue addOperationWithBlock:^{
+	[self.operationQueue dispatchAsync:^{
 	  [self.backend.conversationManager.activeConversation.device addCustomNumber:number withKey:key];
 	  [self.backend scheduleDeviceUpdate];
 	}];
 }
 
 - (void)addCustomDeviceDataBool:(BOOL)boolValue withKey:(NSString *)key {
-	[self.operationQueue addOperationWithBlock:^{
+	[self.operationQueue dispatchAsync:^{
 	  [self.backend.conversationManager.activeConversation.device addCustomBool:boolValue withKey:key];
 	  [self.backend scheduleDeviceUpdate];
 	}];
 }
 
 - (void)addCustomPersonDataString:(NSString *)string withKey:(NSString *)key {
-	[self.operationQueue addOperationWithBlock:^{
+	[self.operationQueue dispatchAsync:^{
 	  [self.backend.conversationManager.activeConversation.person addCustomString:string withKey:key];
 	  [self.backend schedulePersonUpdate];
 	}];
 }
 
 - (void)addCustomPersonDataNumber:(NSNumber *)number withKey:(NSString *)key {
-	[self.operationQueue addOperationWithBlock:^{
+	[self.operationQueue dispatchAsync:^{
 	  [self.backend.conversationManager.activeConversation.person addCustomNumber:number withKey:key];
 	  [self.backend schedulePersonUpdate];
 	}];
 }
 
 - (void)addCustomPersonDataBool:(BOOL)boolValue withKey:(NSString *)key {
-	[self.operationQueue addOperationWithBlock:^{
+	[self.operationQueue dispatchAsync:^{
 	  [self.backend.conversationManager.activeConversation.person addCustomBool:boolValue withKey:key];
 	  [self.backend schedulePersonUpdate];
 	}];
@@ -382,14 +381,14 @@ static Apptentive *_sharedInstance;
 }
 
 - (void)removeCustomPersonDataWithKey:(NSString *)key {
-	[self.operationQueue addOperationWithBlock:^{
+	[self.operationQueue dispatchAsync:^{
 	  [self.backend.conversationManager.activeConversation.person removeCustomValueWithKey:key];
 	  [self.backend schedulePersonUpdate];
 	}];
 }
 
 - (void)removeCustomDeviceDataWithKey:(NSString *)key {
-	[self.operationQueue addOperationWithBlock:^{
+	[self.operationQueue dispatchAsync:^{
 	  [self.backend.conversationManager.activeConversation.device removeCustomValueWithKey:key];
 	  [self.backend scheduleDeviceUpdate];
 	}];
@@ -426,7 +425,7 @@ static Apptentive *_sharedInstance;
 								ntohl(tokenBytes[3]), ntohl(tokenBytes[4]), ntohl(tokenBytes[5]),
 								ntohl(tokenBytes[6]), ntohl(tokenBytes[7])];
 
-	[self.operationQueue addOperationWithBlock:^{
+	[self.operationQueue dispatchAsync:^{
 	  ApptentiveDevice *device = self.backend.conversationManager.activeConversation.device;
 
 	  NSMutableDictionary *integrationConfiguration = [device.integrationConfiguration mutableCopy] ?: [NSMutableDictionary dictionary];
@@ -462,7 +461,7 @@ static Apptentive *_sharedInstance;
 }
 
 - (void)addIntegration:(NSString *)integration withConfiguration:(NSDictionary *)configuration {
-	[self.operationQueue addOperationWithBlock:^{
+	[self.operationQueue dispatchAsync:^{
 	  NSMutableDictionary *integrationConfiguration = [self.backend.conversationManager.activeConversation.device.integrationConfiguration mutableCopy];
 	  ApptentiveDictionarySetKeyValue(integrationConfiguration, integration, configuration);
 	  self.backend.conversationManager.activeConversation.device.integrationConfiguration = integrationConfiguration;
@@ -471,7 +470,7 @@ static Apptentive *_sharedInstance;
 }
 
 - (void)removeIntegration:(NSString *)integration {
-	[self.operationQueue addOperationWithBlock:^{
+	[self.operationQueue dispatchAsync:^{
 	  NSMutableDictionary *integrationConfiguration = [self.backend.conversationManager.activeConversation.device.integrationConfiguration mutableCopy];
 	  [integrationConfiguration removeObjectForKey:integration];
 	  self.backend.conversationManager.activeConversation.device.integrationConfiguration = integrationConfiguration;
@@ -650,7 +649,7 @@ static Apptentive *_sharedInstance;
 
 	if (apptentivePayload != nil) {
 		UIApplicationState applicationState = [UIApplication sharedApplication].applicationState;
-		[self.operationQueue addOperationWithBlock:^{
+		[self.operationQueue dispatchAsync:^{
 		  BOOL shouldCallCompletionHandler = YES;
 
 		  // Make sure the push is for the currently logged-in conversation
@@ -877,7 +876,7 @@ static Apptentive *_sharedInstance;
 	  }
 	};
 
-	[self.operationQueue addOperationWithBlock:^{
+	[self.operationQueue dispatchAsync:^{
 	  [self.backend.conversationManager logInWithToken:token completion:wrappingCompletion];
 	}];
 }
@@ -885,7 +884,7 @@ static Apptentive *_sharedInstance;
 - (void)logOut {
 	[self dismissAllInteractions:NO];
 
-	[self.operationQueue addOperationWithBlock:^{
+	[self.operationQueue dispatchAsync:^{
 	  if (self.backend.conversationManager.activeConversation.state != ApptentiveConversationStateLoggedIn) {
 		  ApptentiveLogError(@"Attempting to log out of a conversation that is not logged in.");
 		  return;
@@ -895,7 +894,7 @@ static Apptentive *_sharedInstance;
 
 	  // To ensure that the logout event payload gets added before the logout payload,
 	  // use a separate block to run the actual logout operation.
-	  [self.operationQueue addOperationWithBlock:^{
+	  [self.operationQueue dispatchAsync:^{
 		[self.backend.conversationManager endActiveConversation];
 	  }];
 	}];
@@ -946,7 +945,7 @@ static Apptentive *_sharedInstance;
 - (void)dispatchOnOperationQueue:(void (^)(void))block {
 	ApptentiveAssertNotNil(block, @"Attempted to execute a nil block");
 	if (block) {
-		[_operationQueue addOperationWithBlock:block];
+		[_operationQueue dispatchAsync:block];
 	}
 }
 

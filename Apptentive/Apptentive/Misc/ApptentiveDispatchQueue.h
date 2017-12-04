@@ -30,7 +30,7 @@ typedef enum : NSUInteger {
 /**
  Creates a background queue with a specified name and concurrency type
  */
-+ (instancetype)createQueueWithName:(NSString *)name type:(ApptentiveDispatchQueueConcurrencyType)type;
++ (instancetype)createQueueWithName:(NSString *)name concurrencyType:(ApptentiveDispatchQueueConcurrencyType)type;
 
 - (void)dispatchAsync:(void (^)(void))task;
 

@@ -32,7 +32,7 @@ static ApptentiveDispatchQueue * _backgroundQueue;
 	return _backgroundQueue;
 }
 
-+ (instancetype)createQueueWithName:(NSString *)name type:(ApptentiveDispatchQueueConcurrencyType)type {
++ (instancetype)createQueueWithName:(NSString *)name concurrencyType:(ApptentiveDispatchQueueConcurrencyType)type {
 	if (type == ApptentiveDispatchQueueConcurrencyTypeSerial) {
 		const char *label = name.UTF8String;
 		return [[ApptentiveGCDDispatchQueue alloc] initWithQueue:dispatch_queue_create(label, DISPATCH_QUEUE_SERIAL)];

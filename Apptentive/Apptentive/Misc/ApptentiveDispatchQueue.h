@@ -1,0 +1,41 @@
+//
+//  ApptentiveDispatchQueue.h
+//  Apptentive
+//
+//  Created by Alex Lementuev on 12/4/17.
+//  Copyright © 2017 Apptentive, Inc. All rights reserved.
+//
+
+#import <Foundation/Foundation.h>
+
+NS_ASSUME_NONNULL_BEGIN
+
+typedef enum : NSUInteger {
+	ApptentiveDispatchQueueConcurrencyTypeSerial,
+	ApptentiveDispatchQueueConcurrencyTypeConcurrent
+} ApptentiveDispatchQueueConcurrencyType;
+
+@interface ApptentiveDispatchQueue : NSObject
+
+/**
+ @return a global serial dispatch queue associated with app's UI-thread.
+ */
++ (instancetype)main;
+
+/**
+ @return a global concurrent dispatch queue associated with a background thread.
+ */
++ (instancetype)background;
+
+/**
+ Creates a background queue with a specified name and concurrency type
+ */
++ (instancetype)createQueueWithName:(NSString *)name type:(ApptentiveDispatchQueueConcurrencyType)type;
+
+- (void)dispatchAsync:(void (^)(void))task;
+
+- (void)dispatchAsync:(void (^)(void))task afterDelay:(NSTimeInterval)delay;
+
+@end
+
+NS_ASSUME_NONNULL_END

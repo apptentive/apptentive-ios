@@ -109,4 +109,9 @@ NSString * _Nullable ApptentiveGetCurrentThreadName() {
 	APPTENTIVE_ABSTRACT_METHOD_CALLED
 }
 
+- (BOOL)isCurrent {
+	APPTENTIVE_ABSTRACT_METHOD_CALLED
+	return NO;
+}
+
 @end

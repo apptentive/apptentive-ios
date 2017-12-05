@@ -20,6 +20,7 @@ extern NSString * _Nullable ApptentiveGetCurrentThreadName(void);
 @interface ApptentiveDispatchQueue : NSObject
 
 @property (nonatomic, assign, getter=isSuspended) BOOL suspended;
+@property (nonatomic, readonly, getter=isCurrent) BOOL current;
 
 /**
  @return a global serial dispatch queue associated with app's UI-thread.

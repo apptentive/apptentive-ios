@@ -59,6 +59,10 @@
 	_queue.suspended = suspended;
 }
 
+- (BOOL)isCurrent {
+	return [NSOperationQueue currentQueue] == _queue;
+}
+
 - (NSString *)name {
 	return _queue.name;
 }

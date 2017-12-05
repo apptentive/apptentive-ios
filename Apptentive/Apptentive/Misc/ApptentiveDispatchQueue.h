@@ -17,6 +17,8 @@ typedef enum : NSUInteger {
 
 @interface ApptentiveDispatchQueue : NSObject
 
+@property (nonatomic, assign, getter=isSuspended) BOOL suspended;
+
 /**
  @return a global serial dispatch queue associated with app's UI-thread.
  */

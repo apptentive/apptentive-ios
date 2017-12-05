@@ -48,6 +48,17 @@
 #pragma mark -
 #pragma mark Properties
 
+#pragma mark -
+#pragma mark Properties
+
+- (BOOL)isSuspended {
+	return _queue.isSuspended;
+}
+
+- (void)setSuspended:(BOOL)suspended {
+	_queue.suspended = suspended;
+}
+
 - (NSString *)name {
 	return _queue.name;
 }

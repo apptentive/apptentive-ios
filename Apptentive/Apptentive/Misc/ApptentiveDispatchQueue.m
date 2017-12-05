@@ -55,4 +55,16 @@ static ApptentiveDispatchQueue * _backgroundQueue;
 	APPTENTIVE_ABSTRACT_METHOD_CALLED
 }
 
+#pragma mark -
+#pragma mark Properties
+
+- (BOOL)isSuspended {
+	APPTENTIVE_ABSTRACT_METHOD_CALLED
+	return NO;
+}
+
+- (void)setSuspended:(BOOL)suspended {
+	APPTENTIVE_ABSTRACT_METHOD_CALLED
+}
+
 @end

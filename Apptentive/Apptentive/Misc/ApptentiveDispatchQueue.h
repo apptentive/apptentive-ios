@@ -15,6 +15,8 @@ typedef enum : NSUInteger {
 	ApptentiveDispatchQueueConcurrencyTypeConcurrent
 } ApptentiveDispatchQueueConcurrencyType;
 
+extern NSString * _Nullable ApptentiveGetCurrentThreadName(void);
+
 @interface ApptentiveDispatchQueue : NSObject
 
 @property (nonatomic, assign, getter=isSuspended) BOOL suspended;

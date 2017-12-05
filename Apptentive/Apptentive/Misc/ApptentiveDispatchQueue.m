@@ -15,6 +15,48 @@
 static ApptentiveDispatchQueue * _mainQueue;
 static ApptentiveDispatchQueue * _backgroundQueue;
 
+NSString * _Nullable ApptentiveGetCurrentThreadName() {
+	if ([NSThread currentThread].isMainThread) {
+		return nil;
+	}
+	
+	NSString *threadName = [NSThread currentThread].name;
+	if (threadName.length > 0) {
+		return threadName;
+	}
+	
+	NSOperationQueue *currentOperationQueue = [NSOperationQueue currentQueue];
+	if (currentOperationQueue != nil) {
+		return currentOperationQueue.name;
+	}
+	
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+	
+	dispatch_queue_t currentDispatchQueue = dispatch_get_current_queue();
+	if (currentDispatchQueue != NULL) {
+		if (currentDispatchQueue == dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+			return @"QUEUE_DEFAULT";
+		}
+		if (currentDispatchQueue == dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)) {
+			return @"QUEUE_HIGH";
+		}
+		if (currentDispatchQueue == dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0)) {
+			return @"QUEUE_LOW";
+		}
+		if (currentDispatchQueue == dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)) {
+			return @"QUEUE_BACKGROUND";
+		}
+		
+		const char *label = dispatch_queue_get_label(currentDispatchQueue);
+		return label != NULL ? [NSString stringWithFormat:@"%s", label] : @"Serial queue";
+	}
+	
+#pragma clang diagnostic pop
+	
+	return @"Background Thread";
+}
+
 @implementation ApptentiveDispatchQueue
 
 + (void)initialize {

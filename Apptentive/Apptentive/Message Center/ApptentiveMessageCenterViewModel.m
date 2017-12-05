@@ -19,6 +19,7 @@
 #import "ApptentiveReachability.h"
 #import "ApptentiveUtilities.h"
 #import "Apptentive_Private.h"
+#import "ApptentiveDispatchQueue.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -71,6 +72,7 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 }
 
 - (void)start {
+#warning This should post a notification
 	[[Apptentive sharedConnection].backend messageCenterEnteredForeground];
 
 	if (self.contextMessageBody) {
@@ -87,6 +89,7 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 }
 
 - (void)stop {
+#warning This should post a notification
 	if (self.contextMessage) {
 		[self.messageManager removeMessage:self.contextMessage];
 	}
@@ -353,11 +356,13 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 
 		[userInfo setObject:@"CompoundMessage" forKey:@"message_type"];
 
-		[self.interaction engage:ATInteractionMessageCenterEventLabelRead fromViewController:nil userInfo:userInfo];
+		[self.messageManager.operationQueue dispatchAsync:^{
+			[self.interaction engage:ATInteractionMessageCenterEventLabelRead fromViewController:nil userInfo:userInfo];
+		}];
 	}
 
 	if (message.state == ApptentiveMessageStateUnread) {
-		[self.messageManager.operationQueue addOperationWithBlock:^{
+		[self.messageManager.operationQueue dispatchAsync:^{
 		  message.state = ApptentiveMessageStateRead;
 		  [self.messageManager updateUnreadCount];
 		  [self.messageManager saveMessageStore];
@@ -458,7 +463,7 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 	  [[self fileAttachmentAtIndexPath:attachmentIndexPath] completeMoveToStorageFor:finalLocation];
 	  [self.delegate messageCenterViewModel:self didLoadAttachmentThumbnailAtIndexPath:attachmentIndexPath];
 
-	  [self.messageManager.operationQueue addOperationWithBlock:^{
+	  [self.messageManager.operationQueue dispatchAsync:^{
 		[self.messageManager saveMessageStore];
 	  }];
 	});
@@ -545,10 +550,12 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 }
 
 - (nullable NSString *)draftMessage {
+#warning fixme
 	return self.conversation.userInfo[ATMessageCenterDraftMessageKey];
 }
 
 - (void)setDraftMessage:(nullable NSString *)draftMessage {
+#warning fixme
 	if (draftMessage) {
 		[self.conversation setUserInfo:draftMessage forKey:ATMessageCenterDraftMessageKey];
 	} else {

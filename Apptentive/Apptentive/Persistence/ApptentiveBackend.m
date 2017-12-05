@@ -185,7 +185,9 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 #pragma mark Notification Handling
 
 - (void)networkStatusChanged:(NSNotification *)notification {
-	[self updateNetworkingForCurrentNetworkStatus];
+	[self.operationQueue dispatchAsync:^{
+		[self updateNetworkingForCurrentNetworkStatus];
+	}];
 }
 
 - (void)applicationWillTerminateNotification:(NSNotification *)notification {
@@ -199,12 +201,14 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 	[self.operationQueue dispatchAsync:^{
 		[self addExitMetric];
 		[self shutDown];
-	}
+	}];
 }
 
 - (void)applicationWillEnterForegroundNotification:(NSNotification *)notification {
-	[self resume];
-	[self addLaunchMetric];
+	[self.operationQueue dispatchAsync:^{
+		[self resume];
+		[self addLaunchMetric];
+	}];
 }
 
 - (void)apptentiveInteractionsDidUpdateNotification:(NSNotification *)notification {
@@ -283,9 +287,6 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 
     [self.conversationManager pause];
 
-	ApptentiveLogVerbose(@"Operations in background queue: %@", [self.operationQueue.operations valueForKeyPath:@"name"]);
-	ApptentiveLogVerbose(@"operations in payload network queue: %@", [self.payloadSender.networkQueue.operations valueForKeyPath:@"name"]);
-
 	// Asynchronous tasks off the main thread will not be given a chance to complete automatically.
 	// We create a background task to clear out our operation queue and the payload sender queue.
 	self.backgroundTaskIdentifier = [[UIApplication sharedApplication] beginBackgroundTaskWithName:@"Wind Down Backend"
@@ -298,26 +299,19 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 	[self.payloadSender cancelNetworkOperations];
 
 	// Create an operation to end the background task.
-	NSBlockOperation *completeBackgroundTaskOperation = [NSBlockOperation blockOperationWithBlock:^{
-	  ApptentiveLogDebug(@"All background operations finished. Exiting.");
-	  [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTaskIdentifier];
+	[self.operationQueue dispatchAsync:^{
+		// After all background operations are finished, wait for anything on the payload sender's network queue to finish before telling the OS we're done.
+		[self.payloadSender.networkQueue addOperationWithBlock:^{
+			ApptentiveLogDebug(@"All background operations finished. Exiting.");
+			[[UIApplication sharedApplication] endBackgroundTask:self.backgroundTaskIdentifier];
+		}];
 	}];
-
-	completeBackgroundTaskOperation.name = @"Complete background task";
-
-	// If there is a save operation in the queue, add it as a cross-queue dependency.
-	NSOperation *saveContextOperation = self.payloadSender.saveContextOperation;
-
-	if (saveContextOperation) {
-		[completeBackgroundTaskOperation addDependency:saveContextOperation];
-	}
-
-	// Add the "complete background task" operation to the end of our (serial) background queue.
-	[self.operationQueue addOperation:completeBackgroundTaskOperation];
 }
 
 // This is called on a warm launch
 - (void)resume {
+	ApptentiveAssertOperationQueue(self.operationQueue);
+
 	if (self.managedObjectContext != nil) {
 		self.state = ApptentiveBackendStatePayloadDatabaseAvailable;
 	}
@@ -364,13 +358,13 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 
 // This should be called once we might have an active conversation, and perodically after that
 - (void)completeHousekeepingTasks {
+	ApptentiveAssertOperationQueue(self.operationQueue);
+
 	[self fetchConfigurationIfNeeded];
 
-	[self.operationQueue addOperationWithBlock:^{
-	  [self.conversationManager completeHousekeepingTasks];
+	[self.conversationManager completeHousekeepingTasks];
 
-	  [self processQueuedRecords];
-	}];
+	[self processQueuedRecords];
 }
 
 - (void)migrateLegacyCoreDataAndTaskQueueForConversation:(ApptentiveConversation *)conversation conversationDirectoryPath:(NSString *)directoryPath {
@@ -455,10 +449,14 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 }
 
 - (void)addLaunchMetric {
+	ApptentiveAssertOperationQueue(self.operationQueue);
+
 	[self engageApptentiveAppEvent:ATInteractionAppEventLabelLaunch];
 }
 
 - (void)addExitMetric {
+	ApptentiveAssertOperationQueue(self.operationQueue);
+
 	[self engageApptentiveAppEvent:ATInteractionAppEventLabelExit];
 }
 
@@ -553,7 +551,8 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 }
 
 - (void)messageCenterEnteredForeground {
-	[self.operationQueue addOperationWithBlock:^{
+#warning Listen for notification instead
+	[self.operationQueue dispatchAsync:^{
 	  _messageCenterInForeground = YES;
 
 	  ApptentiveAssertNotNil(self.messageManager, @"Message manager is nil");
@@ -564,7 +563,8 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 }
 
 - (void)messageCenterLeftForeground {
-	[self.operationQueue addOperationWithBlock:^{
+#warning Listen for notification instead
+	[self.operationQueue dispatchAsync:^{
 	  _messageCenterInForeground = NO;
 
 	  [self updateMessageCheckingTimer];
@@ -578,6 +578,8 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 #pragma mark - Conversation manager delegate
 
 - (void)conversationManager:(ApptentiveConversationManager *)manager conversationDidChangeState:(ApptentiveConversation *)conversation {
+	ApptentiveAssertOperationQueue(self.operationQueue);
+
 	// Anonymous pending conversations will not yet have a token, so we can't finish starting up yet in that case.
 	if (conversation.state != ApptentiveConversationStateAnonymousPending &&
 		conversation.state != ApptentiveConversationStateLegacyPending) {
@@ -599,24 +601,24 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 #pragma mark - Authentication
 
 - (void)authenticationDidFailNotification:(NSNotification *)notification {
-	[self.operationQueue addOperationWithBlock:^{
-	  ApptentiveConversationState conversationState = self.conversationManager.activeConversation.state;
-	  if (conversationState == ApptentiveConversationStateLoggedIn && self.authenticationFailureCallback) {
-		  NSString *conversationIdentifier = ApptentiveDictionaryGetString(notification.userInfo, ApptentiveAuthenticationDidFailNotificationKeyConversationIdentifier);
+	ApptentiveAssertOperationQueue(self.operationQueue);
 
-		  if (![conversationIdentifier isEqualToString:self.conversationManager.activeConversation.identifier]) {
-			  ApptentiveLogDebug(@"Conversation identifier mismatch");
-			  return;
-		  }
+	ApptentiveConversationState conversationState = self.conversationManager.activeConversation.state;
+	if (conversationState == ApptentiveConversationStateLoggedIn && self.authenticationFailureCallback) {
+		NSString *conversationIdentifier = ApptentiveDictionaryGetString(notification.userInfo, ApptentiveAuthenticationDidFailNotificationKeyConversationIdentifier);
 
-		  NSString *errorType = ApptentiveDictionaryGetString(notification.userInfo, ApptentiveAuthenticationDidFailNotificationKeyErrorType);
-		  NSString *errorMessage = ApptentiveDictionaryGetString(notification.userInfo, ApptentiveAuthenticationDidFailNotificationKeyErrorMessage);
-		  ApptentiveAuthenticationFailureReason reason = parseAuthenticationFailureReason(errorType);
-		  self.authenticationFailureCallback(reason, errorMessage);
-	  } else if (conversationState == ApptentiveConversationStateAnonymousPending || conversationState == ApptentiveConversationStateLegacyPending) {
-		  ApptentiveAssertFail(@"Authentication failure when creating conversation. Please double-check your Apptentive App Key and Apptentive App Signature.");
-	  }
-	}];
+		if (![conversationIdentifier isEqualToString:self.conversationManager.activeConversation.identifier]) {
+			ApptentiveLogDebug(@"Conversation identifier mismatch");
+			return;
+		}
+
+		NSString *errorType = ApptentiveDictionaryGetString(notification.userInfo, ApptentiveAuthenticationDidFailNotificationKeyErrorType);
+		NSString *errorMessage = ApptentiveDictionaryGetString(notification.userInfo, ApptentiveAuthenticationDidFailNotificationKeyErrorMessage);
+		ApptentiveAuthenticationFailureReason reason = parseAuthenticationFailureReason(errorType);
+		self.authenticationFailureCallback(reason, errorMessage);
+	} else if (conversationState == ApptentiveConversationStateAnonymousPending || conversationState == ApptentiveConversationStateLegacyPending) {
+		ApptentiveAssertFail(@"Authentication failure when creating conversation. Please double-check your Apptentive App Key and Apptentive App Signature.");
+	}
 }
 
 #pragma mark - Paths

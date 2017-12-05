@@ -25,7 +25,7 @@ extern NSString *const ApptentiveConversationStateDidChangeNotificationKeyConver
 
 @property (strong, nonatomic) ApptentiveConversationMetadata *conversationMetadata;
 @property (readonly, strong, nonatomic) NSString *storagePath;
-@property (readonly, strong, nonatomic) NSOperationQueue *operationQueue;
+@property (readonly, strong, nonatomic) ApptentiveDispatchQueue *operationQueue;
 @property (readonly, strong, nonatomic) ApptentiveClient *client;
 @property (strong, nullable, nonatomic) ApptentiveRequestOperation *conversationOperation;
 @property (readonly, strong, nullable, nonatomic) ApptentiveConversation *activeConversation;

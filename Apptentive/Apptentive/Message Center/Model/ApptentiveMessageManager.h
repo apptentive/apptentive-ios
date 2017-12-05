@@ -13,7 +13,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class ApptentiveMessageStore, ApptentiveClient;
+@class ApptentiveMessageStore, ApptentiveClient, ApptentiveDispatchQueue;
 @protocol ApptentiveMessageManagerDelegate;
 
 
@@ -21,7 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (readonly, nonatomic) NSString *storagePath;
 @property (readonly, nonatomic) NSString *conversationIdentifier;
-@property (readonly, nonatomic) NSOperationQueue *operationQueue;
+@property (readonly, nonatomic) ApptentiveDispatchQueue *operationQueue;
 @property (readonly, nonatomic) ApptentiveConversation *conversation;
 
 @property (readonly, nonatomic) ApptentiveClient *client;
@@ -33,7 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (weak, nonatomic) id<ApptentiveMessageManagerDelegate> delegate;
 
-- (instancetype)initWithStoragePath:(NSString *)storagePath client:(ApptentiveClient *)client pollingInterval:(NSTimeInterval)pollingInterval conversation:(ApptentiveConversation *)conversation operationQueue:(NSOperationQueue *)operationQueue;
+- (instancetype)initWithStoragePath:(NSString *)storagePath client:(ApptentiveClient *)client pollingInterval:(NSTimeInterval)pollingInterval conversation:(ApptentiveConversation *)conversation operationQueue:(ApptentiveDispatchQueue *)operationQueue;
 
 - (void)checkForMessages;
 

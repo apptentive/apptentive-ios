@@ -27,6 +27,7 @@
 #import "ApptentiveUtilities.h"
 #import "ApptentiveVersion.h"
 #import "Apptentive_Private.h"
+#import "ApptentiveDispatchQueue.h"
 
 #import "ApptentiveLegacyEvent.h"
 #import "ApptentiveLegacyFileAttachment.h"
@@ -70,7 +71,7 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 
 @synthesize supportDirectoryPath = _supportDirectoryPath;
 
-- (instancetype)initWithApptentiveKey:(NSString *)apptentiveKey signature:(NSString *)signature baseURL:(NSURL *)baseURL storagePath:(NSString *)storagePath operationQueue:(NSOperationQueue *)operationQueue {
+- (instancetype)initWithApptentiveKey:(NSString *)apptentiveKey signature:(NSString *)signature baseURL:(NSURL *)baseURL storagePath:(NSString *)storagePath operationQueue:(ApptentiveDispatchQueue *)operationQueue {
 	self = [super init];
 
 	if (self) {
@@ -111,9 +112,10 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 
 		[self updateAndMonitorDeviceValues];
 
-		[_operationQueue addOperationWithBlock:^{
+		[_operationQueue dispatchAsync:^{
 		  [self createSupportDirectoryIfNeeded];
 
+		  // it's important to initialize CoreData stack on the main thread so we block the execution of our queue
 		  dispatch_sync(dispatch_get_main_queue(), ^{
 			[self setUpCoreData];
 		  });
@@ -148,7 +150,7 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 		  ApptentiveBackend *strongSelf = weakSelf;
 		  ApptentiveDevice.carrierName = carrier.carrierName;
 		  ApptentiveLogDebug(@"Carrier changed to %@. Updating device.", ApptentiveDevice.carrierName);
-		  [strongSelf.operationQueue addOperationWithBlock:^{
+		  [strongSelf.operationQueue dispatchAsync:^{
 			[strongSelf scheduleDeviceUpdate]; // Must happen on our queue
 		  }];
 		};
@@ -162,18 +164,21 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 												  ApptentiveBackend *strongSelf = weakSelf;
 												  ApptentiveDevice.contentSizeCategory = [UIApplication sharedApplication].preferredContentSizeCategory; // Must happen on main queue
 												  ApptentiveLogDebug(@"Content size category changed to %@. Updating device.", ApptentiveDevice.contentSizeCategory);
-												  [strongSelf.operationQueue addOperationWithBlock:^{
+												  [strongSelf.operationQueue dispatchAsync:^{
 													[strongSelf scheduleDeviceUpdate]; // Must happen on our queue
 												  }];
 												}];
 
 	[[NSNotificationCenter defaultCenter] addObserverForName:NSSystemTimeZoneDidChangeNotification
 													  object:nil
-													   queue:self.operationQueue
+													   queue:[NSOperationQueue mainQueue]
 												  usingBlock:^(NSNotification *_Nonnull note) {
 													ApptentiveLogDebug(@"System time zone changed to %@. Updating device.", NSTimeZone.systemTimeZone);
 													ApptentiveBackend *strongSelf = weakSelf;
-													[strongSelf scheduleDeviceUpdate];
+													  [strongSelf.operationQueue dispatchAsync:^{
+														  [strongSelf scheduleDeviceUpdate];
+													  }];
+													
 												  }];
 }
 
@@ -184,13 +189,17 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 }
 
 - (void)applicationWillTerminateNotification:(NSNotification *)notification {
-	[self addExitMetric];
-	[self shutDown];
+	[self.operationQueue dispatchAsync:^{
+		[self addExitMetric];
+		[self shutDown];
+	}];
 }
 
 - (void)applicationDidEnterBackgroundNotification:(NSNotification *)notification {
-	[self addExitMetric];
-	[self shutDown];
+	[self.operationQueue dispatchAsync:^{
+		[self addExitMetric];
+		[self shutDown];
+	}
 }
 
 - (void)applicationWillEnterForegroundNotification:(NSNotification *)notification {
@@ -199,7 +208,7 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 }
 
 - (void)apptentiveInteractionsDidUpdateNotification:(NSNotification *)notification {
-	[self.operationQueue addOperationWithBlock:^{
+	[self.operationQueue dispatchAsync:^{
 	  [self updateMessageCheckingTimer];
 	}];
 }
@@ -272,9 +281,7 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 	ApptentiveLogVerbose(@"Shutting down backend");
 	self.state = ApptentiveBackendStateShuttingDown;
 
-	[self.operationQueue addOperationWithBlock:^{
-	  [self.conversationManager pause];
-	}];
+    [self.conversationManager pause];
 
 	ApptentiveLogVerbose(@"Operations in background queue: %@", [self.operationQueue.operations valueForKeyPath:@"name"]);
 	ApptentiveLogVerbose(@"operations in payload network queue: %@", [self.payloadSender.networkQueue.operations valueForKeyPath:@"name"]);

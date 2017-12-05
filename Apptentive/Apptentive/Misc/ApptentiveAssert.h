@@ -64,7 +64,7 @@ extern void ApptentiveSetAssertionCallback(ApptentiveAssertionCallback callback)
  * @param ... An optional supplementary description of the failure. A literal NSString, optionally with string format specifiers. This parameter can be completely omitted.
  */
 #define ApptentiveAssertOperationQueue(expression) \
-	if (NSOperationQueue.currentQueue != (expression)) __ApptentiveAssertHelper(#expression, __FILE__, __LINE__, __PRETTY_FUNCTION__, @"Unexpected operation queue: %@", NSOperationQueue.currentQueue)
+	if (!(expression).isCurrent) __ApptentiveAssertHelper(#expression, __FILE__, __LINE__, __PRETTY_FUNCTION__, @"Unexpected operation queue: %@", ApptentiveGetCurrentThreadName())
 
 void __ApptentiveAssertHelper(const char *expression, const char *file, int line, const char *function, ...);
 

@@ -27,7 +27,7 @@ typedef NS_ENUM(NSInteger, ApptentiveBackendState) {
 	ApptentiveBackendStateShuttingDown
 };
 
-@class ApptentiveConversation, ApptentiveEngagementManifest, ApptentiveAppConfiguration, ApptentiveMessageCenterViewController, ApptentiveMessageManager, ApptentivePayloadSender;
+@class ApptentiveConversation, ApptentiveEngagementManifest, ApptentiveAppConfiguration, ApptentiveMessageCenterViewController, ApptentiveMessageManager, ApptentivePayloadSender, ApptentiveDispatchQueue;
 
 /**
  `ApptentiveBackend` contains the internals of the Apptentive SDK.
@@ -48,7 +48,7 @@ typedef NS_ENUM(NSInteger, ApptentiveBackendState) {
 
 @property (readonly, strong, nonatomic) ApptentiveConversationManager *conversationManager;
 @property (readonly, strong, nonatomic) ApptentiveAppConfiguration *configuration;
-@property (readonly, strong, nonatomic) NSOperationQueue *operationQueue;
+@property (readonly, strong, nonatomic) ApptentiveDispatchQueue *operationQueue;
 @property (readonly, strong, nonatomic) ApptentiveClient *client;
 @property (readonly, strong, nonatomic) ApptentivePayloadSender *payloadSender;
 
@@ -70,7 +70,7 @@ typedef NS_ENUM(NSInteger, ApptentiveBackendState) {
  @param storagePath The path (relative to the App's Application Support directory) to use for storage.
  @return The newly-initialized backend.
  */
-- (instancetype)initWithApptentiveKey:(NSString *)apptentiveKey signature:(NSString *)signature baseURL:(NSURL *)baseURL storagePath:(NSString *)storagePath operationQueue:(NSOperationQueue *)operationQueue;
+- (instancetype)initWithApptentiveKey:(NSString *)apptentiveKey signature:(NSString *)signature baseURL:(NSURL *)baseURL storagePath:(NSString *)storagePath operationQueue:(ApptentiveDispatchQueue *)operationQueue;
 
 @property (readonly, strong, nonatomic) NSString *apptentiveKey;
 @property (readonly, strong, nonatomic) NSString *apptentiveSignature;

@@ -18,6 +18,7 @@
 #import "ApptentiveInteractionInvocation.h"
 #import "ApptentiveSerialRequest.h"
 #import "Apptentive_Private.h"
+#import "ApptentiveDispatchQueue.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -92,6 +93,7 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 
 - (BOOL)engageCodePoint:(NSString *)codePoint fromInteraction:(nullable ApptentiveInteraction *)fromInteraction userInfo:(nullable NSDictionary *)userInfo customData:(nullable NSDictionary *)customData extendedData:(nullable NSArray *)extendedData fromViewController:(nullable UIViewController *)viewController {
 	ApptentiveLogInfo(@"Engage Apptentive event: %@", codePoint);
+	ApptentiveAssertOperationQueue(self.operationQueue);
 
 	// TODO: Do this on the background queue?
 	ApptentiveConversation *conversation = self.conversationManager.activeConversation;
@@ -101,15 +103,10 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 		return NO;
 	}
 
-	[self.operationQueue addOperationWithBlock:^{
-	  [self conversation:conversation addMetricWithName:codePoint fromInteraction:fromInteraction info:userInfo customData:customData extendedData:extendedData];
-	}];
+    [self conversation:conversation addMetricWithName:codePoint fromInteraction:fromInteraction info:userInfo customData:customData extendedData:extendedData];
 
-	// FIXME: Race condition when trying to modify and save conversation from different threads
-	@synchronized(conversation) {
-		[conversation warmCodePoint:codePoint];
-		[conversation engageCodePoint:codePoint];
-	}
+	[conversation warmCodePoint:codePoint];
+	[conversation engageCodePoint:codePoint];
 
 	BOOL didEngageInteraction = NO;
 

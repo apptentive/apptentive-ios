@@ -11,7 +11,7 @@
 #import <CoreData/CoreData.h>
 #import <Foundation/Foundation.h>
 
-@class ApptentiveConversationMetadata, ApptentiveConversationMetadataItem, ApptentiveConversation, ApptentiveClient, ApptentiveEngagementManifest, ApptentiveAppConfiguration, ApptentiveMessageManager;
+@class ApptentiveConversationMetadata, ApptentiveConversationMetadataItem, ApptentiveConversation, ApptentiveClient, ApptentiveEngagementManifest, ApptentiveAppConfiguration, ApptentiveMessageManager, ApptentiveDispatchQueue;
 
 @protocol ApptentiveConversationManagerDelegate;
 
@@ -37,7 +37,7 @@ extern NSString *const ApptentiveConversationStateDidChangeNotificationKeyConver
 
 @property (readonly, strong, nonatomic) NSManagedObjectContext *parentManagedObjectContext;
 
-- (instancetype)initWithStoragePath:(NSString *)storagePath operationQueue:(NSOperationQueue *)operationQueue client:(ApptentiveClient *)client parentManagedObjectContext:(NSManagedObjectContext *)parentManagedObjectContext;
+- (instancetype)initWithStoragePath:(NSString *)storagePath operationQueue:(ApptentiveDispatchQueue *)operationQueue client:(ApptentiveClient *)client parentManagedObjectContext:(NSManagedObjectContext *)parentManagedObjectContext;
 
 /**
  * Attempts to load an active conversation.

@@ -19,8 +19,9 @@ static ApptentiveDispatchQueue * _backgroundQueue;
 
 + (void)initialize {
 	if ([self class] == [ApptentiveDispatchQueue class]) {
-		_mainQueue = [[ApptentiveGCDDispatchQueue alloc] initWithQueue:dispatch_get_main_queue()];
-		_backgroundQueue = [[ApptentiveGCDDispatchQueue alloc] initWithQueue:dispatch_queue_create("Apptentive Background Queue", DISPATCH_QUEUE_CONCURRENT)];
+		_mainQueue = [[ApptentiveGCDDispatchQueue alloc] initWithQueue:NSOperationQueue.mainQueue];
+		
+		_backgroundQueue = [self createQueueWithName:@"Apptentive Background Queue" concurrencyType:ApptentiveDispatchQueueConcurrencyTypeConcurrent];
 	}
 }
 
@@ -34,13 +35,16 @@ static ApptentiveDispatchQueue * _backgroundQueue;
 
 + (instancetype)createQueueWithName:(NSString *)name concurrencyType:(ApptentiveDispatchQueueConcurrencyType)type {
 	if (type == ApptentiveDispatchQueueConcurrencyTypeSerial) {
-		const char *label = name.UTF8String;
-		return [[ApptentiveGCDDispatchQueue alloc] initWithQueue:dispatch_queue_create(label, DISPATCH_QUEUE_SERIAL)];
+		NSOperationQueue *queue = [NSOperationQueue new];
+		queue.name = name;
+		queue.maxConcurrentOperationCount = 1;
+		return [[ApptentiveGCDDispatchQueue alloc] initWithQueue:queue];
 	}
 	
 	if (type == ApptentiveDispatchQueueConcurrencyTypeConcurrent) {
-		const char *label = name.UTF8String;
-		return [[ApptentiveGCDDispatchQueue alloc] initWithQueue:dispatch_queue_create(label, DISPATCH_QUEUE_CONCURRENT)];
+		NSOperationQueue *queue = [NSOperationQueue new];
+		queue.name = name;
+		return [[ApptentiveGCDDispatchQueue alloc] initWithQueue:queue];
 	}
 	
 	ApptentiveAssertFail(@"Unexpected concurrency type for queue '%@': %ld", name, type);
@@ -48,10 +52,6 @@ static ApptentiveDispatchQueue * _backgroundQueue;
 }
 
 - (void)dispatchAsync:(void (^)(void))task {
-	[self dispatchAsync:task afterDelay:0.0];
-}
-
-- (void)dispatchAsync:(void (^)(void))task afterDelay:(NSTimeInterval)delay {
 	APPTENTIVE_ABSTRACT_METHOD_CALLED
 }
 

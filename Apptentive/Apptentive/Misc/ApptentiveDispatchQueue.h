@@ -34,8 +34,6 @@ typedef enum : NSUInteger {
 
 - (void)dispatchAsync:(void (^)(void))task;
 
-- (void)dispatchAsync:(void (^)(void))task afterDelay:(NSTimeInterval)delay;
-
 @end
 
 NS_ASSUME_NONNULL_END

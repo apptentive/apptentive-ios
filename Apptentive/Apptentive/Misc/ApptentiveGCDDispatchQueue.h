@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ApptentiveGCDDispatchQueue : ApptentiveDispatchQueue
 
-- (instancetype)initWithQueue:(dispatch_queue_t)queue;
+- (instancetype)initWithQueue:(NSOperationQueue *)queue;
 
 @end
 

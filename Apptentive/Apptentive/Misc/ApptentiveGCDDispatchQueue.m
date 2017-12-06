@@ -12,7 +12,6 @@
 
 @interface ApptentiveGCDDispatchQueue ()
 
-@property (nonatomic, readonly) NSOperationQueue *queue;
 @property (nonatomic, readonly, nullable) NSString *name;
 
 @end

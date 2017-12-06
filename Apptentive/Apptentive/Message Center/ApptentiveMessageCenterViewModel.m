@@ -20,6 +20,7 @@
 #import "ApptentiveUtilities.h"
 #import "Apptentive_Private.h"
 #import "ApptentiveDispatchQueue.h"
+#import "ApptentiveGCDDispatchQueue.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -58,7 +59,7 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 		_dateFormatter.dateStyle = NSDateFormatterLongStyle;
 		_dateFormatter.timeStyle = NSDateFormatterNoStyle;
 
-		_attachmentDownloadSession = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:self delegateQueue:self.messageManager.operationQueue];
+		_attachmentDownloadSession = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:self delegateQueue:((ApptentiveGCDDispatchQueue *)self.messageManager.operationQueue).queue];
 		_taskIndexPaths = [NSMutableDictionary dictionary];
 	}
 	return self;

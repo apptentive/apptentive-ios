@@ -12,6 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ApptentiveGCDDispatchQueue : ApptentiveDispatchQueue
 
+@property (nonatomic, readonly) NSOperationQueue *queue;
+
 - (instancetype)initWithQueue:(NSOperationQueue *)queue;
 
 @end

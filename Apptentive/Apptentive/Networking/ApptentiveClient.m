@@ -12,6 +12,7 @@
 #import "ApptentiveMessageGetRequest.h"
 
 #import "ApptentiveSerialRequest.h"
+#import "ApptentiveGCDDispatchQueue.h"
 
 #define APPTENTIVE_MIN_BACKOFF_DELAY 1.0
 #define APPTENTIVE_BACKOFF_MULTIPLIER 2.0
@@ -24,7 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 @synthesize URLSession = _URLSession;
 @synthesize backoffDelay = _backoffDelay;
 
-- (instancetype)initWithBaseURL:(NSURL *)baseURL apptentiveKey:(nonnull NSString *)apptentiveKey apptentiveSignature:(nonnull NSString *)apptentiveSignature delegateQueue:(NSOperationQueue *)delegateQueue {
+- (instancetype)initWithBaseURL:(NSURL *)baseURL apptentiveKey:(nonnull NSString *)apptentiveKey apptentiveSignature:(nonnull NSString *)apptentiveSignature delegateQueue:(ApptentiveDispatchQueue *)delegateQueue {
 	self = [super init];
 
 	if (self) {
@@ -44,7 +45,7 @@ NS_ASSUME_NONNULL_BEGIN
 		configuration.requestCachePolicy = NSURLRequestReloadIgnoringCacheData;
 		configuration.URLCache = nil;
 
-		_URLSession = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:delegateQueue];
+		_URLSession = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:((ApptentiveGCDDispatchQueue *) delegateQueue).queue];
 
 		[self resetBackoffDelay];
 	}

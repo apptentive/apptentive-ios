@@ -63,6 +63,7 @@ static NSString *const ApptentiveInteractionEventLabelCancel = @"cancel";
 }
 
 - (void)presentInteractionFromViewController:(nullable UIViewController *)viewController {
+	ApptentiveAssertMainQueue
 	self.presentingViewController = viewController;
 }
 

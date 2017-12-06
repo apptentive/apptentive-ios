@@ -989,6 +989,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 }
 
 - (nullable ApptentiveConversation *)activeConversation {
+	ApptentiveAssertOperationQueue(self.operationQueue);
 	return _activeConversation;
 }
 

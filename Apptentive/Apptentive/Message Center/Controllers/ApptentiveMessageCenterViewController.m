@@ -26,6 +26,7 @@
 #import "ApptentiveProgressNavigationBar.h"
 #import "ApptentiveUtilities.h"
 #import "Apptentive_Private.h"
+#import "ApptentiveBackend+Engagement.h"
 #import <MobileCoreServices/UTCoreTypes.h>
 
 #define HEADER_LABEL_HEIGHT 64.0
@@ -210,7 +211,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (void)configureView {
-	[self.viewModel.interaction engage:ATInteractionMessageCenterEventLabelLaunch fromViewController:self];
+	[Apptentive.shared.backend engage:ATInteractionMessageCenterEventLabelLaunch fromInteraction:self.viewModel.interaction fromViewController:self];
 
 	[self.navigationController.toolbar addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(compose:)]];
 
@@ -674,7 +675,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 	[self dismissViewControllerAnimated:YES
 							 completion:^{
-							   [self.viewModel.interaction engage:ATInteractionMessageCenterEventLabelClose fromViewController:presentingViewController];
+							   [Apptentive.shared.backend engage:ATInteractionMessageCenterEventLabelClose fromInteraction:self.viewModel.interaction fromViewController:presentingViewController];
 							 }];
 
 	self.interactionController = nil;
@@ -688,9 +689,10 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.attachmentController.active = NO;
 
 	if ([self shouldShowProfileViewBeforeComposing:NO]) {
-		[self.viewModel.interaction engage:ATInteractionMessageCenterEventLabelProfileOpen
-						fromViewController:self
-								  userInfo:@{ @"required": @(self.viewModel.profileRequired),
+		[Apptentive.shared.backend engage:ATInteractionMessageCenterEventLabelProfileOpen
+						  fromInteraction:self.viewModel.interaction
+					   fromViewController:self
+								 userInfo:@{ @"required": @(self.viewModel.profileRequired),
 									  @"trigger": @"automatic" }];
 
 		self.state = ATMessageCenterStateWhoCard;
@@ -753,9 +755,10 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	[self.profileView.saveButton setTitle:self.viewModel.profileEditSaveButtonTitle forState:UIControlStateNormal];
 	[self.profileView.skipButton setTitle:self.viewModel.profileEditSkipButtonTitle forState:UIControlStateNormal];
 
-	[self.viewModel.interaction engage:ATInteractionMessageCenterEventLabelProfileOpen
-					fromViewController:self
-							  userInfo:@{ @"required": @(self.viewModel.profileRequired),
+	[Apptentive.shared.backend engage:ATInteractionMessageCenterEventLabelProfileOpen
+					  fromInteraction:self.viewModel.interaction
+				   fromViewController:self
+							 userInfo:@{ @"required": @(self.viewModel.profileRequired),
 								  @"trigger": @"button" }];
 
 	self.state = ATMessageCenterStateWhoCard;
@@ -786,16 +789,17 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		[userInfo setObject:buttonLabel forKey:@"button_label"];
 	}
 
-	[self.viewModel.interaction engage:ATInteractionMessageCenterEventLabelProfileSubmit fromViewController:self userInfo:userInfo];
+	[Apptentive.shared.backend engage:ATInteractionMessageCenterEventLabelProfileSubmit fromInteraction:self.viewModel.interaction fromViewController:self userInfo:userInfo];
 
 	if (self.profileView.nameField.text != self.viewModel.personName) {
-		[self.viewModel.interaction engage:ATInteractionMessageCenterEventLabelProfileName fromViewController:self userInfo:@{ @"length": @(self.profileView.nameField.text.length) }];
+		[Apptentive.shared.backend engage:ATInteractionMessageCenterEventLabelProfileName fromInteraction:self.viewModel.interaction fromViewController:self userInfo:@{ @"length": @(self.profileView.nameField.text.length) }];
 	}
 
 	if (self.profileView.emailField.text != self.viewModel.personEmailAddress) {
-		[self.viewModel.interaction engage:ATInteractionMessageCenterEventLabelProfileEmail
-						fromViewController:self
-								  userInfo:@{ @"length": @(self.profileView.emailField.text.length),
+		[Apptentive.shared.backend engage:ATInteractionMessageCenterEventLabelProfileEmail
+						  fromInteraction:self.viewModel.interaction
+					   fromViewController:self
+								 userInfo:@{ @"length": @(self.profileView.emailField.text.length),
 									  @"valid": @([ApptentiveUtilities emailAddressIsValid:self.profileView.emailField.text]) }];
 	}
 
@@ -823,7 +827,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 			@"method": @"button",
 			@"button_label": ((UIButton *)sender).titleLabel.text };
 	}
-	[self.viewModel.interaction engage:ATInteractionMessageCenterEventLabelProfileClose fromViewController:sender userInfo:userInfo];
+	[Apptentive.shared.backend engage:ATInteractionMessageCenterEventLabelProfileClose fromInteraction:self.viewModel.interaction fromViewController:sender userInfo:userInfo];
 
 	self.viewModel.didSkipProfile = YES;
 
@@ -915,9 +919,10 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 - (void)updateState {
 	if ([self shouldShowProfileViewBeforeComposing:YES]) {
-		[self.viewModel.interaction engage:ATInteractionMessageCenterEventLabelProfileOpen
-						fromViewController:self
-								  userInfo:@{ @"required": @(self.viewModel.profileRequired),
+		[Apptentive.shared.backend engage:ATInteractionMessageCenterEventLabelProfileOpen
+						  fromInteraction:self.viewModel.interaction
+					   fromViewController:self
+								 userInfo:@{ @"required": @(self.viewModel.profileRequired),
 									  @"trigger": @"automatic" }];
 
 		self.state = ATMessageCenterStateWhoCard;
@@ -995,7 +1000,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 				self.statusView.mode = ATMessageCenterStatusModeEmpty;
 				self.statusView.statusLabel.text = self.viewModel.statusBody;
 
-				[self.viewModel.interaction engage:ATInteractionMessageCenterEventLabelStatus fromViewController:self];
+				[Apptentive.shared.backend engage:ATInteractionMessageCenterEventLabelStatus fromInteraction:self.viewModel.interaction fromViewController:self];
 				break;
 
 			case ATMessageCenterStateNetworkError:
@@ -1003,7 +1008,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 				self.statusView.mode = ATMessageCenterStatusModeNetworkError;
 				self.statusView.statusLabel.text = self.viewModel.networkErrorBody;
 
-				[self.viewModel.interaction engage:ATInteractionMessageCenterEventLabelNetworkError fromViewController:self];
+				[Apptentive.shared.backend engage:ATInteractionMessageCenterEventLabelNetworkError fromInteraction:self.viewModel.interaction fromViewController:self];
 
 				[self scrollToFooterView:nil];
 				break;
@@ -1013,7 +1018,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 				self.statusView.mode = ATMessageCenterStatusModeHTTPError;
 				self.statusView.statusLabel.text = self.viewModel.HTTPErrorBody;
 
-				[self.viewModel.interaction engage:ATInteractionMessageCenterEventLabelHTTPError fromViewController:self];
+				[Apptentive.shared.backend engage:ATInteractionMessageCenterEventLabelHTTPError fromInteraction:self.viewModel.interaction fromViewController:self];
 
 				[self scrollToFooterView:nil];
 				break;
@@ -1034,11 +1039,11 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 			newFooter.hidden = NO;
 
 			if (oldFooter == self.messageInputView) {
-				[self.viewModel.interaction engage:ATInteractionMessageCenterEventLabelComposeClose fromViewController:self userInfo:self.bodyLengthDictionary];
+				[Apptentive.shared.backend engage:ATInteractionMessageCenterEventLabelComposeClose fromInteraction:self.viewModel.interaction fromViewController:self userInfo:self.bodyLengthDictionary];
 			}
 
 			if (newFooter == self.messageInputView) {
-				[self.viewModel.interaction engage:ATInteractionMessageCenterEventLabelComposeOpen fromViewController:self];
+				[Apptentive.shared.backend engage:ATInteractionMessageCenterEventLabelComposeOpen fromInteraction:self.viewModel.interaction fromViewController:self];
 			}
 
 			self.activeFooterView = newFooter;
@@ -1183,13 +1188,13 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 - (void)keyboardDidShow:(NSNotification *)notification {
 	if (!self.attachmentController.active) {
-		[self.viewModel.interaction engage:ATInteractionMessageCenterEventLabelKeyboardOpen fromViewController:self userInfo:self.bodyLengthDictionary];
+		[Apptentive.shared.backend engage:ATInteractionMessageCenterEventLabelKeyboardOpen fromInteraction:self.viewModel.interaction fromViewController:self userInfo:self.bodyLengthDictionary];
 	}
 }
 
 - (void)keyboardDidHide:(NSNotification *)notification {
 	if (!self.attachmentController.active) {
-		[self.viewModel.interaction engage:ATInteractionMessageCenterEventLabelKeyboardClose fromViewController:self userInfo:self.bodyLengthDictionary];
+		[Apptentive.shared.backend engage:ATInteractionMessageCenterEventLabelKeyboardClose fromInteraction:self.viewModel.interaction fromViewController:self userInfo:self.bodyLengthDictionary];
 	}
 }
 
@@ -1201,7 +1206,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	BOOL greetingOnScreen = self.tableView.contentOffset.y < self.greetingView.bounds.size.height;
 	if (self.greetingView.isOnScreen != greetingOnScreen) {
 		if (greetingOnScreen) {
-			[self.viewModel.interaction engage:ATInteractionMessageCenterEventLabelGreetingMessage fromViewController:self];
+			[Apptentive.shared.backend engage:ATInteractionMessageCenterEventLabelGreetingMessage fromInteraction:self.viewModel.interaction fromViewController:self];
 		}
 		self.greetingView.isOnScreen = greetingOnScreen;
 	}

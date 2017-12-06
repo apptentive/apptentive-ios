@@ -13,6 +13,7 @@
 #import "ApptentiveInteraction.h"
 #import "ApptentiveUtilities.h"
 #import "Apptentive_Private.h"
+#import "ApptentiveBackend+Engagement.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -107,7 +108,7 @@ NSString *const ATInteractionUpgradeMessageEventLabelClose = @"close";
 - (void)dismissAnimated:(BOOL)animated completion:(nullable void (^)(void))completion withAction:(ATInteractionUpgradeMessageAction)action {
 	[self.navigationController dismissViewControllerAnimated:animated completion:completion];
 
-	[self.upgradeMessageInteraction engage:ATInteractionUpgradeMessageEventLabelClose fromViewController:self.presentingViewController];
+	[Apptentive.shared.backend engage:ATInteractionUpgradeMessageEventLabelClose fromInteraction:self.upgradeMessageInteraction fromViewController:self.presentingViewController];
 }
 
 - (void)traitCollectionDidChange:(nullable UITraitCollection *)previousTraitCollection {

@@ -495,7 +495,7 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 
 	__block BOOL didShowMessageCenter;
 	
-	[[ApptentiveInteraction apptentiveAppInteraction] engage:ApptentiveEngagementMessageCenterEvent fromViewController:viewController userInfo:nil customData:nil extendedData:nil completion:^(BOOL engaged) {
+	[self engage:ApptentiveEngagementMessageCenterEvent fromInteraction:[ApptentiveInteraction apptentiveAppInteraction] fromViewController:viewController userInfo:nil customData:nil extendedData:nil completion:^(BOOL engaged) {
 		didShowMessageCenter = engaged;
 	}];
 

@@ -55,7 +55,7 @@ NSString *const ATInteractionSurveyEventLabelLaunch = @"launch";
 		[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveSurveyShownNotification object:@{ApptentiveSurveyIDKey: self.interaction.identifier}];
 	}
 
-	[self.interaction engage:ATInteractionSurveyEventLabelLaunch fromViewController:viewController];
+	[Apptentive.shared.backend engage:ATInteractionSurveyEventLabelLaunch fromInteraction:self.interaction fromViewController:viewController];
 }
 
 @end

@@ -71,7 +71,7 @@ NSString *const ATInteractionAppStoreRatingEventLabelUnableToRate = @"unable_to_
 }
 
 - (void)showUnableToOpenAppStoreDialog {
-	[self.interaction engage:ATInteractionAppStoreRatingEventLabelUnableToRate fromViewController:self.presentingViewController];
+	[Apptentive.shared.backend engage:ATInteractionAppStoreRatingEventLabelUnableToRate fromInteraction:self.interaction fromViewController:self.presentingViewController];
 
 	NSString *title;
 	NSString *message;
@@ -128,7 +128,7 @@ NSString *const ATInteractionAppStoreRatingEventLabelUnableToRate = @"unable_to_
 		}
 
 		if (attemptToOpenURL) {
-			[self.interaction engage:ATInteractionAppStoreRatingEventLabelOpenAppStoreURL fromViewController:self.presentingViewController];
+			[Apptentive.shared.backend engage:ATInteractionAppStoreRatingEventLabelOpenAppStoreURL fromInteraction:self.interaction fromViewController:self.presentingViewController];
 
 			BOOL openedURL = [[UIApplication sharedApplication] openURL:url];
 			if (!openedURL) {
@@ -155,7 +155,7 @@ NSString *const ATInteractionAppStoreRatingEventLabelUnableToRate = @"unable_to_
 							ApptentiveLogError(@"Error loading product view: %@", error);
 							[self showUnableToOpenAppStoreDialog];
 						} else {
-							[self.interaction engage:ATInteractionAppStoreRatingEventLabelOpenStoreKit fromViewController:self.presentingViewController];
+							[Apptentive.shared.backend engage:ATInteractionAppStoreRatingEventLabelOpenStoreKit fromInteraction:self.interaction fromViewController:self.presentingViewController];
 
 							UIViewController *presentingVC = self.presentingViewController;
 
@@ -177,7 +177,7 @@ NSString *const ATInteractionAppStoreRatingEventLabelUnableToRate = @"unable_to_
 }
 
 - (void)openMacAppStore {
-	[self.interaction engage:ATInteractionAppStoreRatingEventLabelOpenMacAppStore fromViewController:self.presentingViewController];
+	[Apptentive.shared.backend engage:ATInteractionAppStoreRatingEventLabelOpenMacAppStore fromInteraction:self.interaction fromViewController:self.presentingViewController];
 }
 
 @end

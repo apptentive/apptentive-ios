@@ -21,6 +21,7 @@
 #import "Apptentive_Private.h"
 #import "ApptentiveDispatchQueue.h"
 #import "ApptentiveGCDDispatchQueue.h"
+#import "ApptentiveBackend+Engagement.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -358,7 +359,7 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 		[userInfo setObject:@"CompoundMessage" forKey:@"message_type"];
 
 		[self.messageManager.operationQueue dispatchAsync:^{
-			[self.interaction engage:ATInteractionMessageCenterEventLabelRead fromViewController:nil userInfo:userInfo];
+			[Apptentive.shared.backend engage:ATInteractionMessageCenterEventLabelRead fromInteraction:self.interaction fromViewController:nil userInfo:userInfo];
 		}];
 	}
 

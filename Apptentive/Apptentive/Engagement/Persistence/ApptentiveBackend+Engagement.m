@@ -84,7 +84,7 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 }
 
 - (void)engageApptentiveAppEvent:(NSString *)event {
-	[[ApptentiveInteraction apptentiveAppInteraction] engage:event fromViewController:nil];
+	[self engage:event fromInteraction:[ApptentiveInteraction apptentiveAppInteraction] fromViewController:nil];
 }
 
 - (void)engageLocalEvent:(NSString *)event userInfo:(nullable NSDictionary *)userInfo customData:(nullable NSDictionary *)customData extendedData:(nullable NSArray *)extendedData fromViewController:(nullable UIViewController *)viewController {
@@ -92,7 +92,7 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 }
 
 - (void)engageLocalEvent:(NSString *)event userInfo:(nullable NSDictionary *)userInfo customData:(nullable NSDictionary *)customData extendedData:(nullable NSArray *)extendedData fromViewController:(nullable UIViewController *)viewController completion:(void (^_Nullable)(BOOL engaged))completion {
-	[[ApptentiveInteraction localAppInteraction] engage:event fromViewController:viewController userInfo:userInfo customData:customData extendedData:extendedData completion:completion];
+	[self engage:event fromInteraction:[ApptentiveInteraction localAppInteraction] fromViewController:viewController userInfo:userInfo customData:customData extendedData:extendedData completion:completion];
 }
 
 - (void)engageCodePoint:(NSString *)codePoint fromInteraction:(nullable ApptentiveInteraction *)fromInteraction userInfo:(nullable NSDictionary *)userInfo customData:(nullable NSDictionary *)customData extendedData:(nullable NSArray *)extendedData fromViewController:(nullable UIViewController *)viewController {
@@ -146,6 +146,26 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 - (void)codePointWasSeen:(NSString *)codePoint {
 	ApptentiveAssertOperationQueue(self.operationQueue);
 	[self.conversationManager.activeConversation warmCodePoint:codePoint];
+}
+
+- (void)engage:(NSString *)event fromInteraction:(ApptentiveInteraction *)interaction fromViewController:(nullable UIViewController *)viewController {
+	[self engage:event fromInteraction:interaction fromViewController:viewController userInfo:nil customData:nil extendedData:nil completion:nil];
+}
+
+- (void)engage:(NSString *)event fromInteraction:(ApptentiveInteraction *)interaction fromViewController:(nullable UIViewController *)viewController userInfo:(nullable NSDictionary *)userInfo {
+	[self engage:event fromInteraction:interaction fromViewController:viewController userInfo:userInfo customData:nil extendedData:nil completion:nil];
+}
+
+- (void)engage:(NSString *)event fromInteraction:(ApptentiveInteraction *)interaction fromViewController:(nullable UIViewController *)viewController userInfo:(nullable NSDictionary *)userInfo customData:(nullable NSDictionary *)customData extendedData:(nullable NSArray *)extendedData {
+	[self engage:event fromInteraction:interaction fromViewController:viewController userInfo:userInfo customData:customData extendedData:extendedData completion:nil];
+}
+
+- (void)engage:(NSString *)event fromInteraction:(nonnull ApptentiveInteraction *)interaction fromViewController:(nullable UIViewController *)viewController userInfo:(nullable NSDictionary *)userInfo customData:(nullable NSDictionary *)customData extendedData:(nullable NSArray *)extendedData completion:(void (^ _Nullable)(BOOL))completion {
+	ApptentiveAssertNotNil(interaction, @"Attempted to engage event '%@' for nil interaction", event);
+	
+	NSString *codePoint = [interaction codePointForEvent:event];
+	
+	[self engageCodePoint:codePoint fromInteraction:interaction userInfo:userInfo customData:customData extendedData:extendedData fromViewController:viewController completion:completion];
 }
 
 - (void)interactionWasSeen:(NSString *)interactionID {

@@ -102,24 +102,6 @@ NS_ASSUME_NONNULL_BEGIN
 	return [ApptentiveBackend codePointForVendor:self.vendor interactionType:self.type event:event];
 }
 
-- (void)engage:(NSString *)event fromViewController:(nullable UIViewController *)viewController {
-	[self engage:event fromViewController:viewController userInfo:nil];
-}
-
-- (void)engage:(NSString *)event fromViewController:(nullable UIViewController *)viewController userInfo:(nullable NSDictionary *)userInfo {
-	[self engage:event fromViewController:viewController userInfo:userInfo customData:nil extendedData:nil];
-}
-
-- (void)engage:(NSString *)event fromViewController:(nullable UIViewController *)viewController userInfo:(nullable NSDictionary *)userInfo customData:(nullable NSDictionary *)customData extendedData:(nullable NSArray *)extendedData {
-	[self engage:event fromViewController:viewController userInfo:userInfo customData:customData extendedData:extendedData completion:nil];
-}
-
-- (void)engage:(NSString *)event fromViewController:(nullable UIViewController *)viewController userInfo:(nullable NSDictionary *)userInfo customData:(nullable NSDictionary *)customData extendedData:(nullable NSArray *)extendedData completion:(void (^ _Nullable)(BOOL))completion {
-	NSString *codePoint = [self codePointForEvent:event];
-
-	[Apptentive.shared.backend engageCodePoint:codePoint fromInteraction:self userInfo:userInfo customData:customData extendedData:extendedData fromViewController:viewController];
-}
-
 @end
 
 NS_ASSUME_NONNULL_END

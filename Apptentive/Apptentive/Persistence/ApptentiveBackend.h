@@ -62,6 +62,9 @@ typedef NS_ENUM(NSInteger, ApptentiveBackendState) {
 @property (readonly, nonatomic) BOOL networkAvailable;
 @property (assign, nonatomic) NSUInteger unreadMessageCount;
 
+@property (strong, nonatomic) NSString *personName;
+@property (strong, nonatomic) NSString *personEmailAddress;
+
 /**
  Initializes a new backend object.
 

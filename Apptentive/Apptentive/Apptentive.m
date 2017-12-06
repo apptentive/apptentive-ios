@@ -181,25 +181,19 @@ static Apptentive *_sharedInstance;
 }
 
 - (nullable NSString *)personName {
-	return self.backend.conversationManager.activeConversation.person.name;
+	return self.backend.personName;
 }
 
 - (void)setPersonName:(nullable NSString *)personName {
-	[self.operationQueue dispatchAsync:^{
-	  self.backend.conversationManager.activeConversation.person.name = personName;
-	  [self.backend schedulePersonUpdate];
-	}];
+	self.backend.personName = personName;
 }
 
 - (nullable NSString *)personEmailAddress {
-	return self.backend.conversationManager.activeConversation.person.emailAddress;
+	return self.backend.personEmailAddress;
 }
 
 - (void)setPersonEmailAddress:(nullable NSString *)personEmailAddress {
-	[self.operationQueue dispatchAsync:^{
-	  self.backend.conversationManager.activeConversation.person.emailAddress = personEmailAddress;
-	  [self.backend schedulePersonUpdate];
-	}];
+	self.backend.personEmailAddress = personEmailAddress;
 }
 
 - (void)sendAttachmentText:(NSString *)text {

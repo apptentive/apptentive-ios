@@ -594,10 +594,33 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 	}];
 }
 
+#pragma mark - Person name/email
+
+- (void)setPersonName:(NSString *)personName {
+	_personName = personName;
+
+	[self.operationQueue dispatchAsync:^{
+		self.conversationManager.activeConversation.person.name = personName;
+		[self schedulePersonUpdate];
+	}];
+}
+
+- (void)setPersonEmailAddress:(NSString *)personEmailAddress {
+	_personEmailAddress = personEmailAddress;
+
+	[self.operationQueue dispatchAsync:^{
+		self.conversationManager.activeConversation.person.emailAddress = personEmailAddress;
+		[self schedulePersonUpdate];
+	}];
+}
+
 #pragma mark - Conversation manager delegate
 
 - (void)conversationManager:(ApptentiveConversationManager *)manager conversationDidChangeState:(ApptentiveConversation *)conversation {
 	ApptentiveAssertOperationQueue(self.operationQueue);
+
+	_personName = conversation.person.name;
+	_personEmailAddress = conversation.person.emailAddress;
 
 	// Anonymous pending conversations will not yet have a token, so we can't finish starting up yet in that case.
 	if (conversation.state != ApptentiveConversationStateAnonymousPending &&

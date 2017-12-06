@@ -33,6 +33,7 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 @property (strong, nonatomic) NSDictionary *currentCustomData;
 @property (readonly, nonatomic) NSMutableDictionary *messageIdentifierIndex;
 @property (readonly, nonatomic) ApptentiveMessageStore *messageStore;
+@property (readonly, nonatomic) NSInteger unreadCount;
 
 @property (readonly, nonatomic) NSString *messageStorePath;
 @property (nullable, copy, nonatomic) void (^backgroundFetchBlock)(UIBackgroundFetchResult);
@@ -411,6 +412,7 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 		_unreadCount = unreadCount;
 
 		dispatch_async(dispatch_get_main_queue(), ^{
+		  Apptentive.shared.backend.unreadMessageCount = unreadCount;
 		  [[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveMessageCenterUnreadCountChangedNotification object:self userInfo:@{ @"count": @(unreadCount) }];
 		});
 	}

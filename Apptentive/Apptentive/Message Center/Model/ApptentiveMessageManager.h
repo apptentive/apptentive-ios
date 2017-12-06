@@ -28,7 +28,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (assign, nonatomic) NSTimeInterval pollingInterval;
 @property (copy, nonatomic) NSString *localUserIdentifier;
 
-@property (readonly, nonatomic) NSInteger unreadCount;
 @property (readonly, nonatomic) NSArray<ApptentiveMessage *> *messages;
 
 @property (weak, nonatomic) id<ApptentiveMessageManagerDelegate> delegate;

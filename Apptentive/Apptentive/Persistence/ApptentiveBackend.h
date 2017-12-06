@@ -60,6 +60,7 @@ typedef NS_ENUM(NSInteger, ApptentiveBackendState) {
 @property (copy, nonatomic) ApptentiveAuthenticationFailureCallback authenticationFailureCallback;
 
 @property (readonly, nonatomic) BOOL networkAvailable;
+@property (assign, nonatomic) NSUInteger unreadMessageCount;
 
 /**
  Initializes a new backend object.

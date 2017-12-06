@@ -554,11 +554,6 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 
 #pragma mark Message Polling
 
-- (NSUInteger)unreadMessageCount {
-	ApptentiveAssertOperationQueue(self.operationQueue);
-	return self.messageManager.unreadCount;
-}
-
 - (void)updateMessageCheckingTimer {
 	ApptentiveAssertOperationQueue(self.operationQueue);
 	if (self.messageManager != nil) {

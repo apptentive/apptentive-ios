@@ -482,21 +482,30 @@ static Apptentive *_sharedInstance;
 	return [self.backend canShowInteractionForLocalEvent:event];
 }
 
-- (BOOL)engage:(NSString *)event fromViewController:(nullable UIViewController *)viewController {
-	return [self engage:event withCustomData:nil fromViewController:viewController];
+- (void)engage:(NSString *)event fromViewController:(nullable UIViewController *)viewController {
+	[self engage:event withCustomData:nil fromViewController:viewController completion:nil];
 }
 
-- (BOOL)engage:(NSString *)event withCustomData:(nullable NSDictionary *)customData fromViewController:(nullable UIViewController *)viewController {
-	return [self engage:event withCustomData:customData withExtendedData:nil fromViewController:viewController];
+- (void)engage:(NSString *)event fromViewController:(UIViewController *_Nullable)viewController completion:(void (^_Nullable)(BOOL engaged))completion {
+	[self engage:event withCustomData:nil fromViewController:viewController completion:completion];
 }
 
-- (BOOL)engage:(NSString *)event withCustomData:(nullable NSDictionary *)customData withExtendedData:(nullable NSArray *)extendedData fromViewController:(nullable UIViewController *)viewController {
-	@try {
-		return [self.backend engageLocalEvent:event userInfo:nil customData:customData extendedData:extendedData fromViewController:viewController];
-	} @catch (NSException *e) {
-		ApptentiveLogCrit(@"Exception while engaging event: %@", event);
-		return NO;
-	}
+- (void)engage:(NSString *)event withCustomData:(nullable NSDictionary *)customData fromViewController:(nullable UIViewController *)viewController {
+	[self engage:event withCustomData:customData withExtendedData:nil fromViewController:viewController completion:nil];
+}
+
+- (void)engage:(NSString *)event withCustomData:(nullable NSDictionary *)customData fromViewController:(UIViewController *_Nullable)viewController completion:(void (^_Nullable)(BOOL engaged))completion {
+	[self engage:event withCustomData:customData withExtendedData:nil fromViewController:viewController completion:completion];
+}
+
+- (void)engage:(NSString *)event withCustomData:(nullable NSDictionary *)customData withExtendedData:(nullable NSArray *)extendedData fromViewController:(nullable UIViewController *)viewController {
+	[self engage:event withCustomData:customData withExtendedData:extendedData fromViewController:viewController completion:nil];
+}
+
+- (void)engage:(NSString *)event withCustomData:(nullable NSDictionary *)customData withExtendedData:(nullable NSArray<NSDictionary *> *)extendedData fromViewController:(UIViewController *_Nullable)viewController completion:(void (^_Nullable)(BOOL engaged))completion {
+	[self.operationQueue dispatchAsync:^{
+		[self.backend engageLocalEvent:event userInfo:nil customData:customData extendedData:extendedData fromViewController:viewController];
+	}];
 }
 
 + (NSDictionary *)extendedDataDate:(NSDate *)date {
@@ -600,18 +609,26 @@ static Apptentive *_sharedInstance;
 	return [self.backend canShowInteractionForCodePoint:messageCenterCodePoint];
 }
 
-- (BOOL)presentMessageCenterFromViewController:(nullable UIViewController *)viewController {
-	return [self.backend presentMessageCenterFromViewController:viewController];
+- (void)presentMessageCenterFromViewController:(nullable UIViewController *)viewController {
+	[self presentMessageCenterFromViewController:viewController completion:nil];
 }
 
-- (BOOL)presentMessageCenterFromViewController:(nullable UIViewController *)viewController withCustomData:(nullable NSDictionary *)customData {
+- (void)presentMessageCenterFromViewController:(nullable UIViewController *)viewController completion:(void (^_Nullable)(BOOL presented))completion {
+	[self.backend presentMessageCenterFromViewController:viewController completion:completion];
+}
+
+- (void)presentMessageCenterFromViewController:(nullable UIViewController *)viewController withCustomData:(nullable NSDictionary *)customData {
+	[self presentMessageCenterFromViewController:viewController withCustomData:customData completion:nil];
+}
+
+- (void)presentMessageCenterFromViewController:(nullable UIViewController *)viewController withCustomData:(nullable NSDictionary *)customData completion:(void (^ _Nullable)(BOOL))completion {
 	NSMutableDictionary *allowedCustomMessageData = [NSMutableDictionary dictionary];
 
 	for (NSString *key in [customData allKeys]) {
 		[self addCustomData:[customData objectForKey:key] withKey:key toCustomDataDictionary:allowedCustomMessageData];
 	}
 
-	return [self.backend presentMessageCenterFromViewController:viewController withCustomData:allowedCustomMessageData];
+	[self.backend presentMessageCenterFromViewController:viewController withCustomData:allowedCustomMessageData completion:completion];
 }
 
 - (void)dismissMessageCenterAnimated:(BOOL)animated completion:(nullable void (^)(void))completion {

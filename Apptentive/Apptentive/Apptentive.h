@@ -251,7 +251,9 @@ typedef NS_ENUM(NSUInteger, ApptentiveLogLevel) {
 
  @return `YES` if an interaction was triggered by the event, `NO` otherwise.
  */
-- (BOOL)engage:(NSString *)event fromViewController:(UIViewController *_Nullable)viewController NS_SWIFT_NAME(engage(event:from:));
+- (void)engage:(NSString *)event fromViewController:(UIViewController *_Nullable)viewController NS_SWIFT_NAME(engage(event:from:));
+
+- (void)engage:(NSString *)event fromViewController:(UIViewController *_Nullable)viewController completion:(void (^_Nullable)(BOOL engaged))completion NS_SWIFT_NAME(engage(event:from:completion:));
 
 /**
  Shows interaction UI, if applicable, related to a given event, and attaches the specified custom data to the event.
@@ -262,7 +264,9 @@ typedef NS_ENUM(NSUInteger, ApptentiveLogLevel) {
 
  @return `YES` if an interaction was triggered by the event, `NO` otherwise.
  */
-- (BOOL)engage:(NSString *)event withCustomData:(nullable NSDictionary *)customData fromViewController:(UIViewController *_Nullable)viewController NS_SWIFT_NAME(engage(event:withCustomData:from:));
+- (void)engage:(NSString *)event withCustomData:(nullable NSDictionary *)customData fromViewController:(UIViewController *_Nullable)viewController NS_SWIFT_NAME(engage(event:withCustomData:from:));
+
+- (void)engage:(NSString *)event withCustomData:(nullable NSDictionary *)customData fromViewController:(UIViewController *_Nullable)viewController completion:(void (^_Nullable)(BOOL engaged))completion NS_SWIFT_NAME(engage(event:withCustomData:from:completion:));
 
 /**
  Shows interaction UI, if applicable, related to a given event. Attaches the specified custom data to the event along with the specified extended data.
@@ -274,7 +278,9 @@ typedef NS_ENUM(NSUInteger, ApptentiveLogLevel) {
 
  @return `YES` if an interaction was triggered by the event, `NO` otherwise.
  */
-- (BOOL)engage:(NSString *)event withCustomData:(nullable NSDictionary *)customData withExtendedData:(nullable NSArray<NSDictionary *> *)extendedData fromViewController:(UIViewController *_Nullable)viewController NS_SWIFT_NAME(engage(event:withCustomData:withExtendedData:from:));
+- (void)engage:(NSString *)event withCustomData:(nullable NSDictionary *)customData withExtendedData:(nullable NSArray<NSDictionary *> *)extendedData fromViewController:(UIViewController *_Nullable)viewController NS_SWIFT_NAME(engage(event:withCustomData:withExtendedData:from:));
+
+- (void)engage:(NSString *)event withCustomData:(nullable NSDictionary *)customData withExtendedData:(nullable NSArray<NSDictionary *> *)extendedData fromViewController:(UIViewController *_Nullable)viewController completion:(void (^_Nullable)(BOOL engaged))completion NS_SWIFT_NAME(engage(event:withCustomData:withExtendedData:from:completion:));
 
 /**
  Returns a Boolean value indicating whether the given event will cause an Interaction to be shown.
@@ -376,7 +382,8 @@ typedef NS_ENUM(NSUInteger, ApptentiveLogLevel) {
 
  @return `YES` if Message Center was presented, `NO` otherwise.
  */
-- (BOOL)presentMessageCenterFromViewController:(nullable UIViewController *)viewController;
+- (void)presentMessageCenterFromViewController:(nullable UIViewController *)viewController;
+- (void)presentMessageCenterFromViewController:(nullable UIViewController *)viewController completion:(void (^_Nullable)(BOOL presented))completion;
 
 /**
  Presents Message Center from a given view controller with custom data.
@@ -389,7 +396,9 @@ typedef NS_ENUM(NSUInteger, ApptentiveLogLevel) {
 
  @return `YES` if Message Center was presented, `NO` otherwise.
  */
-- (BOOL)presentMessageCenterFromViewController:(nullable UIViewController *)viewController withCustomData:(nullable NSDictionary *)customData;
+- (void)presentMessageCenterFromViewController:(nullable UIViewController *)viewController withCustomData:(nullable NSDictionary *)customData;
+
+- (void)presentMessageCenterFromViewController:(nullable UIViewController *)viewController withCustomData:(nullable NSDictionary *)customData completion:(void (^_Nullable)(BOOL presented))completion;
 
 /**
  Dismisses Message Center.

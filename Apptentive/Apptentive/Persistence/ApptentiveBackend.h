@@ -92,8 +92,8 @@ typedef NS_ENUM(NSInteger, ApptentiveBackendState) {
  @param viewController The view controller from which to present message center
  @return Whether message center was displayed
  */
-- (BOOL)presentMessageCenterFromViewController:(nullable UIViewController *)viewController;
-- (BOOL)presentMessageCenterFromViewController:(nullable UIViewController *)viewController withCustomData:(nullable NSDictionary *)customData;
+- (void)presentMessageCenterFromViewController:(nullable UIViewController *)viewController completion:(void (^_Nullable)(BOOL presented))completion;
+- (void)presentMessageCenterFromViewController:(nullable UIViewController *)viewController withCustomData:(nullable NSDictionary *)customData completion:(void (^_Nullable)(BOOL presented))completion;
 
 - (void)dismissMessageCenterAnimated:(BOOL)animated completion:(void (^)(void))completion;
 

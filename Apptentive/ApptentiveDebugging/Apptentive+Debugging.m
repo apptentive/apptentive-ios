@@ -24,6 +24,7 @@
 #import "ApptentiveSafeCollections.h"
 
 #import "ApptentiveJWT.h"
+#import "ApptentiveDispatchQueue.h"
 #import <objc/runtime.h>
 
 NSNotificationName _Nonnull const ApptentiveConversationChangedNotification = @"ApptentiveConversationChangedNotification";

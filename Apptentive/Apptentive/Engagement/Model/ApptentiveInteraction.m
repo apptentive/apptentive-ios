@@ -102,18 +102,22 @@ NS_ASSUME_NONNULL_BEGIN
 	return [ApptentiveBackend codePointForVendor:self.vendor interactionType:self.type event:event];
 }
 
-- (BOOL)engage:(NSString *)event fromViewController:(nullable UIViewController *)viewController {
-	return [self engage:event fromViewController:viewController userInfo:nil];
+- (void)engage:(NSString *)event fromViewController:(nullable UIViewController *)viewController {
+	[self engage:event fromViewController:viewController userInfo:nil];
 }
 
-- (BOOL)engage:(NSString *)event fromViewController:(nullable UIViewController *)viewController userInfo:(nullable NSDictionary *)userInfo {
-	return [self engage:event fromViewController:viewController userInfo:userInfo customData:nil extendedData:nil];
+- (void)engage:(NSString *)event fromViewController:(nullable UIViewController *)viewController userInfo:(nullable NSDictionary *)userInfo {
+	[self engage:event fromViewController:viewController userInfo:userInfo customData:nil extendedData:nil];
 }
 
-- (BOOL)engage:(NSString *)event fromViewController:(nullable UIViewController *)viewController userInfo:(nullable NSDictionary *)userInfo customData:(nullable NSDictionary *)customData extendedData:(nullable NSArray *)extendedData {
+- (void)engage:(NSString *)event fromViewController:(nullable UIViewController *)viewController userInfo:(nullable NSDictionary *)userInfo customData:(nullable NSDictionary *)customData extendedData:(nullable NSArray *)extendedData {
+	[self engage:event fromViewController:viewController userInfo:userInfo customData:customData extendedData:extendedData completion:nil];
+}
+
+- (void)engage:(NSString *)event fromViewController:(nullable UIViewController *)viewController userInfo:(nullable NSDictionary *)userInfo customData:(nullable NSDictionary *)customData extendedData:(nullable NSArray *)extendedData completion:(void (^ _Nullable)(BOOL))completion {
 	NSString *codePoint = [self codePointForEvent:event];
 
-	return [Apptentive.shared.backend engageCodePoint:codePoint fromInteraction:self userInfo:userInfo customData:customData extendedData:extendedData fromViewController:viewController];
+	[Apptentive.shared.backend engageCodePoint:codePoint fromInteraction:self userInfo:userInfo customData:customData extendedData:extendedData fromViewController:viewController];
 }
 
 @end

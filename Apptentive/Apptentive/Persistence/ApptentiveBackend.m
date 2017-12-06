@@ -462,29 +462,42 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 
 #pragma mark Message Center
 
-- (BOOL)presentMessageCenterFromViewController:(nullable UIViewController *)viewController {
-	return [self presentMessageCenterFromViewController:viewController withCustomData:nil];
+- (void)presentMessageCenterFromViewController:(nullable UIViewController *)viewController completion:(void (^ _Nullable)(BOOL))completion {
+	[self presentMessageCenterFromViewController:viewController withCustomData:nil completion:completion];
 }
 
-- (BOOL)presentMessageCenterFromViewController:(nullable UIViewController *)viewController withCustomData:(nullable NSDictionary *)customData {
+- (void)presentMessageCenterFromViewController:(nullable UIViewController *)viewController withCustomData:(nullable NSDictionary *)customData completion:(void (^ _Nullable)(BOOL))completion {
 	if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateBackground) {
 		// Only present Message Center UI in Active state.
-		return NO;
+		if (completion) {
+			completion(NO);
+		}
+		return;
 	}
 
 	self.currentCustomData = customData;
 
 	if (viewController.presentedViewController) {
 		ApptentiveLogError(@"Attempting to present Apptentive Message Center from View Controller that is already presenting a modal view controller");
-		return NO;
+		if (completion) {
+			completion(NO);
+		}
+		return;
 	}
 
 	if (self.presentedMessageCenterViewController != nil) {
 		ApptentiveLogInfo(@"Apptentive message center controller already shown.");
-		return NO;
+		if (completion) {
+			completion(NO);
+		}
+		return;
 	}
 
-	BOOL didShowMessageCenter = [[ApptentiveInteraction apptentiveAppInteraction] engage:ApptentiveEngagementMessageCenterEvent fromViewController:viewController];
+	__block BOOL didShowMessageCenter;
+	
+	[[ApptentiveInteraction apptentiveAppInteraction] engage:ApptentiveEngagementMessageCenterEvent fromViewController:viewController userInfo:nil customData:nil extendedData:nil completion:^(BOOL engaged) {
+		didShowMessageCenter = engaged;
+	}];
 
 	if (!didShowMessageCenter) {
 		ApptentiveNavigationController *navigationController = [[ApptentiveUtilities storyboard] instantiateViewControllerWithIdentifier:@"NoPayloadNavigation"];
@@ -496,7 +509,9 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 		}
 	}
 
-	return didShowMessageCenter;
+	if (completion) {
+		completion(didShowMessageCenter);
+	}
 }
 
 - (void)dismissMessageCenterAnimated:(BOOL)animated completion:(void (^)(void))completion {

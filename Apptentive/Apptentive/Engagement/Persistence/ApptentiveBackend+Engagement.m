@@ -163,6 +163,13 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 - (void)engage:(NSString *)event fromInteraction:(nonnull ApptentiveInteraction *)interaction fromViewController:(nullable UIViewController *)viewController userInfo:(nullable NSDictionary *)userInfo customData:(nullable NSDictionary *)customData extendedData:(nullable NSArray *)extendedData completion:(void (^ _Nullable)(BOOL))completion {
 	ApptentiveAssertNotNil(interaction, @"Attempted to engage event '%@' for nil interaction", event);
 	
+	if (!self.operationQueue.isCurrent) {
+		[self.operationQueue dispatchAsync:^{
+			[self engage:event fromInteraction:interaction fromViewController:viewController userInfo:userInfo customData:customData extendedData:extendedData completion:completion];
+		}];
+		return;
+	}
+	
 	NSString *codePoint = [interaction codePointForEvent:event];
 	
 	[self engageCodePoint:codePoint fromInteraction:interaction userInfo:userInfo customData:customData extendedData:extendedData fromViewController:viewController completion:completion];

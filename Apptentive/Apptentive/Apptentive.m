@@ -12,7 +12,6 @@
 #import "ApptentiveAttachment.h"
 #import "ApptentiveBackend+Engagement.h"
 #import "ApptentiveBackend.h"
-#import "ApptentiveBannerViewController.h"
 #import "ApptentiveDevice.h"
 #import "ApptentiveInteraction.h"
 #import "ApptentiveLogMonitor.h"
@@ -86,7 +85,7 @@ static Apptentive *_sharedInstance;
 @end
 
 
-@interface Apptentive () <ApptentiveBannerViewControllerDelegate>
+@interface Apptentive ()
 
 @property (nonatomic, readonly) ApptentiveMessageManager *messageManager;
 

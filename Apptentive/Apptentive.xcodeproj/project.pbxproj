@@ -187,8 +187,6 @@
 		01A2D1791E490A9700C2103A /* ApptentiveAboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D05F1E490A9700C2103A /* ApptentiveAboutViewController.m */; };
 		01A2D17A1E490A9700C2103A /* ApptentiveAttachmentController.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0601E490A9700C2103A /* ApptentiveAttachmentController.h */; };
 		01A2D17B1E490A9700C2103A /* ApptentiveAttachmentController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0611E490A9700C2103A /* ApptentiveAttachmentController.m */; };
-		01A2D17C1E490A9700C2103A /* ApptentiveBannerViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0621E490A9700C2103A /* ApptentiveBannerViewController.h */; };
-		01A2D17D1E490A9700C2103A /* ApptentiveBannerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0631E490A9700C2103A /* ApptentiveBannerViewController.m */; };
 		01A2D17E1E490A9700C2103A /* ApptentiveMessageCenterErrorViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0641E490A9700C2103A /* ApptentiveMessageCenterErrorViewController.h */; };
 		01A2D17F1E490A9700C2103A /* ApptentiveMessageCenterErrorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0651E490A9700C2103A /* ApptentiveMessageCenterErrorViewController.m */; };
 		01A2D1801E490A9700C2103A /* ApptentiveMessageCenterViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D0661E490A9700C2103A /* ApptentiveMessageCenterViewController.h */; };
@@ -621,8 +619,6 @@
 		01A2D05F1E490A9700C2103A /* ApptentiveAboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveAboutViewController.m; sourceTree = "<group>"; };
 		01A2D0601E490A9700C2103A /* ApptentiveAttachmentController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveAttachmentController.h; sourceTree = "<group>"; };
 		01A2D0611E490A9700C2103A /* ApptentiveAttachmentController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveAttachmentController.m; sourceTree = "<group>"; };
-		01A2D0621E490A9700C2103A /* ApptentiveBannerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveBannerViewController.h; sourceTree = "<group>"; };
-		01A2D0631E490A9700C2103A /* ApptentiveBannerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveBannerViewController.m; sourceTree = "<group>"; };
 		01A2D0641E490A9700C2103A /* ApptentiveMessageCenterErrorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveMessageCenterErrorViewController.h; sourceTree = "<group>"; };
 		01A2D0651E490A9700C2103A /* ApptentiveMessageCenterErrorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveMessageCenterErrorViewController.m; sourceTree = "<group>"; };
 		01A2D0661E490A9700C2103A /* ApptentiveMessageCenterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveMessageCenterViewController.h; sourceTree = "<group>"; };
@@ -1337,8 +1333,6 @@
 				01A2D05F1E490A9700C2103A /* ApptentiveAboutViewController.m */,
 				01A2D0601E490A9700C2103A /* ApptentiveAttachmentController.h */,
 				01A2D0611E490A9700C2103A /* ApptentiveAttachmentController.m */,
-				01A2D0621E490A9700C2103A /* ApptentiveBannerViewController.h */,
-				01A2D0631E490A9700C2103A /* ApptentiveBannerViewController.m */,
 				01A2D0641E490A9700C2103A /* ApptentiveMessageCenterErrorViewController.h */,
 				01A2D0651E490A9700C2103A /* ApptentiveMessageCenterErrorViewController.m */,
 				01A2D0661E490A9700C2103A /* ApptentiveMessageCenterViewController.h */,
@@ -1798,7 +1792,6 @@
 				0140D60E1E83553C007B5130 /* ApptentiveLegacyMessageSender.h in Headers */,
 				01A2D1F21E490A9700C2103A /* ApptentiveSurveyMultilineCell.h in Headers */,
 				01A2D0FD1E490A9700C2103A /* ApptentiveHUDViewController.h in Headers */,
-				01A2D17C1E490A9700C2103A /* ApptentiveBannerViewController.h in Headers */,
 				014508981EAAAF84003326E7 /* ApptentiveMessageGetRequest.h in Headers */,
 				01A2D12D1E490A9700C2103A /* ApptentiveInteractionInvocation.h in Headers */,
 				014508911EAA959E003326E7 /* ApptentiveRequestProtocol.h in Headers */,
@@ -2114,7 +2107,6 @@
 				01A2D1EB1E490A9700C2103A /* ApptentiveSurveyAnswerCell.m in Sources */,
 				01A2D1C31E490A9700C2103A /* ATDataModel v4 to v5.xcmappingmodel in Sources */,
 				01A2D1F71E490A9700C2103A /* ApptentiveSurveyQuestionBackgroundView.m in Sources */,
-				01A2D17D1E490A9700C2103A /* ApptentiveBannerViewController.m in Sources */,
 				EFC97A9F1F56303300BCC461 /* UIAlertController+Apptentive.m in Sources */,
 				01A2D1D71E490A9700C2103A /* ApptentiveBackend.m in Sources */,
 				01A2D1A91E490A9700C2103A /* NSDictionary+Apptentive.m in Sources */,

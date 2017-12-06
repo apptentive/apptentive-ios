@@ -139,6 +139,7 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
  Set up class properties on ApptentiveDevice and monitor for changes
  */
 - (void)updateAndMonitorDeviceValues {
+	ApptentiveAssertMainQueue
 	[ApptentiveDevice getPermanentDeviceValues];
 
 	__weak ApptentiveBackend *weakSelf = self;
@@ -226,6 +227,7 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 #pragma mark - As-needed tasks
 
 - (void)fetchConfigurationIfNeeded {
+	ApptentiveAssertOperationQueue(self.operationQueue);
 	ApptentiveConversation *conversation = self.conversationManager.activeConversation;
 
 	if (self.configurationOperation != nil || conversation.identifier == nil || !self.networkAvailable || [self.configuration.expiry timeIntervalSinceNow] > 0) {
@@ -251,6 +253,7 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 }
 
 - (void)createSupportDirectoryIfNeeded {
+	ApptentiveAssertOperationQueue(self.operationQueue);
 	if (![[NSFileManager defaultManager] fileExistsAtPath:self.supportDirectoryPath]) {
 		NSError *error;
 		if (![[NSFileManager defaultManager] createDirectoryAtPath:self.supportDirectoryPath withIntermediateDirectories:YES attributes:nil error:&error]) {
@@ -282,6 +285,7 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 
 // This is called when we're about to enter the background
 - (void)shutDown {
+	ApptentiveAssertOperationQueue(self.operationQueue);
 	ApptentiveLogVerbose(@"Shutting down backend");
 	self.state = ApptentiveBackendStateShuttingDown;
 
@@ -323,6 +327,7 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 
 // Note: must be called on main thread
 - (void)setUpCoreData {
+	ApptentiveAssertMainQueue
 	ApptentiveLogVerbose(ApptentiveLogTagStorage, @"Setting up data manager");
 	self.dataManager = [[ApptentiveDataManager alloc] initWithModelName:@"ATDataModel" inBundle:[ApptentiveUtilities resourceBundle] storagePath:[self supportDirectoryPath]];
 	if (![self.dataManager setupAndVerify]) {
@@ -333,6 +338,7 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 }
 
 - (void)loadConfiguration {
+	ApptentiveAssertOperationQueue(self.operationQueue);
 	if ([[NSFileManager defaultManager] fileExistsAtPath:[self configurationPath]]) {
 		self->_configuration = [NSKeyedUnarchiver unarchiveObjectWithFile:[self configurationPath]];
 	} else if ([[NSUserDefaults standardUserDefaults] objectForKey:@"ATConfigurationSDKVersionKey"]) {
@@ -347,6 +353,7 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 
 // This is called on warm and cold launch
 - (void)completeStartupAndResumeTasks {
+	ApptentiveAssertOperationQueue(self.operationQueue);
 #if APPTENTIVE_DEBUG
 	[Apptentive.shared checkSDKConfiguration];
 
@@ -368,6 +375,7 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 }
 
 - (void)migrateLegacyCoreDataAndTaskQueueForConversation:(ApptentiveConversation *)conversation conversationDirectoryPath:(NSString *)directoryPath {
+	ApptentiveAssertOperationQueue(self.operationQueue);
 	ApptentiveAssertNotNil(conversation, @"Trying to migrate nil conversation");
 	ApptentiveAssertTrue(conversation.state == ApptentiveConversationStateLegacyPending, @"Trying to migrate conversation that is not a legacy conversation (%@)", NSStringFromApptentiveConversationState(conversation.state));
 
@@ -425,12 +433,12 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 }
 
 - (BOOL)saveConfiguration {
-	@synchronized(self.configuration) {
-		return [NSKeyedArchiver archiveRootObject:self.configuration toFile:[self configurationPath]];
-	}
+	ApptentiveAssertOperationQueue(self.operationQueue);
+	return [NSKeyedArchiver archiveRootObject:self.configuration toFile:[self configurationPath]];
 }
 
 - (void)updateNetworkingForCurrentNetworkStatus {
+	ApptentiveAssertOperationQueue(self.operationQueue);
 	BOOL networkWasAvailable = self.networkAvailable;
 
 	ApptentiveNetworkStatus status = [self.reachability currentNetworkStatus];
@@ -467,6 +475,7 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 }
 
 - (void)presentMessageCenterFromViewController:(nullable UIViewController *)viewController withCustomData:(nullable NSDictionary *)customData completion:(void (^ _Nullable)(BOOL))completion {
+	ApptentiveAssertMainQueue
 	if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateBackground) {
 		// Only present Message Center UI in Active state.
 		if (completion) {
@@ -493,28 +502,27 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 		return;
 	}
 
-	__block BOOL didShowMessageCenter;
-	
-	[self engage:ApptentiveEngagementMessageCenterEvent fromInteraction:[ApptentiveInteraction apptentiveAppInteraction] fromViewController:viewController userInfo:nil customData:nil extendedData:nil completion:^(BOOL engaged) {
-		didShowMessageCenter = engaged;
+	[self engage:ApptentiveEngagementMessageCenterEvent fromInteraction:[ApptentiveInteraction apptentiveAppInteraction] fromViewController:viewController userInfo:nil customData:nil extendedData:nil completion:^(BOOL didShowMessageCenter) {
+		dispatch_sync(dispatch_get_main_queue(), ^{
+			if (!didShowMessageCenter) {
+				ApptentiveNavigationController *navigationController = [[ApptentiveUtilities storyboard] instantiateViewControllerWithIdentifier:@"NoPayloadNavigation"];
+				
+				if (viewController != nil) {
+					[viewController presentViewController:navigationController animated:YES completion:nil];
+				} else {
+					[navigationController presentAnimated:YES completion:nil];
+				}
+			}
+			
+			if (completion) {
+				completion(didShowMessageCenter);
+			}
+		});
 	}];
-
-	if (!didShowMessageCenter) {
-		ApptentiveNavigationController *navigationController = [[ApptentiveUtilities storyboard] instantiateViewControllerWithIdentifier:@"NoPayloadNavigation"];
-
-		if (viewController != nil) {
-			[viewController presentViewController:navigationController animated:YES completion:nil];
-		} else {
-			[navigationController presentAnimated:YES completion:nil];
-		}
-	}
-
-	if (completion) {
-		completion(didShowMessageCenter);
-	}
 }
 
 - (void)dismissMessageCenterAnimated:(BOOL)animated completion:(void (^)(void))completion {
+	ApptentiveAssertMainQueue
 	self.currentCustomData = nil;
 
 	if (self.presentedMessageCenterViewController != nil) {
@@ -547,6 +555,7 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 #pragma mark Message Polling
 
 - (NSUInteger)unreadMessageCount {
+	ApptentiveAssertOperationQueue(self.operationQueue);
 	return self.messageManager.unreadCount;
 }
 
@@ -662,6 +671,7 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 #pragma mark Properties
 
 - (ApptentiveMessageManager *)messageManager {
+	ApptentiveAssertOperationQueue(self.operationQueue);
 	return self.conversationManager.messageManager;
 }
 

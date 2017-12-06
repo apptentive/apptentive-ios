@@ -69,7 +69,6 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 }
 
 - (void)start {
-#warning This should post a notification
 	[[Apptentive sharedConnection].backend messageCenterEnteredForeground];
 
 	if (self.contextMessageBody) {
@@ -86,7 +85,6 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 }
 
 - (void)stop {
-#warning This should post a notification
 	if (self.contextMessage) {
 		[self.messageManager removeMessage:self.contextMessage];
 	}

@@ -570,7 +570,6 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 }
 
 - (void)messageCenterEnteredForeground {
-#warning Listen for notification instead
 	[self.operationQueue dispatchAsync:^{
 	  _messageCenterInForeground = YES;
 
@@ -582,7 +581,6 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 }
 
 - (void)messageCenterLeftForeground {
-#warning Listen for notification instead
 	[self.operationQueue dispatchAsync:^{
 	  _messageCenterInForeground = NO;
 

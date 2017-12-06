@@ -248,11 +248,19 @@ typedef NS_ENUM(NSUInteger, ApptentiveLogLevel) {
 
  @param event A string representing the name of the event.
  @param viewController A view controller Apptentive UI may be presented from. If `nil`, a view controller should be provided by the delegate.
-
- @return `YES` if an interaction was triggered by the event, `NO` otherwise.
  */
 - (void)engage:(NSString *)event fromViewController:(UIViewController *_Nullable)viewController NS_SWIFT_NAME(engage(event:from:));
 
+/**
+ Shows interaction UI, if applicable, related to a given event.
+ 
+ For example, if you have an upgrade message to display on app launch, you might call with event label set to
+ `@"app.launch"` here, along with the view controller an upgrade message might be displayed from.
+ 
+ @param event A string representing the name of the event.
+ @param viewController A view controller Apptentive UI may be presented from. If `nil`, a view controller should be provided by the delegate.
+ @param completion A completion callback
+ */
 - (void)engage:(NSString *)event fromViewController:(UIViewController *_Nullable)viewController completion:(void (^_Nullable)(BOOL engaged))completion NS_SWIFT_NAME(engage(event:from:completion:));
 
 /**
@@ -261,11 +269,17 @@ typedef NS_ENUM(NSUInteger, ApptentiveLogLevel) {
  @param event A string representing the name of the event.
  @param customData A dictionary of key/value pairs to be associated with the event. Keys and values should conform to standards of NSJSONSerialization's `isValidJSONObject:`.
  @param viewController A view controller Apptentive UI may be presented from. If `nil`, a view controller should be provided by the delegate.
-
- @return `YES` if an interaction was triggered by the event, `NO` otherwise.
  */
 - (void)engage:(NSString *)event withCustomData:(nullable NSDictionary *)customData fromViewController:(UIViewController *_Nullable)viewController NS_SWIFT_NAME(engage(event:withCustomData:from:));
 
+/**
+ Shows interaction UI, if applicable, related to a given event, and attaches the specified custom data to the event.
+ 
+ @param event A string representing the name of the event.
+ @param customData A dictionary of key/value pairs to be associated with the event. Keys and values should conform to standards of NSJSONSerialization's `isValidJSONObject:`.
+ @param viewController A view controller Apptentive UI may be presented from. If `nil`, a view controller should be provided by the delegate.
+ @param completion A completion callback
+ */
 - (void)engage:(NSString *)event withCustomData:(nullable NSDictionary *)customData fromViewController:(UIViewController *_Nullable)viewController completion:(void (^_Nullable)(BOOL engaged))completion NS_SWIFT_NAME(engage(event:withCustomData:from:completion:));
 
 /**
@@ -275,11 +289,17 @@ typedef NS_ENUM(NSUInteger, ApptentiveLogLevel) {
  @param customData A dictionary of key/value pairs to be associated with the event. Keys and values should conform to standards of NSJSONSerialization's `isValidJSONObject:`.
  @param extendedData An array of dictionaries with specific Apptentive formatting. For example, [Apptentive extendedDataDate:[NSDate date]].
  @param viewController A view controller Apptentive UI may be presented from. If `nil`, a view controller should be provided by the delegate.
-
- @return `YES` if an interaction was triggered by the event, `NO` otherwise.
  */
 - (void)engage:(NSString *)event withCustomData:(nullable NSDictionary *)customData withExtendedData:(nullable NSArray<NSDictionary *> *)extendedData fromViewController:(UIViewController *_Nullable)viewController NS_SWIFT_NAME(engage(event:withCustomData:withExtendedData:from:));
 
+/**
+ Shows interaction UI, if applicable, related to a given event. Attaches the specified custom data to the event along with the specified extended data.
+ 
+ @param event A string representing the name of the event.
+ @param customData A dictionary of key/value pairs to be associated with the event. Keys and values should conform to standards of NSJSONSerialization's `isValidJSONObject:`.
+ @param extendedData An array of dictionaries with specific Apptentive formatting. For example, [Apptentive extendedDataDate:[NSDate date]].
+ @param viewController A view controller Apptentive UI may be presented from. If `nil`, a view controller should be provided by the delegate.
+ */
 - (void)engage:(NSString *)event withCustomData:(nullable NSDictionary *)customData withExtendedData:(nullable NSArray<NSDictionary *> *)extendedData fromViewController:(UIViewController *_Nullable)viewController completion:(void (^_Nullable)(BOOL engaged))completion NS_SWIFT_NAME(engage(event:withCustomData:withExtendedData:from:completion:));
 
 /**
@@ -379,10 +399,18 @@ typedef NS_ENUM(NSUInteger, ApptentiveLogLevel) {
  "We're attempting to connect" view in place of Message Center.
 
  @param viewController The view controller from which to present Message Center.
-
- @return `YES` if Message Center was presented, `NO` otherwise.
  */
 - (void)presentMessageCenterFromViewController:(nullable UIViewController *)viewController;
+
+/**
+ Presents Message Center modally from the specified view controller.
+ 
+ If the SDK has yet to sync with the Apptentive server, this method returns NO and displays a
+ "We're attempting to connect" view in place of Message Center.
+ 
+ @param viewController The view controller from which to present Message Center.
+ @param completion Completion callback.
+ */
 - (void)presentMessageCenterFromViewController:(nullable UIViewController *)viewController completion:(void (^_Nullable)(BOOL presented))completion;
 
 /**
@@ -393,11 +421,19 @@ typedef NS_ENUM(NSUInteger, ApptentiveLogLevel) {
 
  @param viewController The view controller from which to present Message Center.
  @param customData A dictionary of key/value pairs to be associated with any messages sent via Message Center.
-
- @return `YES` if Message Center was presented, `NO` otherwise.
  */
 - (void)presentMessageCenterFromViewController:(nullable UIViewController *)viewController withCustomData:(nullable NSDictionary *)customData;
 
+/**
+ Presents Message Center from a given view controller with custom data.
+ 
+ If the SDK has yet to sync with the Apptentive server, this method returns NO and displays a
+ "We're attempting to connect" view in place of Message Center.
+ 
+ @param viewController The view controller from which to present Message Center.
+ @param customData A dictionary of key/value pairs to be associated with any messages sent via Message Center.
+ @param completion Completion callback.
+ */
 - (void)presentMessageCenterFromViewController:(nullable UIViewController *)viewController withCustomData:(nullable NSDictionary *)customData completion:(void (^_Nullable)(BOOL presented))completion;
 
 /**

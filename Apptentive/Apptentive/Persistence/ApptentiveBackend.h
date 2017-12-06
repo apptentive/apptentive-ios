@@ -94,7 +94,6 @@ typedef NS_ENUM(NSInteger, ApptentiveBackendState) {
  Presents Message Center using the modal presentation style from the specified view controller.
 
  @param viewController The view controller from which to present message center
- @return Whether message center was displayed
  */
 - (void)presentMessageCenterFromViewController:(nullable UIViewController *)viewController completion:(void (^_Nullable)(BOOL presented))completion;
 - (void)presentMessageCenterFromViewController:(nullable UIViewController *)viewController withCustomData:(nullable NSDictionary *)customData completion:(void (^_Nullable)(BOOL presented))completion;

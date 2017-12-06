@@ -615,9 +615,16 @@ static Apptentive *_sharedInstance;
 
 #pragma mark - Message Center
 
-- (BOOL)canShowMessageCenter {
-	NSString *messageCenterCodePoint = [[ApptentiveInteraction apptentiveAppInteraction] codePointForEvent:ApptentiveEngagementMessageCenterEvent];
-	return [self.backend canShowInteractionForCodePoint:messageCenterCodePoint];
+- (void)queryCanShowMessageCenterWithCompletion:(void (^)(BOOL canShowMessageCenter))completion {
+	[self.operationQueue dispatchAsync:^{
+		NSString *messageCenterCodePoint = [[ApptentiveInteraction apptentiveAppInteraction] codePointForEvent:ApptentiveEngagementMessageCenterEvent];
+		BOOL canShowInteraction = [self.backend canShowInteractionForCodePoint:messageCenterCodePoint];
+		if (completion) {
+			dispatch_async(dispatch_get_main_queue(), ^{
+				completion(canShowInteraction);
+			});
+		}
+	}];
 }
 
 - (void)presentMessageCenterFromViewController:(nullable UIViewController *)viewController {

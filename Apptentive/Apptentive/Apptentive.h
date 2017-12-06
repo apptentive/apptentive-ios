@@ -382,14 +382,14 @@ typedef NS_ENUM(NSUInteger, ApptentiveLogLevel) {
 ///--------------------
 
 /**
- Determines if Message Center will be displayed when `presentMessageCenterFromViewController:` is called.
+ Asynchronously determines if Message Center will be displayed when `presentMessageCenterFromViewController:` is called.
 
- If app has not yet synced with Apptentive, you will be unable to display Message Center. Use `canShowMessageCenter`
+ If app has not yet synced with Apptentive, you will be unable to display Message Center. Use `queryCanShowMessageCenterWithCompletion:`
  to determine if Message Center is ready to be displayed. If Message Center is not ready you could, for example,
  hide the "Message Center" button in your interface.
  **/
 
-@property (readonly, nonatomic) BOOL canShowMessageCenter;
+- (void)queryCanShowMessageCenterWithCompletion:(void (^)(BOOL canShowMessageCenter))completion;
 
 /**
  Presents Message Center modally from the specified view controller.

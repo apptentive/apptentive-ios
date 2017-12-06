@@ -475,7 +475,12 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 }
 
 - (void)presentMessageCenterFromViewController:(nullable UIViewController *)viewController withCustomData:(nullable NSDictionary *)customData completion:(void (^ _Nullable)(BOOL))completion {
-	ApptentiveAssertMainQueue
+	
+	if (![NSThread isMainThread]) {
+		[self presentMessageCenterFromViewController:viewController withCustomData:customData completion:completion];
+		return;
+	}
+	
 	if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateBackground) {
 		// Only present Message Center UI in Active state.
 		if (completion) {

@@ -303,15 +303,14 @@ typedef NS_ENUM(NSUInteger, ApptentiveLogLevel) {
 - (void)engage:(NSString *)event withCustomData:(nullable NSDictionary *)customData withExtendedData:(nullable NSArray<NSDictionary *> *)extendedData fromViewController:(UIViewController *_Nullable)viewController completion:(void (^_Nullable)(BOOL engaged))completion NS_SWIFT_NAME(engage(event:withCustomData:withExtendedData:from:completion:));
 
 /**
- Returns a Boolean value indicating whether the given event will cause an Interaction to be shown.
+ Asynchronously checks whether the given event will cause an Interaction to be shown.
 
- For example, returns YES if a survey is ready to be shown the next time you engage your survey-targeted event. You can use this method to hide a "Show Survey" button in your app if there is no survey to take.
+ For example, callback would be invoked with YES parameter if a survey is ready to be shown the next time you engage your survey-targeted event. You can use this method to hide a "Show Survey" button in your app if there is no survey to take.
 
  @param event A string representing the name of the event.
-
- @return `YES` if the event will show an interaction, `NO` otherwise.
+ @param completion Completion callback
  */
-- (BOOL)canShowInteractionForEvent:(NSString *)event;
+- (void)queryCanShowInteractionForEvent:(NSString *)event completion:(void (^)(BOOL canShowInteraction))completion;
 
 ///--------------------
 /// @name Extended Data for Events

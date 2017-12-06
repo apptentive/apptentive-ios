@@ -471,8 +471,15 @@ static Apptentive *_sharedInstance;
 	}];
 }
 
-- (BOOL)canShowInteractionForEvent:(NSString *)event {
-	return [self.backend canShowInteractionForLocalEvent:event];
+- (void)queryCanShowInteractionForEvent:(NSString *)event completion:(void (^)(BOOL canShowInteraction))completion {
+	[self.operationQueue dispatchAsync:^{
+		BOOL canShowInteraction = [self.backend canShowInteractionForLocalEvent:event];
+		if (completion) {
+			dispatch_async(dispatch_get_main_queue(), ^{
+				completion(canShowInteraction);
+			});
+		}
+	}];
 }
 
 - (void)engage:(NSString *)event fromViewController:(nullable UIViewController *)viewController {
@@ -497,7 +504,18 @@ static Apptentive *_sharedInstance;
 
 - (void)engage:(NSString *)event withCustomData:(nullable NSDictionary *)customData withExtendedData:(nullable NSArray<NSDictionary *> *)extendedData fromViewController:(UIViewController *_Nullable)viewController completion:(void (^_Nullable)(BOOL engaged))completion {
 	[self.operationQueue dispatchAsync:^{
-		[self.backend engageLocalEvent:event userInfo:nil customData:customData extendedData:extendedData fromViewController:viewController];
+		
+		// we need to dispatch the callback on UI-thread
+		void (^wrappedCompletion)(BOOL engaged) = nil;
+		if (completion != nil) {
+			wrappedCompletion = ^(BOOL engaged){
+				dispatch_async(dispatch_get_main_queue(), ^{
+					completion(engaged);
+				});
+			};
+		}
+		
+		[self.backend engageLocalEvent:event userInfo:nil customData:customData extendedData:extendedData fromViewController:viewController completion:wrappedCompletion];
 	}];
 }
 

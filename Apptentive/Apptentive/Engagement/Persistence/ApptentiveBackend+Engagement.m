@@ -35,6 +35,7 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 @implementation ApptentiveBackend (Engagement)
 
 - (BOOL)canShowInteractionForLocalEvent:(NSString *)event {
+	ApptentiveAssertOperationQueue(self.operationQueue);
 	NSString *codePoint = [[ApptentiveInteraction localAppInteraction] codePointForEvent:event];
 
 	return [self canShowInteractionForCodePoint:codePoint];

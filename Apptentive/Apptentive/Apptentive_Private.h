@@ -45,13 +45,6 @@ extern NSString *_Nonnull const ApptentiveManifestRawDataKey;
 @property (readonly, nonatomic) id<ApptentiveStyle> style;
 @property (readonly, nonatomic) BOOL didAccessStyleSheet;
 
-/*!
- * Returns the NSBundle corresponding to the bundle containing Apptentive's
- * images, xibs, strings files, etc.
- */
-
-- (void)showNotificationBannerForMessage:(ApptentiveMessage *)message;
-
 + (NSDictionary *)timestampObjectWithNumber:(NSNumber *)seconds;
 + (NSDictionary *)versionObjectWithVersion:(NSString *)version;
 + (NSDictionary *)timestampObjectWithDate:(NSDate *)date;

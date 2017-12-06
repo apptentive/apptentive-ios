@@ -584,7 +584,6 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
  server.
  */
 - (void)conversationDidChange:(ApptentiveConversation *)conversation {
-#warning rate limit me
 	[self scheduleSaveConversation:conversation];
 }
 

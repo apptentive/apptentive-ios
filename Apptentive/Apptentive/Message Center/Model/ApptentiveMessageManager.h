@@ -32,6 +32,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (weak, nonatomic) id<ApptentiveMessageManagerDelegate> delegate;
 
+@property (strong, nonatomic) NSString *draftMessage;
+@property (assign, nonatomic) BOOL didSkipProfile;
+
 - (instancetype)initWithStoragePath:(NSString *)storagePath client:(ApptentiveClient *)client pollingInterval:(NSTimeInterval)pollingInterval conversation:(ApptentiveConversation *)conversation operationQueue:(ApptentiveDispatchQueue *)operationQueue;
 
 - (void)checkForMessages;

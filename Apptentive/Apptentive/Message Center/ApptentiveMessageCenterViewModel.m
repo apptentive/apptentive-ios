@@ -29,9 +29,6 @@ NSString *const ATMessageCenterServerErrorDomain = @"com.apptentive.MessageCente
 NSString *const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenterErrorMessages";
 NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 
-NSString *const ATMessageCenterDidSkipProfileKey = @"ATMessageCenterDidSkipProfileKey";
-NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKey";
-
 
 @interface ApptentiveMessageCenterViewModel ()
 
@@ -45,13 +42,11 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 
 @implementation ApptentiveMessageCenterViewModel
 
-- (instancetype)initWithConversation:(ApptentiveConversation *)conversation interaction:(ApptentiveInteraction *)interaction messageManager:(ApptentiveMessageManager *)messageManager {
+- (instancetype)initWithInteraction:(ApptentiveInteraction *)interaction messageManager:(ApptentiveMessageManager *)messageManager {
 	if ((self = [super init])) {
-		APPTENTIVE_CHECK_INIT_NOT_NIL_ARG(conversation);
 		APPTENTIVE_CHECK_INIT_NOT_NIL_ARG(interaction);
 		APPTENTIVE_CHECK_INIT_NOT_NIL_ARG(messageManager);
 
-		_conversation = conversation;
 		_interaction = interaction;
 		_messageManager = messageManager;
 		messageManager.delegate = self;
@@ -544,25 +539,19 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 }
 
 - (BOOL)didSkipProfile {
-	return [[self.conversation.userInfo objectForKey:ATMessageCenterDidSkipProfileKey] boolValue];
+	return self.messageManager.didSkipProfile;
 }
 
 - (void)setDidSkipProfile:(BOOL)didSkipProfile {
-	[self.conversation setUserInfo:@(didSkipProfile) forKey:ATMessageCenterDidSkipProfileKey];
+	self.messageManager.didSkipProfile = didSkipProfile;
 }
 
 - (nullable NSString *)draftMessage {
-#warning fixme
-	return self.conversation.userInfo[ATMessageCenterDraftMessageKey];
+	return self.messageManager.draftMessage;
 }
 
 - (void)setDraftMessage:(nullable NSString *)draftMessage {
-#warning fixme
-	if (draftMessage) {
-		[self.conversation setUserInfo:draftMessage forKey:ATMessageCenterDraftMessageKey];
-	} else {
-		[self.conversation removeUserInfoForKey:ATMessageCenterDraftMessageKey];
-	}
+	self.messageManager.draftMessage = draftMessage;
 }
 
 #pragma mark - Private

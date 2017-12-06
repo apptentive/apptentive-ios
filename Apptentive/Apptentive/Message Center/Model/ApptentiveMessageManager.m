@@ -25,6 +25,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 static NSString *const MessageStoreFileName = @"messages-v1.archive";
 
+NSString *const ATMessageCenterDidSkipProfileKey = @"ATMessageCenterDidSkipProfileKey";
+NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKey";
+
 
 @interface ApptentiveMessageManager ()
 
@@ -59,6 +62,9 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 
 		_messageIdentifierIndex = [NSMutableDictionary dictionary];
 		_messageStore = [NSKeyedUnarchiver unarchiveObjectWithFile:self.messageStorePath] ?: [[ApptentiveMessageStore alloc] init];
+
+		_didSkipProfile = [conversation.userInfo[ATMessageCenterDidSkipProfileKey] boolValue];
+		_draftMessage = conversation.userInfo[ATMessageCenterDraftMessageKey];
 
 		for (ApptentiveMessage *message in _messageStore.messages) {
 			for (ApptentiveAttachment *attachment in message.attachments) {
@@ -156,6 +162,22 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 	}
 
 	return result;
+}
+
+- (void)setDidSkipProfile:(BOOL)didSkipProfile {
+	_didSkipProfile = didSkipProfile;
+
+	[self.operationQueue dispatchAsync:^{
+		[self.conversation setUserInfo:@(didSkipProfile) forKey:ATMessageCenterDidSkipProfileKey];
+	}];
+}
+
+- (void)setDraftMessage:(NSString *)draftMessage {
+	_draftMessage = draftMessage;
+
+	[self.operationQueue dispatchAsync:^{
+		[self.conversation setUserInfo:draftMessage forKey:ATMessageCenterDraftMessageKey];
+	}];
 }
 
 #pragma mark Request Operation Delegate

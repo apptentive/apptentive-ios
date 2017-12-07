@@ -39,6 +39,8 @@ extern NSString * _Nullable ApptentiveGetCurrentThreadName(void);
 
 - (void)dispatchAsync:(void (^)(void))task;
 
+- (void)dispatchAsync:(void (^)(void))task withDependency:(NSOperation *)dependency;
+
 @end
 
 NS_ASSUME_NONNULL_END

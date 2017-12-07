@@ -467,67 +467,65 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 }
 
 - (void)requestLoggedInConversationWithToken:(NSString *)token {
-	ApptentiveAssertFail(@"We don't have a way of making sure that the conversation request has completed.");
-
 	[self.operationQueue dispatchAsync:^{
-	  ApptentiveAssertOperationQueue(self.operationQueue);
+		ApptentiveAssertOperationQueue(self.operationQueue);
 
-	  NSError *jwtError;
-	  ApptentiveJWT *jwt = [ApptentiveJWT JWTWithContentOfString:token error:&jwtError];
-	  if (jwtError != nil) {
-		  [self failLoginWithErrorCode:ApptentiveInternalInconsistency failureReason:@"JWT parsing error: %@", jwtError];
-		  return;
-	  }
+		NSError *jwtError;
+		ApptentiveJWT *jwt = [ApptentiveJWT JWTWithContentOfString:token error:&jwtError];
+		if (jwtError != nil) {
+			[self failLoginWithErrorCode:ApptentiveInternalInconsistency failureReason:@"JWT parsing error: %@", jwtError];
+			return;
+		}
 
-	  NSString *userId = jwt.payload[@"sub"];
-	  if (userId.length == 0) {
-		  [self failLoginWithErrorCode:ApptentiveInternalInconsistency failureReason:@"MISSING_SUB_CLAIM"];
-		  return;
-	  }
+		NSString *userId = jwt.payload[@"sub"];
+		if (userId.length == 0) {
+			[self failLoginWithErrorCode:ApptentiveInternalInconsistency failureReason:@"MISSING_SUB_CLAIM"];
+			return;
+		}
 
-	  // Check if there is an active conversation
-	  if (self.activeConversation == nil) {
-		  ApptentiveLogDebug(ApptentiveLogTagConversation, @"No active conversation. Performing login...");
+		// Check if there is an active conversation
+		if (self.activeConversation == nil) {
+			ApptentiveLogDebug(ApptentiveLogTagConversation, @"No active conversation. Performing login...");
 
-		  // attempt to find previous logged out conversation
-		  ApptentiveConversationMetadataItem *conversationItem = [self.conversationMetadata findItemFilter:^BOOL(ApptentiveConversationMetadataItem *item) {
-			return [item.userId isEqualToString:userId];
-		  }];
+			// attempt to find previous logged out conversation
+			ApptentiveConversationMetadataItem *conversationItem = [self.conversationMetadata findItemFilter:^BOOL(ApptentiveConversationMetadataItem *item) {
+				return [item.userId isEqualToString:userId];
+			}];
 
-		  if (conversationItem == nil) {
-			  ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Logging in a new user...");
-			  [self sendLoginRequestWithToken:token conversationIdentifier:nil userId:userId];
-			  return;
-		  }
+			if (conversationItem == nil) {
+				ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Logging in a new user...");
+				[self sendLoginRequestWithToken:token conversationIdentifier:nil userId:userId];
+				return;
+			}
 
-		  ApptentiveAssertNotNil(conversationItem.conversationIdentifier, @"Missing conversation identifier");
+			ApptentiveAssertNotNil(conversationItem.conversationIdentifier, @"Missing conversation identifier");
 
-		  ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Logging in an existing user (%@)...", userId);
-		  [self sendLoginRequestWithToken:token conversationIdentifier:conversationItem.conversationIdentifier userId:userId];
-		  return;
-	  }
+			ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Logging in an existing user (%@)...", userId);
+			[self sendLoginRequestWithToken:token conversationIdentifier:conversationItem.conversationIdentifier userId:userId];
+			return;
+		}
 
-	  switch (self.activeConversation.state) {
-		  case ApptentiveConversationStateAnonymousPending:
-		  case ApptentiveConversationStateLegacyPending:
-			  ApptentiveAssertTrue(NO, @"Login operation should not kick off until conversation fetch complete");
-			  [self failLoginWithErrorCode:ApptentiveInternalInconsistency failureReason:@"Login cannot proceed with Anonymous Pending conversation."];
-			  break;
+		switch (self.activeConversation.state) {
+			case ApptentiveConversationStateAnonymousPending:
+			case ApptentiveConversationStateLegacyPending:
+				ApptentiveAssertTrue(NO, @"Login operation should not kick off until conversation fetch complete");
+				[self failLoginWithErrorCode:ApptentiveInternalInconsistency failureReason:@"Login cannot proceed with Anonymous Pending conversation."];
+				break;
 
-		  case ApptentiveConversationStateAnonymous:
-			  [self sendLoginRequestWithToken:token conversationIdentifier:self.activeConversation.identifier userId:userId];
-			  break;
+			case ApptentiveConversationStateAnonymous:
+				[self sendLoginRequestWithToken:token conversationIdentifier:self.activeConversation.identifier userId:userId];
+				break;
 
-		  case ApptentiveConversationStateLoggedIn:
-			  [self failLoginWithErrorCode:ApptentiveAlreadyLoggedInErrorCode failureReason:@"A logged in conversation is active."];
-			  break;
+			case ApptentiveConversationStateLoggedIn:
+				[self failLoginWithErrorCode:ApptentiveAlreadyLoggedInErrorCode failureReason:@"A logged in conversation is active."];
+				break;
 
-		  default:
-			  ApptentiveAssertTrue(NO, @"Unexpected conversation state when logging in: %@", NSStringFromApptentiveConversationState(self.activeConversation.state));
-			  [self failLoginWithErrorCode:ApptentiveInternalInconsistency failureReason:@"Unexpected conversation state when logging in: %@", NSStringFromApptentiveConversationState(self.activeConversation.state)];
-			  break;
-	  }
-	}];
+			default:
+				ApptentiveAssertTrue(NO, @"Unexpected conversation state when logging in: %@", NSStringFromApptentiveConversationState(self.activeConversation.state));
+				[self failLoginWithErrorCode:ApptentiveInternalInconsistency failureReason:@"Unexpected conversation state when logging in: %@", NSStringFromApptentiveConversationState(self.activeConversation.state)];
+				break;
+		}
+	} withDependency:self.conversationOperation];
 }
 
 - (void)sendLoginRequestWithToken:(NSString *)token conversationIdentifier:(nullable NSString *)conversationIdentifier userId:(NSString *)userId {

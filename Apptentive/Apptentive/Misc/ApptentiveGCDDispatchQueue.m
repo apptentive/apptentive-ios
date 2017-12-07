@@ -36,6 +36,16 @@
 	}
 }
 
+- (void)dispatchAsync:(void (^)(void))task withDependency:(nonnull NSOperation *)dependency {
+	NSBlockOperation *operation = [NSBlockOperation blockOperationWithBlock:task];
+
+	if (dependency != nil) {
+		[operation addDependency:dependency];
+	}
+
+	[self.queue addOperation:operation];
+}
+
 - (void)dispatchTaskGuarded:(void (^)(void))task {
 	@try {
 		task();

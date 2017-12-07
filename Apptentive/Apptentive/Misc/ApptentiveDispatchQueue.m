@@ -97,6 +97,10 @@ NSString * _Nullable ApptentiveGetCurrentThreadName() {
 	APPTENTIVE_ABSTRACT_METHOD_CALLED
 }
 
+- (void)dispatchAsync:(void (^)(void))task withDependency:(nonnull NSOperation *)dependency {
+	APPTENTIVE_ABSTRACT_METHOD_CALLED
+}
+
 #pragma mark -
 #pragma mark Properties
 

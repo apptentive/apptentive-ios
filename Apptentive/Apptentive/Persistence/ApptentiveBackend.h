@@ -20,13 +20,6 @@ extern NSString *const ApptentiveAuthenticationDidFailNotificationKeyErrorType;
 extern NSString *const ApptentiveAuthenticationDidFailNotificationKeyErrorMessage;
 extern NSString *const ApptentiveAuthenticationDidFailNotificationKeyConversationIdentifier;
 
-typedef NS_ENUM(NSInteger, ApptentiveBackendState) {
-	ApptentiveBackendStateStarting,
-	ApptentiveBackendStateWaitingForDataProtectionUnlock,
-	ApptentiveBackendStatePayloadDatabaseAvailable,
-	ApptentiveBackendStateShuttingDown
-};
-
 @class ApptentiveConversation, ApptentiveEngagementManifest, ApptentiveAppConfiguration, ApptentiveMessageCenterViewController, ApptentiveMessageManager, ApptentivePayloadSender, ApptentiveDispatchQueue;
 
 /**
@@ -80,7 +73,6 @@ typedef NS_ENUM(NSInteger, ApptentiveBackendState) {
 @property (readonly, strong, nonatomic) NSString *apptentiveSignature;
 @property (readonly, strong, nonatomic) NSURL *baseURL;
 @property (readonly, strong, nonatomic) NSString *storagePath;
-@property (readonly, assign, nonatomic) ApptentiveBackendState state;
 
 /**
  Instructs the serial network queue to add network operations for the currently-queued network payloads.

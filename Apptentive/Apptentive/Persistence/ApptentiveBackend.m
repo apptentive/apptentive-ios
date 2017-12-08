@@ -50,8 +50,6 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 
 @property (nullable, strong, nonatomic) ApptentiveRequestOperation *configurationOperation;
 
-@property (assign, nonatomic) ApptentiveBackendState state;
-
 @property (strong, nonatomic) CTTelephonyNetworkInfo *telephonyNetworkInfo;
 
 @property (strong, nonatomic) NSTimer *messageRetrievalTimer;
@@ -80,13 +78,11 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 		_baseURL = baseURL;
 		_storagePath = storagePath;
 
-		_state = ApptentiveBackendStateStarting;
 		_operationQueue = operationQueue;
 		_supportDirectoryPath = [[ApptentiveUtilities applicationSupportPath] stringByAppendingPathComponent:storagePath];
 
 		if ([UIApplication sharedApplication] != nil && ![UIApplication sharedApplication].isProtectedDataAvailable) {
 			_operationQueue.suspended = YES;
-			_state = ApptentiveBackendStateWaitingForDataProtectionUnlock;
 
 			__weak ApptentiveBackend *weakSelf = self;
 			[[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationProtectedDataDidBecomeAvailable
@@ -96,7 +92,6 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 															ApptentiveBackend *strongSelf = weakSelf;
 															if (strongSelf) {
 																strongSelf.operationQueue.suspended = NO;
-																strongSelf.state = ApptentiveBackendStateStarting;
 															}
 														  }];
 		}
@@ -274,8 +269,6 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 
 	_payloadSender = [[ApptentivePayloadSender alloc] initWithBaseURL:self.baseURL apptentiveKey:self.apptentiveKey apptentiveSignature:self.apptentiveSignature managedObjectContext:self.managedObjectContext delegateQueue:self.operationQueue];
 
-	self.state = ApptentiveBackendStatePayloadDatabaseAvailable;
-
 	[self.conversationManager loadActiveConversation];
 
 	[self completeStartupAndResumeTasks];
@@ -287,7 +280,6 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 - (void)shutDown {
 	ApptentiveAssertOperationQueue(self.operationQueue);
 	ApptentiveLogVerbose(@"Shutting down backend");
-	self.state = ApptentiveBackendStateShuttingDown;
 
     [self.conversationManager pause];
 
@@ -315,10 +307,6 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 // This is called on a warm launch
 - (void)resume {
 	ApptentiveAssertOperationQueue(self.operationQueue);
-
-	if (self.managedObjectContext != nil) {
-		self.state = ApptentiveBackendStatePayloadDatabaseAvailable;
-	}
 
 	[self completeStartupAndResumeTasks];
 
@@ -419,7 +407,7 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 - (void)processQueuedRecords {
 	ApptentiveAssertOperationQueue(self.operationQueue);
 
-	if (self.state == ApptentiveBackendStatePayloadDatabaseAvailable && self.networkAvailable && self.conversationManager.activeConversation.token != nil) {
+	if (self.networkAvailable && self.conversationManager.activeConversation.token != nil) {
 		[self.payloadSender createOperationsForQueuedRequestsInContext:self.managedObjectContext];
 	}
 }

@@ -46,6 +46,7 @@ static NSString *const ManifestFilename = @"manifest-v1.archive";
 
 static NSInteger ApptentiveInternalInconsistency = -201;
 static NSInteger ApptentiveAlreadyLoggedInErrorCode = -202;
+static NSInteger ApptentiveInBackgroundErrorCode = -203;
 
 NSString *const ApptentiveConversationStateDidChangeNotification = @"ApptentiveConversationStateDidChangeNotification";
 NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation = @"conversation";
@@ -468,6 +469,10 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 - (void)requestLoggedInConversationWithToken:(NSString *)token {
 	[self.operationQueue dispatchAsync:^{
+		if (!Apptentive.shared.backend.foreground) {
+			[self failLoginWithErrorCode:ApptentiveInBackgroundErrorCode failureReason:@"App is in background state"];
+		}
+
 		ApptentiveAssertOperationQueue(self.operationQueue);
 
 		NSError *jwtError;
@@ -924,7 +929,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 #pragma mark - Private
 
 - (void)fetchEngagementManifest {
-	if (self.manifestOperation != nil || self.activeConversation.identifier == nil) {
+	if (self.manifestOperation != nil || self.activeConversation.identifier == nil || !Apptentive.shared.backend.foreground) {
 		return;
 	}
 

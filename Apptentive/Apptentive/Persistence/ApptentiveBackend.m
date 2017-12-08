@@ -62,6 +62,8 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 
 @property (strong, nonatomic) ApptentiveReachability *reachability;
 
+@property (assign, nonatomic, getter=isForeground) BOOL foreground;
+
 @end
 
 
@@ -97,6 +99,7 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 		}
 
 		_reachability = [[ApptentiveReachability alloc] initWithHostname:self.baseURL.host];
+		_foreground = UIApplication.sharedApplication.applicationState != UIApplicationStateBackground;
 
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillEnterForegroundNotification:) name:UIApplicationWillEnterForegroundNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillTerminateNotification:) name:UIApplicationWillTerminateNotification object:nil];
@@ -195,6 +198,7 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 
 - (void)applicationDidEnterBackgroundNotification:(NSNotification *)notification {
 	[self.operationQueue dispatchAsync:^{
+		_foreground = NO;
 		[self addExitMetric];
 		[self shutDown];
 	}];
@@ -202,6 +206,7 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 
 - (void)applicationWillEnterForegroundNotification:(NSNotification *)notification {
 	[self.operationQueue dispatchAsync:^{
+		_foreground = YES;
 		[self resume];
 		[self addLaunchMetric];
 	}];
@@ -225,7 +230,7 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 	ApptentiveAssertOperationQueue(self.operationQueue);
 	ApptentiveConversation *conversation = self.conversationManager.activeConversation;
 
-	if (self.configurationOperation != nil || conversation.identifier == nil || !self.networkAvailable || [self.configuration.expiry timeIntervalSinceNow] > 0) {
+	if (self.configurationOperation != nil || conversation.identifier == nil || !self.networkAvailable || !self.foreground || [self.configuration.expiry timeIntervalSinceNow] > 0) {
 		return;
 	}
 
@@ -407,7 +412,7 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 - (void)processQueuedRecords {
 	ApptentiveAssertOperationQueue(self.operationQueue);
 
-	if (self.networkAvailable && self.conversationManager.activeConversation.token != nil) {
+	if (self.foreground && self.networkAvailable && self.conversationManager.activeConversation.token != nil) {
 		[self.payloadSender createOperationsForQueuedRequestsInContext:self.managedObjectContext];
 	}
 }
@@ -550,7 +555,7 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 - (void)updateMessageCheckingTimer {
 	ApptentiveAssertOperationQueue(self.operationQueue);
 	if (self.messageManager != nil) {
-		if (self.networkAvailable) {
+		if (self.networkAvailable && self.foreground) {
 			if (self.messageCenterInForeground) {
 				self.messageManager.pollingInterval = self.configuration.messageCenter.foregroundPollingInterval;
 			} else {

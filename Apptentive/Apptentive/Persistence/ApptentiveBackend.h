@@ -44,6 +44,7 @@ extern NSString *const ApptentiveAuthenticationDidFailNotificationKeyConversatio
 @property (readonly, strong, nonatomic) ApptentiveDispatchQueue *operationQueue;
 @property (readonly, strong, nonatomic) ApptentiveClient *client;
 @property (readonly, strong, nonatomic) ApptentivePayloadSender *payloadSender;
+@property (readonly, nonatomic, getter=isForeground) BOOL foreground;
 
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (readonly, strong, nonatomic) NSString *supportDirectoryPath;

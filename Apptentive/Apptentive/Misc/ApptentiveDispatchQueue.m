@@ -75,7 +75,7 @@ NSString * _Nullable ApptentiveGetCurrentThreadName() {
 	return _backgroundQueue;
 }
 
-+ (instancetype)createQueueWithName:(NSString *)name concurrencyType:(ApptentiveDispatchQueueConcurrencyType)type {
++ (nullable instancetype)createQueueWithName:(NSString *)name concurrencyType:(ApptentiveDispatchQueueConcurrencyType)type {
 	if (type == ApptentiveDispatchQueueConcurrencyTypeSerial) {
 		NSOperationQueue *queue = [NSOperationQueue new];
 		queue.name = name;

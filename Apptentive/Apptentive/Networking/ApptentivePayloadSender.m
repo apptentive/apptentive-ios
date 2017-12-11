@@ -299,7 +299,7 @@ NSString *const ApptentiveBuildPayloadRequestsName = @"Build Payload Requests";
 	[childContext setParentContext:context];
 
 	// execute the block on a background thread (this call returns immediatelly)
-	[childContext performBlock:^{
+	[childContext performBlockAndWait:^{
 
 	  // fetch all the requests without a conversation id (no sorting needed)
 	  NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"QueuedRequest"];

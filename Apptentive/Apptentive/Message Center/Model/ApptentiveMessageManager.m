@@ -194,7 +194,7 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 	NSMutableDictionary *mutableMessageIdentifierIndex = [NSMutableDictionary dictionaryWithCapacity:messageListJSON.count];
 	NSMutableArray *addedMessages = [NSMutableArray array];
 	NSMutableArray *updatedMessages = [NSMutableArray array];
-	NSString *lastDownloadedMessageIdentifier;
+	NSString *lastDownloadedMessageIdentifier = self.messageStore.lastMessageIdentifier;
 
 	// Correlate messages from server with local messages
 	for (NSDictionary *messageJSON in messageListJSON) {

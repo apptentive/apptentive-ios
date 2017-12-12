@@ -354,8 +354,9 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 - (void)updateWithCurrentValues {
 	_SDK = [[ApptentiveSDK alloc] initWithCurrentSDK];
 
-	_appRelease = [[ApptentiveAppRelease alloc] initWithCurrentAppRelease];
-	[_appRelease copyNonholonomicValuesFrom:self.appRelease];
+	ApptentiveAppRelease *currentAppRelease = [[ApptentiveAppRelease alloc] initWithCurrentAppRelease];
+	[currentAppRelease copyNonholonomicValuesFrom:self.appRelease];
+	_appRelease = currentAppRelease;
 
 	_state = ApptentiveConversationStateAnonymousPending;
 

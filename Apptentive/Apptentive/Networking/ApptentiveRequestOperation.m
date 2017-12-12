@@ -22,7 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 @property (assign, nonatomic) BOOL wasCompleted;
-@property (assign, nonatomic) BOOL wasCancelled;
+//@property (assign, nonatomic) BOOL wasCancelled;
 @property (readonly, nonatomic) NSTimeInterval duration;
 
 @end
@@ -84,13 +84,7 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 
 - (BOOL)isFinished {
 	@synchronized(self) {
-		return self.wasCompleted || self.wasCancelled;
-	}
-}
-
-- (BOOL)isCancelled {
-	@synchronized(self) {
-		return self.wasCancelled;
+		return self.wasCompleted;
 	}
 }
 
@@ -107,38 +101,38 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 		}
 
 		[self willChangeValueForKey:@"isExecuting"];
-		_task = [self.dataSource.URLSession dataTaskWithRequest:self.URLRequest
-											  completionHandler:^(NSData *_Nullable data, NSURLResponse *_Nullable response, NSError *_Nullable error) {
-												if (self.isCancelled || error.code == NSURLErrorCancelled) {
-													return;
-												} else if (!response) {
-													[self processNetworkError:error];
-												} else {
-													NSHTTPURLResponse *URLResponse = (NSHTTPURLResponse *)response;
-													_responseData = data; // Store "raw" response data to access from the callback
 
-													if ([[[self class] okStatusCodes] containsIndex:URLResponse.statusCode]) {
-														NSObject *responseObject = nil;
+		_task = [self.dataSource.URLSession dataTaskWithRequest:self.URLRequest completionHandler:^(NSData *_Nullable data, NSURLResponse *_Nullable response, NSError *_Nullable error) {
+			if (self.cancelled || error.code == NSURLErrorCancelled) {
+				[self completeOperation];
+				return;
+			} else if (!response) {
+				[self processNetworkError:error];
+			} else {
+				NSHTTPURLResponse *URLResponse = (NSHTTPURLResponse *)response;
 
-														if (URLResponse.statusCode != 204) { // "No Content"
-															responseObject = [ApptentiveJSONSerialization JSONObjectWithData:data error:&error];
+				if ([[[self class] okStatusCodes] containsIndex:URLResponse.statusCode]) {
+					NSObject *responseObject = nil;
 
-															if (responseObject == nil) { // Decoding error
-																[self processHTTPError:error withResponse:URLResponse responseData:data];
-															}
-														}
+					if (URLResponse.statusCode != 204) { // "No Content"
+						responseObject = [ApptentiveJSONSerialization JSONObjectWithData:data error:&error];
 
-														[self processResponse:URLResponse withObject:responseObject];
-													} else {
-														[self processHTTPError:error withResponse:URLResponse responseData:data];
-													}
+						if (responseObject == nil) { // Decoding error
+							[self processHTTPError:error withResponse:URLResponse responseData:data];
+						}
+					}
 
-													// check if request failed due to an authentication failure
-													if (URLResponse.statusCode == 401) {
-														[self processAuthenticationFailureResponseData:data];
-													}
-												}
-											  }];
+					[self processResponse:URLResponse withObject:responseObject];
+				} else {
+					[self processHTTPError:error withResponse:URLResponse responseData:data];
+				}
+
+				// check if request failed due to an authentication failure
+				if (URLResponse.statusCode == 401) {
+					[self processAuthenticationFailureResponseData:data];
+				}
+			}
+		}];
 
 		[self.task resume];
 		[self didChangeValueForKey:@"isExecuting"];
@@ -154,23 +148,8 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 
 - (void)cancel {
 	@synchronized(self) {
-		BOOL shouldFinish = self.isExecuting;
-
-		[self willChangeValueForKey:@"isCancelled"];
-		_wasCancelled = YES;
+		[super cancel];
 		[self.task cancel];
-		[self didChangeValueForKey:@"isCancelled"];
-
-		if (shouldFinish) {
-			[self willChangeValueForKey:@"isFinished"];
-			_wasCompleted = YES;
-
-			[self.dataSource.URLSession.delegateQueue addOperationWithBlock:^{
-			  [self.delegate requestOperation:self didFailWithError:nil];
-			}];
-
-			[self didChangeValueForKey:@"isFinished"];
-		}
 	}
 }
 

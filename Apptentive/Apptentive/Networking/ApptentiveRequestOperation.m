@@ -22,7 +22,6 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 @property (assign, nonatomic) BOOL wasCompleted;
-//@property (assign, nonatomic) BOOL wasCancelled;
 @property (readonly, nonatomic) NSTimeInterval duration;
 
 @end
@@ -110,6 +109,7 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 				[self processNetworkError:error];
 			} else {
 				NSHTTPURLResponse *URLResponse = (NSHTTPURLResponse *)response;
+				_responseData = data; // Store "raw" response data to access from the callback
 
 				if ([[[self class] okStatusCodes] containsIndex:URLResponse.statusCode]) {
 					NSObject *responseObject = nil;

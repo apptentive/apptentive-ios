@@ -283,7 +283,9 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 	dispatch_sync(dispatch_get_main_queue(), ^{
 		if (UIApplication.sharedApplication.applicationState != UIApplicationStateBackground) {
 			ApptentiveLogDebug(@"Synthesizing launch event on initial SDK startup.");
-			[self addLaunchMetric];
+			[self.operationQueue dispatchAsync:^{
+				[self addLaunchMetric];
+			}];
 		} else {
 			ApptentiveLogDebug(@"Skipping synthetic launch event because app started in the background.");
 		}

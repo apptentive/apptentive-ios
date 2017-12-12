@@ -160,9 +160,7 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 - (void)checkForDiffs {
 	@synchronized(self) {
 		ApptentiveAppRelease *currentAppRelease = [[ApptentiveAppRelease alloc] initWithCurrentAppRelease];
-		if (self.appRelease.overridingStyles) {
-			[currentAppRelease setOverridingStyles];
-		}
+		[currentAppRelease copyNonholonomicValuesFrom:self.appRelease];
 
 		ApptentiveSDK *currentSDK = [[ApptentiveSDK alloc] initWithCurrentSDK];
 
@@ -175,12 +173,12 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 			conversationNeedsUpdate = YES;
 
 			if (![currentAppRelease.version isEqualToVersion:self.appRelease.version]) {
-				[self.appRelease resetVersion];
+				[currentAppRelease resetVersion];
 				[self.engagement resetVersion];
 			}
 
 			if (![currentAppRelease.build isEqualToVersion:self.appRelease.build]) {
-				[self.appRelease resetBuild];
+				[currentAppRelease resetBuild];
 				[self.engagement resetBuild];
 			}
 
@@ -355,7 +353,10 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 
 - (void)updateWithCurrentValues {
 	_SDK = [[ApptentiveSDK alloc] initWithCurrentSDK];
+
 	_appRelease = [[ApptentiveAppRelease alloc] initWithCurrentAppRelease];
+	[_appRelease copyNonholonomicValuesFrom:self.appRelease];
+
 	_state = ApptentiveConversationStateAnonymousPending;
 
 	[self.device updateWithCurrentDeviceValues];

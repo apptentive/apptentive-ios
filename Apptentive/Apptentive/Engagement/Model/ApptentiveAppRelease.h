@@ -165,6 +165,21 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)setOverridingStyles;
 
+/**
+ Copies values from another app release object that can't be observed from the current state of the app.
+
+ @param otherAppRelease The app release object to copy values from
+ */
+- (void)copyNonholonomicValuesFrom:(ApptentiveAppRelease *)otherAppRelease;
+
+
+/**
+ Due to a bug some app release objects might be missing their timeAtInstall values.
+
+ @param timeAtInstall The install time to fall back to if values are missing.
+ */
+- (void)updateMissingTimeAtInstallTo:(NSDate *)timeAtInstall;
+
 @end
 
 NS_ASSUME_NONNULL_END

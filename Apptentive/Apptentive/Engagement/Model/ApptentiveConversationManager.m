@@ -9,6 +9,7 @@
 #import "ApptentiveConversationManager.h"
 #import "ApptentiveAppConfiguration.h"
 #import "ApptentiveAppInstall.h"
+#import "ApptentiveAppRelease.h"
 #import "ApptentiveBackend.h"
 #import "ApptentiveClient.h"
 #import "ApptentiveConversationMetadata.h"
@@ -102,6 +103,8 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	// TODO: dispatch debug event (EVT_CONVERSATION_LOAD_ACTIVE, activeConversation != null);
 
 	if (self.activeConversation != nil) {
+		[self updateMissingTimeAtInstall];
+
 		self.activeConversation.delegate = self;
 
 		[self handleConversationStateChange:self.activeConversation];
@@ -1006,6 +1009,27 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 	if ([self.manifest.expiry timeIntervalSinceNow] <= 0) {
 		[self fetchEngagementManifest];
+	}
+}
+
+- (void)updateMissingTimeAtInstall {
+	if (self.activeConversation.appRelease.timeAtInstallTotal == nil) {
+		NSError *error = nil;
+
+		// Get time at install from the creation date of the `com.apptentive.feedback` directory
+		NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:Apptentive.shared.backend.supportDirectoryPath error:&error];
+		if (attributes == nil) {
+			ApptentiveLogError(@"Error retrieving support directory attributes (%@)", error);
+			return;
+		}
+
+		NSDate *timeAtInstall = attributes[NSFileCreationDate];
+
+		if (timeAtInstall == nil) {
+			ApptentiveLogError(@"Error retrieving support directory creation date");
+		}
+
+		[self.activeConversation.appRelease updateMissingTimeAtInstallTo:timeAtInstall];
 	}
 }
 

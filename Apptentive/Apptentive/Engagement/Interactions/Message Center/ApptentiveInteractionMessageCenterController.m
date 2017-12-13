@@ -28,12 +28,8 @@ NS_ASSUME_NONNULL_BEGIN
 	ApptentiveNavigationController *navigationController = [[ApptentiveUtilities storyboard] instantiateViewControllerWithIdentifier:@"MessageCenterNavigation"];
 	ApptentiveMessageCenterViewController *messageCenter = navigationController.viewControllers.firstObject;
 
-	// TODO: Do this on the background queue?
-	ApptentiveConversation *conversation = Apptentive.shared.backend.conversationManager.activeConversation;
-	ApptentiveAssertNotNil(conversation, @"Conversation is nil");
-
 	ApptentiveAssertNotNil(Apptentive.shared.backend.conversationManager.messageManager, @"Attempted to present interaction without message manager: %@", self.interaction);
-	ApptentiveMessageCenterViewModel *viewModel = [[ApptentiveMessageCenterViewModel alloc] initWithConversation:(ApptentiveConversation *)conversation interaction:self.interaction messageManager:Apptentive.shared.backend.conversationManager.messageManager];
+	ApptentiveMessageCenterViewModel *viewModel = [[ApptentiveMessageCenterViewModel alloc] initWithInteraction:self.interaction messageManager:Apptentive.shared.backend.conversationManager.messageManager];
 	[viewModel start];
 
 	messageCenter.viewModel = viewModel;

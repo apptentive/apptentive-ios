@@ -41,12 +41,12 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 			[viewController presentViewController:self.presentedViewController
 										 animated:YES
 									   completion:^{
-										 [self.interaction engage:ATInteractionTextModalEventLabelLaunch fromViewController:viewController];
+										 [Apptentive.shared.backend engage:ATInteractionTextModalEventLabelLaunch fromInteraction:self.interaction fromViewController:viewController];
 									   }];
 		} else {
 			[(UIAlertController *)self.presentedViewController apptentive_presentAnimated:YES
 																			   completion:^{
-																				 [self.interaction engage:ATInteractionTextModalEventLabelLaunch fromViewController:nil];
+																				 [Apptentive.shared.backend engage:ATInteractionTextModalEventLabelLaunch fromInteraction:self.interaction fromViewController:nil];
 																			   }];
 		}
 	}
@@ -154,7 +154,7 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 		@"action_id": (actionConfig[@"id"] ?: [NSNull null]),
 	};
 
-	[self.interaction engage:ATInteractionTextModalEventLabelDismiss fromViewController:self.presentingViewController userInfo:userInfo];
+	[Apptentive.shared.backend engage:ATInteractionTextModalEventLabelDismiss fromInteraction:self.interaction fromViewController:self.presentingViewController userInfo:userInfo];
 
 	self.presentedViewController = nil;
 }
@@ -179,7 +179,7 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 		@"action_id": (actionConfig[@"id"] ?: [NSNull null]),
 	};
 
-	[self.interaction engage:ATInteractionTextModalEventLabelInteraction fromViewController:self.presentingViewController userInfo:userInfo];
+	[Apptentive.shared.backend engage:ATInteractionTextModalEventLabelInteraction fromInteraction:self.interaction fromViewController:self.presentingViewController userInfo:userInfo];
 
 	if (interaction) {
 		[[Apptentive sharedConnection].backend presentInteraction:interaction fromViewController:self.presentingViewController];

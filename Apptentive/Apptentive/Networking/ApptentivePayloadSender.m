@@ -37,7 +37,7 @@ NSString *const ApptentiveBuildPayloadRequestsName = @"Build Payload Requests";
 
 @implementation ApptentivePayloadSender
 
-- (instancetype)initWithBaseURL:(NSURL *)baseURL apptentiveKey:(NSString *)apptentiveKey apptentiveSignature:(NSString *)apptentiveSignature managedObjectContext:(NSManagedObjectContext *)managedObjectContext delegateQueue:(NSOperationQueue *)delegateQueue {
+- (instancetype)initWithBaseURL:(NSURL *)baseURL apptentiveKey:(NSString *)apptentiveKey apptentiveSignature:(NSString *)apptentiveSignature managedObjectContext:(NSManagedObjectContext *)managedObjectContext delegateQueue:(ApptentiveDispatchQueue *)delegateQueue {
 	self = [super initWithBaseURL:baseURL apptentiveKey:apptentiveKey apptentiveSignature:apptentiveSignature delegateQueue:delegateQueue];
 
 	if (self) {

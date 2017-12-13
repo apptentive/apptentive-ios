@@ -12,7 +12,6 @@
 #import "ApptentiveAttachment.h"
 #import "ApptentiveBackend+Engagement.h"
 #import "ApptentiveBackend.h"
-#import "ApptentiveBannerViewController.h"
 #import "ApptentiveDevice.h"
 #import "ApptentiveInteraction.h"
 #import "ApptentiveLogMonitor.h"
@@ -26,6 +25,7 @@
 #import "ApptentiveUtilities.h"
 #import "ApptentiveVersion.h"
 #import "Apptentive_Private.h"
+#import "ApptentiveDispatchQueue.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -85,7 +85,7 @@ static Apptentive *_sharedInstance;
 @end
 
 
-@interface Apptentive () <ApptentiveBannerViewControllerDelegate>
+@interface Apptentive ()
 
 @property (nonatomic, readonly) ApptentiveMessageManager *messageManager;
 
@@ -118,9 +118,7 @@ static Apptentive *_sharedInstance;
 
 		[ApptentiveLogMonitor tryInitializeWithBaseURL:configuration.baseURL appKey:configuration.apptentiveKey signature:configuration.apptentiveSignature];
 
-		_operationQueue = [[NSOperationQueue alloc] init];
-		_operationQueue.maxConcurrentOperationCount = 1;
-		_operationQueue.name = @"Apptentive Operation Queue";
+		_operationQueue = [ApptentiveDispatchQueue createQueueWithName:@"Apptentive Main Queue" concurrencyType:ApptentiveDispatchQueueConcurrencyTypeSerial];
 
 		_style = [[ApptentiveStyleSheet alloc] init];
 		_apptentiveKey = configuration.apptentiveKey;
@@ -173,7 +171,7 @@ static Apptentive *_sharedInstance;
 	if (!self.didAccessStyleSheet) {
 		_didAccessStyleSheet = YES;
 
-		[self.operationQueue addOperationWithBlock:^{
+		[self.operationQueue dispatchAsync:^{
 		  if (self.backend.conversationManager.activeConversation) {
 			  [self.backend.conversationManager.activeConversation didOverrideStyles];
 		  }
@@ -182,29 +180,23 @@ static Apptentive *_sharedInstance;
 }
 
 - (nullable NSString *)personName {
-	return self.backend.conversationManager.activeConversation.person.name;
+	return self.backend.personName;
 }
 
 - (void)setPersonName:(nullable NSString *)personName {
-	[self.operationQueue addOperationWithBlock:^{
-	  self.backend.conversationManager.activeConversation.person.name = personName;
-	  [self.backend schedulePersonUpdate];
-	}];
+	self.backend.personName = personName;
 }
 
 - (nullable NSString *)personEmailAddress {
-	return self.backend.conversationManager.activeConversation.person.emailAddress;
+	return self.backend.personEmailAddress;
 }
 
 - (void)setPersonEmailAddress:(nullable NSString *)personEmailAddress {
-	[self.operationQueue addOperationWithBlock:^{
-	  self.backend.conversationManager.activeConversation.person.emailAddress = personEmailAddress;
-	  [self.backend schedulePersonUpdate];
-	}];
+	self.backend.personEmailAddress = personEmailAddress;
 }
 
 - (void)sendAttachmentText:(NSString *)text {
-	[self.operationQueue addOperationWithBlock:^{
+	[self.operationQueue dispatchAsync:^{
 	  if (self.backend.conversationManager.activeConversation == nil) {
 		  ApptentiveLogError(@"Attempting to send message with no active conversation.");
 		  return;
@@ -224,7 +216,7 @@ static Apptentive *_sharedInstance;
 }
 
 - (void)sendAttachmentImage:(UIImage *)image {
-	[self.operationQueue addOperationWithBlock:^{
+	[self.operationQueue dispatchAsync:^{
 	  if (self.backend.conversationManager.activeConversation == nil) {
 		  ApptentiveLogError(@"Attempting to send message with no active conversation.");
 		  return;
@@ -264,7 +256,7 @@ static Apptentive *_sharedInstance;
 }
 
 - (void)sendAttachmentFile:(NSData *)fileData withMimeType:(NSString *)mimeType {
-	[self.operationQueue addOperationWithBlock:^{
+	[self.operationQueue dispatchAsync:^{
 	  if (self.backend.conversationManager.activeConversation == nil) {
 		  ApptentiveLogError(@"Attempting to send message with no active conversation.");
 		  return;
@@ -304,42 +296,42 @@ static Apptentive *_sharedInstance;
 }
 
 - (void)addCustomDeviceDataString:(NSString *)string withKey:(NSString *)key {
-	[self.operationQueue addOperationWithBlock:^{
+	[self.operationQueue dispatchAsync:^{
 	  [self.backend.conversationManager.activeConversation.device addCustomString:string withKey:key];
 	  [self.backend scheduleDeviceUpdate];
 	}];
 }
 
 - (void)addCustomDeviceDataNumber:(NSNumber *)number withKey:(NSString *)key {
-	[self.operationQueue addOperationWithBlock:^{
+	[self.operationQueue dispatchAsync:^{
 	  [self.backend.conversationManager.activeConversation.device addCustomNumber:number withKey:key];
 	  [self.backend scheduleDeviceUpdate];
 	}];
 }
 
 - (void)addCustomDeviceDataBool:(BOOL)boolValue withKey:(NSString *)key {
-	[self.operationQueue addOperationWithBlock:^{
+	[self.operationQueue dispatchAsync:^{
 	  [self.backend.conversationManager.activeConversation.device addCustomBool:boolValue withKey:key];
 	  [self.backend scheduleDeviceUpdate];
 	}];
 }
 
 - (void)addCustomPersonDataString:(NSString *)string withKey:(NSString *)key {
-	[self.operationQueue addOperationWithBlock:^{
+	[self.operationQueue dispatchAsync:^{
 	  [self.backend.conversationManager.activeConversation.person addCustomString:string withKey:key];
 	  [self.backend schedulePersonUpdate];
 	}];
 }
 
 - (void)addCustomPersonDataNumber:(NSNumber *)number withKey:(NSString *)key {
-	[self.operationQueue addOperationWithBlock:^{
+	[self.operationQueue dispatchAsync:^{
 	  [self.backend.conversationManager.activeConversation.person addCustomNumber:number withKey:key];
 	  [self.backend schedulePersonUpdate];
 	}];
 }
 
 - (void)addCustomPersonDataBool:(BOOL)boolValue withKey:(NSString *)key {
-	[self.operationQueue addOperationWithBlock:^{
+	[self.operationQueue dispatchAsync:^{
 	  [self.backend.conversationManager.activeConversation.person addCustomBool:boolValue withKey:key];
 	  [self.backend schedulePersonUpdate];
 	}];
@@ -382,14 +374,14 @@ static Apptentive *_sharedInstance;
 }
 
 - (void)removeCustomPersonDataWithKey:(NSString *)key {
-	[self.operationQueue addOperationWithBlock:^{
+	[self.operationQueue dispatchAsync:^{
 	  [self.backend.conversationManager.activeConversation.person removeCustomValueWithKey:key];
 	  [self.backend schedulePersonUpdate];
 	}];
 }
 
 - (void)removeCustomDeviceDataWithKey:(NSString *)key {
-	[self.operationQueue addOperationWithBlock:^{
+	[self.operationQueue dispatchAsync:^{
 	  [self.backend.conversationManager.activeConversation.device removeCustomValueWithKey:key];
 	  [self.backend scheduleDeviceUpdate];
 	}];
@@ -426,7 +418,7 @@ static Apptentive *_sharedInstance;
 								ntohl(tokenBytes[3]), ntohl(tokenBytes[4]), ntohl(tokenBytes[5]),
 								ntohl(tokenBytes[6]), ntohl(tokenBytes[7])];
 
-	[self.operationQueue addOperationWithBlock:^{
+	[self.operationQueue dispatchAsync:^{
 	  ApptentiveDevice *device = self.backend.conversationManager.activeConversation.device;
 
 	  NSMutableDictionary *integrationConfiguration = [device.integrationConfiguration mutableCopy] ?: [NSMutableDictionary dictionary];
@@ -462,7 +454,7 @@ static Apptentive *_sharedInstance;
 }
 
 - (void)addIntegration:(NSString *)integration withConfiguration:(NSDictionary *)configuration {
-	[self.operationQueue addOperationWithBlock:^{
+	[self.operationQueue dispatchAsync:^{
 	  NSMutableDictionary *integrationConfiguration = [self.backend.conversationManager.activeConversation.device.integrationConfiguration mutableCopy];
 	  ApptentiveDictionarySetKeyValue(integrationConfiguration, integration, configuration);
 	  self.backend.conversationManager.activeConversation.device.integrationConfiguration = integrationConfiguration;
@@ -471,7 +463,7 @@ static Apptentive *_sharedInstance;
 }
 
 - (void)removeIntegration:(NSString *)integration {
-	[self.operationQueue addOperationWithBlock:^{
+	[self.operationQueue dispatchAsync:^{
 	  NSMutableDictionary *integrationConfiguration = [self.backend.conversationManager.activeConversation.device.integrationConfiguration mutableCopy];
 	  [integrationConfiguration removeObjectForKey:integration];
 	  self.backend.conversationManager.activeConversation.device.integrationConfiguration = integrationConfiguration;
@@ -479,25 +471,52 @@ static Apptentive *_sharedInstance;
 	}];
 }
 
-- (BOOL)canShowInteractionForEvent:(NSString *)event {
-	return [self.backend canShowInteractionForLocalEvent:event];
+- (void)queryCanShowInteractionForEvent:(NSString *)event completion:(void (^)(BOOL canShowInteraction))completion {
+	[self.operationQueue dispatchAsync:^{
+		BOOL canShowInteraction = [self.backend canShowInteractionForLocalEvent:event];
+		if (completion) {
+			dispatch_async(dispatch_get_main_queue(), ^{
+				completion(canShowInteraction);
+			});
+		}
+	}];
 }
 
-- (BOOL)engage:(NSString *)event fromViewController:(nullable UIViewController *)viewController {
-	return [self engage:event withCustomData:nil fromViewController:viewController];
+- (void)engage:(NSString *)event fromViewController:(nullable UIViewController *)viewController {
+	[self engage:event withCustomData:nil fromViewController:viewController completion:nil];
 }
 
-- (BOOL)engage:(NSString *)event withCustomData:(nullable NSDictionary *)customData fromViewController:(nullable UIViewController *)viewController {
-	return [self engage:event withCustomData:customData withExtendedData:nil fromViewController:viewController];
+- (void)engage:(NSString *)event fromViewController:(UIViewController *_Nullable)viewController completion:(void (^_Nullable)(BOOL engaged))completion {
+	[self engage:event withCustomData:nil fromViewController:viewController completion:completion];
 }
 
-- (BOOL)engage:(NSString *)event withCustomData:(nullable NSDictionary *)customData withExtendedData:(nullable NSArray *)extendedData fromViewController:(nullable UIViewController *)viewController {
-	@try {
-		return [self.backend engageLocalEvent:event userInfo:nil customData:customData extendedData:extendedData fromViewController:viewController];
-	} @catch (NSException *e) {
-		ApptentiveLogCrit(@"Exception while engaging event: %@", event);
-		return NO;
-	}
+- (void)engage:(NSString *)event withCustomData:(nullable NSDictionary *)customData fromViewController:(nullable UIViewController *)viewController {
+	[self engage:event withCustomData:customData withExtendedData:nil fromViewController:viewController completion:nil];
+}
+
+- (void)engage:(NSString *)event withCustomData:(nullable NSDictionary *)customData fromViewController:(UIViewController *_Nullable)viewController completion:(void (^_Nullable)(BOOL engaged))completion {
+	[self engage:event withCustomData:customData withExtendedData:nil fromViewController:viewController completion:completion];
+}
+
+- (void)engage:(NSString *)event withCustomData:(nullable NSDictionary *)customData withExtendedData:(nullable NSArray *)extendedData fromViewController:(nullable UIViewController *)viewController {
+	[self engage:event withCustomData:customData withExtendedData:extendedData fromViewController:viewController completion:nil];
+}
+
+- (void)engage:(NSString *)event withCustomData:(nullable NSDictionary *)customData withExtendedData:(nullable NSArray<NSDictionary *> *)extendedData fromViewController:(UIViewController *_Nullable)viewController completion:(void (^_Nullable)(BOOL engaged))completion {
+	[self.operationQueue dispatchAsync:^{
+		
+		// we need to dispatch the callback on UI-thread
+		void (^wrappedCompletion)(BOOL engaged) = nil;
+		if (completion != nil) {
+			wrappedCompletion = ^(BOOL engaged){
+				dispatch_async(dispatch_get_main_queue(), ^{
+					completion(engaged);
+				});
+			};
+		}
+		
+		[self.backend engageLocalEvent:event userInfo:nil customData:customData extendedData:extendedData fromViewController:viewController completion:wrappedCompletion];
+	}];
 }
 
 + (NSDictionary *)extendedDataDate:(NSDate *)date {
@@ -596,23 +615,38 @@ static Apptentive *_sharedInstance;
 
 #pragma mark - Message Center
 
-- (BOOL)canShowMessageCenter {
-	NSString *messageCenterCodePoint = [[ApptentiveInteraction apptentiveAppInteraction] codePointForEvent:ApptentiveEngagementMessageCenterEvent];
-	return [self.backend canShowInteractionForCodePoint:messageCenterCodePoint];
+- (void)queryCanShowMessageCenterWithCompletion:(void (^)(BOOL canShowMessageCenter))completion {
+	[self.operationQueue dispatchAsync:^{
+		NSString *messageCenterCodePoint = [[ApptentiveInteraction apptentiveAppInteraction] codePointForEvent:ApptentiveEngagementMessageCenterEvent];
+		BOOL canShowInteraction = [self.backend canShowInteractionForCodePoint:messageCenterCodePoint];
+		if (completion) {
+			dispatch_async(dispatch_get_main_queue(), ^{
+				completion(canShowInteraction);
+			});
+		}
+	}];
 }
 
-- (BOOL)presentMessageCenterFromViewController:(nullable UIViewController *)viewController {
-	return [self.backend presentMessageCenterFromViewController:viewController];
+- (void)presentMessageCenterFromViewController:(nullable UIViewController *)viewController {
+	[self presentMessageCenterFromViewController:viewController completion:nil];
 }
 
-- (BOOL)presentMessageCenterFromViewController:(nullable UIViewController *)viewController withCustomData:(nullable NSDictionary *)customData {
+- (void)presentMessageCenterFromViewController:(nullable UIViewController *)viewController completion:(void (^_Nullable)(BOOL presented))completion {
+	[self.backend presentMessageCenterFromViewController:viewController completion:completion];
+}
+
+- (void)presentMessageCenterFromViewController:(nullable UIViewController *)viewController withCustomData:(nullable NSDictionary *)customData {
+	[self presentMessageCenterFromViewController:viewController withCustomData:customData completion:nil];
+}
+
+- (void)presentMessageCenterFromViewController:(nullable UIViewController *)viewController withCustomData:(nullable NSDictionary *)customData completion:(void (^ _Nullable)(BOOL))completion {
 	NSMutableDictionary *allowedCustomMessageData = [NSMutableDictionary dictionary];
 
 	for (NSString *key in [customData allKeys]) {
 		[self addCustomData:[customData objectForKey:key] withKey:key toCustomDataDictionary:allowedCustomMessageData];
 	}
 
-	return [self.backend presentMessageCenterFromViewController:viewController withCustomData:allowedCustomMessageData];
+	[self.backend presentMessageCenterFromViewController:viewController withCustomData:allowedCustomMessageData completion:completion];
 }
 
 - (void)dismissMessageCenterAnimated:(BOOL)animated completion:(nullable void (^)(void))completion {
@@ -650,7 +684,7 @@ static Apptentive *_sharedInstance;
 
 	if (apptentivePayload != nil) {
 		UIApplicationState applicationState = [UIApplication sharedApplication].applicationState;
-		[self.operationQueue addOperationWithBlock:^{
+		[self.operationQueue dispatchAsync:^{
 		  BOOL shouldCallCompletionHandler = YES;
 
 		  // Make sure the push is for the currently logged-in conversation
@@ -877,7 +911,7 @@ static Apptentive *_sharedInstance;
 	  }
 	};
 
-	[self.operationQueue addOperationWithBlock:^{
+	[self.operationQueue dispatchAsync:^{
 	  [self.backend.conversationManager logInWithToken:token completion:wrappingCompletion];
 	}];
 }
@@ -885,7 +919,7 @@ static Apptentive *_sharedInstance;
 - (void)logOut {
 	[self dismissAllInteractions:NO];
 
-	[self.operationQueue addOperationWithBlock:^{
+	[self.operationQueue dispatchAsync:^{
 	  if (self.backend.conversationManager.activeConversation.state != ApptentiveConversationStateLoggedIn) {
 		  ApptentiveLogError(@"Attempting to log out of a conversation that is not logged in.");
 		  return;
@@ -895,7 +929,7 @@ static Apptentive *_sharedInstance;
 
 	  // To ensure that the logout event payload gets added before the logout payload,
 	  // use a separate block to run the actual logout operation.
-	  [self.operationQueue addOperationWithBlock:^{
+	  [self.operationQueue dispatchAsync:^{
 		[self.backend.conversationManager endActiveConversation];
 	  }];
 	}];
@@ -946,7 +980,7 @@ static Apptentive *_sharedInstance;
 - (void)dispatchOnOperationQueue:(void (^)(void))block {
 	ApptentiveAssertNotNil(block, @"Attempted to execute a nil block");
 	if (block) {
-		[_operationQueue addOperationWithBlock:block];
+		[_operationQueue dispatchAsync:block];
 	}
 }
 

@@ -40,12 +40,16 @@ NSString *const ATInteractionRatingDialogEventLabelDecline = @"decline";
 			[viewController presentViewController:self.presentedViewController
 										 animated:YES
 									   completion:^{
-										 [self.interaction engage:ATInteractionRatingDialogEventLabelLaunch fromViewController:viewController];
+				[Apptentive.shared.backend engage:ATInteractionRatingDialogEventLabelLaunch
+							      fromInteraction:self.interaction
+							   fromViewController:viewController];
 									   }];
 		} else {
 			[(UIAlertController *)self.presentedViewController apptentive_presentAnimated:YES
 																			   completion:^{
-																				 [self.interaction engage:ATInteractionRatingDialogEventLabelLaunch fromViewController:nil];
+														[Apptentive.shared.backend engage:ATInteractionRatingDialogEventLabelLaunch
+																	      fromInteraction:self.interaction
+																	   fromViewController:nil];
 																			   }];
 		}
 	}
@@ -99,24 +103,27 @@ NSString *const ATInteractionRatingDialogEventLabelDecline = @"decline";
 	[alertController addAction:[UIAlertAction actionWithTitle:self.rateText
 														style:UIAlertActionStyleDefault
 													  handler:^(UIAlertAction *action) {
-														[self.interaction engage:ATInteractionRatingDialogEventLabelRate fromViewController:self.presentingViewController];
-
+							[Apptentive.shared.backend engage:ATInteractionRatingDialogEventLabelRate
+											  fromInteraction:self.interaction
+										   fromViewController:self.presentingViewController];
 														self.presentedViewController = nil;
 													  }]];
 
 	[alertController addAction:[UIAlertAction actionWithTitle:self.remindText
 														style:UIAlertActionStyleDefault
 													  handler:^(UIAlertAction *action) {
-														[self.interaction engage:ATInteractionRatingDialogEventLabelRemind fromViewController:self.presentingViewController];
-
+							[Apptentive.shared.backend engage:ATInteractionRatingDialogEventLabelRemind
+											  fromInteraction:self.interaction
+										   fromViewController:self.presentingViewController];
 														self.presentedViewController = nil;
 													  }]];
 
 	[alertController addAction:[UIAlertAction actionWithTitle:self.declineText
 														style:UIAlertActionStyleCancel
 													  handler:^(UIAlertAction *action) {
-														[self.interaction engage:ATInteractionRatingDialogEventLabelDecline fromViewController:self.presentingViewController];
-
+							[Apptentive.shared.backend engage:ATInteractionRatingDialogEventLabelDecline
+											  fromInteraction:self.interaction
+										   fromViewController:self.presentingViewController];
 														self.presentedViewController = nil;
 													  }]];
 

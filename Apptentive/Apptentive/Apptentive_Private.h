@@ -26,8 +26,7 @@ extern NSString *_Nonnull const ApptentiveCustomDeviceDataPreferenceKey;
 extern NSString *_Nonnull const ApptentiveCustomPersonDataPreferenceKey;
 extern NSString *_Nonnull const ApptentiveManifestRawDataKey;
 
-@class ApptentiveMessage, ApptentiveBackend;
-
+@class ApptentiveMessage, ApptentiveBackend, ApptentiveDispatchQueue;
 
 @interface Apptentive ()
 
@@ -35,7 +34,7 @@ extern NSString *_Nonnull const ApptentiveManifestRawDataKey;
  * This private serial queue is used for all Apptentive internal API calls and callbacks.
  * You may think of it as of the 'main' queue for the SDK itself.
  */
-@property (readonly, nonatomic) NSOperationQueue *operationQueue;
+@property (readonly, nonatomic) ApptentiveDispatchQueue *operationQueue;
 
 @property (readonly, nonatomic) NSURL *baseURL;
 @property (readonly, nonatomic) ApptentiveBackend *backend;
@@ -46,18 +45,13 @@ extern NSString *_Nonnull const ApptentiveManifestRawDataKey;
 @property (readonly, nonatomic) id<ApptentiveStyle> style;
 @property (readonly, nonatomic) BOOL didAccessStyleSheet;
 
-/*!
- * Returns the NSBundle corresponding to the bundle containing Apptentive's
- * images, xibs, strings files, etc.
- */
-
-- (void)showNotificationBannerForMessage:(ApptentiveMessage *)message;
-
 + (NSDictionary *)timestampObjectWithNumber:(NSNumber *)seconds;
 + (NSDictionary *)versionObjectWithVersion:(NSString *)version;
 + (NSDictionary *)timestampObjectWithDate:(NSDate *)date;
 
 - (UIViewController *)viewControllerForInteractions;
+
+- (void)dispatchOnOperationQueue:(void (^)(void))block;
 
 @end
 

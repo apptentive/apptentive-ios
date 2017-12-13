@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 typedef void (^ApptentiveAssertionCallback)(NSString *filename, NSInteger line, NSString *message);
 
 extern void ApptentiveSetAssertionCallback(ApptentiveAssertionCallback callback);
+extern NSString * _Nullable ApptentiveGetCurrentThreadName(void);
 
 /*!
  * @define ApptentiveAssertFail(...)
@@ -64,7 +65,16 @@ extern void ApptentiveSetAssertionCallback(ApptentiveAssertionCallback callback)
  * @param ... An optional supplementary description of the failure. A literal NSString, optionally with string format specifiers. This parameter can be completely omitted.
  */
 #define ApptentiveAssertOperationQueue(expression) \
-	if (NSOperationQueue.currentQueue != (expression)) __ApptentiveAssertHelper(#expression, __FILE__, __LINE__, __PRETTY_FUNCTION__, @"Unexpected operation queue: %@", NSOperationQueue.currentQueue)
+	if (!(expression).isCurrent) __ApptentiveAssertHelper(#expression, __FILE__, __LINE__, __PRETTY_FUNCTION__, @"Unexpected operation queue: %@", ApptentiveGetCurrentThreadName())
+
+/*!
+ * @define ApptentiveAssertMainQueue(...)
+ * Generates a failure when ((\a expression1) does not match the current dispatch queue.
+ * @param expression An expression of dispatch_queue_t type.
+ * @param ... An optional supplementary description of the failure. A literal NSString, optionally with string format specifiers. This parameter can be completely omitted.
+ */
+#define ApptentiveAssertMainQueue \
+if (![NSThread isMainThread]) __ApptentiveAssertHelper("[NSThread isMainThread]", __FILE__, __LINE__, __PRETTY_FUNCTION__, @"Unexpected operation queue: %@", ApptentiveGetCurrentThreadName());
 
 void __ApptentiveAssertHelper(const char *expression, const char *file, int line, const char *function, ...);
 

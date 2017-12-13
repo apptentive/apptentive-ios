@@ -8,6 +8,8 @@
 
 #import "ApptentiveInteractionNavigateToLink.h"
 #import "ApptentiveInteraction.h"
+#import "Apptentive_Private.h"
+#import "ApptentiveBackend+Engagement.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -50,7 +52,7 @@ NSString *const ATInteractionNavigateToLinkEventLabelNavigate = @"navigate";
 		@"success": @(openedURL),
 	};
 
-	[self.interaction engage:ATInteractionNavigateToLinkEventLabelNavigate fromViewController:nil userInfo:userInfo];
+	[Apptentive.shared.backend engage:ATInteractionNavigateToLinkEventLabelNavigate fromInteraction:self.interaction fromViewController:nil userInfo:userInfo];
 }
 
 @end

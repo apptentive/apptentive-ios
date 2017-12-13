@@ -19,10 +19,14 @@
 #import "ApptentiveSerialRequest.h"
 #import "ApptentiveUtilities.h"
 #import "Apptentive_Private.h"
+#import "ApptentiveDispatchQueue.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 static NSString *const MessageStoreFileName = @"messages-v1.archive";
+
+NSString *const ATMessageCenterDidSkipProfileKey = @"ATMessageCenterDidSkipProfileKey";
+NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKey";
 
 
 @interface ApptentiveMessageManager ()
@@ -32,6 +36,7 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 @property (strong, nonatomic) NSDictionary *currentCustomData;
 @property (readonly, nonatomic) NSMutableDictionary *messageIdentifierIndex;
 @property (readonly, nonatomic) ApptentiveMessageStore *messageStore;
+@property (readonly, nonatomic) NSInteger unreadCount;
 
 @property (readonly, nonatomic) NSString *messageStorePath;
 @property (nullable, copy, nonatomic) void (^backgroundFetchBlock)(UIBackgroundFetchResult);
@@ -41,7 +46,7 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 
 @implementation ApptentiveMessageManager
 
-- (instancetype)initWithStoragePath:(NSString *)storagePath client:(ApptentiveClient *)client pollingInterval:(NSTimeInterval)pollingInterval conversation:(ApptentiveConversation *)conversation operationQueue:(NSOperationQueue *)operationQueue {
+- (instancetype)initWithStoragePath:(NSString *)storagePath client:(ApptentiveClient *)client pollingInterval:(NSTimeInterval)pollingInterval conversation:(ApptentiveConversation *)conversation operationQueue:(ApptentiveDispatchQueue *)operationQueue {
 	self = [super init];
 
 	if (self) {
@@ -57,6 +62,9 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 
 		_messageIdentifierIndex = [NSMutableDictionary dictionary];
 		_messageStore = [NSKeyedUnarchiver unarchiveObjectWithFile:self.messageStorePath] ?: [[ApptentiveMessageStore alloc] init];
+
+		_didSkipProfile = [conversation.userInfo[ATMessageCenterDidSkipProfileKey] boolValue];
+		_draftMessage = conversation.userInfo[ATMessageCenterDraftMessageKey];
 
 		for (ApptentiveMessage *message in _messageStore.messages) {
 			for (ApptentiveAttachment *attachment in message.attachments) {
@@ -156,6 +164,22 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 	return result;
 }
 
+- (void)setDidSkipProfile:(BOOL)didSkipProfile {
+	_didSkipProfile = didSkipProfile;
+
+	[self.operationQueue dispatchAsync:^{
+		[self.conversation setUserInfo:@(didSkipProfile) forKey:ATMessageCenterDidSkipProfileKey];
+	}];
+}
+
+- (void)setDraftMessage:(NSString *)draftMessage {
+	_draftMessage = draftMessage;
+
+	[self.operationQueue dispatchAsync:^{
+		[self.conversation setUserInfo:draftMessage forKey:ATMessageCenterDraftMessageKey];
+	}];
+}
+
 #pragma mark Request Operation Delegate
 
 - (void)processMessageOperationResponse:(ApptentiveRequestOperation *)operation {
@@ -170,7 +194,7 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 	NSMutableDictionary *mutableMessageIdentifierIndex = [NSMutableDictionary dictionaryWithCapacity:messageListJSON.count];
 	NSMutableArray *addedMessages = [NSMutableArray array];
 	NSMutableArray *updatedMessages = [NSMutableArray array];
-	NSString *lastDownloadedMessageIdentifier;
+	NSString *lastDownloadedMessageIdentifier = self.messageStore.lastMessageIdentifier;
 
 	// Correlate messages from server with local messages
 	for (NSDictionary *messageJSON in messageListJSON) {
@@ -288,7 +312,7 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 #pragma mark - Sending Messages
 
 - (void)sendMessage:(ApptentiveMessage *)message {
-	[self.operationQueue addOperationWithBlock:^{
+	[self.operationQueue dispatchAsync:^{
 	  message.sender = [[ApptentiveMessageSender alloc] initWithName:nil identifier:self.localUserIdentifier profilePhotoURL:nil];
 
 	  [self enqueueMessageForSending:message];
@@ -298,7 +322,7 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 }
 
 - (void)enqueueMessageForSendingOnBackgroundQueue:(ApptentiveMessage *)message {
-	[self.operationQueue addOperationWithBlock:^{
+	[self.operationQueue dispatchAsync:^{
 	  [self enqueueMessageForSending:message];
 	}];
 }
@@ -410,6 +434,7 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 		_unreadCount = unreadCount;
 
 		dispatch_async(dispatch_get_main_queue(), ^{
+		  Apptentive.shared.backend.unreadMessageCount = unreadCount;
 		  [[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveMessageCenterUnreadCountChangedNotification object:self userInfo:@{ @"count": @(unreadCount) }];
 		});
 	}

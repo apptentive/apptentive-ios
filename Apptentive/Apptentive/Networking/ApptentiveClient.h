@@ -12,7 +12,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class ApptentiveConversation;
+@class ApptentiveConversation, ApptentiveDispatchQueue;
 
 
 @interface ApptentiveClient : NSObject <NSURLSessionDelegate, ApptentiveRequestOperationDataSource>
@@ -22,7 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (readonly, nonatomic) NSString *apptentiveKey;
 @property (readonly, nonatomic) NSString *apptentiveSignature;
 
-- (instancetype)initWithBaseURL:(NSURL *)baseURL apptentiveKey:(NSString *)apptentiveKey apptentiveSignature:(NSString *)apptentiveSignature delegateQueue:(NSOperationQueue *)delegateQueue;
+- (instancetype)initWithBaseURL:(NSURL *)baseURL apptentiveKey:(NSString *)apptentiveKey apptentiveSignature:(NSString *)apptentiveSignature delegateQueue:(ApptentiveDispatchQueue *)delegateQueue;
 
 - (ApptentiveRequestOperation *)requestOperationWithRequest:(id<ApptentiveRequest>)request token:(NSString *_Nullable)token delegate:(ApptentiveRequestOperationCallback *)delegate;
 - (ApptentiveRequestOperation *)requestOperationWithRequest:(id<ApptentiveRequest>)request legacyToken:(NSString *_Nullable)token delegate:(ApptentiveRequestOperationCallback *)delegate;

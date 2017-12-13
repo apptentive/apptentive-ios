@@ -18,6 +18,7 @@
 #import "ApptentiveInteractionInvocation.h"
 #import "ApptentiveSerialRequest.h"
 #import "Apptentive_Private.h"
+#import "ApptentiveDispatchQueue.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -34,6 +35,7 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 @implementation ApptentiveBackend (Engagement)
 
 - (BOOL)canShowInteractionForLocalEvent:(NSString *)event {
+	ApptentiveAssertOperationQueue(self.operationQueue);
 	NSString *codePoint = [[ApptentiveInteraction localAppInteraction] codePointForEvent:event];
 
 	return [self canShowInteractionForCodePoint:codePoint];
@@ -82,43 +84,41 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 	return codePoint;
 }
 
-- (BOOL)engageApptentiveAppEvent:(NSString *)event {
-	return [[ApptentiveInteraction apptentiveAppInteraction] engage:event fromViewController:nil];
+- (void)engageApptentiveAppEvent:(NSString *)event {
+	[self engage:event fromInteraction:[ApptentiveInteraction apptentiveAppInteraction] fromViewController:nil];
 }
 
-- (BOOL)engageLocalEvent:(NSString *)event userInfo:(nullable NSDictionary *)userInfo customData:(nullable NSDictionary *)customData extendedData:(nullable NSArray *)extendedData fromViewController:(nullable UIViewController *)viewController {
-	return [[ApptentiveInteraction localAppInteraction] engage:event fromViewController:viewController userInfo:userInfo customData:customData extendedData:extendedData];
+- (void)engageLocalEvent:(NSString *)event userInfo:(nullable NSDictionary *)userInfo customData:(nullable NSDictionary *)customData extendedData:(nullable NSArray *)extendedData fromViewController:(nullable UIViewController *)viewController {
+	[self engageLocalEvent:event userInfo:userInfo customData:customData extendedData:extendedData fromViewController:viewController completion:nil];
 }
 
-- (BOOL)engageCodePoint:(NSString *)codePoint fromInteraction:(nullable ApptentiveInteraction *)fromInteraction userInfo:(nullable NSDictionary *)userInfo customData:(nullable NSDictionary *)customData extendedData:(nullable NSArray *)extendedData fromViewController:(nullable UIViewController *)viewController {
-	if (self.state != ApptentiveBackendStatePayloadDatabaseAvailable) {
-		[self.operationQueue addOperationWithBlock:^{
-		  [self engageCodePoint:codePoint fromInteraction:fromInteraction userInfo:userInfo customData:customData extendedData:extendedData fromViewController:viewController];
-		}];
+- (void)engageLocalEvent:(NSString *)event userInfo:(nullable NSDictionary *)userInfo customData:(nullable NSDictionary *)customData extendedData:(nullable NSArray *)extendedData fromViewController:(nullable UIViewController *)viewController completion:(void (^_Nullable)(BOOL engaged))completion {
+	[self engage:event fromInteraction:[ApptentiveInteraction localAppInteraction] fromViewController:viewController userInfo:userInfo customData:customData extendedData:extendedData completion:completion];
+}
 
-		ApptentiveLogInfo(@"Backend not ready. Deferring engagement of %@", codePoint);
-		return NO;
-	}
+- (void)engageCodePoint:(NSString *)codePoint fromInteraction:(nullable ApptentiveInteraction *)fromInteraction userInfo:(nullable NSDictionary *)userInfo customData:(nullable NSDictionary *)customData extendedData:(nullable NSArray *)extendedData fromViewController:(nullable UIViewController *)viewController {
+	[self engageCodePoint:codePoint fromInteraction:fromInteraction userInfo:userInfo customData:customData extendedData:extendedData fromViewController:viewController completion:nil];
+}
 
+- (void)engageCodePoint:(NSString *)codePoint fromInteraction:(nullable ApptentiveInteraction *)fromInteraction userInfo:(nullable NSDictionary *)userInfo customData:(nullable NSDictionary *)customData extendedData:(nullable NSArray *)extendedData fromViewController:(nullable UIViewController *)viewController completion:(void (^_Nullable)(BOOL engaged))completion {
 	ApptentiveLogInfo(@"Engage Apptentive event: %@", codePoint);
+	ApptentiveAssertOperationQueue(self.operationQueue);
 
 	// TODO: Do this on the background queue?
 	ApptentiveConversation *conversation = self.conversationManager.activeConversation;
 
 	if (conversation == nil) {
 		ApptentiveLogWarning(@"Attempting to engage event with no active conversation.");
-		return NO;
+		if (completion) {
+			completion(NO);
+		}
+		return;
 	}
 
-	[self.operationQueue addOperationWithBlock:^{
-	  [self conversation:conversation addMetricWithName:codePoint fromInteraction:fromInteraction info:userInfo customData:customData extendedData:extendedData];
-	}];
+    [self conversation:conversation addMetricWithName:codePoint fromInteraction:fromInteraction info:userInfo customData:customData extendedData:extendedData];
 
-	// FIXME: Race condition when trying to modify and save conversation from different threads
-	@synchronized(conversation) {
-		[conversation warmCodePoint:codePoint];
-		[conversation engageCodePoint:codePoint];
-	}
+	[conversation warmCodePoint:codePoint];
+	[conversation engageCodePoint:codePoint];
 
 	BOOL didEngageInteraction = NO;
 
@@ -128,27 +128,59 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 	if (interaction) {
 		ApptentiveLogInfo(@"--Running valid %@ interaction.", interaction.type);
 
-		if (viewController != nil && (!viewController.isViewLoaded || viewController.view.window == nil)) {
-			ApptentiveLogError(@"Attempting to present interaction on a view controller whose view is not visible in a window. Using a separate window instead.");
-			viewController = nil;
-		}
-
-		[self presentInteraction:interaction fromViewController:viewController];
+		dispatch_sync(dispatch_get_main_queue(), ^{
+			UIViewController *presentingController = viewController;
+			if (viewController != nil && (!viewController.isViewLoaded || viewController.view.window == nil)) {
+				ApptentiveLogError(@"Attempting to present interaction on a view controller whose view is not visible in a window. Using a separate window instead.");
+				presentingController = nil;
+			}
+			
+			[self presentInteraction:interaction fromViewController:presentingController];
+		});
 
 		[conversation engageInteraction:interaction.identifier];
 		didEngageInteraction = YES;
 	}
-
-	return didEngageInteraction;
+	
+	if (completion) {
+		completion(didEngageInteraction);
+	}
 }
 
 - (void)codePointWasSeen:(NSString *)codePoint {
-	// TODO: Do this on the background queue?
+	ApptentiveAssertOperationQueue(self.operationQueue);
 	[self.conversationManager.activeConversation warmCodePoint:codePoint];
 }
 
+- (void)engage:(NSString *)event fromInteraction:(ApptentiveInteraction *)interaction fromViewController:(nullable UIViewController *)viewController {
+	[self engage:event fromInteraction:interaction fromViewController:viewController userInfo:nil customData:nil extendedData:nil completion:nil];
+}
+
+- (void)engage:(NSString *)event fromInteraction:(ApptentiveInteraction *)interaction fromViewController:(nullable UIViewController *)viewController userInfo:(nullable NSDictionary *)userInfo {
+	[self engage:event fromInteraction:interaction fromViewController:viewController userInfo:userInfo customData:nil extendedData:nil completion:nil];
+}
+
+- (void)engage:(NSString *)event fromInteraction:(ApptentiveInteraction *)interaction fromViewController:(nullable UIViewController *)viewController userInfo:(nullable NSDictionary *)userInfo customData:(nullable NSDictionary *)customData extendedData:(nullable NSArray *)extendedData {
+	[self engage:event fromInteraction:interaction fromViewController:viewController userInfo:userInfo customData:customData extendedData:extendedData completion:nil];
+}
+
+- (void)engage:(NSString *)event fromInteraction:(nonnull ApptentiveInteraction *)interaction fromViewController:(nullable UIViewController *)viewController userInfo:(nullable NSDictionary *)userInfo customData:(nullable NSDictionary *)customData extendedData:(nullable NSArray *)extendedData completion:(void (^ _Nullable)(BOOL))completion {
+	ApptentiveAssertNotNil(interaction, @"Attempted to engage event '%@' for nil interaction", event);
+	
+	if (!self.operationQueue.isCurrent) {
+		[self.operationQueue dispatchAsync:^{
+			[self engage:event fromInteraction:interaction fromViewController:viewController userInfo:userInfo customData:customData extendedData:extendedData completion:completion];
+		}];
+		return;
+	}
+	
+	NSString *codePoint = [interaction codePointForEvent:event];
+	
+	[self engageCodePoint:codePoint fromInteraction:interaction userInfo:userInfo customData:customData extendedData:extendedData fromViewController:viewController completion:completion];
+}
+
 - (void)interactionWasSeen:(NSString *)interactionID {
-	// TODO: Do this on the background queue?
+	ApptentiveAssertOperationQueue(self.operationQueue);
 	[self.conversationManager.activeConversation warmInteraction:interactionID];
 }
 
@@ -157,21 +189,23 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 		ApptentiveLogError(@"Attempting to present an interaction that does not exist!");
 		return;
 	}
-
-	if (![[NSThread currentThread] isMainThread]) {
-		dispatch_async(dispatch_get_main_queue(), ^{
-		  [self presentInteraction:interaction fromViewController:viewController];
+	
+	// we always need to dispatch this call on the UI-thread since we create and present
+	// view controllers here
+	if (![NSThread isMainThread]) {
+		dispatch_sync(dispatch_get_main_queue(), ^{
+			[self presentInteraction:interaction fromViewController:viewController];
 		});
 		return;
 	}
-
+	
 	if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateBackground) {
 		// Only present interaction UI in Active state.
 		return;
 	}
-
+	
 	ApptentiveInteractionController *controller = [ApptentiveInteractionController interactionControllerWithInteraction:interaction];
-
+	
 	[controller presentInteractionFromViewController:viewController];
 }
 

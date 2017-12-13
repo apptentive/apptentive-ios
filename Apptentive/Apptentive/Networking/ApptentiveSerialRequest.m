@@ -16,6 +16,7 @@
 #import "ApptentiveUtilities.h"
 #import "Apptentive_Private.h"
 #import "NSData+Encryption.h"
+#import "ApptentiveDispatchQueue.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class ApptentiveClient;
 @class ApptentiveConversation;
+@class ApptentiveDispatchQueue;
 
 typedef NS_ENUM(NSInteger, ApptentiveQueueStatus) {
 	ApptentiveQueueStatusUnknown,
@@ -28,7 +29,7 @@ typedef NS_ENUM(NSInteger, ApptentiveQueueStatus) {
 
 @property (weak, nonatomic) id<ApptentivePayloadSenderDelegate> messageDelegate;
 
-- (instancetype)initWithBaseURL:(NSURL *)baseURL apptentiveKey:(NSString *)apptentiveKey apptentiveSignature:(NSString *)apptentiveSignature managedObjectContext:(NSManagedObjectContext *)managedObjectContext delegateQueue:(NSOperationQueue *)delegateQueue;
+- (instancetype)initWithBaseURL:(NSURL *)baseURL apptentiveKey:(NSString *)apptentiveKey apptentiveSignature:(NSString *)apptentiveSignature managedObjectContext:(NSManagedObjectContext *)managedObjectContext delegateQueue:(ApptentiveDispatchQueue *)delegateQueue;
 - (void)cancelNetworkOperations;
 
 #pragma mark - Serial network queue

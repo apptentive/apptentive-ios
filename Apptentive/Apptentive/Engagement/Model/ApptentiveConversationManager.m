@@ -36,6 +36,7 @@
 #import "ApptentiveUtilities.h"
 #import "Apptentive_Private.h"
 #import "NSData+Encryption.h"
+#import "ApptentiveDispatchQueue.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -71,7 +72,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 @synthesize activeConversation = _activeConversation;
 
-- (instancetype)initWithStoragePath:(NSString *)storagePath operationQueue:(NSOperationQueue *)operationQueue client:(ApptentiveClient *)client parentManagedObjectContext:(NSManagedObjectContext *)parentManagedObjectContext {
+- (instancetype)initWithStoragePath:(NSString *)storagePath operationQueue:(ApptentiveDispatchQueue *)operationQueue client:(ApptentiveClient *)client parentManagedObjectContext:(NSManagedObjectContext *)parentManagedObjectContext {
 	self = [super init];
 
 	if (self) {
@@ -365,6 +366,8 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 }
 
 - (void)handleConversationStateChange:(ApptentiveConversation *)conversation {
+	ApptentiveAssertOperationQueue(self.operationQueue);
+
 	ApptentiveAssertNotNil(conversation, @"Conversation is nil");
 	if (conversation != nil) {
 		NSDictionary *userInfo = @{ApptentiveConversationStateDidChangeNotificationKeyConversation: conversation};
@@ -469,72 +472,65 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 }
 
 - (void)requestLoggedInConversationWithToken:(NSString *)token {
-	NSBlockOperation *loginOperation = [NSBlockOperation blockOperationWithBlock:^{
+	[self.operationQueue dispatchAsync:^{
+		ApptentiveAssertOperationQueue(self.operationQueue);
 
-	  ApptentiveAssertOperationQueue(self.operationQueue);
+		NSError *jwtError;
+		ApptentiveJWT *jwt = [ApptentiveJWT JWTWithContentOfString:token error:&jwtError];
+		if (jwtError != nil) {
+			[self failLoginWithErrorCode:ApptentiveInternalInconsistency failureReason:@"JWT parsing error: %@", jwtError];
+			return;
+		}
 
-	  NSError *jwtError;
-	  ApptentiveJWT *jwt = [ApptentiveJWT JWTWithContentOfString:token error:&jwtError];
-	  if (jwtError != nil) {
-		  [self failLoginWithErrorCode:ApptentiveInternalInconsistency failureReason:@"JWT parsing error: %@", jwtError];
-		  return;
-	  }
+		NSString *userId = jwt.payload[@"sub"];
+		if (userId.length == 0) {
+			[self failLoginWithErrorCode:ApptentiveInternalInconsistency failureReason:@"MISSING_SUB_CLAIM"];
+			return;
+		}
 
-	  NSString *userId = jwt.payload[@"sub"];
-	  if (userId.length == 0) {
-		  [self failLoginWithErrorCode:ApptentiveInternalInconsistency failureReason:@"MISSING_SUB_CLAIM"];
-		  return;
-	  }
+		// Check if there is an active conversation
+		if (self.activeConversation == nil) {
+			ApptentiveLogDebug(ApptentiveLogTagConversation, @"No active conversation. Performing login...");
 
-	  // Check if there is an active conversation
-	  if (self.activeConversation == nil) {
-		  ApptentiveLogDebug(ApptentiveLogTagConversation, @"No active conversation. Performing login...");
+			// attempt to find previous logged out conversation
+			ApptentiveConversationMetadataItem *conversationItem = [self.conversationMetadata findItemFilter:^BOOL(ApptentiveConversationMetadataItem *item) {
+				return [item.userId isEqualToString:userId];
+			}];
 
-		  // attempt to find previous logged out conversation
-		  ApptentiveConversationMetadataItem *conversationItem = [self.conversationMetadata findItemFilter:^BOOL(ApptentiveConversationMetadataItem *item) {
-			return [item.userId isEqualToString:userId];
-		  }];
+			if (conversationItem == nil) {
+				ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Logging in a new user...");
+				[self sendLoginRequestWithToken:token conversationIdentifier:nil userId:userId];
+				return;
+			}
 
-		  if (conversationItem == nil) {
-			  ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Logging in a new user...");
-			  [self sendLoginRequestWithToken:token conversationIdentifier:nil userId:userId];
-			  return;
-		  }
+			ApptentiveAssertNotNil(conversationItem.conversationIdentifier, @"Missing conversation identifier");
 
-		  ApptentiveAssertNotNil(conversationItem.conversationIdentifier, @"Missing conversation identifier");
+			ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Logging in an existing user (%@)...", userId);
+			[self sendLoginRequestWithToken:token conversationIdentifier:conversationItem.conversationIdentifier userId:userId];
+			return;
+		}
 
-		  ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Logging in an existing user (%@)...", userId);
-		  [self sendLoginRequestWithToken:token conversationIdentifier:conversationItem.conversationIdentifier userId:userId];
-		  return;
-	  }
+		switch (self.activeConversation.state) {
+			case ApptentiveConversationStateAnonymousPending:
+			case ApptentiveConversationStateLegacyPending:
+				ApptentiveAssertTrue(NO, @"Login operation should not kick off until conversation fetch complete");
+				[self failLoginWithErrorCode:ApptentiveInternalInconsistency failureReason:@"Login cannot proceed with Anonymous Pending conversation."];
+				break;
 
-	  switch (self.activeConversation.state) {
-		  case ApptentiveConversationStateAnonymousPending:
-		  case ApptentiveConversationStateLegacyPending:
-			  ApptentiveAssertTrue(NO, @"Login operation should not kick off until conversation fetch complete");
-			  [self failLoginWithErrorCode:ApptentiveInternalInconsistency failureReason:@"Login cannot proceed with Anonymous Pending conversation."];
-			  break;
+			case ApptentiveConversationStateAnonymous:
+				[self sendLoginRequestWithToken:token conversationIdentifier:self.activeConversation.identifier userId:userId];
+				break;
 
-		  case ApptentiveConversationStateAnonymous:
-			  [self sendLoginRequestWithToken:token conversationIdentifier:self.activeConversation.identifier userId:userId];
-			  break;
+			case ApptentiveConversationStateLoggedIn:
+				[self failLoginWithErrorCode:ApptentiveAlreadyLoggedInErrorCode failureReason:@"A logged in conversation is active."];
+				break;
 
-		  case ApptentiveConversationStateLoggedIn:
-			  [self failLoginWithErrorCode:ApptentiveAlreadyLoggedInErrorCode failureReason:@"A logged in conversation is active."];
-			  break;
-
-		  default:
-			  ApptentiveAssertTrue(NO, @"Unexpected conversation state when logging in: %@", NSStringFromApptentiveConversationState(self.activeConversation.state));
-			  [self failLoginWithErrorCode:ApptentiveInternalInconsistency failureReason:@"Unexpected conversation state when logging in: %@", NSStringFromApptentiveConversationState(self.activeConversation.state)];
-			  break;
-	  }
-	}];
-
-	if (self.conversationOperation != nil) {
-		[loginOperation addDependency:self.conversationOperation];
-	}
-
-	[self.operationQueue addOperation:loginOperation];
+			default:
+				ApptentiveAssertTrue(NO, @"Unexpected conversation state when logging in: %@", NSStringFromApptentiveConversationState(self.activeConversation.state));
+				[self failLoginWithErrorCode:ApptentiveInternalInconsistency failureReason:@"Unexpected conversation state when logging in: %@", NSStringFromApptentiveConversationState(self.activeConversation.state)];
+				break;
+		}
+	} withDependency:self.conversationOperation];
 }
 
 - (void)sendLoginRequestWithToken:(NSString *)token conversationIdentifier:(nullable NSString *)conversationIdentifier userId:(NSString *)userId {
@@ -595,65 +591,55 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 }
 
 - (void)conversationAppReleaseOrSDKDidChange:(ApptentiveConversation *)conversation {
-	NSBlockOperation *conversationDidChangeOperation = [NSBlockOperation blockOperationWithBlock:^{
-	  ApptentiveSDKAppReleasePayload *payload = [[ApptentiveSDKAppReleasePayload alloc] initWithConversation:conversation];
+	ApptentiveAssertOperationQueue(self.operationQueue);
 
-	  [ApptentiveSerialRequest enqueuePayload:payload forConversation:conversation usingAuthToken:conversation.token inContext:self.parentManagedObjectContext];
+	ApptentiveSDKAppReleasePayload *payload = [[ApptentiveSDKAppReleasePayload alloc] initWithConversation:conversation];
 
-	  [self.delegate processQueuedRecords];
+	[ApptentiveSerialRequest enqueuePayload:payload forConversation:conversation usingAuthToken:conversation.token inContext:self.parentManagedObjectContext];
 
-	  [self saveConversation:conversation];
+	[self.delegate processQueuedRecords];
 
-	  self.manifest.expiry = [NSDate distantPast];
-	}];
+	[self saveConversation:conversation];
 
-	[self.operationQueue addOperation:conversationDidChangeOperation];
+	self.manifest.expiry = [NSDate distantPast];
 }
 
 - (void)conversation:(ApptentiveConversation *)conversation personDidChange:(NSDictionary *)diffs {
-	NSBlockOperation *personDidChangeOperation = [NSBlockOperation blockOperationWithBlock:^{
-	  ApptentivePersonPayload *payload = [[ApptentivePersonPayload alloc] initWithPersonDiffs:diffs];
+	ApptentiveAssertOperationQueue(self.operationQueue);
 
-	  [ApptentiveSerialRequest enqueuePayload:payload forConversation:conversation usingAuthToken:conversation.token inContext:self.parentManagedObjectContext];
+	ApptentivePersonPayload *payload = [[ApptentivePersonPayload alloc] initWithPersonDiffs:diffs];
 
-	  [self saveConversation:conversation];
+	[ApptentiveSerialRequest enqueuePayload:payload forConversation:conversation usingAuthToken:conversation.token inContext:self.parentManagedObjectContext];
 
-	  [self.delegate processQueuedRecords];
-	}];
+	[self saveConversation:conversation];
 
-	[self.operationQueue addOperation:personDidChangeOperation];
+	[self.delegate processQueuedRecords];
 }
 
 - (void)conversation:(ApptentiveConversation *)conversation deviceDidChange:(NSDictionary *)diffs {
-	NSBlockOperation *deviceDidChangeOperation = [NSBlockOperation blockOperationWithBlock:^{
-	  ApptentiveDevicePayload *payload = [[ApptentiveDevicePayload alloc] initWithDeviceDiffs:diffs];
+	ApptentiveAssertOperationQueue(self.operationQueue);
 
-	  [ApptentiveSerialRequest enqueuePayload:payload forConversation:conversation usingAuthToken:conversation.token inContext:self.parentManagedObjectContext];
+	ApptentiveDevicePayload *payload = [[ApptentiveDevicePayload alloc] initWithDeviceDiffs:diffs];
 
-	  [self saveConversation:conversation];
+	[ApptentiveSerialRequest enqueuePayload:payload forConversation:conversation usingAuthToken:conversation.token inContext:self.parentManagedObjectContext];
 
-	  [self.delegate processQueuedRecords];
+	[self saveConversation:conversation];
 
-	  self.manifest.expiry = [NSDate distantPast];
-	}];
+	[self.delegate processQueuedRecords];
 
-	[self.operationQueue addOperation:deviceDidChangeOperation];
+	self.manifest.expiry = [NSDate distantPast];
 }
 
 - (void)conversationUserInfoDidChange:(ApptentiveConversation *)conversation {
-	NSBlockOperation *conversationSaveOperation = [NSBlockOperation blockOperationWithBlock:^{
-	  [self saveConversation:conversation];
-	}];
+	ApptentiveAssertOperationQueue(self.operationQueue);
 
-	[self.operationQueue addOperation:conversationSaveOperation];
+	[self saveConversation:conversation];
 }
 
 - (void)conversationEngagementDidChange:(ApptentiveConversation *)conversation {
-	NSBlockOperation *conversationSaveOperation = [NSBlockOperation blockOperationWithBlock:^{
-	  [self saveConversation:conversation];
-	}];
+	ApptentiveAssertOperationQueue(self.operationQueue);
 
-	[self.operationQueue addOperation:conversationSaveOperation];
+	[self saveConversation:conversation];
 }
 
 #pragma mark - Process network responses
@@ -830,6 +816,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 }
 
 - (BOOL)saveConversation:(ApptentiveConversation *)conversation {
+	ApptentiveAssertOperationQueue(self.operationQueue);
 	ApptentiveAssertNotNil(conversation, @"Attempted to save nil conversation");
 	if (conversation == nil) {
 		return NO;
@@ -856,10 +843,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		return NO;
 	}
 
-	NSData *conversationData;
-	@synchronized(conversation) {
-		conversationData = [NSKeyedArchiver archivedDataWithRootObject:conversation];
-	}
+	NSData *conversationData = [NSKeyedArchiver archivedDataWithRootObject:conversation];
 
 	ApptentiveAssertNotNil(conversationData, @"Conversation data serialization failed");
 
@@ -935,9 +919,9 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 }
 
 - (BOOL)saveManifest {
-	@synchronized(self.manifest) {
-		return [NSKeyedArchiver archiveRootObject:_manifest toFile:self.manifestPath];
-	}
+	ApptentiveAssertOperationQueue(self.operationQueue);
+
+	return [NSKeyedArchiver archiveRootObject:_manifest toFile:self.manifestPath];
 }
 
 #pragma mark - Private
@@ -967,11 +951,11 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 }
 
 - (void)scheduleSaveConversation:(ApptentiveConversation *)conversation {
-	[self.operationQueue addOperationWithBlock:^{
-	  if (![self saveConversation:conversation]) {
-		  ApptentiveLogError(@"Error saving active conversation.");
-	  }
-	}];
+	ApptentiveAssertOperationQueue(self.operationQueue);
+
+	if (![self saveConversation:conversation]) {
+		ApptentiveLogError(@"Error saving active conversation.");
+	}
 }
 
 #pragma mark - Paths
@@ -1005,6 +989,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 }
 
 - (nullable ApptentiveConversation *)activeConversation {
+	ApptentiveAssertOperationQueue(self.operationQueue);
 	return _activeConversation;
 }
 

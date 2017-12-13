@@ -16,6 +16,7 @@
 #import "ApptentiveSerialRequest.h"
 #import "ApptentiveSurveyResponsePayload.h"
 #import "Apptentive_Private.h"
+#import "ApptentiveBackend+Engagement.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -245,7 +246,7 @@ NSString *const ApptentiveInteractionSurveyEventLabelCancel = @"cancel";
 }
 
 - (void)submit {
-	[Apptentive.shared.operationQueue addOperationWithBlock:^{
+	[Apptentive.shared dispatchOnOperationQueue:^{
 	  ApptentiveConversation *conversation = Apptentive.shared.backend.conversationManager.activeConversation;
 	  ApptentiveSurveyResponsePayload *payload = [[ApptentiveSurveyResponsePayload alloc] initWithAnswers:self.answers identifier:self.interaction.identifier];
 	  ApptentiveAssertNotNil(payload, @"Unable to create Apptentive survey response payload");
@@ -402,16 +403,16 @@ NSString *const ApptentiveInteractionSurveyEventLabelCancel = @"cancel";
 - (void)answerChangedAtIndexPath:(NSIndexPath *)indexPath {
 	ApptentiveSurveyQuestion *question = [self questionAtIndex:indexPath.section];
 
-	[self.interaction engage:ApptentiveInteractionSurveyEventLabelQuestionResponse fromViewController:nil userInfo:@{ @"id": question.identifier ?: [NSNull null] }];
+	[Apptentive.shared.backend engage:ApptentiveInteractionSurveyEventLabelQuestionResponse fromInteraction:self.interaction fromViewController:nil userInfo:@{ @"id": question.identifier ?: [NSNull null] }];
 }
 
 - (void)didCancel:(UIViewController *)presentingViewController {
-	[self.interaction engage:ApptentiveInteractionSurveyEventLabelCancel fromViewController:presentingViewController];
+	[Apptentive.shared.backend engage:ApptentiveInteractionSurveyEventLabelCancel fromInteraction:self.interaction fromViewController:presentingViewController];
 }
 
 - (void)didSubmit:(UIViewController *)presentingViewController {
 	[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveSurveySentNotification object:@{ApptentiveSurveyIDKey: ApptentiveCollectionValue(self.interaction.identifier)}];
-	[self.interaction engage:ApptentiveInteractionSurveyEventLabelSubmit fromViewController:presentingViewController];
+	[Apptentive.shared.backend engage:ApptentiveInteractionSurveyEventLabelSubmit fromInteraction:self.interaction fromViewController:presentingViewController];
 }
 
 #pragma mark - Private

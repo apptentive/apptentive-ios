@@ -39,12 +39,12 @@ NSString *const ATInteractionEnjoymentDialogEventLabelNo = @"no";
 			[viewController presentViewController:self.presentedViewController
 										 animated:YES
 									   completion:^{
-										 [self.interaction engage:ATInteractionEnjoymentDialogEventLabelLaunch fromViewController:viewController];
+										 [Apptentive.shared.backend engage:ATInteractionEnjoymentDialogEventLabelLaunch fromInteraction:self.interaction fromViewController:viewController];
 									   }];
 		} else {
 			[(UIAlertController *)self.presentedViewController apptentive_presentAnimated:YES
 																			   completion:^{
-																				 [self.interaction engage:ATInteractionEnjoymentDialogEventLabelLaunch fromViewController:nil];
+																				 [Apptentive.shared.backend engage:ATInteractionEnjoymentDialogEventLabelLaunch fromInteraction:self.interaction fromViewController:nil];
 																			   }];
 		}
 	}
@@ -92,7 +92,7 @@ NSString *const ATInteractionEnjoymentDialogEventLabelNo = @"no";
 	[alertController addAction:[UIAlertAction actionWithTitle:self.noText
 														style:UIAlertActionStyleDefault
 													  handler:^(UIAlertAction *action) {
-														[self.interaction engage:ATInteractionEnjoymentDialogEventLabelNo fromViewController:self.presentingViewController];
+														[Apptentive.shared.backend engage:ATInteractionEnjoymentDialogEventLabelNo fromInteraction:self.interaction fromViewController:self.presentingViewController];
 
 														self.presentedViewController = nil;
 													  }]];
@@ -100,7 +100,7 @@ NSString *const ATInteractionEnjoymentDialogEventLabelNo = @"no";
 	[alertController addAction:[UIAlertAction actionWithTitle:self.yesText
 														style:UIAlertActionStyleDefault
 													  handler:^(UIAlertAction *action) {
-														[self.interaction engage:ATInteractionEnjoymentDialogEventLabelYes fromViewController:self.presentingViewController];
+														[Apptentive.shared.backend engage:ATInteractionEnjoymentDialogEventLabelYes fromInteraction:self.interaction fromViewController:self.presentingViewController];
 
 														self.presentedViewController = nil;
 													  }]];

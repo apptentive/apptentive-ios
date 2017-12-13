@@ -29,10 +29,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSString *)codePointForEvent:(NSString *)event;
 
-- (BOOL)engage:(NSString *)event fromViewController:(nullable UIViewController *)viewController;
-- (BOOL)engage:(NSString *)event fromViewController:(nullable UIViewController *)viewController userInfo:(nullable NSDictionary *)userInfo;
-- (BOOL)engage:(NSString *)event fromViewController:(nullable UIViewController *)viewController userInfo:(nullable NSDictionary *)userInfo customData:(nullable NSDictionary *)customData extendedData:(nullable NSArray *)extendedData;
-
 @end
 
 NS_ASSUME_NONNULL_END

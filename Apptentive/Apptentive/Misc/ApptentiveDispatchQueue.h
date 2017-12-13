@@ -35,7 +35,7 @@ extern NSString * _Nullable ApptentiveGetCurrentThreadName(void);
 /**
  Creates a background queue with a specified name and concurrency type
  */
-+ (instancetype)createQueueWithName:(NSString *)name concurrencyType:(ApptentiveDispatchQueueConcurrencyType)type;
++ (nullable instancetype)createQueueWithName:(NSString *)name concurrencyType:(ApptentiveDispatchQueueConcurrencyType)type;
 
 - (void)dispatchAsync:(void (^)(void))task;
 

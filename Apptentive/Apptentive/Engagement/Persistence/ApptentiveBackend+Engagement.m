@@ -209,7 +209,7 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 	[controller presentInteractionFromViewController:viewController];
 }
 
-- (void)conversation:(ApptentiveConversation *)conversation addMetricWithName:(NSString *)name fromInteraction:(ApptentiveInteraction *)fromInteraction info:(NSDictionary *)userInfo customData:(NSDictionary *)customData extendedData:(NSArray *)extendedData {
+- (void)conversation:(ApptentiveConversation *)conversation addMetricWithName:(NSString *)name fromInteraction:(ApptentiveInteraction *)fromInteraction info:(nullable NSDictionary *)userInfo customData:(nullable NSDictionary *)customData extendedData:(nullable NSArray *)extendedData {
 	ApptentiveAssertOperationQueue(self.operationQueue);
 
 	if (self.configuration.metricsEnabled == NO || name == nil || conversation.state == ApptentiveConversationStateLoggedOut) {

@@ -298,8 +298,9 @@ NSString *const ApptentiveBuildPayloadRequestsName = @"Build Payload Requests";
 	// set parent context
 	[childContext setParentContext:context];
 
-	// execute the block on a background thread (this call returns immediatelly)
-	[childContext performBlock:^{
+	// execute the block synchronously
+	// otherwise it creates a race condition as described here: https://stackoverflow.com/questions/5749426/how-do-i-set-up-a-nspredicate-to-look-for-objects-that-have-a-nil-attribute/47760129#47760129
+	[childContext performBlockAndWait:^{
 
 	  // fetch all the requests without a conversation id (no sorting needed)
 	  NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"QueuedRequest"];

@@ -50,8 +50,6 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 
 @property (nullable, strong, nonatomic) ApptentiveRequestOperation *configurationOperation;
 
-@property (assign, nonatomic) ApptentiveBackendState state;
-
 @property (strong, nonatomic) CTTelephonyNetworkInfo *telephonyNetworkInfo;
 
 @property (strong, nonatomic) NSTimer *messageRetrievalTimer;
@@ -63,6 +61,8 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 @property (assign, nonatomic) UIBackgroundTaskIdentifier backgroundTaskIdentifier;
 
 @property (strong, nonatomic) ApptentiveReachability *reachability;
+
+@property (assign, nonatomic, getter=isForeground) BOOL foreground;
 
 @end
 
@@ -80,13 +80,11 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 		_baseURL = baseURL;
 		_storagePath = storagePath;
 
-		_state = ApptentiveBackendStateStarting;
 		_operationQueue = operationQueue;
 		_supportDirectoryPath = [[ApptentiveUtilities applicationSupportPath] stringByAppendingPathComponent:storagePath];
 
 		if ([UIApplication sharedApplication] != nil && ![UIApplication sharedApplication].isProtectedDataAvailable) {
 			_operationQueue.suspended = YES;
-			_state = ApptentiveBackendStateWaitingForDataProtectionUnlock;
 
 			__weak ApptentiveBackend *weakSelf = self;
 			[[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationProtectedDataDidBecomeAvailable
@@ -96,12 +94,12 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 															ApptentiveBackend *strongSelf = weakSelf;
 															if (strongSelf) {
 																strongSelf.operationQueue.suspended = NO;
-																strongSelf.state = ApptentiveBackendStateStarting;
 															}
 														  }];
 		}
 
 		_reachability = [[ApptentiveReachability alloc] initWithHostname:self.baseURL.host];
+		_foreground = UIApplication.sharedApplication.applicationState != UIApplicationStateBackground;
 
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillEnterForegroundNotification:) name:UIApplicationWillEnterForegroundNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillTerminateNotification:) name:UIApplicationWillTerminateNotification object:nil];
@@ -200,6 +198,7 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 
 - (void)applicationDidEnterBackgroundNotification:(NSNotification *)notification {
 	[self.operationQueue dispatchAsync:^{
+		_foreground = NO;
 		[self addExitMetric];
 		[self shutDown];
 	}];
@@ -207,6 +206,7 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 
 - (void)applicationWillEnterForegroundNotification:(NSNotification *)notification {
 	[self.operationQueue dispatchAsync:^{
+		_foreground = YES;
 		[self resume];
 		[self addLaunchMetric];
 	}];
@@ -230,7 +230,7 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 	ApptentiveAssertOperationQueue(self.operationQueue);
 	ApptentiveConversation *conversation = self.conversationManager.activeConversation;
 
-	if (self.configurationOperation != nil || conversation.identifier == nil || !self.networkAvailable || [self.configuration.expiry timeIntervalSinceNow] > 0) {
+	if (self.configurationOperation != nil || conversation.identifier == nil || !self.networkAvailable || !self.foreground || [self.configuration.expiry timeIntervalSinceNow] > 0) {
 		return;
 	}
 
@@ -274,8 +274,6 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 
 	_payloadSender = [[ApptentivePayloadSender alloc] initWithBaseURL:self.baseURL apptentiveKey:self.apptentiveKey apptentiveSignature:self.apptentiveSignature managedObjectContext:self.managedObjectContext delegateQueue:self.operationQueue];
 
-	self.state = ApptentiveBackendStatePayloadDatabaseAvailable;
-
 	[self.conversationManager loadActiveConversation];
 
 	[self completeStartupAndResumeTasks];
@@ -296,7 +294,6 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 - (void)shutDown {
 	ApptentiveAssertOperationQueue(self.operationQueue);
 	ApptentiveLogVerbose(@"Shutting down backend");
-	self.state = ApptentiveBackendStateShuttingDown;
 
     [self.conversationManager pause];
 
@@ -324,10 +321,6 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 // This is called on a warm launch
 - (void)resume {
 	ApptentiveAssertOperationQueue(self.operationQueue);
-
-	if (self.managedObjectContext != nil) {
-		self.state = ApptentiveBackendStatePayloadDatabaseAvailable;
-	}
 
 	[self completeStartupAndResumeTasks];
 
@@ -428,7 +421,7 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 - (void)processQueuedRecords {
 	ApptentiveAssertOperationQueue(self.operationQueue);
 
-	if (self.state == ApptentiveBackendStatePayloadDatabaseAvailable && self.networkAvailable && self.conversationManager.activeConversation.token != nil) {
+	if (self.foreground && self.networkAvailable && self.conversationManager.activeConversation.token != nil) {
 		[self.payloadSender createOperationsForQueuedRequestsInContext:self.managedObjectContext];
 	}
 }
@@ -571,7 +564,7 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 - (void)updateMessageCheckingTimer {
 	ApptentiveAssertOperationQueue(self.operationQueue);
 	if (self.messageManager != nil) {
-		if (self.networkAvailable) {
+		if (self.networkAvailable && self.foreground) {
 			if (self.messageCenterInForeground) {
 				self.messageManager.pollingInterval = self.configuration.messageCenter.foregroundPollingInterval;
 			} else {

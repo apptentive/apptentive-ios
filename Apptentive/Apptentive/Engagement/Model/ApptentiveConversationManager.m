@@ -363,6 +363,8 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 }
 
 - (void)handleConversationStateChange:(ApptentiveConversation *)conversation {
+	ApptentiveAssertOperationQueue(self.operationQueue);
+
 	ApptentiveAssertNotNil(conversation, @"Conversation is nil");
 	if (conversation != nil) {
 		NSDictionary *userInfo = @{ApptentiveConversationStateDidChangeNotificationKeyConversation: conversation};
@@ -811,6 +813,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 }
 
 - (BOOL)saveConversation:(ApptentiveConversation *)conversation {
+	ApptentiveAssertOperationQueue(self.operationQueue);
 	ApptentiveAssertNotNil(conversation, @"Attempted to save nil conversation");
 	if (conversation == nil) {
 		return NO;
@@ -837,10 +840,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		return NO;
 	}
 
-	NSData *conversationData;
-	@synchronized(conversation) {
-		conversationData = [NSKeyedArchiver archivedDataWithRootObject:conversation];
-	}
+	NSData *conversationData = [NSKeyedArchiver archivedDataWithRootObject:conversation];
 
 	ApptentiveAssertNotNil(conversationData, @"Conversation data serialization failed");
 
@@ -916,9 +916,9 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 }
 
 - (BOOL)saveManifest {
-	@synchronized(self.manifest) {
-		return [NSKeyedArchiver archiveRootObject:_manifest toFile:self.manifestPath];
-	}
+	ApptentiveAssertOperationQueue(self.operationQueue);
+
+	return [NSKeyedArchiver archiveRootObject:_manifest toFile:self.manifestPath];
 }
 
 #pragma mark - Private

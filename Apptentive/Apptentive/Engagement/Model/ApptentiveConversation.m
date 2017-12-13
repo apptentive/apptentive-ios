@@ -158,56 +158,54 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 }
 
 - (void)checkForDiffs {
-	@synchronized(self) {
-		ApptentiveAppRelease *currentAppRelease = [[ApptentiveAppRelease alloc] initWithCurrentAppRelease];
-		if (self.appRelease.overridingStyles) {
-			[currentAppRelease setOverridingStyles];
-		}
-
-		ApptentiveSDK *currentSDK = [[ApptentiveSDK alloc] initWithCurrentSDK];
-
-		BOOL conversationNeedsUpdate = NO;
-
-		NSDictionary *appReleaseDiffs = [ApptentiveUtilities diffDictionary:currentAppRelease.JSONDictionary againstDictionary:self.appRelease.JSONDictionary];
-
-		if (appReleaseDiffs.count > 0) {
-			ApptentiveLogDebug(ApptentiveLogTagConversation, @"App release did change.");
-			conversationNeedsUpdate = YES;
-
-			if (![currentAppRelease.version isEqualToVersion:self.appRelease.version]) {
-				[self.appRelease resetVersion];
-				[self.engagement resetVersion];
-			}
-
-			if (![currentAppRelease.build isEqualToVersion:self.appRelease.build]) {
-				[self.appRelease resetBuild];
-				[self.engagement resetBuild];
-			}
-
-			_appRelease = currentAppRelease;
-		}
-
-		NSDictionary *SDKDiffs = [ApptentiveUtilities diffDictionary:currentSDK.JSONDictionary againstDictionary:self.SDK.JSONDictionary];
-
-		if (SDKDiffs.count > 0) {
-			ApptentiveLogDebug(ApptentiveLogTagConversation, @"SDK did change.");
-
-			conversationNeedsUpdate = YES;
-
-			_SDK = currentSDK;
-		}
-
-		if (conversationNeedsUpdate) {
-			[self notifyConversationChanged];
-
-			if ([_delegate respondsToSelector:@selector(conversationAppReleaseOrSDKDidChange:)]) {
-				[_delegate conversationAppReleaseOrSDKDidChange:self];
-			}
-		}
-
-		// See if any of the non-custom device attributes have changed
-		[self checkForDeviceDiffs];
+	ApptentiveAppRelease *currentAppRelease = [[ApptentiveAppRelease alloc] initWithCurrentAppRelease];
+	if (self.appRelease.overridingStyles) {
+		[currentAppRelease setOverridingStyles];
 	}
+
+	ApptentiveSDK *currentSDK = [[ApptentiveSDK alloc] initWithCurrentSDK];
+
+	BOOL conversationNeedsUpdate = NO;
+
+	NSDictionary *appReleaseDiffs = [ApptentiveUtilities diffDictionary:currentAppRelease.JSONDictionary againstDictionary:self.appRelease.JSONDictionary];
+
+	if (appReleaseDiffs.count > 0) {
+		ApptentiveLogDebug(ApptentiveLogTagConversation, @"App release did change.");
+		conversationNeedsUpdate = YES;
+
+		if (![currentAppRelease.version isEqualToVersion:self.appRelease.version]) {
+			[self.appRelease resetVersion];
+			[self.engagement resetVersion];
+		}
+
+		if (![currentAppRelease.build isEqualToVersion:self.appRelease.build]) {
+			[self.appRelease resetBuild];
+			[self.engagement resetBuild];
+		}
+
+		_appRelease = currentAppRelease;
+	}
+
+	NSDictionary *SDKDiffs = [ApptentiveUtilities diffDictionary:currentSDK.JSONDictionary againstDictionary:self.SDK.JSONDictionary];
+
+	if (SDKDiffs.count > 0) {
+		ApptentiveLogDebug(ApptentiveLogTagConversation, @"SDK did change.");
+		
+		conversationNeedsUpdate = YES;
+
+		_SDK = currentSDK;
+	}
+
+	if (conversationNeedsUpdate) {
+		[self notifyConversationChanged];
+
+		if ([_delegate respondsToSelector:@selector(conversationAppReleaseOrSDKDidChange:)]) {
+			[_delegate conversationAppReleaseOrSDKDidChange:self];
+		}
+	}
+
+	// See if any of the non-custom device attributes have changed
+	[self checkForDeviceDiffs];
 }
 
 - (void)checkForDeviceDiffs {

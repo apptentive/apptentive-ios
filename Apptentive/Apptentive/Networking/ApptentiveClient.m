@@ -56,15 +56,11 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - Request operation data source
 
 - (void)increaseBackoffDelay {
-	@synchronized(self) {
-		_backoffDelay *= APPTENTIVE_BACKOFF_MULTIPLIER;
-	}
+	_backoffDelay *= APPTENTIVE_BACKOFF_MULTIPLIER;
 }
 
 - (void)resetBackoffDelay {
-	@synchronized(self) {
-		_backoffDelay = APPTENTIVE_MIN_BACKOFF_DELAY;
-	}
+	_backoffDelay = APPTENTIVE_MIN_BACKOFF_DELAY;
 }
 
 #pragma mark - Creating request operations

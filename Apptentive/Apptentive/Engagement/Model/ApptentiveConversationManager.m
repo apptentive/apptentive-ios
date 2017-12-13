@@ -471,6 +471,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	[self.operationQueue dispatchAsync:^{
 		if (!Apptentive.shared.backend.foreground) {
 			[self failLoginWithErrorCode:ApptentiveInBackgroundErrorCode failureReason:@"App is in background state"];
+			return;
 		}
 
 		ApptentiveAssertOperationQueue(self.operationQueue);

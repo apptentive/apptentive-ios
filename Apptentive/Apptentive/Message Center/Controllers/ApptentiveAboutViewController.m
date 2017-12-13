@@ -29,7 +29,7 @@ NSString *const ATInteractionAboutViewEventLabelClose = @"close";
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *imageViewHeightConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *aboutButtonPrivacyButtonVeritcalConstraint;
 
-@property (strong, nonatomic) IBOutlet ApptentiveInteraction *interaction;
+@property (strong, nonatomic) ApptentiveInteraction *interaction;
 
 @end
 

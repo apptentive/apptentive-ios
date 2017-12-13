@@ -351,9 +351,7 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 
 		[userInfo setObject:@"CompoundMessage" forKey:@"message_type"];
 
-		[self.messageManager.operationQueue dispatchAsync:^{
-			[Apptentive.shared.backend engage:ATInteractionMessageCenterEventLabelRead fromInteraction:self.interaction fromViewController:nil userInfo:userInfo];
-		}];
+		[Apptentive.shared.backend engage:ATInteractionMessageCenterEventLabelRead fromInteraction:self.interaction fromViewController:nil userInfo:userInfo];
 	}
 
 	if (message.state == ApptentiveMessageStateUnread) {

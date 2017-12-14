@@ -30,7 +30,7 @@ NSString *const ATEngagementCodePointApptentiveVendorKey = @"com.apptentive";
 NSString *const ATEngagementCodePointApptentiveAppInteractionKey = @"app";
 
 NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
-
+NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 
 @implementation ApptentiveBackend (Engagement)
 
@@ -225,6 +225,30 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 	[ApptentiveSerialRequest enqueuePayload:payload forConversation:conversation usingAuthToken:conversation.token inContext:self.managedObjectContext];
 
 	[self processQueuedRecords];
+}
+
+- (void)invokeAction:(NSDictionary *)actionConfig withInteraction:(ApptentiveInteraction *)sourceInteraction fromViewController:(UIViewController *)fromViewController {
+	[self.operationQueue dispatchAsync:^{
+		ApptentiveInteraction *interaction = nil;
+		NSArray *invocations = actionConfig[@"invokes"];
+
+		if (invocations) {
+			// TODO: Do this on the background queue?
+			interaction = [self interactionForInvocations:invocations];
+		}
+
+		NSDictionary *userInfo = @{ @"label": (actionConfig[@"label"] ?: [NSNull null]),
+									@"position": (actionConfig[@"position"] ?: [NSNull null]),
+									@"invoked_interaction_id": (interaction.identifier ?: [NSNull null]),
+									@"action_id": (actionConfig[@"id"] ?: [NSNull null]),
+									};
+
+		[self engage:ATInteractionTextModalEventLabelInteraction fromInteraction:sourceInteraction fromViewController:fromViewController userInfo:userInfo];
+
+		if (interaction != nil) {
+			[self presentInteraction:interaction fromViewController:fromViewController];
+		}
+	}];
 }
 
 @end

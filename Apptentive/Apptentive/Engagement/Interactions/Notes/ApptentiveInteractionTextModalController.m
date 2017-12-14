@@ -20,7 +20,6 @@ NS_ASSUME_NONNULL_BEGIN
 NSString *const ATInteractionTextModalEventLabelLaunch = @"launch";
 NSString *const ATInteractionTextModalEventLabelCancel = @"cancel";
 NSString *const ATInteractionTextModalEventLabelDismiss = @"dismiss";
-NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 
 typedef void (^alertActionHandler)(UIAlertAction *);
 
@@ -166,24 +165,7 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 }
 
 - (void)interactionAction:(NSDictionary *)actionConfig {
-	ApptentiveInteraction *interaction = nil;
-	NSArray *invocations = actionConfig[@"invokes"];
-	if (invocations) {
-		// TODO: Do this on the background queue?
-		interaction = [[Apptentive sharedConnection].backend interactionForInvocations:invocations];
-	}
-
-	NSDictionary *userInfo = @{ @"label": (actionConfig[@"label"] ?: [NSNull null]),
-		@"position": (actionConfig[@"position"] ?: [NSNull null]),
-		@"invoked_interaction_id": (interaction.identifier ?: [NSNull null]),
-		@"action_id": (actionConfig[@"id"] ?: [NSNull null]),
-	};
-
-	[Apptentive.shared.backend engage:ATInteractionTextModalEventLabelInteraction fromInteraction:self.interaction fromViewController:self.presentingViewController userInfo:userInfo];
-
-	if (interaction) {
-		[[Apptentive sharedConnection].backend presentInteraction:interaction fromViewController:self.presentingViewController];
-	}
+	[Apptentive.shared.backend invokeAction:actionConfig withInteraction:self.interaction fromViewController:self.presentingViewController];
 
 	self.presentedViewController = nil;
 }

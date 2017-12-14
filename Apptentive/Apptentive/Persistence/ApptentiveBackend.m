@@ -191,17 +191,21 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 
 - (void)applicationWillTerminateNotification:(NSNotification *)notification {
 	[self.operationQueue dispatchAsync:^{
-		[self addExitMetric];
-		[self shutDown];
+		if (self.foreground) {
+			[self addExitMetric];
+		}
 	}];
+
+	[self shutDown];
 }
 
 - (void)applicationDidEnterBackgroundNotification:(NSNotification *)notification {
 	[self.operationQueue dispatchAsync:^{
 		_foreground = NO;
 		[self addExitMetric];
-		[self shutDown];
 	}];
+
+	[self shutDown];
 }
 
 - (void)applicationWillEnterForegroundNotification:(NSNotification *)notification {
@@ -278,24 +282,16 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 
 	[self completeStartupAndResumeTasks];
 
-	dispatch_sync(dispatch_get_main_queue(), ^{
-		if (UIApplication.sharedApplication.applicationState != UIApplicationStateBackground) {
-			ApptentiveLogDebug(@"Synthesizing launch event on initial SDK startup.");
-			[self.operationQueue dispatchAsync:^{
-				[self addLaunchMetric];
-			}];
-		} else {
-			ApptentiveLogDebug(@"Skipping synthetic launch event because app started in the background.");
-		}
-	});
+	if (self.foreground) {
+		[self addLaunchMetric];
+	} else {
+		ApptentiveLogDebug(@"Skip engaging launch event because app started in the background.");
+	}
 }
 
 // This is called when we're about to enter the background
 - (void)shutDown {
-	ApptentiveAssertOperationQueue(self.operationQueue);
 	ApptentiveLogVerbose(@"Shutting down backend");
-
-    [self.conversationManager pause];
 
 	// Asynchronous tasks off the main thread will not be given a chance to complete automatically.
 	// We create a background task to clear out our operation queue and the payload sender queue.
@@ -310,6 +306,8 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 
 	// Create an operation to end the background task.
 	[self.operationQueue dispatchAsync:^{
+		[self.conversationManager pause];
+
 		// After all background operations are finished, wait for anything on the payload sender's network queue to finish before telling the OS we're done.
 		[self.payloadSender.networkQueue addOperationWithBlock:^{
 			ApptentiveLogDebug(@"All background operations finished. Exiting.");

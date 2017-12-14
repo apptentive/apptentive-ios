@@ -176,7 +176,11 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 	_draftMessage = draftMessage;
 
 	[self.operationQueue dispatchAsync:^{
-		[self.conversation setUserInfo:draftMessage forKey:ATMessageCenterDraftMessageKey];
+		if (draftMessage == nil) {
+			[self.conversation removeUserInfoForKey:ATMessageCenterDraftMessageKey];
+		} else {
+			[self.conversation setUserInfo:draftMessage forKey:ATMessageCenterDraftMessageKey];
+		}
 	}];
 }
 

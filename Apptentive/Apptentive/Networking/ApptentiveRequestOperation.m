@@ -83,7 +83,7 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 
 - (BOOL)isFinished {
 	@synchronized(self) {
-		return self.wasCompleted;
+		return self.wasCompleted || self.cancelled;
 	}
 }
 

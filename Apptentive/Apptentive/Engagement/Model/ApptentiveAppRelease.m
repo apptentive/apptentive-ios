@@ -76,7 +76,6 @@ static NSString *const ATEngagementIsUpdateBuildKey = @"ATEngagementIsUpdateBuil
 		_XcodeBuild = [NSBundle mainBundle].infoDictionary[@"DTXcodeBuild"];
 
 
-
 #ifdef APPTENTIVE_DEBUG
 		_debugBuild = YES;
 #endif
@@ -189,6 +188,23 @@ static NSString *const ATEngagementIsUpdateBuildKey = @"ATEngagementIsUpdateBuil
 
 - (void)setOverridingStyles {
 	_overridingStyles = YES;
+}
+
+- (void)updateMissingTimeAtInstallTo:(NSDate *)timeAtInstall {
+	_timeAtInstallTotal = _timeAtInstallTotal ?: timeAtInstall;
+	_timeAtInstallVersion = _timeAtInstallVersion ?: timeAtInstall;
+	_timeAtInstallBuild = _timeAtInstallBuild ?: timeAtInstall;
+}
+
+- (void)copyNonholonomicValuesFrom:(ApptentiveAppRelease *)otherAppRelease {
+	_overridingStyles = otherAppRelease.overridingStyles;
+
+	_timeAtInstallTotal = otherAppRelease.timeAtInstallTotal;
+	_timeAtInstallVersion = otherAppRelease.timeAtInstallVersion;
+	_timeAtInstallBuild = otherAppRelease.timeAtInstallBuild;
+
+	_updateVersion = otherAppRelease.updateVersion;
+	_updateBuild = otherAppRelease.updateBuild;
 }
 
 @end

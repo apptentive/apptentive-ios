@@ -7,10 +7,11 @@
 //
 
 #import "ApptentiveMessageCenterErrorViewController.h"
-#import "ApptentiveReachability.h"
-#import "Apptentive_Private.h"
 #import "ApptentiveBackend+Engagement.h"
+#import "ApptentiveReachability.h"
 #import "ApptentiveUtilities.h"
+#import "Apptentive_Private.h"
+#import "ApptentiveInteraction.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -25,17 +26,19 @@ NSString *const ATInteractionMessageCenterEventLabelNoInteractionClose = @"no_in
 @property (strong, nonatomic) IBOutlet UIImageView *imageView;
 @property (strong, nonatomic) IBOutlet UILabel *textLabel;
 
+@property (strong, nonatomic) ApptentiveInteraction *interaction;
+
 @end
 
 
 @implementation ApptentiveMessageCenterErrorViewController
 
-- (NSString *)codePointForEvent:(NSString *)event {
-	return [ApptentiveBackend codePointForVendor:ATEngagementCodePointApptentiveVendorKey interactionType:ATInteractionMessageCenterErrorViewInteractionKey event:event];
-}
-
 - (void)viewDidLoad {
 	[super viewDidLoad];
+
+	self.interaction = [[ApptentiveInteraction alloc] init];
+	self.interaction.vendor = ATEngagementCodePointApptentiveVendorKey;
+	self.interaction.type = ATInteractionMessageCenterErrorViewInteractionKey;
 
 	self.navigationItem.title = ApptentiveLocalizedString(@"Message Center", @"Message Center default title");
 
@@ -43,12 +46,12 @@ NSString *const ATInteractionMessageCenterEventLabelNoInteractionClose = @"no_in
 		self.imageView.image = [[ApptentiveUtilities imageNamed:@"at_network_error"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 		self.textLabel.text = ApptentiveLocalizedString(@"You must connect to the internet before you can send feedback.", @"Message Center configuration hasn't downloaded due to connection problem.");
 
-		[Apptentive.shared.backend engageCodePoint:[self codePointForEvent:ATInteractionMessageCenterEventLabelNoInteractionNoInternet] fromInteraction:nil userInfo:nil customData:nil extendedData:nil fromViewController:self];
+		[Apptentive.shared.backend engage:ATInteractionMessageCenterEventLabelNoInteractionNoInternet fromInteraction:self.interaction fromViewController:self];
 	} else {
 		self.imageView.image = [[ApptentiveUtilities imageNamed:@"at_error_wait"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 		self.textLabel.text = ApptentiveLocalizedString(@"We’re attempting to connect. Thanks for your patience!", @"Message Center configuration is waiting to be downloaded or encountered a server error.");
 
-		[Apptentive.shared.backend engageCodePoint:[self codePointForEvent:ATInteractionMessageCenterEventLabelNoInteractionAttempting] fromInteraction:nil userInfo:nil customData:nil extendedData:nil fromViewController:self];
+		[Apptentive.shared.backend engage:ATInteractionMessageCenterEventLabelNoInteractionAttempting fromInteraction:self.interaction fromViewController:self];
 	}
 
 	self.imageView.tintColor = [[Apptentive sharedConnection].style colorForStyle:ApptentiveTextStyleMessageCenterStatus];
@@ -63,7 +66,7 @@ NSString *const ATInteractionMessageCenterEventLabelNoInteractionClose = @"no_in
 }
 
 - (IBAction)dismiss:(id)sender {
-	[Apptentive.shared.backend engageCodePoint:[self codePointForEvent:ATInteractionMessageCenterEventLabelNoInteractionClose] fromInteraction:nil userInfo:nil customData:nil extendedData:nil fromViewController:self];
+	[Apptentive.shared.backend engage:ATInteractionMessageCenterEventLabelNoInteractionClose fromInteraction:self.interaction fromViewController:self];
 
 	[self dismissViewControllerAnimated:YES completion:nil];
 }
@@ -72,7 +75,7 @@ NSString *const ATInteractionMessageCenterEventLabelNoInteractionClose = @"no_in
 	BOOL animated = [notification.userInfo[ApptentiveInteractionsShouldDismissAnimatedKey] boolValue];
 	[self dismissViewControllerAnimated:animated completion:nil];
 
-	[Apptentive.shared.backend engageCodePoint:[self codePointForEvent:ATInteractionMessageCenterEventLabelNoInteractionClose] fromInteraction:nil userInfo:@{ @"cause": @"notification" } customData:nil extendedData:nil fromViewController:self];
+	[Apptentive.shared.backend engage:ATInteractionMessageCenterEventLabelNoInteractionClose fromInteraction:self.interaction fromViewController:self];
 }
 
 @end

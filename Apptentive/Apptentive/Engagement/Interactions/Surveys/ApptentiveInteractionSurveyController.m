@@ -7,11 +7,11 @@
 //
 
 #import "ApptentiveInteractionSurveyController.h"
-#import "Apptentive_Private.h"
-#import "ApptentiveInteraction.h"
-#import "ApptentiveBackend.h"
-#import "ApptentiveSurveyViewController.h"
 #import "ApptentiveBackend+Engagement.h"
+#import "ApptentiveBackend.h"
+#import "ApptentiveInteraction.h"
+#import "ApptentiveSurveyViewController.h"
+#import "Apptentive_Private.h"
 
 #import "ApptentiveSurvey.h"
 #import "ApptentiveSurveyViewModel.h"
@@ -54,8 +54,8 @@ NSString *const ATInteractionSurveyEventLabelLaunch = @"launch";
 	if (self.interaction.identifier != nil) {
 		[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveSurveyShownNotification object:@{ApptentiveSurveyIDKey: self.interaction.identifier}];
 	}
-	
-	[self.interaction engage:ATInteractionSurveyEventLabelLaunch fromViewController:viewController];
+
+	[Apptentive.shared.backend engage:ATInteractionSurveyEventLabelLaunch fromInteraction:self.interaction fromViewController:viewController];
 }
 
 @end

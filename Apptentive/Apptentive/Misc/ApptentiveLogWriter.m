@@ -8,12 +8,14 @@
 
 #import "ApptentiveLogWriter.h"
 
+
 @interface ApptentiveLogWriter ()
 
 @property (nonatomic, readonly) dispatch_queue_t writerQueue;
 @property (nonatomic, assign) BOOL running;
 
 @end
+
 
 @implementation ApptentiveLogWriter
 
@@ -32,19 +34,19 @@
 
 - (void)stop {
 	dispatch_async(_writerQueue, ^{
-		self.running = NO;
-		if (self.finishCallback) {
-			self.finishCallback(self);
-		}
+	  self.running = NO;
+	  if (self.finishCallback) {
+		  self.finishCallback(self);
+	  }
 	});
 }
 
 - (void)appendMessage:(NSString *)message {
 	NSDate *timeStamp = [NSDate new];
 	dispatch_async(_writerQueue, ^{
-		if (self.running) {
-			[self writeMessage:[[NSString alloc] initWithFormat:@"%@ %@\n", timeStamp, message]];
-		}
+	  if (self.running) {
+		  [self writeMessage:[[NSString alloc] initWithFormat:@"%@ %@\n", timeStamp, message]];
+	  }
 	});
 }
 

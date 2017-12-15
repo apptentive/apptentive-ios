@@ -6,12 +6,12 @@
 //  Copyright 2011 Apptentive, Inc.. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
+#import <UIKit/UIKit.h>
 
-#import "ApptentiveMessage.h"
-#import "ApptentiveConversationManager.h"
 #import "ApptentiveClient.h"
+#import "ApptentiveConversationManager.h"
+#import "ApptentiveMessage.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -20,14 +20,7 @@ extern NSString *const ApptentiveAuthenticationDidFailNotificationKeyErrorType;
 extern NSString *const ApptentiveAuthenticationDidFailNotificationKeyErrorMessage;
 extern NSString *const ApptentiveAuthenticationDidFailNotificationKeyConversationIdentifier;
 
-typedef NS_ENUM(NSInteger, ApptentiveBackendState) {
-	ApptentiveBackendStateStarting,
-	ApptentiveBackendStateWaitingForDataProtectionUnlock,
-	ApptentiveBackendStatePayloadDatabaseAvailable,
-	ApptentiveBackendStateShuttingDown
-};
-
-@class ApptentiveConversation, ApptentiveEngagementManifest, ApptentiveAppConfiguration, ApptentiveMessageCenterViewController, ApptentiveMessageManager, ApptentivePayloadSender;
+@class ApptentiveConversation, ApptentiveEngagementManifest, ApptentiveAppConfiguration, ApptentiveMessageCenterViewController, ApptentiveMessageManager, ApptentivePayloadSender, ApptentiveDispatchQueue;
 
 /**
  `ApptentiveBackend` contains the internals of the Apptentive SDK.
@@ -48,9 +41,10 @@ typedef NS_ENUM(NSInteger, ApptentiveBackendState) {
 
 @property (readonly, strong, nonatomic) ApptentiveConversationManager *conversationManager;
 @property (readonly, strong, nonatomic) ApptentiveAppConfiguration *configuration;
-@property (readonly, strong, nonatomic) NSOperationQueue *operationQueue;
+@property (readonly, strong, nonatomic) ApptentiveDispatchQueue *operationQueue;
 @property (readonly, strong, nonatomic) ApptentiveClient *client;
 @property (readonly, strong, nonatomic) ApptentivePayloadSender *payloadSender;
+@property (readonly, nonatomic, getter=isForeground) BOOL foreground;
 
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (readonly, strong, nonatomic) NSString *supportDirectoryPath;
@@ -60,6 +54,10 @@ typedef NS_ENUM(NSInteger, ApptentiveBackendState) {
 @property (copy, nonatomic) ApptentiveAuthenticationFailureCallback authenticationFailureCallback;
 
 @property (readonly, nonatomic) BOOL networkAvailable;
+@property (assign, nonatomic) NSUInteger unreadMessageCount;
+
+@property (strong, nonatomic) NSString *personName;
+@property (strong, nonatomic) NSString *personEmailAddress;
 
 /**
  Initializes a new backend object.
@@ -70,13 +68,12 @@ typedef NS_ENUM(NSInteger, ApptentiveBackendState) {
  @param storagePath The path (relative to the App's Application Support directory) to use for storage.
  @return The newly-initialized backend.
  */
-- (instancetype)initWithApptentiveKey:(NSString *)apptentiveKey signature:(NSString *)signature baseURL:(NSURL *)baseURL storagePath:(NSString *)storagePath operationQueue:(NSOperationQueue *)operationQueue;
+- (instancetype)initWithApptentiveKey:(NSString *)apptentiveKey signature:(NSString *)signature baseURL:(NSURL *)baseURL storagePath:(NSString *)storagePath operationQueue:(ApptentiveDispatchQueue *)operationQueue;
 
 @property (readonly, strong, nonatomic) NSString *apptentiveKey;
 @property (readonly, strong, nonatomic) NSString *apptentiveSignature;
 @property (readonly, strong, nonatomic) NSURL *baseURL;
 @property (readonly, strong, nonatomic) NSString *storagePath;
-@property (readonly, assign, nonatomic) ApptentiveBackendState state;
 
 /**
  Instructs the serial network queue to add network operations for the currently-queued network payloads.
@@ -90,10 +87,9 @@ typedef NS_ENUM(NSInteger, ApptentiveBackendState) {
  Presents Message Center using the modal presentation style from the specified view controller.
 
  @param viewController The view controller from which to present message center
- @return Whether message center was displayed
  */
-- (BOOL)presentMessageCenterFromViewController:(nullable UIViewController *)viewController;
-- (BOOL)presentMessageCenterFromViewController:(nullable UIViewController *)viewController withCustomData:(nullable NSDictionary *)customData;
+- (void)presentMessageCenterFromViewController:(nullable UIViewController *)viewController completion:(void (^_Nullable)(BOOL presented))completion;
+- (void)presentMessageCenterFromViewController:(nullable UIViewController *)viewController withCustomData:(nullable NSDictionary *)customData completion:(void (^_Nullable)(BOOL presented))completion;
 
 - (void)dismissMessageCenterAnimated:(BOOL)animated completion:(void (^)(void))completion;
 

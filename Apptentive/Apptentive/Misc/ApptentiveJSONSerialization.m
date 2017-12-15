@@ -25,7 +25,7 @@ NSInteger ApptentiveJSONSerializationErrorCode = -568;
 			if (error != NULL) {
 				*error = [NSError errorWithDomain:ApptentiveErrorDomain code:ApptentiveJSONSerializationErrorCode userInfo:@{ NSLocalizedFailureReasonErrorKey: @"JSON object is malformed." }];
 			}
-			
+
 			ApptentiveLogError(@"Exception when encoding JSON: %@.", exception.reason);
 			ApptentiveLogError(@"Attempted to encode %@.", obj);
 		}

@@ -7,9 +7,10 @@
 //
 
 #import "ApptentiveAboutViewController.h"
-#import "Apptentive_Private.h"
 #import "ApptentiveBackend+Engagement.h"
 #import "ApptentiveUtilities.h"
+#import "Apptentive_Private.h"
+#import "ApptentiveInteraction.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -28,21 +29,21 @@ NSString *const ATInteractionAboutViewEventLabelClose = @"close";
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *imageViewHeightConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *aboutButtonPrivacyButtonVeritcalConstraint;
 
-
+@property (strong, nonatomic) ApptentiveInteraction *interaction;
 
 @end
 
 
 @implementation ApptentiveAboutViewController
 
-- (NSString *)codePointForEvent:(NSString *)event {
-	return [ApptentiveBackend codePointForVendor:ATEngagementCodePointApptentiveVendorKey interactionType:ATInteractionAboutViewInteractionKey event:event];
-}
-
 - (void)viewDidLoad {
 	[super viewDidLoad];
 
-	[Apptentive.shared.backend engageCodePoint:[self codePointForEvent:ATInteractionAboutViewEventLabelLaunch] fromInteraction:nil userInfo:nil customData:nil extendedData:nil fromViewController:self];
+	self.interaction = [[ApptentiveInteraction alloc] init];
+	self.interaction.type = ATInteractionAboutViewInteractionKey;
+	self.interaction.vendor = ATEngagementCodePointApptentiveVendorKey;
+
+	[Apptentive.shared.backend engage:ATInteractionAboutViewEventLabelLaunch fromInteraction:self.interaction fromViewController:self];
 
 	self.imageView.image = [ApptentiveUtilities imageNamed:@"at_apptentive_logo"];
 	// TODO: Look into localizing the storyboard instead
@@ -54,7 +55,7 @@ NSString *const ATInteractionAboutViewEventLabelClose = @"close";
 - (void)viewWillDisappear:(BOOL)animated {
 	[super viewWillDisappear:animated];
 
-	[Apptentive.shared.backend engageCodePoint:[self codePointForEvent:ATInteractionAboutViewEventLabelClose] fromInteraction:nil userInfo:nil customData:nil extendedData:nil fromViewController:self];
+	[Apptentive.shared.backend engage:ATInteractionAboutViewEventLabelClose fromInteraction:self.interaction fromViewController:self];
 }
 
 - (IBAction)learnMore:(id)sender {

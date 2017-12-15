@@ -6,16 +6,16 @@
 //  Copyright © 2016 Apptentive, Inc. All rights reserved.
 //
 
-#import <XCTest/XCTest.h>
-#import "ApptentiveSurveyViewModel.h"
-#import "ApptentiveInteraction.h"
-#import "ApptentiveStyleSheet.h"
-#import "ApptentiveInteractionUsageData.h"
-#import "ApptentiveConversation.h"
-#import "Apptentive_Private.h"
 #import "ApptentiveBackend.h"
-#import "ApptentiveEngagement.h"
+#import "ApptentiveConversation.h"
 #import "ApptentiveCount.h"
+#import "ApptentiveEngagement.h"
+#import "ApptentiveInteraction.h"
+#import "ApptentiveInteractionUsageData.h"
+#import "ApptentiveStyleSheet.h"
+#import "ApptentiveSurveyViewModel.h"
+#import "Apptentive_Private.h"
+#import <XCTest/XCTest.h>
 
 
 @interface ApptentiveSurveyTests : XCTestCase <ATSurveyViewModelDelegate>

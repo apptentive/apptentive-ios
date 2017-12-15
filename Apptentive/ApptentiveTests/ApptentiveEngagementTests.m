@@ -6,21 +6,22 @@
 //  Copyright (c) 2013 Apptentive, Inc. All rights reserved.
 //
 
-#import <XCTest/XCTest.h>
+#import "Apptentive+Debugging.h"
 #import "Apptentive.h"
+#import "ApptentiveAppRelease.h"
+#import "ApptentiveBackend+Engagement.h"
+#import "ApptentiveBackend+Engagement.h"
+#import "ApptentiveConversation.h"
+#import "ApptentiveEngagement.h"
 #import "ApptentiveInteraction.h"
 #import "ApptentiveInteractionInvocation.h"
 #import "ApptentiveInteractionUsageData.h"
-#import "ApptentiveBackend+Engagement.h"
-#import "Apptentive+Debugging.h"
-#import "ApptentiveConversation.h"
-#import "ApptentiveAppRelease.h"
-#import "ApptentiveSDK.h"
-#import "ApptentiveVersion.h"
-#import "ApptentiveEngagement.h"
-#import "ApptentiveBackend+Engagement.h"
-#import "ApptentiveUtilities.h"
 #import "ApptentiveMessageManager.h"
+#import "ApptentiveSDK.h"
+#import "ApptentiveUtilities.h"
+#import "ApptentiveVersion.h"
+#import <XCTest/XCTest.h>
+#import "ApptentiveDispatchQueue.h"
 
 
 @interface ApptentiveEngagementTests : XCTestCase
@@ -484,7 +485,7 @@
 
 	XCTestExpectation *expectation = [self expectationWithDescription:@"Backend stood up"];
 
-	[Apptentive.shared.backend.operationQueue addOperationWithBlock:^{
+	[Apptentive.shared.backend.operationQueue dispatchAsync:^{
 		Apptentive.shared.localInteractionsURL = [[NSBundle bundleForClass:[self class]] URLForResource:@"testInteractions" withExtension:@"json"];
 
 		[Apptentive.shared.backend.conversationManager.activeConversation warmCodePoint:@"local#app#init"];
@@ -513,23 +514,31 @@
 
 		[Apptentive.shared.backend.conversationManager.activeConversation warmInteraction:@"533ed97a7724c5457e00003f"];
 
-		XCTAssertFalse([Apptentive.shared canShowInteractionForEvent:@"testRatingFlow"], @"The OR clauses are failing.");
+		[Apptentive.shared queryCanShowInteractionForEvent:@"testRatingFlow" completion:^(BOOL canShowInteraction) {
+			XCTAssertFalse(canShowInteraction, @"The OR clauses are failing.");
 
-		[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#init"];
-		[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#init"];
+			[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#init"];
+			[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#init"];
 
-		[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#testRatingFlow"];
-		[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#testRatingFlow"];
+			[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#testRatingFlow"];
+			[Apptentive.shared.backend.conversationManager.activeConversation engageCodePoint:@"local#app#testRatingFlow"];
 
-		XCTAssertTrue([Apptentive.shared canShowInteractionForEvent:@"testRatingFlow"], @"One of the OR clauses is true. The other ANDed clause is also true. Should work.");
+			[Apptentive.shared queryCanShowInteractionForEvent:@"testRatingFlow" completion:^(BOOL canShowInteraction) {
+				XCTAssertTrue(canShowInteraction, @"One of the OR clauses is true. The other ANDed clause is also true. Should work.");
 
-		[Apptentive.shared.backend.conversationManager.activeConversation.appRelease setValue:[NSDate dateWithTimeIntervalSinceNow:-864001] forKey:@"timeAtInstallTotal"];
-		XCTAssertTrue([Apptentive.shared canShowInteractionForEvent:@"testRatingFlow"], @"All of the OR clauses are true. The other ANDed clause is also true. Should work.");
+				[Apptentive.shared.backend.conversationManager.activeConversation.appRelease setValue:[NSDate dateWithTimeIntervalSinceNow:-864001] forKey:@"timeAtInstallTotal"];
+				[Apptentive.shared queryCanShowInteractionForEvent:@"testRatingFlow" completion:^(BOOL canShowInteraction) {
+					XCTAssertTrue(canShowInteraction, @"All of the OR clauses are true. The other ANDed clause is also true. Should work.");
 
-		[Apptentive.shared.backend.conversationManager.activeConversation engageInteraction:@"533ed97a7724c5457e00003f"];
-		XCTAssertFalse([Apptentive.shared canShowInteractionForEvent:@"testRatingFlow"], @"All the OR clauses are true. The other ANDed clause is not true. Should fail.");
+					[Apptentive.shared.backend.conversationManager.activeConversation engageInteraction:@"533ed97a7724c5457e00003f"];
+					[Apptentive.shared queryCanShowInteractionForEvent:@"testRatingFlow" completion:^(BOOL canShowInteraction) {
+						XCTAssertFalse(canShowInteraction, @"All the OR clauses are true. The other ANDed clause is not true. Should fail.");
 
-		[expectation fulfill];
+						[expectation fulfill];
+					}];
+				}];
+			}];
+		}];
 	}];
 
 	[self waitForExpectationsWithTimeout:5 handler:nil];
@@ -542,14 +551,22 @@
 
 	XCTestExpectation *expectation = [self expectationWithDescription:@"Backend stood up"];
 
-	[Apptentive.shared.backend.operationQueue addOperationWithBlock:^{
-		[Apptentive.shared.backend.conversationManager createMessageManagerForConversation:Apptentive.shared.backend.conversationManager.activeConversation];
-		Apptentive.shared.localInteractionsURL = [[NSBundle bundleForClass:[self class]] URLForResource:@"testInteractions" withExtension:@"json"];
+	[Apptentive.shared.backend.operationQueue dispatchAsync:^{
+		[Apptentive.shared.backend.conversationManager.activeConversation setValue:@"abc123" forKey:@"token"];
+		[Apptentive.shared.backend.conversationManager.activeConversation setValue:@"abc123" forKey:@"identifier"];
 
-		XCTAssertTrue([[Apptentive sharedConnection] canShowInteractionForEvent:@"canShow"], @"If invocation is valid, it will be shown for the next targeted event.");
-		XCTAssertFalse([[Apptentive sharedConnection] canShowInteractionForEvent:@"cannotShow"], @"If invocation is not valid, it will not be shown for the next targeted event.");
+	  [Apptentive.shared.backend.conversationManager createMessageManagerForConversation:Apptentive.shared.backend.conversationManager.activeConversation];
+	  Apptentive.shared.localInteractionsURL = [[NSBundle bundleForClass:[self class]] URLForResource:@"testInteractions" withExtension:@"json"];
 
-		[expectation fulfill];
+		[Apptentive.shared queryCanShowInteractionForEvent:@"canShow" completion:^(BOOL canShowInteraction) {
+			XCTAssertTrue(canShowInteraction, @"If invocation is valid, it will be shown for the next targeted event.");
+
+			[Apptentive.shared queryCanShowInteractionForEvent:@"cannotShow" completion:^(BOOL canShowInteraction) {
+				XCTAssertFalse(canShowInteraction, @"If invocation is not valid, it will not be shown for the next targeted event.");
+
+				[expectation fulfill];
+			}];
+		}];
 	}];
 
 	[self waitForExpectationsWithTimeout:5 handler:nil];

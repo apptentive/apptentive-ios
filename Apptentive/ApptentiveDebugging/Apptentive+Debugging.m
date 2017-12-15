@@ -7,24 +7,25 @@
 //
 
 #import "Apptentive+Debugging.h"
-#import "ApptentiveBackend.h"
 #import "ApptentiveBackend+Engagement.h"
-#import "ApptentiveInteraction.h"
-#import "ApptentiveMessageCenterViewController.h"
+#import "ApptentiveBackend.h"
 #import "ApptentiveDevice.h"
+#import "ApptentiveEngagementManifest.h"
+#import "ApptentiveInteraction.h"
+#import "ApptentiveJSONSerialization.h"
+#import "ApptentiveMessageCenterViewController.h"
 #import "ApptentivePerson.h"
 #import "ApptentiveSDK.h"
 #import "ApptentiveVersion.h"
-#import "ApptentiveEngagementManifest.h"
-#import "ApptentiveJSONSerialization.h"
 
 #import "ApptentiveConversation.h"
 #import "ApptentiveConversationMetadata.h"
 #import "ApptentiveConversationMetadataItem.h"
 #import "ApptentiveSafeCollections.h"
 
-#import <objc/runtime.h>
 #import "ApptentiveJWT.h"
+#import "ApptentiveDispatchQueue.h"
+#import <objc/runtime.h>
 
 NSNotificationName _Nonnull const ApptentiveConversationChangedNotification = @"ApptentiveConversationChangedNotification";
 
@@ -125,7 +126,7 @@ NSNotificationName _Nonnull const ApptentiveConversationChangedNotification = @"
 	}
 
 	dispatch_async(dispatch_get_main_queue(), ^{
-		[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveConversationChangedNotification object:self];
+	  [[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveConversationChangedNotification object:self];
 	});
 }
 

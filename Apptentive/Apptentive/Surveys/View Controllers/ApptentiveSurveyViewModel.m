@@ -8,14 +8,15 @@
 
 #import "ApptentiveSurveyViewModel.h"
 #import "ApptentiveSurvey.h"
-#import "ApptentiveSurveyQuestion.h"
 #import "ApptentiveSurveyAnswer.h"
+#import "ApptentiveSurveyQuestion.h"
 
-#import "Apptentive_Private.h"
-#import "ApptentiveInteraction.h"
 #import "ApptentiveBackend.h"
+#import "ApptentiveInteraction.h"
 #import "ApptentiveSerialRequest.h"
 #import "ApptentiveSurveyResponsePayload.h"
+#import "Apptentive_Private.h"
+#import "ApptentiveBackend+Engagement.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -245,16 +246,16 @@ NSString *const ApptentiveInteractionSurveyEventLabelCancel = @"cancel";
 }
 
 - (void)submit {
-	[Apptentive.shared.operationQueue addOperationWithBlock:^{
-		ApptentiveConversation *conversation = Apptentive.shared.backend.conversationManager.activeConversation;
-		ApptentiveSurveyResponsePayload *payload = [[ApptentiveSurveyResponsePayload alloc] initWithAnswers:self.answers identifier:self.interaction.identifier];
-		ApptentiveAssertNotNil(payload, @"Unable to create Apptentive survey response payload");
+	[Apptentive.shared dispatchOnOperationQueue:^{
+	  ApptentiveConversation *conversation = Apptentive.shared.backend.conversationManager.activeConversation;
+	  ApptentiveSurveyResponsePayload *payload = [[ApptentiveSurveyResponsePayload alloc] initWithAnswers:self.answers identifier:self.interaction.identifier];
+	  ApptentiveAssertNotNil(payload, @"Unable to create Apptentive survey response payload");
 
-		if (payload != nil) {
-			[ApptentiveSerialRequest enqueuePayload:payload forConversation:conversation usingAuthToken:conversation.token inContext:Apptentive.shared.backend.managedObjectContext];
+	  if (payload != nil) {
+		  [ApptentiveSerialRequest enqueuePayload:payload forConversation:conversation usingAuthToken:conversation.token inContext:Apptentive.shared.backend.managedObjectContext];
 
-			[Apptentive.shared.backend processQueuedRecords];
-		}
+		  [Apptentive.shared.backend processQueuedRecords];
+	  }
 	}];
 }
 
@@ -268,67 +269,67 @@ NSString *const ApptentiveInteractionSurveyEventLabelCancel = @"cancel";
 	self.invalidAnswerIndexPaths = [NSMutableSet set];
 
 	[self.survey.questions enumerateObjectsUsingBlock:^(ApptentiveSurveyQuestion *_Nonnull question, NSUInteger questionIndex, BOOL *_Nonnull questionsStop) {
-		switch (question.type) {
-			case ATSurveyQuestionTypeSingleLine:
-			case ATSurveyQuestionTypeMultipleLine: {
-				NSIndexPath *answerIndexPath = [NSIndexPath indexPathForItem:0 inSection:questionIndex];
-				if (question.required && ![self textFieldHasTextAtIndexPath:answerIndexPath]) {
-					[self.invalidQuestionIndexes addIndex:questionIndex];
-					[self.invalidAnswerIndexPaths addObject:answerIndexPath];
-				}
-				break;
-			}
-			case ATSurveyQuestionTypeSingleSelect:
-			case ATSurveyQuestionTypeMultipleSelect: {
-				NSInteger __block numberOfSelections = 0;
+	  switch (question.type) {
+		  case ATSurveyQuestionTypeSingleLine:
+		  case ATSurveyQuestionTypeMultipleLine: {
+			  NSIndexPath *answerIndexPath = [NSIndexPath indexPathForItem:0 inSection:questionIndex];
+			  if (question.required && ![self textFieldHasTextAtIndexPath:answerIndexPath]) {
+				  [self.invalidQuestionIndexes addIndex:questionIndex];
+				  [self.invalidAnswerIndexPaths addObject:answerIndexPath];
+			  }
+			  break;
+		  }
+		  case ATSurveyQuestionTypeSingleSelect:
+		  case ATSurveyQuestionTypeMultipleSelect: {
+			  NSInteger __block numberOfSelections = 0;
 
-				[question.answers enumerateObjectsUsingBlock:^(ApptentiveSurveyAnswer * _Nonnull answer, NSUInteger answerIndex, BOOL * _Nonnull answersStop) {
-					NSIndexPath *answerIndexPath = [NSIndexPath indexPathForItem:answerIndex inSection:questionIndex];
+			  [question.answers enumerateObjectsUsingBlock:^(ApptentiveSurveyAnswer *_Nonnull answer, NSUInteger answerIndex, BOOL *_Nonnull answersStop) {
+				NSIndexPath *answerIndexPath = [NSIndexPath indexPathForItem:answerIndex inSection:questionIndex];
 
-					if ([self.selectedIndexPaths containsObject:answerIndexPath]) {
-						numberOfSelections ++;
+				if ([self.selectedIndexPaths containsObject:answerIndexPath]) {
+					numberOfSelections++;
 
-						if (question.required && answer.type == ApptentiveSurveyAnswerTypeOther && ![self textFieldHasTextAtIndexPath:answerIndexPath]) {
-							[self.invalidAnswerIndexPaths addObject:answerIndexPath];
-							[self.invalidQuestionIndexes addIndex:questionIndex];
-						}
-					}
-				}];
-
-				BOOL numberOfSelectionsOutOfRange = numberOfSelections	> question.maximumSelectedCount || numberOfSelections < question.minimumSelectedCount;
-				if ((question.required || numberOfSelections != 0) && numberOfSelectionsOutOfRange) {
-					[self.invalidQuestionIndexes addIndex:questionIndex];
-				}
-
-				break;
-			}
-			case ATSurveyQuestionTypeRange:
-				if (question.required) {
-					if ([self selectedIndexPathsForQuestionAtIndex:questionIndex].count == 0) {
+					if (question.required && answer.type == ApptentiveSurveyAnswerTypeOther && ![self textFieldHasTextAtIndexPath:answerIndexPath]) {
+						[self.invalidAnswerIndexPaths addObject:answerIndexPath];
 						[self.invalidQuestionIndexes addIndex:questionIndex];
 					}
 				}
+			  }];
 
-				break;
-		}
+			  BOOL numberOfSelectionsOutOfRange = numberOfSelections > question.maximumSelectedCount || numberOfSelections < question.minimumSelectedCount;
+			  if ((question.required || numberOfSelections != 0) && numberOfSelectionsOutOfRange) {
+				  [self.invalidQuestionIndexes addIndex:questionIndex];
+			  }
+
+			  break;
+		  }
+		  case ATSurveyQuestionTypeRange:
+			  if (question.required) {
+				  if ([self selectedIndexPathsForQuestionAtIndex:questionIndex].count == 0) {
+					  [self.invalidQuestionIndexes addIndex:questionIndex];
+				  }
+			  }
+
+			  break;
+	  }
 	}];
 
 	// Unless the submit button was tapped, only allow answers to go from red to green
 	if (!isSubmit) {
 		NSMutableIndexSet *redToGreenQuestionIndexes = [self.invalidQuestionIndexes mutableCopy];
 		[self.invalidQuestionIndexes enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *_Nonnull stop) {
-			if (![previousInvalidQuestionIndexes containsIndex:idx]) {
-				[redToGreenQuestionIndexes removeIndex:idx];
-			}
+		  if (![previousInvalidQuestionIndexes containsIndex:idx]) {
+			  [redToGreenQuestionIndexes removeIndex:idx];
+		  }
 		}];
 
 		self.invalidQuestionIndexes = redToGreenQuestionIndexes;
 
 		NSMutableSet *redToGreenAnswerIndexPaths = [self.invalidAnswerIndexPaths mutableCopy];
 		[self.invalidAnswerIndexPaths enumerateObjectsUsingBlock:^(id _Nonnull obj, BOOL *_Nonnull stop) {
-			if (![previousInvalidAnswerIndexPaths containsObject:obj]) {
-				[redToGreenAnswerIndexPaths removeObject:obj];
-			}
+		  if (![previousInvalidAnswerIndexPaths containsObject:obj]) {
+			  [redToGreenAnswerIndexPaths removeObject:obj];
+		  }
 		}];
 
 		self.invalidAnswerIndexPaths = redToGreenAnswerIndexPaths;
@@ -343,10 +344,10 @@ NSString *const ApptentiveInteractionSurveyEventLabelCancel = @"cancel";
 
 - (NSIndexPath *)firstInvalidAnswerIndexPath {
 	__block NSUInteger minIndex = NSNotFound;
-	[self.invalidQuestionIndexes enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
-		minIndex = MIN(minIndex, idx);
+	[self.invalidQuestionIndexes enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *_Nonnull stop) {
+	  minIndex = MIN(minIndex, idx);
 	}];
-	
+
 	return minIndex != NSNotFound ? [NSIndexPath indexPathForItem:0 inSection:minIndex] : nil;
 }
 
@@ -354,45 +355,44 @@ NSString *const ApptentiveInteractionSurveyEventLabelCancel = @"cancel";
 	NSMutableDictionary *result = [NSMutableDictionary dictionary];
 
 	[self.survey.questions enumerateObjectsUsingBlock:^(ApptentiveSurveyQuestion *_Nonnull question, NSUInteger questionIndex, BOOL *_Nonnull stop) {
-		NSMutableArray *responses = [NSMutableArray array];
-		switch (question.type) {
-			case ATSurveyQuestionTypeSingleLine:
-			case ATSurveyQuestionTypeMultipleLine: {
-				NSIndexPath *indexPath = [NSIndexPath indexPathForItem:0 inSection:questionIndex];
+	  NSMutableArray *responses = [NSMutableArray array];
+	  switch (question.type) {
+		  case ATSurveyQuestionTypeSingleLine:
+		  case ATSurveyQuestionTypeMultipleLine: {
+			  NSIndexPath *indexPath = [NSIndexPath indexPathForItem:0 inSection:questionIndex];
 
-				if ([self textFieldHasTextAtIndexPath:indexPath]) {
-					[responses addObject:@{ @"value": [self trimmedTextAtIndexPath:indexPath] }];
-				}
-				break;
-			}
-			case ATSurveyQuestionTypeSingleSelect: {
-				NSArray *selections = [self selectedIndexPathsForQuestionAtIndex:questionIndex];
+			  if ([self textFieldHasTextAtIndexPath:indexPath]) {
+				  [responses addObject:@{ @"value": [self trimmedTextAtIndexPath:indexPath] }];
+			  }
+			  break;
+		  }
+		  case ATSurveyQuestionTypeSingleSelect: {
+			  NSArray *selections = [self selectedIndexPathsForQuestionAtIndex:questionIndex];
 
-				if (selections.count == 1) {
-					ApptentiveArrayAddObject(responses, [self responseDictionaryForAnswerAtIndexPath:selections.firstObject]);
-				}
-				break;
-			}
-			case ATSurveyQuestionTypeMultipleSelect:
-				for (NSIndexPath *indexPath in [self selectedIndexPathsForQuestionAtIndex:questionIndex]) {
-					ApptentiveArrayAddObject(responses, [self responseDictionaryForAnswerAtIndexPath:indexPath]);
-				}
+			  if (selections.count == 1) {
+				  ApptentiveArrayAddObject(responses, [self responseDictionaryForAnswerAtIndexPath:selections.firstObject]);
+			  }
+			  break;
+		  }
+		  case ATSurveyQuestionTypeMultipleSelect:
+			  for (NSIndexPath *indexPath in [self selectedIndexPathsForQuestionAtIndex:questionIndex]) {
+				  ApptentiveArrayAddObject(responses, [self responseDictionaryForAnswerAtIndexPath:indexPath]);
+			  }
 
-				break;
-			case ATSurveyQuestionTypeRange: {
-				NSArray<NSIndexPath *> *selections = [self selectedIndexPathsForQuestionAtIndex:questionIndex];
+			  break;
+		  case ATSurveyQuestionTypeRange: {
+			  NSArray<NSIndexPath *> *selections = [self selectedIndexPathsForQuestionAtIndex:questionIndex];
 
-				if (selections.count == 1) {
-					[responses addObject:@{ @"value": @(selections.firstObject.item + question.minimumValue) }];
-				}
-				break;
-			}
+			  if (selections.count == 1) {
+				  [responses addObject:@{ @"value": @(selections.firstObject.item + question.minimumValue) }];
+			  }
+			  break;
+		  }
+	  }
 
-		}
-
-		if (responses.count > 0) {
-			result[question.identifier] = responses;
-		}
+	  if (responses.count > 0) {
+		  result[question.identifier] = responses;
+	  }
 	}];
 
 	return result;
@@ -403,16 +403,16 @@ NSString *const ApptentiveInteractionSurveyEventLabelCancel = @"cancel";
 - (void)answerChangedAtIndexPath:(NSIndexPath *)indexPath {
 	ApptentiveSurveyQuestion *question = [self questionAtIndex:indexPath.section];
 
-	[self.interaction engage:ApptentiveInteractionSurveyEventLabelQuestionResponse fromViewController:nil userInfo:@{ @"id": question.identifier ?: [NSNull null] }];
+	[Apptentive.shared.backend engage:ApptentiveInteractionSurveyEventLabelQuestionResponse fromInteraction:self.interaction fromViewController:nil userInfo:@{ @"id": question.identifier ?: [NSNull null] }];
 }
 
 - (void)didCancel:(UIViewController *)presentingViewController {
-	[self.interaction engage:ApptentiveInteractionSurveyEventLabelCancel fromViewController:presentingViewController];
+	[Apptentive.shared.backend engage:ApptentiveInteractionSurveyEventLabelCancel fromInteraction:self.interaction fromViewController:presentingViewController];
 }
 
 - (void)didSubmit:(UIViewController *)presentingViewController {
 	[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveSurveySentNotification object:@{ApptentiveSurveyIDKey: ApptentiveCollectionValue(self.interaction.identifier)}];
-	[self.interaction engage:ApptentiveInteractionSurveyEventLabelSubmit fromViewController:presentingViewController];
+	[Apptentive.shared.backend engage:ApptentiveInteractionSurveyEventLabelSubmit fromInteraction:self.interaction fromViewController:presentingViewController];
 }
 
 #pragma mark - Private

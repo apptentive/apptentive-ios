@@ -7,8 +7,8 @@
 //
 
 #import "ApptentiveMessage.h"
-#import "ApptentiveMessageSender.h"
 #import "ApptentiveAttachment.h"
+#import "ApptentiveMessageSender.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

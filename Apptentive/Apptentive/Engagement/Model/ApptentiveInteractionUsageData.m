@@ -7,18 +7,18 @@
 //
 
 #import "ApptentiveInteractionUsageData.h"
-#import "ApptentiveBackend.h"
 #import "Apptentive.h"
-#import "Apptentive_Private.h"
-#import "ApptentiveBackend+Engagement.h"
-#import "ApptentiveUtilities.h"
-#import "ApptentiveVersion.h"
 #import "ApptentiveAppRelease.h"
-#import "ApptentiveSDK.h"
-#import "ApptentiveEngagement.h"
+#import "ApptentiveBackend+Engagement.h"
+#import "ApptentiveBackend.h"
 #import "ApptentiveCount.h"
 #import "ApptentiveDevice.h"
+#import "ApptentiveEngagement.h"
 #import "ApptentivePerson.h"
+#import "ApptentiveSDK.h"
+#import "ApptentiveUtilities.h"
+#import "ApptentiveVersion.h"
+#import "Apptentive_Private.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -93,7 +93,7 @@ NS_ASSUME_NONNULL_BEGIN
 	result[@"application/dt_compiler"] = self.conversation.appRelease.compiler;
 	result[@"application/dt_platform_build"] = self.conversation.appRelease.platformBuild;
 	result[@"application/dt_platform_name"] = self.conversation.appRelease.platformName;
-	result[@"application/dt_platform_version"] = [[ApptentiveVersion alloc] initWithString: self.conversation.appRelease.platformVersion];
+	result[@"application/dt_platform_version"] = [[ApptentiveVersion alloc] initWithString:self.conversation.appRelease.platformVersion];
 	result[@"application/dt_sdk_build"] = self.conversation.appRelease.SDKBuild;
 	result[@"application/dt_sdk_name"] = self.conversation.appRelease.SDKName;
 	result[@"application/dt_xcode"] = self.conversation.appRelease.Xcode;

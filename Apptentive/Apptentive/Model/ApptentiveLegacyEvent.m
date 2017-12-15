@@ -7,11 +7,11 @@
 //
 
 #import "ApptentiveConversation.h"
+#import "ApptentiveBackend.h"
+#import "ApptentiveEventPayload.h"
 #import "ApptentiveLegacyEvent.h"
 #import "ApptentiveSerialRequest.h"
 #import "Apptentive_Private.h"
-#import "ApptentiveBackend.h"
-#import "ApptentiveEventPayload.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

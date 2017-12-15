@@ -124,18 +124,20 @@ NS_ASSUME_NONNULL_BEGIN
 
 		[self traitCollectionDidChange:self.traitCollection];
 
-		[UIView animateWithDuration:0.25 animations:^{
-			self.nameField.alpha = nameFieldAlpha;
-			self.requiredLabel.alpha = 1.0 - nameFieldAlpha;
-			
-			[self layoutIfNeeded];
-		} completion:^(BOOL finished) {
-			if (nameFieldAlpha == 0) {
-				self.nameField.hidden = YES;
-			} else {
-				self.requiredLabel.hidden = YES;
+		[UIView animateWithDuration:0.25
+			animations:^{
+			  self.nameField.alpha = nameFieldAlpha;
+			  self.requiredLabel.alpha = 1.0 - nameFieldAlpha;
+
+			  [self layoutIfNeeded];
 			}
-		}];
+			completion:^(BOOL finished) {
+			  if (nameFieldAlpha == 0) {
+				  self.nameField.hidden = YES;
+			  } else {
+				  self.requiredLabel.hidden = YES;
+			  }
+			}];
 	}
 }
 

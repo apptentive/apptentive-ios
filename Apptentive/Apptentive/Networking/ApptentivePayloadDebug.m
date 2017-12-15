@@ -7,8 +7,8 @@
 //
 
 #import "ApptentivePayloadDebug.h"
-#import "ApptentiveUtilities.h"
 #import "ApptentiveSerialRequest.h"
+#import "ApptentiveUtilities.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

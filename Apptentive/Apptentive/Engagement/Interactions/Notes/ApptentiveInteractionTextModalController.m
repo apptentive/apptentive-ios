@@ -7,11 +7,11 @@
 //
 
 #import "ApptentiveInteractionTextModalController.h"
-#import "ApptentiveUtilities.h"
-#import "ApptentiveInteractionInvocation.h"
 #import "ApptentiveBackend+Engagement.h"
-#import "Apptentive_Private.h"
 #import "ApptentiveInteraction.h"
+#import "ApptentiveInteractionInvocation.h"
+#import "ApptentiveUtilities.h"
+#import "Apptentive_Private.h"
 #import "UIAlertController+Apptentive.h"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -20,7 +20,6 @@ NS_ASSUME_NONNULL_BEGIN
 NSString *const ATInteractionTextModalEventLabelLaunch = @"launch";
 NSString *const ATInteractionTextModalEventLabelCancel = @"cancel";
 NSString *const ATInteractionTextModalEventLabelDismiss = @"dismiss";
-NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 
 typedef void (^alertActionHandler)(UIAlertAction *);
 
@@ -38,13 +37,16 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 
 	if (self.presentedViewController) {
 		if (viewController != nil) {
-			[viewController presentViewController:self.presentedViewController animated:YES completion:^{
-				[self.interaction engage:ATInteractionTextModalEventLabelLaunch fromViewController:viewController];
-			}];
+			[viewController presentViewController:self.presentedViewController
+										 animated:YES
+									   completion:^{
+										 [Apptentive.shared.backend engage:ATInteractionTextModalEventLabelLaunch fromInteraction:self.interaction fromViewController:viewController];
+									   }];
 		} else {
-			[(UIAlertController *)self.presentedViewController apptentive_presentAnimated:YES completion:^{
-				[self.interaction engage:ATInteractionTextModalEventLabelLaunch fromViewController:nil];
-			}];
+			[(UIAlertController *)self.presentedViewController apptentive_presentAnimated:YES
+																			   completion:^{
+																				 [Apptentive.shared.backend engage:ATInteractionTextModalEventLabelLaunch fromInteraction:self.interaction fromViewController:nil];
+																			   }];
 		}
 	}
 }
@@ -151,43 +153,26 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 		@"action_id": (actionConfig[@"id"] ?: [NSNull null]),
 	};
 
-	[self.interaction engage:ATInteractionTextModalEventLabelDismiss fromViewController:self.presentingViewController userInfo:userInfo];
+	[Apptentive.shared.backend engage:ATInteractionTextModalEventLabelDismiss fromInteraction:self.interaction fromViewController:self.presentingViewController userInfo:userInfo];
 
 	self.presentedViewController = nil;
 }
 
 - (alertActionHandler)createButtonHandlerBlockDismiss:(NSDictionary *)actionConfig {
 	return [^(UIAlertAction *alertAction) {
-		[self dismissAction:actionConfig];
+	  [self dismissAction:actionConfig];
 	} copy];
 }
 
 - (void)interactionAction:(NSDictionary *)actionConfig {
-	ApptentiveInteraction *interaction = nil;
-	NSArray *invocations = actionConfig[@"invokes"];
-	if (invocations) {
-		// TODO: Do this on the background queue?
-		interaction = [[Apptentive sharedConnection].backend interactionForInvocations:invocations];
-	}
-
-	NSDictionary *userInfo = @{ @"label": (actionConfig[@"label"] ?: [NSNull null]),
-		@"position": (actionConfig[@"position"] ?: [NSNull null]),
-		@"invoked_interaction_id": (interaction.identifier ?: [NSNull null]),
-		@"action_id": (actionConfig[@"id"] ?: [NSNull null]),
-	};
-
-	[self.interaction engage:ATInteractionTextModalEventLabelInteraction fromViewController:self.presentingViewController userInfo:userInfo];
-
-	if (interaction) {
-		[[Apptentive sharedConnection].backend presentInteraction:interaction fromViewController:self.presentingViewController];
-	}
+	[Apptentive.shared.backend invokeAction:actionConfig withInteraction:self.interaction fromViewController:self.presentingViewController];
 
 	self.presentedViewController = nil;
 }
 
 - (alertActionHandler)createButtonHandlerBlockInteractionAction:(NSDictionary *)actionConfig {
 	return [^(UIAlertAction *alertAction) {
-		[self interactionAction:actionConfig];
+	  [self interactionAction:actionConfig];
 	} copy];
 }
 

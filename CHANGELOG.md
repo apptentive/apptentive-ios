@@ -1,3 +1,19 @@
+2017-12-15 frankus, weeebox v5.0.0
+----------------------------------
+###Improvements
+
+- The engage method is now run asynchronously. Methods incorporating a callback are provided in case your app needs to be notified whether an interaction was displayed. 
+- Nonessential network requests will not be run when your app is in the background.
+
+###Bugs Fixed
+
+- App launches to the background and exits from the background are no longer reported as launches and exits.
+- The Apptentive framework version now matches the SDK version.
+- A bug that stopped Updgrade Messages from displaying is fixed.
+- A rare crash when a network request is cancelled was fixed.
+- A bug causing messages to re-download was fixed.
+
+
 2017-11-13 frankus, weeebox v4.1.1
 ----------------------------------
 ###Bugs Fixed
@@ -16,6 +32,13 @@
 
 - Fix Message Center styling bug on iPhone X in landscape mode
 - Fix delay before events can be engaged when SDK initializes
+
+2017-11-16 frankus, weeebox v4.0.8
+----------------------------------
+###Bugs Fixed
+
+- Fix rare crash in ApptentivePayloadSender when a request is cancelled
+- Fix About Apptentive and Upgrade Message layout on iPhone X
 
 2017-10-10 frankus, weeebox v4.0.7
 ----------------------------------

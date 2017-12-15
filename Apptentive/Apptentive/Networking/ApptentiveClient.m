@@ -7,11 +7,12 @@
 //
 
 #import "ApptentiveClient.h"
-#import "ApptentiveMessageGetRequest.h"
 #import "ApptentiveConfigurationRequest.h"
 #import "ApptentiveConversationRequest.h"
+#import "ApptentiveMessageGetRequest.h"
 
 #import "ApptentiveSerialRequest.h"
+#import "ApptentiveGCDDispatchQueue.h"
 
 #define APPTENTIVE_MIN_BACKOFF_DELAY 1.0
 #define APPTENTIVE_BACKOFF_MULTIPLIER 2.0
@@ -24,7 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 @synthesize URLSession = _URLSession;
 @synthesize backoffDelay = _backoffDelay;
 
-- (instancetype)initWithBaseURL:(NSURL *)baseURL apptentiveKey:(nonnull NSString *)apptentiveKey apptentiveSignature:(nonnull NSString *)apptentiveSignature delegateQueue:(NSOperationQueue *)delegateQueue {
+- (instancetype)initWithBaseURL:(NSURL *)baseURL apptentiveKey:(nonnull NSString *)apptentiveKey apptentiveSignature:(nonnull NSString *)apptentiveSignature delegateQueue:(ApptentiveDispatchQueue *)delegateQueue {
 	self = [super init];
 
 	if (self) {
@@ -44,7 +45,7 @@ NS_ASSUME_NONNULL_BEGIN
 		configuration.requestCachePolicy = NSURLRequestReloadIgnoringCacheData;
 		configuration.URLCache = nil;
 
-		_URLSession = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:delegateQueue];
+		_URLSession = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:((ApptentiveGCDDispatchQueue *) delegateQueue).queue];
 
 		[self resetBackoffDelay];
 	}
@@ -55,15 +56,11 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - Request operation data source
 
 - (void)increaseBackoffDelay {
-	@synchronized(self) {
-		_backoffDelay *= APPTENTIVE_BACKOFF_MULTIPLIER;
-	}
+	_backoffDelay *= APPTENTIVE_BACKOFF_MULTIPLIER;
 }
 
 - (void)resetBackoffDelay {
-	@synchronized(self) {
-		_backoffDelay = APPTENTIVE_MIN_BACKOFF_DELAY;
-	}
+	_backoffDelay = APPTENTIVE_MIN_BACKOFF_DELAY;
 }
 
 #pragma mark - Creating request operations

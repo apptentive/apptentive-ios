@@ -36,21 +36,22 @@ ApptentiveStyleIdentifier ApptentiveColorMessageBackground = @"com.apptentive.co
 ApptentiveStyleIdentifier ApptentiveColorReplyBackground = @"com.apptentive.color.replyBackground";
 ApptentiveStyleIdentifier ApptentiveColorContextBackground = @"com.apptentive.color.contextBackground";
 
-NSString * const FontFamilyKey = @"FontFamily";
-NSString * const LightFaceAttributeKey = @"LightFaceAttribute";
-NSString * const RegularFaceAttributeKey = @"RegularFaceAttribute";
-NSString * const MediumFaceAttributeKey = @"MediumFaceAttribute";
-NSString * const BoldFaceAttributeKey = @"BoldFaceAttribute";
-NSString * const PrimaryColorKey = @"PrimaryColor";
-NSString * const SecondaryColorKey = @"SecondaryColor";
-NSString * const FailureColorKey = @"FailureColor";
-NSString * const BackgroundColorKey = @"BackgroundColor";
-NSString * const SeparatorColorKey = @"SeparatorColor";
-NSString * const CollectionBackgroundColorKey = @"CollectionBackgroundColor";
-NSString * const PlaceholderColorKey = @"PlaceholderColor";
-NSString * const SizeAdjustmentKey = @"SizeAdjustment";
-NSString * const ColorOverridesKey = @"ColorOverrides";
-NSString * const FontOverridesKey = @"FontOverrides";
+NSString *const FontFamilyKey = @"FontFamily";
+NSString *const LightFaceAttributeKey = @"LightFaceAttribute";
+NSString *const RegularFaceAttributeKey = @"RegularFaceAttribute";
+NSString *const MediumFaceAttributeKey = @"MediumFaceAttribute";
+NSString *const BoldFaceAttributeKey = @"BoldFaceAttribute";
+NSString *const PrimaryColorKey = @"PrimaryColor";
+NSString *const SecondaryColorKey = @"SecondaryColor";
+NSString *const FailureColorKey = @"FailureColor";
+NSString *const BackgroundColorKey = @"BackgroundColor";
+NSString *const SeparatorColorKey = @"SeparatorColor";
+NSString *const CollectionBackgroundColorKey = @"CollectionBackgroundColor";
+NSString *const PlaceholderColorKey = @"PlaceholderColor";
+NSString *const SizeAdjustmentKey = @"SizeAdjustment";
+NSString *const ColorOverridesKey = @"ColorOverrides";
+NSString *const FontOverridesKey = @"FontOverrides";
+
 
 @interface ApptentiveStyleSheet ()
 
@@ -80,19 +81,19 @@ NSString * const FontOverridesKey = @"FontOverrides";
 	static NSDictionary<NSString *, NSNumber *> *faceForStyle;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-		faceForStyle = @{
-						 ApptentiveTextStyleHeaderTitle: @300,
-						 ApptentiveTextStyleHeaderMessage: @400,
-						 ApptentiveTextStyleMessageDate: @700,
-						 ApptentiveTextStyleMessageSender: @700,
-						 ApptentiveTextStyleMessageStatus: @700,
-						 ApptentiveTextStyleMessageCenterStatus: @700,
-						 ApptentiveTextStyleSurveyInstructions: @400,
-						 ApptentiveTextStyleButton: @400,
-						 ApptentiveTextStyleDoneButton: @700,
-						 ApptentiveTextStyleSubmitButton: @500,
-						 ApptentiveTextStyleTextInput: @400
-						 };
+	  faceForStyle = @{
+		  ApptentiveTextStyleHeaderTitle: @300,
+		  ApptentiveTextStyleHeaderMessage: @400,
+		  ApptentiveTextStyleMessageDate: @700,
+		  ApptentiveTextStyleMessageSender: @700,
+		  ApptentiveTextStyleMessageStatus: @700,
+		  ApptentiveTextStyleMessageCenterStatus: @700,
+		  ApptentiveTextStyleSurveyInstructions: @400,
+		  ApptentiveTextStyleButton: @400,
+		  ApptentiveTextStyleDoneButton: @700,
+		  ApptentiveTextStyleSubmitButton: @500,
+		  ApptentiveTextStyleTextInput: @400
+	  };
 	});
 	return faceForStyle[textStyle].integerValue;
 }
@@ -101,162 +102,162 @@ NSString * const FontOverridesKey = @"FontOverrides";
 	static NSDictionary<NSString *, NSDictionary<NSString *, NSNumber *> *> *sizeForCategoryForStyle;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-		sizeForCategoryForStyle = @{
-									ApptentiveTextStyleHeaderTitle: @{
-											UIContentSizeCategoryAccessibilityExtraExtraExtraLarge: @28,
-											UIContentSizeCategoryAccessibilityExtraExtraLarge: @28,
-											UIContentSizeCategoryAccessibilityExtraLarge: @27,
-											UIContentSizeCategoryAccessibilityLarge: @27,
-											UIContentSizeCategoryAccessibilityMedium: @26,
-											UIContentSizeCategoryExtraExtraExtraLarge: @26,
-											UIContentSizeCategoryExtraExtraLarge: @25,
-											UIContentSizeCategoryExtraLarge: @24,
-											UIContentSizeCategoryLarge: @23,
-											UIContentSizeCategoryMedium: @22,
-											UIContentSizeCategorySmall: @21,
-											UIContentSizeCategoryExtraSmall: @20
-											},
-									ApptentiveTextStyleHeaderMessage:  @{
-											UIContentSizeCategoryAccessibilityExtraExtraExtraLarge: @22,
-											UIContentSizeCategoryAccessibilityExtraExtraLarge: @21,
-											UIContentSizeCategoryAccessibilityExtraLarge: @20,
-											UIContentSizeCategoryAccessibilityLarge: @20,
-											UIContentSizeCategoryAccessibilityMedium: @19,
-											UIContentSizeCategoryExtraExtraExtraLarge: @19,
-											UIContentSizeCategoryExtraExtraLarge: @18,
-											UIContentSizeCategoryExtraLarge: @17,
-											UIContentSizeCategoryLarge: @16,
-											UIContentSizeCategoryMedium: @15,
-											UIContentSizeCategorySmall: @14,
-											UIContentSizeCategoryExtraSmall: @13
-											},
-									ApptentiveTextStyleMessageDate: @{
-											UIContentSizeCategoryAccessibilityExtraExtraExtraLarge: @21,
-											UIContentSizeCategoryAccessibilityExtraExtraLarge: @20,
-											UIContentSizeCategoryAccessibilityExtraLarge: @19,
-											UIContentSizeCategoryAccessibilityLarge: @19,
-											UIContentSizeCategoryAccessibilityMedium: @18,
-											UIContentSizeCategoryExtraExtraExtraLarge: @18,
-											UIContentSizeCategoryExtraExtraLarge: @17,
-											UIContentSizeCategoryExtraLarge: @16,
-											UIContentSizeCategoryLarge: @15,
-											UIContentSizeCategoryMedium: @14,
-											UIContentSizeCategorySmall: @13,
-											UIContentSizeCategoryExtraSmall: @12
-											},
-									ApptentiveTextStyleMessageSender: @{
-											UIContentSizeCategoryAccessibilityExtraExtraExtraLarge: @21,
-											UIContentSizeCategoryAccessibilityExtraExtraLarge: @20,
-											UIContentSizeCategoryAccessibilityExtraLarge: @19,
-											UIContentSizeCategoryAccessibilityLarge: @19,
-											UIContentSizeCategoryAccessibilityMedium: @18,
-											UIContentSizeCategoryExtraExtraExtraLarge: @18,
-											UIContentSizeCategoryExtraExtraLarge: @17,
-											UIContentSizeCategoryExtraLarge: @16,
-											UIContentSizeCategoryLarge: @15,
-											UIContentSizeCategoryMedium: @14,
-											UIContentSizeCategorySmall: @13,
-											UIContentSizeCategoryExtraSmall: @12
-											},
-									ApptentiveTextStyleMessageStatus: @{
-											UIContentSizeCategoryAccessibilityExtraExtraExtraLarge: @18,
-											UIContentSizeCategoryAccessibilityExtraExtraLarge: @17,
-											UIContentSizeCategoryAccessibilityExtraLarge: @16,
-											UIContentSizeCategoryAccessibilityLarge: @16,
-											UIContentSizeCategoryAccessibilityMedium: @15,
-											UIContentSizeCategoryExtraExtraExtraLarge: @15,
-											UIContentSizeCategoryExtraExtraLarge: @14,
-											UIContentSizeCategoryExtraLarge: @14,
-											UIContentSizeCategoryLarge: @13,
-											UIContentSizeCategoryMedium: @12,
-											UIContentSizeCategorySmall: @12,
-											UIContentSizeCategoryExtraSmall: @11
-											},
-									ApptentiveTextStyleMessageCenterStatus: @{
-											UIContentSizeCategoryAccessibilityExtraExtraExtraLarge: @18,
-											UIContentSizeCategoryAccessibilityExtraExtraLarge: @17,
-											UIContentSizeCategoryAccessibilityExtraLarge: @16,
-											UIContentSizeCategoryAccessibilityLarge: @16,
-											UIContentSizeCategoryAccessibilityMedium: @15,
-											UIContentSizeCategoryExtraExtraExtraLarge: @15,
-											UIContentSizeCategoryExtraExtraLarge: @14,
-											UIContentSizeCategoryExtraLarge: @14,
-											UIContentSizeCategoryLarge: @13,
-											UIContentSizeCategoryMedium: @12,
-											UIContentSizeCategorySmall: @12,
-											UIContentSizeCategoryExtraSmall: @11
-											},
-									ApptentiveTextStyleSurveyInstructions: @{
-											UIContentSizeCategoryAccessibilityExtraExtraExtraLarge: @18,
-											UIContentSizeCategoryAccessibilityExtraExtraLarge: @17,
-											UIContentSizeCategoryAccessibilityExtraLarge: @16,
-											UIContentSizeCategoryAccessibilityLarge: @16,
-											UIContentSizeCategoryAccessibilityMedium: @15,
-											UIContentSizeCategoryExtraExtraExtraLarge: @15,
-											UIContentSizeCategoryExtraExtraLarge: @14,
-											UIContentSizeCategoryExtraLarge: @14,
-											UIContentSizeCategoryLarge: @13,
-											UIContentSizeCategoryMedium: @12,
-											UIContentSizeCategorySmall: @12,
-											UIContentSizeCategoryExtraSmall: @11
-											},
-									ApptentiveTextStyleButton: @{
-											UIContentSizeCategoryAccessibilityExtraExtraExtraLarge: @22,
-											UIContentSizeCategoryAccessibilityExtraExtraLarge: @21,
-											UIContentSizeCategoryAccessibilityExtraLarge: @20,
-											UIContentSizeCategoryAccessibilityLarge: @20,
-											UIContentSizeCategoryAccessibilityMedium: @19,
-											UIContentSizeCategoryExtraExtraExtraLarge: @19,
-											UIContentSizeCategoryExtraExtraLarge: @18,
-											UIContentSizeCategoryExtraLarge: @17,
-											UIContentSizeCategoryLarge: @16,
-											UIContentSizeCategoryMedium: @15,
-											UIContentSizeCategorySmall: @14,
-											UIContentSizeCategoryExtraSmall: @13
-											},
-									ApptentiveTextStyleDoneButton: @{
-											UIContentSizeCategoryAccessibilityExtraExtraExtraLarge: @22,
-											UIContentSizeCategoryAccessibilityExtraExtraLarge: @21,
-											UIContentSizeCategoryAccessibilityExtraLarge: @20,
-											UIContentSizeCategoryAccessibilityLarge: @20,
-											UIContentSizeCategoryAccessibilityMedium: @19,
-											UIContentSizeCategoryExtraExtraExtraLarge: @19,
-											UIContentSizeCategoryExtraExtraLarge: @18,
-											UIContentSizeCategoryExtraLarge: @17,
-											UIContentSizeCategoryLarge: @16,
-											UIContentSizeCategoryMedium: @15,
-											UIContentSizeCategorySmall: @14,
-											UIContentSizeCategoryExtraSmall: @13
-											},
-									ApptentiveTextStyleSubmitButton: @{
-											UIContentSizeCategoryAccessibilityExtraExtraExtraLarge: @26,
-											UIContentSizeCategoryAccessibilityExtraExtraLarge: @26,
-											UIContentSizeCategoryAccessibilityExtraLarge: @25,
-											UIContentSizeCategoryAccessibilityLarge: @25,
-											UIContentSizeCategoryAccessibilityMedium: @24,
-											UIContentSizeCategoryExtraExtraExtraLarge: @24,
-											UIContentSizeCategoryExtraExtraLarge: @23,
-											UIContentSizeCategoryExtraLarge: @22,
-											UIContentSizeCategoryLarge: @22,
-											UIContentSizeCategoryMedium: @20,
-											UIContentSizeCategorySmall: @19,
-											UIContentSizeCategoryExtraSmall: @18
-											},
-									ApptentiveTextStyleTextInput: @{
-											UIContentSizeCategoryAccessibilityExtraExtraExtraLarge: @21,
-											UIContentSizeCategoryAccessibilityExtraExtraLarge: @20,
-											UIContentSizeCategoryAccessibilityExtraLarge: @19,
-											UIContentSizeCategoryAccessibilityLarge: @19,
-											UIContentSizeCategoryAccessibilityMedium: @18,
-											UIContentSizeCategoryExtraExtraExtraLarge: @18,
-											UIContentSizeCategoryExtraExtraLarge: @17,
-											UIContentSizeCategoryExtraLarge: @16,
-											UIContentSizeCategoryLarge: @15,
-											UIContentSizeCategoryMedium: @14,
-											UIContentSizeCategorySmall: @13,
-											UIContentSizeCategoryExtraSmall: @12
-											},
-									};
+	  sizeForCategoryForStyle = @{
+		  ApptentiveTextStyleHeaderTitle: @{
+			  UIContentSizeCategoryAccessibilityExtraExtraExtraLarge: @28,
+			  UIContentSizeCategoryAccessibilityExtraExtraLarge: @28,
+			  UIContentSizeCategoryAccessibilityExtraLarge: @27,
+			  UIContentSizeCategoryAccessibilityLarge: @27,
+			  UIContentSizeCategoryAccessibilityMedium: @26,
+			  UIContentSizeCategoryExtraExtraExtraLarge: @26,
+			  UIContentSizeCategoryExtraExtraLarge: @25,
+			  UIContentSizeCategoryExtraLarge: @24,
+			  UIContentSizeCategoryLarge: @23,
+			  UIContentSizeCategoryMedium: @22,
+			  UIContentSizeCategorySmall: @21,
+			  UIContentSizeCategoryExtraSmall: @20
+		  },
+		  ApptentiveTextStyleHeaderMessage: @{
+			  UIContentSizeCategoryAccessibilityExtraExtraExtraLarge: @22,
+			  UIContentSizeCategoryAccessibilityExtraExtraLarge: @21,
+			  UIContentSizeCategoryAccessibilityExtraLarge: @20,
+			  UIContentSizeCategoryAccessibilityLarge: @20,
+			  UIContentSizeCategoryAccessibilityMedium: @19,
+			  UIContentSizeCategoryExtraExtraExtraLarge: @19,
+			  UIContentSizeCategoryExtraExtraLarge: @18,
+			  UIContentSizeCategoryExtraLarge: @17,
+			  UIContentSizeCategoryLarge: @16,
+			  UIContentSizeCategoryMedium: @15,
+			  UIContentSizeCategorySmall: @14,
+			  UIContentSizeCategoryExtraSmall: @13
+		  },
+		  ApptentiveTextStyleMessageDate: @{
+			  UIContentSizeCategoryAccessibilityExtraExtraExtraLarge: @21,
+			  UIContentSizeCategoryAccessibilityExtraExtraLarge: @20,
+			  UIContentSizeCategoryAccessibilityExtraLarge: @19,
+			  UIContentSizeCategoryAccessibilityLarge: @19,
+			  UIContentSizeCategoryAccessibilityMedium: @18,
+			  UIContentSizeCategoryExtraExtraExtraLarge: @18,
+			  UIContentSizeCategoryExtraExtraLarge: @17,
+			  UIContentSizeCategoryExtraLarge: @16,
+			  UIContentSizeCategoryLarge: @15,
+			  UIContentSizeCategoryMedium: @14,
+			  UIContentSizeCategorySmall: @13,
+			  UIContentSizeCategoryExtraSmall: @12
+		  },
+		  ApptentiveTextStyleMessageSender: @{
+			  UIContentSizeCategoryAccessibilityExtraExtraExtraLarge: @21,
+			  UIContentSizeCategoryAccessibilityExtraExtraLarge: @20,
+			  UIContentSizeCategoryAccessibilityExtraLarge: @19,
+			  UIContentSizeCategoryAccessibilityLarge: @19,
+			  UIContentSizeCategoryAccessibilityMedium: @18,
+			  UIContentSizeCategoryExtraExtraExtraLarge: @18,
+			  UIContentSizeCategoryExtraExtraLarge: @17,
+			  UIContentSizeCategoryExtraLarge: @16,
+			  UIContentSizeCategoryLarge: @15,
+			  UIContentSizeCategoryMedium: @14,
+			  UIContentSizeCategorySmall: @13,
+			  UIContentSizeCategoryExtraSmall: @12
+		  },
+		  ApptentiveTextStyleMessageStatus: @{
+			  UIContentSizeCategoryAccessibilityExtraExtraExtraLarge: @18,
+			  UIContentSizeCategoryAccessibilityExtraExtraLarge: @17,
+			  UIContentSizeCategoryAccessibilityExtraLarge: @16,
+			  UIContentSizeCategoryAccessibilityLarge: @16,
+			  UIContentSizeCategoryAccessibilityMedium: @15,
+			  UIContentSizeCategoryExtraExtraExtraLarge: @15,
+			  UIContentSizeCategoryExtraExtraLarge: @14,
+			  UIContentSizeCategoryExtraLarge: @14,
+			  UIContentSizeCategoryLarge: @13,
+			  UIContentSizeCategoryMedium: @12,
+			  UIContentSizeCategorySmall: @12,
+			  UIContentSizeCategoryExtraSmall: @11
+		  },
+		  ApptentiveTextStyleMessageCenterStatus: @{
+			  UIContentSizeCategoryAccessibilityExtraExtraExtraLarge: @18,
+			  UIContentSizeCategoryAccessibilityExtraExtraLarge: @17,
+			  UIContentSizeCategoryAccessibilityExtraLarge: @16,
+			  UIContentSizeCategoryAccessibilityLarge: @16,
+			  UIContentSizeCategoryAccessibilityMedium: @15,
+			  UIContentSizeCategoryExtraExtraExtraLarge: @15,
+			  UIContentSizeCategoryExtraExtraLarge: @14,
+			  UIContentSizeCategoryExtraLarge: @14,
+			  UIContentSizeCategoryLarge: @13,
+			  UIContentSizeCategoryMedium: @12,
+			  UIContentSizeCategorySmall: @12,
+			  UIContentSizeCategoryExtraSmall: @11
+		  },
+		  ApptentiveTextStyleSurveyInstructions: @{
+			  UIContentSizeCategoryAccessibilityExtraExtraExtraLarge: @18,
+			  UIContentSizeCategoryAccessibilityExtraExtraLarge: @17,
+			  UIContentSizeCategoryAccessibilityExtraLarge: @16,
+			  UIContentSizeCategoryAccessibilityLarge: @16,
+			  UIContentSizeCategoryAccessibilityMedium: @15,
+			  UIContentSizeCategoryExtraExtraExtraLarge: @15,
+			  UIContentSizeCategoryExtraExtraLarge: @14,
+			  UIContentSizeCategoryExtraLarge: @14,
+			  UIContentSizeCategoryLarge: @13,
+			  UIContentSizeCategoryMedium: @12,
+			  UIContentSizeCategorySmall: @12,
+			  UIContentSizeCategoryExtraSmall: @11
+		  },
+		  ApptentiveTextStyleButton: @{
+			  UIContentSizeCategoryAccessibilityExtraExtraExtraLarge: @22,
+			  UIContentSizeCategoryAccessibilityExtraExtraLarge: @21,
+			  UIContentSizeCategoryAccessibilityExtraLarge: @20,
+			  UIContentSizeCategoryAccessibilityLarge: @20,
+			  UIContentSizeCategoryAccessibilityMedium: @19,
+			  UIContentSizeCategoryExtraExtraExtraLarge: @19,
+			  UIContentSizeCategoryExtraExtraLarge: @18,
+			  UIContentSizeCategoryExtraLarge: @17,
+			  UIContentSizeCategoryLarge: @16,
+			  UIContentSizeCategoryMedium: @15,
+			  UIContentSizeCategorySmall: @14,
+			  UIContentSizeCategoryExtraSmall: @13
+		  },
+		  ApptentiveTextStyleDoneButton: @{
+			  UIContentSizeCategoryAccessibilityExtraExtraExtraLarge: @22,
+			  UIContentSizeCategoryAccessibilityExtraExtraLarge: @21,
+			  UIContentSizeCategoryAccessibilityExtraLarge: @20,
+			  UIContentSizeCategoryAccessibilityLarge: @20,
+			  UIContentSizeCategoryAccessibilityMedium: @19,
+			  UIContentSizeCategoryExtraExtraExtraLarge: @19,
+			  UIContentSizeCategoryExtraExtraLarge: @18,
+			  UIContentSizeCategoryExtraLarge: @17,
+			  UIContentSizeCategoryLarge: @16,
+			  UIContentSizeCategoryMedium: @15,
+			  UIContentSizeCategorySmall: @14,
+			  UIContentSizeCategoryExtraSmall: @13
+		  },
+		  ApptentiveTextStyleSubmitButton: @{
+			  UIContentSizeCategoryAccessibilityExtraExtraExtraLarge: @26,
+			  UIContentSizeCategoryAccessibilityExtraExtraLarge: @26,
+			  UIContentSizeCategoryAccessibilityExtraLarge: @25,
+			  UIContentSizeCategoryAccessibilityLarge: @25,
+			  UIContentSizeCategoryAccessibilityMedium: @24,
+			  UIContentSizeCategoryExtraExtraExtraLarge: @24,
+			  UIContentSizeCategoryExtraExtraLarge: @23,
+			  UIContentSizeCategoryExtraLarge: @22,
+			  UIContentSizeCategoryLarge: @22,
+			  UIContentSizeCategoryMedium: @20,
+			  UIContentSizeCategorySmall: @19,
+			  UIContentSizeCategoryExtraSmall: @18
+		  },
+		  ApptentiveTextStyleTextInput: @{
+			  UIContentSizeCategoryAccessibilityExtraExtraExtraLarge: @21,
+			  UIContentSizeCategoryAccessibilityExtraExtraLarge: @20,
+			  UIContentSizeCategoryAccessibilityExtraLarge: @19,
+			  UIContentSizeCategoryAccessibilityLarge: @19,
+			  UIContentSizeCategoryAccessibilityMedium: @18,
+			  UIContentSizeCategoryExtraExtraExtraLarge: @18,
+			  UIContentSizeCategoryExtraExtraLarge: @17,
+			  UIContentSizeCategoryExtraLarge: @16,
+			  UIContentSizeCategoryLarge: @15,
+			  UIContentSizeCategoryMedium: @14,
+			  UIContentSizeCategorySmall: @13,
+			  UIContentSizeCategoryExtraSmall: @12
+		  },
+	  };
 	});
 	return sizeForCategoryForStyle[textStyle][[UIApplication sharedApplication].preferredContentSizeCategory];
 }
@@ -265,18 +266,18 @@ NSString * const FontOverridesKey = @"FontOverrides";
 	static NSArray *_UIKitTextStyles;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-		_UIKitTextStyles = @[
-						 UIFontTextStyleBody,
-						 UIFontTextStyleCallout,
-						 UIFontTextStyleCaption1,
-						 UIFontTextStyleCaption2,
-						 UIFontTextStyleFootnote,
-						 UIFontTextStyleHeadline,
-						 UIFontTextStyleSubheadline,
-						 UIFontTextStyleTitle1,
-						 UIFontTextStyleTitle2,
-						 UIFontTextStyleTitle3,
-						 ];
+	  _UIKitTextStyles = @[
+		  UIFontTextStyleBody,
+		  UIFontTextStyleCallout,
+		  UIFontTextStyleCaption1,
+		  UIFontTextStyleCaption2,
+		  UIFontTextStyleFootnote,
+		  UIFontTextStyleHeadline,
+		  UIFontTextStyleSubheadline,
+		  UIFontTextStyleTitle1,
+		  UIFontTextStyleTitle2,
+		  UIFontTextStyleTitle3,
+	  ];
 	});
 	return _UIKitTextStyles;
 }
@@ -285,16 +286,16 @@ NSString * const FontOverridesKey = @"FontOverrides";
 	static NSArray *_apptentiveStyleNames;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-		_apptentiveStyleNames = @[
-								  ApptentiveTextStyleHeaderTitle,
-								  ApptentiveTextStyleHeaderMessage,
-								  ApptentiveTextStyleMessageDate,
-								  ApptentiveTextStyleMessageSender,
-								  ApptentiveTextStyleMessageStatus,
-								  ApptentiveTextStyleDoneButton,
-								  ApptentiveTextStyleButton,
-								  ApptentiveTextStyleSubmitButton
-								  ];
+	  _apptentiveStyleNames = @[
+		  ApptentiveTextStyleHeaderTitle,
+		  ApptentiveTextStyleHeaderMessage,
+		  ApptentiveTextStyleMessageDate,
+		  ApptentiveTextStyleMessageSender,
+		  ApptentiveTextStyleMessageStatus,
+		  ApptentiveTextStyleDoneButton,
+		  ApptentiveTextStyleButton,
+		  ApptentiveTextStyleSubmitButton
+	  ];
 	});
 	return _apptentiveStyleNames;
 }
@@ -303,11 +304,11 @@ NSString * const FontOverridesKey = @"FontOverrides";
 	static NSArray *_apptentiveColorStyles;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-		_apptentiveColorStyles = @[
-								   ApptentiveColorHeaderBackground,
-								   ApptentiveColorFooterBackground,
-								   ApptentiveColorFailure
-								   ];
+	  _apptentiveColorStyles = @[
+		  ApptentiveColorHeaderBackground,
+		  ApptentiveColorFooterBackground,
+		  ApptentiveColorFailure
+	  ];
 	});
 	return _apptentiveColorStyles;
 }
@@ -320,7 +321,7 @@ NSString * const FontOverridesKey = @"FontOverrides";
 	static ApptentiveStyleSheet *_styleSheet;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-		_styleSheet = [[ApptentiveStyleSheet alloc] init];
+	  _styleSheet = [[ApptentiveStyleSheet alloc] init];
 	});
 	return _styleSheet;
 }

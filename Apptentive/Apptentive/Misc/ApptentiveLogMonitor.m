@@ -7,35 +7,37 @@
 //
 
 #import "Apptentive.h"
-#import "ApptentiveLogMonitor.h"
-#import "ApptentiveUtilities.h"
-#import "ApptentiveLogWriter.h"
 #import "ApptentiveJSONSerialization.h"
-#import "ApptentiveSafeCollections.h"
+#import "ApptentiveJSONSerialization.h"
 #import "ApptentiveJWT.h"
-#import "ApptentiveJSONSerialization.h"
+#import "ApptentiveLogMonitor.h"
+#import "ApptentiveLogWriter.h"
+#import "ApptentiveSafeCollections.h"
+#import "ApptentiveUtilities.h"
 
 #import <MessageUI/MessageUI.h>
 
 // These constants are defined in Apptentive-Private.h but the compiler is "unhappy" if
 // this file is imported here (TODO: figure it out)
 extern NSNotificationName _Nonnull const ApptentiveManifestRawDataDidReceiveNotification;
-extern NSString * _Nonnull const ApptentiveManifestRawDataKey;
+extern NSString *_Nonnull const ApptentiveManifestRawDataKey;
 
-static NSString * const KeyEmailRecipients = @"emailRecipients";
-static NSString * const KeyLogLevel = @"logLevel";
+static NSString *const KeyEmailRecipients = @"emailRecipients";
+static NSString *const KeyLogLevel = @"logLevel";
 
-static NSString * const ConfigurationStorageFile = @"apptentive-log-monitor.cfg";
-static NSString * const LogFileName = @"apptentive-log.txt";
-static NSString * const ManifestFileName = @"apptentive-manifest.txt";
+static NSString *const ConfigurationStorageFile = @"apptentive-log-monitor.cfg";
+static NSString *const LogFileName = @"apptentive-log.txt";
+static NSString *const ManifestFileName = @"apptentive-manifest.txt";
 
-static NSString * const DebugTextHeader = @"com.apptentive.debug:";
+static NSString *const DebugTextHeader = @"com.apptentive.debug:";
 
-static ApptentiveLogMonitor * _sharedInstance;
+static ApptentiveLogMonitor *_sharedInstance;
+
 
 @interface ApptentiveLogMonitorConfigration () <NSCoding>
 
 @end
+
 
 @implementation ApptentiveLogMonitorConfigration
 
@@ -57,7 +59,7 @@ static ApptentiveLogMonitor * _sharedInstance;
 	self = [super init];
 	if (self) {
 		_emailRecipients = [[decoder decodeObjectForKey:KeyEmailRecipients] componentsSeparatedByString:@","];
-		_logLevel = (ApptentiveLogLevel) [decoder decodeIntForKey:KeyLogLevel];
+		_logLevel = (ApptentiveLogLevel)[decoder decodeIntForKey:KeyLogLevel];
 		_restored = YES;
 	}
 	return self;
@@ -68,6 +70,7 @@ static ApptentiveLogMonitor * _sharedInstance;
 }
 
 @end
+
 
 @interface ApptentiveLogMonitor () <MFMailComposeViewControllerDelegate>
 
@@ -81,6 +84,7 @@ static ApptentiveLogMonitor * _sharedInstance;
 @property (nonatomic, strong) UIWindow *mailComposeControllerWindow;
 
 @end
+
 
 @implementation ApptentiveLogMonitor
 
@@ -102,25 +106,25 @@ static ApptentiveLogMonitor * _sharedInstance;
 - (void)start {
 	ApptentiveLogSetLevel(_logLevel);
 	ApptentiveLogInfo(ApptentiveLogTagMonitor, @"Override log level %@ -> %@", NSStringFromApptentiveLogLevel(_originalLogLevel), NSStringFromApptentiveLogLevel(_logLevel));
-	
+
 	NSString *logFilePath = [ApptentiveLogMonitor logFilePath];
 	if (!_sessionRestored) {
 		[ApptentiveUtilities deleteFileAtPath:logFilePath];
 	}
-	
+
 	ApptentiveLogWriter *logWriter = [[ApptentiveLogWriter alloc] initWithPath:logFilePath];
 	ApptentiveSetLoggerCallback(^(ApptentiveLogLevel level, NSString *message) {
-		[logWriter appendMessage:message];
+	  [logWriter appendMessage:message];
 	});
 	[logWriter start];
-	
+
 	_logWriter = logWriter;
-	
+
 	// dispatch on the main thread to avoid UI-issues
 	dispatch_async(dispatch_get_main_queue(), ^{
-		[self showReportUI];
+	  [self showReportUI];
 	});
-	
+
 	ApptentiveLogInfo(ApptentiveLogTagMonitor, @"Troubleshooting mode enabled");
 }
 
@@ -130,16 +134,16 @@ static ApptentiveLogMonitor * _sharedInstance;
 
 - (void)stop {
 	ApptentiveLogInfo(ApptentiveLogTagMonitor, @"Troubleshooting mode disabled");
-	
+
 	// restore the original log level
 	ApptentiveLogSetLevel(_originalLogLevel);
-	
+
 	// remove log callbacks
 	ApptentiveSetLoggerCallback(nil);
-	
+
 	// stop writting logs
 	[_logWriter stop];
-	
+
 	// delete store configuration
 	[ApptentiveLogMonitor clearConfiguration];
 }
@@ -150,27 +154,33 @@ static ApptentiveLogMonitor * _sharedInstance;
 - (void)showReportUI {
 	// create a custom window to show UI on top of everything
 	UIWindow *window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-	
+
 	// create alert controller with "Send", "Continue" and "Discard" actions
 	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Apptentive" message:@"Troubleshooting mode" preferredStyle:UIAlertControllerStyleActionSheet];
-	[alertController addAction:[UIAlertAction actionWithTitle:@"Send Report" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-		window.hidden = YES;
-		__weak id weakSelf = self;
-		_logWriter.finishCallback = ^(ApptentiveLogWriter *writer) {
-			dispatch_async(dispatch_get_main_queue(), ^{
-				[weakSelf sendReportWithAttachedFiles:@[writer.path, [ApptentiveLogMonitor manifestFilePath]]];
-			});
-		};
-		[self stop];
-	}]];
-	[alertController addAction:[UIAlertAction actionWithTitle:@"Continue" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-		window.hidden = YES;
-	}]];
-	[alertController addAction:[UIAlertAction actionWithTitle:@"Discard Report" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
-		window.hidden = YES;
-		[self stop];
-	}]];
-	
+	[alertController addAction:[UIAlertAction actionWithTitle:@"Send Report"
+														style:UIAlertActionStyleDefault
+													  handler:^(UIAlertAction *_Nonnull action) {
+														window.hidden = YES;
+														__weak id weakSelf = self;
+														_logWriter.finishCallback = ^(ApptentiveLogWriter *writer) {
+														  dispatch_async(dispatch_get_main_queue(), ^{
+															[weakSelf sendReportWithAttachedFiles:@[writer.path, [ApptentiveLogMonitor manifestFilePath]]];
+														  });
+														};
+														[self stop];
+													  }]];
+	[alertController addAction:[UIAlertAction actionWithTitle:@"Continue"
+														style:UIAlertActionStyleCancel
+													  handler:^(UIAlertAction *_Nonnull action) {
+														window.hidden = YES;
+													  }]];
+	[alertController addAction:[UIAlertAction actionWithTitle:@"Discard Report"
+														style:UIAlertActionStyleDestructive
+													  handler:^(UIAlertAction *_Nonnull action) {
+														window.hidden = YES;
+														[self stop];
+													  }]];
+
 	window.rootViewController = [[UIViewController alloc] init];
 	window.windowLevel = UIWindowLevelAlert + 1;
 	window.hidden = NO; // don't use makeKeyAndVisible since we don't have any knowledge about the host app's UI
@@ -185,28 +195,28 @@ static ApptentiveLogMonitor * _sharedInstance;
 		ApptentiveLogError(ApptentiveLogTagMonitor, @"Unable to initialize log monitor: base URL is nil");
 		return NO;
 	}
-	
+
 	if (appKey.length == 0) {
 		ApptentiveLogError(ApptentiveLogTagMonitor, @"Unable to initialize log monitor: app key is nil or empty");
 		return NO;
 	}
-	
+
 	if (appSignature.length == 0) {
 		ApptentiveLogError(ApptentiveLogTagMonitor, @"Unable to initialize log monitor: app signature is nil or empty");
 		return NO;
 	}
-	
+
 	// Store raw manifest data each time the update is received
 	NSString *manifestPath = [ApptentiveLogMonitor manifestFilePath];
 	[[NSNotificationCenter defaultCenter] addObserverForName:ApptentiveManifestRawDataDidReceiveNotification
 													  object:nil
 													   queue:nil
-												  usingBlock:^(NSNotification * _Nonnull note) {
-		 NSData *data = note.userInfo[ApptentiveManifestRawDataKey];
-		 ApptentiveAssertNotNil(data, @"Missing manifest data");
-		 [data writeToFile:manifestPath atomically:YES];
-    }];
-	
+												  usingBlock:^(NSNotification *_Nonnull note) {
+													NSData *data = note.userInfo[ApptentiveManifestRawDataKey];
+													ApptentiveAssertNotNil(data, @"Missing manifest data");
+													[data writeToFile:manifestPath atomically:YES];
+												  }];
+
 	@try {
 		NSString *storagePath = [self configurationStoragePath];
 		ApptentiveLogMonitorConfigration *configuration = [self readConfigurationFromStoragePath:storagePath];
@@ -217,18 +227,18 @@ static ApptentiveLogMonitor * _sharedInstance;
 			if (![self syncVerifyAccessToken:accessToken baseURL:baseURL appKey:appKey signature:appSignature]) {
 				return NO;
 			}
-			
+
 			configuration = [self readConfigurationFromToken:accessToken];
 			if (configuration != nil) {
 				ApptentiveLogInfo(ApptentiveLogTagMonitor, @"Read log monitor configuration from clipboard: %@", configuration);
 				// save configuration
 				[self writeConfiguration:configuration toStoragePath:storagePath];
-				
+
 				// clear pastboard text
 				[[UIPasteboard generalPasteboard] setString:@""];
 			}
 		}
-		
+
 		if (configuration != nil) {
 			_sharedInstance = [[ApptentiveLogMonitor alloc] initWithBaseURL:baseURL configuration:configuration];
 			[_sharedInstance start];
@@ -237,7 +247,7 @@ static ApptentiveLogMonitor * _sharedInstance;
 	} @catch (NSException *e) {
 		ApptentiveLogError(ApptentiveLogTagMonitor, @"Exception while initializing log monitor: %@", e);
 	}
-	
+
 	return NO;
 }
 
@@ -250,14 +260,17 @@ static ApptentiveLogMonitor * _sharedInstance;
 
 + (nullable NSString *)readAccessTokenFromClipboard {
 	NSString *text = [UIPasteboard generalPasteboard].string;
-	
+
 	// remove white spaces
 	text = [text stringByReplacingOccurrencesOfString:@"\\s" withString:@"" options:NSRegularExpressionSearch range:NSMakeRange(0, text.length)];
-	
+
 	if (![text hasPrefix:DebugTextHeader]) {
 		return nil;
 	}
 	
+	// clear the token from the clipboard
+	[UIPasteboard generalPasteboard].string = @"";
+
 	return [text substringFromIndex:DebugTextHeader.length];
 }
 
@@ -265,34 +278,34 @@ static ApptentiveLogMonitor * _sharedInstance;
 	if (accessToken.length == 0) {
 		return NO;
 	}
-	
+
 	ApptentiveLogInfo(ApptentiveLogTagMonitor, @"Starting access token verification: %@", accessToken);
-	
+
 	NSDate *startDate = [NSDate new];
-	NSData *body = [ApptentiveJSONSerialization dataWithJSONObject:@{@"debug_token" : accessToken} options:0 error:nil];
-	
+	NSData *body = [ApptentiveJSONSerialization dataWithJSONObject:@{ @"debug_token": accessToken } options:0 error:nil];
+
 	NSDictionary *headers = @{
-	  @"X-API-Version": kApptentiveAPIVersionString,
-	  @"APPTENTIVE-KEY": appKey,
-	  @"APPTENTIVE-SIGNATURE": appSignature,
-	  @"Content-Type": @"application/json",
-	  @"Accept": @"application/json",
-	  @"User-Agent": [NSString stringWithFormat:@"ApptentiveConnect/%@ (iOS)", kApptentiveVersionString]
-    };
-	
+		@"X-API-Version": kApptentiveAPIVersionString,
+		@"APPTENTIVE-KEY": appKey,
+		@"APPTENTIVE-SIGNATURE": appSignature,
+		@"Content-Type": @"application/json",
+		@"Accept": @"application/json",
+		@"User-Agent": [NSString stringWithFormat:@"ApptentiveConnect/%@ (iOS)", kApptentiveVersionString]
+	};
+
 	NSURL *URL = [NSURL URLWithString:@"/debug_token/verify" relativeToURL:baseURL];
 	NSDictionary *json = [self loadJsonFromURL:URL body:body headers:headers];
 	NSTimeInterval duration = -[startDate timeIntervalSinceNow];
-	
+
 	if (json == nil) {
 		ApptentiveLogError(ApptentiveLogTagMonitor, @"Access token verification failed: invalid server response (took %g sec)", duration);
-		
+
 		return NO;
 	}
-	
-	BOOL valid =  ApptentiveDictionaryGetBool(json, @"valid");
+
+	BOOL valid = ApptentiveDictionaryGetBool(json, @"valid");
 	ApptentiveLogInfo(ApptentiveLogTagMonitor, @"Access token is %@ (took %g sec)", valid ? @"valid" : @"invalid", duration);
-	
+
 	return valid;
 }
 
@@ -303,7 +316,7 @@ static ApptentiveLogMonitor * _sharedInstance;
 	}
 	request.HTTPBody = body;
 	request.HTTPMethod = @"POST";
-	
+
 	NSURLResponse *response;
 	NSError *requestError;
 
@@ -316,19 +329,19 @@ static ApptentiveLogMonitor * _sharedInstance;
 		ApptentiveLogError(@"Unable to load json from URL: %@", requestError);
 		return nil;
 	}
-	
+
 	NSError *jsonError;
 	id object = [ApptentiveJSONSerialization JSONObjectWithData:data error:&jsonError];
 	if (jsonError != nil) {
 		ApptentiveLogError(@"Unable to parse json from URL: %@", requestError);
 		return nil;
 	}
-	
+
 	if (![object isKindOfClass:[NSDictionary class]]) {
 		ApptentiveLogError(@"Unexpected json object: %@", object);
 		return nil;
 	}
-	
+
 	return object;
 }
 
@@ -355,20 +368,20 @@ static ApptentiveLogMonitor * _sharedInstance;
 		ApptentiveLogError(ApptentiveLogTagMonitor, @"JWT parsing error: %@", jwtError);
 		return nil;
 	}
-	
+
 	ApptentiveLogMonitorConfigration *configuration = [[ApptentiveLogMonitorConfigration alloc] init];
-	
+
 	NSString *logLevelStr = ApptentiveDictionaryGetString(jwt.payload, @"level");
 	ApptentiveLogLevel logLevel = ApptentiveLogLevelFromString(logLevelStr);
 	if (logLevel != ApptentiveLogLevelUndefined) {
 		configuration.logLevel = logLevel;
 	}
-	
+
 	NSArray *emailRecepients = ApptentiveDictionaryGetArray(jwt.payload, @"recipients");
 	if (emailRecepients != nil) {
 		configuration.emailRecipients = emailRecepients;
 	}
-	
+
 	return configuration;
 }
 
@@ -377,7 +390,6 @@ static ApptentiveLogMonitor * _sharedInstance;
 
 - (void)sendReportWithAttachedFiles:(NSArray<NSString *> *)files {
 	if (![MFMailComposeViewController canSendMail]) {
-
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 		UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Apptentive Log Monitor" message:@"Unable to send email" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
@@ -386,9 +398,9 @@ static ApptentiveLogMonitor * _sharedInstance;
 
 		return;
 	}
-	
+
 	NSDictionary *bundleInfo = [[NSBundle mainBundle] infoDictionary];
-	
+
 	// collecting system info
 	NSMutableString *messageBody = [NSMutableString new];
 	[messageBody appendString:@"This email may contain sensitive content.\n Please review before sending.\n\n"];
@@ -399,15 +411,15 @@ static ApptentiveLogMonitor * _sharedInstance;
 	[messageBody appendFormat:@"Device Model: %@\n", [ApptentiveUtilities deviceMachine]];
 	[messageBody appendFormat:@"iOS Version: %@\n", [UIDevice currentDevice].systemVersion];
 	[messageBody appendFormat:@"Locale: %@", [NSLocale currentLocale].localeIdentifier];
-	
+
 	NSString *emailTitle = [NSString stringWithFormat:@"%@ (iOS)", [NSBundle mainBundle].infoDictionary[@"CFBundleName"]];
-	
+
 	MFMailComposeViewController *mc = [[MFMailComposeViewController alloc] init];
 	mc.mailComposeDelegate = self;
 	[mc setSubject:emailTitle];
 	[mc setMessageBody:messageBody isHTML:NO];
 	[mc setToRecipients:_emailRecipients];
-	
+
 	// Get the resource path and read the file using NSData
 	for (NSString *path in files) {
 		NSString *filename = [path lastPathComponent];
@@ -416,19 +428,19 @@ static ApptentiveLogMonitor * _sharedInstance;
 			ApptentiveLogError(ApptentiveLogTagMonitor, @"Attachment file does not exist or empty: %@", path);
 			continue;
 		}
-	
+
 		// Add attachment
 		[mc addAttachmentData:fileData mimeType:@"text/plain" fileName:filename];
 	}
-	
+
 	// Present mail view controller on screen in a separate window
 	UIViewController *rootController = [UIViewController new];
-	
+
 	self.mailComposeControllerWindow = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
 	self.mailComposeControllerWindow.windowLevel = UIWindowLevelAlert + 1;
 	self.mailComposeControllerWindow.rootViewController = rootController;
 	self.mailComposeControllerWindow.hidden = NO;
-	
+
 	[rootController presentViewController:mc animated:YES completion:nil];
 }
 
@@ -436,10 +448,11 @@ static ApptentiveLogMonitor * _sharedInstance;
 #pragma mark MFMailComposeViewControllerDelegate
 
 - (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(nullable NSError *)error {
-	[controller dismissViewControllerAnimated:YES completion:^{
-		self.mailComposeControllerWindow.hidden = YES;
-		self.mailComposeControllerWindow = nil;
-	}];
+	[controller dismissViewControllerAnimated:YES
+								   completion:^{
+									 self.mailComposeControllerWindow.hidden = YES;
+									 self.mailComposeControllerWindow = nil;
+								   }];
 }
 
 #pragma mark -

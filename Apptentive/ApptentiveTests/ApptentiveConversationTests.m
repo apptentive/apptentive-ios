@@ -6,15 +6,15 @@
 //  Copyright © 2017 Apptentive, Inc. All rights reserved.
 //
 
-#import <XCTest/XCTest.h>
-#import "ApptentiveConversation.h"
 #import "ApptentiveAppRelease.h"
-#import "ApptentiveSDK.h"
-#import "ApptentiveDevice.h"
-#import "ApptentivePerson.h"
-#import "ApptentiveEngagement.h"
-#import "ApptentiveVersion.h"
+#import "ApptentiveConversation.h"
 #import "ApptentiveCount.h"
+#import "ApptentiveDevice.h"
+#import "ApptentiveEngagement.h"
+#import "ApptentivePerson.h"
+#import "ApptentiveSDK.h"
+#import "ApptentiveVersion.h"
+#import <XCTest/XCTest.h>
 
 
 @interface ApptentiveConversationTests : XCTestCase <ApptentiveConversationDelegate>

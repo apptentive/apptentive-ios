@@ -6,10 +6,10 @@
 //  Copyright © 2017 Apptentive, Inc. All rights reserved.
 //
 
-#import <XCTest/XCTest.h>
-#import "NSData+Encryption.h"
-#import "ApptentiveSerialRequest.h"
 #import "ApptentiveEventPayload.h"
+#import "ApptentiveSerialRequest.h"
+#import "NSData+Encryption.h"
+#import <XCTest/XCTest.h>
 
 
 @interface ApptentiveEncryptionTests : XCTestCase

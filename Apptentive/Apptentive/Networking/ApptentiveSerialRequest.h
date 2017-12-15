@@ -45,12 +45,12 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  The conversation identifier (used to associate with a conversation for authentication).
  */
-@property (strong, nonatomic) NSString *conversationIdentifier;
+@property (nullable, strong, nonatomic) NSString *conversationIdentifier;
 
 /**
  Authorization token that should be used to send a payload
  */
-@property (strong, nonatomic) NSString *authToken;
+@property (nullable, strong, nonatomic) NSString *authToken;
 
 /**
  The date on which the request was created.

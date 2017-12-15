@@ -8,10 +8,10 @@
 
 #import "ApptentiveInteraction.h"
 #import "ApptentiveBackend+Engagement.h"
+#import "ApptentiveInteractionController.h"
 #import "ApptentiveInteractionUsageData.h"
 #import "ApptentiveUtilities.h"
 #import "Apptentive_Private.h"
-#import "ApptentiveInteractionController.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -100,20 +100,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSString *)codePointForEvent:(NSString *)event {
 	return [ApptentiveBackend codePointForVendor:self.vendor interactionType:self.type event:event];
-}
-
-- (BOOL)engage:(NSString *)event fromViewController:(nullable UIViewController *)viewController {
-	return [self engage:event fromViewController:viewController userInfo:nil];
-}
-
-- (BOOL)engage:(NSString *)event fromViewController:(nullable UIViewController *)viewController userInfo:(nullable NSDictionary *)userInfo {
-	return [self engage:event fromViewController:viewController userInfo:userInfo customData:nil extendedData:nil];
-}
-
-- (BOOL)engage:(NSString *)event fromViewController:(nullable UIViewController *)viewController userInfo:(nullable NSDictionary *)userInfo customData:(nullable NSDictionary *)customData extendedData:(nullable NSArray *)extendedData {
-	NSString *codePoint = [self codePointForEvent:event];
-
-	return [Apptentive.shared.backend engageCodePoint:codePoint fromInteraction:self userInfo:userInfo customData:customData extendedData:extendedData fromViewController:viewController];
 }
 
 @end

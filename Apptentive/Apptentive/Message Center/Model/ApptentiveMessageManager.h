@@ -6,14 +6,14 @@
 //  Copyright © 2017 Apptentive, Inc. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-#import "ApptentiveRequestOperation.h"
 #import "ApptentiveMessage.h"
 #import "ApptentivePayloadSender.h"
+#import "ApptentiveRequestOperation.h"
+#import <UIKit/UIKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class ApptentiveMessageStore, ApptentiveClient;
+@class ApptentiveMessageStore, ApptentiveClient, ApptentiveDispatchQueue;
 @protocol ApptentiveMessageManagerDelegate;
 
 
@@ -21,19 +21,21 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (readonly, nonatomic) NSString *storagePath;
 @property (readonly, nonatomic) NSString *conversationIdentifier;
-@property (readonly, nonatomic) NSOperationQueue *operationQueue;
+@property (readonly, nonatomic) ApptentiveDispatchQueue *operationQueue;
 @property (readonly, nonatomic) ApptentiveConversation *conversation;
 
 @property (readonly, nonatomic) ApptentiveClient *client;
 @property (assign, nonatomic) NSTimeInterval pollingInterval;
 @property (copy, nonatomic) NSString *localUserIdentifier;
 
-@property (readonly, nonatomic) NSInteger unreadCount;
 @property (readonly, nonatomic) NSArray<ApptentiveMessage *> *messages;
 
 @property (weak, nonatomic) id<ApptentiveMessageManagerDelegate> delegate;
 
-- (instancetype)initWithStoragePath:(NSString *)storagePath client:(ApptentiveClient *)client pollingInterval:(NSTimeInterval)pollingInterval conversation:(ApptentiveConversation *)conversation operationQueue:(NSOperationQueue *)operationQueue;
+@property (strong, nonatomic) NSString *draftMessage;
+@property (assign, nonatomic) BOOL didSkipProfile;
+
+- (instancetype)initWithStoragePath:(NSString *)storagePath client:(ApptentiveClient *)client pollingInterval:(NSTimeInterval)pollingInterval conversation:(ApptentiveConversation *)conversation operationQueue:(ApptentiveDispatchQueue *)operationQueue;
 
 - (void)checkForMessages;
 

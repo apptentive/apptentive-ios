@@ -9,12 +9,12 @@
 #import "ApptentiveDevice.h"
 #import "ApptentiveVersion.h"
 
-#import <UIKit/UIKit.h>
-#import <CoreTelephony/CTTelephonyNetworkInfo.h>
 #import <CoreTelephony/CTCarrier.h>
+#import <CoreTelephony/CTTelephonyNetworkInfo.h>
+#import <UIKit/UIKit.h>
 #include <stdlib.h>
-#import <sys/utsname.h>
 #import <sys/sysctl.h>
+#import <sys/utsname.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -45,7 +45,6 @@ static NSString *_currentHardware;
 static NSDictionary *_currentIntegrationConfiguration;
 static NSString *_currentCarrierName;
 static UIContentSizeCategory _currentContentSizeCategory;
-
 
 
 @implementation ApptentiveDevice

@@ -7,13 +7,14 @@
 //
 
 #import "ApptentiveLog.h"
+#import "ApptentiveDispatchQueue.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 static ApptentiveLogLevel _logLevel = ApptentiveLogLevelInfo;
 static ApptentiveLoggerCallback _logCallback;
 
-static const char * _Nonnull _logLevelNameLookup[] = {
+static const char *_Nonnull _logLevelNameLookup[] = {
 	"?", // ApptentiveLogLevelUndefined
 	"C", // ApptentiveLogLevelCrit,
 	"E", // ApptentiveLogLevelError,
@@ -30,48 +31,6 @@ inline static BOOL shouldLogLevel(ApptentiveLogLevel logLevel) {
 	return logLevel <= _logLevel;
 }
 
-static NSString *getCurrentThreadName() {
-	if ([NSThread currentThread].isMainThread) {
-		return nil;
-	}
-
-	NSString *threadName = [NSThread currentThread].name;
-	if (threadName.length > 0) {
-		return threadName;
-	}
-
-	NSOperationQueue *currentOperationQueue = [NSOperationQueue currentQueue];
-	if (currentOperationQueue != nil) {
-		return currentOperationQueue.name;
-	}
-
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-
-	dispatch_queue_t currentDispatchQueue = dispatch_get_current_queue();
-	if (currentDispatchQueue != NULL) {
-		if (currentDispatchQueue == dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-			return @"QUEUE_DEFAULT";
-		}
-		if (currentDispatchQueue == dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)) {
-			return @"QUEUE_HIGH";
-		}
-		if (currentDispatchQueue == dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0)) {
-			return @"QUEUE_LOW";
-		}
-		if (currentDispatchQueue == dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)) {
-			return @"QUEUE_BACKGROUND";
-		}
-
-		const char *label = dispatch_queue_get_label(currentDispatchQueue);
-		return label != NULL ? [NSString stringWithFormat:@"%s", label] : @"Serial queue";
-	}
-
-#pragma clang diagnostic pop
-
-	return @"Background Thread";
-}
-
 #pragma mark -
 #pragma mark Log Functions
 
@@ -83,7 +42,7 @@ static void _ApptentiveLogHelper(ApptentiveLogLevel level, id arg, va_list ap) {
 		}
 
 		NSString *format = arg;
-		NSString *threadName = getCurrentThreadName();
+		NSString *threadName = ApptentiveGetCurrentThreadName();
 		NSString *message = [[NSString alloc] initWithFormat:format arguments:ap];
 
 		NSMutableString *fullMessage = [[NSMutableString alloc] initWithFormat:@"%s/Apptentive: ", _logLevelNameLookup[level]];
@@ -96,7 +55,7 @@ static void _ApptentiveLogHelper(ApptentiveLogLevel level, id arg, va_list ap) {
 		[fullMessage appendString:message];
 
 		NSLog(@"%@", fullMessage);
-		
+
 		if (_logCallback) {
 			_logCallback(level, fullMessage);
 		}
@@ -177,7 +136,7 @@ NSString *NSStringFromApptentiveLogLevel(ApptentiveLogLevel level) {
 			return @"verbose";
 		default:
 			return @"undefined";
-  	}
+	}
 }
 
 ApptentiveLogLevel ApptentiveLogLevelFromString(NSString *level) {

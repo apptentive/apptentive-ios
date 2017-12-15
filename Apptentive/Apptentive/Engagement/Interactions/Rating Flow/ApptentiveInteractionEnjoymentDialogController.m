@@ -7,12 +7,12 @@
 //
 
 #import "ApptentiveInteractionEnjoymentDialogController.h"
-#import "ApptentiveUtilities.h"
-#import "ApptentiveInteractionInvocation.h"
 #import "ApptentiveBackend+Engagement.h"
-#import "Apptentive_Private.h"
 #import "ApptentiveBackend.h"
 #import "ApptentiveInteraction.h"
+#import "ApptentiveInteractionInvocation.h"
+#import "ApptentiveUtilities.h"
+#import "Apptentive_Private.h"
 #import "UIAlertController+Apptentive.h"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -36,13 +36,16 @@ NSString *const ATInteractionEnjoymentDialogEventLabelNo = @"no";
 
 	if (self.presentedViewController) {
 		if (viewController != nil) {
-			[viewController presentViewController:self.presentedViewController animated:YES completion:^{
-				[self.interaction engage:ATInteractionEnjoymentDialogEventLabelLaunch fromViewController:viewController];
-			}];
+			[viewController presentViewController:self.presentedViewController
+										 animated:YES
+									   completion:^{
+										 [Apptentive.shared.backend engage:ATInteractionEnjoymentDialogEventLabelLaunch fromInteraction:self.interaction fromViewController:viewController];
+									   }];
 		} else {
-			[(UIAlertController *)self.presentedViewController apptentive_presentAnimated:YES completion:^{
-				[self.interaction engage:ATInteractionEnjoymentDialogEventLabelLaunch fromViewController:nil];
-			}];
+			[(UIAlertController *)self.presentedViewController apptentive_presentAnimated:YES
+																			   completion:^{
+																				 [Apptentive.shared.backend engage:ATInteractionEnjoymentDialogEventLabelLaunch fromInteraction:self.interaction fromViewController:nil];
+																			   }];
 		}
 	}
 }
@@ -86,17 +89,21 @@ NSString *const ATInteractionEnjoymentDialogEventLabelNo = @"no";
 
 	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:self.title message:self.body preferredStyle:UIAlertControllerStyleAlert];
 
-	[alertController addAction:[UIAlertAction actionWithTitle:self.noText style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        [self.interaction engage:ATInteractionEnjoymentDialogEventLabelNo fromViewController:self.presentingViewController];
+	[alertController addAction:[UIAlertAction actionWithTitle:self.noText
+														style:UIAlertActionStyleDefault
+													  handler:^(UIAlertAction *action) {
+														[Apptentive.shared.backend engage:ATInteractionEnjoymentDialogEventLabelNo fromInteraction:self.interaction fromViewController:self.presentingViewController];
 
-		self.presentedViewController = nil;
-	}]];
+														self.presentedViewController = nil;
+													  }]];
 
-	[alertController addAction:[UIAlertAction actionWithTitle:self.yesText style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        [self.interaction engage:ATInteractionEnjoymentDialogEventLabelYes fromViewController:self.presentingViewController];
+	[alertController addAction:[UIAlertAction actionWithTitle:self.yesText
+														style:UIAlertActionStyleDefault
+													  handler:^(UIAlertAction *action) {
+														[Apptentive.shared.backend engage:ATInteractionEnjoymentDialogEventLabelYes fromInteraction:self.interaction fromViewController:self.presentingViewController];
 
-		self.presentedViewController = nil;
-	}]];
+														self.presentedViewController = nil;
+													  }]];
 
 	return alertController;
 }

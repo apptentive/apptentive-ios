@@ -7,10 +7,11 @@
 //
 
 #import "ApptentiveInteractionUpgradeMessageController.h"
-#import "ApptentiveInteractionUpgradeMessageViewController.h"
 #import "ApptentiveInteraction.h"
+#import "ApptentiveInteractionUpgradeMessageViewController.h"
 #import "ApptentiveUtilities.h"
 #import "Apptentive_Private.h"
+#import "ApptentiveBackend+Engagement.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -43,7 +44,7 @@ NSString *const ATInteractionUpgradeMessageEventLabelDismiss = @"dismiss";
 		[navigationController presentAnimated:YES completion:nil];
 	}
 
-	[result.upgradeMessageInteraction engage:ATInteractionUpgradeMessageEventLabelLaunch fromViewController:viewController];
+	[Apptentive.shared.backend engage:ATInteractionUpgradeMessageEventLabelLaunch fromInteraction:result.upgradeMessageInteraction fromViewController:viewController];
 }
 
 - (NSString *)programmaticDismissEventLabel {

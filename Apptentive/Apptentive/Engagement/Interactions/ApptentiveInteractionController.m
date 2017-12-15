@@ -9,6 +9,7 @@
 #import "ApptentiveInteractionController.h"
 #import "ApptentiveInteraction.h"
 #import "Apptentive_Private.h"
+#import "ApptentiveBackend+Engagement.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -22,7 +23,7 @@ static NSString *const ApptentiveInteractionEventLabelCancel = @"cancel";
 + (void)registerInteractionControllerClass:(Class) class forType:(NSString *)type {
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-        interactionControllerClassRegistry = @{};
+	  interactionControllerClassRegistry = @{};
 	});
 
 	@synchronized([ApptentiveInteractionController class]) {
@@ -63,6 +64,7 @@ static NSString *const ApptentiveInteractionEventLabelCancel = @"cancel";
 }
 
 - (void)presentInteractionFromViewController:(nullable UIViewController *)viewController {
+	ApptentiveAssertMainQueue
 	self.presentingViewController = viewController;
 }
 
@@ -72,7 +74,7 @@ static NSString *const ApptentiveInteractionEventLabelCancel = @"cancel";
 	[self.presentedViewController dismissViewControllerAnimated:animated completion:nil];
 
 	// Ordinarily we would engage in the completion block of the -dismiss method, but that screws up event ordering during logout.
-	[self.interaction engage:self.programmaticDismissEventLabel fromViewController:nil userInfo:@{ @"cause": @"notification" }];
+	[Apptentive.shared.backend engage:self.programmaticDismissEventLabel fromInteraction:self.interaction fromViewController:nil userInfo:@{ @"cause": @"notification" }];
 
 	self.presentedViewController = nil;
 }

@@ -7,12 +7,13 @@
 //
 
 #import "ApptentiveAttachmentController.h"
-#import "ApptentiveAttachmentCell.h"
 #import "ApptentiveAttachButton.h"
-#import "ApptentiveMessageCenterViewController.h"
-#import "ApptentiveInteraction.h"
-#import "Apptentive_Private.h"
 #import "ApptentiveAttachment.h"
+#import "ApptentiveAttachmentCell.h"
+#import "ApptentiveInteraction.h"
+#import "ApptentiveMessageCenterViewController.h"
+#import "Apptentive_Private.h"
+#import "ApptentiveBackend+Engagement.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -140,7 +141,9 @@ NSString *const ATInteractionMessageCenterEventLabelAttachmentDelete = @"attachm
 	if ((self.active || self.mutableAttachments.count == 0) && self.mutableAttachments.count < MAX_NUMBER_OF_ATTACHMENTS) {
 		[self chooseImage:sender];
 	} else {
-		[self.viewController.viewModel.interaction engage:ATInteractionMessageCenterEventLabelAttachmentListOpen fromViewController:self.viewController];
+		[Apptentive.shared.backend engage:ATInteractionMessageCenterEventLabelAttachmentListOpen
+						  fromInteraction:self.viewController.viewModel.interaction
+					   fromViewController:self.viewController];
 		[self becomeFirstResponder];
 		[self updateBadge];
 
@@ -165,7 +168,9 @@ NSString *const ATInteractionMessageCenterEventLabelAttachmentDelete = @"attachm
 	_attachments = nil;
 	[self didChangeValueForKey:@"attachments"];
 
-	[self.viewController.viewModel.interaction engage:ATInteractionMessageCenterEventLabelAttachmentDelete fromViewController:self.viewController];
+	[Apptentive.shared.backend engage:ATInteractionMessageCenterEventLabelAttachmentDelete
+					  fromInteraction:self.viewController.viewModel.interaction
+				   fromViewController:self.viewController];
 
 	[self.collectionView deleteItemsAtIndexPaths:@[indexPath]];
 	[self updateBadge];
@@ -224,15 +229,21 @@ NSString *const ATInteractionMessageCenterEventLabelAttachmentDelete = @"attachm
 	if (!self.active) {
 		[self becomeFirstResponder];
 		self.active = YES;
-		[self.viewController.viewModel.interaction engage:ATInteractionMessageCenterEventLabelAttachmentListOpen fromViewController:self.viewController];
+		[Apptentive.shared.backend engage:ATInteractionMessageCenterEventLabelAttachmentListOpen
+						  fromInteraction:self.viewController.viewModel.interaction
+					   fromViewController:self.viewController];
 	}
 
-	[self.viewController.viewModel.interaction engage:ATInteractionMessageCenterEventLabelAttachmentAdd fromViewController:self.viewController];
+	[Apptentive.shared.backend engage:ATInteractionMessageCenterEventLabelAttachmentAdd
+					  fromInteraction:self.viewController.viewModel.interaction
+				   fromViewController:self.viewController];
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
 	[self dismissImagePicker:picker];
-	[self.viewController.viewModel.interaction engage:ATInteractionMessageCenterEventLabelAttachmentCancel fromViewController:self.viewController];
+	[Apptentive.shared.backend engage:ATInteractionMessageCenterEventLabelAttachmentCancel
+					  fromInteraction:self.viewController.viewModel.interaction
+				   fromViewController:self.viewController];
 }
 
 #pragma mark - Private

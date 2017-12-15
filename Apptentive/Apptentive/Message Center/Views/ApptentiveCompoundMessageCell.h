@@ -6,8 +6,8 @@
 //  Copyright © 2015 Apptentive, Inc. All rights reserved.
 //
 
-#import "ApptentiveMessageCenterMessageCell.h"
 #import "ApptentiveMessageCenterCellProtocols.h"
+#import "ApptentiveMessageCenterMessageCell.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

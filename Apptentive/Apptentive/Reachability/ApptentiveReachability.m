@@ -7,8 +7,8 @@
 //
 
 #import "ApptentiveReachability.h"
-#import "ApptentiveUtilities.h"
 #import "ApptentiveLog.h"
+#import "ApptentiveUtilities.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

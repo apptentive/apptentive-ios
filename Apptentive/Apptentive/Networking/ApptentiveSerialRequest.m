@@ -8,14 +8,15 @@
 
 #import "ApptentiveSerialRequest.h"
 #import "ApptentiveAttachment.h"
-#import "ApptentiveRequestOperation.h"
-#import "ApptentiveSerialRequestAttachment.h"
 #import "ApptentiveConversation.h"
 #import "ApptentivePayload.h"
-#import "NSData+Encryption.h"
+#import "ApptentivePayloadDebug.h"
+#import "ApptentiveRequestOperation.h"
+#import "ApptentiveSerialRequestAttachment.h"
 #import "ApptentiveUtilities.h"
 #import "Apptentive_Private.h"
-#import "ApptentivePayloadDebug.h"
+#import "NSData+Encryption.h"
+#import "ApptentiveDispatchQueue.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -39,7 +40,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (BOOL)enqueuePayload:(ApptentivePayload *)payload forConversation:(ApptentiveConversation *)conversation usingAuthToken:(nullable NSString *)authToken inContext:(NSManagedObjectContext *)context {
 	ApptentiveAssertOperationQueue(Apptentive.shared.operationQueue);
-	
+
 	ApptentiveAssertNotNil(context, @"Context is nil");
 	if (context == nil) {
 		return NO;
@@ -96,49 +97,49 @@ NS_ASSUME_NONNULL_BEGIN
 
 	// execute the block on a background thread (this call returns immediatelly)
 	[childContext performBlockAndWait:^{
-        
-        ApptentiveSerialRequest *request = (ApptentiveSerialRequest *)[[NSManagedObject alloc] initWithEntity:[NSEntityDescription entityForName:@"QueuedRequest" inManagedObjectContext:childContext] insertIntoManagedObjectContext:childContext];
-        
-        ApptentiveAssertNotNil(request, @"Can't load managed request object");
-        if (request == nil) {
-            ApptentiveLogError(@"Unable encode enqueue request '%@': can't load managed request object", payloadPath);
-            return;
-        }
-        
-        request.date = [NSDate date];
-        request.path = payloadPath;
-        request.method = payloadMethod;
-        request.identifier = payloadIdentifier;
-        request.conversationIdentifier = conversationIdentifier;
-        request.apiVersion = payloadApiVersion;
-        request.authToken = authToken;
-        request.contentType = payloadContentType;
-        request.encrypted = payloadEncrypted;
-        request.payload = payloadData;
-		request.type = payloadType;
-        
-        NSMutableArray *attachmentArray = [NSMutableArray arrayWithCapacity:payload.attachments.count];
-        for (ApptentiveAttachment *attachment in payloadAttachments) {
-            ApptentiveArrayAddObject(attachmentArray, [ApptentiveSerialRequestAttachment queuedAttachmentWithName:attachment.name path:attachment.fullLocalPath MIMEType:attachment.contentType inContext:childContext]);
-        }
-        request.attachments = [NSOrderedSet orderedSetWithArray:attachmentArray];
-        
-        // save child context
-        NSError *saveError;
-        if (![childContext save:&saveError]) {
-            ApptentiveLogError(@"Unable to save temporary managed object context: %@", saveError);
-        }
-		
-		// save parent context
-        [context performBlockAndWait:^{
-            NSError *parentSaveError;
-            if (![context save:&parentSaveError]) {
-                ApptentiveLogError(@"Unable to save parent managed object context: %@", parentSaveError);
-            }
-        }];
-		
-		// print payload queue
-		[ApptentivePayloadDebug printPayloadSendingQueueWithContext:childContext title:@"Enqueue payload"];
+
+	  ApptentiveSerialRequest *request = (ApptentiveSerialRequest *)[[NSManagedObject alloc] initWithEntity:[NSEntityDescription entityForName:@"QueuedRequest" inManagedObjectContext:childContext] insertIntoManagedObjectContext:childContext];
+
+	  ApptentiveAssertNotNil(request, @"Can't load managed request object");
+	  if (request == nil) {
+		  ApptentiveLogError(@"Unable encode enqueue request '%@': can't load managed request object", payloadPath);
+		  return;
+	  }
+
+	  request.date = [NSDate date];
+	  request.path = payloadPath;
+	  request.method = payloadMethod;
+	  request.identifier = payloadIdentifier;
+	  request.conversationIdentifier = conversationIdentifier;
+	  request.apiVersion = payloadApiVersion;
+	  request.authToken = authToken;
+	  request.contentType = payloadContentType;
+	  request.encrypted = payloadEncrypted;
+	  request.payload = payloadData;
+	  request.type = payloadType;
+
+	  NSMutableArray *attachmentArray = [NSMutableArray arrayWithCapacity:payload.attachments.count];
+	  for (ApptentiveAttachment *attachment in payloadAttachments) {
+		  ApptentiveArrayAddObject(attachmentArray, [ApptentiveSerialRequestAttachment queuedAttachmentWithName:attachment.name path:attachment.fullLocalPath MIMEType:attachment.contentType inContext:childContext]);
+	  }
+	  request.attachments = [NSOrderedSet orderedSetWithArray:attachmentArray];
+
+	  // save child context
+	  NSError *saveError;
+	  if (![childContext save:&saveError]) {
+		  ApptentiveLogError(@"Unable to save temporary managed object context: %@", saveError);
+	  }
+
+	  // save parent context
+	  [context performBlockAndWait:^{
+		NSError *parentSaveError;
+		if (![context save:&parentSaveError]) {
+			ApptentiveLogError(@"Unable to save parent managed object context: %@", parentSaveError);
+		}
+	  }];
+
+	  // print payload queue
+	  [ApptentivePayloadDebug printPayloadSendingQueueWithContext:childContext title:@"Enqueue payload"];
 	}];
 
 	return YES;

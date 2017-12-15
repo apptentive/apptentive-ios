@@ -7,9 +7,9 @@
 //
 
 #import "ApptentiveSDKAppReleasePayload.h"
+#import "ApptentiveAppRelease.h"
 #import "ApptentiveConversation.h"
 #import "ApptentiveSDK.h"
-#import "ApptentiveAppRelease.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

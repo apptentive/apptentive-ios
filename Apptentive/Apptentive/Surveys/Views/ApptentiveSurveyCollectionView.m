@@ -32,9 +32,27 @@ NS_ASSUME_NONNULL_BEGIN
 		[self addSubview:collectionHeaderView];
 
 		[self addConstraints:@[
-			[NSLayoutConstraint constraintWithItem:collectionHeaderView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeWidth multiplier:1.0 constant:0.0],
-			[NSLayoutConstraint constraintWithItem:collectionHeaderView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0.0],
-			[NSLayoutConstraint constraintWithItem:collectionHeaderView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.0]
+			[NSLayoutConstraint constraintWithItem:collectionHeaderView
+										 attribute:NSLayoutAttributeWidth
+										 relatedBy:NSLayoutRelationEqual
+											toItem:self
+										 attribute:NSLayoutAttributeWidth
+										multiplier:1.0
+										  constant:0.0],
+			[NSLayoutConstraint constraintWithItem:collectionHeaderView
+										 attribute:NSLayoutAttributeCenterX
+										 relatedBy:NSLayoutRelationEqual
+											toItem:self
+										 attribute:NSLayoutAttributeCenterX
+										multiplier:1.0
+										  constant:0.0],
+			[NSLayoutConstraint constraintWithItem:collectionHeaderView
+										 attribute:NSLayoutAttributeTop
+										 relatedBy:NSLayoutRelationEqual
+											toItem:self
+										 attribute:NSLayoutAttributeTop
+										multiplier:1.0
+										  constant:0.0]
 		]];
 	}
 
@@ -55,8 +73,20 @@ NS_ASSUME_NONNULL_BEGIN
 		self.footerConstraint = [NSLayoutConstraint constraintWithItem:collectionFooterView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.0];
 
 		[self addConstraints:@[
-			[NSLayoutConstraint constraintWithItem:collectionFooterView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeWidth multiplier:1.0 constant:0.0],
-			[NSLayoutConstraint constraintWithItem:collectionFooterView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0.0],
+			[NSLayoutConstraint constraintWithItem:collectionFooterView
+										 attribute:NSLayoutAttributeWidth
+										 relatedBy:NSLayoutRelationEqual
+											toItem:self
+										 attribute:NSLayoutAttributeWidth
+										multiplier:1.0
+										  constant:0.0],
+			[NSLayoutConstraint constraintWithItem:collectionFooterView
+										 attribute:NSLayoutAttributeCenterX
+										 relatedBy:NSLayoutRelationEqual
+											toItem:self
+										 attribute:NSLayoutAttributeCenterX
+										multiplier:1.0
+										  constant:0.0],
 			self.footerConstraint
 		]];
 	}

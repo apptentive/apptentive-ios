@@ -7,31 +7,32 @@
 //
 
 #import "ApptentiveBackend.h"
+#import "ApptentiveAppConfiguration.h"
+#import "ApptentiveAppRelease.h"
 #import "ApptentiveBackend+Engagement.h"
-#import "Apptentive_Private.h"
+#import "ApptentiveConfigurationRequest.h"
 #import "ApptentiveDataManager.h"
-#import "ApptentiveReachability.h"
-#import "ApptentiveUtilities.h"
+#import "ApptentiveDevice.h"
+#import "ApptentiveEngagementManifest.h"
+#import "ApptentiveInteraction.h"
 #import "ApptentiveLog.h"
 #import "ApptentiveMessageCenterViewController.h"
-#import "ApptentiveAppConfiguration.h"
-#import "ApptentiveEngagementManifest.h"
-#import "ApptentiveSerialRequest.h"
-#import "ApptentiveAppRelease.h"
-#import "ApptentiveSDK.h"
-#import "ApptentivePerson.h"
-#import "ApptentiveDevice.h"
-#import "ApptentiveVersion.h"
 #import "ApptentiveMessageManager.h"
-#import "ApptentiveConfigurationRequest.h"
 #import "ApptentivePayloadSender.h"
+#import "ApptentivePerson.h"
+#import "ApptentiveReachability.h"
+#import "ApptentiveSDK.h"
 #import "ApptentiveSafeCollections.h"
-#import "ApptentiveInteraction.h"
+#import "ApptentiveSerialRequest.h"
+#import "ApptentiveUtilities.h"
+#import "ApptentiveVersion.h"
+#import "Apptentive_Private.h"
+#import "ApptentiveDispatchQueue.h"
 
 #import "ApptentiveLegacyEvent.h"
-#import "ApptentiveLegacySurveyResponse.h"
-#import "ApptentiveLegacyMessage.h"
 #import "ApptentiveLegacyFileAttachment.h"
+#import "ApptentiveLegacyMessage.h"
+#import "ApptentiveLegacySurveyResponse.h"
 
 @import CoreTelephony;
 
@@ -49,8 +50,6 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 
 @property (nullable, strong, nonatomic) ApptentiveRequestOperation *configurationOperation;
 
-@property (assign, nonatomic) ApptentiveBackendState state;
-
 @property (strong, nonatomic) CTTelephonyNetworkInfo *telephonyNetworkInfo;
 
 @property (strong, nonatomic) NSTimer *messageRetrievalTimer;
@@ -63,6 +62,8 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 
 @property (strong, nonatomic) ApptentiveReachability *reachability;
 
+@property (assign, nonatomic, getter=isForeground) BOOL foreground;
+
 @end
 
 
@@ -70,7 +71,7 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 
 @synthesize supportDirectoryPath = _supportDirectoryPath;
 
-- (instancetype)initWithApptentiveKey:(NSString *)apptentiveKey signature:(NSString *)signature baseURL:(NSURL *)baseURL storagePath:(NSString *)storagePath operationQueue:(NSOperationQueue *)operationQueue {
+- (instancetype)initWithApptentiveKey:(NSString *)apptentiveKey signature:(NSString *)signature baseURL:(NSURL *)baseURL storagePath:(NSString *)storagePath operationQueue:(ApptentiveDispatchQueue *)operationQueue {
 	self = [super init];
 
 	if (self) {
@@ -79,46 +80,47 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 		_baseURL = baseURL;
 		_storagePath = storagePath;
 
-		_state = ApptentiveBackendStateStarting;
 		_operationQueue = operationQueue;
 		_supportDirectoryPath = [[ApptentiveUtilities applicationSupportPath] stringByAppendingPathComponent:storagePath];
 
 		if ([UIApplication sharedApplication] != nil && ![UIApplication sharedApplication].isProtectedDataAvailable) {
 			_operationQueue.suspended = YES;
-			_state = ApptentiveBackendStateWaitingForDataProtectionUnlock;
 
 			__weak ApptentiveBackend *weakSelf = self;
-			[[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationProtectedDataDidBecomeAvailable object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *_Nonnull note) {
-                ApptentiveBackend *strongSelf = weakSelf;
-                if (strongSelf) {
-                    strongSelf.operationQueue.suspended = NO;
-                    strongSelf.state = ApptentiveBackendStateStarting;
-                }
-			}];
+			[[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationProtectedDataDidBecomeAvailable
+															  object:nil
+															   queue:[NSOperationQueue mainQueue]
+														  usingBlock:^(NSNotification *_Nonnull note) {
+															ApptentiveBackend *strongSelf = weakSelf;
+															if (strongSelf) {
+																strongSelf.operationQueue.suspended = NO;
+															}
+														  }];
 		}
 
 		_reachability = [[ApptentiveReachability alloc] initWithHostname:self.baseURL.host];
+		_foreground = UIApplication.sharedApplication.applicationState != UIApplicationStateBackground;
 
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillEnterForegroundNotification:) name:UIApplicationWillEnterForegroundNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillTerminateNotification:) name:UIApplicationWillTerminateNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidEnterBackgroundNotification:) name:UIApplicationDidEnterBackgroundNotification object:nil];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleRemoteNotificationInUIApplicationStateActive) name:UIApplicationDidBecomeActiveNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkStatusChanged:) name:ApptentiveReachabilityStatusChanged object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(apptentiveInteractionsDidUpdateNotification:) name:ApptentiveInteractionsDidUpdateNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(authenticationDidFailNotification:) name:ApptentiveAuthenticationDidFailNotification object:nil];
 
 		[self updateAndMonitorDeviceValues];
 
-		[_operationQueue addOperationWithBlock:^{
-			[self createSupportDirectoryIfNeeded];
+		[_operationQueue dispatchAsync:^{
+		  [self createSupportDirectoryIfNeeded];
 
-			dispatch_sync(dispatch_get_main_queue(), ^{
-				[self setUpCoreData];
-			});
+		  // it's important to initialize CoreData stack on the main thread so we block the execution of our queue
+		  dispatch_sync(dispatch_get_main_queue(), ^{
+			[self setUpCoreData];
+		  });
 
-			[self loadConfiguration];
-			
-			[self startUp];
+		  [self loadConfiguration];
+
+		  [self startUp];
 		}];
 	}
 
@@ -135,6 +137,7 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
  Set up class properties on ApptentiveDevice and monitor for changes
  */
 - (void)updateAndMonitorDeviceValues {
+	ApptentiveAssertMainQueue
 	[ApptentiveDevice getPermanentDeviceValues];
 
 	__weak ApptentiveBackend *weakSelf = self;
@@ -142,64 +145,81 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 		_telephonyNetworkInfo = [[CTTelephonyNetworkInfo alloc] init];
 		ApptentiveDevice.carrierName = _telephonyNetworkInfo.subscriberCellularProvider.carrierName;
 
-		_telephonyNetworkInfo.subscriberCellularProviderDidUpdateNotifier = ^(CTCarrier * _Nonnull carrier) {
-			ApptentiveBackend *strongSelf = weakSelf;
-			ApptentiveDevice.carrierName = carrier.carrierName;
-			ApptentiveLogDebug(@"Carrier changed to %@. Updating device.", ApptentiveDevice.carrierName);
-			[strongSelf.operationQueue addOperationWithBlock:^{
-				[strongSelf scheduleDeviceUpdate]; // Must happen on our queue
-			}];
+		_telephonyNetworkInfo.subscriberCellularProviderDidUpdateNotifier = ^(CTCarrier *_Nonnull carrier) {
+		  ApptentiveBackend *strongSelf = weakSelf;
+		  ApptentiveDevice.carrierName = carrier.carrierName;
+		  ApptentiveLogDebug(@"Carrier changed to %@. Updating device.", ApptentiveDevice.carrierName);
+		  [strongSelf.operationQueue dispatchAsync:^{
+			[strongSelf scheduleDeviceUpdate]; // Must happen on our queue
+		  }];
 		};
 	}
 
 	ApptentiveDevice.contentSizeCategory = [UIApplication sharedApplication].preferredContentSizeCategory;
-	[NSNotificationCenter.defaultCenter addObserverForName:UIContentSizeCategoryDidChangeNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
-		ApptentiveBackend *strongSelf = weakSelf;
-		ApptentiveDevice.contentSizeCategory = [UIApplication sharedApplication].preferredContentSizeCategory; // Must happen on main queue
-		ApptentiveLogDebug(@"Content size category changed to %@. Updating device.", ApptentiveDevice.contentSizeCategory);
-		[strongSelf.operationQueue addOperationWithBlock:^{
-			[strongSelf scheduleDeviceUpdate]; // Must happen on our queue
-		}];
-	}];
+	[NSNotificationCenter.defaultCenter addObserverForName:UIContentSizeCategoryDidChangeNotification
+													object:nil
+													 queue:[NSOperationQueue mainQueue]
+												usingBlock:^(NSNotification *_Nonnull note) {
+												  ApptentiveBackend *strongSelf = weakSelf;
+												  ApptentiveDevice.contentSizeCategory = [UIApplication sharedApplication].preferredContentSizeCategory; // Must happen on main queue
+												  ApptentiveLogDebug(@"Content size category changed to %@. Updating device.", ApptentiveDevice.contentSizeCategory);
+												  [strongSelf.operationQueue dispatchAsync:^{
+													[strongSelf scheduleDeviceUpdate]; // Must happen on our queue
+												  }];
+												}];
 
-	[[NSNotificationCenter defaultCenter] addObserverForName:NSSystemTimeZoneDidChangeNotification object:nil queue:self.operationQueue usingBlock:^(NSNotification * _Nonnull note) {
-		ApptentiveLogDebug(@"System time zone changed to %@. Updating device.", NSTimeZone.systemTimeZone);
-		ApptentiveBackend *strongSelf = weakSelf;
-		[strongSelf scheduleDeviceUpdate];
-	}];
+	[[NSNotificationCenter defaultCenter] addObserverForName:NSSystemTimeZoneDidChangeNotification
+													  object:nil
+													   queue:[NSOperationQueue mainQueue]
+												  usingBlock:^(NSNotification *_Nonnull note) {
+													ApptentiveLogDebug(@"System time zone changed to %@. Updating device.", NSTimeZone.systemTimeZone);
+													ApptentiveBackend *strongSelf = weakSelf;
+													  [strongSelf.operationQueue dispatchAsync:^{
+														  [strongSelf scheduleDeviceUpdate];
+													  }];
+													
+												  }];
 }
 
 #pragma mark Notification Handling
 
 - (void)networkStatusChanged:(NSNotification *)notification {
-	[self updateNetworkingForCurrentNetworkStatus];
+	[self.operationQueue dispatchAsync:^{
+		[self updateNetworkingForCurrentNetworkStatus];
+	}];
 }
 
 - (void)applicationWillTerminateNotification:(NSNotification *)notification {
-	[self addExitMetric];
+	[self.operationQueue dispatchAsync:^{
+		if (self.foreground) {
+			[self addExitMetric];
+		}
+	}];
+
 	[self shutDown];
 }
 
 - (void)applicationDidEnterBackgroundNotification:(NSNotification *)notification {
-	[self addExitMetric];
+	[self.operationQueue dispatchAsync:^{
+		_foreground = NO;
+		[self addExitMetric];
+	}];
+
 	[self shutDown];
 }
 
 - (void)applicationWillEnterForegroundNotification:(NSNotification *)notification {
-	[self resume];
-	[self addLaunchMetric];
-}
-
-- (void)apptentiveInteractionsDidUpdateNotification:(NSNotification *)notification {
-	[self.operationQueue addOperationWithBlock:^{
-        [self updateMessageCheckingTimer];
+	[self.operationQueue dispatchAsync:^{
+		_foreground = YES;
+		[self resume];
+		[self addLaunchMetric];
 	}];
 }
 
-- (void)handleRemoteNotificationInUIApplicationStateActive {
-	if ([Apptentive sharedConnection].pushUserInfo) {
-		[[Apptentive sharedConnection] didReceiveRemoteNotification:[Apptentive sharedConnection].pushUserInfo fromViewController:[Apptentive sharedConnection].pushViewController];
-	}
+- (void)apptentiveInteractionsDidUpdateNotification:(NSNotification *)notification {
+	[self.operationQueue dispatchAsync:^{
+	  [self updateMessageCheckingTimer];
+	}];
 }
 
 #pragma mark - Core Data stack
@@ -211,19 +231,20 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 #pragma mark - As-needed tasks
 
 - (void)fetchConfigurationIfNeeded {
+	ApptentiveAssertOperationQueue(self.operationQueue);
 	ApptentiveConversation *conversation = self.conversationManager.activeConversation;
 
-	if (self.configurationOperation != nil || conversation.identifier == nil || !self.networkAvailable ||   [self.configuration.expiry timeIntervalSinceNow] > 0) {
+	if (self.configurationOperation != nil || conversation.identifier == nil || !self.networkAvailable || !self.foreground || [self.configuration.expiry timeIntervalSinceNow] > 0) {
 		return;
 	}
 
 	ApptentiveRequestOperationCallback *callback = [ApptentiveRequestOperationCallback new];
 	callback.operationFinishCallback = ^(ApptentiveRequestOperation *operation) {
-        [self processConfigurationResponse:(NSDictionary *)operation.responseObject cacheLifetime:operation.cacheLifetime];
-        self.configurationOperation = nil;
+	  [self processConfigurationResponse:(NSDictionary *)operation.responseObject cacheLifetime:operation.cacheLifetime];
+	  self.configurationOperation = nil;
 	};
 	callback.operationFailCallback = ^(ApptentiveRequestOperation *operation, NSError *error) {
-        self.configurationOperation = nil;
+	  self.configurationOperation = nil;
 	};
 
 	self.configurationOperation = [self.client requestOperationWithRequest:[[ApptentiveConfigurationRequest alloc] initWithConversationIdentifier:conversation.identifier] token:conversation.token delegate:callback];
@@ -236,6 +257,7 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 }
 
 - (void)createSupportDirectoryIfNeeded {
+	ApptentiveAssertOperationQueue(self.operationQueue);
 	if (![[NSFileManager defaultManager] fileExistsAtPath:self.supportDirectoryPath]) {
 		NSError *error;
 		if (![[NSFileManager defaultManager] createDirectoryAtPath:self.supportDirectoryPath withIntermediateDirectories:YES attributes:nil error:&error]) {
@@ -256,61 +278,47 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 
 	_payloadSender = [[ApptentivePayloadSender alloc] initWithBaseURL:self.baseURL apptentiveKey:self.apptentiveKey apptentiveSignature:self.apptentiveSignature managedObjectContext:self.managedObjectContext delegateQueue:self.operationQueue];
 
-	self.state = ApptentiveBackendStatePayloadDatabaseAvailable;
-
 	[self.conversationManager loadActiveConversation];
 
 	[self completeStartupAndResumeTasks];
 
-	[self addLaunchMetric];
+	if (self.foreground) {
+		[self addLaunchMetric];
+	} else {
+		ApptentiveLogDebug(@"Skip engaging launch event because app started in the background.");
+	}
 }
 
 // This is called when we're about to enter the background
 - (void)shutDown {
 	ApptentiveLogVerbose(@"Shutting down backend");
-	self.state = ApptentiveBackendStateShuttingDown;
-
-	[self.operationQueue addOperationWithBlock:^{
-		[self.conversationManager pause];
-	}];
-
-	ApptentiveLogVerbose(@"Operations in background queue: %@", [self.operationQueue.operations valueForKeyPath:@"name"]);
-	ApptentiveLogVerbose(@"operations in payload network queue: %@", [self.payloadSender.networkQueue.operations valueForKeyPath:@"name"]);
 
 	// Asynchronous tasks off the main thread will not be given a chance to complete automatically.
 	// We create a background task to clear out our operation queue and the payload sender queue.
-	self.backgroundTaskIdentifier = [[UIApplication sharedApplication] beginBackgroundTaskWithName:@"Wind Down Backend" expirationHandler:^{
-		ApptentiveLogError(@"Background task (%ld) did not complete in time.", (unsigned long)self.backgroundTaskIdentifier);
-		[[UIApplication sharedApplication] endBackgroundTask:self.backgroundTaskIdentifier];
-	}];
+	self.backgroundTaskIdentifier = [[UIApplication sharedApplication] beginBackgroundTaskWithName:@"Wind Down Backend"
+																				 expirationHandler:^{
+																				   ApptentiveLogError(@"Background task (%ld) did not complete in time.", (unsigned long)self.backgroundTaskIdentifier);
+																				   [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTaskIdentifier];
+																				 }];
 
 	// Here, we cancel any ongoing network operations in the payload sender.
 	[self.payloadSender cancelNetworkOperations];
 
 	// Create an operation to end the background task.
-	NSBlockOperation *completeBackgroundTaskOperation = [NSBlockOperation blockOperationWithBlock:^{
-		ApptentiveLogDebug(@"All background operations finished. Exiting.");
-		[[UIApplication sharedApplication] endBackgroundTask:self.backgroundTaskIdentifier];
+	[self.operationQueue dispatchAsync:^{
+		[self.conversationManager pause];
+
+		// After all background operations are finished, wait for anything on the payload sender's network queue to finish before telling the OS we're done.
+		[self.payloadSender.networkQueue addOperationWithBlock:^{
+			ApptentiveLogDebug(@"All background operations finished. Exiting.");
+			[[UIApplication sharedApplication] endBackgroundTask:self.backgroundTaskIdentifier];
+		}];
 	}];
-
-	completeBackgroundTaskOperation.name = @"Complete background task";
-
-	// If there is a save operation in the queue, add it as a cross-queue dependency.
-	NSOperation *saveContextOperation = self.payloadSender.saveContextOperation;
-
-	if (saveContextOperation) {
-		[completeBackgroundTaskOperation addDependency:saveContextOperation];
-	}
-
-	// Add the "complete background task" operation to the end of our (serial) background queue.
-	[self.operationQueue addOperation:completeBackgroundTaskOperation];
 }
 
 // This is called on a warm launch
 - (void)resume {
-	if (self.managedObjectContext != nil) {
-		self.state = ApptentiveBackendStatePayloadDatabaseAvailable;
-	}
+	ApptentiveAssertOperationQueue(self.operationQueue);
 
 	[self completeStartupAndResumeTasks];
 
@@ -319,6 +327,7 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 
 // Note: must be called on main thread
 - (void)setUpCoreData {
+	ApptentiveAssertMainQueue
 	ApptentiveLogVerbose(ApptentiveLogTagStorage, @"Setting up data manager");
 	self.dataManager = [[ApptentiveDataManager alloc] initWithModelName:@"ATDataModel" inBundle:[ApptentiveUtilities resourceBundle] storagePath:[self supportDirectoryPath]];
 	if (![self.dataManager setupAndVerify]) {
@@ -329,6 +338,7 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 }
 
 - (void)loadConfiguration {
+	ApptentiveAssertOperationQueue(self.operationQueue);
 	if ([[NSFileManager defaultManager] fileExistsAtPath:[self configurationPath]]) {
 		self->_configuration = [NSKeyedUnarchiver unarchiveObjectWithFile:[self configurationPath]];
 	} else if ([[NSUserDefaults standardUserDefaults] objectForKey:@"ATConfigurationSDKVersionKey"]) {
@@ -343,6 +353,7 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 
 // This is called on warm and cold launch
 - (void)completeStartupAndResumeTasks {
+	ApptentiveAssertOperationQueue(self.operationQueue);
 #if APPTENTIVE_DEBUG
 	[Apptentive.shared checkSDKConfiguration];
 
@@ -354,23 +365,24 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 
 // This should be called once we might have an active conversation, and perodically after that
 - (void)completeHousekeepingTasks {
+	ApptentiveAssertOperationQueue(self.operationQueue);
+
 	[self fetchConfigurationIfNeeded];
 
-	[self.operationQueue addOperationWithBlock:^{
-		[self.conversationManager completeHousekeepingTasks];
+	[self.conversationManager completeHousekeepingTasks];
 
-		[self processQueuedRecords];
-	}];
+	[self processQueuedRecords];
 }
 
 - (void)migrateLegacyCoreDataAndTaskQueueForConversation:(ApptentiveConversation *)conversation conversationDirectoryPath:(NSString *)directoryPath {
+	ApptentiveAssertOperationQueue(self.operationQueue);
 	ApptentiveAssertNotNil(conversation, @"Trying to migrate nil conversation");
 	ApptentiveAssertTrue(conversation.state == ApptentiveConversationStateLegacyPending, @"Trying to migrate conversation that is not a legacy conversation (%@)", NSStringFromApptentiveConversationState(conversation.state));
 
 	if (conversation.state != ApptentiveConversationStateLegacyPending) {
 		return;
 	}
-	
+
 	NSManagedObjectContext *parentContext = self.managedObjectContext;
 	ApptentiveAssertNotNil(parentContext, @"Parent context is nil");
 	if (parentContext == nil) {
@@ -391,14 +403,14 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 	migrationContext.parentContext = parentContext;
 
 	[migrationContext performBlockAndWait:^{
-		[ApptentiveLegacyMessage enqueueUnsentMessagesInContext:migrationContext forConversation:conversation oldAttachmentPath:oldAttachmentPath newAttachmentPath:newAttachmentPath];
-		[ApptentiveLegacyEvent enqueueUnsentEventsInContext:migrationContext forConversation:conversation];
-		[ApptentiveLegacySurveyResponse enqueueUnsentSurveyResponsesInContext:migrationContext forConversation:conversation];
+	  [ApptentiveLegacyMessage enqueueUnsentMessagesInContext:migrationContext forConversation:conversation oldAttachmentPath:oldAttachmentPath newAttachmentPath:newAttachmentPath];
+	  [ApptentiveLegacyEvent enqueueUnsentEventsInContext:migrationContext forConversation:conversation];
+	  [ApptentiveLegacySurveyResponse enqueueUnsentSurveyResponsesInContext:migrationContext forConversation:conversation];
 
-		NSError *coreDataError;
-		if (![migrationContext save:&coreDataError]) {
-			ApptentiveLogError(@"Unable to save migration context: %@", coreDataError);
-		}
+	  NSError *coreDataError;
+	  if (![migrationContext save:&coreDataError]) {
+		  ApptentiveLogError(@"Unable to save migration context: %@", coreDataError);
+	  }
 	}];
 
 	[self processQueuedRecords];
@@ -407,7 +419,7 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 - (void)processQueuedRecords {
 	ApptentiveAssertOperationQueue(self.operationQueue);
 
-	if (self.state == ApptentiveBackendStatePayloadDatabaseAvailable && self.networkAvailable && self.conversationManager.activeConversation.token != nil) {
+	if (self.foreground && self.networkAvailable && self.conversationManager.activeConversation.token != nil) {
 		[self.payloadSender createOperationsForQueuedRequestsInContext:self.managedObjectContext];
 	}
 }
@@ -421,12 +433,12 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 }
 
 - (BOOL)saveConfiguration {
-	@synchronized(self.configuration) {
-		return [NSKeyedArchiver archiveRootObject:self.configuration toFile:[self configurationPath]];
-	}
+	ApptentiveAssertOperationQueue(self.operationQueue);
+	return [NSKeyedArchiver archiveRootObject:self.configuration toFile:[self configurationPath]];
 }
 
 - (void)updateNetworkingForCurrentNetworkStatus {
+	ApptentiveAssertOperationQueue(self.operationQueue);
 	BOOL networkWasAvailable = self.networkAvailable;
 
 	ApptentiveNetworkStatus status = [self.reachability currentNetworkStatus];
@@ -445,60 +457,85 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 }
 
 - (void)addLaunchMetric {
+	ApptentiveAssertOperationQueue(self.operationQueue);
+
 	[self engageApptentiveAppEvent:ATInteractionAppEventLabelLaunch];
 }
 
 - (void)addExitMetric {
+	ApptentiveAssertOperationQueue(self.operationQueue);
+
 	[self engageApptentiveAppEvent:ATInteractionAppEventLabelExit];
 }
 
 #pragma mark Message Center
 
-- (BOOL)presentMessageCenterFromViewController:(nullable UIViewController *)viewController {
-	return [self presentMessageCenterFromViewController:viewController withCustomData:nil];
+- (void)presentMessageCenterFromViewController:(nullable UIViewController *)viewController completion:(void (^ _Nullable)(BOOL))completion {
+	[self presentMessageCenterFromViewController:viewController withCustomData:nil completion:completion];
 }
 
-- (BOOL)presentMessageCenterFromViewController:(nullable UIViewController *)viewController withCustomData:(nullable NSDictionary *)customData {
+- (void)presentMessageCenterFromViewController:(nullable UIViewController *)viewController withCustomData:(nullable NSDictionary *)customData completion:(void (^ _Nullable)(BOOL))completion {
+	
+	if (![NSThread isMainThread]) {
+		[self presentMessageCenterFromViewController:viewController withCustomData:customData completion:completion];
+		return;
+	}
+	
 	if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateBackground) {
 		// Only present Message Center UI in Active state.
-		return NO;
+		if (completion) {
+			completion(NO);
+		}
+		return;
 	}
 
 	self.currentCustomData = customData;
 
 	if (viewController.presentedViewController) {
 		ApptentiveLogError(@"Attempting to present Apptentive Message Center from View Controller that is already presenting a modal view controller");
-		return NO;
+		if (completion) {
+			completion(NO);
+		}
+		return;
 	}
 
 	if (self.presentedMessageCenterViewController != nil) {
 		ApptentiveLogInfo(@"Apptentive message center controller already shown.");
-		return NO;
-	}
-
-	BOOL didShowMessageCenter = [[ApptentiveInteraction apptentiveAppInteraction] engage:ApptentiveEngagementMessageCenterEvent fromViewController:viewController];
-
-	if (!didShowMessageCenter) {
-		ApptentiveNavigationController *navigationController = [[ApptentiveUtilities storyboard] instantiateViewControllerWithIdentifier:@"NoPayloadNavigation"];
-
-		if (viewController != nil) {
-			[viewController presentViewController:navigationController animated:YES completion:nil];
-		} else {
-			[navigationController presentAnimated:YES completion:nil];
+		if (completion) {
+			completion(NO);
 		}
+		return;
 	}
 
-	return didShowMessageCenter;
+	[self engage:ApptentiveEngagementMessageCenterEvent fromInteraction:[ApptentiveInteraction apptentiveAppInteraction] fromViewController:viewController userInfo:nil customData:nil extendedData:nil completion:^(BOOL didShowMessageCenter) {
+		dispatch_sync(dispatch_get_main_queue(), ^{
+			if (!didShowMessageCenter) {
+				ApptentiveNavigationController *navigationController = [[ApptentiveUtilities storyboard] instantiateViewControllerWithIdentifier:@"NoPayloadNavigation"];
+				
+				if (viewController != nil) {
+					[viewController presentViewController:navigationController animated:YES completion:nil];
+				} else {
+					[navigationController presentAnimated:YES completion:nil];
+				}
+			}
+			
+			if (completion) {
+				completion(didShowMessageCenter);
+			}
+		});
+	}];
 }
 
 - (void)dismissMessageCenterAnimated:(BOOL)animated completion:(void (^)(void))completion {
+	ApptentiveAssertMainQueue
 	self.currentCustomData = nil;
 
 	if (self.presentedMessageCenterViewController != nil) {
 		UIViewController *vc = [self.presentedMessageCenterViewController presentingViewController];
-		[vc dismissViewControllerAnimated:YES completion:^{
-			completion();
-		}];
+		[vc dismissViewControllerAnimated:YES
+							   completion:^{
+								 completion();
+							   }];
 		return;
 	}
 
@@ -522,14 +559,10 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 
 #pragma mark Message Polling
 
-- (NSUInteger)unreadMessageCount {
-	return self.messageManager.unreadCount;
-}
-
 - (void)updateMessageCheckingTimer {
 	ApptentiveAssertOperationQueue(self.operationQueue);
 	if (self.messageManager != nil) {
-		if (self.networkAvailable) {
+		if (self.networkAvailable && self.foreground) {
 			if (self.messageCenterInForeground) {
 				self.messageManager.pollingInterval = self.configuration.messageCenter.foregroundPollingInterval;
 			} else {
@@ -542,35 +575,59 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 }
 
 - (void)messageCenterEnteredForeground {
-	[self.operationQueue addOperationWithBlock:^{
-        _messageCenterInForeground = YES;
-        
-        ApptentiveAssertNotNil(self.messageManager, @"Message manager is nil");
-        [self.messageManager checkForMessages];
-        
-        [self updateMessageCheckingTimer];
+	[self.operationQueue dispatchAsync:^{
+	  _messageCenterInForeground = YES;
+
+	  ApptentiveAssertNotNil(self.messageManager, @"Message manager is nil");
+	  [self.messageManager checkForMessages];
+
+	  [self updateMessageCheckingTimer];
 	}];
 }
 
 - (void)messageCenterLeftForeground {
-	[self.operationQueue addOperationWithBlock:^{
-		_messageCenterInForeground = NO;
+	[self.operationQueue dispatchAsync:^{
+	  _messageCenterInForeground = NO;
 
-		[self updateMessageCheckingTimer];
+	  [self updateMessageCheckingTimer];
 
-		if (self.presentedMessageCenterViewController) {
-			self.presentedMessageCenterViewController = nil;
-		}
+	  if (self.presentedMessageCenterViewController) {
+		  self.presentedMessageCenterViewController = nil;
+	  }
+	}];
+}
+
+#pragma mark - Person name/email
+
+- (void)setPersonName:(NSString *)personName {
+	_personName = personName;
+
+	[self.operationQueue dispatchAsync:^{
+		self.conversationManager.activeConversation.person.name = personName;
+		[self schedulePersonUpdate];
+	}];
+}
+
+- (void)setPersonEmailAddress:(NSString *)personEmailAddress {
+	_personEmailAddress = personEmailAddress;
+
+	[self.operationQueue dispatchAsync:^{
+		self.conversationManager.activeConversation.person.emailAddress = personEmailAddress;
+		[self schedulePersonUpdate];
 	}];
 }
 
 #pragma mark - Conversation manager delegate
 
 - (void)conversationManager:(ApptentiveConversationManager *)manager conversationDidChangeState:(ApptentiveConversation *)conversation {
+	ApptentiveAssertOperationQueue(self.operationQueue);
+
+	_personName = conversation.person.name;
+	_personEmailAddress = conversation.person.emailAddress;
+
 	// Anonymous pending conversations will not yet have a token, so we can't finish starting up yet in that case.
 	if (conversation.state != ApptentiveConversationStateAnonymousPending &&
 		conversation.state != ApptentiveConversationStateLegacyPending) {
-
 		if (conversation.state == ApptentiveConversationStateAnonymous) {
 			[self.payloadSender updateQueuedRequestsInContext:self.managedObjectContext withConversation:conversation];
 
@@ -589,24 +646,24 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 #pragma mark - Authentication
 
 - (void)authenticationDidFailNotification:(NSNotification *)notification {
-	[self.operationQueue addOperationWithBlock:^{
-		ApptentiveConversationState conversationState = self.conversationManager.activeConversation.state;
-        if (conversationState == ApptentiveConversationStateLoggedIn && self.authenticationFailureCallback) {
-            NSString *conversationIdentifier = ApptentiveDictionaryGetString(notification.userInfo, ApptentiveAuthenticationDidFailNotificationKeyConversationIdentifier);
-            
-            if (![conversationIdentifier isEqualToString:self.conversationManager.activeConversation.identifier]) {
-                ApptentiveLogDebug(@"Conversation identifier mismatch");
-                return;
-            }
-            
-            NSString *errorType = ApptentiveDictionaryGetString(notification.userInfo, ApptentiveAuthenticationDidFailNotificationKeyErrorType);
-            NSString *errorMessage = ApptentiveDictionaryGetString(notification.userInfo, ApptentiveAuthenticationDidFailNotificationKeyErrorMessage);
-            ApptentiveAuthenticationFailureReason reason = parseAuthenticationFailureReason(errorType);
-            self.authenticationFailureCallback(reason, errorMessage);
-		} else if (conversationState == ApptentiveConversationStateAnonymousPending || conversationState == ApptentiveConversationStateLegacyPending) {
-			ApptentiveAssertFail(@"Authentication failure when creating conversation. Please double-check your Apptentive App Key and Apptentive App Signature.");
+	ApptentiveAssertOperationQueue(self.operationQueue);
+
+	ApptentiveConversationState conversationState = self.conversationManager.activeConversation.state;
+	if (conversationState == ApptentiveConversationStateLoggedIn && self.authenticationFailureCallback) {
+		NSString *conversationIdentifier = ApptentiveDictionaryGetString(notification.userInfo, ApptentiveAuthenticationDidFailNotificationKeyConversationIdentifier);
+
+		if (![conversationIdentifier isEqualToString:self.conversationManager.activeConversation.identifier]) {
+			ApptentiveLogDebug(@"Conversation identifier mismatch");
+			return;
 		}
-	}];
+
+		NSString *errorType = ApptentiveDictionaryGetString(notification.userInfo, ApptentiveAuthenticationDidFailNotificationKeyErrorType);
+		NSString *errorMessage = ApptentiveDictionaryGetString(notification.userInfo, ApptentiveAuthenticationDidFailNotificationKeyErrorMessage);
+		ApptentiveAuthenticationFailureReason reason = parseAuthenticationFailureReason(errorType);
+		self.authenticationFailureCallback(reason, errorMessage);
+	} else if (conversationState == ApptentiveConversationStateAnonymousPending || conversationState == ApptentiveConversationStateLegacyPending) {
+		ApptentiveAssertFail(@"Authentication failure when creating conversation. Please double-check your Apptentive App Key and Apptentive App Signature.");
+	}
 }
 
 #pragma mark - Paths
@@ -635,6 +692,7 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 #pragma mark Properties
 
 - (ApptentiveMessageManager *)messageManager {
+	ApptentiveAssertOperationQueue(self.operationQueue);
 	return self.conversationManager.messageManager;
 }
 

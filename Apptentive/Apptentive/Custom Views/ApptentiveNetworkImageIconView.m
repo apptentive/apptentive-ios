@@ -7,8 +7,8 @@
 //
 
 #import "ApptentiveNetworkImageIconView.h"
-#import "ApptentiveUtilities.h"
 #import "ApptentiveBackend.h"
+#import "ApptentiveUtilities.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

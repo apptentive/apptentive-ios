@@ -6,23 +6,25 @@
 //  Copyright © 2017 Apptentive, Inc. All rights reserved.
 //
 
-#import <XCTest/XCTest.h>
 #import "ApptentiveJSONSerialization.h"
+#import <XCTest/XCTest.h>
+
 
 @interface ApptentiveJSONSerializationTests : XCTestCase
 
 @end
 
+
 @implementation ApptentiveJSONSerializationTests
 
 - (void)setUp {
-    [super setUp];
-    // Put setup code here. This method is called before the invocation of each test method in the class.
+	[super setUp];
+	// Put setup code here. This method is called before the invocation of each test method in the class.
 }
 
 - (void)tearDown {
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
-    [super tearDown];
+	// Put teardown code here. This method is called after the invocation of each test method in the class.
+	[super tearDown];
 }
 
 - (void)testValidSerialization {

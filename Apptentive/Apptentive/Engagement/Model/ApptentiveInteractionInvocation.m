@@ -237,50 +237,50 @@ NS_ASSUME_NONNULL_BEGIN
 			}
 		} else if ([operatorString isEqualToString:@"$before"] || [operatorString isEqualToString:@"$after"]) {
 			predicate = [NSPredicate predicateWithBlock:^BOOL(id _Nonnull evaluatedObject, NSDictionary<NSString *, id> *_Nullable bindings) {
-				NSDictionary *complexValue = [evaluatedObject valueForKeyPath:keyPath];
+			  NSDictionary *complexValue = [evaluatedObject valueForKeyPath:keyPath];
 
-				// Time comparison with "never" always returns false.
-				if (complexValue == nil || [complexValue isKindOfClass:[NSNull class]]) {
-					return NO;
-				}
+			  // Time comparison with "never" always returns false.
+			  if (complexValue == nil || [complexValue isKindOfClass:[NSNull class]]) {
+				  return NO;
+			  }
 
-				// $before and $after work with datetimes only.
-				if ([complexValue[@"_type"] isEqualToString:@"datetime"]) {
-					NSNumber *fieldValue = (NSNumber *)[complexValue valueForKey:@"sec"];
-					NSNumber *parameterNumber = (NSNumber *)parameter;
+			  // $before and $after work with datetimes only.
+			  if ([complexValue[@"_type"] isEqualToString:@"datetime"]) {
+				  NSNumber *fieldValue = (NSNumber *)[complexValue valueForKey:@"sec"];
+				  NSNumber *parameterNumber = (NSNumber *)parameter;
 
-					if (fieldValue && parameterNumber) {
-						NSTimeInterval fieldSeconds = fieldValue.doubleValue;
-						NSTimeInterval parameterSeconds = parameterNumber.doubleValue + [[NSDate date] timeIntervalSince1970];
-						if ([operatorString isEqualToString:@"$before"]) {
-							return fieldSeconds < parameterSeconds;
-						} else {
-							return fieldSeconds > parameterSeconds;
-						}
-					}
-				}
+				  if (fieldValue && parameterNumber) {
+					  NSTimeInterval fieldSeconds = fieldValue.doubleValue;
+					  NSTimeInterval parameterSeconds = parameterNumber.doubleValue + [[NSDate date] timeIntervalSince1970];
+					  if ([operatorString isEqualToString:@"$before"]) {
+						  return fieldSeconds < parameterSeconds;
+					  } else {
+						  return fieldSeconds > parameterSeconds;
+					  }
+				  }
+			  }
 
-				return NO;
+			  return NO;
 			}];
 		} else if (parameterIsPrimitiveType) {
 			BOOL hasError;
 			NSPredicateOperatorType operatorType = [self predicateOperatorTypeFromString:operatorString hasError:&hasError];
-						if (!hasError && [self operator:operatorType isValidForParameter:parameter]) {
-							predicate = [self predicateWithLeftKeyPath:keyPath rightValue:parameter operatorType:operatorType];
-						} else {
-							predicate = [NSPredicate predicateWithValue:NO];
-						}
+												if (!hasError && [self operator:operatorType isValidForParameter:parameter]) {
+													predicate = [self predicateWithLeftKeyPath:keyPath rightValue:parameter operatorType:operatorType];
+												} else {
+													predicate = [NSPredicate predicateWithValue:NO];
+												}
 		} else if (parameterIsDictionary) {
 			predicate = [NSCompoundPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
-				BOOL hasError;
-				NSPredicateOperatorType operatorType = [self predicateOperatorTypeFromString:operatorString hasError:&hasError];
-				if (!hasError && [self operator:operatorType isValidForParameter:parameter]) {
-					NSPredicate *localPredicate = [self predicateWithLeftKeyPath:keyPath forObject:evaluatedObject rightComplexObject:(NSDictionary *)parameter operatorType:operatorType];
-					
-					return [localPredicate evaluateWithObject:nil];
-				} else {
-					return NO;
-				}
+			  BOOL hasError;
+			  NSPredicateOperatorType operatorType = [self predicateOperatorTypeFromString:operatorString hasError:&hasError];
+								if (!hasError && [self operator:operatorType isValidForParameter:parameter]) {
+									NSPredicate *localPredicate = [self predicateWithLeftKeyPath:keyPath forObject:evaluatedObject rightComplexObject:(NSDictionary *)parameter operatorType:operatorType];
+
+									return [localPredicate evaluateWithObject:nil];
+								} else {
+									return NO;
+								}
 			}];
 		}
 

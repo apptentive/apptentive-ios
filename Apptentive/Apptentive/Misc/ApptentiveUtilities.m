@@ -7,11 +7,11 @@
 //
 
 #import "ApptentiveUtilities.h"
-#import <QuartzCore/QuartzCore.h>
 #import <AVFoundation/AVFoundation.h>
+#import <QuartzCore/QuartzCore.h>
 #include <stdlib.h>
-#import <sys/utsname.h>
 #import <sys/sysctl.h>
+#import <sys/utsname.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -51,21 +51,21 @@ UIViewController *topChildViewController(UIViewController *viewController) {
 	static NSString *_applicationSupportPath;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-		_applicationSupportPath = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES).firstObject;
+	  _applicationSupportPath = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES).firstObject;
 
-		NSError *error;
+	  NSError *error;
 
-		if (![[NSFileManager defaultManager] createDirectoryAtPath:_applicationSupportPath withIntermediateDirectories:YES attributes:nil error:&error]) {
-			ApptentiveLogError(@"Failed to create Application Support directory: %@", _applicationSupportPath);
-			ApptentiveLogError(@"Error was: %@", error);
-			_applicationSupportPath = nil;
-		}
+	  if (![[NSFileManager defaultManager] createDirectoryAtPath:_applicationSupportPath withIntermediateDirectories:YES attributes:nil error:&error]) {
+		  ApptentiveLogError(@"Failed to create Application Support directory: %@", _applicationSupportPath);
+		  ApptentiveLogError(@"Error was: %@", error);
+		  _applicationSupportPath = nil;
+	  }
 
 
-		if (![[NSFileManager defaultManager] setAttributes:@{ NSFileProtectionKey: NSFileProtectionCompleteUntilFirstUserAuthentication } ofItemAtPath:_applicationSupportPath error:&error]) {
-			ApptentiveLogError(@"Failed to set file protection level: %@", _applicationSupportPath);
-			ApptentiveLogError(@"Error was: %@", error);
-		}
+	  if (![[NSFileManager defaultManager] setAttributes:@{ NSFileProtectionKey: NSFileProtectionCompleteUntilFirstUserAuthentication } ofItemAtPath:_applicationSupportPath error:&error]) {
+		  ApptentiveLogError(@"Failed to set file protection level: %@", _applicationSupportPath);
+		  ApptentiveLogError(@"Error was: %@", error);
+	  }
 	});
 
 	return _applicationSupportPath;
@@ -143,24 +143,24 @@ UIViewController *topChildViewController(UIViewController *viewController) {
 	static UIImage *iconFile = nil;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-		NSArray *iconFiles = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleIconFiles"];
-		if (!iconFiles) {
-			// Asset Catalog app icons
-			iconFiles = [NSBundle mainBundle].infoDictionary[@"CFBundleIcons"][@"CFBundlePrimaryIcon"][@"CFBundleIconFiles"];
-		}
+	  NSArray *iconFiles = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleIconFiles"];
+	  if (!iconFiles) {
+		  // Asset Catalog app icons
+		  iconFiles = [NSBundle mainBundle].infoDictionary[@"CFBundleIcons"][@"CFBundlePrimaryIcon"][@"CFBundleIconFiles"];
+	  }
 
-		UIImage *maxImage = nil;
-		for (NSString *path in iconFiles) {
-			UIImage *image = [UIImage imageNamed:path];
-			if (maxImage == nil || maxImage.size.width < image.size.width) {
-				if (image.size.width >= 512) {
-					// Just in case someone stuck iTunesArtwork in there.
-					continue;
-				}
-				maxImage = image;
-			}
-		}
-		iconFile = maxImage;
+	  UIImage *maxImage = nil;
+	  for (NSString *path in iconFiles) {
+		  UIImage *image = [UIImage imageNamed:path];
+		  if (maxImage == nil || maxImage.size.width < image.size.width) {
+			  if (image.size.width >= 512) {
+				  // Just in case someone stuck iTunesArtwork in there.
+				  continue;
+			  }
+			  maxImage = image;
+		  }
+	  }
+	  iconFile = maxImage;
 	});
 	return iconFile;
 }
@@ -183,12 +183,12 @@ UIViewController *topChildViewController(UIViewController *viewController) {
 
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-		dateFormatter = [[NSDateFormatter alloc] init];
-		NSLocale *enUSLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
-		NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
-		[dateFormatter setLocale:enUSLocale];
-		[dateFormatter setCalendar:calendar];
-		[dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+	  dateFormatter = [[NSDateFormatter alloc] init];
+	  NSLocale *enUSLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
+	  NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+	  [dateFormatter setLocale:enUSLocale];
+	  [dateFormatter setCalendar:calendar];
+	  [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
 	});
 
 	NSTimeZone *timeZone = [NSTimeZone defaultTimeZone];
@@ -415,7 +415,7 @@ UIViewController *topChildViewController(UIViewController *viewController) {
 + (NSString *)deviceMachine {
 	struct utsname systemInfo;
 	uname(&systemInfo);
-	
+
 	return [NSString stringWithCString:systemInfo.machine encoding:NSUTF8StringEncoding];
 }
 

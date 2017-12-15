@@ -8,16 +8,16 @@
 
 #import <XCTest/XCTest.h>
 
-#import "Apptentive_Private.h"
 #import "Apptentive+Debugging.h"
+#import "ApptentiveAppRelease.h"
 #import "ApptentiveBackend+Engagement.h"
+#import "ApptentiveBackend.h"
+#import "ApptentiveConversation.h"
 #import "ApptentiveInteractionInvocation.h"
 #import "ApptentiveInteractionUsageData.h"
-#import "ApptentiveConversation.h"
-#import "ApptentiveAppRelease.h"
-#import "ApptentiveVersion.h"
-#import "ApptentiveBackend.h"
 #import "ApptentivePerson.h"
+#import "ApptentiveVersion.h"
+#import "Apptentive_Private.h"
 
 
 @interface ApptentiveInteractionUsageDataTests : XCTestCase

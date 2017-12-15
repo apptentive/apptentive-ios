@@ -10,24 +10,24 @@
 #import "ApptentiveAttachment.h"
 #import "ApptentiveMessageSender.h"
 
-#import "ApptentiveBackend.h"
 #import "Apptentive.h"
-#import "Apptentive_Private.h"
 #import "ApptentiveAttachmentCell.h"
-#import "ApptentiveUtilities.h"
+#import "ApptentiveBackend.h"
+#import "ApptentiveDefines.h"
 #import "ApptentiveInteraction.h"
 #import "ApptentivePerson.h"
 #import "ApptentiveReachability.h"
-#import "ApptentiveDefines.h"
+#import "ApptentiveUtilities.h"
+#import "Apptentive_Private.h"
+#import "ApptentiveDispatchQueue.h"
+#import "ApptentiveGCDDispatchQueue.h"
+#import "ApptentiveBackend+Engagement.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 NSString *const ATMessageCenterServerErrorDomain = @"com.apptentive.MessageCenterServerError";
 NSString *const ATMessageCenterErrorMessagesKey = @"com.apptentive.MessageCenterErrorMessages";
 NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
-
-NSString *const ATMessageCenterDidSkipProfileKey = @"ATMessageCenterDidSkipProfileKey";
-NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKey";
 
 
 @interface ApptentiveMessageCenterViewModel ()
@@ -42,13 +42,11 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 
 @implementation ApptentiveMessageCenterViewModel
 
-- (instancetype)initWithConversation:(ApptentiveConversation *)conversation interaction:(ApptentiveInteraction *)interaction messageManager:(ApptentiveMessageManager *)messageManager {
+- (instancetype)initWithInteraction:(ApptentiveInteraction *)interaction messageManager:(ApptentiveMessageManager *)messageManager {
 	if ((self = [super init])) {
-		APPTENTIVE_CHECK_INIT_NOT_NIL_ARG(conversation);
 		APPTENTIVE_CHECK_INIT_NOT_NIL_ARG(interaction);
 		APPTENTIVE_CHECK_INIT_NOT_NIL_ARG(messageManager);
 
-		_conversation = conversation;
 		_interaction = interaction;
 		_messageManager = messageManager;
 		messageManager.delegate = self;
@@ -57,7 +55,7 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 		_dateFormatter.dateStyle = NSDateFormatterLongStyle;
 		_dateFormatter.timeStyle = NSDateFormatterNoStyle;
 
-		_attachmentDownloadSession = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:self delegateQueue:self.messageManager.operationQueue];
+		_attachmentDownloadSession = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:self delegateQueue:((ApptentiveGCDDispatchQueue *)self.messageManager.operationQueue).queue];
 		_taskIndexPaths = [NSMutableDictionary dictionary];
 	}
 	return self;
@@ -353,14 +351,14 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 
 		[userInfo setObject:@"CompoundMessage" forKey:@"message_type"];
 
-		[self.interaction engage:ATInteractionMessageCenterEventLabelRead fromViewController:nil userInfo:userInfo];
+		[Apptentive.shared.backend engage:ATInteractionMessageCenterEventLabelRead fromInteraction:self.interaction fromViewController:nil userInfo:userInfo];
 	}
 
 	if (message.state == ApptentiveMessageStateUnread) {
-		[self.messageManager.operationQueue addOperationWithBlock:^{
-			message.state = ApptentiveMessageStateRead;
-			[self.messageManager updateUnreadCount];
-			[self.messageManager saveMessageStore];
+		[self.messageManager.operationQueue dispatchAsync:^{
+		  message.state = ApptentiveMessageStateRead;
+		  [self.messageManager updateUnreadCount];
+		  [self.messageManager saveMessageStore];
 		}];
 	}
 }
@@ -454,13 +452,13 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 	}
 
 	dispatch_async(dispatch_get_main_queue(), ^{
-		// -completeMoveToStorageFor: must be called on main thread.
-		[[self fileAttachmentAtIndexPath:attachmentIndexPath] completeMoveToStorageFor:finalLocation];
-		[self.delegate messageCenterViewModel:self didLoadAttachmentThumbnailAtIndexPath:attachmentIndexPath];
+	  // -completeMoveToStorageFor: must be called on main thread.
+	  [[self fileAttachmentAtIndexPath:attachmentIndexPath] completeMoveToStorageFor:finalLocation];
+	  [self.delegate messageCenterViewModel:self didLoadAttachmentThumbnailAtIndexPath:attachmentIndexPath];
 
-		[self.messageManager.operationQueue addOperationWithBlock:^{
-			[self.messageManager saveMessageStore];
-		}];
+	  [self.messageManager.operationQueue dispatchAsync:^{
+		[self.messageManager saveMessageStore];
+	  }];
 	});
 }
 
@@ -468,7 +466,7 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 	NSIndexPath *attachmentIndexPath = [self indexPathForTask:downloadTask];
 
 	dispatch_async(dispatch_get_main_queue(), ^{
-        [self.delegate messageCenterViewModel:self attachmentDownloadAtIndexPath:attachmentIndexPath didProgress:(double) totalBytesWritten / (double) totalBytesExpectedToWrite];
+	  [self.delegate messageCenterViewModel:self attachmentDownloadAtIndexPath:attachmentIndexPath didProgress:(double)totalBytesWritten / (double)totalBytesExpectedToWrite];
 	});
 }
 
@@ -479,7 +477,7 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 	[self removeTask:task];
 
 	dispatch_async(dispatch_get_main_queue(), ^{
-		[self.delegate messageCenterViewModel:self didFailToLoadAttachmentThumbnailAtIndexPath:attachmentIndexPath error:error];
+	  [self.delegate messageCenterViewModel:self didFailToLoadAttachmentThumbnailAtIndexPath:attachmentIndexPath error:error];
 	});
 }
 
@@ -537,23 +535,19 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 }
 
 - (BOOL)didSkipProfile {
-	return [[self.conversation.userInfo objectForKey:ATMessageCenterDidSkipProfileKey] boolValue];
+	return self.messageManager.didSkipProfile;
 }
 
 - (void)setDidSkipProfile:(BOOL)didSkipProfile {
-	[self.conversation setUserInfo:@(didSkipProfile) forKey:ATMessageCenterDidSkipProfileKey];
+	self.messageManager.didSkipProfile = didSkipProfile;
 }
 
 - (nullable NSString *)draftMessage {
-	return self.conversation.userInfo[ATMessageCenterDraftMessageKey];
+	return self.messageManager.draftMessage;
 }
 
 - (void)setDraftMessage:(nullable NSString *)draftMessage {
-	if (draftMessage) {
-		[self.conversation setUserInfo:draftMessage forKey:ATMessageCenterDraftMessageKey];
-	} else {
-		[self.conversation removeUserInfoForKey:ATMessageCenterDraftMessageKey];
-	}
+	self.messageManager.draftMessage = draftMessage;
 }
 
 #pragma mark - Private

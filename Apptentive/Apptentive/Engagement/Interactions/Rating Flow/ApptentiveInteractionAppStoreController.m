@@ -7,12 +7,12 @@
 //
 
 #import "ApptentiveInteractionAppStoreController.h"
-#import "Apptentive_Private.h"
-#import "ApptentiveUtilities.h"
-#import "ApptentiveInteraction.h"
 #import "ApptentiveBackend+Engagement.h"
-#import "UIAlertController+Apptentive.h"
+#import "ApptentiveInteraction.h"
 #import "ApptentiveStoreProductViewController.h"
+#import "ApptentiveUtilities.h"
+#import "Apptentive_Private.h"
+#import "UIAlertController+Apptentive.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -71,7 +71,7 @@ NSString *const ATInteractionAppStoreRatingEventLabelUnableToRate = @"unable_to_
 }
 
 - (void)showUnableToOpenAppStoreDialog {
-	[self.interaction engage:ATInteractionAppStoreRatingEventLabelUnableToRate fromViewController:self.presentingViewController];
+	[Apptentive.shared.backend engage:ATInteractionAppStoreRatingEventLabelUnableToRate fromInteraction:self.interaction fromViewController:self.presentingViewController];
 
 	NSString *title;
 	NSString *message;
@@ -128,7 +128,7 @@ NSString *const ATInteractionAppStoreRatingEventLabelUnableToRate = @"unable_to_
 		}
 
 		if (attemptToOpenURL) {
-			[self.interaction engage:ATInteractionAppStoreRatingEventLabelOpenAppStoreURL fromViewController:self.presentingViewController];
+			[Apptentive.shared.backend engage:ATInteractionAppStoreRatingEventLabelOpenAppStoreURL fromInteraction:self.interaction fromViewController:self.presentingViewController];
 
 			BOOL openedURL = [[UIApplication sharedApplication] openURL:url];
 			if (!openedURL) {
@@ -149,22 +149,23 @@ NSString *const ATInteractionAppStoreRatingEventLabelUnableToRate = @"unable_to_
 	if ([SKStoreProductViewController class] != NULL && [self appID]) {
 		ApptentiveStoreProductViewController *vc = [[ApptentiveStoreProductViewController alloc] init];
 		vc.delegate = self;
-		[vc loadProductWithParameters:@{ SKStoreProductParameterITunesItemIdentifier: self.appID } completionBlock:^(BOOL result, NSError *error) {
-			if (error) {
-				ApptentiveLogError(@"Error loading product view: %@", error);
-				[self showUnableToOpenAppStoreDialog];
-			} else {
-				[self.interaction engage:ATInteractionAppStoreRatingEventLabelOpenStoreKit fromViewController:self.presentingViewController];
-				
-				UIViewController *presentingVC = self.presentingViewController;
+		[vc loadProductWithParameters:@{ SKStoreProductParameterITunesItemIdentifier: self.appID }
+					  completionBlock:^(BOOL result, NSError *error) {
+						if (error) {
+							ApptentiveLogError(@"Error loading product view: %@", error);
+							[self showUnableToOpenAppStoreDialog];
+						} else {
+							[Apptentive.shared.backend engage:ATInteractionAppStoreRatingEventLabelOpenStoreKit fromInteraction:self.interaction fromViewController:self.presentingViewController];
 
-				if (presentingVC != nil) {
-					[presentingVC presentViewController:vc animated:YES completion:nil];
-				} else {
-					[vc presentAnimated:YES completion:nil];
-				}
-			}
-		}];
+							UIViewController *presentingVC = self.presentingViewController;
+
+							if (presentingVC != nil) {
+								[presentingVC presentViewController:vc animated:YES completion:nil];
+							} else {
+								[vc presentAnimated:YES completion:nil];
+							}
+						}
+					  }];
 	} else {
 		[self showUnableToOpenAppStoreDialog];
 	}
@@ -176,7 +177,7 @@ NSString *const ATInteractionAppStoreRatingEventLabelUnableToRate = @"unable_to_
 }
 
 - (void)openMacAppStore {
-	[self.interaction engage:ATInteractionAppStoreRatingEventLabelOpenMacAppStore fromViewController:self.presentingViewController];
+	[Apptentive.shared.backend engage:ATInteractionAppStoreRatingEventLabelOpenMacAppStore fromInteraction:self.interaction fromViewController:self.presentingViewController];
 }
 
 @end

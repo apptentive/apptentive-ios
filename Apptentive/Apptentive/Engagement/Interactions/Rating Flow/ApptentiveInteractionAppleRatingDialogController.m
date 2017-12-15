@@ -7,9 +7,9 @@
 //
 
 #import "ApptentiveInteractionAppleRatingDialogController.h"
+#import "ApptentiveBackend+Engagement.h"
 #import "ApptentiveInteraction.h"
 #import "Apptentive_Private.h"
-#import "ApptentiveBackend+Engagement.h"
 #import <StoreKit/StoreKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
@@ -38,7 +38,7 @@ NSString *const ApptentiveInteractionAppleRatingDialogEventLabelFallback = @"fal
 - (void)presentInteractionFromViewController:(nullable UIViewController *)viewController {
 	[super presentInteractionFromViewController:viewController];
 
-	[self.interaction engage:ApptentiveInteractionAppleRatingDialogEventLabelRequest fromViewController:viewController];
+	[Apptentive.shared.backend engage:ApptentiveInteractionAppleRatingDialogEventLabelRequest fromInteraction:self.interaction fromViewController:viewController];
 
 	// Guard against not having store review controller class in OS and/or SDK
 	if (@available(iOS 10.3, *)) {
@@ -65,7 +65,7 @@ NSString *const ApptentiveInteractionAppleRatingDialogEventLabelFallback = @"fal
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIWindowDidBecomeVisibleNotification object:nil];
 
 	if (self.didShowReviewController) {
-		[self.interaction engage:ApptentiveInteractionAppleRatingDialogEventLabelShown fromViewController:self.presentingViewController];
+		[Apptentive.shared.backend engage:ApptentiveInteractionAppleRatingDialogEventLabelShown fromInteraction:self.interaction fromViewController:self.presentingViewController];
 	} else {
 		[self invokeNotShownInteractionFromViewController:self.presentingViewController withReason:nil];
 	}
@@ -83,7 +83,7 @@ NSString *const ApptentiveInteractionAppleRatingDialogEventLabelFallback = @"fal
 
 	ApptentiveLogInfo(@"Apple Rating Dialog did not appear (reason: %@)", notShownReason);
 
-	[self.interaction engage:ApptentiveInteractionAppleRatingDialogEventLabelNotShown fromViewController:viewController userInfo:userInfo];
+	[Apptentive.shared.backend engage:ApptentiveInteractionAppleRatingDialogEventLabelNotShown fromInteraction:self.interaction fromViewController:viewController userInfo:userInfo];
 
 	NSString *notShownInteractionIdentifier = self.interaction.configuration[@"not_shown_interaction"];
 
@@ -91,7 +91,7 @@ NSString *const ApptentiveInteractionAppleRatingDialogEventLabelFallback = @"fal
 		ApptentiveInteraction *interaction = [Apptentive.shared.backend interactionForIdentifier:notShownInteractionIdentifier];
 
 		if (interaction) {
-			[self.interaction engage:ApptentiveInteractionAppleRatingDialogEventLabelFallback fromViewController:viewController userInfo:@{ @"fallback_interaction_id": notShownInteractionIdentifier }];
+			[Apptentive.shared.backend engage:ApptentiveInteractionAppleRatingDialogEventLabelFallback fromInteraction:self.interaction fromViewController:viewController userInfo:@{ @"fallback_interaction_id": notShownInteractionIdentifier }];
 
 			[[Apptentive sharedConnection].backend presentInteraction:interaction fromViewController:viewController];
 		} else {

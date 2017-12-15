@@ -6,9 +6,9 @@
 //  Copyright (c) 2017 Apptentive, Inc. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import "Apptentive.h"
 #import "ApptentiveLogTag.h"
+#import <Foundation/Foundation.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -25,7 +25,7 @@ extern BOOL ApptentiveCanLogLevel(ApptentiveLogLevel level);
 extern NSString *NSStringFromApptentiveLogLevel(ApptentiveLogLevel level);
 extern ApptentiveLogLevel ApptentiveLogLevelFromString(NSString *level);
 
-typedef void(^ApptentiveLoggerCallback)(ApptentiveLogLevel level, NSString *message);
+typedef void (^ApptentiveLoggerCallback)(ApptentiveLogLevel level, NSString *message);
 
 void ApptentiveLogCrit(id arg, ...);
 void ApptentiveLogError(id arg, ...);

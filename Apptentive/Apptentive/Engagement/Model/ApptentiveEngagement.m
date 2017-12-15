@@ -127,14 +127,12 @@ static NSString *const ATEngagementInteractionsInvokesLastDateKey = @"ATEngageme
 }
 
 - (void)resetVersion {
-	@synchronized(self) {
-		for (ApptentiveCount *count in self.codePoints.allValues) {
-			[count resetVersion];
-		}
+	for (ApptentiveCount *count in self.codePoints.allValues) {
+		[count resetVersion];
+	}
 
-		for (ApptentiveCount *count in self.interactions.allValues) {
-			[count resetVersion];
-		}
+	for (ApptentiveCount *count in self.interactions.allValues) {
+		[count resetVersion];
 	}
 }
 

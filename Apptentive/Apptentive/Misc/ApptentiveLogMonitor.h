@@ -10,6 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+
 @interface ApptentiveLogMonitorConfigration : NSObject
 
 /** Email recipients for the log email */
@@ -22,6 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly, getter=isRestored) BOOL restored;
 
 @end
+
 
 @interface ApptentiveLogMonitor : NSObject
 

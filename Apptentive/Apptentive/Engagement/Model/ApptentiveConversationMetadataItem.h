@@ -6,8 +6,8 @@
 //  Copyright © 2017 Apptentive, Inc. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import "ApptentiveConversation.h"
+#import <Foundation/Foundation.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

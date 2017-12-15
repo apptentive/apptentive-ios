@@ -7,11 +7,11 @@
 //
 
 #import "CriteriaTests.h"
-#import "ApptentiveInteractionInvocation.h"
 #import "Apptentive.h"
 #import "ApptentiveConversation.h"
-#import "ApptentiveEngagement.h"
 #import "ApptentiveDevice.h"
+#import "ApptentiveEngagement.h"
+#import "ApptentiveInteractionInvocation.h"
 #import "ApptentivePerson.h"
 
 

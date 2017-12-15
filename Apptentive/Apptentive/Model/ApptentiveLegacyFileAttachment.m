@@ -7,9 +7,9 @@
 //
 
 #import "ApptentiveLegacyFileAttachment.h"
+#import "ApptentiveBackend.h"
 #import "ApptentiveLegacyMessage.h"
 #import "Apptentive_Private.h"
-#import "ApptentiveBackend.h"
 #import <MobileCoreServices/MobileCoreServices.h>
 
 NS_ASSUME_NONNULL_BEGIN

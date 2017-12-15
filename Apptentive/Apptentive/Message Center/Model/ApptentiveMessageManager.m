@@ -7,22 +7,26 @@
 //
 
 #import "ApptentiveMessageManager.h"
-#import "ApptentiveMessage.h"
-#import "ApptentiveMessageSender.h"
-#import "ApptentiveSerialRequest.h"
-#import "ApptentiveMessageStore.h"
-#import "Apptentive_Private.h"
-#import "ApptentiveBackend.h"
-#import "ApptentiveMessagePayload.h"
-#import "ApptentiveMessageGetRequest.h"
-#import "ApptentiveClient.h"
-#import "ApptentivePerson.h"
-#import "ApptentiveUtilities.h"
 #import "ApptentiveAttachment.h"
+#import "ApptentiveBackend.h"
+#import "ApptentiveClient.h"
+#import "ApptentiveMessage.h"
+#import "ApptentiveMessageGetRequest.h"
+#import "ApptentiveMessagePayload.h"
+#import "ApptentiveMessageSender.h"
+#import "ApptentiveMessageStore.h"
+#import "ApptentivePerson.h"
+#import "ApptentiveSerialRequest.h"
+#import "ApptentiveUtilities.h"
+#import "Apptentive_Private.h"
+#import "ApptentiveDispatchQueue.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 static NSString *const MessageStoreFileName = @"messages-v1.archive";
+
+NSString *const ATMessageCenterDidSkipProfileKey = @"ATMessageCenterDidSkipProfileKey";
+NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKey";
 
 
 @interface ApptentiveMessageManager ()
@@ -32,6 +36,7 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 @property (strong, nonatomic) NSDictionary *currentCustomData;
 @property (readonly, nonatomic) NSMutableDictionary *messageIdentifierIndex;
 @property (readonly, nonatomic) ApptentiveMessageStore *messageStore;
+@property (readonly, nonatomic) NSInteger unreadCount;
 
 @property (readonly, nonatomic) NSString *messageStorePath;
 @property (nullable, copy, nonatomic) void (^backgroundFetchBlock)(UIBackgroundFetchResult);
@@ -41,7 +46,7 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 
 @implementation ApptentiveMessageManager
 
-- (instancetype)initWithStoragePath:(NSString *)storagePath client:(ApptentiveClient *)client pollingInterval:(NSTimeInterval)pollingInterval conversation:(ApptentiveConversation *)conversation operationQueue:(NSOperationQueue *)operationQueue {
+- (instancetype)initWithStoragePath:(NSString *)storagePath client:(ApptentiveClient *)client pollingInterval:(NSTimeInterval)pollingInterval conversation:(ApptentiveConversation *)conversation operationQueue:(ApptentiveDispatchQueue *)operationQueue {
 	self = [super init];
 
 	if (self) {
@@ -57,6 +62,9 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 
 		_messageIdentifierIndex = [NSMutableDictionary dictionary];
 		_messageStore = [NSKeyedUnarchiver unarchiveObjectWithFile:self.messageStorePath] ?: [[ApptentiveMessageStore alloc] init];
+
+		_didSkipProfile = [conversation.userInfo[ATMessageCenterDidSkipProfileKey] boolValue];
+		_draftMessage = conversation.userInfo[ATMessageCenterDraftMessageKey];
 
 		for (ApptentiveMessage *message in _messageStore.messages) {
 			for (ApptentiveAttachment *attachment in message.attachments) {
@@ -100,11 +108,11 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 
 	ApptentiveRequestOperationCallback *callback = [ApptentiveRequestOperationCallback new];
 	callback.operationFinishCallback = ^(ApptentiveRequestOperation *operation) {
-        self.messageOperation = nil;
-        [self processMessageOperationResponse:operation];
+	  self.messageOperation = nil;
+	  [self processMessageOperationResponse:operation];
 	};
 	callback.operationFailCallback = ^(ApptentiveRequestOperation *operation, NSError *error) {
-        self.messageOperation = nil;
+	  self.messageOperation = nil;
 	};
 
 	ApptentiveMessageGetRequest *request = [[ApptentiveMessageGetRequest alloc] initWithConversationIdentifier:self.conversationIdentifier];
@@ -156,6 +164,26 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 	return result;
 }
 
+- (void)setDidSkipProfile:(BOOL)didSkipProfile {
+	_didSkipProfile = didSkipProfile;
+
+	[self.operationQueue dispatchAsync:^{
+		[self.conversation setUserInfo:@(didSkipProfile) forKey:ATMessageCenterDidSkipProfileKey];
+	}];
+}
+
+- (void)setDraftMessage:(NSString *)draftMessage {
+	_draftMessage = draftMessage;
+
+	[self.operationQueue dispatchAsync:^{
+		if (draftMessage == nil) {
+			[self.conversation removeUserInfoForKey:ATMessageCenterDraftMessageKey];
+		} else {
+			[self.conversation setUserInfo:draftMessage forKey:ATMessageCenterDraftMessageKey];
+		}
+	}];
+}
+
 #pragma mark Request Operation Delegate
 
 - (void)processMessageOperationResponse:(ApptentiveRequestOperation *)operation {
@@ -170,7 +198,7 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 	NSMutableDictionary *mutableMessageIdentifierIndex = [NSMutableDictionary dictionaryWithCapacity:messageListJSON.count];
 	NSMutableArray *addedMessages = [NSMutableArray array];
 	NSMutableArray *updatedMessages = [NSMutableArray array];
-	NSString *lastDownloadedMessageIdentifier;
+	NSString *lastDownloadedMessageIdentifier = self.messageStore.lastMessageIdentifier;
 
 	// Correlate messages from server with local messages
 	for (NSDictionary *messageJSON in messageListJSON) {
@@ -237,21 +265,21 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 		}
 
 		dispatch_sync(dispatch_get_main_queue(), ^{
-			[self.delegate messageManagerWillBeginUpdates:self];
+		  [self.delegate messageManagerWillBeginUpdates:self];
 
-			[self.messageStore.messages removeAllObjects];
-			[self.messageStore.messages addObjectsFromArray:mutableMessages];
-			_messageIdentifierIndex = mutableMessageIdentifierIndex;
+		  [self.messageStore.messages removeAllObjects];
+		  [self.messageStore.messages addObjectsFromArray:mutableMessages];
+		  _messageIdentifierIndex = mutableMessageIdentifierIndex;
 
-			for (ApptentiveMessage *newMessage in addedMessages) {
-				[self.delegate messageManager:self didInsertMessage:newMessage atIndex:[self.messages indexOfObject:newMessage]];
-			}
+		  for (ApptentiveMessage *newMessage in addedMessages) {
+			  [self.delegate messageManager:self didInsertMessage:newMessage atIndex:[self.messages indexOfObject:newMessage]];
+		  }
 
-			for (ApptentiveMessage *updatedMessage in updatedMessages) {
-				[self.delegate messageManager:self didUpdateMessage:updatedMessage atIndex:[self.messages indexOfObject:updatedMessage]];
-			}
+		  for (ApptentiveMessage *updatedMessage in updatedMessages) {
+			  [self.delegate messageManager:self didUpdateMessage:updatedMessage atIndex:[self.messages indexOfObject:updatedMessage]];
+		  }
 
-			[self.delegate messageManagerDidEndUpdates:self];
+		  [self.delegate messageManagerDidEndUpdates:self];
 		});
 
 		needsSave = YES;
@@ -288,18 +316,18 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 #pragma mark - Sending Messages
 
 - (void)sendMessage:(ApptentiveMessage *)message {
-	[self.operationQueue addOperationWithBlock:^{
-        message.sender = [[ApptentiveMessageSender alloc] initWithName:nil identifier:self.localUserIdentifier profilePhotoURL:nil];
-        
-        [self enqueueMessageForSending:message];
-        
-        [self appendMessage:message];
+	[self.operationQueue dispatchAsync:^{
+	  message.sender = [[ApptentiveMessageSender alloc] initWithName:nil identifier:self.localUserIdentifier profilePhotoURL:nil];
+
+	  [self enqueueMessageForSending:message];
+
+	  [self appendMessage:message];
 	}];
 }
 
 - (void)enqueueMessageForSendingOnBackgroundQueue:(ApptentiveMessage *)message {
-	[self.operationQueue addOperationWithBlock:^{
-		[self enqueueMessageForSending:message];
+	[self.operationQueue dispatchAsync:^{
+	  [self enqueueMessageForSending:message];
 	}];
 }
 
@@ -340,9 +368,9 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 		NSInteger index = [self.messages indexOfObject:message];
 
 		dispatch_async(dispatch_get_main_queue(), ^{
-			[self.delegate messageManagerWillBeginUpdates:self];
-			[self.delegate messageManager:self didUpdateMessage:message atIndex:index];
-			[self.delegate messageManagerDidEndUpdates:self];
+		  [self.delegate messageManagerWillBeginUpdates:self];
+		  [self.delegate messageManager:self didUpdateMessage:message atIndex:index];
+		  [self.delegate messageManagerDidEndUpdates:self];
 		});
 	}
 }
@@ -363,9 +391,9 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 
 	if (self.delegate) {
 		dispatch_async(dispatch_get_main_queue(), ^{
-			[self.delegate messageManagerWillBeginUpdates:self];
-			[self.delegate messageManager:self didInsertMessage:message atIndex:index];
-			[self.delegate messageManagerDidEndUpdates:self];
+		  [self.delegate messageManagerWillBeginUpdates:self];
+		  [self.delegate messageManager:self didInsertMessage:message atIndex:index];
+		  [self.delegate messageManagerDidEndUpdates:self];
 		});
 	}
 
@@ -390,9 +418,9 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 	[self.messageIdentifierIndex removeObjectForKey:message.localIdentifier];
 
 	dispatch_async(dispatch_get_main_queue(), ^{
-		[self.delegate messageManagerWillBeginUpdates:self];
-		[self.delegate messageManager:self didDeleteMessage:message atIndex:index];
-		[self.delegate messageManagerDidEndUpdates:self];
+	  [self.delegate messageManagerWillBeginUpdates:self];
+	  [self.delegate messageManager:self didDeleteMessage:message atIndex:index];
+	  [self.delegate messageManagerDidEndUpdates:self];
 	});
 
 	[self saveMessageStore];
@@ -410,7 +438,8 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 		_unreadCount = unreadCount;
 
 		dispatch_async(dispatch_get_main_queue(), ^{
-			[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveMessageCenterUnreadCountChangedNotification object:self userInfo:@{ @"count": @(unreadCount) }];
+		  Apptentive.shared.backend.unreadMessageCount = unreadCount;
+		  [[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveMessageCenterUnreadCountChangedNotification object:self userInfo:@{ @"count": @(unreadCount) }];
 		});
 	}
 }
@@ -434,9 +463,9 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 
 	if (self.backgroundFetchBlock) {
 		dispatch_async(dispatch_get_main_queue(), ^{
-			self.backgroundFetchBlock(fetchResult);
+		  self.backgroundFetchBlock(fetchResult);
 
-			self.backgroundFetchBlock = nil;
+		  self.backgroundFetchBlock = nil;
 		});
 	}
 }

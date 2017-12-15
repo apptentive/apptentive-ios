@@ -7,12 +7,12 @@
 //
 
 #import "ApptentiveInteractionRatingDialogController.h"
-#import "ApptentiveUtilities.h"
-#import "ApptentiveInteractionInvocation.h"
 #import "ApptentiveBackend+Engagement.h"
-#import "Apptentive_Private.h"
 #import "ApptentiveBackend.h"
 #import "ApptentiveInteraction.h"
+#import "ApptentiveInteractionInvocation.h"
+#import "ApptentiveUtilities.h"
+#import "Apptentive_Private.h"
 #import "UIAlertController+Apptentive.h"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -37,13 +37,20 @@ NSString *const ATInteractionRatingDialogEventLabelDecline = @"decline";
 
 	if (self.presentedViewController) {
 		if (viewController != nil) {
-			[viewController presentViewController:self.presentedViewController animated:YES completion:^{
-				[self.interaction engage:ATInteractionRatingDialogEventLabelLaunch fromViewController:viewController];
-			}];
+			[viewController presentViewController:self.presentedViewController
+										 animated:YES
+									   completion:^{
+				[Apptentive.shared.backend engage:ATInteractionRatingDialogEventLabelLaunch
+							      fromInteraction:self.interaction
+							   fromViewController:viewController];
+									   }];
 		} else {
-			[(UIAlertController *)self.presentedViewController apptentive_presentAnimated:YES completion:^{
-				[self.interaction engage:ATInteractionRatingDialogEventLabelLaunch fromViewController:nil];
-			}];
+			[(UIAlertController *)self.presentedViewController apptentive_presentAnimated:YES
+																			   completion:^{
+														[Apptentive.shared.backend engage:ATInteractionRatingDialogEventLabelLaunch
+																	      fromInteraction:self.interaction
+																	   fromViewController:nil];
+																			   }];
 		}
 	}
 }
@@ -93,23 +100,32 @@ NSString *const ATInteractionRatingDialogEventLabelDecline = @"decline";
 
 	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:self.title message:self.body preferredStyle:UIAlertControllerStyleAlert];
 
-	[alertController addAction:[UIAlertAction actionWithTitle:self.rateText style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-		[self.interaction engage:ATInteractionRatingDialogEventLabelRate fromViewController:self.presentingViewController];
+	[alertController addAction:[UIAlertAction actionWithTitle:self.rateText
+														style:UIAlertActionStyleDefault
+													  handler:^(UIAlertAction *action) {
+							[Apptentive.shared.backend engage:ATInteractionRatingDialogEventLabelRate
+											  fromInteraction:self.interaction
+										   fromViewController:self.presentingViewController];
+														self.presentedViewController = nil;
+													  }]];
 
-		self.presentedViewController = nil;
-	}]];
+	[alertController addAction:[UIAlertAction actionWithTitle:self.remindText
+														style:UIAlertActionStyleDefault
+													  handler:^(UIAlertAction *action) {
+							[Apptentive.shared.backend engage:ATInteractionRatingDialogEventLabelRemind
+											  fromInteraction:self.interaction
+										   fromViewController:self.presentingViewController];
+														self.presentedViewController = nil;
+													  }]];
 
-	[alertController addAction:[UIAlertAction actionWithTitle:self.remindText style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-		[self.interaction engage:ATInteractionRatingDialogEventLabelRemind fromViewController:self.presentingViewController];
-
-		self.presentedViewController = nil;
-	}]];
-
-	[alertController addAction:[UIAlertAction actionWithTitle:self.declineText style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-		[self.interaction engage:ATInteractionRatingDialogEventLabelDecline fromViewController:self.presentingViewController];
-
-		self.presentedViewController = nil;
-	}]];
+	[alertController addAction:[UIAlertAction actionWithTitle:self.declineText
+														style:UIAlertActionStyleCancel
+													  handler:^(UIAlertAction *action) {
+							[Apptentive.shared.backend engage:ATInteractionRatingDialogEventLabelDecline
+											  fromInteraction:self.interaction
+										   fromViewController:self.presentingViewController];
+														self.presentedViewController = nil;
+													  }]];
 
 	return alertController;
 }

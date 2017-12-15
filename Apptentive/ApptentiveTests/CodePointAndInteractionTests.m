@@ -7,12 +7,12 @@
 //
 
 #import "CriteriaTests.h"
+#import "ApptentiveConversation.h"
+#import "ApptentiveCount.h"
+#import "ApptentiveEngagement.h"
 #import "ApptentiveInteractionInvocation.h"
 #import "ApptentiveInteractionUsageData.h"
 #import "Apptentive_Private.h"
-#import "ApptentiveConversation.h"
-#import "ApptentiveEngagement.h"
-#import "ApptentiveCount.h"
 
 
 @interface CodePointTest : CriteriaTest

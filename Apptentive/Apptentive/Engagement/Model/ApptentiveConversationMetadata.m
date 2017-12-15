@@ -7,8 +7,8 @@
 //
 
 #import "ApptentiveConversationMetadata.h"
-#import "ApptentiveConversationMetadataItem.h"
 #import "ApptentiveConversation.h"
+#import "ApptentiveConversationMetadataItem.h"
 #import "ApptentiveUtilities.h"
 
 #define VERSION 1

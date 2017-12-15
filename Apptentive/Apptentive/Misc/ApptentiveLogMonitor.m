@@ -267,6 +267,9 @@ static ApptentiveLogMonitor *_sharedInstance;
 	if (![text hasPrefix:DebugTextHeader]) {
 		return nil;
 	}
+	
+	// clear the token from the clipboard
+	[UIPasteboard generalPasteboard].string = @"";
 
 	return [text substringFromIndex:DebugTextHeader.length];
 }

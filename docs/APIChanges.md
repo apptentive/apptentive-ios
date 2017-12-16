@@ -1,5 +1,11 @@
 This document tracks changes to the API between versions.
 
+#5.0.0
+
+* The `engage` methods no longer returns a value. If your app needs to know whether an interaction was displayed, use one of the methods that accept a completion handler. 
+* The `canShowInteractionForEvent` and `canShowMessageCenter` have been replaced with `-queryCanShowInteractionForEvent:completion:` and `-queryCanShowMessageCenterWithCompletion:`.
+* The `Apptentive` singleton now implements `UNUserNotificationCenterDelegate`, allowing for streamlined integration with Apptentive push notifications.
+ 
 #4.0.5
 
 * Passing `nil` for the view controller parameter of the `engage` method will now open interactions in a new window. The `delegate` property of the `Apptentive` singleton will no longer be asked for a view controller to present interactions from.

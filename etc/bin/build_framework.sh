@@ -29,7 +29,7 @@ FRAMEWORK="${UNIVERSAL_LIBRARY_DIR}/${FRAMEWORK_NAME}.framework"
 
 xcodebuild -project ${PROJECT_DIR}/${PROJECT_NAME}.xcodeproj -scheme ${FRAMEWORK_NAME} -sdk iphonesimulator -configuration ${CONFIGURATION} clean build CONFIGURATION_BUILD_DIR=${BUILD_DIR}/${CONFIGURATION}-iphonesimulator ENABLE_BITCODE=YES OTHER_CFLAGS='-fembed-bitcode' GCC_PREPROCESSOR_DEFINITIONS='APPTENTIVE_FRAMEWORK=1' 2>&1
 
-xcodebuild -project ${PROJECT_DIR}/${PROJECT_NAME}.xcodeproj -scheme ${FRAMEWORK_NAME} -sdk iphoneos -configuration ${CONFIGURATION} clean build CONFIGURATION_BUILD_DIR=${BUILD_DIR}/${CONFIGURATION}-iphoneos ENABLE_BITCODE=YES OTHER_CFLAGS='-fembed-bitcode' GCC_PREPROCESSOR_DEFINITIONS='APPTENTIVE_FRAMEWORK=1' 2>&1
+xcodebuild -project ${PROJECT_DIR}/${PROJECT_NAME}.xcodeproj -scheme ${FRAMEWORK_NAME} -sdk iphoneos -configuration ${CONFIGURATION} clean archive CONFIGURATION_BUILD_DIR=${BUILD_DIR}/${CONFIGURATION}-iphoneos ENABLE_BITCODE=YES OTHER_CFLAGS='-fembed-bitcode' GCC_PREPROCESSOR_DEFINITIONS='APPTENTIVE_FRAMEWORK=1' 2>&1
 
 ######################
 # Create directory for universal

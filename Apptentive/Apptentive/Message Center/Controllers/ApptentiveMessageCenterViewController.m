@@ -1140,7 +1140,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		CGFloat homeAreaInset = 0;
 #ifdef __IPHONE_11_0
 		if (@available(iOS 11.0, *)) {
-			topContentInset = self.tableView.safeAreaInsets.top;
+			topContentInset = fmax(self.tableView.layoutMargins.top, self.tableView.safeAreaInsets.top);
 			homeAreaInset = fmax(0, self.tableView.safeAreaInsets.bottom - self.tableView.contentInset.bottom);
 		}
 #endif

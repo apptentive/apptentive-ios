@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation ApptentiveSurveyResponsePayload
 
-- (nullable instancetype)initWithAnswers:(NSDictionary *)answers identifier:(NSString *)identifier {
+- (nullable instancetype)initWithAnswers:(NSDictionary *)answers identifier:(NSString *)identifier creationDate:(nonnull NSDate *)creationDate {
 	if (answers == nil) {
 		ApptentiveLogError(@"Attempting to create survey response without answers");
 		return nil;
@@ -24,7 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 		return nil;
 	}
 
-	self = [super init];
+	self = [super initWithCreationDate:creationDate];
 
 	if (self) {
 		_answers = answers;

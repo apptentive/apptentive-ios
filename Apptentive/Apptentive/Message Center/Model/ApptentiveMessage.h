@@ -40,7 +40,7 @@ typedef NS_ENUM(NSInteger, ApptentiveMessageState) {
 @property (readonly, nonatomic) BOOL inbound;
 
 - (nullable instancetype)initWithJSON:(NSDictionary *)JSON;
-- (nullable instancetype)initWithBody:(nullable NSString *)body attachments:(nullable NSArray *)attachments automated:(BOOL)automated customData:(NSDictionary *_Nullable)customData;
+- (nullable instancetype)initWithBody:(nullable NSString *)body attachments:(nullable NSArray *)attachments automated:(BOOL)automated customData:(NSDictionary *_Nullable)customData creationDate:(NSDate *)creationDate;
 
 - (ApptentiveMessage *)mergedWith:(ApptentiveMessage *)messageFromServer;
 - (void)updateWithLocalIdentifier:(NSString *)localIdentifier;

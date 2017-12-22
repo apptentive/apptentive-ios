@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (readonly, nonatomic) NSDictionary *answers;
 @property (readonly, nonatomic) NSString *identifier;
 
-- (nullable instancetype)initWithAnswers:(NSDictionary *)answers identifier:(NSString *)identifier;
+- (nullable instancetype)initWithAnswers:(NSDictionary *)answers identifier:(NSString *)identifier creationDate:(NSDate *)creationDate;
 
 @end
 

@@ -18,12 +18,16 @@ NS_ASSUME_NONNULL_BEGIN
 @implementation ApptentivePayload
 
 - (instancetype)init {
+	return [self initWithCreationDate:[NSDate date]];
+}
+
+- (instancetype)initWithCreationDate:(NSDate *)creationDate {
 	self = [super init];
 	if (self) {
 		_contents = @{
 			@"nonce": [NSUUID UUID].UUIDString,
-			@"client_created_at": @([NSDate date].timeIntervalSince1970),
-			@"client_created_at_utc_offset": @([[NSTimeZone systemTimeZone] secondsFromGMTForDate:[NSDate date]])
+			@"client_created_at": @(creationDate.timeIntervalSince1970),
+			@"client_created_at_utc_offset": @([[NSTimeZone systemTimeZone] secondsFromGMTForDate:creationDate])
 		};
 	}
 	return self;

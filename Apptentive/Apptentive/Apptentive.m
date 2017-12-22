@@ -202,7 +202,7 @@ static Apptentive *_sharedInstance;
 		  return;
 	  }
 
-	  ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:text attachments:nil automated:NO customData:nil];
+	  ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:text attachments:nil automated:NO customData:nil creationDate:[NSDate date]];
 	  ApptentiveAssertNotNil(message, @"Message is nil");
 
 	  if (message != nil) {
@@ -241,7 +241,7 @@ static Apptentive *_sharedInstance;
 	  ApptentiveAttachment *attachment = [[ApptentiveAttachment alloc] initWithData:imageData contentType:@"image/jpeg" name:nil attachmentDirectoryPath:self.backend.conversationManager.messageManager.attachmentDirectoryPath];
 	  ApptentiveAssertNotNil(attachment, @"Attachment is nil");
 	  if (attachment != nil) {
-		  ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:nil attachments:@[attachment] automated:NO customData:nil];
+		  ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:nil attachments:@[attachment] automated:NO customData:nil creationDate:[NSDate date]];
 		  ApptentiveAssertNotNil(message, @"Message is nil");
 
 		  if (message != nil) {
@@ -281,7 +281,7 @@ static Apptentive *_sharedInstance;
 	  ApptentiveAssertNotNil(attachment, @"Attachment is nil");
 
 	  if (attachment != nil) {
-		  ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:nil attachments:@[attachment] automated:NO customData:nil];
+		  ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:nil attachments:@[attachment] automated:NO customData:nil creationDate:[NSDate date]];
 
 		  ApptentiveAssertNotNil(message, @"Message is nil");
 		  if (message != nil) {

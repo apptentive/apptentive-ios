@@ -248,7 +248,7 @@ NSString *const ApptentiveInteractionSurveyEventLabelCancel = @"cancel";
 - (void)submit {
 	[Apptentive.shared dispatchOnOperationQueue:^{
 	  ApptentiveConversation *conversation = Apptentive.shared.backend.conversationManager.activeConversation;
-	  ApptentiveSurveyResponsePayload *payload = [[ApptentiveSurveyResponsePayload alloc] initWithAnswers:self.answers identifier:self.interaction.identifier];
+	  ApptentiveSurveyResponsePayload *payload = [[ApptentiveSurveyResponsePayload alloc] initWithAnswers:self.answers identifier:self.interaction.identifier creationDate:[NSDate date]];
 	  ApptentiveAssertNotNil(payload, @"Unable to create Apptentive survey response payload");
 
 	  if (payload != nil) {

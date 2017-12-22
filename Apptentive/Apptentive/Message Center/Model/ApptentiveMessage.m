@@ -97,7 +97,7 @@ static NSString *const InboundKey = @"inboundKey";
 	return self;
 }
 
-- (nullable instancetype)initWithBody:(nullable NSString *)body attachments:(nullable NSArray *)attachments automated:(BOOL)automated customData:(nullable NSDictionary *)customData {
+- (nullable instancetype)initWithBody:(nullable NSString *)body attachments:(nullable NSArray *)attachments automated:(BOOL)automated customData:(nullable NSDictionary *)customData creationDate:(nonnull NSDate *)creationDate {
 	self = [super init];
 
 	if (self) {
@@ -107,7 +107,7 @@ static NSString *const InboundKey = @"inboundKey";
 		_automated = automated;
 		_customData = customData;
 
-		_sentDate = [NSDate date];
+		_sentDate = creationDate;
 		_state = ApptentiveMessageStatePending;
 
 		_inbound = YES;
@@ -147,11 +147,10 @@ static NSString *const InboundKey = @"inboundKey";
 }
 
 - (id)copyWithZone:(nullable NSZone *)zone {
-	ApptentiveMessage *copy = [[ApptentiveMessage alloc] initWithBody:self.body attachments:self.attachments automated:self.automated customData:self.customData];
+	ApptentiveMessage *copy = [[ApptentiveMessage alloc] initWithBody:self.body attachments:self.attachments automated:self.automated customData:self.customData creationDate:self.sentDate];
 
 	copy.identifier = self.identifier;
 	copy.localIdentifier = self.localIdentifier;
-	copy.sentDate = self.sentDate;
 	copy.sender = self.sender;
 	copy.state = self.state;
 

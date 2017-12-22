@@ -88,7 +88,7 @@ NS_ASSUME_NONNULL_BEGIN
 				customData = [NSKeyedUnarchiver unarchiveObjectWithData:legacyMessage.customData];
 			};
 
-			ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:legacyMessage.body attachments:attachments automated:legacyMessage.automated.boolValue customData:customData];
+			ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:legacyMessage.body attachments:attachments automated:legacyMessage.automated.boolValue customData:customData creationDate:[NSDate dateWithTimeIntervalSince1970:legacyMessage.clientCreationTime.doubleValue]];
 
 			if (legacyMessage.hidden.boolValue) {
 				message.state = ApptentiveMessageStateHidden;

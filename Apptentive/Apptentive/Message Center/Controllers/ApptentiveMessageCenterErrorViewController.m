@@ -75,7 +75,7 @@ NSString *const ATInteractionMessageCenterEventLabelNoInteractionClose = @"no_in
 	BOOL animated = [notification.userInfo[ApptentiveInteractionsShouldDismissAnimatedKey] boolValue];
 	[self dismissViewControllerAnimated:animated completion:nil];
 
-	[Apptentive.shared.backend engage:ATInteractionMessageCenterEventLabelNoInteractionClose fromInteraction:self.interaction fromViewController:self];
+	[Apptentive.shared.backend engage:ATInteractionMessageCenterEventLabelNoInteractionClose fromInteraction:self.interaction fromViewController:self userInfo:@{ @"cause": @"notification" }];
 }
 
 @end

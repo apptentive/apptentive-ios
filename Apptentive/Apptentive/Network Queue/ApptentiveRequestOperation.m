@@ -22,7 +22,6 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 @property (assign, nonatomic) BOOL wasCompleted;
-@property (assign, nonatomic) BOOL wasCancelled;
 @property (readonly, nonatomic) NSTimeInterval duration;
 
 @end
@@ -84,13 +83,7 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 
 - (BOOL)isFinished {
 	@synchronized(self) {
-		return self.wasCompleted || self.wasCancelled;
-	}
-}
-
-- (BOOL)isCancelled {
-	@synchronized(self) {
-		return self.wasCancelled;
+		return self.wasCompleted || self.cancelled;
 	}
 }
 
@@ -107,8 +100,10 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 		}
 
 		[self willChangeValueForKey:@"isExecuting"];
+
 		_task = [self.dataSource.URLSession dataTaskWithRequest:self.URLRequest completionHandler:^(NSData *_Nullable data, NSURLResponse *_Nullable response, NSError *_Nullable error) {
-			if (self.isCancelled || error.code == NSURLErrorCancelled) {
+			if (self.cancelled || error.code == NSURLErrorCancelled) {
+				[self completeOperation];
 				return;
 			} else if (!response) {
 				[self processNetworkError:error];
@@ -153,23 +148,8 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 
 - (void)cancel {
 	@synchronized(self) {
-		BOOL shouldFinish = self.isExecuting;
-
-		[self willChangeValueForKey:@"isCancelled"];
-		_wasCancelled = YES;
+		[super cancel];
 		[self.task cancel];
-		[self didChangeValueForKey:@"isCancelled"];
-
-		if (shouldFinish) {
-			[self willChangeValueForKey:@"isFinished"];
-			_wasCompleted = YES;
-
-			[self.dataSource.URLSession.delegateQueue addOperationWithBlock:^{
-				[self.delegate requestOperation:self didFailWithError:nil];
-			}];
-
-			[self didChangeValueForKey:@"isFinished"];
-		}
 	}
 }
 

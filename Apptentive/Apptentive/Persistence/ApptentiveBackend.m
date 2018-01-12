@@ -176,7 +176,10 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 }
 
 - (void)applicationWillTerminateNotification:(NSNotification *)notification {
-	[self addExitMetric];
+	if (UIApplication.sharedApplication.applicationState != UIApplicationStateBackground) {
+		[self addLaunchMetric];
+	}
+
 	[self shutDown];
 }
 
@@ -262,7 +265,14 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 
 	[self completeStartupAndResumeTasks];
 
-	[self addLaunchMetric];
+	__block BOOL foreground;
+	dispatch_sync(dispatch_get_main_queue(), ^{
+		foreground = UIApplication.sharedApplication.applicationState != UIApplicationStateBackground;
+	});
+
+	if (foreground) {
+		[self addLaunchMetric];
+	}
 }
 
 // This is called when we're about to enter the background

@@ -118,7 +118,7 @@ extern NSErrorDomain const ApptentiveHTTPErrorDomain;
 - (void)increaseBackoffDelay;
 
 /**
- Indicates taht the data source should reset its backoff delay because a request
+ Indicates that the data source should reset its backoff delay because a request
  succeeded.
  */
 - (void)resetBackoffDelay;

@@ -1,3 +1,8 @@
+2017-11-20 frankus, weeebox v4.0.9
+----------------------------------
+
+Restore support for iOS 8 devices.
+
 2017-11-16 frankus, weeebox v4.0.8
 ----------------------------------
 ###Bugs Fixed

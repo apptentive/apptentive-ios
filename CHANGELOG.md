@@ -1,3 +1,14 @@
+2018-01-12 frankus, weeebox v4.0.10
+-----------------------------------
+
+###Bugs Fixed
+
+- App launches to the background and exits from the background are no longer reported as launches and exits.
+- The Apptentive framework version now matches the SDK version.
+- A bug that stopped Updgrade Messages from displaying is fixed.
+- A rare crash when a network request is cancelled was fixed.
+- A bug causing messages to re-download was fixed.
+
 2017-11-20 frankus, weeebox v4.0.9
 ----------------------------------
 

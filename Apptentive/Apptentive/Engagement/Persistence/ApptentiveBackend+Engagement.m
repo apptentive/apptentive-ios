@@ -93,7 +93,9 @@ NSString *const ApptentiveEngagementMessageCenterEvent = @"show_message_center";
 - (BOOL)engageCodePoint:(NSString *)codePoint fromInteraction:(nullable ApptentiveInteraction *)fromInteraction userInfo:(nullable NSDictionary *)userInfo customData:(nullable NSDictionary *)customData extendedData:(nullable NSArray *)extendedData fromViewController:(nullable UIViewController *)viewController {
 	if (self.state != ApptentiveBackendStatePayloadDatabaseAvailable) {
 		[self.operationQueue addOperationWithBlock:^{
-			[self engageCodePoint:codePoint fromInteraction:fromInteraction userInfo:userInfo customData:customData extendedData:extendedData fromViewController:viewController];
+			dispatch_async(dispatch_get_main_queue(), ^{
+				[self engageCodePoint:codePoint fromInteraction:fromInteraction userInfo:userInfo customData:customData extendedData:extendedData fromViewController:viewController];
+			});
 		}];
 
 		ApptentiveLogInfo(@"Backend not ready. Deferring engagement of %@", codePoint);

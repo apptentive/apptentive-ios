@@ -7,6 +7,7 @@
 //
 
 #import "ApptentiveSurveyCollectionView.h"
+#import "ApptentiveSurveyCollectionViewLayout.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -121,7 +122,9 @@ NS_ASSUME_NONNULL_BEGIN
 #endif
 
 	CGFloat top = [self.collectionViewLayout collectionViewContentSize].height - CGRectGetHeight(self.collectionFooterView.bounds);
-	top = fmax(top, CGRectGetHeight(self.bounds) - CGRectGetHeight(self.collectionFooterView.bounds) - contentInset.top - contentInset.bottom);
+	if (((ApptentiveSurveyCollectionViewLayout *)self.collectionViewLayout).shouldExpand) {
+		top = fmax(top, CGRectGetHeight(self.bounds) - CGRectGetHeight(self.collectionFooterView.bounds) - contentInset.top - contentInset.bottom);
+	}
 
 	self.footerConstraint.constant = top;
 

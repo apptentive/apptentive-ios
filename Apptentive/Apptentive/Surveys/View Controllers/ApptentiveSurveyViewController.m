@@ -54,6 +54,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (readonly, nonatomic) CGFloat lineHeightOfQuestionFont;
 @property (assign, nonatomic) CGFloat toolbarInset;
+@property (assign, nonatomic) BOOL keyboardVisible;
 
 @end
 
@@ -81,6 +82,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 	((ApptentiveSurveyCollectionView *)self.collectionView).collectionHeaderView = self.headerView;
 	((ApptentiveSurveyCollectionView *)self.collectionView).collectionFooterView = self.footerView;
+	((ApptentiveSurveyCollectionViewLayout *)self.collectionViewLayout).shouldExpand = YES;
 
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(adjustForKeyboard:) name:UIKeyboardWillShowNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(adjustForKeyboard:) name:UIKeyboardWillHideNotification object:nil];
@@ -630,8 +632,6 @@ NS_ASSUME_NONNULL_BEGIN
 	[self maybeAnimateOtherSizeChangeAtIndexPath:indexPath];
 }
 
-#pragma mark - Keyboard adjustment for iOS 7 & 8
-
 - (void)adjustForKeyboard:(NSNotification *)notification {
 	if (self.toolbarInset != 0) {
 		// Remove any additional inset we added for hiding the toolbar when the keyboard was visible.
@@ -640,6 +640,11 @@ NS_ASSUME_NONNULL_BEGIN
 		self.collectionView.contentInset = contentInset;
 		self.toolbarInset = 0;
 	}
+
+	ApptentiveSurveyCollectionViewLayout *layout = (ApptentiveSurveyCollectionViewLayout *)self.collectionViewLayout;
+	CGRect keyboardRect = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+	self.keyboardVisible = CGRectGetMinY(keyboardRect) < CGRectGetMaxY(self.collectionView.frame);
+	layout.shouldExpand = !self.keyboardVisible;
 
 	CGFloat duration = ((NSNumber *)notification.userInfo[UIKeyboardAnimationDurationUserInfoKey]).doubleValue;
 	[UIView animateWithDuration:duration
@@ -660,16 +665,14 @@ NS_ASSUME_NONNULL_BEGIN
 // There are a lot of pecularities related to OS version and keyboard visibility we have to deal with as well.
 - (void)setToolbarHidden:(BOOL)hidden {
 	CGFloat bottomContentInset = self.collectionView.contentInset.bottom;
-	BOOL keyboardVisible = bottomContentInset > 0;
 	CGFloat bottomContentOffset = self.collectionView.contentSize.height - CGRectGetHeight(self.collectionView.bounds) + bottomContentInset;
 	CGFloat toolbarAdjustment = (hidden ? -1 : 1) * CGRectGetHeight(self.navigationController.toolbar.bounds);
-	BOOL scrolledAllTheWayDown = self.collectionView.contentOffset.y >= bottomContentOffset - toolbarAdjustment;
 
 	[UIView animateWithDuration:0.2
 					 animations:^{
-					   if (!keyboardVisible && scrolledAllTheWayDown) {
+					   if (!self.keyboardVisible) {
 						   self.collectionView.contentOffset = CGPointMake(0, bottomContentOffset + toolbarAdjustment);
-					   } else if (keyboardVisible && hidden) {
+					   } else if (hidden) {
 						   // If we're hiding the toolbar with the keyboard visible, we need to add in a bit more bottom inset to keep things from moving around.
 						   UIEdgeInsets insets = self.collectionView.contentInset;
 						   CGPoint contentOffset = self.collectionView.contentOffset;

@@ -47,6 +47,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 	if ([self.collectionView isKindOfClass:[ApptentiveSurveyCollectionView class]]) {
 		ApptentiveSurveyCollectionView *myCollectionView = (ApptentiveSurveyCollectionView *)self.collectionView;
+		// Add space for the global header, global footer, and spacing between them and their adjacent sections
 		superSize.height += CGRectGetHeight(myCollectionView.collectionHeaderView.bounds) + CGRectGetHeight(myCollectionView.collectionFooterView.bounds) + self.sectionInset.top + self.sectionInset.bottom;
 
 		UIEdgeInsets contentInset = self.collectionView.contentInset;
@@ -55,7 +56,9 @@ NS_ASSUME_NONNULL_BEGIN
 			contentInset = self.collectionView.safeAreaInsets;
 		}
 #endif
-		superSize.height = fmax(superSize.height, CGRectGetHeight(self.collectionView.bounds) - contentInset.top - contentInset.bottom);
+		if (self.shouldExpand) {
+			superSize.height = fmax(superSize.height, CGRectGetHeight(self.collectionView.bounds) - contentInset.top - contentInset.bottom);
+		}
 	}
 
 	return superSize;

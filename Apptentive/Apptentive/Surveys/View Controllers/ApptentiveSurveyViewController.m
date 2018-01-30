@@ -338,12 +338,7 @@ NS_ASSUME_NONNULL_BEGIN
 		view.textLabel.text = [self.viewModel textOfQuestionAtIndex:indexPath.section];
 		view.textLabel.font = [self.viewModel.styleSheet fontForStyle:UIFontTextStyleBody];
 		view.textLabel.textColor = [self.viewModel.styleSheet colorForStyle:UIFontTextStyleBody];
-		
-		NSString *questionAccessibilityHint = [self.viewModel accessibilityHintForQuestionAtIndexPath:indexPath];
-		if (questionAccessibilityHint.length > 0) {
-		view.textLabel.accessibilityHint = questionAccessibilityHint;
-		}
-
+		view.textLabel.accessibilityHint = [self.viewModel accessibilityHintForQuestionAtIndexPath:indexPath];
 		view.instructionsTextLabel.attributedText = [self.viewModel instructionTextOfQuestionAtIndex:indexPath.section];
 		view.instructionsTextLabel.font = [self.viewModel.styleSheet fontForStyle:ApptentiveTextStyleSurveyInstructions];
 

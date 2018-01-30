@@ -240,6 +240,7 @@ NS_ASSUME_NONNULL_BEGIN
 			cell.textField.delegate = self;
 			cell.textField.tag = [self.viewModel textFieldTagForIndexPath:indexPath];
 			cell.textField.font = [self.viewModel.styleSheet fontForStyle:ApptentiveTextStyleTextInput];
+			cell.textField.accessibilityLabel = cell.textField.placeholder;
 			cell.textField.textColor = [self.viewModel.styleSheet colorForStyle:ApptentiveTextStyleTextInput];
 
 			return cell;
@@ -340,7 +341,7 @@ NS_ASSUME_NONNULL_BEGIN
 		
 		NSString *questionAccessibilityHint = [self.viewModel accessibilityHintForQuestionAtIndexPath:indexPath];
 		if (questionAccessibilityHint.length > 0) {
-			view.textLabel.accessibilityHint = questionAccessibilityHint;
+		view.textLabel.accessibilityHint = questionAccessibilityHint;
 		}
 
 		view.instructionsTextLabel.attributedText = [self.viewModel instructionTextOfQuestionAtIndex:indexPath.section];

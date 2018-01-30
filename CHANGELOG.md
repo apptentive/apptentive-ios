@@ -1,3 +1,9 @@
+2018-01-30 frankus, weeebox v5.0.1
+----------------------------------
+###Improvements
+
+- Accessibility improvements for VoiceOver.
+
 2017-12-15 frankus, weeebox v5.0.0
 ----------------------------------
 ###Improvements

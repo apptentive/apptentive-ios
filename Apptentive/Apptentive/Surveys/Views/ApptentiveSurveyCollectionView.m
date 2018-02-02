@@ -112,6 +112,8 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 - (void)layoutSubviews {
+	[self.collectionViewLayout invalidateLayout];
+
 	[super layoutSubviews];
 
 	UIEdgeInsets contentInset = self.contentInset;

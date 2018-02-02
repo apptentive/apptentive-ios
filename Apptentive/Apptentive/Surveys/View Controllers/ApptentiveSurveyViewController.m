@@ -164,7 +164,7 @@ NS_ASSUME_NONNULL_BEGIN
 		NSIndexPath *firstInvalidQuestionIndex = self.viewModel.firstInvalidAnswerIndexPath;
 		ApptentiveAssertNotNil(firstInvalidQuestionIndex, @"Expected non-nil index");
 		if (firstInvalidQuestionIndex) {
-			[self.collectionView scrollToItemAtIndexPath:firstInvalidQuestionIndex atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:YES];
+			[(ApptentiveSurveyCollectionView *)self.collectionView scrollHeaderAtIndexPathToTop:firstInvalidQuestionIndex animated:YES];
 			UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, [self.viewModel errorMessageAtIndex:firstInvalidQuestionIndex.section]);
 		}
 	}

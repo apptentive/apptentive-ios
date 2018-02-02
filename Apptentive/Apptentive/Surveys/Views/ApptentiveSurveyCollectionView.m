@@ -96,19 +96,26 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 - (void)scrollHeaderAtIndexPathToTop:(NSIndexPath *)indexPath animated:(BOOL)animated {
+	[self layoutIfNeeded];
+
 	CGRect headerFrame = [self layoutAttributesForSupplementaryElementOfKind:UICollectionElementKindSectionHeader atIndexPath:indexPath].frame;
 
 	// Make sure we don't scroll off the bottom of the content + footer
 	UIEdgeInsets contentInset = self.contentInset;
+	UIEdgeInsets adjustedContentInset = self.contentInset;
+	
 #ifdef __IPHONE_11_0
 	if (@available(iOS 11.0, *)) {
 		contentInset = self.safeAreaInsets;
+		adjustedContentInset = self.adjustedContentInset;
 	}
 #endif
 
-	headerFrame.origin.y = fmin(headerFrame.origin.y - contentInset.top, self.contentSize.height - CGRectGetHeight(self.bounds) + contentInset.bottom);
+	headerFrame.origin.y -= contentInset.top;
 
-	[self setContentOffset:headerFrame.origin animated:animated];
+	headerFrame.origin.y = fmin(fmax(0, headerFrame.origin.y), self.contentSize.height + adjustedContentInset.bottom - CGRectGetHeight(self.bounds));
+
+	[super setContentOffset:headerFrame.origin animated:animated];
 }
 
 - (void)layoutSubviews {

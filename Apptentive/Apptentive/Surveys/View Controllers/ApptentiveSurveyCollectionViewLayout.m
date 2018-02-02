@@ -22,26 +22,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation ApptentiveSurveyCollectionViewLayout
 
-- (instancetype)init {
-	self = [super init];
-
-	if (self) {
-		[self updateHeaderHeight];
-	}
-
-	return self;
-}
-
-- (nullable instancetype)initWithCoder:(NSCoder *)aDecoder {
-	self = [super initWithCoder:aDecoder];
-
-	if (self) {
-		[self updateHeaderHeight];
-	}
-
-	return self;
-}
-
 - (CGSize)collectionViewContentSize {
 	CGSize superSize = [super collectionViewContentSize];
 
@@ -51,13 +31,17 @@ NS_ASSUME_NONNULL_BEGIN
 		superSize.height += CGRectGetHeight(myCollectionView.collectionHeaderView.bounds) + CGRectGetHeight(myCollectionView.collectionFooterView.bounds) + self.sectionInset.top + self.sectionInset.bottom;
 
 		UIEdgeInsets contentInset = self.collectionView.contentInset;
+		UIEdgeInsets adjustedContentInset = self.collectionView.contentInset;
 #ifdef __IPHONE_11_0
 		if (@available(iOS 11.0, *)) {
 			contentInset = self.collectionView.safeAreaInsets;
+			adjustedContentInset = self.collectionView.adjustedContentInset;
 		}
 #endif
 		if (self.shouldExpand) {
 			superSize.height = fmax(superSize.height, CGRectGetHeight(self.collectionView.bounds) - contentInset.top - contentInset.bottom);
+		} else if (adjustedContentInset.bottom > contentInset.bottom || adjustedContentInset.top > contentInset.top) {
+			superSize.height = fmax(superSize.height, CGRectGetHeight(self.collectionView.bounds) - adjustedContentInset.top - adjustedContentInset.bottom);
 		}
 	}
 
@@ -115,7 +99,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 - (nullable NSArray *)layoutAttributesForElementsInRect:(CGRect)rect {
-	rect = CGRectOffset(rect, 0, -self.headerHeight);
+	rect = CGRectInset(rect, 0, -self.headerHeight);
 
 	NSArray *superAttributes = [super layoutAttributesForElementsInRect:rect];
 	NSMutableArray *newAttributes = [superAttributes mutableCopy];
@@ -149,11 +133,21 @@ NS_ASSUME_NONNULL_BEGIN
 	[self updateHeaderHeight];
 }
 
+- (void)setShouldExpand:(BOOL)shouldExpand {
+	if (_shouldExpand != shouldExpand) {
+		_shouldExpand = shouldExpand;
+
+		[self.collectionView setNeedsLayout];
+	}
+}
+
 #pragma mark - Private
 
 - (void)updateHeaderHeight {
 	if ([self.collectionView isKindOfClass:[ApptentiveSurveyCollectionView class]]) {
-		self.headerHeight = CGRectGetHeight(((ApptentiveSurveyCollectionView *)self.collectionView).collectionHeaderView.bounds) + self.sectionInset.bottom;
+		UIView *collectionHeaderView = ((ApptentiveSurveyCollectionView *)self.collectionView).collectionHeaderView;
+		CGSize headerSize = [collectionHeaderView systemLayoutSizeFittingSize:CGSizeMake(self.collectionView.bounds.size.width, CGFLOAT_MAX)];
+		self.headerHeight = headerSize.height + self.sectionInset.bottom;
 	} else {
 		self.headerHeight = 0;
 	}

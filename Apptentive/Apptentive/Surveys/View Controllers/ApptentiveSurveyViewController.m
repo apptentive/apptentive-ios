@@ -114,8 +114,6 @@ NS_ASSUME_NONNULL_BEGIN
 	self.navigationController.toolbar.translucent = NO;
 	self.navigationController.toolbar.barTintColor = [style colorForStyle:ApptentiveColorFailure];
 	self.navigationController.toolbar.userInteractionEnabled = NO;
-
-	[self.collectionView layoutSubviews];
 }
 
 - (void)dealloc {
@@ -123,12 +121,10 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
-	[super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-	[self.collectionViewLayout invalidateLayout];
-}
-
-- (void)viewWillLayoutSubviews {
-	[self.collectionViewLayout invalidateLayout];
+	[coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> _Nonnull context) {
+		[self.collectionViewLayout invalidateLayout];
+	} completion:^(id<UIViewControllerTransitionCoordinatorContext> _Nonnull context){
+	}];
 }
 
 - (void)sizeDidUpdate:(NSNotification *)notification {

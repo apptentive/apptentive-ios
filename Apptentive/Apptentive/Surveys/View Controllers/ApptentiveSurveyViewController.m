@@ -553,7 +553,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)textViewDidBeginEditing:(UITextField *)textView {
 	self.editingIndexPath = [self.viewModel indexPathForTextFieldTag:textView.tag];
-	[(ApptentiveSurveyCollectionView *)self.collectionView scrollHeaderAtIndexPathToTop:self.editingIndexPath animated:YES];
 }
 
 - (BOOL)textViewShouldEndEditing:(UITextView *)textView {
@@ -583,10 +582,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
 	self.editingIndexPath = [self.viewModel indexPathForTextFieldTag:textField.tag];
-
-	if ([self.viewModel typeOfAnswerAtIndexPath:self.editingIndexPath] != ApptentiveSurveyAnswerTypeOther) {
-		[(ApptentiveSurveyCollectionView *)self.collectionView scrollHeaderAtIndexPathToTop:self.editingIndexPath animated:YES];
-	}
 }
 
 - (IBAction)textFieldChanged:(UITextField *)textField {

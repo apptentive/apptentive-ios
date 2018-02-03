@@ -164,7 +164,7 @@ NS_ASSUME_NONNULL_BEGIN
 		NSIndexPath *firstInvalidQuestionIndex = self.viewModel.firstInvalidAnswerIndexPath;
 		ApptentiveAssertNotNil(firstInvalidQuestionIndex, @"Expected non-nil index");
 		if (firstInvalidQuestionIndex) {
-			[(ApptentiveSurveyCollectionView *)self.collectionView scrollHeaderAtIndexPathToTop:firstInvalidQuestionIndex animated:YES];
+			[self.collectionView scrollToItemAtIndexPath:firstInvalidQuestionIndex atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:YES];
 			UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, [self.viewModel errorMessageAtIndex:firstInvalidQuestionIndex.section]);
 		}
 	}
@@ -624,14 +624,6 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 - (void)adjustForKeyboard:(NSNotification *)notification {
-	if (self.toolbarInset != 0) {
-		// Remove any additional inset we added for hiding the toolbar when the keyboard was visible.
-		UIEdgeInsets contentInset = self.collectionView.contentInset;
-		contentInset.bottom += self.toolbarInset;
-		self.collectionView.contentInset = contentInset;
-		self.toolbarInset = 0;
-	}
-
 	ApptentiveSurveyCollectionViewLayout *layout = (ApptentiveSurveyCollectionViewLayout *)self.collectionViewLayout;
 	CGRect keyboardRect = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
 	self.keyboardVisible = CGRectGetMinY(keyboardRect) < CGRectGetMaxY(self.collectionView.frame);
@@ -640,45 +632,48 @@ NS_ASSUME_NONNULL_BEGIN
 	CGFloat duration = ((NSNumber *)notification.userInfo[UIKeyboardAnimationDurationUserInfoKey]).doubleValue;
 	[UIView animateWithDuration:duration
 					 animations:^{
-					   CGPoint contentOffset = self.collectionView.contentOffset;
-					   [self.collectionView layoutIfNeeded];
-					   self.collectionView.contentOffset = contentOffset;
-					   if (self.editingIndexPath && [self.viewModel typeOfAnswerAtIndexPath:self.editingIndexPath] != ApptentiveSurveyAnswerTypeOther) {
-						   [(ApptentiveSurveyCollectionView *)self.collectionView scrollHeaderAtIndexPathToTop:self.editingIndexPath animated:NO];
-					   }
+						 // If the toolbar was hidden while the keyboard was visible, subtract off the toolbar height when the keyboard is hidden.
+						 if (!self.keyboardVisible && self.toolbarInset > 0) {
+							 UIEdgeInsets contentInset = self.collectionView.contentInset;
+							 contentInset.bottom -= self.toolbarInset;
+							 self.collectionView.contentInset = contentInset;
+							 self.toolbarInset = 0;
+						 }
+
+						 [self.collectionView layoutIfNeeded];
 					 }];
 }
 
 #pragma mark - Private
 
-// If the survey is scrolled all the way to the bottom, we want to scroll down as the toolbar animates in
-// (and scroll up when it animates out, if necessary).
-// There are a lot of pecularities related to OS version and keyboard visibility we have to deal with as well.
 - (void)setToolbarHidden:(BOOL)hidden {
-	CGFloat bottomContentInset = self.collectionView.contentInset.bottom;
-	CGFloat bottomContentOffset = self.collectionView.contentSize.height - CGRectGetHeight(self.collectionView.bounds) + bottomContentInset;
-	CGFloat toolbarAdjustment = (hidden ? -1 : 1) * CGRectGetHeight(self.navigationController.toolbar.bounds);
+	if (hidden != self.navigationController.toolbarHidden) {
+		CGFloat toolbarHeight = CGRectGetHeight(self.navigationController.toolbar.bounds);
 
-	[UIView animateWithDuration:0.2
-					 animations:^{
-					   if (!self.keyboardVisible) {
-						   self.collectionView.contentOffset = CGPointMake(0, bottomContentOffset + toolbarAdjustment);
-					   } else if (hidden) {
-						   // If we're hiding the toolbar with the keyboard visible, we need to add in a bit more bottom inset to keep things from moving around.
-						   UIEdgeInsets insets = self.collectionView.contentInset;
-						   CGPoint contentOffset = self.collectionView.contentOffset;
+		[self.navigationController setToolbarHidden:hidden animated:YES];
 
-						   insets.bottom -= toolbarAdjustment;
+		// Workaround for bugs around showing/hiding opaque toolbar with keyboard visible
+		[UIView animateWithDuration:0.2
+						 animations:^{
+							 CGPoint contentOffset = self.collectionView.contentOffset;
+							 UIEdgeInsets insets = self.collectionView.contentInset;
 
-						   // On iOS9, we need to remember to remove that inset once the keyboard is dismissed.
-						   self.toolbarInset = toolbarAdjustment;
+							 if (self.keyboardVisible && hidden) {
+								 // If we're hiding the toolbar with the keyboard visible, the OS will subtract content inset from the bottom, making it so the user can't scroll all the way down until the keyboard is hidden.
 
-						   self.collectionView.contentInset = insets;
-						   self.collectionView.contentOffset = contentOffset;
-					   }
-					 }];
+								 // Add back the toolbar height to the bottom content inset.
+								 insets.bottom += toolbarHeight;
+								 self.collectionView.contentInset = insets;
 
-	[self.navigationController setToolbarHidden:hidden animated:YES];
+								 // Remember how much we content inset added so that we can subtract it if/when the keyboard is hidden.
+								 self.toolbarInset = toolbarHeight;
+							 }
+
+							 // Scroll down to offset the OS'es behavior
+							 contentOffset.y += insets.bottom + toolbarHeight;
+							 self.collectionView.contentOffset = contentOffset;
+						 }];
+	}
 }
 
 - (void)maybeAnimateOtherSizeChangeAtIndexPath:(NSIndexPath *)indexPath {

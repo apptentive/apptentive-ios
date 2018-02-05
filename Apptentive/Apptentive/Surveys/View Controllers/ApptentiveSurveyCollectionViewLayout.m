@@ -99,6 +99,10 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 - (nullable NSArray *)layoutAttributesForElementsInRect:(CGRect)rect {
+	// Because the header view pushes the other views down, we have to adjust the rectangle in question
+	// to encompass a larger area of the collection view. Experimentally, simply offseting the rect
+	// results in missing cells (particular with "Other" question types). So instead we use inset with
+	// a negative value to expand the rectangle vertically.
 	rect = CGRectInset(rect, 0, -self.headerHeight);
 
 	NSArray *superAttributes = [super layoutAttributesForElementsInRect:rect];

@@ -123,8 +123,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
 	[coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> _Nonnull context) {
 		[self.collectionViewLayout invalidateLayout];
-	} completion:^(id<UIViewControllerTransitionCoordinatorContext> _Nonnull context){
-	}];
+	} completion:nil];
 }
 
 - (void)sizeDidUpdate:(NSNotification *)notification {
@@ -623,6 +622,9 @@ NS_ASSUME_NONNULL_BEGIN
 	[self maybeAnimateOtherSizeChangeAtIndexPath:indexPath];
 }
 
+// This gets called via the keyboard will hide/show notification, to:
+// a) Collapse the space between the last question and the submit button on short surveys (they normally expand to fill the screen).
+// b) Remove the toolbar inset added when the toolbar is hidden with the keyboard showing (see -setToolbarHidden: below).
 - (void)adjustForKeyboard:(NSNotification *)notification {
 	ApptentiveSurveyCollectionViewLayout *layout = (ApptentiveSurveyCollectionViewLayout *)self.collectionViewLayout;
 	CGRect keyboardRect = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
@@ -669,7 +671,7 @@ NS_ASSUME_NONNULL_BEGIN
 								 self.toolbarInset = toolbarHeight;
 							 }
 
-							 // Scroll down to offset the OS'es behavior
+							 // Scroll down to offset the OS's behavior
 							 contentOffset.y += insets.bottom + toolbarHeight;
 							 self.collectionView.contentOffset = contentOffset;
 						 }];

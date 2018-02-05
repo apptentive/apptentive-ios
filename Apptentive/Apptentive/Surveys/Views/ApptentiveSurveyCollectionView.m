@@ -95,30 +95,8 @@ NS_ASSUME_NONNULL_BEGIN
 	[self.collectionViewLayout invalidateLayout];
 }
 
-- (void)scrollHeaderAtIndexPathToTop:(NSIndexPath *)indexPath animated:(BOOL)animated {
-	[self layoutIfNeeded];
-
-	CGRect headerFrame = [self layoutAttributesForSupplementaryElementOfKind:UICollectionElementKindSectionHeader atIndexPath:indexPath].frame;
-
-	// Make sure we don't scroll off the bottom of the content + footer
-	UIEdgeInsets contentInset = self.contentInset;
-	UIEdgeInsets adjustedContentInset = self.contentInset;
-	
-#ifdef __IPHONE_11_0
-	if (@available(iOS 11.0, *)) {
-		contentInset = self.safeAreaInsets;
-		adjustedContentInset = self.adjustedContentInset;
-	}
-#endif
-
-	headerFrame.origin.y -= contentInset.top;
-
-	headerFrame.origin.y = fmin(fmax(0, headerFrame.origin.y), self.contentSize.height + adjustedContentInset.bottom - CGRectGetHeight(self.bounds));
-
-	[super setContentOffset:headerFrame.origin animated:animated];
-}
-
 - (void)layoutSubviews {
+	// We might change the layout attributes if the header size changes. Makes sure we warn the OS. 
 	[self.collectionViewLayout invalidateLayout];
 
 	[super layoutSubviews];

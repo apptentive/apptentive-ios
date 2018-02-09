@@ -133,7 +133,7 @@ extension Array {
 		for i in 0..<(list.count - 1) {
 			let j = Int(arc4random_uniform(UInt32(list.count - i))) + i
 			if i != j {
-				swap(&list[i], &list[j])
+				list.swapAt(i, j)
 			}
 		}
 		return list

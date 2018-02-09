@@ -16,8 +16,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) UIView *collectionHeaderView;
 @property (strong, nonatomic) UIView *collectionFooterView;
 
-- (void)scrollHeaderAtIndexPathToTop:(NSIndexPath *)indexPath animated:(BOOL)animated;
-
 @end
 
 @protocol ApptentiveCollectionViewDataSource <UICollectionViewDataSource>

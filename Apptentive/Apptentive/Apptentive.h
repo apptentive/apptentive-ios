@@ -20,7 +20,7 @@ FOUNDATION_EXPORT double ApptentiveVersionNumber;
 FOUNDATION_EXPORT const unsigned char ApptentiveVersionString[];
 
 /** The version number of the Apptentive SDK. */
-#define kApptentiveVersionString @"5.0.0"
+#define kApptentiveVersionString @"5.0.2"
 
 /** The version number of the Apptentive API platform. */
 #define kApptentiveAPIVersionString @"9"
@@ -591,7 +591,7 @@ typedef NS_ENUM(NSUInteger, ApptentiveLogLevel) {
  @param completionHandler The completion handler that will be called if the notification was sent by Apptentive
  @return `YES` if the notification was sent by Apptentive, `NO` otherwise.
  */
-- (BOOL)willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler;
+- (BOOL)willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler NS_AVAILABLE_IOS(10_0);
 
 ///-------------------------------------
 /// @name Attach Text, Images, and Files

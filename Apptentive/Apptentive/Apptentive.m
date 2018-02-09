@@ -847,11 +847,11 @@ static Apptentive *_sharedInstance;
 // These two methods implement UNUserNotificationCenterDelegate, so you can just set the Apptentive singleton as the delegate.
 // (You still have to register and respond to push notifications in the App Delegate, however).
 
-- (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)(void))completionHandler {
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)(void))completionHandler NS_AVAILABLE_IOS(10_0) {
 	[self didReceveUserNotificationResponse:response fromViewController:nil withCompletionHandler:completionHandler];
 }
 
-- (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler {
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler NS_AVAILABLE_IOS(10_0) {
 	[self willPresentNotification:notification withCompletionHandler:completionHandler];
 }
 

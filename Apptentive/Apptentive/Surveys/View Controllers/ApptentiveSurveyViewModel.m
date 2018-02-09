@@ -156,6 +156,15 @@ NSString *const ApptentiveInteractionSurveyEventLabelCancel = @"cancel";
 	return [self.selectedIndexPaths containsObject:indexPath];
 }
 
+- (nullable NSString *)accessibilityHintForQuestionAtIndexPath:(NSIndexPath *)indexPath {
+	ApptentiveSurveyQuestion *question = [self questionAtIndex:indexPath.section];
+	if (question.required) {
+		return ApptentiveLocalizedString(@"required", @"Required answer hint");
+	}
+	
+	return nil;
+}
+
 - (ATSurveyQuestionType)typeOfQuestionAtIndex:(NSInteger)index {
 	return [self questionAtIndex:index].type;
 }

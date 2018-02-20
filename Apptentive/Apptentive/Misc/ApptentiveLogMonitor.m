@@ -14,6 +14,7 @@
 #import "ApptentiveLogWriter.h"
 #import "ApptentiveSafeCollections.h"
 #import "ApptentiveUtilities.h"
+#import "Apptentive_Private.h"
 
 #import <MessageUI/MessageUI.h>
 
@@ -156,8 +157,8 @@ static ApptentiveLogMonitor *_sharedInstance;
 	UIWindow *window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
 
 	// create alert controller with "Send", "Continue" and "Discard" actions
-	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Apptentive" message:@"Troubleshooting mode" preferredStyle:UIAlertControllerStyleActionSheet];
-	[alertController addAction:[UIAlertAction actionWithTitle:@"Send Report"
+	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:ApptentiveLocalizedString(@"Apptentive", @"Apptentive") message:ApptentiveLocalizedString(@"Troubleshooting mode", @"Troubleshooting mode") preferredStyle:UIAlertControllerStyleActionSheet];
+	[alertController addAction:[UIAlertAction actionWithTitle:ApptentiveLocalizedString(@"Send Report", @"Send Report")
 														style:UIAlertActionStyleDefault
 													  handler:^(UIAlertAction *_Nonnull action) {
 														window.hidden = YES;
@@ -169,12 +170,12 @@ static ApptentiveLogMonitor *_sharedInstance;
 														};
 														[self stop];
 													  }]];
-	[alertController addAction:[UIAlertAction actionWithTitle:@"Continue"
+	[alertController addAction:[UIAlertAction actionWithTitle:ApptentiveLocalizedString(@"Continue", @"Continue")
 														style:UIAlertActionStyleCancel
 													  handler:^(UIAlertAction *_Nonnull action) {
 														window.hidden = YES;
 													  }]];
-	[alertController addAction:[UIAlertAction actionWithTitle:@"Discard Report"
+	[alertController addAction:[UIAlertAction actionWithTitle:ApptentiveLocalizedString(@"Discard Report", @"Discard Report")
 														style:UIAlertActionStyleDestructive
 													  handler:^(UIAlertAction *_Nonnull action) {
 														window.hidden = YES;
@@ -392,7 +393,7 @@ static ApptentiveLogMonitor *_sharedInstance;
 	if (![MFMailComposeViewController canSendMail]) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
-		UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Apptentive Log Monitor" message:@"Unable to send email" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+		UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:ApptentiveLocalizedString(@"Apptentive Log Monitor", @"Apptentive Log Monitor") message:ApptentiveLocalizedString(@"Unable to send email", @"Unable to send email") delegate:nil cancelButtonTitle:ApptentiveLocalizedString(@"OK", @"OK") otherButtonTitles:nil];
 		[alertView show];
 #pragma clang diagnostic pop
 

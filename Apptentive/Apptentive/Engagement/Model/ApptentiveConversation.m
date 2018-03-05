@@ -146,17 +146,6 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 	[coder encodeObject:@1 forKey:ArchiveVersionKey];
 }
 
-- (void)setToken:(NSString *)token conversationID:(NSString *)conversationID personID:(NSString *)personID deviceID:(NSString *)deviceID {
-	[self setConversationIdentifier:conversationID JWT:token];
-	self.person.identifier = personID;
-	self.device.identifier = deviceID;
-}
-
-- (void)setConversationIdentifier:(NSString *)identifier JWT:(NSString *)JWT {
-	_identifier = [identifier copy];
-	_token = [JWT copy];
-}
-
 - (void)checkForDiffs {
 	ApptentiveAppRelease *currentAppRelease = [[ApptentiveAppRelease alloc] initWithCurrentAppRelease];
 	[currentAppRelease copyNonholonomicValuesFrom:self.appRelease];
@@ -526,8 +515,6 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 @dynamic encryptionKey;
 @dynamic lastMessageID;
 @dynamic directoryName;
-
-// FIXME: remove these methods
 
 - (void)setToken:(NSString *)token conversationID:(NSString *)conversationID personID:(NSString *)personID deviceID:(NSString *)deviceID {
 	[self setConversationIdentifier:conversationID JWT:token];

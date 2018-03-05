@@ -88,6 +88,12 @@ static NSString *const JWTKey = @"JWT";
 
 			return NO;
 		}
+		
+		if (self.JWT.length == 0) {
+			ApptentiveLogError(ApptentiveLogTagConversation, @"Conversation auth token is empty for state %@.", NSStringFromApptentiveConversationState(self.state));
+			
+			return NO;
+		}
 	}
 
 	if (self.state == ApptentiveConversationStateLoggedIn) {

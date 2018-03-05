@@ -365,6 +365,46 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 	return _state == ApptentiveConversationStateAnonymous || _state == ApptentiveConversationStateLoggedIn;
 }
 
+- (BOOL)isConsistent {
+	if (self.state == ApptentiveConversationStateUndefined) {
+		ApptentiveLogError(ApptentiveLogTagConversation, @"Conversation state is undefined.");
+		return NO;
+	}
+	
+	if (self.directoryName.length == 0) {
+		ApptentiveLogError(ApptentiveLogTagConversation, @"Conversation directory name is empty.");
+		return NO;
+	}
+	
+	if (self.state == ApptentiveConversationStateAnonymous || self.state == ApptentiveConversationStateLoggedIn) {
+		if (self.identifier.length == 0) {
+			ApptentiveLogError(ApptentiveLogTagConversation, @"Conversation identifier is nil or empty for state %@.", NSStringFromApptentiveConversationState(self.state));
+			
+			return NO;
+		}
+		
+		if (self.token.length == 0) {
+			ApptentiveLogError(ApptentiveLogTagConversation, @"Conversation auth token is nil or empty for state %@.", NSStringFromApptentiveConversationState(self.state));
+			
+			return NO;
+		}
+	}
+	
+	if (self.state == ApptentiveConversationStateLoggedIn) {
+		if (self.userId.length == 0) {
+			ApptentiveLogError(ApptentiveLogTagConversation, @"Conversation userId is nil or empty for logged-in conversation.");
+			return NO;
+		}
+		
+		if (self.encryptionKey.length == 0) {
+			ApptentiveLogError(ApptentiveLogTagConversation, @"Conversation encryption key is nil or empty for logged-in conversation.");
+			return NO;
+		}
+	}
+	
+	return YES;
+}
+
 + (void)deleteMigratedData {
 	[ApptentiveAppRelease deleteMigratedData];
 	[ApptentiveSDK deleteMigratedData];

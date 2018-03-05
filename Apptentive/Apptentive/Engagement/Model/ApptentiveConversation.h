@@ -118,6 +118,11 @@ extern NSString *NSStringFromApptentiveConversationState(ApptentiveConversationS
 @property (readonly, nonatomic) NSDictionary *userInfo;
 
 /**
+ Returns true if conversation data is consistent.
+ */
+@property (readonly, nonatomic, getter=isConsistent) BOOL consistent;
+
+/**
  The delegate for the conversation.
  */
 @property (weak, nonatomic) id<ApptentiveConversationDelegate> delegate;

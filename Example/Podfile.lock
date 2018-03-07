@@ -1,5 +1,5 @@
 PODS:
-  - apptentive-ios (5.0.2)
+  - apptentive-ios (5.0.3)
 
 DEPENDENCIES:
   - apptentive-ios (from `..`)
@@ -9,7 +9,7 @@ EXTERNAL SOURCES:
     :path: ..
 
 SPEC CHECKSUMS:
-  apptentive-ios: 2b4c640697d659cb9ef047294ba0be0a058efbc3
+  apptentive-ios: ad55e169a5ad1d1b999f4f9e996948a2227c1bce
 
 PODFILE CHECKSUM: fb7822acbd17e9b6c60d2db75808647cc370b6a0
 

@@ -146,17 +146,6 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 	[coder encodeObject:@1 forKey:ArchiveVersionKey];
 }
 
-- (void)setToken:(NSString *)token conversationID:(NSString *)conversationID personID:(NSString *)personID deviceID:(NSString *)deviceID {
-	[self setConversationIdentifier:conversationID JWT:token];
-	self.person.identifier = personID;
-	self.device.identifier = deviceID;
-}
-
-- (void)setConversationIdentifier:(NSString *)identifier JWT:(NSString *)JWT {
-	_identifier = [identifier copy];
-	_token = [JWT copy];
-}
-
 - (void)checkForDiffs {
 	ApptentiveAppRelease *currentAppRelease = [[ApptentiveAppRelease alloc] initWithCurrentAppRelease];
 	[currentAppRelease copyNonholonomicValuesFrom:self.appRelease];
@@ -365,6 +354,46 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 	return _state == ApptentiveConversationStateAnonymous || _state == ApptentiveConversationStateLoggedIn;
 }
 
+- (BOOL)isConsistent {
+	if (self.state == ApptentiveConversationStateUndefined) {
+		ApptentiveLogError(ApptentiveLogTagConversation, @"Conversation state is undefined.");
+		return NO;
+	}
+	
+	if (self.directoryName.length == 0) {
+		ApptentiveLogError(ApptentiveLogTagConversation, @"Conversation directory name is empty.");
+		return NO;
+	}
+	
+	if (self.state == ApptentiveConversationStateAnonymous || self.state == ApptentiveConversationStateLoggedIn) {
+		if (self.identifier.length == 0) {
+			ApptentiveLogError(ApptentiveLogTagConversation, @"Conversation identifier is nil or empty for state %@.", NSStringFromApptentiveConversationState(self.state));
+			
+			return NO;
+		}
+		
+		if (self.token.length == 0) {
+			ApptentiveLogError(ApptentiveLogTagConversation, @"Conversation auth token is nil or empty for state %@.", NSStringFromApptentiveConversationState(self.state));
+			
+			return NO;
+		}
+	}
+	
+	if (self.state == ApptentiveConversationStateLoggedIn) {
+		if (self.userId.length == 0) {
+			ApptentiveLogError(ApptentiveLogTagConversation, @"Conversation userId is nil or empty for logged-in conversation.");
+			return NO;
+		}
+		
+		if (self.encryptionKey.length == 0) {
+			ApptentiveLogError(ApptentiveLogTagConversation, @"Conversation encryption key is nil or empty for logged-in conversation.");
+			return NO;
+		}
+	}
+	
+	return YES;
+}
+
 + (void)deleteMigratedData {
 	[ApptentiveAppRelease deleteMigratedData];
 	[ApptentiveSDK deleteMigratedData];
@@ -486,8 +515,6 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 @dynamic encryptionKey;
 @dynamic lastMessageID;
 @dynamic directoryName;
-
-// FIXME: remove these methods
 
 - (void)setToken:(NSString *)token conversationID:(NSString *)conversationID personID:(NSString *)personID deviceID:(NSString *)deviceID {
 	[self setConversationIdentifier:conversationID JWT:token];

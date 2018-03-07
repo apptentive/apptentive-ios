@@ -14,7 +14,6 @@
 #import "ApptentiveLogWriter.h"
 #import "ApptentiveSafeCollections.h"
 #import "ApptentiveUtilities.h"
-#import "Apptentive_Private.h"
 
 #import <MessageUI/MessageUI.h>
 
@@ -22,6 +21,8 @@
 // this file is imported here (TODO: figure it out)
 extern NSNotificationName _Nonnull const ApptentiveManifestRawDataDidReceiveNotification;
 extern NSString *_Nonnull const ApptentiveManifestRawDataKey;
+
+extern NSString *ApptentiveLocalizedString(NSString *key, NSString *comment);
 
 static NSString *const KeyEmailRecipients = @"emailRecipients";
 static NSString *const KeyLogLevel = @"logLevel";

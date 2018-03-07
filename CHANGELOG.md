@@ -1,23 +1,31 @@
-2017-02-09 frankus, weeebox v5.0.2
-----------------------------------
-### Bugs Fixed
+# 2018-03-07 - v5.0.3
+
+#### Bugs Fixed
+
+- Allow the SDK to recover from rare instances in which it gets stuck in an inconsistent state. 
+- Fix static analyzer warnings.
+- Update CHANGELOG formatting.
+
+# 2018-02-09 - v5.0.2
+
+#### Bugs Fixed
 
 - Scrolling fixes in Surveys.
 
-2017-01-30 frankus, weeebox v5.0.1
-----------------------------------
-### Improvements
+# 2018-01-30 - v5.0.1
+
+#### Improvements
 
 - Accessibility improvements for VoiceOver.
 
-2017-12-15 frankus, weeebox v5.0.0
-----------------------------------
-### Improvements
+# 2017-12-15 - v5.0.0
+
+#### Improvements
 
 - The engage method is now run asynchronously. Methods incorporating a callback are provided in case your app needs to be notified whether an interaction was displayed. 
 - Nonessential network requests will not be run when your app is in the background.
 
-### Bugs Fixed
+#### Bugs Fixed
 
 - App launches to the background and exits from the background are no longer reported as launches and exits.
 - The Apptentive framework version now matches the SDK version.
@@ -25,157 +33,156 @@
 - A rare crash when a network request is cancelled was fixed.
 - A bug causing messages to re-download was fixed.
 
+# 2017-11-13 - v4.1.1
 
-2017-11-13 frankus, weeebox v4.1.1
-----------------------------------
-### Bugs Fixed
+#### Bugs Fixed
 
 - Fix rare crash in ApptentivePayloadSender when a request is cancelled
 - Fix About Apptentive and Upgrade Message layout on iPhone X
 
-2017-11-06 frankus, weeebox v4.1.0
-----------------------------------
-### Improvements
+# 2017-11-06 - v4.1.0
+
+#### Improvements
 
 - Improved accessibility of Surveys and Message center for the visually impaired
 - Added the ability to enable troubleshooting mode in the SDK, and easily email logs to Apptentive support
 
-### Bugs Fixed
+#### Bugs Fixed
 
 - Fix Message Center styling bug on iPhone X in landscape mode
 - Fix delay before events can be engaged when SDK initializes
 
-2017-11-16 frankus, weeebox v4.0.8
-----------------------------------
-### Bugs Fixed
+# 2017-11-16 - v4.0.8
+
+#### Bugs Fixed
 
 - Fix rare crash in ApptentivePayloadSender when a request is cancelled
 - Fix About Apptentive and Upgrade Message layout on iPhone X
 
-2017-10-10 frankus, weeebox v4.0.7
-----------------------------------
+# 2017-10-10 - v4.0.7
+
 Version 4.0.7 updates Messsage Center and Surveys to adapt to the iPhone X
 screen and fixes parts of the SDK that in rare instances could cause a
 crash. It also adds a new method for better compatibility with the User
 Notifications framework.
 
-2017-09-26 frankus, weeebox v4.0.6
-----------------------------------
+# 2017-09-26 - v4.0.6
+
 Version 4.0.6 creates a unified background task handler that should address several remaining issues with apps not exiting cleanly. It also prevents an app from crashing when the SDK is not able to intialize properly. Finally it fixes several instances where core data managed objects were being accessed on the wrong queue.
 
-2017-09-06 frankus, weeebox v4.0.5
-----------------------------------
+# 2017-09-06 - v4.0.5
+
 Version 4.0.5 fixes an error where a background task expiration handler was not called correctly, which could result in a crash. It also adds an experimental feature where passing `nil` for the view controller parameter of the `engage` method will present interactions in a new window.
 
-2017-08-28 frankus, weeebox v4.0.4
-----------------------------------
+# 2017-08-28 - v4.0.4
+
 Version 4.0.4 fixes a potential crash when exiting the app. It also fixes saving person name and email when they are supplied in message center, and improves accessibility for surveys.
 
-2017-08-11 frankus, weeebox v4.0.3
-----------------------------------
+# 2017-08-11 - v4.0.3
+
 Version 4.0.3 fixes a potential crash when decoding invalid JSON, and provides better error messaging for incorrect Apptentive App Key and Apptentive App Signature values. It also updates the URL used to send users to the App Store rating page for an app.
 
-2017-08-03 frankus, weeebox v4.0.2
-----------------------------------
+# 2017-08-03 - v4.0.2
+
 Version 4.0.2 fixes a potential deadlock when an app returns to the foreground.
 
-2017-07-28 frankus, weeebox v4.0.1
-----------------------------------
+# 2017-07-28 - v4.0.1
+
 Version 4.0.1 fixes a bug where a small number of legacy SDK installations could be incorrectly migrated and could cause the SDK to get stuck in an invalid state. It also corrects a bug where JWTs were not deleted on logout (they would still be revoked on the server).
 
-2017-07-18 frankus, weeebox v4.0.0
-----------------------------------
+# 2017-07-18 - v4.0.0
+
 Version 4.0.0 adds the ability to pass customer authentication to Apptentive to protect and separate each customer's personal information from one another. It uses a new method for initializing the SDK. There is also a new method (required for using push) to forward local notifications to the SDK. Static library support has been dropped in favor of a dynamic framework. There is a new runtime setting for log level, which defaults to `INFO` in all build configurations. 
 
-2017-06-13 frankus, weeebox v3.5.1
-----------------------------------
+# 2017-06-13 - v3.5.1
+
 This release attempts to work around a crash experienced by a small number of users using the SKStoreReviewController feature of version 3.5.0 of the Apptentive iOS SDK by using selector-based APIs rather than block-based APIs for notification and timeout handling.
 
-2017-04-05 frankus, weeebox v3.5.0
-----------------------------------
+# 2017-04-05 - v3.5.0
+
 This release adds the capability to request a review using the SKStoreReviewController class added in iOS version 10.3.
 
-2017-01-06 frankus v3.4.1
--------------------------
+# 2017-01-06 - v3.4.1
+
 Version 3.4.0 fixes visual issues in surveys and upgrade messages. 
 
-2016-12-07 frankus v3.4.0
--------------------------
+# 2016-12-07 - v3.4.0
+
 Version 3.4.0 contains a number of bug fixes.  
 
-2016-11-23 frankus v3.3.3
--------------------------
+# 2016-11-23 - v3.3.3
+
 Version 3.3.3 fixes a bug where launch events weren't being recorded in some instances.  
 
-2016-11-07 frankus v3.3.2
--------------------------
+# 2016-11-07 - v3.3.2
+
 Version 3.3.2 fixes a bug with section caching do reduce log noise, along with other 
 stability and reliability fixes.  
 
-2016-10-06 frankus v3.3.1
--------------------------
+# 2016-10-06 - v3.3.1
+
 Version 3.3.1 adds a framework target that can be used for Carthage support.  
 
-2016-09-16 frankus v3.3.0
--------------------------
+# 2016-09-16 - v3.3.0
+
 Version 3.3.0 drops iOS 7 support and fixes a number of deprecation warnings
 when building for iOS 8+. It fixes several bugs including better layout support
 for localized labels in Message Center. New Swift 3 names are added for many
 methods, properties, and constants. 
 
-2016-08-09 frankus v3.2.1
--------------------------
+# 2016-08-09 - v3.2.1
+
 Version 3.2.1 improves stability and reliability and fixes several warnings when
 building with Xcode 8.0 beta. This release is intended to be compatible with
 iOS 10. In addition, the Demo app has been removed from the repository. 
 
-2016-07-08 frankus v3.2.0
--------------------------
+# 2016-07-08 - v3.2.0
+
 Version 3.2.0 adds a range question type in order to support NPS-style survey
 questions. It also improves RTL language support and accessibility and includes
 several bug fixes. Logging now respects preprocessor macros when integrating
 via CocoaPods.
 
-2016-06-21 frankus v3.1.1
--------------------------
+# 2016-06-21 - v3.1.1
+
 Version 3.1.1 fixes an issue where surveys could crash if the Apptentive
 singleton was instantiated after the app became active. It also improves the
 scrolling behavior in surveys.
 
-2016-06-08 frankus v3.1.0
--------------------------
+# 2016-06-08 - v3.1.0
+
 Version 3.1.0 adds the ability to include a freeform "Other" choice for single-
 and multiple-selection question types in surveys. The FeedbackDemo app has been
 replaced by separate Demo and Example apps. See the README for each app for
 details.
 
-2016-04-26 frankus v3.0.0
--------------------------
+# 2016-04-26 - v3.0.0
+
 Version 3.0.0 introduces a redesigned survey UI and enhanced styling capability.
 The ATConnect class has been renamed to Apptentive, and several enums and string
 constants have also been changed. See the migration guide in the docs directory
 for more information.
 
-2016-03-09 frankus v2.1.3
--------------------------
+# 2016-03-09 - v2.1.3
+
 Version 2.1.3 contains a fix for flagging automated messages as such. It also
 fixes an issue where the post-survey HUD view was rotating incorrectly on iOS 9
 devices.
 
-2016-02-05 frankus v2.1.2
--------------------------
+# 2016-02-05 - v2.1.2
+
 Version 2.1.2 contains a fix for a namespace collision with a system
 framework. It also fixes a race condition in the deallocation of Message Center.
 It sets the module name for CocoaPods users to simplify integration
 with Swift projects.
 
-2016-01-14 frankus v2.1.1
--------------------------
+# 2016-01-14 - v2.1.1
+
 Version 2.1.1 contains bug fixes and fixes several deprecation warnings for
 iOS 8 deployment targets. The code formatting has been made more consistent.
 
-2015-12-09 frankus v2.1.0
---------------------------------
+# 2015-12-09 - v2.1.0
+
 Version 2.1 contains several major features:
 
 - Restores the ability to send images in Message Center.
@@ -183,23 +190,19 @@ Version 2.1 contains several major features:
 - Adds new strongly-typed setters for custom person and device data.
 - Includes numerous bug fixes and improvements.
 
-2015-10-27 frankus v2.0.5
---------------------------------
+# 2015-10-27 - v2.0.5
 
 Version 2.0.5 adds missing keys in ApptentiveResource.bundle's Info.plist file for CocoaPods.
 
-2015-10-26 frankus v2.0.4
---------------------------------
+# 2015-10-26 - v2.0.4
 
 Version 2.0.4 is a small bugfix update, including missing keys in ApptentiveResource.bundle's Info.plist file and localization fixes for Chinese and Portuguese.
 
-2015-10-14 pkamb, frankus v2.0.3
---------------------------------
+# 2015-10-14 - v2.0.3
 
 Version 2.0.3 is a small bugfix update, including fixes for a memory leak and an issue displaying image messages in the 2.0 Message Center.
 
-2015-09-08 pkamb, frankus v2.0.2
---------------------------------
+# 2015-09-08 - v2.0.2
 
 Version 2.0.2 fixes several bugs a bug where the bar tint color of Message Center was not overridable using UIAppearance. As a side effect, the default barTintColor of the survey UI now adopts the Apptentive Default white. In addition, the tintColor property has been deprecated in favor of using UIAppearance. See the iOS Customization Guide for more information.
 
@@ -207,15 +210,13 @@ This version fixes a bug that was not allowing in-app notification banners to be
 
 The Message Center UI also contains a number of small usability improvements.
 
-2015-09-08 pkamb, frankus v2.0.1
---------------------------------
+# 2015-09-08 - v2.0.1
 
 Version 2.0.1 contains fixes for our CocoaPods release, which was not working correctly with 2.0.0.
 
 Please use 2.0.1 with CocoaPods for the new Message Center and ARC changes. Non-CocoaPods builds can continue to use 2.0.0, or upgrade to 2.0.1.
 
-2015-09-02 pkamb, frankus v2.0.0
---------------------------------
+# 2015-09-02 - v2.0.0
 
 The 2.0.0 release includes major improvements to the Apptentive Message Center, fixes for iOS 9, conversion of the project to ARC, and many other changes.
 
@@ -231,8 +232,7 @@ Localization has been added for Polish.
 
 Many older API methods have been updated or removed. Please see the "Migrating to 2.0.0" document in this repository for details.
 
-2015-04-23 pkamb, frankus v1.7.3
---------------------------------
+# 2015-04-23 - v1.7.3
 
 The 1.7.3 release contains a variety of small enhancements.
 
@@ -242,13 +242,11 @@ Localization files have been added for Arabic, Brazilian Portuguese, French Cana
 
 Finally, the Feedback Demo example application now allows you to easily select and display any interaction created on your Apptentive account. This allows for easy testing of any given interaction, such as a Survey or Upgrade Message, without needing to first engage the required events or satisfy any time limits.
 
-2015-03-23 pkamb, wooster v1.7.2
---------------------------------
+# 2015-03-23 - v1.7.2
 
 The 1.7.2 release contains a fix for multithreaded execution of `engage:` calls. Engaging events from a background thread had the possibility to cause Core Data issues. In 1.7.2, all `engage:` calls are made on the Main Thread.
 
-2015-02-10 pkamb v1.7.1
---------------------------------
+# 2015-02-10 - v1.7.1
 
 The 1.7.1 release contains support for the new "Notes" feature. Use a Note interaction to send an alert with a link or a Survey to people using your app.
 
@@ -256,16 +254,16 @@ Other improvements include fixing an issue where the "View Messages" button coul
 
 The Notes feature is currently in Beta. If you would like to create Notes via your Apptentive dashboard, please contact us: support@apptentive.com
 
-2014-11-20 pkamb v1.6.1
---------------------------------
+# 2014-11-20 - v1.6.1
+
 The 1.6.1 release contains an improved FeedbackDemo project for easily testing your Apptentive events and interactions. Simply input your API Key and custom events in the `defines.h` file, then tap the respective buttons in the demo app to engage those events.
 
 This release also fixes the default message text in the Ratings Prompt, which for some languages may have referenced Message Center when Message Center was disabled.
 
 We have also fixed an issue where some messages were not sorted correctly in Message Center, and toned down Apptentive logging in Release builds.
 
-2014-10-20 pkamb v1.6.0
---------------------------------
+# 2014-10-20 - v1.6.0
+
 The 1.6.0 release adds the method `willShowInteractionForEvent:`, which returns YES if engaging the given event will cause an Interaction to be shown.
 
 For example, `willShowInteractionForEvent:` returns YES if a survey is ready to be shown the next time you engage your survey-targeted event. You can thus use this method to hide a "Show Survey" button in your app if there is no survey to take.
@@ -274,14 +272,13 @@ We have also fixed an issue with adding photos to Message Center on iOS 8 iPads,
 
 Finally, we have added xib-based Launch Images to the Apptentive demo app. This fixes an issue when presenting Message Center from landscape on iPhone 6 and 6 Plus devices. If you are experiencing the same problem, you will most likely need to add Launch Images for the new iPhone screen sizes to your parent app.
 
-2014-09-26 pkamb v1.5.8
---------------------------------
+# 2014-09-26 - v1.5.8
+
 This release adds a number of fixes for the landscape presentation of Message Center in iOS 8. If you discover other iOS 8 issues in your app, please contact us!
 
 We have also fixed an issue related to targeting interactions based upon custom data. If you are targeting Surveys or Rating Prompts to show only to people with certain `device` or `person` custom data attributes, you will need to update to this version of the SDK.
 
-2014-09-12 pkamb v1.5.7
---------------------------------
+# 2014-09-12 - v1.5.7
 
 This release adds a number of small fixes for Xcode 6 and iOS 8. We've updated the project to use Xcode 6's default settings, and fixed a number of warnings that surfaced in Xcode 6.
 
@@ -293,8 +290,7 @@ This release fixes a malformed image that caused a `pngcrush` error in Xcode CI 
 
 Finally, we removed a debug background color that slipped into the iOS 6 Message Center's textfield.
 
-2014-08-24 pkamb v1.5.6
---------------------------------
+# 2014-08-24 - v1.5.6
 
 This release adds initial iOS 8 support to the Apptentive SDK.
 
@@ -304,8 +300,7 @@ We will continue to add fixes as we test Apptentive with the latest iOS 8 beta r
 
 This release also adds support for displaying Asset Catalog app icons.
 
-2014-08-19 pkamb v1.5.5
---------------------------------
+# 2014-08-19 - v1.5.5
 
 This release improves the Message Center user interface. The Message Center background is now white, rather than a transparent panel. Message bubbles now appear in the tint color of your app, or the tint color you set on ATConnect. Default profile pictures have been improved, and other small improvements have been made.
 
@@ -313,8 +308,7 @@ This release also improves error handling when creating Events with `customData`
 
 Finally, `addParseIntegrationWithDeviceToken:` has been added for integrating with Parse's Push Notification service.
 
-2014-07-21 pkamb v1.5.4
---------------------------------
+# 2014-07-21 - v1.5.4
 
 This release changes the App Store rating URL to open the "Reviews" tab directly in iOS 7.1+. #110
 
@@ -334,8 +328,7 @@ We have also added methods to easily construct these `extendedData` dictionaries
   - `extendedDataCommerceWithTransactionID:affiliation:revenue:shipping:tax:currency:commerceItems:`
   - `extendedDataCommerceItemWithItemID:name:category:price:quantity:currency:`
 
-2014-06-30 pkamb v1.5.3
---------------------------------
+# 2014-06-30 - v1.5.3
 
 This release fixes an issue where the Rating Prompt's "Require Email" option was not being utilized.
 
@@ -343,15 +336,13 @@ Support has also been added for remote configuration of Apptentive branding. Dep
 
 Branding was formerly controlled by the `showTagLine` property, which has now been removed. The `initiallyHideBranding` property has been provided to control the app's initial experience before Apptentive's server-based configuration can be fetched.
 
-2014-06-12 pkamb v1.5.2
---------------------------------
+# 2014-06-12 - v1.5.2
 
 This release fixes a crash when submitting a piece of Feedback without an email address after tapping "No" on the Enjoyment Dialog. This bug affected versions 1.4.3, 1.5.0, and 1.5.1. If you are using one of these releases, we strongly recommend you upgrade your Apptentive SDK as soon as possible.
 
 Additionally, the current iOS version is now logged as, for example, "7.1.1" whereas it was formerly "Version 7.1.1 (Build 11D201)".
 
-2014-06-10 wooster, pkamb v1.5.1
---------------------------------
+# 2014-06-10 - v1.5.1
 
 This release fixes a crash when showing Surveys in iOS 5 or iOS 6 from Apptentive v1.5.0. Surveys have additionally been disabled remotely for devices using Apptentive 1.5.0 and running an OS version prior to iOS 7. We recommend upgrading immediately from 1.5.0 if you are using Surveys and support legacy devices.
 
@@ -361,9 +352,7 @@ The `showTagLine` property of `ATConnect` now makes the "Powered By Apptentive" 
 
 Finally, we have changed the language code used for delivering localizations to use `[[NSLocale preferredLanguages] firstObject]` rather than use the `NSLocaleLanguageCode` locale component.
 
-
-2014-05-27 wooster, pkamb v1.5.0
---------------------------------
+# 2014-05-27 - v1.5.0
 
 This release moves Surveys to the engagement framework. You will now be able to target surveys to events that you `engage:` in your app. This change enables surveys to be chained with other interactions, such as the Ratings Prompt. From your Apptentive dashboard, you can now present a Survey if someone answers "No" to your "Do you Love App_Name?" prompt.
 
@@ -373,9 +362,7 @@ If you were using a version prior to 1.5.0, please read [MigratingTo_1.5.0.md](d
 
 Finally, we have migrated and improved our documentation for this release. The GitHub README now presents a smaller and simpler overview of Apptentive, and links to relevant sections on the [Apptentive Documentation](http://www.apptentive.com/docs/) site.
 
-
-2014-05-05 wooster, pkamb v1.4.3
---------------------------------
+# 2014-05-05 - v1.4.3
 
 This release adds checks to ensure that custom person data is sent in a timely manner and is immediately visible in the dashboard alongside messages.
 
@@ -392,8 +379,7 @@ Fixes:
 * IOS-485 HTML Response logs contents of the HTML.
 * `Contains` operator should be case insensitive.
 
-2014-04-18 wooster, pkamb v1.4.2
---------------------------------
+# 2014-04-18 - v1.4.2
 
 This release adds push notification integration with Amazon Web Services (AWS) Simple Notification Service (SNS).
 
@@ -405,8 +391,7 @@ Fixes:
 * #90 ATLogger fails to catch exception if no space left on device
 * #91 ATAppConfigurationUpdateTask needs to retain self before updating task state
 
-2014-04-13 wooster, pkamb v1.4.1
---------------------------------
+# 2014-04-13 - v1.4.1
 
 Bug fix release for interaction codepoint encoding.
 
@@ -416,8 +401,7 @@ Fixes:
 
 * IOS-479 URL encode each token of a codepoint
 
-2014-04-07 wooster, pkamb v1.4.0
---------------------------------
+# 2014-04-07 - v1.4.0
 
 This marks the first release of a more generalized engagement framework. This will allow us to chain interactions together in interesting ways, provide better server-side configuration of what customers see and when they see it, and lay the foundation for some very interesting features in the future.
 
@@ -429,8 +413,7 @@ Fixes:
 * IOS-447 Add `identifierForVendor` as device property.
 * [Fix](https://github.com/apptentive/apptentive-ios/commit/58e098850d75bb35fb5572cfd9d63b79aa45949f) for a memory leak in `ATInteractionUsageData`.
 
-2014-03-29 wooster, pkamb v1.3.0
---------------------------------
+# 2014-03-29 - v1.3.0
 
 Important:
 
@@ -453,8 +436,7 @@ Fixes:
 * IOS-422 Ensure device info is sent before retrieving Interactions.
 * IOS-449 Clicking next from email entry doesn't highlight message text entry.
 
-2014-03-10 wooster, pkamb v1.2.9
---------------------------------
+# 2014-03-10 - v1.2.9
 
 This release adds several small fixes to alleviate common support requests.
 
@@ -467,8 +449,7 @@ Fixes:
 * IOS-364 Don't fetch surveys until at least one DeviceInfo has been sent
 * IOS-380 Re-add "sending..." label to pending messages
 
-2014-02-20 pkamb v1.2.8
------------------------
+# 2014-02-20 - v1.2.8
 
 This release fixes several issues reported by developers. We now strip NSAssert calls from the Apptentive static library. Also fixes an issue where setting a nil email address caused problems with the email validator. Additional debug logging added to make API key issues easier to recognize and debug.
 
@@ -481,8 +462,7 @@ Fixes:
 * IOS-379 Added additional information to readme about responding to 'Unread Message' notifications.
 * Added Swedish localization file to FeedbackDemo.
 
-2014-02-12 wooster, pkamb v1.2.7
---------------------------------
+# 2014-02-12 - v1.2.7
 
 This release adds a `BOOL` return type to the `engage:` method, allowing the developer to take action if an interaction is or isn't shown. The `initiallyUseMessageCenter` property has been added to set the initial Message Center state; this will be overridden when the Apptentive configuration file is first downloaded.
 
@@ -498,8 +478,8 @@ Fixes:
 * IOS-373 Add `build` property to Interactions.
 * IOS-378 Add API method to set initial/local `useMessageCenter` setting
 
-2014-01-27 wooster, pkamb v1.2.6
---------------------------------
+# 2014-01-27 - v1.2.6
+
 This release adds support for message attachments. These text, image, or file attachments will be seen in your Apptentive online dashboard, but will not be visible in Message Center on the device.
 
 Fixes:
@@ -514,8 +494,8 @@ Fixes:
 * IOS-356 Can't see send button in Message Center with white tintColor
 * IOS-357 Add support for hidden text/file messages
 
-2014-01-10 wooster, pkamb v1.2.5
---------------------------------
+# 2014-01-10 - v1.2.5
+
 This release fixes some minor issues and bugs. It includes some compatibility fixes for CocoaPods users and fixes for some visual issues on iOS 7.
 
 Fixes:
@@ -531,8 +511,8 @@ Fixes:
 * IOS-345 Message Center arrow visual issue
 * IOS-347 Switch to using XCTest from SenTest
 
-2013-12-20 wooster, pkamb v1.2.4
---------------------------------
+# 2013-12-20 - v1.2.4
+
 This release includes a UI refresh for iOS 7. Specifically, the message center and message panel both have completely new UIs.
 
 Our previous UI should still work for iOS 4.3-6, with the new UI showing up on iOS 7+. There were a significant number of changes made, so we suggest you take a look and test things out with your app to see if we missed anything or if things don't look nice inside your app.
@@ -556,8 +536,8 @@ Fixes:
 * IOS-337 Crash and/or hang taking photos on iPad
 * IOS-340 Notification or return value when rating flow was not shown.
 
-2013-11-22 wooster, pkamb v1.2.3
---------------------------------
+# 2013-11-22 - v1.2.3
+
 This is a release solely to fix a crash related to database migration in iOS 7.
 
 iOS 7 switched the SQLite backing store for Core Data to use write ahead logging (WAL), which make the datastore no longer consist of a single file, but several. When performing database migrations, we were creating an upgraded database then moving it into the location of the old database. Unfortunately, the `-wal` and `-shm` sidecar files that now accompanied that old database were there alongside the new upgraded database. Since these were no longer valid when SQLite tried to load them along with the new database, there were some weird exceptions and crashes happening.
@@ -568,8 +548,7 @@ Fixes:
 
 * [Issue #71](https://github.com/apptentive/apptentive-ios/issues/71) SQLite error in Apptentive DB
 
-2013-10-22 wooster, pkamb v1.2.2
---------------------------------
+# 2013-10-22 - v1.2.2
 
 This release focuses on adding upgrade messages support. See the readme for information on how to use this feature.
 
@@ -593,8 +572,8 @@ Fixes:
 * IOS-257 Message Center read event not including message ID
 * IOS-258 3rd-Party notification services configuration
 
-2013-10-09 wooster, pkamb v1.2.1
--------------------------
+# 2013-10-09 - v1.2.1
+
 Fixes:
 
 * IOS-233 "Write a Review" is grayed out when using StoreKit
@@ -606,8 +585,8 @@ This release fixes an issue where iOS 7 disabled the "Write a Review" button on 
 
 We strongly recommend updating to this version.
 
-2013-10-08 wooster v1.2.0
--------------------------
+# 2013-10-08 - v1.2.0
+
 Fixes:
 
 * IOS-199 Contact info Name field should have word capitalization set
@@ -617,8 +596,8 @@ Fixes:
 
 This release also adds a mechanism to require email addresses via server setting.
 
-2013-09-24 wooster v1.1.1
--------------------------
+# 2013-09-24 - v1.1.1
+
 This is a compatibility release for iOS 7.
 
 Fixes:
@@ -643,8 +622,8 @@ Other changes:
 * Renamed English.lproj to en.lproj to fix Application Loader warning on app submission.
 * Made `showTagline` setting work for Apptentive logo on person details screen.
 
-2013-08-29 wooster v1.1.0
--------------------------
+# 2013-08-29 - v1.1.0
+
 This release focuses on support for Enterprise Surveys.
 
 These are mostly changes on the web side of things, but there are also some client changes:
@@ -663,8 +642,8 @@ Other fixes:
 * We accidentally used the Traditional Chinese localization for both Traditional and Simplified Chinese. This has been fixed.
 * Added `useMessageCenter` property on `ATConnect` for those who don't want to use Message Center.
 
-2013-08-18 wooster v1.0.1
--------------------------
+# 2013-08-18 - v1.0.1
+
 Deprecating the `-addCustomData:withKey:` and `-removeCustomDataWithKey:` methods in `ATConnect`.
 
 In their place, use these new methods, which add custom data about devices and people:
@@ -706,8 +685,8 @@ Fixes:
 * apptentive-ios#44 Doesn't work well in portrait mode on iPad
 * apptentive-ios#26 More localizations
 
-2013-06-28 wooster v1.0.0
--------------------------
+# 2013-06-28 - v1.0.0
+
 There are a lot of major API changes. They are documented in docs/APIChanges.md
 
 * Fixes IOS-127 Make some APIs private for Message Center release
@@ -722,8 +701,8 @@ Note that for apps created before June 28, 2013, please contact us to have your 
 upgraded to the new Message Center UI on our website. If you have any questions at all,
 please let us know!
 
-2013-06-07 wooster v0.4.9
--------------------------
+# 2013-06-07 - v0.4.9
+
 We've finally added support for surveys with tags.
 
 - To check for surveys, call `ATSurveys +(void)checkForAvailableSurveys` as usual.
@@ -755,14 +734,14 @@ Other fixes:
 * Fixes IOS-126 Long survey answers are truncated
 * Also brings in pull requests #38 and #39.
 
-2013-05-31 wooster v0.4.8a
---------------------------
+# 2013-05-31 - v0.4.8a
+
 This is a localization minor bump. There are still a few edge cases in the UI.
 
 Thanks to Robert Lo Bue and Applingua (with help from SpaceInch) for the new localizations!
 
-2013-02-01 wooster v0.4.8
--------------------------
+# 2013-02-01 - v0.4.8
+
 This is a bug fix release.
 
 * Fixes IOS-80 Use StoreKit to show product page when reviewing app
@@ -780,8 +759,8 @@ This is a bug fix release.
 * Fixes IOS-97 Sending file attachments is writing files to disk a lot
 * Fixes IOS-88 Send CP suffix on client version for cocoa pod versions
 
-2012-09-27 wooster v0.4.7
--------------------------
+# 2012-09-27 - v0.4.7
+
 Major change:
 * We're dropping armv6 support. This means no more iPhone 3G or iPod Touch 2 support. This is in line with what we're seeing from app developers and other vendors of 3rd party libraries. If you *really* need armv6 support, let us know.
 
@@ -802,9 +781,8 @@ Other changes:
 * Fixes IOS-39 No option to cancel a photo/screenshot attachment?
   * To cancel a screenshot or photo attachment, just drag it away from the paperclip.
 
+# 2012-09-11 - v0.4.6
 
-2012-09-11 wooster v0.4.6
--------------------------
 One major change in the API:
 * The `shouldTakeScreenshot` property of `ATConnect` is now `NO` by default.
 
@@ -824,22 +802,22 @@ Other fixes:
 
 Of these, the configuration expiration lets us be less aggressive in retrieving new configurations from the server on startup. #23 fixes a problem in which presenting the feedback dialog from within a modal view controller caused view hierarchy issues with the modal view controller. IOS-70 was, in cases where the app had no surveys, sometimes preventing configuration settings being retrieved from the server. IOS-67 lets us track which pieces of feedback were generated by people saying they don't like the app in the ratings flow.
 
-2012-08-29 wooster v0.4.6
--------------------------
+# 2012-08-29 - v0.4.6
+
 Changes for OS X compatibility:
 * Added backing ivars for properties.
 * Removed methods for displaying different feedback window types on OS X.
 
-2012-08-29 wooster v0.4.5
--------------------------
+# 2012-08-29 - v0.4.5
+
 Fixes in this version:
 
 * Fixes IOS-65, `[[UIApplication sharedApplication] keyWindow]` being nil after feedback window is dismissed.
 * Fixes leak of feedback and custom placeholder text by feedback controller.
 * Current feedback is cleared before feedback window is shown by ratings and after that window is dismissed.
 
-2012-08-08 wooster v0.4.4
--------------------------
+# 2012-08-08 - v0.4.4
+
 Major changes:
 
 We switched from JSONKit to our PrefixedJSONKit library, which prefixes all the JSONKit symbols. In this case, our prefix is `AT`. So, we no longer conflict with JSONKit. If you were using JSONKit already and removed it in favor of ours, you'll want to add the original JSONKit back to your project rather than using the PrefixedJSONKit project.
@@ -847,17 +825,16 @@ We switched from JSONKit to our PrefixedJSONKit library, which prefixes all the 
 Minor changes:
 - Fix for IOS-59, which tweaks how `ATBackend` stops and restarts the task queue.
 
-2012-07-24 wooster v0.4.3
--------------------------
+# 2012-07-24 - v0.4.3
+
 * Fix for IOS-41, wherein the metrics were being sent incorrectly and metric for
   text responses was being sent after the metric for survey submission.
 
-2012-07-23 wooster v0.4.2
--------------------------
+# 2012-07-23 - v0.4.2
+
 * Fix for [#20](https://github.com/apptentive/apptentive-ios/issues/20), wherein the image picker on iPad would cause the app to crash.
 
-2012-07-22 wooster v0.4.2
--------------------------
+# 2012-07-22 - v0.4.2
 
 * IOS-52: Requests sent before API key is set won't succeed until next app start
 
@@ -867,16 +844,15 @@ Minor changes:
 	to be executed at the current time. For the case of API requests, that will be
 	`NO` until such time as the API key is set.
 
-2012-07-09 wooster v0.4.2
--------------------------
+# 2012-07-09 - v0.4.2
+
 Minor changes:
 * Adding Spanish localization courtesy of [Babble-on Inc](http://www.ibabbleon.com/).
 * Fixes from [@kgn](https://github.com/kgn) for crash on original iPad and disabled styling on Send button ([pull request 18](https://github.com/apptentive/apptentive-ios/pull/18)).
 * IOS-48: Use count is incremented twice at startup, again at location prompt See [a8dedf6abb5b08342aa564ca2a26fcbae80c9d6f](https://github.com/apptentive/apptentive-ios/commit/a8dedf6abb5b08342aa564ca2a26fcbae80c9d6f)
 
+# 2012-06-25 - v0.4.1
 
-2012-06-25 wooster v0.4.1
--------------------------
 Major changes:
 
 The surveys module has been integrated into `ApptentiveConnect` proper, as the survey features are now live for all users on the site. If you have previously added the Surveys module to your app, you will need to update the configuration by removing it from your app and including the `ATSurveys.h` header file.
@@ -885,8 +861,8 @@ Minor changes:
 * Consistent use of tabs for indents.
 * New icons with new Apptentive logo.
 
-2012-06-01 wooster v0.4.0
--------------------------
+# 2012-06-01 - v0.4.0
+
 Major changes:
 
 The metrics module has been integrated into `ApptentiveConnect` proper. Now that you can enable and disable metrics from the website, it didn't make sense to keep them separate.
@@ -902,13 +878,12 @@ Bug fixes:
 * IOS-44: Where screenshots appear too small on Retina display devices. See [7a0d877b523a7f58ba94789bda6ceeebaaff1bd0](https://github.com/apptentive/apptentive-ios/commit/7a0d877b523a7f58ba94789bda6ceeebaaff1bd0)
 * IOS-45: In which the application frame wasn't properly taken into account and whitespace appeared in the screenshot under non-default orientations. See [e8a7358f329797812e9d944412bd6708b0d238d4](https://github.com/apptentive/apptentive-ios/commit/e8a7358f329797812e9d944412bd6708b0d238d4)
 
-2012-03-26 wooster v0.3.3
--------------------------
+# 2012-03-26 - v0.3.3
 
 Fixes problem wherein app wouldn't use the correct ratings configuration from the server.
 
-2012-03-25 wooster
-------------------
+# 2012-03-25 - v0.3.0
+
 Major changes:
 
 * Start of version 0.3.
@@ -921,10 +896,10 @@ Major changes:
 * Application exit events wired up in Metrics module.
 * Adding `initialName` property to ATConnect for pre-populating the user's name.
 
-##### Metrics
+#### Metrics
 The metrics module can be used by simply linking against the `libApptentiveMetrics.a` static library. That's it. You can turn metrics on or off server side in your app settings.
 
-##### Surveys
+#### Surveys
 This is a very rough initial version of surveys. To use, link against `libApptentiveSurveys.a`.
 
 Specific bug fixes and features:
@@ -936,8 +911,8 @@ Specific bug fixes and features:
 * IOS-22: Option to clear ratings parameter values (days of use, events, etc.) on version upgrade
 * IOS-34: Add support for prepopulating the user's name
 
-2012-01-13 wooster
-------------------
+# 2012-01-13 - v0.2.0
+
 * Start of version 0.2.
 * Added support for adding and removing extra data to feedback.
 * Added initial version of metrics module.

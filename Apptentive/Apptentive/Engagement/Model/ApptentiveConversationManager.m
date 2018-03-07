@@ -258,8 +258,8 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	}
 
 	ApptentiveConversation *conversation = [NSKeyedUnarchiver unarchiveObjectWithData:conversationData];
-	ApptentiveAssertNotNil(conversation, @"Failed to load conversation");
 	if (conversation == nil) {
+		ApptentiveLogError(ApptentiveLogTagConversation, @"Unable to load conversation from archive.");
 		return nil;
 	}
 
@@ -270,8 +270,11 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	mutableConversation.encryptionKey = item.encryptionKey;
 	mutableConversation.userId = item.userId;
 	mutableConversation.token = item.JWT;
-
-	// TODO: check data consistency
+	
+	if (!mutableConversation.isConsistent) {
+		ApptentiveLogError(ApptentiveLogTagConversation, @"Conversation data is inconsistent.");
+		return nil;
+	}
 
 	return mutableConversation;
 }

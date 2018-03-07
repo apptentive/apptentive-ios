@@ -1,8 +1,10 @@
-# 2018-03-06 - v5.0.3
+# 2018-03-07 - v5.0.3
 
 #### Bugs Fixed
 
-- TODO
+- Allow the SDK to recover from rare instances in which it gets stuck in an inconsistent state. 
+- Fix static analyzer warnings.
+- Update CHANGELOG formatting.
 
 # 2018-02-09 - v5.0.2
 

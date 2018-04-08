@@ -109,7 +109,7 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 				[self processNetworkError:error];
 			} else {
 				NSHTTPURLResponse *URLResponse = (NSHTTPURLResponse *)response;
-				_responseData = data; // Store "raw" response data to access from the callback
+				self->_responseData = data; // Store "raw" response data to access from the callback
 
 				if ([[[self class] okStatusCodes] containsIndex:URLResponse.statusCode]) {
 					NSObject *responseObject = nil;

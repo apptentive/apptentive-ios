@@ -201,7 +201,7 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 
 - (void)applicationDidEnterBackgroundNotification:(NSNotification *)notification {
 	[self.operationQueue dispatchAsync:^{
-		_foreground = NO;
+		self->_foreground = NO;
 		[self addExitMetric];
 	}];
 
@@ -210,7 +210,7 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 
 - (void)applicationWillEnterForegroundNotification:(NSNotification *)notification {
 	[self.operationQueue dispatchAsync:^{
-		_foreground = YES;
+		self->_foreground = YES;
 		[self resume];
 		[self addLaunchMetric];
 	}];
@@ -576,7 +576,7 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 
 - (void)messageCenterEnteredForeground {
 	[self.operationQueue dispatchAsync:^{
-	  _messageCenterInForeground = YES;
+	  self->_messageCenterInForeground = YES;
 
 	  ApptentiveAssertNotNil(self.messageManager, @"Message manager is nil");
 	  [self.messageManager checkForMessages];
@@ -587,7 +587,7 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 
 - (void)messageCenterLeftForeground {
 	[self.operationQueue dispatchAsync:^{
-	  _messageCenterInForeground = NO;
+	  self->_messageCenterInForeground = NO;
 
 	  [self updateMessageCheckingTimer];
 

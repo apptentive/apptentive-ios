@@ -269,7 +269,7 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 
 		  [self.messageStore.messages removeAllObjects];
 		  [self.messageStore.messages addObjectsFromArray:mutableMessages];
-		  _messageIdentifierIndex = mutableMessageIdentifierIndex;
+		  self->_messageIdentifierIndex = mutableMessageIdentifierIndex;
 
 		  for (ApptentiveMessage *newMessage in addedMessages) {
 			  [self.delegate messageManager:self didInsertMessage:newMessage atIndex:[self.messages indexOfObject:newMessage]];

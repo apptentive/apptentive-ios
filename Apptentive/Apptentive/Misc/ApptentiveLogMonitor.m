@@ -164,7 +164,7 @@ static ApptentiveLogMonitor *_sharedInstance;
 													  handler:^(UIAlertAction *_Nonnull action) {
 														window.hidden = YES;
 														__weak id weakSelf = self;
-														_logWriter.finishCallback = ^(ApptentiveLogWriter *writer) {
+														self->_logWriter.finishCallback = ^(ApptentiveLogWriter *writer) {
 														  dispatch_async(dispatch_get_main_queue(), ^{
 															[weakSelf sendReportWithAttachedFiles:@[writer.path, [ApptentiveLogMonitor manifestFilePath]]];
 														  });

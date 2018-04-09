@@ -155,7 +155,7 @@ NSString *const ApptentiveBuildPayloadRequestsName = @"Build Payload Requests";
 
 		  saveBlockOperation.name = @"Save Child & Parent Context";
 
-		  _saveContextOperation = saveBlockOperation;
+		  self->_saveContextOperation = saveBlockOperation;
 
 		  [self.networkQueue addOperation:saveBlockOperation];
 	  }

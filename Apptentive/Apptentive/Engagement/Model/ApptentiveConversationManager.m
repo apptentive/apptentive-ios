@@ -48,6 +48,7 @@ static NSString *const ManifestFilename = @"manifest-v1.archive";
 static NSInteger ApptentiveInternalInconsistency = -201;
 static NSInteger ApptentiveAlreadyLoggedInErrorCode = -202;
 static NSInteger ApptentiveInBackgroundErrorCode = -203;
+static NSInteger ApptentiveLoginRequestInProcessErrorCode = -204;
 
 NSString *const ApptentiveConversationStateDidChangeNotification = @"ApptentiveConversationStateDidChangeNotification";
 NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation = @"conversation";
@@ -295,6 +296,12 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 - (void)endActiveConversation {
 	ApptentiveAssertOperationQueue(self.operationQueue);
 
+	if (self.loginRequestOperation != nil) {
+		ApptentiveLogInfo(ApptentiveLogTagConversation, @"Cancelling login request due to logout");
+		[self.loginRequestOperation cancel];
+		self.loginRequestOperation = nil;
+	}
+
 	if (self.activeConversation != nil) {
 		ApptentiveMutableConversation *conversation = [self.activeConversation mutableCopy];
 
@@ -470,13 +477,18 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 - (void)logInWithToken:(NSString *)token completion:(void (^)(BOOL, NSError *_Nonnull))completion {
 	ApptentiveAssertOperationQueue(self.operationQueue);
 
-	self.loginCompletionBlock = [completion copy];
-
-	[self requestLoggedInConversationWithToken:token];
+	[self requestLoggedInConversationWithToken:token completion:completion];
 }
 
-- (void)requestLoggedInConversationWithToken:(NSString *)token {
+- (void)requestLoggedInConversationWithToken:(NSString *)token completion:(void (^)(BOOL, NSError *_Nonnull))completion {
 	[self.operationQueue dispatchAsync:^{
+		self.loginCompletionBlock = [completion copy];
+
+		if (self.loginRequestOperation != nil) {
+			[self failLoginWithErrorCode:ApptentiveLoginRequestInProcessErrorCode failureReason:@"Login request already in process."];
+			return;
+		}
+
 		if (!Apptentive.shared.backend.foreground) {
 			[self failLoginWithErrorCode:ApptentiveInBackgroundErrorCode failureReason:@"App is in background state"];
 			return;
@@ -583,8 +595,14 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 }
 
 - (void)completeLoginSuccess:(BOOL)success error:(nullable NSError *)error {
-	self.loginCompletionBlock(success, error);
-	self.loginCompletionBlock = nil;
+	ApptentiveAssertNotNil(self.loginCompletionBlock, @"Login completion block was nil");
+
+	if (_loginCompletionBlock != nil) {
+		self.loginCompletionBlock(success, error);
+		self.loginCompletionBlock = nil;
+	} else {
+		ApptentiveLogError(ApptentiveLogTagConversation, @"Unexpectedly found nil login completion block");
+	}
 }
 
 #pragma mark - ApptentiveConversationDelegate

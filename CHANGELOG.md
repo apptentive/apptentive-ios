@@ -1,3 +1,9 @@
+# 2018-05-04 - v5.0.4
+
+#### Bugs Fixed
+
+- Fixed a race condition where two login operations could overlap, potentially causing a crash.
+
 # 2018-03-07 - v5.0.3
 
 #### Bugs Fixed

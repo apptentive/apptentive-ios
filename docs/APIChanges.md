@@ -36,7 +36,7 @@ This document tracks changes to the API between versions.
 * The `ATNavigationController` class has been renamed to `ApptentiveNavigationController`. A compatibility alias is provided for legacy code. 
 * The `apiKey` property on the Apptentive instance has been renamed to `APIKey` to match Apple's naming guidelines. The previous spelling is included for compatibility, but is deprecated. 
 * The UI for surveys has undergone a complete visual redesign, but still retains the same functionality.
-* A new style sheet object allows extensive customization of the Apptentive UI. See our [Customization Guide](https://docs.apptentive.com/ios/customization/) for details. 
+* A new style sheet object allows extensive customization of the Apptentive UI. See our [Customization Guide](https://learn.apptentive.com/knowledge-base/interface-customization-ios/) for details. 
 
 # 2.1.0
 

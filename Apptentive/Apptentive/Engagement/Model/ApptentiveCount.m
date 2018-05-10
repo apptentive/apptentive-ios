@@ -110,4 +110,32 @@ static NSString *const LastInvokedKey = @"lastInvoked";
 
 @end
 
+@implementation ApptentiveCount (Criteria)
+
+- (nullable NSObject *)valueForFieldWithPath:(NSString *)path {
+	NSArray *parts = [path componentsSeparatedByString:@"/"];
+	NSString *invokesOrTime = parts[0];
+	NSString *scope = parts[1];
+
+	if ([invokesOrTime isEqualToString:@"invokes"]) {
+		if ([scope isEqualToString:@"total"]) {
+			return @(self.totalCount);
+		} else if ([scope isEqualToString:@"cf_bundle_short_version_string"]) {
+			return @(self.versionCount);
+		} else if ([scope isEqualToString:@"cf_bundle_version"]) {
+			return @(self.buildCount);
+		}
+
+		ApptentiveLogError(@"Unrecognized field name “%@”", path);
+		return nil;
+	} else if ([invokesOrTime isEqualToString:@"last_invoked_at"] && [scope isEqualToString:@"total"]) {
+		return self.lastInvoked;
+	}
+
+	ApptentiveLogError(@"Unrecognized field name “%@”", path);
+	return nil;
+}
+
+@end
+
 NS_ASSUME_NONNULL_END

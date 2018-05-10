@@ -38,7 +38,7 @@ static NSDictionary *_Nullable _decodeBase64Json(NSString *string, NSError **err
 	NSError *jsonError = nil;
 	id dictionary = [ApptentiveJSONSerialization JSONObjectWithData:data error:&jsonError];
 	if (jsonError != nil) {
-		ApptentiveLogError(@"Unable to parse json string: '%@'", error);
+		ApptentiveLogError(ApptentiveLogTagUtility, @"Unable to parse json string: '%@'", jsonError);
 		if (error) {
 			*error = _createError([jsonError localizedDescription]);
 		}
@@ -62,16 +62,16 @@ static NSDictionary *_Nullable _decodeBase64Json(NSString *string, NSError **err
 	self = [super init];
 	if (self) {
 		if (alg.length == 0) {
-			ApptentiveLogError(@"Unable to create JWT: 'alg' is nil or empty");
+			ApptentiveLogError(ApptentiveLogTagUtility, @"Unable to create JWT: 'alg' is nil or empty.");
 			return nil;
 		}
 		if (type.length == 0) {
-			ApptentiveLogError(@"Unable to create JWT: 'type' is nil or empty");
+			ApptentiveLogError(ApptentiveLogTagUtility, @"Unable to create JWT: 'type' is nil or empty.");
 			return nil;
 		}
 
 		if (payload == nil) {
-			ApptentiveLogError(@"Unable to create JWT: 'payload' is nil");
+			ApptentiveLogError(ApptentiveLogTagUtility, @"Unable to create JWT: 'payload' is nil.");
 			return nil;
 		}
 

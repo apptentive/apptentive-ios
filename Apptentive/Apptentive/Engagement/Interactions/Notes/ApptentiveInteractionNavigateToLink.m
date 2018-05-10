@@ -39,13 +39,13 @@ NSString *const ATInteractionNavigateToLinkEventLabelNavigate = @"navigate";
 		if (attemptToOpenURL) {
 			openedURL = [[UIApplication sharedApplication] openURL:url];
 			if (!openedURL) {
-				ApptentiveLogError(@"Could not open URL: %@", url);
+				ApptentiveLogWarning(ApptentiveLogTagInteractions, @"Could not open URL %@.", url);
 			}
 		} else {
-			ApptentiveLogError(@"No application can open the Interaction's URL: %@", url);
+			ApptentiveLogWarning(ApptentiveLogTagInteractions, @"No application can open the Interaction's URL (%@), or the %@ scheme is missing from Info.plist's LSApplicationQueriesSchemes value.", url, url.scheme);
 		}
 	} else {
-		ApptentiveLogError(@"No URL was included in the NavigateToLink Interaction's configuration.");
+		ApptentiveLogError(ApptentiveLogTagInteractions, @"No URL was included in the NavigateToLink Interaction's configuration.");
 	}
 
 	NSDictionary *userInfo = @{ @"url": (urlString ?: [NSNull null]),

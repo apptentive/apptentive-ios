@@ -9,14 +9,19 @@
 #import "ApptentiveBackend+Engagement.h"
 #import "ApptentiveAppConfiguration.h"
 #import "ApptentiveBackend.h"
+#import "ApptentiveInteraction.h"
+#import "Apptentive_Private.h"
+#import "ApptentiveInteractionController.h"
 #import "ApptentiveEngagement.h"
 #import "ApptentiveEngagementBackend.h"
 #import "ApptentiveEngagementManifest.h"
 #import "ApptentiveEventPayload.h"
 #import "ApptentiveInteraction.h"
 #import "ApptentiveInteractionController.h"
-#import "ApptentiveInteractionInvocation.h"
 #import "ApptentiveSerialRequest.h"
+#import "ApptentiveAppConfiguration.h"
+#import "ApptentiveTargets.h"
+#import "ApptentiveInvocations.h"
 #import "Apptentive_Private.h"
 #import "ApptentiveDispatchQueue.h"
 
@@ -47,9 +52,12 @@ NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 	return (interaction != nil);
 }
 
-- (ApptentiveInteraction *)interactionForInvocations:(NSArray *)invocations {
-	ApptentiveEngagementBackend *engagementBackend = [[ApptentiveEngagementBackend alloc] initWithConversation:self.conversationManager.activeConversation manifest:self.conversationManager.manifest];
-	return [engagementBackend interactionForInvocations:invocations];
+- (ApptentiveInteraction *)interactionForInvocations:(NSArray *)invocationsArray {
+	ApptentiveInvocations *invocations = [[ApptentiveInvocations alloc] initWithArray:invocationsArray];
+
+	NSString *interactionIdentifier = [invocations interactionIdentifierForConversation:self.conversationManager.activeConversation];
+
+	return self.conversationManager.manifest.interactions[interactionIdentifier];
 }
 
 - (ApptentiveInteraction *)interactionForIdentifier:(NSString *)identifier {
@@ -57,31 +65,13 @@ NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 }
 
 - (ApptentiveInteraction *)interactionForEvent:(NSString *)event {
-	NSArray *invocations = self.conversationManager.manifest.targets[event];
-	ApptentiveInteraction *interaction = [self interactionForInvocations:invocations];
+	NSString *interactionIdentifier = [self.conversationManager.manifest.targets interactionIdentifierForEvent:event conversation:self.conversationManager.activeConversation];
 
-	return interaction;
-}
-
-+ (NSString *)stringByEscapingCodePointSeparatorCharactersInString:(NSString *)string {
-	// Only escape "%", "/", and "#".
-	// Do not change unless the server spec changes.
-	NSMutableString *escape = [string mutableCopy];
-	[escape replaceOccurrencesOfString:@"%" withString:@"%25" options:NSLiteralSearch range:NSMakeRange(0, escape.length)];
-	[escape replaceOccurrencesOfString:@"/" withString:@"%2F" options:NSLiteralSearch range:NSMakeRange(0, escape.length)];
-	[escape replaceOccurrencesOfString:@"#" withString:@"%23" options:NSLiteralSearch range:NSMakeRange(0, escape.length)];
-
-	return escape;
+	return self.conversationManager.manifest.interactions[interactionIdentifier];
 }
 
 + (NSString *)codePointForVendor:(NSString *)vendor interactionType:(NSString *)interactionType event:(NSString *)event {
-	NSString *encodedVendor = [[self class] stringByEscapingCodePointSeparatorCharactersInString:vendor];
-	NSString *encodedInteractionType = [[self class] stringByEscapingCodePointSeparatorCharactersInString:interactionType];
-	NSString *encodedEvent = [[self class] stringByEscapingCodePointSeparatorCharactersInString:event];
-
-	NSString *codePoint = [NSString stringWithFormat:@"%@#%@#%@", encodedVendor, encodedInteractionType, encodedEvent];
-
-	return codePoint;
+	return [NSString stringWithFormat:@"%@#%@#%@", vendor, interactionType, event];;
 }
 
 - (void)engageApptentiveAppEvent:(NSString *)event {
@@ -101,14 +91,14 @@ NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 }
 
 - (void)engageCodePoint:(NSString *)codePoint fromInteraction:(nullable ApptentiveInteraction *)fromInteraction userInfo:(nullable NSDictionary *)userInfo customData:(nullable NSDictionary *)customData extendedData:(nullable NSArray *)extendedData fromViewController:(nullable UIViewController *)viewController completion:(void (^_Nullable)(BOOL engaged))completion {
-	ApptentiveLogInfo(@"Engage Apptentive event: %@", codePoint);
+	ApptentiveLogInfo(ApptentiveLogTagInteractions, @"Engage Apptentive event: %@", codePoint);
 	ApptentiveAssertOperationQueue(self.operationQueue);
 
 	// TODO: Do this on the background queue?
 	ApptentiveConversation *conversation = self.conversationManager.activeConversation;
 
 	if (conversation == nil) {
-		ApptentiveLogWarning(@"Attempting to engage event with no active conversation.");
+		ApptentiveLogWarning(ApptentiveLogTagInteractions, @"Attempting to engage event with no active conversation.");
 		if (completion) {
 			completion(NO);
 		}
@@ -126,12 +116,12 @@ NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 
 	ApptentiveInteraction *interaction = [engagementBackend interactionForEvent:codePoint];
 	if (interaction) {
-		ApptentiveLogInfo(@"--Running valid %@ interaction.", interaction.type);
+		ApptentiveLogInfo(ApptentiveLogTagInteractions, @"--Running valid %@ interaction.", interaction.type);
 
 		dispatch_sync(dispatch_get_main_queue(), ^{
 			UIViewController *presentingController = viewController;
 			if (viewController != nil && (!viewController.isViewLoaded || viewController.view.window == nil)) {
-				ApptentiveLogError(@"Attempting to present interaction on a view controller whose view is not visible in a window. Using a separate window instead.");
+				ApptentiveLogWarning(ApptentiveLogTagInteractions, @"Attempting to present interaction on a view controller whose view is not visible in a window. Using a separate window instead.");
 				presentingController = nil;
 			}
 			
@@ -186,7 +176,7 @@ NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 
 - (void)presentInteraction:(ApptentiveInteraction *)interaction fromViewController:(nullable UIViewController *)viewController {
 	if (!interaction) {
-		ApptentiveLogError(@"Attempting to present an interaction that does not exist!");
+		ApptentiveLogError(ApptentiveLogTagInteractions, @"Attempting to present an interaction that does not exist.");
 		return;
 	}
 	

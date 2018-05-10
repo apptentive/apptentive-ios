@@ -30,6 +30,7 @@ static NSString *const LocaleCountryCodeKey = @"localeCountryCode";
 static NSString *const LocaleLanguageCodeKey = @"localeLanguageCode";
 static NSString *const UTCOffsetKey = @"UTCOffset";
 static NSString *const IntegrationConfigurationKey = @"integrationConfiguration";
+static NSString *const AdvertisingIdentifierKey = @"advertisingIdentifier";
 
 // Legacy keys
 NSString *const ATDeviceLastUpdateValuePreferenceKey = @"ATDeviceLastUpdateValuePreferenceKey";
@@ -45,6 +46,7 @@ static NSString *_currentHardware;
 static NSDictionary *_currentIntegrationConfiguration;
 static NSString *_currentCarrierName;
 static UIContentSizeCategory _currentContentSizeCategory;
+static NSUUID * _Nullable _currentAdvertisingIdentifier;
 
 
 @implementation ApptentiveDevice
@@ -71,6 +73,50 @@ static UIContentSizeCategory _currentContentSizeCategory;
 
 + (UIContentSizeCategory)contentSizeCategory {
 	return _currentContentSizeCategory;
+}
+
++ (void)getAdvertisingIdentifier {
+	NSUUID *oldAdvertisingIdentifier = _currentAdvertisingIdentifier;
+	_currentAdvertisingIdentifier = nil;
+	@try {
+		Class IdentifierManager = NSClassFromString(@"ASIdentifierManager");
+		if (IdentifierManager) {
+	#pragma clang diagnostic push
+	#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+			id sharedManager = [IdentifierManager performSelector:NSSelectorFromString(@"sharedManager")];
+			SEL advertisingIdentifierSelector = NSSelectorFromString(@"advertisingIdentifier");
+			SEL advertisingTrackingEnabledSelector = NSSelectorFromString(@"isAdvertisingTrackingEnabled");
+
+			if (![sharedManager respondsToSelector:advertisingIdentifierSelector] ||
+				![sharedManager respondsToSelector:advertisingTrackingEnabledSelector]) {
+				ApptentiveLogDebug(ApptentiveLogTagConversation, @"Unable to get advertising id: required method on ASIdentifierManager not found");
+				return;
+			}
+			
+			if (![sharedManager performSelector:advertisingTrackingEnabledSelector]) {
+				ApptentiveLogDebug(ApptentiveLogTagConversation, @"Unable to get advertising id: advertising tracking disabled");
+				return;
+			}
+			
+			NSUUID *advertisingIdentifier = [sharedManager performSelector:advertisingIdentifierSelector];
+			if ([advertisingIdentifier.UUIDString isEqualToString:@"00000000-0000-0000-0000-000000000000"]) {
+				ApptentiveLogDebug(ApptentiveLogTagConversation, @"Unable to get advertising id: invalid value");
+				return;
+			}
+			
+			if (![advertisingIdentifier isEqual:oldAdvertisingIdentifier]) {
+				ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Updated advertising id: %@", advertisingIdentifier);
+			}
+			_currentAdvertisingIdentifier = advertisingIdentifier;
+	#pragma clang diagnostic pop
+		}
+	} @catch (NSException *e) {
+		ApptentiveLogError(ApptentiveLogTagConversation, @"Exception while trying to resolve advertising id.\n%@", e);
+	}
+}
+
++ (NSUUID *)advertisingIdentifier {
+	return _currentAdvertisingIdentifier;
 }
 
 + (void)getPermanentDeviceValues {
@@ -129,6 +175,7 @@ static UIContentSizeCategory _currentContentSizeCategory;
 		_localeLanguageCode = [aDecoder decodeObjectOfClass:[NSString class] forKey:LocaleLanguageCodeKey];
 		_UTCOffset = [aDecoder decodeIntegerForKey:UTCOffsetKey];
 		_integrationConfiguration = [aDecoder decodeObjectOfClass:[NSDictionary class] forKey:IntegrationConfigurationKey];
+		_advertisingIdentifier = [aDecoder decodeObjectOfClass:[NSUUID class] forKey:AdvertisingIdentifierKey];
 	}
 
 	return self;
@@ -149,6 +196,7 @@ static UIContentSizeCategory _currentContentSizeCategory;
 	[aCoder encodeObject:self.localeLanguageCode forKey:LocaleLanguageCodeKey];
 	[aCoder encodeInteger:self.UTCOffset forKey:UTCOffsetKey];
 	[aCoder encodeObject:self.integrationConfiguration forKey:IntegrationConfigurationKey];
+	[aCoder encodeObject:self.advertisingIdentifier forKey:AdvertisingIdentifierKey];
 }
 
 - (instancetype)initAndMigrate {
@@ -175,6 +223,10 @@ static UIContentSizeCategory _currentContentSizeCategory;
 	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ApptentiveCustomDeviceDataPreferenceKey];
 }
 
++ (NSArray *)sensitiveKeys {
+	return [super.sensitiveKeys arrayByAddingObject:@"uuid"];
+}
+
 #pragma mark - Private
 
 - (void)updateWithCurrentDeviceValues {
@@ -194,6 +246,8 @@ static UIContentSizeCategory _currentContentSizeCategory;
 	_UTCOffset = [NSTimeZone systemTimeZone].secondsFromGMT;
 
 	_integrationConfiguration = ApptentiveDevice.integrationConfiguration;
+
+	_advertisingIdentifier = _currentAdvertisingIdentifier;
 }
 
 @end
@@ -213,6 +267,10 @@ static UIContentSizeCategory _currentContentSizeCategory;
 	return self.OSVersion.versionString;
 }
 
+- (NSString *)advertisingIdentifierString {
+	return self.advertisingIdentifier.UUIDString;
+}
+
 + (NSDictionary *)JSONKeyPathMapping {
 	return @{
 		@"custom_data": NSStringFromSelector(@selector(customData)),
@@ -227,8 +285,78 @@ static UIContentSizeCategory _currentContentSizeCategory;
 		@"locale_country_code": NSStringFromSelector(@selector(localeCountryCode)),
 		@"locale_language_code": NSStringFromSelector(@selector(localeLanguageCode)),
 		@"utc_offset": NSStringFromSelector(@selector(boxedUTCOffset)),
-		@"integration_config": NSStringFromSelector(@selector(integrationConfiguration))
+		@"integration_config": NSStringFromSelector(@selector(integrationConfiguration)),
+		@"advertiser_id": NSStringFromSelector(@selector(advertisingIdentifierString))
 	};
+}
+
+@end
+
+@implementation ApptentiveDevice (Criteria)
+
+- (nullable NSObject *)valueForFieldWithPath:(NSString *)path {
+	if ([path isEqualToString:@"uuid"]) {
+		return self.UUIDString;
+	} else if ([path isEqualToString:@"os_name"]) {
+		return self.OSName;
+	} else if ([path isEqualToString:@"os_version"]) {
+		return [[ApptentiveVersion alloc] initWithString:self.OSVersionString];
+	} else if ([path isEqualToString:@"os_build"]) {
+		return self.OSBuild;
+	} else if ([path isEqualToString:@"hardware"]) {
+		return self.hardware;
+	} else if ([path isEqualToString:@"carrier"]) {
+		return self.carrier;
+	} else if ([path isEqualToString:@"content_size_category"]) {
+		return self.contentSizeCategory;
+	} else if ([path isEqualToString:@"locale_raw"]) {
+		return self.localeRaw;
+	} else if ([path isEqualToString:@"locale_country_code"]) {
+		return self.localeCountryCode;
+	} else if ([path isEqualToString:@"locale_language_code"]) {
+		return self.localeLanguageCode;
+	} else if ([path isEqualToString:@"utc_offset"]) {
+		return self.boxedUTCOffset;
+	} else if ([path isEqualToString:@"integration_config"]) {
+		return self.integrationConfiguration;
+	} else {
+		return [super valueForFieldWithPath:path];
+	}
+}
+
+- (NSString *)descriptionForFieldWithPath:(NSString *)path {
+	if ([path isEqualToString:@"uuid"]) {
+		return @"device identifier (identifierForVendor)";
+	} else if ([path isEqualToString:@"os_name"]) {
+		return @"device OS name";
+	} else if ([path isEqualToString:@"os_version"]) {
+		return @"device OS version";
+	} else if ([path isEqualToString:@"os_build"]) {
+		return @"device OS build";
+	} else if ([path isEqualToString:@"hardware"]) {
+		return @"device hardware";
+	} else if ([path isEqualToString:@"carrier"]) {
+		return @"device carrier";
+	} else if ([path isEqualToString:@"content_size_category"]) {
+		return @"device content size category";
+	} else if ([path isEqualToString:@"locale_raw"]) {
+		return @"device raw locale";
+	} else if ([path isEqualToString:@"locale_country_code"]) {
+		return @"device locale country code";
+	} else if ([path isEqualToString:@"locale_language_code"]) {
+		return @"device locale language code";
+	} else if ([path isEqualToString:@"utc_offset"]) {
+		return @"device UTC offset";
+	} else if ([path isEqualToString:@"integration_config"]) {
+		return @"device integration configuration";
+	} else {
+		NSArray *parts = [path componentsSeparatedByString:@"/"];
+		if (parts.count != 2 || ![parts[0] isEqualToString:@"custom_data"]) {
+			return [NSString stringWithFormat:@"Unrecognized device field %@", path];
+		}
+
+		return [NSString stringWithFormat:@"device_data[%@]", parts[1]];
+	}
 }
 
 @end

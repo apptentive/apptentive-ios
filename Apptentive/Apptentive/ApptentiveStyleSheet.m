@@ -353,7 +353,7 @@ NSString *const FontOverridesKey = @"FontOverrides";
 		NSDictionary *propertyList = [NSDictionary dictionaryWithContentsOfURL:stylePropertyListURL];
 
 		if (propertyList == nil) {
-			ApptentiveLogError(@"Style property list at URL %@ was unable to be loaded.", stylePropertyListURL);
+			ApptentiveLogWarning(@"Style property list at URL %@ was unable to be loaded.", stylePropertyListURL);
 			return nil;
 		}
 
@@ -381,11 +381,11 @@ NSString *const FontOverridesKey = @"FontOverrides";
 				if (color) {
 					[self setColor:color forStyle:style];
 				} else {
-					ApptentiveLogError(@"Property list color override for style %@ is not a valid hex string (e.g. #A1B2C3).", style);
+					ApptentiveLogWarning(@"Property list color override for style %@ is not a valid hex string (e.g. #A1B2C3).", style);
 				}
 			}
 		} else {
-			ApptentiveLogError(@"Property list color overrides is not a valid dictionary.");
+			ApptentiveLogWarning(@"Property list value for color overrides key is not a valid dictionary.");
 		}
 
 		NSDictionary *fontOverrides = propertyList[FontOverridesKey];
@@ -396,7 +396,7 @@ NSString *const FontOverridesKey = @"FontOverrides";
 				NSNumber *fontSize = fontOverrides[style][@"size"];
 
 				if (![fontName isKindOfClass:[NSString class]] || ![fontSize isKindOfClass:[NSNumber class]]) {
-					ApptentiveLogError(@"Property list font override for style %@ has missing or invalid `font` (string) or `size` (number) value.");
+					ApptentiveLogWarning(@"Property list font override for style %@ has missing or invalid `font` (string) or `size` (number) value.");
 					continue;
 				}
 
@@ -405,11 +405,11 @@ NSString *const FontOverridesKey = @"FontOverrides";
 				if (fontDescriptor != nil) {
 					[self setFontDescriptor:fontDescriptor forStyle:style];
 				} else {
-					ApptentiveLogError(@"Unable to create font descriptor with name %@ and size %f", fontName, fontSize.doubleValue);
+					ApptentiveLogWarning(@"Unable to create font descriptor with name %@ and size %f.", fontName, fontSize.doubleValue);
 				}
 			}
 		} else {
-			ApptentiveLogError(@"Property list font overrides is not a valid dictionary.");
+			ApptentiveLogWarning(@"Property list value for font overrides key is not a valid dictionary.");
 		}
 	}
 

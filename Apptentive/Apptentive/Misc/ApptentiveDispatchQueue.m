@@ -10,6 +10,7 @@
 
 #import "ApptentiveAssert.h"
 #import "ApptentiveDefines.h"
+#import "ApptentiveDispatchTask+Internal.h"
 #import "ApptentiveGCDDispatchQueue.h"
 
 static ApptentiveDispatchQueue * _mainQueue;
@@ -99,6 +100,28 @@ NSString * _Nullable ApptentiveGetCurrentThreadName() {
 
 - (void)dispatchAsync:(void (^)(void))task withDependency:(nonnull NSOperation *)dependency {
 	APPTENTIVE_ABSTRACT_METHOD_CALLED
+}
+
+- (void)dispatchTask:(ApptentiveDispatchTask *)task {
+	ApptentiveAssertNotNil(task, @"Attempted to dispatch a nil task");
+	if (task) {
+		[self dispatchAsync:^{
+			task.scheduled = YES;
+			[task executeTask];
+		}];
+	}
+}
+
+- (void)dispatchTaskOnce:(ApptentiveDispatchTask *)task {
+	ApptentiveAssertNotNil(task, @"Attempted to dispatch a nil task");
+	if (task) {
+		[self dispatchAsync:^{
+			if (!task.scheduled) {
+				task.scheduled = YES;
+				[task executeTask];
+			}
+		}];
+	}
 }
 
 #pragma mark -

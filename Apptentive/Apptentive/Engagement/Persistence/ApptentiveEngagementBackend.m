@@ -12,8 +12,13 @@
 #import "ApptentiveEngagementBackend.h"
 #import "ApptentiveEngagementManifest.h"
 #import "ApptentiveInteraction.h"
+#import "Apptentive_Private.h"
 #import "ApptentiveInteractionController.h"
-#import "ApptentiveInteractionInvocation.h"
+#import "ApptentiveEngagement.h"
+#import "ApptentiveEngagementManifest.h"
+#import "ApptentiveEngagementBackend.h"
+#import "ApptentiveTargets.h"
+#import "ApptentiveInteractionController.h"
 #import "Apptentive_Private.h"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -32,45 +37,9 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 - (nullable ApptentiveInteraction *)interactionForEvent:(NSString *)event {
-	NSArray *invocations = self.manifest.targets[event];
-	ApptentiveInteraction *interaction = [self interactionForInvocations:invocations];
+	NSString *interactionIdentifier = [self.manifest.targets interactionIdentifierForEvent:event conversation:self.conversation];
 
-	return interaction;
-}
-
-- (nullable ApptentiveInteraction *)interactionForInvocations:(NSArray *)invocations {
-	NSString *interactionID = nil;
-
-	for (NSObject *invocationOrDictionary in invocations) {
-		ApptentiveInteractionInvocation *invocation = nil;
-
-		// Allow parsing of ATInteractionInvocation and NSDictionary invocation objects
-		if ([invocationOrDictionary isKindOfClass:[ApptentiveInteractionInvocation class]]) {
-			invocation = (ApptentiveInteractionInvocation *)invocationOrDictionary;
-		} else if ([invocationOrDictionary isKindOfClass:[NSDictionary class]]) {
-			invocation = [ApptentiveInteractionInvocation invocationWithJSONDictionary:((NSDictionary *)invocationOrDictionary)];
-		} else {
-			ApptentiveLogError(@"Attempting to parse an invocation that is neither an ATInteractionInvocation or NSDictionary.");
-		}
-
-		if (invocation && [invocation isKindOfClass:[ApptentiveInteractionInvocation class]]) {
-			if ([invocation criteriaAreMetForConversation:self.conversation]) {
-				interactionID = invocation.interactionID;
-				break;
-			}
-		}
-	}
-
-	ApptentiveInteraction *interaction = nil;
-	if (interactionID) {
-		interaction = [self interactionForIdentifier:interactionID];
-	}
-
-	return interaction;
-}
-
-- (ApptentiveInteraction *)interactionForIdentifier:(NSString *)identifier {
-	return self.manifest.interactions[identifier];
+	return self.manifest.interactions[interactionIdentifier];
 }
 
 @end

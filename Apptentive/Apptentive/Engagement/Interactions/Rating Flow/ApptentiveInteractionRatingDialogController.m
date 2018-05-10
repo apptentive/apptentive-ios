@@ -7,10 +7,10 @@
 //
 
 #import "ApptentiveInteractionRatingDialogController.h"
+#import "ApptentiveUtilities.h"
 #import "ApptentiveBackend+Engagement.h"
 #import "ApptentiveBackend.h"
 #import "ApptentiveInteraction.h"
-#import "ApptentiveInteractionInvocation.h"
 #import "ApptentiveUtilities.h"
 #import "Apptentive_Private.h"
 #import "UIAlertController+Apptentive.h"
@@ -94,7 +94,7 @@ NSString *const ATInteractionRatingDialogEventLabelDecline = @"decline";
 
 - (nullable UIAlertController *)alertControllerWithInteraction:(ApptentiveInteraction *)interaction {
 	if (!self.title && !self.body) {
-		ApptentiveLogError(@"Skipping display of Rating Dialog that does not have a title or body.");
+		ApptentiveLogError(ApptentiveLogTagInteractions, @"Skipping display of Rating Dialog that does not have a title or body.");
 		return nil;
 	}
 

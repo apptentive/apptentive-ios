@@ -10,28 +10,12 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-
-@interface ApptentiveLogMonitorConfigration : NSObject
-
-/** Email recipients for the log email */
-@property (nonatomic, strong) NSArray<NSString *> *emailRecipients;
-
-/** New log level */
-@property (nonatomic, assign) ApptentiveLogLevel logLevel;
-
-/** True if configuration was restored from the persistent storage */
-@property (nonatomic, readonly, getter=isRestored) BOOL restored;
-
-@end
-
+@class ApptentiveDispatchQueue;
 
 @interface ApptentiveLogMonitor : NSObject
 
-+ (BOOL)tryInitializeWithBaseURL:(NSURL *)baseURL appKey:(NSString *)appKey signature:(NSString *)appSignature;
-
-+ (instancetype)sharedInstance;
-
-- (void)resume;
++ (void)startSessionWithBaseURL:(NSURL *)baseURL appKey:(NSString *)appKey signature:(NSString *)appSignature queue:(ApptentiveDispatchQueue *)queue;
++ (BOOL)resumeSession;
 
 @end
 

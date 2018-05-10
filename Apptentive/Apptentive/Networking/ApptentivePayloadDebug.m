@@ -55,7 +55,7 @@ NS_ASSUME_NONNULL_BEGIN
 			if (moreInfo.length > 0) {
 				[moreInfo appendString:@"\n"];
 			}
-			[moreInfo appendFormat:@"JWT-%ld: %@", (unsigned long)row, request.authToken];
+			[moreInfo appendFormat:@"JWT-%ld: %@", (unsigned long)row, ApptentiveHideIfSanitized(request.authToken)];
 		}
 		[rows addObject:@[
 			request.type ?: @"nil",

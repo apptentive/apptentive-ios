@@ -32,7 +32,7 @@ NS_ASSUME_NONNULL_BEGIN
 	NSArray *unsentEvents = [context executeFetchRequest:request error:&error];
 
 	if (unsentEvents == nil) {
-		ApptentiveLogError(@"Unable to retrieve unsent events: %@", error);
+		ApptentiveLogError(ApptentiveLogTagInteractions, @"Unable to retrieve unsent events: %@", error);
 		return;
 	}
 
@@ -89,17 +89,17 @@ NS_ASSUME_NONNULL_BEGIN
 
 	// Monitor that the Event payload has not been dropped on retry
 	if (!result) {
-		ApptentiveLogError(@"Event json should not be nil.");
+		ApptentiveLogError(ApptentiveLogTagInteractions, @"Event json should not be nil.");
 	}
 	if (result.count == 0) {
-		ApptentiveLogError(@"Event json should return a result.");
+		ApptentiveLogError(ApptentiveLogTagInteractions, @"Event json should return a result.");
 	}
 	if (!result[@"label"]) {
-		ApptentiveLogError(@"Event json should include a `label`.");
+		ApptentiveLogError(ApptentiveLogTagInteractions, @"Event json should include a `label`.");
 		return nil;
 	}
 	if (!result[@"nonce"]) {
-		ApptentiveLogError(@"Event json should include a `nonce`.");
+		ApptentiveLogError(ApptentiveLogTagInteractions, @"Event json should include a `nonce`.");
 		return nil;
 	}
 
@@ -131,7 +131,7 @@ NS_ASSUME_NONNULL_BEGIN
 		@try {
 			result = [NSKeyedUnarchiver unarchiveObjectWithData:self.dictionaryData];
 		} @catch (NSException *exception) {
-			ApptentiveLogError(@"Unable to unarchive event: %@", exception);
+			ApptentiveLogError(ApptentiveLogTagInteractions, @"Unable to unarchive event: %@", exception);
 		}
 		return result;
 	}

@@ -1,6 +1,6 @@
 # Migration to Apptentive v3.0.0
 
-If you have integrated a previous version of the Apptentive SDK, you will need to keep in mind the following changes in our version 3.0.0 release. For more information, please see our [Integration Guide](https://docs.apptentive.com/ios/integration/).
+If you have integrated a previous version of the Apptentive SDK, you will need to keep in mind the following changes in our version 3.0.0 release. For more information, please see our [Integration Guide](https://learn.apptentive.com/knowledge-base/ios-integration-reference/).
 
 ## Renamed Classes and Constants
 
@@ -20,7 +20,7 @@ Currently the style sheet is respected by the Survey and Message Center interact
 
 You will need to import the `ApptentiveStyleSheet.h` file if you would like to use the built-in styles and you are integrating via source or using the static library.
 
-You can find more information in our [Customization Guide](https://docs.apptentive.com/ios/customization/). 
+You can find more information in our [Customization Guide](https://learn.apptentive.com/knowledge-base/interface-customization-ios/).
 
 ## Survey Redesign
 

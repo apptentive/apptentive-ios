@@ -11,8 +11,10 @@
 #import "ApptentiveConversation.h"
 #import "ApptentiveDevice.h"
 #import "ApptentiveEngagement.h"
-#import "ApptentiveInteractionInvocation.h"
 #import "ApptentivePerson.h"
+#import "ApptentiveAndClause.h"
+#import "ApptentiveLog.h"
+#import "ApptentiveVersion.h"
 
 
 @interface CriteriaTest ()
@@ -33,6 +35,8 @@
 - (void)setUp {
 	[super setUp];
 
+	ApptentiveLogSetLevel(ApptentiveLogLevelDebug);
+
 	NSURL *JSONURL = [[NSBundle bundleForClass:[self class]] URLForResource:self.JSONFilename withExtension:@"json"];
 	NSData *JSONData = [NSData dataWithContentsOfURL:JSONURL];
 	NSError *error;
@@ -41,9 +45,7 @@
 	if (!JSONDictionary) {
 		NSLog(@"Error reading JSON: %@", error);
 	} else {
-		NSDictionary *invocationDictionary = @{ @"criteria": JSONDictionary };
-
-		self.interaction = [ApptentiveInteractionInvocation invocationWithJSONDictionary:invocationDictionary];
+		self.clause = [ApptentiveAndClause andClauseWithDictionary:JSONDictionary];
 	}
 
 	self.data = [[ApptentiveConversation alloc] initWithState:ApptentiveConversationStateAnonymous];
@@ -64,7 +66,7 @@
 @implementation CornerCasesThatShouldBeFalse
 
 - (void)testCornerCasesThatShouldBeFalse {
-	XCTAssertTrue([self.interaction criteriaAreMetForConversation:self.data]);
+	XCTAssertTrue([self.clause criteriaMetForConversation:self.data]);
 }
 
 @end
@@ -77,7 +79,7 @@
 @implementation CornerCasesThatShouldBeTrue
 
 - (void)testCornerCasesThatShouldBeTrue {
-	XCTAssertTrue([self.interaction criteriaAreMetForConversation:self.data]);
+	XCTAssertTrue([self.clause criteriaMetForConversation:self.data]);
 }
 
 @end
@@ -96,7 +98,7 @@
 	[Apptentive sharedConnection].personName = nil;
 	[Apptentive sharedConnection].personEmailAddress = nil;
 
-	XCTAssertTrue([self.interaction criteriaAreMetForConversation:self.data]);
+	XCTAssertTrue([self.clause criteriaMetForConversation:self.data]);
 }
 
 @end
@@ -109,7 +111,19 @@
 @implementation PredicateParsing
 
 - (void)testPredicateParsing {
-	XCTAssertNotNil([self.interaction valueForKey:@"criteriaPredicate"]);
+	// On Android this just checks that the parser can parse the criteria.
+	XCTAssertNotNil(self.clause);
+
+//	There are some problems with the criteria that make it not actually work:
+//	1. There is no field called, e.g. "booleanQuery". This could be custom data ("person/custom_data/booleanQuery"), but that won't work for dates or versions.
+//	2. Even if we add methods to add date and version custom data (and edit the field names in the criteria), the version is set to be both equal and not equal to 1.0.0.
+//	[self.data.person addCustomBool:YES withKey:@"booleanQuery"];
+//	[self.data.person addCustomNumber:@(0) withKey:@"numberQuery"];
+//	[self.data.person addCustomString:@"foo" withKey:@"stringQuery"];
+//	[self.data.person addCustomDate:[NSDate dateWithTimeIntervalSince1970:123456789] withKey:@"dateTimeQuery"];
+//	[self.data.person addCustomVersion:[[ApptentiveVersion alloc] initWithString:@"1.0.0"] withKey:@"versionQuery"];
+//
+//	XCTAssertTrue([self.clause criteriaMetForConversation:self.data]);
 }
 
 @end
@@ -124,7 +138,7 @@
 - (void)testOperatorContains {
 	self.data.person.emailAddress = @"test@example.com";
 
-	XCTAssertTrue([self.interaction criteriaAreMetForConversation:self.data]);
+	XCTAssertTrue([self.clause criteriaMetForConversation:self.data]);
 }
 
 @end
@@ -137,7 +151,7 @@
 @implementation OperatorStartsWith
 
 - (void)testOperatorStartsWith {
-	XCTAssertTrue([self.interaction criteriaAreMetForConversation:self.data]);
+	XCTAssertTrue([self.clause criteriaMetForConversation:self.data]);
 }
 
 @end
@@ -150,7 +164,7 @@
 @implementation OperatorEndsWith
 
 - (void)testOperatorEndsWith {
-	XCTAssertTrue([self.interaction criteriaAreMetForConversation:self.data]);
+	XCTAssertTrue([self.clause criteriaMetForConversation:self.data]);
 }
 
 @end
@@ -163,7 +177,7 @@
 @implementation OperatorNot
 
 - (void)testOperatorNot {
-	XCTAssertTrue([self.interaction criteriaAreMetForConversation:self.data]);
+	XCTAssertTrue([self.clause criteriaMetForConversation:self.data]);
 }
 
 @end
@@ -176,7 +190,7 @@
 @implementation OperatorExists
 
 - (void)testOperatorExists {
-	XCTAssertTrue([self.interaction criteriaAreMetForConversation:self.data]);
+	XCTAssertTrue([self.clause criteriaMetForConversation:self.data]);
 }
 
 @end
@@ -189,7 +203,29 @@
 @implementation WhitespaceTrimming
 
 - (void)testWhitespaceTrimming {
-	XCTAssertTrue([self.interaction criteriaAreMetForConversation:self.data]);
+	XCTAssertTrue([self.clause criteriaMetForConversation:self.data]);
+}
+
+@end
+
+@interface OperatorStringEquals : CriteriaTest
+@end
+
+@implementation OperatorStringEquals
+
+- (void)testWhitespaceTrimming {
+	XCTAssertTrue([self.clause criteriaMetForConversation:self.data]);
+}
+
+@end
+
+@interface OperatorStringNotEquals : CriteriaTest
+@end
+
+@implementation OperatorStringNotEquals
+
+- (void)testWhitespaceTrimming {
+	XCTAssertTrue([self.clause criteriaMetForConversation:self.data]);
 }
 
 @end

@@ -85,6 +85,10 @@ static NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCus
 	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ApptentiveCustomPersonDataPreferenceKey];
 }
 
++ (NSArray *)sensitiveKeys {
+	return [super.sensitiveKeys arrayByAddingObjectsFromArray:@[@"name", @"email"]];
+}
+
 @end
 
 
@@ -115,5 +119,35 @@ static NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCus
 }
 
 @end
+
+@implementation ApptentivePerson (Criteria)
+
+- (nullable NSObject *)valueForFieldWithPath:(NSString *)path {
+	if ([path isEqualToString:@"name"]) {
+		return self.name;
+	} else if ([path isEqualToString:@"email"]) {
+		return self.emailAddress;
+	} else {
+		return [super valueForFieldWithPath:path];
+	}
+}
+
+- (NSString *)descriptionForFieldWithPath:(NSString *)path {
+	if ([path isEqualToString:@"name"]) {
+		return @"person name";
+	} else if ([path isEqualToString:@"email"]) {
+		return @"person email";
+	} else {
+		NSArray *parts = [path componentsSeparatedByString:@"/"];
+		if (parts.count != 2 || ![parts[0] isEqualToString:@"custom_data"]) {
+			return [NSString stringWithFormat:@"Unrecognized person field %@", path];
+		}
+
+		return [NSString stringWithFormat:@"person_data[%@]", parts[1]];
+	}
+}
+
+@end
+
 
 NS_ASSUME_NONNULL_END

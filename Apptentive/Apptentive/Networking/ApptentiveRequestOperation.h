@@ -12,7 +12,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol ApptentiveRequestOperationDataSource;
-@class ApptentiveRequestOperationCallback;
+@class ApptentiveRequestOperationCallback, ApptentiveRetryPolicy;
 
 extern NSErrorDomain const ApptentiveHTTPErrorDomain;
 
@@ -114,19 +114,7 @@ extern NSErrorDomain const ApptentiveHTTPErrorDomain;
 /**
  The number of seconds the operation should wait before retrying a request.
  */
-@property (readonly, nonatomic) NSTimeInterval backoffDelay;
-
-/**
- Indicates that the data source should increase the backoff delay because the
- previous request encountered a retry-able error.
- */
-- (void)increaseBackoffDelay;
-
-/**
- Indicates taht the data source should reset its backoff delay because a request
- succeeded.
- */
-- (void)resetBackoffDelay;
+@property (readonly, nonatomic) ApptentiveRetryPolicy *retryPolicy;
 
 @end
 

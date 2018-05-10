@@ -16,6 +16,12 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @interface ApptentiveState : NSObject <NSSecureCoding>
 
+/**
+ A list of keys in the JSON representation whose values may include sensitive
+ data that should be hidden if log santization is turned on.
+ */
+@property (class, readonly, nonatomic) NSArray *sensitiveKeys;
+
 @end
 
 
@@ -70,6 +76,13 @@ NS_ASSUME_NONNULL_BEGIN
  (<= 3.4.x) versions of the SDK is removed.
  */
 + (void)deleteMigratedData;
+
+@end
+
+@interface ApptentiveState (Criteria)
+
+- (nullable NSObject *)valueForFieldWithPath:(NSString *)path;
+- (NSString *)descriptionForFieldWithPath:(NSString *)path;
 
 @end
 

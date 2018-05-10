@@ -1028,7 +1028,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 				break;
 
 			default:
-				ApptentiveLogError(@"Invalid Message Center State: %d", state);
+				ApptentiveLogError(ApptentiveLogTagMessages, @"Invalid Message Center State: %d", state);
 				break;
 		}
 

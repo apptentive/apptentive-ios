@@ -18,14 +18,19 @@ NS_ASSUME_NONNULL_BEGIN
 #define ApptentiveLogTagUtility [ApptentiveLogTag utilityTag]
 #define ApptentiveLogTagStorage [ApptentiveLogTag storageTag]
 #define ApptentiveLogTagMonitor [ApptentiveLogTag logMonitorTag]
+#define ApptentiveLogTagCriteria [ApptentiveLogTag criteriaTag]
+#define ApptentiveLogTagInteractions [ApptentiveLogTag interactionsTag]
+#define ApptentiveLogTagPush [ApptentiveLogTag pushTag]
+#define ApptentiveLogTagMessages [ApptentiveLogTag messagesTag]
 
 extern ApptentiveLogLevel ApptentiveLogGetLevel(void);
 extern void ApptentiveLogSetLevel(ApptentiveLogLevel level);
 extern BOOL ApptentiveCanLogLevel(ApptentiveLogLevel level);
 extern NSString *NSStringFromApptentiveLogLevel(ApptentiveLogLevel level);
 extern ApptentiveLogLevel ApptentiveLogLevelFromString(NSString *level);
-
-typedef void (^ApptentiveLoggerCallback)(ApptentiveLogLevel level, NSString *message);
+extern NSObject * _Nullable ApptentiveHideIfSanitized(NSObject * _Nullable value);
+NSDictionary *ApptentiveHideKeysIfSanitized(NSDictionary *dictionary, NSArray *sensitiveKeys);
+extern void setShouldSanitizeApptentiveLogMessages(BOOL shouldSanitize);
 
 void ApptentiveLogCrit(id arg, ...);
 void ApptentiveLogError(id arg, ...);
@@ -34,6 +39,7 @@ void ApptentiveLogInfo(id arg, ...);
 void ApptentiveLogDebug(id arg, ...);
 void ApptentiveLogVerbose(id arg, ...);
 
-void ApptentiveSetLoggerCallback(_Nullable ApptentiveLoggerCallback callback);
+void ApptentiveStartLogMonitor(NSString *logDir);
+NSArray<NSString *> * _Nullable ApptentiveListLogFiles(void);
 
 NS_ASSUME_NONNULL_END

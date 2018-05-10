@@ -23,6 +23,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)encodeWithCoder:(NSCoder *)aCoder {
 }
 
++ (NSArray *)sensitiveKeys {
+	return @[];
+}
+
 @end
 
 
@@ -50,6 +54,20 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSDictionary *)JSONDictionary {
 	return [self dictionaryForJSONKeyPropertyMapping:[[self class] JSONKeyPathMapping]];
+}
+
+@end
+
+@implementation ApptentiveState (Criteria)
+
+- (nullable NSObject *)valueForFieldWithPath:(NSString *)path {
+	ApptentiveAssertFail(@"Abstract method called");
+	return nil;
+}
+
+- (NSString *)descriptionForFieldWithPath:(NSString *)path {
+	ApptentiveAssertFail(@"Abstract method called");
+	return [NSString stringWithFormat:@"Unrecognized field %@", path];
 }
 
 @end

@@ -226,6 +226,13 @@ extern NSString *NSStringFromApptentiveConversationState(ApptentiveConversationS
 
 - (void)updateWithCurrentValues;
 
+
+/**
+ Indicates that a network request to update the device has been
+ enqueued, so any current device diffs should be cleared.
+ */
+- (void)updateLastSentDevice;
+
 /**
  Checks if conversation is in active state
  */

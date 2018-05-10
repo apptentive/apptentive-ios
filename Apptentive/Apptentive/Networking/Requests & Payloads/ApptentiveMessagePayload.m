@@ -12,6 +12,7 @@
 #import "ApptentiveUtilities.h"
 #import "NSData+Encryption.h"
 #import "NSMutableData+Types.h"
+#import "ApptentiveDefines.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -29,10 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 	self = [super init];
 
 	if (self) {
-		if (message == nil) {
-			ApptentiveLogError(@"Can't init %@: message is nil", NSStringFromClass([self class]));
-			return nil;
-		}
+		APPTENTIVE_CHECK_INIT_NOT_NIL_ARG(message);
 
 		_message = message;
 		_superContents = super.contents;
@@ -136,10 +134,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 				ApptentiveLogVerbose(ApptentiveLogTagPayload, @"Encrypting attachment bytes: %ld", attachmentBytes.length);
 				NSData *encryptedAttachment = [attachmentBytes apptentive_dataEncryptedWithKey:self.encryptionKey];
-				ApptentiveLogVerbose(ApptentiveLogTagPayload, @"Writing encrypted attachment bytes: %ld", encryptedAttachment.length);
+				ApptentiveLogVerbose(ApptentiveLogTagPayload, @"Writing encrypted attachment bytes: %ld.", encryptedAttachment.length);
 				[data appendData:encryptedAttachment];
 			} else {
-				ApptentiveLogVerbose(ApptentiveLogTagPayload, @"Writing attachment bytes: %ld", attachmentBytes.length);
+				ApptentiveLogVerbose(ApptentiveLogTagPayload, @"Writing attachment bytes: %ld.", attachmentBytes.length);
 				[data appendData:attachmentBytes];
 			}
 			[data apptentive_appendString:@"\r\n"];
@@ -147,7 +145,7 @@ NS_ASSUME_NONNULL_BEGIN
 	}
 	[data apptentive_appendFormat:@"--%@--", boundary];
 
-	ApptentiveLogVerbose(ApptentiveLogTagPayload, @"Total payload body bytes: %ld", data.length);
+	ApptentiveLogVerbose(ApptentiveLogTagPayload, @"Total payload body bytes: %ld.", data.length);
 	return data;
 }
 

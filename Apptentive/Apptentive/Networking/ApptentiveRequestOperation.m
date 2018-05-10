@@ -13,6 +13,7 @@
 #import "ApptentiveRequestProtocol.h"
 #import "ApptentiveSafeCollections.h"
 #import "ApptentiveSerialRequest.h"
+#import "ApptentiveRetryPolicy.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -30,38 +31,6 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 
 
 @implementation ApptentiveRequestOperation
-
-+ (NSIndexSet *)okStatusCodes {
-	static NSIndexSet *_okStatusCodes;
-	static dispatch_once_t onceToken;
-	dispatch_once(&onceToken, ^{
-	  _okStatusCodes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(200, 100)]; // 2xx status codes
-	});
-
-	return _okStatusCodes;
-}
-
-+ (NSIndexSet *)clientErrorStatusCodes {
-	static NSIndexSet *_clientErrorStatusCodes;
-	static dispatch_once_t onceToken;
-	dispatch_once(&onceToken, ^{
-	  _clientErrorStatusCodes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(400, 100)]; // 4xx status codes
-
-	});
-
-	return _clientErrorStatusCodes;
-}
-
-+ (NSIndexSet *)serverErrorStatusCodes {
-	static NSIndexSet *_serverErrorStatusCodes;
-	static dispatch_once_t onceToken;
-	dispatch_once(&onceToken, ^{
-	  _serverErrorStatusCodes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(500, 100)]; // 5xx status codes
-
-	});
-
-	return _serverErrorStatusCodes;
-}
 
 - (instancetype)initWithURLRequest:(NSURLRequest *)URLRequest delegate:(ApptentiveRequestOperationCallback *)delegate dataSource:(id<ApptentiveRequestOperationDataSource>)dataSource {
 	self = [super init];
@@ -111,7 +80,7 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 				NSHTTPURLResponse *URLResponse = (NSHTTPURLResponse *)response;
 				self->_responseData = data; // Store "raw" response data to access from the callback
 
-				if ([[[self class] okStatusCodes] containsIndex:URLResponse.statusCode]) {
+				if ([[ApptentiveClient okStatusCodes] containsIndex:URLResponse.statusCode]) {
 					NSObject *responseObject = nil;
 
 					if (URLResponse.statusCode != 204) { // "No Content"
@@ -136,9 +105,8 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 
 		[self.task resume];
 		[self didChangeValueForKey:@"isExecuting"];
-
 		ApptentiveLogDebug(ApptentiveLogTagNetwork, @"%@ %@ started.", self.URLRequest.HTTPMethod, self.URLRequest.URL.absoluteString);
-		ApptentiveLogVerbose(ApptentiveLogTagNetwork, @"Headers: %@%@", self.URLRequest.allHTTPHeaderFields, self.URLRequest.HTTPBody.length > 0 ? [NSString stringWithFormat:@"\n-----------PAYLOAD BEGIN-----------\n%@\n-----------PAYLOAD END-----------", [[NSString alloc] initWithData:self.URLRequest.HTTPBody encoding:NSUTF8StringEncoding]] : @"");
+		ApptentiveLogVerbose(ApptentiveLogTagNetwork, @"Headers: %@%@", ApptentiveHideKeysIfSanitized(self.URLRequest.allHTTPHeaderFields, @[@"Authorization"]), self.URLRequest.HTTPBody.length > 0 ? [NSString stringWithFormat:@"\n-----------PAYLOAD BEGIN-----------\n%@\n-----------PAYLOAD END-----------", ApptentiveHideIfSanitized([[NSString alloc] initWithData:self.URLRequest.HTTPBody encoding:NSUTF8StringEncoding])] : @"");
 
 		[self.dataSource.URLSession.delegateQueue addOperationWithBlock:^{
 		  [self.delegate requestOperationDidStart:self];
@@ -158,11 +126,12 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 	_responseObject = responseObject;
 
 	ApptentiveLogDebug(ApptentiveLogTagNetwork, @"%@ %@ finished successfully (took %g sec).", self.URLRequest.HTTPMethod, self.URLRequest.URL.absoluteString, self.duration);
-	ApptentiveLogVerbose(ApptentiveLogTagNetwork, @"Response object:\n%@.", responseObject);
+
+	ApptentiveLogVerbose(ApptentiveLogTagNetwork, @"Response object:\n%@.", ApptentiveHideIfSanitized(responseObject ?: @""));
 
 	[self.delegate requestOperationDidFinish:self];
 
-	[self.dataSource resetBackoffDelay];
+	[self.dataSource.retryPolicy resetRetryDelay];
 
 	[self completeOperation];
 }
@@ -172,15 +141,14 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 }
 
 - (void)processHTTPError:(NSError *)error withResponse:(NSHTTPURLResponse *)response responseData:(NSData *)responseData {
-	BOOL shouldRetry = YES;
+	BOOL shouldRetry = [self.dataSource.retryPolicy shouldRetryRequestWithStatusCode:response.statusCode];
 	NSString *HTTPErrorTitle;
 	NSString *HTTPErrorMessage = responseData == nil ? @"" : [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
 
-	if ([[[self class] serverErrorStatusCodes] containsIndex:response.statusCode]) {
+	if ([[ApptentiveClient serverErrorStatusCodes] containsIndex:response.statusCode]) {
 		HTTPErrorTitle = @"Server error";
-	} else if ([[[self class] clientErrorStatusCodes] containsIndex:response.statusCode]) {
+	} else if ([[ApptentiveClient clientErrorStatusCodes] containsIndex:response.statusCode]) {
 		HTTPErrorTitle = @"Client error";
-		shouldRetry = NO;
 	}
 
 	if (error == nil && HTTPErrorTitle != nil) {
@@ -201,16 +169,17 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 
 - (void)retryTaskWithError:(nullable NSError *)error {
 	if (error != nil) {
-		ApptentiveLogError(ApptentiveLogTagNetwork, @"%@ %@ failed with error: %@", self.URLRequest.HTTPMethod, self.URLRequest.URL.absoluteString, error);
+		ApptentiveLogWarning(ApptentiveLogTagNetwork, @"%@ %@ failed with error (%@).", self.URLRequest.HTTPMethod, self.URLRequest.URL.absoluteString, error);
 	}
 
-	ApptentiveLogInfo(@"%@ %@ will retry in %f seconds.", self.URLRequest.HTTPMethod, self.URLRequest.URL.absoluteString, self.dataSource.backoffDelay);
+	[self.dataSource.retryPolicy increaseRetryDelay];
+	NSTimeInterval retryDelay = self.dataSource.retryPolicy.retryDelay;
+
+	ApptentiveLogInfo(@"%@ %@ will retry in %f seconds.", self.URLRequest.HTTPMethod, self.URLRequest.URL.absoluteString, retryDelay);
 
 	[self.delegate requestOperationWillRetry:self withError:error];
 
-	[self.dataSource increaseBackoffDelay];
-
-	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(self.dataSource.backoffDelay * NSEC_PER_SEC)), dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0), ^{
+	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(retryDelay * NSEC_PER_SEC)), dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0), ^{
 	  [self startTask];
 	});
 }
@@ -219,12 +188,12 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 	NSError *error;
 	id jsonObject = [ApptentiveJSONSerialization JSONObjectWithData:data error:&error];
 	if (error) {
-		ApptentiveLogError(@"Error while parsing JSON: %@", error);
+		ApptentiveLogError(ApptentiveLogTagNetwork, @"Error while parsing JSON (%@).", error);
 		return;
 	}
 
 	if (![jsonObject isKindOfClass:[NSDictionary class]]) {
-		ApptentiveLogError(@"Unexpected JSON object: %@", jsonObject);
+		ApptentiveLogError(ApptentiveLogTagNetwork, @"Unexpected JSON object: %@", ApptentiveHideIfSanitized(jsonObject));
 		return;
 	}
 
@@ -253,7 +222,7 @@ NSErrorDomain const ApptentiveHTTPErrorDomain = @"com.apptentive.http";
 }
 
 - (void)finishWithError:(NSError *)error {
-	ApptentiveLogError(ApptentiveLogTagNetwork, @"%@ %@ failed with error (took %g sec): %@. Not retrying.", self.URLRequest.HTTPMethod, self.URLRequest.URL.absoluteString, self.duration, error);
+	ApptentiveLogError(ApptentiveLogTagNetwork, @"%@ %@ failed with error after %g sec (%@). Not retrying.", self.URLRequest.HTTPMethod, self.URLRequest.URL.absoluteString, self.duration, error);
 
 	[self.delegate requestOperation:self didFailWithError:error];
 

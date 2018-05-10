@@ -50,7 +50,7 @@
 	@try {
 		task();
 	} @catch (NSException *exception) {
-		ApptentiveLogCrit(@"Exception while dispatching task: %@", exception);
+		ApptentiveLogCrit(ApptentiveLogTagUtility, @"Exception while dispatching task (%@).", exception);
 	}
 }
 

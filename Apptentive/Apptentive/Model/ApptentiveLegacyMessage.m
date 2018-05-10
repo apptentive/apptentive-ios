@@ -52,7 +52,7 @@ NS_ASSUME_NONNULL_BEGIN
 	NSArray *unsentMessages = [context executeFetchRequest:request error:&error];
 
 	if (unsentMessages == nil) {
-		ApptentiveLogError(@"Unable to retrieve unsent messages: %@", error);
+		ApptentiveLogError(ApptentiveLogTagMessages, @"Unable to retrieve unsent messages: %@", error);
 		return;
 	}
 
@@ -75,7 +75,7 @@ NS_ASSUME_NONNULL_BEGIN
 				NSString *newPath = [newAttachmentPath stringByAppendingPathComponent:filename];
 
 				if (![[NSFileManager defaultManager] moveItemAtPath:oldPath toPath:newPath error:&error]) {
-					ApptentiveLogError(@"Unable to move attachment file to %@: %@", newPath, error);
+					ApptentiveLogError(ApptentiveLogTagMessages, @"Unable to move attachment file to %@: %@", newPath, error);
 					continue;
 				}
 
@@ -106,7 +106,7 @@ NS_ASSUME_NONNULL_BEGIN
 	}
 
 	if ([[NSFileManager defaultManager] fileExistsAtPath:oldAttachmentPath] && ![[NSFileManager defaultManager] removeItemAtPath:oldAttachmentPath error:&error]) {
-		ApptentiveLogError(@"Unable to remove legacy attachments directory (%@): %@", oldAttachmentPath, error);
+		ApptentiveLogWarning(ApptentiveLogTagMessages, @"Unable to remove legacy attachments directory (%@): %@", oldAttachmentPath, error);
 	}
 }
 

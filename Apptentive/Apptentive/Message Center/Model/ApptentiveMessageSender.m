@@ -7,6 +7,7 @@
 //
 
 #import "ApptentiveMessageSender.h"
+#import "ApptentiveDefines.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -26,7 +27,7 @@ static NSString *const ProfilePhotoURLKey = @"profilePhotoURL";
 
 	if (self) {
 		if (![JSON isKindOfClass:[NSDictionary class]]) {
-			ApptentiveLogError(@"Can't init %@: invalid json object class: %@", NSStringFromClass([self class]), NSStringFromClass([JSON class]));
+			ApptentiveLogError(ApptentiveLogTagMessages, @"Can't init %@: invalid json object class: %@", NSStringFromClass([self class]), NSStringFromClass([JSON class]));
 			return nil;
 		}
 
@@ -34,7 +35,7 @@ static NSString *const ProfilePhotoURLKey = @"profilePhotoURL";
 
 		_identifier = ApptentiveDictionaryGetString(JSON, @"id");
 		if (_identifier.length == 0) {
-			ApptentiveLogError(@"Can't init %@: identifier is nil or empty", NSStringFromClass([self class]));
+			ApptentiveLogError(ApptentiveLogTagMessages, @"Can't init %@: identifier is nil or empty", NSStringFromClass([self class]));
 			return nil;
 		}
 
@@ -51,10 +52,7 @@ static NSString *const ProfilePhotoURLKey = @"profilePhotoURL";
 	self = [super init];
 
 	if (self) {
-		if (identifier.length == 0) {
-			ApptentiveLogError(@"Can't init %@: identifier is nil or empty", NSStringFromClass([self class]));
-			return nil;
-		}
+		APPTENTIVE_CHECK_INIT_NOT_EMPTY_ARG(identifier);
 
 		_name = name;
 		_identifier = identifier;

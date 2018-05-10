@@ -58,7 +58,7 @@ static NSString *const ATEngagementIsUpdateBuildKey = @"ATEngagementIsUpdateBuil
 }
 
 - (instancetype)initWithCurrentAppRelease {
-	self = [super init];
+	self = [self init];
 
 	if (self) {
 		_type = @"ios";
@@ -249,6 +249,113 @@ static NSString *const ATEngagementIsUpdateBuildKey = @"ATEngagementIsUpdateBuil
 		@"dt_xcode": NSStringFromSelector(@selector(Xcode)),
 		@"dt_xcode_build": NSStringFromSelector(@selector(XcodeBuild))
 	};
+}
+
+@end
+
+@implementation ApptentiveAppRelease (Criteria)
+
+- (nullable NSObject *)valueForFieldWithPath:(NSString *)path {
+	if ([path isEqualToString:@"cf_bundle_version"]) {
+		return self.build;
+	} else if ([path isEqualToString:@"cf_bundle_short_version_string"]) {
+		return self.version;
+	} else if ([path isEqualToString:@"debug"]) {
+		return @(self.debugBuild);
+	} else if ([path isEqualToString:@"dt_compiler"]) {
+		return self.compiler;
+	} else if ([path isEqualToString:@"dt_platform_build"]) {
+		return self.platformBuild;
+	} else if ([path isEqualToString:@"dt_platform_name"]) {
+		return self.platformName;
+	} else if ([path isEqualToString:@"dt_platform_version"]) {
+		return [[ApptentiveVersion alloc] initWithString:self.platformVersion];
+	} else if ([path isEqualToString:@"dt_sdk_build"]) {
+		return self.SDKBuild;
+	} else if ([path isEqualToString:@"dt_sdk_name"]) {
+		return self.SDKName;
+	} else if ([path isEqualToString:@"dt_xcode"]) {
+		return self.Xcode;
+	} else if ([path isEqualToString:@"dt_xcode_build"]) {
+		return self.XcodeBuild;
+	} else {
+		NSArray *parts = [path componentsSeparatedByString:@"/"];
+		NSString *first = parts.firstObject;
+		NSString *last = parts.lastObject;
+
+		if ([first isEqualToString:@"is_update"]) {
+			if ([last isEqualToString:@"cf_bundle_short_version_string"]) {
+				return @(self.isUpdateVersion);
+			} else if ([last isEqualToString:@"cf_bundle_version"]) {
+				return @(self.isUpdateBuild);
+			} else {
+				ApptentiveLogError(@"Unrecognized field name “%@”", path);
+				return nil;
+			}
+		} else if ([first isEqualToString:@"time_at_install"]) {
+			if ([last isEqualToString:@"total"]) {
+				return self.timeAtInstallTotal;
+			} else if ([last isEqualToString:@"cf_bundle_short_version_string"]) {
+				return self.timeAtInstallVersion;
+			} else if ([last isEqualToString:@"cf_bundle_version"]) {
+				return self.timeAtInstallBuild;
+			} else {
+				ApptentiveLogError(@"Unrecognized field name “%@”", path);
+				return nil;
+			}
+		}
+	}
+
+	ApptentiveLogError(@"Unrecognized field name “%@”", path);
+	return nil;
+}
+
+- (NSString *)descriptionForFieldWithPath:(NSString *)path {
+	if ([path isEqualToString:@"cf_bundle_version"]) {
+		return @"app build (CFBundleVersion)";
+	} else if ([path isEqualToString:@"cf_bundle_short_version_string"]) {
+		return @"app version (CFBundleShortVersionString)";
+	} else if ([path isEqualToString:@"debug"]) {
+		return @"app built using the debug configuration";
+	} else if ([path isEqualToString:@"dt_compiler"]) {
+		return @"developer tools compiler";
+	} else if ([path isEqualToString:@"dt_platform_build"]) {
+		return @"developer tools platform build";
+	} else if ([path isEqualToString:@"dt_platform_name"]) {
+		return @"developer tools platform name";
+	} else if ([path isEqualToString:@"dt_platform_version"]) {
+		return @"developer tools platform version";
+	} else if ([path isEqualToString:@"dt_sdk_build"]) {
+		return @"developer tools SDK build";
+	} else if ([path isEqualToString:@"dt_sdk_name"]) {
+		return @"developer tools SDK name";
+	} else if ([path isEqualToString:@"dt_xcode"]) {
+		return @"developer tools xcode";
+	} else if ([path isEqualToString:@"dt_xcode_build"]) {
+		return @"developer tools xcode build";
+	} else {
+		NSArray *parts = [path componentsSeparatedByString:@"/"];
+		NSString *first = parts.firstObject;
+		NSString *last = parts.lastObject;
+
+		if ([first isEqualToString:@"is_update"]) {
+			if ([last isEqualToString:@"cf_bundle_short_version_string"]) {
+				return @"app version (CFBundleShortVersionString) changed";
+			} else if ([last isEqualToString:@"cf_bundle_version"]) {
+				return @"app build (CFBundleVersion) changed";
+			}
+		} else if ([first isEqualToString:@"time_at_install"]) {
+			if ([last isEqualToString:@"total"]) {
+				return @"time at install";
+			} else if ([last isEqualToString:@"cf_bundle_short_version_string"]) {
+				return @"time at install for version";
+			} else if ([last isEqualToString:@"cf_bundle_version"]) {
+				return @"time at install for build";
+			}
+		}
+	}
+
+	return [NSString stringWithFormat:@"Unrecognized app release field %@", path];
 }
 
 @end

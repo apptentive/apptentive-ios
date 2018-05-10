@@ -17,6 +17,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ApptentiveClient : NSObject <NSURLSessionDelegate, ApptentiveRequestOperationDataSource>
 
++ (NSIndexSet *)okStatusCodes;
++ (NSIndexSet *)clientErrorStatusCodes;
++ (NSIndexSet *)serverErrorStatusCodes;
+
 @property (readonly, nonatomic) NSOperationQueue *networkQueue;
 @property (readonly, nonatomic) NSURL *baseURL;
 @property (readonly, nonatomic) NSString *apptentiveKey;

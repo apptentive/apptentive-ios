@@ -32,7 +32,7 @@ NS_ASSUME_NONNULL_BEGIN
 	NSArray *unsentSurveyResponses = [context executeFetchRequest:request error:&error];
 
 	if (unsentSurveyResponses == nil) {
-		ApptentiveLogError(@"Unable to retrieve unsent events: %@", error);
+		ApptentiveLogError(ApptentiveLogTagInteractions, @"Unable to retrieve unsent events: %@", error);
 		return;
 	}
 
@@ -83,7 +83,7 @@ NS_ASSUME_NONNULL_BEGIN
 		@try {
 			result = [NSKeyedUnarchiver unarchiveObjectWithData:self.answersData];
 		} @catch (NSException *exception) {
-			ApptentiveLogError(@"Unable to unarchive answers data: %@", exception);
+			ApptentiveLogError(ApptentiveLogTagInteractions, @"Unable to unarchive answers data: %@", exception);
 		}
 		return result;
 	}

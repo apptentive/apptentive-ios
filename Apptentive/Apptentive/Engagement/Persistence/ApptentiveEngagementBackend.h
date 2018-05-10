@@ -21,9 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (readonly, nonatomic) ApptentiveEngagementManifest *manifest;
 
 - (instancetype)initWithConversation:(ApptentiveConversation *)conversation manifest:(ApptentiveEngagementManifest *)manifest;
-
 - (nullable ApptentiveInteraction *)interactionForEvent:(NSString *)event;
-- (nullable ApptentiveInteraction *)interactionForInvocations:(NSArray *)invocations;
 
 @end
 

@@ -4,22 +4,21 @@ The Apptentive iOS SDK provides a simple and powerful channel to communicate in-
 
 Use Apptentive features to improve your app's App Store ratings, collect and respond to customer feedback, show surveys at specific points within your app, and more.
 
-## Install Guide
+See our [Quick Start Guide](https://learn.apptentive.com/knowledge-base/ios-quick-start/) to get up and running as quickly as possible. 
 
-Apptentive can be installed manually as an Xcode subproject or via the dependency manager CocoaPods.
+For complete information on installing and using Apptentive, please see our [iOS integration reference](https://learn.apptentive.com/knowledge-base/ios-integration-reference/).
 
-The following guides explain the integration process:
+## Installation
 
- - [Xcode project setup guide](http://www.apptentive.com/docs/ios/setup/xcode/)
- - [CocoaPods installation guide](http://www.apptentive.com/docs/ios/setup/cocoapods)
- 
- As of version 3.3.1, we also support Carthage. 
+Apptentive can be installed using CocoaPods or Carthage, or manually as an Xcode subproject. 
+
+ - [CocoaPods installation guide](https://learn.apptentive.com/knowledge-base/ios-integration-reference/#cocoapods)
+ - [Carthage installation guide](https://learn.apptentive.com/knowledge-base/ios-integration-reference/#carthage)
+ - [Xcode project setup guide](https://learn.apptentive.com/knowledge-base/ios-integration-reference/#subproject)
 
 ## Using Apptentive in your App
 
-After integrating the Apptentive SDK into your project, you can [begin using Apptentive features in your app](http://www.apptentive.com/docs/ios/integration/).
-
-To begin using the SDK, import the SDK and create a configuration object with your Apptentive App Key and Apptentive App Signature (found in the [API section of your Apptentive dashboard](https://be.apptentive.com/apps/current/settings/api)).
+To begin, you will have to [initialize the Apptentive SDK](https://learn.apptentive.com/knowledge-base/ios-integration-reference/#initialize-apptentive):
 
 ``` objective-c
 @import Apptentive;
@@ -44,17 +43,15 @@ Apptentive.shared.engage(event: "event_name", from: viewController)
 
 Later, on your Apptentive dashboard, you will target these events with Apptentive features such as Message Center, Ratings Prompts, and Surveys.
 
-Please see our [iOS integration guide](http://www.apptentive.com/docs/ios/integration/) for more on this subject.
-
 ## API Documentation
 
-Please see our docs site for the Apptentive iOS SDK's [API documentation](http://www.apptentive.com/docs/ios/api/Classes/Apptentive.html).
+Please see our Customer Learning Center for the Apptentive iOS SDK's [API documentation](https://learn.apptentive.com/knowledge-base/ios-sdk-api/).
 
 Apptentive's [API changelog](docs/APIChanges.md) is also updated with each release of the SDK.
 
 ## Testing Apptentive Features
 
-Please see the [Apptentive testing guide](http://www.apptentive.com/docs/ios/testing/) for directions on how to test that the Rating Prompt, Surveys, and other Apptentive features have been configured correctly.
+Please see the [Apptentive testing guide](https://learn.apptentive.com/knowledge-base/testing-your-apptentive-integration-ios/) for directions on how to test that the Rating Prompt, Surveys, and other Apptentive features have been configured correctly.
 
 # Apptentive Example App
 

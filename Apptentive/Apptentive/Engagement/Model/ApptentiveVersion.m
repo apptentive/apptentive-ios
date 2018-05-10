@@ -91,6 +91,26 @@ static NSString *const PatchKey = @"patch";
 	}
 }
 
+- (uint64_t)integerValueForComparison {
+	return (self.major << 20) + (self.minor << 10) + self.patch;
+}
+
+- (NSComparisonResult)compare:(ApptentiveVersion *)otherVersion {
+	if (self.major == -1 || otherVersion.major == -1) {
+		return [self.versionString compare:otherVersion.versionString];
+	} else if ([otherVersion integerValueForComparison] > [self integerValueForComparison]) {
+		return NSOrderedAscending;
+	} else if ([otherVersion integerValueForComparison] < [self integerValueForComparison]) {
+		return NSOrderedDescending;
+	} else {
+		return NSOrderedSame;
+	}
+}
+
+- (NSString *)description {
+	return [NSString stringWithFormat:@"%@: %@", super.description, self.versionString];
+}
+
 @end
 
 

@@ -34,6 +34,7 @@
 #import "ApptentiveSerialRequest.h"
 #import "ApptentiveStopWatch.h"
 #import "ApptentiveUtilities.h"
+#import "ApptentiveFileUtilities.h"
 #import "Apptentive_Private.h"
 #import "NSData+Encryption.h"
 #import "ApptentiveDispatchQueue.h"
@@ -43,7 +44,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 static NSString *const ConversationMetadataFilename = @"conversation-v1.meta";
 static NSString *const ConversationFilename = @"conversation-v1.archive";
-static NSString *const ManifestFilename = @"manifest-v1.archive";
+static NSString *const ManifestFilename = @"manifest-v2.archive";
 
 static NSInteger ApptentiveInternalInconsistency = -201;
 static NSInteger ApptentiveAlreadyLoggedInErrorCode = -202;
@@ -109,6 +110,8 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 		self.activeConversation.delegate = self;
 
+		[self createMessageManagerForConversation:self.activeConversation];
+
 		[self handleConversationStateChange:self.activeConversation];
 		return true;
 	}
@@ -130,7 +133,6 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 		if (loggedInConversation != nil) {
 			[self loadEngagementManfiest];
-			[self createMessageManagerForConversation:loggedInConversation];
 
 			return loggedInConversation;
 		}
@@ -147,7 +149,6 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 		if (anonymousConversation != nil) {
 			[self loadEngagementManfiest];
-			[self createMessageManagerForConversation:anonymousConversation];
 
 			return anonymousConversation;
 		}
@@ -188,7 +189,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	  return item.state == ApptentiveConversationStateLoggedOut;
 	}];
 	if (item != nil) {
-		ApptentiveLogDebug(ApptentiveLogTagConversation, @"Can't load conversation: only 'logged-out' conversations available");
+		ApptentiveLogDebug(ApptentiveLogTagConversation, @"Can't load conversation: only 'logged-out' conversations available.");
 		return nil;
 	}
 
@@ -222,7 +223,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 }
 
 - (nullable ApptentiveConversation *)loadConversationFromMetadataItem:(ApptentiveConversationMetadataItem *)item {
-	ApptentiveAssertNotNil(item, @"Conversation metadata item is nil");
+	ApptentiveAssertNotNil(item, @"Conversation metadata item is nil.");
 	if (item == nil) {
 		return nil;
 	}
@@ -244,18 +245,18 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	if (item.state == ApptentiveConversationStateLoggedIn || item.state == ApptentiveConversationStateLoggedOut) {
 		ApptentiveStopWatch *decryptionStopWatch = [ApptentiveStopWatch new];
 
-		ApptentiveAssertNotNil(item.encryptionKey, @"Missing encryption key");
+		ApptentiveAssertNotNil(item.encryptionKey, @"Missing encryption key.");
 		if (item.encryptionKey == nil) {
 			return nil;
 		}
 
 		conversationData = [conversationData apptentive_dataDecryptedWithKey:item.encryptionKey];
-		ApptentiveAssertNotNil(item.encryptionKey, @"Can't decrypt conversation data");
+		ApptentiveAssertNotNil(item.encryptionKey, @"Can't decrypt conversation data.");
 		if (conversationData == nil) {
 			return nil;
 		}
 
-		ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Conversation decrypted (took %g ms)", decryptionStopWatch.elapsedMilliseconds);
+		ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Conversation decrypted (took %g ms).", decryptionStopWatch.elapsedMilliseconds);
 	}
 
 	ApptentiveConversation *conversation = [NSKeyedUnarchiver unarchiveObjectWithData:conversationData];
@@ -281,15 +282,12 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 }
 
 - (void)createMessageManagerForConversation:(ApptentiveConversation *)conversation {
-	ApptentiveAssertNotNil(conversation.token, @"Attempted to create message manager without conversation token");
-	ApptentiveAssertNotNil(conversation.identifier, @"Attempted to create message manager without conversation identifier");
-
 	NSString *directoryPath = [self conversationContainerPathForDirectoryName:conversation.directoryName];
 
-	ApptentiveAssertNil(self.messageManager, @"Message manager already exists");
+	ApptentiveAssertNil(self.messageManager, @"Message manager already exists.");
 	_messageManager = [[ApptentiveMessageManager alloc] initWithStoragePath:directoryPath client:self.client pollingInterval:Apptentive.shared.backend.configuration.messageCenter.backgroundPollingInterval conversation:conversation operationQueue:self.operationQueue];
 
-	ApptentiveAssertNotNil(self.messageManager, @"Unable to create message manager");
+	ApptentiveAssertNotNil(self.messageManager, @"Unable to create message manager.");
 	Apptentive.shared.backend.payloadSender.messageDelegate = self.messageManager;
 }
 
@@ -313,7 +311,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 		conversation.state = ApptentiveConversationStateLoggedOut;
 
-		ApptentiveAssertNotNil(self.messageManager, @"Attempted to end active conversation without message manager");
+		ApptentiveAssertNotNil(self.messageManager, @"Attempted to end active conversation without message manager.");
 		[self.messageManager saveMessageStore];
 		[self.messageManager stop];
 		_messageManager = nil;
@@ -323,14 +321,14 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 		self.activeConversation = nil;
 	} else {
-		ApptentiveLogInfo(@"Attempting to log out, but no conversation is active.");
+		ApptentiveLogError(ApptentiveLogTagConversation, @"Attempting to log out, but no conversation is active.");
 	}
 }
 
 #pragma mark - Conversation Token Fetching
 
 - (void)fetchConversationToken:(ApptentiveConversation *)conversation {
-	ApptentiveAssertNil(self.conversationOperation, @"Another request fetch request is running");
+	ApptentiveAssertNil(self.conversationOperation, @"Another request fetch request is running.");
 	self.conversationOperation.delegate = nil;
 	[self.conversationOperation cancel];
 
@@ -347,12 +345,14 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	self.conversationOperation = [self.client requestOperationWithRequest:[[ApptentiveConversationRequest alloc] initWithAppInstall:conversation] token:nil delegate:delegate];
 
 	[self.client.networkQueue addOperation:self.conversationOperation];
+
+	[conversation updateLastSentDevice];
 }
 
 - (BOOL)fetchLegacyConversation:(ApptentiveConversation *)conversation {
-	ApptentiveAssertNotNil(conversation, @"Conversation is nil");
-	ApptentiveAssertNil(conversation.token, @"Conversation token already exists");
-	ApptentiveAssertTrue(conversation.legacyToken.length > 0, @"Conversation legacy token is nil or empty");
+	ApptentiveAssertNotNil(conversation, @"Conversation is nil.");
+	ApptentiveAssertNil(conversation.token, @"Conversation token already exists.");
+	ApptentiveAssertTrue(conversation.legacyToken.length > 0, @"Conversation legacy token is nil or empty.");
 
 	ApptentiveRequestOperationCallback *delegate = [ApptentiveRequestOperationCallback new];
 	delegate.operationFinishCallback = ^(ApptentiveRequestOperation *operation) {
@@ -379,7 +379,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 - (void)handleConversationStateChange:(ApptentiveConversation *)conversation {
 	ApptentiveAssertOperationQueue(self.operationQueue);
 
-	ApptentiveAssertNotNil(conversation, @"Conversation is nil");
+	ApptentiveAssertNotNil(conversation, @"Conversation is nil.");
 	if (conversation != nil) {
 		NSDictionary *userInfo = @{ApptentiveConversationStateDidChangeNotificationKeyConversation: conversation};
 		[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveConversationStateDidChangeNotification
@@ -399,7 +399,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 }
 
 - (void)updateMetadataItems:(ApptentiveConversation *)conversation {
-	ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Updating metadata: state=%@ localId=%@ conversationId=%@ token=%@", NSStringFromApptentiveConversationState(conversation.state), conversation.localIdentifier, conversation.identifier, conversation.token);
+	ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Updating metadata:\nstate: %@\nlocalIdentifier: %@\nconversationIdentifier: %@\ntoken: %@", NSStringFromApptentiveConversationState(conversation.state), conversation.localIdentifier, conversation.identifier, ApptentiveHideIfSanitized(conversation.token));
 
 	// if the conversation is 'logged-in' we should not have any other 'logged-in' items in metadata
 	if (conversation.state == ApptentiveConversationStateLoggedIn) {
@@ -435,14 +435,14 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 	item.state = conversation.state;
 	if ([conversation hasActiveState]) {
-		ApptentiveAssertNotNil(conversation.token, @"Conversation token is nil");
+		ApptentiveAssertNotNil(conversation.token, @"Conversation token is nil.");
 		item.JWT = conversation.token;
 	}
 
 	if (item.state == ApptentiveConversationStateLoggedIn) {
-		ApptentiveAssertNotNil(conversation.encryptionKey, @"Encryption key is nil");
+		ApptentiveAssertNotNil(conversation.encryptionKey, @"Encryption key is nil.");
 		item.encryptionKey = conversation.encryptionKey;
-		ApptentiveAssertNotNil(conversation.userId, @"User id is nil");
+		ApptentiveAssertNotNil(conversation.userId, @"userId is nil.");
 		item.userId = conversation.userId;
 	}
 
@@ -455,14 +455,14 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	NSString *metadataPath = self.metadataPath;
 
 	ApptentiveConversationMetadata *metadata = nil;
-	if ([ApptentiveUtilities fileExistsAtPath:metadataPath]) {
+	if ([ApptentiveFileUtilities fileExistsAtPath:metadataPath]) {
 		metadata = [NSKeyedUnarchiver unarchiveObjectWithFile:metadataPath];
 		if (metadata) {
 			// TODO: dispatch debug event
 			return metadata;
 		}
 
-		ApptentiveLogWarning(@"Unable to deserialize metadata from file: %@", metadataPath);
+		ApptentiveLogError(ApptentiveLogTagConversation, @"Unable to unarchive metadata from file: %@", metadataPath);
 	}
 
 	return [[ApptentiveConversationMetadata alloc] init];
@@ -490,7 +490,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		}
 
 		if (!Apptentive.shared.backend.foreground) {
-			[self failLoginWithErrorCode:ApptentiveInBackgroundErrorCode failureReason:@"App is in background state"];
+			[self failLoginWithErrorCode:ApptentiveInBackgroundErrorCode failureReason:@"App is in background state."];
 			return;
 		}
 
@@ -499,13 +499,13 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		NSError *jwtError;
 		ApptentiveJWT *jwt = [ApptentiveJWT JWTWithContentOfString:token error:&jwtError];
 		if (jwtError != nil) {
-			[self failLoginWithErrorCode:ApptentiveInternalInconsistency failureReason:@"JWT parsing error: %@", jwtError];
+			[self failLoginWithErrorCode:ApptentiveInternalInconsistency failureReason:@"JWT parsing error (%@).", jwtError];
 			return;
 		}
 
 		NSString *userId = jwt.payload[@"sub"];
 		if (userId.length == 0) {
-			[self failLoginWithErrorCode:ApptentiveInternalInconsistency failureReason:@"MISSING_SUB_CLAIM"];
+			[self failLoginWithErrorCode:ApptentiveInternalInconsistency failureReason:@"Missing sub claim."];
 			return;
 		}
 
@@ -519,14 +519,14 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 			}];
 
 			if (conversationItem == nil) {
-				ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Logging in a new user...");
+				ApptentiveLogDebug(ApptentiveLogTagConversation, @"Logging in a new user...");
 				[self sendLoginRequestWithToken:token conversationIdentifier:nil userId:userId];
 				return;
 			}
 
-			ApptentiveAssertNotNil(conversationItem.conversationIdentifier, @"Missing conversation identifier");
+			ApptentiveAssertNotNil(conversationItem.conversationIdentifier, @"Missing conversation identifier.");
 
-			ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Logging in an existing user (%@)...", userId);
+			ApptentiveLogDebug(ApptentiveLogTagConversation, @"Logging in an existing user (%@)...", userId);
 			[self sendLoginRequestWithToken:token conversationIdentifier:conversationItem.conversationIdentifier userId:userId];
 			return;
 		}
@@ -534,7 +534,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		switch (self.activeConversation.state) {
 			case ApptentiveConversationStateAnonymousPending:
 			case ApptentiveConversationStateLegacyPending:
-				ApptentiveAssertTrue(NO, @"Login operation should not kick off until conversation fetch complete");
+				ApptentiveAssertTrue(NO, @"Login operation should not kick off until conversation fetch is complete.");
 				[self failLoginWithErrorCode:ApptentiveInternalInconsistency failureReason:@"Login cannot proceed with Anonymous Pending conversation."];
 				break;
 
@@ -556,8 +556,8 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 - (void)sendLoginRequestWithToken:(NSString *)token conversationIdentifier:(nullable NSString *)conversationIdentifier userId:(NSString *)userId {
 	ApptentiveAssertOperationQueue(self.operationQueue);
-	ApptentiveAssertNotEmpty(token, @"Attempted to send login request with nil or empty conversation token");
-	ApptentiveAssertNotEmpty(userId, @"Attempted to send login request with nil or empty user id");
+	ApptentiveAssertNotEmpty(token, @"Attempted to send login request with nil or empty conversation token.");
+	ApptentiveAssertNotEmpty(userId, @"Attempted to send login request with nil or empty user id.");
 
 	ApptentiveRequestOperationCallback *delegate = [ApptentiveRequestOperationCallback new];
 	delegate.operationFinishCallback = ^(ApptentiveRequestOperation *operation) {
@@ -705,7 +705,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 - (void)conversation:(ApptentiveConversation *)conversation processLoginResponse:(NSDictionary *)loginResponse userId:(NSString *)userId token:(NSString *)token {
 	ApptentiveAssertOperationQueue(self.operationQueue);
-	ApptentiveAssertNotEmpty(token, @"Empty token in login request");
+	ApptentiveAssertNotEmpty(token, @"Empty token in login request.");
 
 	NSString *encryptionKey = ApptentiveDictionaryGetString(loginResponse, @"encryption_key");
 	NSString *deviceIdentifier = ApptentiveDictionaryGetString(loginResponse, @"device_id");
@@ -739,7 +739,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 			ApptentiveConversation *existingConversation = [self loadConversationFromMetadataItem:conversationItem];
 			mutableConversation = [existingConversation mutableCopy];
 		} else {
-			[self failLoginWithErrorCode:ApptentiveInternalInconsistency failureReason:@"Mismatching conversation identifiers for user '%@'. Expected '%@' but was '%@'", userId, conversationItem.conversationIdentifier, conversationIdentifier];
+			[self failLoginWithErrorCode:ApptentiveInternalInconsistency failureReason:@"Mismatching conversation identifiers for user '%@'. Expected '%@' but was '%@'.", userId, conversationItem.conversationIdentifier, conversationIdentifier];
 			return;
 		}
 	} else {
@@ -750,12 +750,12 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	mutableConversation.state = ApptentiveConversationStateLoggedIn;
 	mutableConversation.userId = userId;
 	mutableConversation.encryptionKey = [NSData apptentive_dataWithHexString:encryptionKey];
-	ApptentiveAssertNotNil(mutableConversation.encryptionKey, @"Apptentive encryption key should be not nil");
+	ApptentiveAssertNotNil(mutableConversation.encryptionKey, @"Apptentive encryption key is nil.");
 
-	[self.messageManager stopPolling];
-	self.messageManager = nil;
-
-	[self createMessageManagerForConversation:mutableConversation];
+	// If a user has logged out during since we've launched, we have to recreate the message manager.
+	if (self.messageManager == nil) {
+		[self createMessageManagerForConversation:mutableConversation];
+	}
 
 	self.activeConversation = mutableConversation;
 	self.activeConversation.delegate = self;
@@ -785,7 +785,6 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		}
 
 		[self.messageManager stop];
-		[self createMessageManagerForConversation:mutableConversation];
 
 		self.activeConversation = mutableConversation;
 		self.activeConversation.delegate = self;
@@ -804,7 +803,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 }
 
 - (BOOL)updateLegacyConversation:(ApptentiveConversation *)conversation withResponse:(NSDictionary *)conversationResponse {
-	ApptentiveAssertNotNil(conversation, @"Active conversation is nil");
+	ApptentiveAssertNotNil(conversation, @"Active conversation is nil.");
 	if (conversation == nil) {
 		return NO;
 	}
@@ -824,8 +823,6 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		if (mutableConversation.state == ApptentiveConversationStateLegacyPending) {
 			mutableConversation.state = ApptentiveConversationStateAnonymous;
 		}
-
-		[self createMessageManagerForConversation:mutableConversation];
 
 		self.activeConversation = mutableConversation;
 		self.activeConversation.delegate = self;
@@ -858,7 +855,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		NSError *error;
 
 		if (![[NSFileManager defaultManager] createDirectoryAtPath:conversationDirectoryPath withIntermediateDirectories:YES attributes:nil error:&error]) {
-			ApptentiveAssertTrue(NO, @"Unable to create conversation directory “%@” (%@)", conversationDirectoryPath, error);
+			ApptentiveAssertTrue(NO, @"Unable to create conversation directory %@ (%@)", conversationDirectoryPath, error);
 			return NO;
 		}
 	}
@@ -881,9 +878,11 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	// All non-anonymous conversations should be encrypted
 	// We may have just logged out, so also encrypt logged-out conversations
 	if (conversation.state == ApptentiveConversationStateLoggedIn || conversation.state == ApptentiveConversationStateLoggedOut) {
+		ApptentiveLogDebug(ApptentiveLogTagConversation, @"Saving encrypted conversation data.");
+
 		ApptentiveStopWatch *encryptionStopWatch = [[ApptentiveStopWatch alloc] init];
 
-		ApptentiveAssertNotNil(conversation.encryptionKey, @"Missing encryption key");
+		ApptentiveAssertNotNil(conversation.encryptionKey, @"Missing encryption key.");
 		if (conversation.encryptionKey == nil) {
 			return NO;
 		}
@@ -898,17 +897,17 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		conversationData = [conversationData apptentive_dataEncryptedWithKey:conversation.encryptionKey
 														initializationVector:initializationVector];
 		if (conversationData == nil) {
-			ApptentiveLogError(@"Unable to save conversation data: encryption failed");
+			ApptentiveLogError(ApptentiveLogTagConversation, @"Unable to save conversation data: encryption failed.");
 			return NO;
 		}
 
-		ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Conversation data encrypted (took %g ms)", encryptionStopWatch.elapsedMilliseconds);
+		ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Conversation data encrypted (took %g ms).", encryptionStopWatch.elapsedMilliseconds);
 	} else {
-		ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Saving unencrypted conversation data");
+		ApptentiveLogDebug(ApptentiveLogTagConversation, @"Saving unencrypted conversation data.");
 	}
 
 	BOOL succeed = [conversationData writeToFile:file atomically:YES];
-	ApptentiveLogDebug(ApptentiveLogTagConversation, @"Conversation data %@saved (took %g ms): location=%@", succeed ? @"" : @"NOT ", saveStopWatch.elapsedMilliseconds, file);
+	ApptentiveLogDebug(ApptentiveLogTagConversation, @"Conversation data %@saved (took %g ms): location=%@.", succeed ? @"" : @"NOT ", saveStopWatch.elapsedMilliseconds, file);
 
 	return succeed;
 }
@@ -917,16 +916,16 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 - (void)loadEngagementManfiest {
 	if ([[NSFileManager defaultManager] fileExistsAtPath:self.manifestPath]) {
-		ApptentiveLogDebug(@"Loading cached engagment manifest from %@", self.manifestPath);
+		ApptentiveLogDebug(ApptentiveLogTagConversation, @"Loading cached engagment manifest from %@.", self.manifestPath);
 		@try {
 			_manifest = [NSKeyedUnarchiver unarchiveObjectWithFile:self.manifestPath];
 
 			[self notifyEngagementManifestUpdate];
 		} @catch (NSException *exc) {
-			ApptentiveAssertFail(@"Exception when loading engagement manifest: %@", exc);
+			ApptentiveAssertFail(@"Exception when loading engagement manifest (%@).", exc);
 		}
 	} else {
-		ApptentiveLogDebug(@"No cached engagement manifest available at %@", self.manifestPath);
+		ApptentiveLogDebug(ApptentiveLogTagConversation, @"No cached engagement manifest available at %@.", self.manifestPath);
 	}
 }
 
@@ -981,7 +980,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	ApptentiveAssertOperationQueue(self.operationQueue);
 
 	if (![self saveConversation:conversation]) {
-		ApptentiveLogError(@"Error saving active conversation.");
+		ApptentiveLogError(ApptentiveLogTagConversation, @"Error saving active conversation.");
 	}
 }
 
@@ -1046,14 +1045,14 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		// Get time at install from the creation date of the `com.apptentive.feedback` directory
 		NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:Apptentive.shared.backend.supportDirectoryPath error:&error];
 		if (attributes == nil) {
-			ApptentiveLogError(@"Error retrieving support directory attributes (%@)", error);
+			ApptentiveLogError(ApptentiveLogTagConversation, @"Error retrieving support directory attributes (%@)", error);
 			return;
 		}
 
 		NSDate *timeAtInstall = attributes[NSFileCreationDate];
 
 		if (timeAtInstall == nil) {
-			ApptentiveLogError(@"Error retrieving support directory creation date");
+			ApptentiveLogError(ApptentiveLogTagConversation, @"Error retrieving support directory creation date.");
 		}
 
 		[self.activeConversation.appRelease updateMissingTimeAtInstallTo:timeAtInstall];
@@ -1080,7 +1079,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 			NSDictionary *manifestDictionary = [ApptentiveJSONSerialization JSONObjectWithData:localData error:&error];
 
 			if (!manifestDictionary) {
-				ApptentiveLogError(@"Unable to parse local manifest %@: %@", localEngagementManifestURL.absoluteString, error);
+				ApptentiveLogError(ApptentiveLogTagConversation, @"Unable to parse local manifest %@ (%@).", localEngagementManifestURL.absoluteString, error);
 			}
 
 			_manifest = [[ApptentiveEngagementManifest alloc] initWithJSONDictionary:manifestDictionary cacheLifetime:MAXFLOAT];

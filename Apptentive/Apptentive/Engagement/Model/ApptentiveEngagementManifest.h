@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class ApptentiveInteraction;
+@class ApptentiveInteraction, ApptentiveTargets;
 
 
 /**
@@ -25,7 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
  of interaction invocations (a combination of an interaction identfier and
  criteria that must be met for the interaction to be engage).
  */
-@property (readonly, strong, nonatomic) NSDictionary<NSString *, NSArray *> *targets;
+@property (readonly, strong, nonatomic) ApptentiveTargets *targets;
 
 /**
  A dictionary whose keys are interaction identifiers, and whose values are

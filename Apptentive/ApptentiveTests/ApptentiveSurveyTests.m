@@ -11,7 +11,8 @@
 #import "ApptentiveCount.h"
 #import "ApptentiveEngagement.h"
 #import "ApptentiveInteraction.h"
-#import "ApptentiveInteractionUsageData.h"
+#import "ApptentiveStyleSheet.h"
+#import "ApptentiveConversation.h"
 #import "ApptentiveStyleSheet.h"
 #import "ApptentiveSurveyViewModel.h"
 #import "Apptentive_Private.h"
@@ -37,6 +38,9 @@
 	NSData *JSONData = [NSData dataWithContentsOfURL:JSONURL];
 	NSError *error;
 	NSDictionary *JSONDictionary = [NSJSONSerialization JSONObjectWithData:JSONData options:0 error:&error];
+
+	// We use a stylesheet object internally. This should get injected as a dependency at some point
+	[Apptentive registerWithConfiguration:[ApptentiveConfiguration configurationWithApptentiveKey:@"abc123" apptentiveSignature:@"abc123"]];
 
 	if (!JSONDictionary) {
 		NSLog(@"Error reading JSON: %@", error);

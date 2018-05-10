@@ -29,12 +29,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable NSData *)apptentive_dataEncryptedWithKey:(NSData *)key initializationVector:(NSData *)initializationVector {
 	if (key == nil) {
-		ApptentiveLogError(@"Unable to encrypt data: encryption key is nil");
+		ApptentiveLogError(ApptentiveLogTagUtility, @"Unable to encrypt data: encryption key is nil.");
 		return nil;
 	}
 
 	if (initializationVector.length == 0) {
-		ApptentiveLogError(@"Unable to encrypt data: initialization vector is nil or empty");
+		ApptentiveLogError(ApptentiveLogTagUtility, @"Unable to encrypt data: initialization vector is nil or empty.");
 		return nil;
 	}
 
@@ -51,7 +51,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 		return ciphertextData;
 	} else {
-		ApptentiveLogError(@"Failed to encrypt data (error code: %ld)", err);
+		ApptentiveLogError(ApptentiveLogTagUtility, @"Failed to encrypt data (error code: %ld).", err);
 		return nil;
 	}
 }
@@ -71,14 +71,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 		return result;
 	} else {
-		ApptentiveLogError(@"Failed to decrypt data (error code: %ld)", err);
+		ApptentiveLogError(ApptentiveLogTagUtility, @"Failed to decrypt data (error code: %ld)", err);
 		return nil;
 	}
 }
 
 + (nullable instancetype)apptentive_dataWithHexString:(NSString *)string {
 	if (string.length % 2 != 0) {
-		ApptentiveLogError(@"Key length must be an even number of characters: '%@'", string);
+		ApptentiveLogError(ApptentiveLogTagUtility, @"Key length must be an even number of characters: '%@'", string);
 		return nil;
 	}
 

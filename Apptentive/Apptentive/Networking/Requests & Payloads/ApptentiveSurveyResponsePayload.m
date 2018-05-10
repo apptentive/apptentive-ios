@@ -15,12 +15,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable instancetype)initWithAnswers:(NSDictionary *)answers identifier:(NSString *)identifier creationDate:(nonnull NSDate *)creationDate {
 	if (answers == nil) {
-		ApptentiveLogError(@"Attempting to create survey response without answers");
+		ApptentiveLogError(ApptentiveLogTagPayload, @"Attempting to create survey response without answers.");
 		return nil;
 	}
 
 	if (identifier.length == 0) {
-		ApptentiveLogError(@"Attempting to create survey response without identifier");
+		ApptentiveLogError(ApptentiveLogTagPayload, @"Attempting to create survey response without identifier.");
 		return nil;
 	}
 

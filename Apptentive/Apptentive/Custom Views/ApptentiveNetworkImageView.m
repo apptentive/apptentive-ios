@@ -36,7 +36,7 @@ NS_ASSUME_NONNULL_BEGIN
 		self.task = [[NSURLSession sharedSession] dataTaskWithURL:self.imageURL
 												completionHandler:^(NSData *_Nullable data, NSURLResponse *_Nullable response, NSError *_Nullable error) {
 												  if (data == nil) {
-													  ApptentiveLogError(@"Unable to download image at %@: %@", self.imageURL, error);
+													  ApptentiveLogWarning(ApptentiveLogTagNetwork, @"Unable to download image from %@ (%@).", self.imageURL, error);
 													  self.task = nil;
 
 													  if ([self.delegate respondsToSelector:@selector(networkImageView:didFailWithError:)]) {

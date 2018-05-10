@@ -67,7 +67,7 @@ static NSString *const IdentifierKey = @"identifier";
 	if (string != nil && key != nil) {
 		[self.mutableCustomData setObject:string forKey:key];
 	} else {
-		ApptentiveLogError(@"Attempting to add custom data string with nil key and/or value");
+		ApptentiveLogError(ApptentiveLogTagConversation, @"Attempting to add custom data string with nil key and/or value.");
 	}
 }
 
@@ -75,7 +75,7 @@ static NSString *const IdentifierKey = @"identifier";
 	if (number != nil && key != nil) {
 		[self.mutableCustomData setObject:number forKey:key];
 	} else {
-		ApptentiveLogError(@"Attempting to add custom data number with nil key and/or value");
+		ApptentiveLogError(ApptentiveLogTagConversation, @"Attempting to add custom data number with nil key and/or value.");
 	}
 }
 
@@ -83,7 +83,7 @@ static NSString *const IdentifierKey = @"identifier";
 	if (key != nil) {
 		[self.mutableCustomData setObject:@(boolValue) forKey:key];
 	} else {
-		ApptentiveLogError(@"Attempting to add custom data boolean with nil key");
+		ApptentiveLogError(ApptentiveLogTagConversation, @"Attempting to add custom data boolean with nil key.");
 	}
 }
 
@@ -91,8 +91,12 @@ static NSString *const IdentifierKey = @"identifier";
 	if (key != nil) {
 		[self.mutableCustomData removeObjectForKey:key];
 	} else {
-		ApptentiveLogError(@"Attempting to remove custom data with nil key");
+		ApptentiveLogError(ApptentiveLogTagConversation, @"Attempting to remove custom data with nil key.");
 	}
+}
+
++ (NSArray *)sensitiveKeys {
+	return @[@"custom_data"];
 }
 
 @end
@@ -102,6 +106,20 @@ static NSString *const IdentifierKey = @"identifier";
 
 + (NSDictionary *)JSONKeyPathMapping {
 	return @{ @"custom_data": NSStringFromSelector(@selector(customData)) };
+}
+
+@end
+
+@implementation ApptentiveCustomData (Criteria)
+
+- (nullable NSObject *)valueForFieldWithPath:(NSString *)path {
+	if ([path hasPrefix:@"custom_data/"]) {
+		NSString *customDataKey = [path substringFromIndex:@"custom_data/".length];
+		return self.customData[customDataKey];
+	}
+
+	ApptentiveLogError(@"Unrecognized field name “%@”", path);
+	return nil;
 }
 
 @end

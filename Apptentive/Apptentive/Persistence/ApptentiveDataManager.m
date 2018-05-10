@@ -117,10 +117,10 @@ typedef enum {
 		}
 	}
 	@catch (NSException *exception) {
-		ApptentiveLogError(@"Caught exception attempting to test classes: %@", exception);
+		ApptentiveLogError(ApptentiveLogTagStorage, @"Caught exception attempting to test classes (%@).", exception);
 		self.managedObjectContext = nil;
 		self.persistentStoreCoordinator = nil;
-		ApptentiveLogError(@"Removing persistent store and starting over.");
+		ApptentiveLogError(ApptentiveLogTagStorage, @"Removing persistent store and starting over.");
 		[self removePersistentStore];
 	}
 	@finally {
@@ -163,14 +163,14 @@ typedef enum {
 			_persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
 		}
 		@catch (NSException *exception) {
-			ApptentiveLogError(@"Unable to setup persistent store: %@", exception);
+			ApptentiveLogError(ApptentiveLogTagStorage, @"Unable to setup persistent store (%@).", exception);
 			return nil;
 		}
 		BOOL storeExists = [[NSFileManager defaultManager] fileExistsAtPath:[storeURL path]];
 
 		if (storeExists && [self isMigrationNecessary:_persistentStoreCoordinator]) {
 			if (![self migrateStoreError:&error]) {
-				ApptentiveLogError(@"Failed to migrate store. Need to start over from scratch: %@", error);
+				ApptentiveLogError(ApptentiveLogTagStorage, @"Failed to migrate persistent store. Need to start over from scratch (%@).", error);
 				self.didFailToMigrateStore = YES;
 				[self removePersistentStore];
 			} else {
@@ -184,7 +184,7 @@ typedef enum {
 		// So, there's no need to set these explicitly for our purposes.
 		NSDictionary *options = @{ NSSQLitePragmasOption: @{@"journal_mode": @"DELETE"} };
 		if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:options error:&error]) {
-			ApptentiveLogError(@"Unable to create new persistent store: %@", error);
+			ApptentiveLogError(ApptentiveLogTagStorage, @"Unable to create new persistent store (%@).", error);
 			_persistentStoreCoordinator = nil;
 			return nil;
 		}
@@ -206,7 +206,7 @@ typedef enum {
 	if ([fileManager fileExistsAtPath:sourcePath]) {
 		NSError *error = nil;
 		if (![[NSFileManager defaultManager] removeItemAtURL:storeURL error:&error]) {
-			ApptentiveLogError(@"Failed to delete the store: %@", error);
+			ApptentiveLogError(ApptentiveLogTagStorage, @"Failed to delete the persistent store (%@).", error);
 		}
 	}
 	[self removeSQLiteSidecarsForPath:sourcePath];
@@ -236,7 +236,7 @@ typedef enum {
 	if ([[NSFileManager defaultManager] removeItemAtPath:[self canaryFilePath] error:&error]) {
 		return YES;
 	}
-	ApptentiveLogError(@"Error removing upgrade canary: %@", error);
+	ApptentiveLogError(ApptentiveLogTagStorage, @"Error removing core data upgrade canary (%@).", error);
 	return NO;
 }
 @end
@@ -281,7 +281,7 @@ typedef enum {
 	NSArray *bundlesForSourceModel = @[self.bundle];
 	NSManagedObjectModel *sourceModel = [NSManagedObjectModel mergedModelFromBundles:bundlesForSourceModel forStoreMetadata:sourceMetadata];
 	if (sourceModel == nil) {
-		ApptentiveLogError(@"Failed to find source model.");
+		ApptentiveLogError(ApptentiveLogTagStorage, @"Failed to find core data source model.");
 		if (error) {
 			*error = [NSError errorWithDomain:@"ATErrorDomain" code:ATMigrationMergedModelErrorCode userInfo:@{ NSLocalizedDescriptionKey: @"Failed to find source model for migration" }];
 		}
@@ -353,18 +353,18 @@ typedef enum {
 	NSFileManager *fileManager = [NSFileManager defaultManager];
 
 	if (![fileManager createDirectoryAtPath:[backupPath stringByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:error]) {
-		ApptentiveLogError(@"Unable to create backup source store path.");
+		ApptentiveLogError(ApptentiveLogTagStorage, @"Unable to create backup source persistent store path.");
 		return NO;
 	}
 
 	if (![fileManager moveItemAtPath:[sourceStoreURL path] toPath:backupPath error:error]) {
-		ApptentiveLogError(@"Unable to backup source store path.");
+		ApptentiveLogError(ApptentiveLogTagStorage, @"Unable to back up source persistent store path.");
 		return NO;
 	}
 
 	if (![fileManager moveItemAtPath:storePath toPath:[sourceStoreURL path] error:error]) {
 		[fileManager moveItemAtPath:backupPath toPath:[sourceStoreURL path] error:nil];
-		ApptentiveLogError(@"Unable to move new store into place.");
+		ApptentiveLogError(ApptentiveLogTagStorage, @"Unable to move new persistent store into place.");
 		return NO;
 	} else {
 		// Kill any remaining -wal or -shm files. Kill them with fire.
@@ -387,7 +387,7 @@ typedef enum {
 		NSError *localError = nil;
 		if ([fileManager fileExistsAtPath:obsoletePath isDirectory:&isDir] && !isDir) {
 			if (![fileManager removeItemAtPath:obsoletePath error:&localError]) {
-				ApptentiveLogError(@"Unable to remove obsolete WAL file %@ with error: %@", obsoletePath, localError);
+				ApptentiveLogError(ApptentiveLogTagStorage, @"Unable to remove obsolete WAL file %@ (%@).", obsoletePath, localError);
 				success = NO;
 			}
 		}

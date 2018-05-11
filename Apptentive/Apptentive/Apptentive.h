@@ -788,8 +788,6 @@ typedef NS_ENUM(NSUInteger, ApptentiveLogLevel) {
 
 @property (assign, nonatomic) ApptentiveLogLevel logLevel;
 
-@property (assign, nonatomic) BOOL redactSensitiveInformation;
-
 @end
 
 @protocol ApptentiveDelegate <NSObject>

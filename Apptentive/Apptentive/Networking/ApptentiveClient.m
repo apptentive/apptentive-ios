@@ -13,17 +13,56 @@
 
 #import "ApptentiveSerialRequest.h"
 #import "ApptentiveGCDDispatchQueue.h"
+#import "ApptentiveRetryPolicy.h"
 
-#define APPTENTIVE_MIN_BACKOFF_DELAY 1.0
+#define APPTENTIVE_MIN_BACKOFF_DELAY 5.0
 #define APPTENTIVE_BACKOFF_MULTIPLIER 2.0
+#define APPTENTIVE_BACKOFF_CAP 10.0 * 60.0
 
 NS_ASSUME_NONNULL_BEGIN
+
+@interface ApptentiveClient ()
+
+@property (strong, nonatomic) ApptentiveRetryPolicy *retryPolicy;
+
+@end
 
 
 @implementation ApptentiveClient
 
 @synthesize URLSession = _URLSession;
-@synthesize backoffDelay = _backoffDelay;
+
++ (NSIndexSet *)okStatusCodes {
+	static NSIndexSet *_okStatusCodes;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		_okStatusCodes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(200, 100)]; // 2xx status codes
+	});
+
+	return _okStatusCodes;
+}
+
++ (NSIndexSet *)clientErrorStatusCodes {
+	static NSIndexSet *_clientErrorStatusCodes;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		_clientErrorStatusCodes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(400, 100)]; // 4xx status codes
+
+	});
+
+	return _clientErrorStatusCodes;
+}
+
++ (NSIndexSet *)serverErrorStatusCodes {
+	static NSIndexSet *_serverErrorStatusCodes;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		_serverErrorStatusCodes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(500, 100)]; // 5xx status codes
+
+	});
+
+	return _serverErrorStatusCodes;
+}
 
 - (instancetype)initWithBaseURL:(NSURL *)baseURL apptentiveKey:(nonnull NSString *)apptentiveKey apptentiveSignature:(nonnull NSString *)apptentiveSignature delegateQueue:(ApptentiveDispatchQueue *)delegateQueue {
 	self = [super init];
@@ -33,6 +72,11 @@ NS_ASSUME_NONNULL_BEGIN
 		_apptentiveKey = apptentiveKey;
 		_apptentiveSignature = apptentiveSignature;
 		_networkQueue = [NSOperationQueue new];
+
+		_retryPolicy = [[ApptentiveRetryPolicy alloc] initWithInitialBackoff:APPTENTIVE_MIN_BACKOFF_DELAY base:APPTENTIVE_BACKOFF_MULTIPLIER];
+		_retryPolicy.shouldAddJitter = YES;
+		_retryPolicy.cap = APPTENTIVE_BACKOFF_CAP;
+		_retryPolicy.retryStatusCodes = [[self class] serverErrorStatusCodes];
 
 		NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
 		configuration.HTTPAdditionalHeaders = @{
@@ -46,21 +90,9 @@ NS_ASSUME_NONNULL_BEGIN
 		configuration.URLCache = nil;
 
 		_URLSession = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:((ApptentiveGCDDispatchQueue *) delegateQueue).queue];
-
-		[self resetBackoffDelay];
 	}
 
 	return self;
-}
-
-#pragma mark - Request operation data source
-
-- (void)increaseBackoffDelay {
-	_backoffDelay *= APPTENTIVE_BACKOFF_MULTIPLIER;
-}
-
-- (void)resetBackoffDelay {
-	_backoffDelay = APPTENTIVE_MIN_BACKOFF_DELAY;
 }
 
 #pragma mark - Creating request operations

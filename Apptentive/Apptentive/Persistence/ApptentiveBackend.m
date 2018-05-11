@@ -28,6 +28,7 @@
 #import "ApptentiveVersion.h"
 #import "Apptentive_Private.h"
 #import "ApptentiveDispatchQueue.h"
+#import "ApptentiveRetryPolicy.h"
 
 #import "ApptentiveLegacyEvent.h"
 #import "ApptentiveLegacyFileAttachment.h"
@@ -119,6 +120,8 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 		  });
 
 		  [self loadConfiguration];
+			
+		  [self maybeGetAdvertisingIdentifier];
 
 		  [self startUp];
 		}];
@@ -213,6 +216,7 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 		self->_foreground = YES;
 		[self resume];
 		[self addLaunchMetric];
+		[self maybeGetAdvertisingIdentifier];
 	}];
 }
 
@@ -261,7 +265,7 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 	if (![[NSFileManager defaultManager] fileExistsAtPath:self.supportDirectoryPath]) {
 		NSError *error;
 		if (![[NSFileManager defaultManager] createDirectoryAtPath:self.supportDirectoryPath withIntermediateDirectories:YES attributes:nil error:&error]) {
-			ApptentiveLogError(@"Unable to create storage path “%@”: %@", self.supportDirectoryPath, error);
+			ApptentiveLogError(ApptentiveLogTagStorage, @"Unable to create storage path %@ (%@).", self.supportDirectoryPath, error);
 		}
 	}
 }
@@ -291,13 +295,13 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 
 // This is called when we're about to enter the background
 - (void)shutDown {
-	ApptentiveLogVerbose(@"Shutting down backend");
+	ApptentiveLogVerbose(@"Shutting down backend.");
 
 	// Asynchronous tasks off the main thread will not be given a chance to complete automatically.
 	// We create a background task to clear out our operation queue and the payload sender queue.
 	self.backgroundTaskIdentifier = [[UIApplication sharedApplication] beginBackgroundTaskWithName:@"Wind Down Backend"
 																				 expirationHandler:^{
-																				   ApptentiveLogError(@"Background task (%ld) did not complete in time.", (unsigned long)self.backgroundTaskIdentifier);
+																				   ApptentiveLogWarning(@"Background task (%ld) did not complete in time.", (unsigned long)self.backgroundTaskIdentifier);
 																				   [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTaskIdentifier];
 																				 }];
 
@@ -328,12 +332,12 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 // Note: must be called on main thread
 - (void)setUpCoreData {
 	ApptentiveAssertMainQueue
-	ApptentiveLogVerbose(ApptentiveLogTagStorage, @"Setting up data manager");
+	ApptentiveLogVerbose(ApptentiveLogTagStorage, @"Setting up data manager.");
 	self.dataManager = [[ApptentiveDataManager alloc] initWithModelName:@"ATDataModel" inBundle:[ApptentiveUtilities resourceBundle] storagePath:[self supportDirectoryPath]];
 	if (![self.dataManager setupAndVerify]) {
 		ApptentiveLogError(ApptentiveLogTagStorage, @"Unable to setup and verify data manager.");
 	} else if (![self.dataManager persistentStoreCoordinator]) {
-		ApptentiveLogError(ApptentiveLogTagStorage, @"There was a problem setting up the persistent store coordinator!");
+		ApptentiveLogError(ApptentiveLogTagStorage, @"There was a problem setting up the persistent store coordinator.");
 	}
 }
 
@@ -409,7 +413,7 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 
 	  NSError *coreDataError;
 	  if (![migrationContext save:&coreDataError]) {
-		  ApptentiveLogError(@"Unable to save migration context: %@", coreDataError);
+		  ApptentiveLogError(@"Unable to save core data migration context (%@).", coreDataError);
 	  }
 	}];
 
@@ -430,6 +434,8 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 	_configuration = [[ApptentiveAppConfiguration alloc] initWithJSONDictionary:configurationResponse cacheLifetime:cacheLifetime];
 
 	[self saveConfiguration];
+
+	[self maybeGetAdvertisingIdentifier];
 }
 
 - (BOOL)saveConfiguration {
@@ -446,8 +452,8 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 
 	if (self.networkAvailable != networkWasAvailable) {
 		if (self.networkAvailable) {
-			[self.client resetBackoffDelay];
-			[self.payloadSender resetBackoffDelay];
+			[self.client.retryPolicy resetRetryDelay];
+			[self.payloadSender.retryPolicy resetRetryDelay];
 
 			[self completeHousekeepingTasks];
 		} else {
@@ -492,7 +498,7 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 	self.currentCustomData = customData;
 
 	if (viewController.presentedViewController) {
-		ApptentiveLogError(@"Attempting to present Apptentive Message Center from View Controller that is already presenting a modal view controller");
+		ApptentiveLogError(ApptentiveLogTagInteractions, @"Attempting to present Apptentive Message Center from View Controller that is already presenting a modal view controller.");
 		if (completion) {
 			completion(NO);
 		}
@@ -500,7 +506,7 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 	}
 
 	if (self.presentedMessageCenterViewController != nil) {
-		ApptentiveLogInfo(@"Apptentive message center controller already shown.");
+		ApptentiveLogInfo(ApptentiveLogTagInteractions, @"Apptentive message center controller already shown.");
 		if (completion) {
 			completion(NO);
 		}
@@ -653,7 +659,7 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 		NSString *conversationIdentifier = ApptentiveDictionaryGetString(notification.userInfo, ApptentiveAuthenticationDidFailNotificationKeyConversationIdentifier);
 
 		if (![conversationIdentifier isEqualToString:self.conversationManager.activeConversation.identifier]) {
-			ApptentiveLogDebug(@"Conversation identifier mismatch");
+			ApptentiveLogError(ApptentiveLogTagConversation, @"The identifier for the newly logged-in conversation did not match the active conversation.");
 			return;
 		}
 
@@ -677,8 +683,7 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 	NSError *error = nil;
 	BOOL result = [fm createDirectoryAtPath:newPath withIntermediateDirectories:YES attributes:nil error:&error];
 	if (!result) {
-		ApptentiveLogError(@"Failed to create support directory: %@", newPath);
-		ApptentiveLogError(@"Error was: %@", error);
+		ApptentiveLogError(ApptentiveLogTagStorage, @"Failed to create support directory %@ (%@).", newPath, error);
 		return nil;
 	}
 	return newPath;
@@ -694,6 +699,18 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 - (ApptentiveMessageManager *)messageManager {
 	ApptentiveAssertOperationQueue(self.operationQueue);
 	return self.conversationManager.messageManager;
+}
+
+#pragma mark -
+#pragma mark Advertising Identifier
+
+- (void)maybeGetAdvertisingIdentifier {
+	ApptentiveAssertOperationQueue(self.operationQueue);
+	
+	if (self.configuration.collectAdvertisingIdentifier) {
+		[ApptentiveDevice getAdvertisingIdentifier];
+		[self scheduleDeviceUpdate];
+	}
 }
 
 @end

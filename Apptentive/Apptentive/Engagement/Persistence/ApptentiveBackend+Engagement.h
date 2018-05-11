@@ -44,7 +44,6 @@ extern NSString *const ApptentiveEngagementMessageCenterEvent;
 - (BOOL)canShowInteractionForLocalEvent:(NSString *)event;
 - (BOOL)canShowInteractionForCodePoint:(NSString *)codePoint;
 
-+ (NSString *)stringByEscapingCodePointSeparatorCharactersInString:(NSString *)string;
 + (NSString *)codePointForVendor:(NSString *)vendor interactionType:(NSString *)interactionType event:(NSString *)event;
 
 - (void)engageApptentiveAppEvent:(NSString *)event;
@@ -55,6 +54,8 @@ extern NSString *const ApptentiveEngagementMessageCenterEvent;
 
 - (void)engageCodePoint:(NSString *)codePoint fromInteraction:(nullable ApptentiveInteraction *)fromInteraction userInfo:(nullable NSDictionary *)userInfo customData:(nullable NSDictionary *)customData extendedData:(nullable NSArray *)extendedData fromViewController:(nullable UIViewController *)viewController completion:(void (^_Nullable)(BOOL engaged))completion;
 
+- (void)presentInteraction:(ApptentiveInteraction *)interaction fromViewController:(nullable UIViewController *)viewController;
+
 - (void)codePointWasSeen:(NSString *)codePoint;
 
 - (void)engage:(NSString *)event fromInteraction:(ApptentiveInteraction *)interaction fromViewController:(nullable UIViewController *)viewController;
@@ -62,8 +63,6 @@ extern NSString *const ApptentiveEngagementMessageCenterEvent;
 - (void)engage:(NSString *)event fromInteraction:(ApptentiveInteraction *)interaction fromViewController:(nullable UIViewController *)viewController userInfo:(nullable NSDictionary *)userInfo customData:(nullable NSDictionary *)customData extendedData:(nullable NSArray *)extendedData;
 - (void)engage:(NSString *)event fromInteraction:(ApptentiveInteraction *)interaction fromViewController:(nullable UIViewController *)viewController userInfo:(nullable NSDictionary *)userInfo customData:(nullable NSDictionary *)customData extendedData:(nullable NSArray *)extendedData completion:(void (^ _Nullable)(BOOL))completion;
 - (void)interactionWasSeen:(NSString *)interactionID;
-
-- (void)presentInteraction:(ApptentiveInteraction *)interaction fromViewController:(nullable UIViewController *)viewController;
 
 - (void)invokeAction:(NSDictionary *)actionConfig withInteraction:(ApptentiveInteraction *)sourceInteraction fromViewController:(UIViewController *)fromViewController;
 

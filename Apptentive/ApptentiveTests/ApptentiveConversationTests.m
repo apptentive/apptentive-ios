@@ -308,6 +308,25 @@
 	XCTAssertEqualWithAccuracy(testInteraction.lastInvoked.timeIntervalSince1970, [engagementTime timeIntervalSince1970], 0.01);
 }
 
+- (void)testResetDeviceDiffs {
+	[self.conversation updateLastSentDevice];
+	[self.conversation checkForDeviceDiffs];
+
+	XCTAssertNil(self.deviceDiffs);
+
+	[self.conversation.device addCustomString:@"foo" withKey:@"bar"];
+	[self.conversation checkForDeviceDiffs];
+
+	XCTAssertEqualObjects(self.deviceDiffs, @{ @"custom_data": @{ @"bar": @"foo"}});
+
+	self.deviceDiffs = nil;
+	[self.conversation.device addCustomString:@"bar" withKey:@"foo"];
+	[self.conversation updateLastSentDevice];
+	[self.conversation checkForDeviceDiffs];
+
+	XCTAssertNil(self.deviceDiffs);
+}
+
 #pragma mark - Conversation delegate
 
 - (void)conversation:(ApptentiveConversation *)conversation deviceDidChange:(NSDictionary *)diffs {

@@ -26,8 +26,8 @@ NSInteger ApptentiveJSONSerializationErrorCode = -568;
 				*error = [NSError errorWithDomain:ApptentiveErrorDomain code:ApptentiveJSONSerializationErrorCode userInfo:@{ NSLocalizedFailureReasonErrorKey: @"JSON object is malformed." }];
 			}
 
-			ApptentiveLogError(@"Exception when encoding JSON: %@.", exception.reason);
-			ApptentiveLogError(@"Attempted to encode %@.", obj);
+			ApptentiveLogError(ApptentiveLogTagUtility, @"Exception when encoding JSON (%@).", exception.reason);
+			ApptentiveLogError(ApptentiveLogTagUtility, @"Attempted to encode %@.", obj);
 		}
 
 		return jsonData;
@@ -36,7 +36,7 @@ NSInteger ApptentiveJSONSerializationErrorCode = -568;
 			*error = [NSError errorWithDomain:ApptentiveErrorDomain code:ApptentiveJSONDeserializationErrorCode userInfo:@{ NSLocalizedFailureReasonErrorKey: @"Object is not valid JSON object." }];
 		}
 
-		ApptentiveLogError(@"Attempting to create JSON data from an invalid JSON object (%@).", obj);
+		ApptentiveLogError(ApptentiveLogTagUtility, @"Attempting to create JSON data from an invalid JSON object (%@).", obj);
 
 		return nil;
 	}
@@ -50,7 +50,7 @@ NSInteger ApptentiveJSONSerializationErrorCode = -568;
 			*error = [NSError errorWithDomain:ApptentiveErrorDomain code:ApptentiveJSONDeserializationErrorCode userInfo:@{ NSLocalizedFailureReasonErrorKey: @"JSON data is nil." }];
 		}
 
-		ApptentiveLogError(@"Attempting to decode nil JSON data.");
+		ApptentiveLogError(ApptentiveLogTagUtility, @"Attempting to decode nil JSON data.");
 
 		return nil;
 	}
@@ -64,8 +64,8 @@ NSInteger ApptentiveJSONSerializationErrorCode = -568;
 			*error = [NSError errorWithDomain:ApptentiveErrorDomain code:ApptentiveJSONSerializationErrorCode userInfo:@{ NSLocalizedFailureReasonErrorKey: @"JSON data is malformed." }];
 		}
 
-		ApptentiveLogError(@"Exception when decoding JSON: %@", exception.reason);
-		ApptentiveLogError(@"Attempted to decode “%@”", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+		ApptentiveLogError(ApptentiveLogTagUtility, @"Exception when decoding JSON (%@).", exception.reason);
+		ApptentiveLogError(ApptentiveLogTagUtility, @"Attempted to decode: %@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
 
 		return nil;
 	}

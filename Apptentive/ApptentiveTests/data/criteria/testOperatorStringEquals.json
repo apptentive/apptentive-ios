@@ -1,0 +1,44 @@
+{
+  "$and": [
+    {
+      "device/custom_data/string_qwerty": {
+        "$eq": "qwerty"
+      }
+    },
+    {
+      "device/custom_data/string_qwerty": "qwerty"
+    },
+    {
+      "device/custom_data/string_qwerty": {
+        "$eq": "QWERTY"
+      }
+    },
+    {
+      "device/custom_data/string_qwerty": "QWERTY"
+    },
+    {
+      "$not": {
+        "device/custom_data/string_qwerty": {
+          "$eq": "werty"
+        }
+      }
+    },
+    {
+      "$not": {
+        "device/custom_data/string_qwerty": "werty"
+      }
+    },
+    {
+      "$not": {
+        "device/custom_data/string_qwerty": {
+          "$eq": null
+        }
+      }
+    },
+    {
+      "$not": {
+        "device/custom_data/string_qwerty": null
+      }
+    }
+  ]
+}

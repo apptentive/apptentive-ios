@@ -22,6 +22,7 @@
 #import "ApptentiveConversationMetadata.h"
 #import "ApptentiveConversationMetadataItem.h"
 #import "ApptentiveSafeCollections.h"
+#import "ApptentiveTargets.h"
 
 #import "ApptentiveJWT.h"
 #import "ApptentiveDispatchQueue.h"
@@ -74,8 +75,8 @@ NSNotificationName _Nonnull const ApptentiveConversationChangedNotification = @"
 }
 
 - (NSArray *)engagementEvents {
-	NSDictionary *targets = Apptentive.shared.backend.conversationManager.manifest.targets;
-	NSArray *localCodePoints = [targets.allKeys filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF BEGINSWITH[c] %@", @"local#app#"]];
+	ApptentiveTargets *targets = Apptentive.shared.backend.conversationManager.manifest.targets;
+	NSArray *localCodePoints = [[targets.invocations.allKeys filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF BEGINSWITH[c] %@", @"local#app#"]] sortedArrayUsingSelector:@selector(compare:)];
 	NSMutableArray *eventNames = [NSMutableArray array];
 	for (NSString *codePoint in localCodePoints) {
 		ApptentiveArrayAddObject(eventNames, [codePoint substringFromIndex:10]);

@@ -45,7 +45,7 @@ static NSString *const RemoteURLKey = @"remoteURL";
 
 		_contentType = ApptentiveDictionaryGetString(JSON, @"content_type");
 		if (_contentType.length == 0) {
-			ApptentiveLogError(@"Can't init %@: content type is nil or empty", NSStringFromClass([self class]));
+			ApptentiveLogError(ApptentiveLogTagMessages, @"Can't init %@: content type is nil or empty", NSStringFromClass([self class]));
 			return nil;
 		}
 
@@ -72,7 +72,7 @@ static NSString *const RemoteURLKey = @"remoteURL";
 
 		BOOL isDirectory;
 		if (![[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isDirectory] || isDirectory) {
-			ApptentiveLogError(@"Can't init %@: file does not exist: %@", NSStringFromClass([self class]), path);
+			ApptentiveLogError(ApptentiveLogTagMessages, @"Can't init %@: file does not exist: %@", NSStringFromClass([self class]), path);
 			return nil;
 		}
 
@@ -243,7 +243,7 @@ static NSString *const RemoteURLKey = @"remoteURL";
 	ApptentiveAssertNotEmpty(self.attachmentDirectoryPath, @"Attachment directory path must be set");
 
 	if (filename.length == 0 || self.attachmentDirectoryPath.length == 0) {
-		ApptentiveLogError(@"Attempting to access attachment without attachment directory path set");
+		ApptentiveLogError(ApptentiveLogTagMessages, @"Attempting to access attachment without attachment directory path set.");
 		return nil; // TODO: assertion?
 	}
 
@@ -281,29 +281,29 @@ static NSString *const RemoteURLKey = @"remoteURL";
 		NSError *error = nil;
 		BOOL isDir = NO;
 		if (![fm fileExistsAtPath:fullPath isDirectory:&isDir] || isDir) {
-			ApptentiveLogError(@"File attachment sidecar doesn't exist at path or is directory: %@, %d", fullPath, isDir);
+			ApptentiveLogWarning(ApptentiveLogTagMessages, @"File attachment sidecar doesn't exist at path or is directory: %@, %d", fullPath, isDir);
 			return;
 		}
 		if (![fm removeItemAtPath:fullPath error:&error]) {
-			ApptentiveLogError(@"Error removing attachment at path: %@. %@", fullPath, error);
+			ApptentiveLogWarning(ApptentiveLogTagMessages, @"Error removing attachment at path: %@. %@", fullPath, error);
 			return;
 		}
 		// Delete any thumbnails.
 		ApptentiveMessageManager *messageManager = Apptentive.shared.backend.conversationManager.messageManager;
 		ApptentiveAssertNotNil(messageManager, @"Message manager is nil");
 		if (!messageManager) {
-			ApptentiveLogError(@"Error listing attachments directory: message manager is not initialized");
+			ApptentiveLogWarning(ApptentiveLogTagMessages, @"Error listing attachments directory: message manager is not initialized.");
 		} else {
 			NSArray *filenames = [fm contentsOfDirectoryAtPath:messageManager.attachmentDirectoryPath error:&error];
 			if (!filenames) {
-				ApptentiveLogError(@"Error listing attachments directory: %@", error);
+				ApptentiveLogWarning(ApptentiveLogTagMessages, @"Error listing attachments directory: %@", error);
 			} else {
 				for (NSString *filename in filenames) {
 					if ([filename hasPrefix:self.filename.stringByDeletingPathExtension]) {
 						NSString *thumbnailPath = [self fullLocalPathForFilename:filename];
 
 						if (![fm removeItemAtPath:thumbnailPath error:&error]) {
-							ApptentiveLogError(@"Error removing attachment thumbnail at path: %@. %@", thumbnailPath, error);
+							ApptentiveLogWarning(ApptentiveLogTagMessages, @"Error removing attachment thumbnail at path: %@. %@", thumbnailPath, error);
 							continue;
 						}
 					}

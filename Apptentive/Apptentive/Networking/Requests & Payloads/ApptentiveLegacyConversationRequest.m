@@ -8,6 +8,7 @@
 
 #import "ApptentiveLegacyConversationRequest.h"
 #import "ApptentiveConversation.h"
+#import "ApptentiveDefines.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -18,10 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 	self = [super init];
 
 	if (self) {
-		if (conversation == nil) {
-			ApptentiveLogError(@"Can't init %@: conversation is nil");
-			return nil;
-		}
+		APPTENTIVE_CHECK_INIT_NOT_NIL_ARG(conversation);
 		_conversation = conversation;
 	}
 

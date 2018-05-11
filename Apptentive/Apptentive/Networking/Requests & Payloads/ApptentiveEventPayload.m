@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 	if (self) {
 		if (label.length == 0) {
-			ApptentiveLogError(@"Event label is nil");
+			ApptentiveLogError(ApptentiveLogTagPayload, @"Event label is nil.");
 			return nil;
 		}
 
@@ -58,8 +58,8 @@ NS_ASSUME_NONNULL_BEGIN
 		if ([NSJSONSerialization isValidJSONObject:customDataDictionary]) {
 			[contents addEntriesFromDictionary:customDataDictionary];
 		} else {
-			ApptentiveLogError(@"Event `customData` cannot be transformed into valid JSON and will be ignored.");
-			ApptentiveLogError(@"Please see NSJSONSerialization's `+isValidJSONObject:` for allowed types.");
+			ApptentiveLogError(ApptentiveLogTagPayload, @"Event `customData` cannot be transformed into valid JSON and will be ignored.");
+			ApptentiveLogError(ApptentiveLogTagPayload, @"Please see NSJSONSerialization's `+isValidJSONObject:` for allowed types.");
 		}
 	}
 
@@ -69,8 +69,8 @@ NS_ASSUME_NONNULL_BEGIN
 				// Extended data items are not added for key "extended_data", but rather for key of extended data type: "time", "location", etc.
 				[contents addEntriesFromDictionary:data];
 			} else {
-				ApptentiveLogError(@"Event `extendedData` cannot be transformed into valid JSON and will be ignored.");
-				ApptentiveLogError(@"Please see NSJSONSerialization's `+isValidJSONObject:` for allowed types.");
+				ApptentiveLogError(ApptentiveLogTagPayload, @"Event `extendedData` cannot be transformed into valid JSON and will be ignored.");
+				ApptentiveLogError(ApptentiveLogTagPayload, @"Please see NSJSONSerialization's `+isValidJSONObject:` for allowed types.");
 			}
 		}
 	}

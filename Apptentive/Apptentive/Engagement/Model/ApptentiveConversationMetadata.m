@@ -111,13 +111,13 @@ static NSString *const VersionKey = @"version";
 			if (moreInfo.length > 0) {
 				[moreInfo appendString:@"\n"];
 			}
-			[moreInfo appendFormat:@"JWT-%ld: %@", (unsigned long)row, item.JWT];
+			[moreInfo appendFormat:@"JWT-%ld: %@", (unsigned long)row, ApptentiveHideIfSanitized(item.JWT)];
 		}
 		if (item.encryptionKey) {
 			if (moreInfo.length > 0) {
 				[moreInfo appendString:@"\n"];
 			}
-			[moreInfo appendFormat:@"KEY-%ld: %@", (unsigned long)row, item.encryptionKey];
+			[moreInfo appendFormat:@"KEY-%ld: %@", (unsigned long)row, ApptentiveHideIfSanitized(item.encryptionKey)];
 		}
 
 		[rows addObject:@[
@@ -143,8 +143,8 @@ static NSString *const VersionKey = @"version";
 	NSMutableArray *invalidItems = [NSMutableArray array];
 
 	for (ApptentiveConversationMetadataItem *item in self.items) {
-		if (!item.consistent) {
-			ApptentiveLogError(@"Conversation metadata item %@ is inconsistent. Deleting it...", item);
+		if (!item.isConsistent) {
+			ApptentiveLogError(ApptentiveLogTagConversation, @"Conversation metadata item %@ is inconsistent. Deleting it...", item);
 
 			[invalidItems addObject:item];
 		}

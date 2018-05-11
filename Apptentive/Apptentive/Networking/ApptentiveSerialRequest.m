@@ -64,7 +64,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 	ApptentiveAssertNotNil(context, @"Managed object context is nil");
 	if (context == nil) {
-		ApptentiveLogError(@"Unable encode enqueue request: managed object context is nil");
+		ApptentiveLogError(ApptentiveLogTagPayload, @"Unable encode enqueue request: managed object context is nil.");
 		return NO;
 	}
 
@@ -100,9 +100,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 	  ApptentiveSerialRequest *request = (ApptentiveSerialRequest *)[[NSManagedObject alloc] initWithEntity:[NSEntityDescription entityForName:@"QueuedRequest" inManagedObjectContext:childContext] insertIntoManagedObjectContext:childContext];
 
-	  ApptentiveAssertNotNil(request, @"Can't load managed request object");
+	  ApptentiveAssertNotNil(request, @"Can't load managed request object.");
 	  if (request == nil) {
-		  ApptentiveLogError(@"Unable encode enqueue request '%@': can't load managed request object", payloadPath);
+		  ApptentiveLogError(ApptentiveLogTagPayload, @"Unable encode enqueue request '%@': can't load managed request object.", payloadPath);
 		  return;
 	  }
 
@@ -127,14 +127,14 @@ NS_ASSUME_NONNULL_BEGIN
 	  // save child context
 	  NSError *saveError;
 	  if (![childContext save:&saveError]) {
-		  ApptentiveLogError(@"Unable to save temporary managed object context: %@", saveError);
+		  ApptentiveLogError(ApptentiveLogTagPayload, @"Unable to save temporary managed object context (%@).", saveError);
 	  }
 
 	  // save parent context
 	  [context performBlockAndWait:^{
 		NSError *parentSaveError;
 		if (![context save:&parentSaveError]) {
-			ApptentiveLogError(@"Unable to save parent managed object context: %@", parentSaveError);
+			ApptentiveLogError(ApptentiveLogTagPayload, @"Unable to save parent managed object context (%@).", parentSaveError);
 		}
 	  }];
 

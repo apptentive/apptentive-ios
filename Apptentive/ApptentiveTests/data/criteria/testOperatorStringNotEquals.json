@@ -1,0 +1,23 @@
+{
+  "$and": [
+    {
+      "$not": {
+        "device/custom_data/string_qwerty": {
+          "$ne": "qwerty"
+        }
+      }
+    },
+    {
+      "$not": {
+        "device/custom_data/string_qwerty": {
+          "$ne": "QWERTY"
+        }
+      }
+    },
+    {
+      "device/custom_data/string_qwerty": {
+        "$ne": "werty"
+      }
+    }
+  ]
+}

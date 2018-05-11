@@ -91,6 +91,11 @@ extern NSString *const ATDeviceLastUpdateValuePreferenceKey;
 @property (copy, nonatomic) NSDictionary *integrationConfiguration;
 
 /**
+ The advertising identifier, if the AdSupport framework is linked, and the user has enabled it
+ */
+@property (readonly, nullable, strong, nonatomic) NSUUID *advertisingIdentifier;
+
+/**
  Initializes a device object with values obtained from the current device.
 
  @return The newly-initialized device object.
@@ -108,6 +113,11 @@ extern NSString *const ATDeviceLastUpdateValuePreferenceKey;
 + (void)getPermanentDeviceValues;
 
 /**
+ Sets static variable for advertising identifier.
+ */
++ (void)getAdvertisingIdentifier;
+
+/**
  The push integration to be set globally for all devices
  */
 @property (class, strong, nonatomic) NSDictionary *integrationConfiguration;
@@ -123,6 +133,11 @@ extern NSString *const ATDeviceLastUpdateValuePreferenceKey;
  This is an intermediate value that device objects can use to update themselves.
  */
 @property (class, strong, nonatomic) UIContentSizeCategory contentSizeCategory;
+
+/**
+ Exposes the static variable _currentAdvertisingIdentifier for reading when debugging.
+ */
+@property (class, readonly, strong, nonatomic) NSUUID *advertisingIdentifier;
 
 @end
 

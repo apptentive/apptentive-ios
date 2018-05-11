@@ -27,7 +27,10 @@ static NSString *const MessageStoreFileName = @"messages-v1.archive";
 
 NSString *const ATMessageCenterDidSkipProfileKey = @"ATMessageCenterDidSkipProfileKey";
 NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKey";
+NSString *const ApptentiveHasSentMessageKey = @"ApptentiveHasSentMessageKey";
 
+NSNotificationName const ApptentiveMessageSentNotification = @"ApptentiveMessageSentNotification";
+NSString *const ApptentiveSentByUserKey = @"com.apptentive.sentByUser";
 
 @interface ApptentiveMessageManager ()
 
@@ -37,6 +40,7 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 @property (readonly, nonatomic) NSMutableDictionary *messageIdentifierIndex;
 @property (readonly, nonatomic) ApptentiveMessageStore *messageStore;
 @property (readonly, nonatomic) NSInteger unreadCount;
+@property (readonly, nonatomic) BOOL hasSentMessage;
 
 @property (readonly, nonatomic) NSString *messageStorePath;
 @property (nullable, copy, nonatomic) void (^backgroundFetchBlock)(UIBackgroundFetchResult);
@@ -65,6 +69,7 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 
 		_didSkipProfile = [conversation.userInfo[ATMessageCenterDidSkipProfileKey] boolValue];
 		_draftMessage = conversation.userInfo[ATMessageCenterDraftMessageKey];
+		_hasSentMessage = [conversation.userInfo[ApptentiveHasSentMessageKey] boolValue];
 
 		for (ApptentiveMessage *message in _messageStore.messages) {
 			for (ApptentiveAttachment *attachment in message.attachments) {
@@ -76,7 +81,7 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 
 		NSError *error;
 		if (![[NSFileManager defaultManager] createDirectoryAtPath:self.attachmentDirectoryPath withIntermediateDirectories:YES attributes:nil error:&error]) {
-			ApptentiveAssertTrue(NO, @"Unable to create attachments directory “%@” (%@)", self.attachmentDirectoryPath, error);
+			ApptentiveAssertTrue(NO, @"Unable to create attachments directory %@ (%@)", self.attachmentDirectoryPath, error);
 			return nil;
 		}
 
@@ -102,7 +107,7 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 }
 
 - (void)checkForMessages {
-	if (self.messageOperation != nil || self.conversationIdentifier == nil) {
+	if (!self.hasSentMessage || self.messageOperation != nil || self.conversationIdentifier == nil) {
 		return;
 	}
 
@@ -156,7 +161,7 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 		NSError *error;
 
 		if (![[NSFileManager defaultManager] createDirectoryAtPath:result withIntermediateDirectories:YES attributes:nil error:&error]) {
-			ApptentiveLogError(@"Unable to create attachments directory (%@): %@", result, error);
+			ApptentiveLogError(ApptentiveLogTagMessages, @"Unable to create attachments directory (%@): %@", result, error);
 			return nil;
 		}
 	}
@@ -190,7 +195,7 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 	NSArray *messageListJSON = [operation.responseObject valueForKey:@"messages"];
 
 	if (messageListJSON == nil) {
-		ApptentiveLogError(@"Unexpected response from /messages endpoint");
+		ApptentiveLogError(ApptentiveLogTagMessages, @"Unexpected response from /messages endpoint.");
 		return;
 	}
 
@@ -225,7 +230,7 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 
 			lastDownloadedMessageIdentifier = message.identifier;
 		} else {
-			ApptentiveLogError(@"Unable to create message from JSON: %@", messageJSON);
+			ApptentiveLogError(ApptentiveLogTagMessages, @"Unable to create message from JSON: %@", ApptentiveHideKeysIfSanitized(messageJSON, @[@"body", @"custom_data", @"title"]));
 		}
 	}
 
@@ -351,6 +356,14 @@ NSString *const ATMessageCenterDraftMessageKey = @"ATMessageCenterDraftMessageKe
 	}
 
 	message.state = ApptentiveMessageStateWaiting;
+
+	dispatch_async(dispatch_get_main_queue(), ^{
+		BOOL sentByUser = [message.sender.identifier isEqualToString:self.localUserIdentifier];
+		[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveMessageSentNotification object:Apptentive.shared userInfo:@{ ApptentiveSentByUserKey: @(sentByUser)}];
+	});
+
+	_hasSentMessage = YES;
+	[self.conversation setUserInfo:@(self.hasSentMessage) forKey:ApptentiveHasSentMessageKey];
 }
 
 #pragma mark - Client message delelgate

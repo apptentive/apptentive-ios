@@ -132,14 +132,14 @@ NSString *const ATInteractionAppStoreRatingEventLabelUnableToRate = @"unable_to_
 
 			BOOL openedURL = [[UIApplication sharedApplication] openURL:url];
 			if (!openedURL) {
-				ApptentiveLogError(@"Could not open App Store URL: %@", url);
+				ApptentiveLogWarning(ApptentiveLogTagInteractions, @"Could not open App Store URL: %@", url);
 			}
 		} else {
-			ApptentiveLogError(@"No application can open the URL: %@", url);
+			ApptentiveLogWarning(ApptentiveLogTagInteractions, @"No application can open the URL: %@", url);
 			[self showUnableToOpenAppStoreDialog];
 		}
 	} else {
-		ApptentiveLogError(@"Could not open App Store because App ID is not set. Set the `appID` property locally, or configure it remotely via the Apptentive dashboard.");
+		ApptentiveLogError(ApptentiveLogTagInteractions, @"Could not open App Store because App ID is not set. Set the `appID` property locally, or configure it remotely via the Apptentive dashboard.");
 
 		[self showUnableToOpenAppStoreDialog];
 	}
@@ -152,7 +152,7 @@ NSString *const ATInteractionAppStoreRatingEventLabelUnableToRate = @"unable_to_
 		[vc loadProductWithParameters:@{ SKStoreProductParameterITunesItemIdentifier: self.appID }
 					  completionBlock:^(BOOL result, NSError *error) {
 						if (error) {
-							ApptentiveLogError(@"Error loading product view: %@", error);
+							ApptentiveLogWarning(ApptentiveLogTagInteractions, @"Unable to load product view (%@).", error);
 							[self showUnableToOpenAppStoreDialog];
 						} else {
 							[Apptentive.shared.backend engage:ATInteractionAppStoreRatingEventLabelOpenStoreKit fromInteraction:self.interaction fromViewController:self.presentingViewController];

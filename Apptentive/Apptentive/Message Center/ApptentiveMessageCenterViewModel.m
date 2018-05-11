@@ -420,7 +420,7 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 	ApptentiveAttachment *attachment = [self fileAttachmentAtIndexPath:indexPath];
 	attachment.attachmentDirectoryPath = self.messageManager.attachmentDirectoryPath;
 	if (attachment.filename != nil || !attachment.remoteURL) {
-		ApptentiveLogError(@"Attempting to download attachment with missing or invalid remote URL");
+		ApptentiveLogError(ApptentiveLogTagMessages, @"Attempting to download attachment with missing or invalid remote URL.");
 		return;
 	}
 
@@ -448,7 +448,7 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 	// -beginMoveToStorageFrom: must be called on this (background) thread.
 	NSError *error;
 	if (![[NSFileManager defaultManager] moveItemAtURL:location toURL:finalLocation error:&error]) {
-		ApptentiveLogError(@"Unable to move attachment to final location: %@", error);
+		ApptentiveLogError(ApptentiveLogTagMessages, @"Unable to move attachment to final location (%@).", error);
 	}
 
 	dispatch_async(dispatch_get_main_queue(), ^{

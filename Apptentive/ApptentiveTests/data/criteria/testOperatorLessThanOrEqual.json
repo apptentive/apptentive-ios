@@ -75,6 +75,70 @@
           "$lte": 0
         }
       }
+    },
+    {
+      "device/custom_data/boolean_true": {
+        "$lte": true
+      }
+    },
+    {
+      "$not": {
+        "device/custom_data/boolean_true": {
+          "$lte": false
+        }
+      }
+    },
+    {
+      "$not": {
+        "device/custom_data/datetime_1000": {
+          "$lte": {
+            "_type": "datetime",
+            "sec": "999"
+          }
+        }
+      }
+    },
+    {
+      "device/custom_data/datetime_1000": {
+        "$lte": {
+          "_type": "datetime",
+          "sec": "1000"
+        }
+      }
+    },
+    {
+      "device/custom_data/datetime_1000": {
+        "$lte": {
+          "_type": "datetime",
+          "sec": "1001"
+        }
+      }
+    },
+    {
+      "$not": {
+        "device/custom_data/version_1.2.3": {
+          "$lte": {
+            "_type": "version",
+            "version": "1.2.2"
+          }
+        }
+      }
+    },
+    {
+      "device/custom_data/version_1.2.3": {
+        "$lte": {
+          "_type": "version",
+          "version": "1.2.3"
+        }
+      }
+    },
+    {
+      "device/custom_data/version_1.2.3": {
+        "$lte": {
+          "_type": "version",
+          "version": "1.2.4"
+        }
+      }
     }
   ]
 }

@@ -16,6 +16,10 @@ static ApptentiveLogTag *_payloadTag;
 static ApptentiveLogTag *_utilityTag;
 static ApptentiveLogTag *_storageTag;
 static ApptentiveLogTag *_logMonitorTag;
+static ApptentiveLogTag *_criteriaTag;
+static ApptentiveLogTag *_interactionsTag;
+static ApptentiveLogTag *_pushTag;
+static ApptentiveLogTag *_messagesTag;
 
 
 @implementation ApptentiveLogTag
@@ -23,24 +27,27 @@ static ApptentiveLogTag *_logMonitorTag;
 
 + (void)initialize {
 	if ([self class] == [ApptentiveLogTag class]) {
-		_conversationTag = [ApptentiveLogTag logTagWithName:@"CONVERSATION" enabled:YES];
-		_networkTag = [ApptentiveLogTag logTagWithName:@"NETWORKING" enabled:YES];
-		_payloadTag = [ApptentiveLogTag logTagWithName:@"PAYLOAD" enabled:YES];
-		_utilityTag = [ApptentiveLogTag logTagWithName:@"UTILITY" enabled:YES];
-		_storageTag = [ApptentiveLogTag logTagWithName:@"STORAGE" enabled:YES];
-		_logMonitorTag = [ApptentiveLogTag logTagWithName:@"LOG_MONITOR" enabled:YES];
+		_conversationTag = [ApptentiveLogTag logTagWithName:@"CONVERSATION"];
+		_networkTag = [ApptentiveLogTag logTagWithName:@"NETWORK"];
+		_payloadTag = [ApptentiveLogTag logTagWithName:@"PAYLOADS"];
+		_utilityTag = [ApptentiveLogTag logTagWithName:@"UTIL"];
+		_storageTag = [ApptentiveLogTag logTagWithName:@"STORAGE"];
+		_logMonitorTag = [ApptentiveLogTag logTagWithName:@"LOG_MONITOR"];
+		_interactionsTag = [ApptentiveLogTag logTagWithName:@"INTERACTIONS"];
+		_pushTag = [ApptentiveLogTag logTagWithName:@"PUSH"];
+		_messagesTag = [ApptentiveLogTag logTagWithName:@"MESSAGES"];
+		_criteriaTag = [ApptentiveLogTag logTagWithName:@"CRITERIA"];
 	}
 }
 
-+ (instancetype)logTagWithName:(NSString *)name enabled:(BOOL)enabled {
-	return [[self alloc] initWithName:name enabled:enabled];
++ (instancetype)logTagWithName:(NSString *)name {
+	return [[self alloc] initWithName:name];
 }
 
-- (instancetype)initWithName:(NSString *)name enabled:(BOOL)enabled {
+- (instancetype)initWithName:(NSString *)name {
 	self = [super init];
 	if (self) {
 		_name = name;
-		_enabled = enabled;
 	}
 	return self;
 }
@@ -69,6 +76,22 @@ static ApptentiveLogTag *_logMonitorTag;
 }
 
 + (ApptentiveLogTag *)logMonitorTag {
+	return _logMonitorTag;
+}
+
++ (ApptentiveLogTag *)criteriaTag {
+	return _criteriaTag;
+}
+
++ (ApptentiveLogTag *)interactionsTag {
+	return _logMonitorTag;
+}
+
++ (ApptentiveLogTag *)pushTag {
+	return _logMonitorTag;
+}
+
++ (ApptentiveLogTag *)messagesTag {
 	return _logMonitorTag;
 }
 

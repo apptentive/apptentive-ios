@@ -31,22 +31,6 @@ UIViewController *topChildViewController(UIViewController *viewController) {
 
 @implementation ApptentiveUtilities
 
-+ (BOOL)fileExistsAtPath:(NSString *)path {
-	return path != nil && [[NSFileManager defaultManager] fileExistsAtPath:path];
-}
-
-+ (BOOL)deleteFileAtPath:(NSString *)path {
-	return [self deleteFileAtPath:path error:NULL];
-}
-
-+ (BOOL)deleteFileAtPath:(NSString *)path error:(NSError **)error {
-	return path != nil && [[NSFileManager defaultManager] removeItemAtPath:path error:error];
-}
-
-+ (BOOL)deleteDirectoryAtPath:(NSString *)path error:(NSError **)error {
-	return path != nil && [[NSFileManager defaultManager] removeItemAtPath:path error:error];
-}
-
 + (NSString *)applicationSupportPath {
 	static NSString *_applicationSupportPath;
 	static dispatch_once_t onceToken;
@@ -56,21 +40,48 @@ UIViewController *topChildViewController(UIViewController *viewController) {
 	  NSError *error;
 
 	  if (![[NSFileManager defaultManager] createDirectoryAtPath:_applicationSupportPath withIntermediateDirectories:YES attributes:nil error:&error]) {
-		  ApptentiveLogError(@"Failed to create Application Support directory: %@", _applicationSupportPath);
-		  ApptentiveLogError(@"Error was: %@", error);
+		  ApptentiveLogError(ApptentiveLogTagUtility, @"Failed to create Application Support directory: %@", _applicationSupportPath);
+		  ApptentiveLogError(ApptentiveLogTagUtility, @"Error was: %@", error);
 		  _applicationSupportPath = nil;
 	  }
 
 
 	  if (![[NSFileManager defaultManager] setAttributes:@{ NSFileProtectionKey: NSFileProtectionCompleteUntilFirstUserAuthentication } ofItemAtPath:_applicationSupportPath error:&error]) {
-		  ApptentiveLogError(@"Failed to set file protection level: %@", _applicationSupportPath);
-		  ApptentiveLogError(@"Error was: %@", error);
+		  ApptentiveLogError(ApptentiveLogTagUtility, @"Failed to set file protection level: %@", _applicationSupportPath);
+		  ApptentiveLogError(ApptentiveLogTagUtility, @"Error was: %@", error);
 	  }
 	});
 
 	return _applicationSupportPath;
 }
 
++ (NSString * _Nullable)cacheDirectoryPath:(NSString *)path {
+	ApptentiveAssertNotNil(path, @"Attempted to get nil cache directory subpath");
+	if (path.length == 0) {
+		return nil;
+	}
+	
+	static NSString *_cacheDirectoryPath;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		_cacheDirectoryPath = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES).firstObject;
+		
+		NSError *error;
+		
+		if (![[NSFileManager defaultManager] createDirectoryAtPath:_cacheDirectoryPath withIntermediateDirectories:YES attributes:nil error:&error]) {
+			ApptentiveLogError(ApptentiveLogTagUtility, @"Failed to create Cache directory: %@", _cacheDirectoryPath);
+			ApptentiveLogError(ApptentiveLogTagUtility, @"Error was: %@", error);
+			_cacheDirectoryPath = nil;
+		}
+		
+		if (![[NSFileManager defaultManager] setAttributes:@{ NSFileProtectionKey: NSFileProtectionCompleteUntilFirstUserAuthentication } ofItemAtPath:_cacheDirectoryPath error:&error]) {
+			ApptentiveLogError(ApptentiveLogTagUtility, @"Failed to set file protection level: %@", _cacheDirectoryPath);
+			ApptentiveLogError(ApptentiveLogTagUtility, @"Error was: %@", error);
+		}
+	});
+	
+	return [_cacheDirectoryPath stringByAppendingPathComponent:path];
+}
 
 + (NSBundle *)resourceBundle {
 	NSBundle *bundleForClass = [NSBundle bundleForClass:[self class]];
@@ -348,7 +359,7 @@ UIViewController *topChildViewController(UIViewController *viewController) {
 	NSError *error = nil;
 	NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"^\\s*[^\\s@]+@[^\\s@]+\\s*$" options:NSRegularExpressionCaseInsensitive error:&error];
 	if (!regex) {
-		ApptentiveLogError(@"Unable to build email regular expression: %@", error);
+		ApptentiveLogError(ApptentiveLogTagUtility, @"Unable to build email regular expression: %@", error);
 		return NO;
 	}
 	NSUInteger count = [regex numberOfMatchesInString:emailAddress options:NSMatchingAnchored range:NSMakeRange(0, [emailAddress length])];
@@ -417,6 +428,11 @@ UIViewController *topChildViewController(UIViewController *viewController) {
 	uname(&systemInfo);
 
 	return [NSString stringWithCString:systemInfo.machine encoding:NSUTF8StringEncoding];
+}
+
++ (NSError *)errorWithCode:(NSInteger)code failureReason:(NSString *)failureReason {
+	NSDictionary *userInfo = failureReason != nil ? @{NSLocalizedFailureReasonErrorKey: failureReason} : @{};
+	return [NSError errorWithDomain:ApptentiveErrorDomain code:code userInfo:userInfo];
 }
 
 @end

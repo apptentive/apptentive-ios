@@ -144,6 +144,10 @@ static ApptentiveVersion *_distributionVersion;
 	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATCurrentConversationPreferenceKey];
 }
 
++ (NSArray *)sensitiveKeys {
+	return @[@"author_name"];
+}
+
 @end
 
 
@@ -166,6 +170,35 @@ static ApptentiveVersion *_distributionVersion;
 		@"sdk_distribution": NSStringFromSelector(@selector(distributionName)),
 		@"sdk_distribution_version": NSStringFromSelector(@selector(distributionVersionString))
 	};
+}
+
+@end
+
+@implementation ApptentiveSDK (Criteria)
+
+- (nullable NSObject *)valueForFieldWithPath:(NSString *)path {
+	if ([path isEqualToString:@"version"]) {
+		return self.version;
+	} else if ([path isEqualToString:@"distribution"]) {
+		return self.distributionName;
+	} else if ([path isEqualToString:@"distribution_version"]) {
+		return self.distributionVersion;
+	}
+
+	ApptentiveLogError(@"Unrecognized field name “%@”", path);
+	return nil;
+}
+
+- (NSString *)descriptionForFieldWithPath:(NSString *)path {
+	if ([path isEqualToString:@"version"]) {
+		return @"SDK version";
+	} else if ([path isEqualToString:@"distribution"]) {
+		return @"SDK distribution method";
+	} else if ([path isEqualToString:@"distribution_version"]) {
+		return @"SDK distribution package version";
+	}
+
+	return [NSString stringWithFormat:@"Unrecognized SDK field %@", path];
 }
 
 @end

@@ -12,13 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 @interface ApptentiveUtilities : NSObject
-
-+ (BOOL)fileExistsAtPath:(NSString *)path;
-+ (BOOL)deleteFileAtPath:(NSString *)path;
-+ (BOOL)deleteFileAtPath:(NSString *)path error:(NSError **)error;
-+ (BOOL)deleteDirectoryAtPath:(NSString *)path error:(NSError **)error;
-
 + (NSString *)applicationSupportPath;
++ (NSString * _Nullable)cacheDirectoryPath:(NSString *)path;
 + (NSBundle *)resourceBundle;
 + (UIStoryboard *)storyboard;
 + (UIImage *)imageNamed:(NSString *)name;
@@ -49,6 +44,8 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSString *)formatAsTableRows:(NSArray<NSArray *> *)rows;
 
 + (NSString *)deviceMachine;
+
++ (NSError *)errorWithCode:(NSInteger)code failureReason:(NSString *)failureReason;
 
 @end
 

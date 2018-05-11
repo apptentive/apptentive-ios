@@ -14,10 +14,9 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ApptentiveLogTag : NSObject
 
 @property (nonatomic, readonly) NSString *name;
-@property (nonatomic, assign) BOOL enabled;
 
-+ (instancetype)logTagWithName:(NSString *)name enabled:(BOOL)enabled;
-- (instancetype)initWithName:(NSString *)name enabled:(BOOL)enabled;
++ (instancetype)logTagWithName:(NSString *)name;
+- (instancetype)initWithName:(NSString *)name;
 
 + (ApptentiveLogTag *)conversationTag;
 + (ApptentiveLogTag *)networkTag;
@@ -25,6 +24,10 @@ NS_ASSUME_NONNULL_BEGIN
 + (ApptentiveLogTag *)utilityTag;
 + (ApptentiveLogTag *)storageTag;
 + (ApptentiveLogTag *)logMonitorTag;
++ (ApptentiveLogTag *)criteriaTag;
++ (ApptentiveLogTag *)interactionsTag;
++ (ApptentiveLogTag *)pushTag;
++ (ApptentiveLogTag *)messagesTag;
 
 @end
 

@@ -56,15 +56,15 @@ NSString *const ApptentiveBuildPayloadRequestsName = @"Build Payload Requests";
 - (void)cancelNetworkOperations {
 	for (NSOperation *operation in self.networkQueue.operations) {
 		if ([operation isKindOfClass:[ApptentiveRequestOperation class]]) {
-			ApptentiveLogVerbose(@"Cancelling request operation %@.", operation.name);
+			ApptentiveLogVerbose(ApptentiveLogTagPayload, @"Cancelling request operation %@.", operation.name);
 			[operation cancel];
 		} else if ([operation.name isEqualToString:ApptentiveBuildPayloadRequestsName]) {
-			ApptentiveLogVerbose(@"Cancelling build payload requets operation.");
+			ApptentiveLogVerbose(ApptentiveLogTagPayload, @"Cancelling build payload requets operation.");
 			[operation cancel];
 		}
 	}
 
-	ApptentiveLogVerbose(ApptentiveLogTagPayload, @"Clearing isResuming Flag");
+	ApptentiveLogVerbose(ApptentiveLogTagPayload, @"Clearing isResuming Flag.");
 	self.isResuming = NO;
 }
 
@@ -81,7 +81,7 @@ NSString *const ApptentiveBuildPayloadRequestsName = @"Build Payload Requests";
 		return;
 	}
 
-	ApptentiveLogVerbose(ApptentiveLogTagPayload, @"Setting isResuming Flag");
+	ApptentiveLogVerbose(ApptentiveLogTagPayload, @"Setting isResuming Flag.");
 	self.isResuming = YES;
 
 	NSBlockOperation *buildPayloadRequestsOperation = [NSBlockOperation blockOperationWithBlock:^{
@@ -103,12 +103,12 @@ NSString *const ApptentiveBuildPayloadRequestsName = @"Build Payload Requests";
 			ApptentiveLogError(ApptentiveLogTagPayload, @"Unable to fetch waiting network payloads.");
 		}
 
-		ApptentiveLogDebug(ApptentiveLogTagPayload, @"Adding %d record operations for queued payloads", queuedRequests.count);
+		ApptentiveLogDebug(ApptentiveLogTagPayload, @"Adding %d record operations for queued payloads.", queuedRequests.count);
 
 		// Add an operation for every record in the queue
 		// When the operation succeeds (or fails permanently), it deletes the associated record
 		for (ApptentiveSerialRequest *request in queuedRequests) {
-			ApptentiveAssertNotNil(request.authToken, @"Attempted to send a request without a token: %@", request);
+			ApptentiveAssertNotNil(request.authToken, @"Attempted to send a request without a token: %@", ApptentiveHideIfSanitized(request));
 			ApptentiveRequestOperationCallback *callback = [ApptentiveRequestOperationCallback new];
 			callback.operationStartCallback = ^(ApptentiveRequestOperation *operation) {
 			  [self requestOperationDidStart:operation];
@@ -124,7 +124,7 @@ NSString *const ApptentiveBuildPayloadRequestsName = @"Build Payload Requests";
 			};
 
 			ApptentiveRequestOperation *operation = [self requestOperationWithRequest:request token:request.authToken delegate:callback];
-			ApptentiveLogVerbose(ApptentiveLogTagPayload, @"Adding operation for %@ %@", operation.URLRequest.HTTPMethod, operation.URLRequest.URL.absoluteString);
+			ApptentiveLogVerbose(ApptentiveLogTagPayload, @"Adding operation for %@ %@.", operation.URLRequest.HTTPMethod, operation.URLRequest.URL.absoluteString);
 
 			operation.request = request;
 
@@ -135,19 +135,19 @@ NSString *const ApptentiveBuildPayloadRequestsName = @"Build Payload Requests";
 	  if (queuedRequests.count) {
 		  // Save the context after all enqueued records have been sent
 		  NSBlockOperation *saveBlockOperation = [NSBlockOperation blockOperationWithBlock:^{
-			ApptentiveLogVerbose(ApptentiveLogTagPayload, @"Saving Private Managed Object Context (with completed payloads deleted)");
+			ApptentiveLogVerbose(ApptentiveLogTagPayload, @"Saving Private Managed Object Context (with completed payloads deleted).");
 			[childContext performBlockAndWait:^{
 			  NSError *saveError;
 			  if (![childContext save:&saveError]) {
-				  ApptentiveLogError(@"Unable to save temporary managed object context: %@", saveError);
+				  ApptentiveLogError(ApptentiveLogTagPayload, @"Unable to save temporary managed object context (%@).", saveError);
 				  return;
 			  }
 
-			  ApptentiveLogVerbose(ApptentiveLogTagPayload, @"Saving Parent Managed Object Context (with completed payloads deleted)");
+			  ApptentiveLogVerbose(ApptentiveLogTagPayload, @"Saving Parent Managed Object Context (with completed payloads deleted).");
 			  [context performBlockAndWait:^{
 				NSError *parentSaveError;
 				if (![context save:&parentSaveError]) {
-					ApptentiveLogError(@"Unable to save parent managed object context: %@", parentSaveError);
+					ApptentiveLogError(ApptentiveLogTagPayload, @"Unable to save parent managed object context (%@).", parentSaveError);
 				}
 			  }];
 			}];
@@ -160,7 +160,7 @@ NSString *const ApptentiveBuildPayloadRequestsName = @"Build Payload Requests";
 		  [self.networkQueue addOperation:saveBlockOperation];
 	  }
 
-	  ApptentiveLogVerbose(ApptentiveLogTagPayload, @"Clearing isResuming Flag");
+	  ApptentiveLogVerbose(ApptentiveLogTagPayload, @"Clearing isResuming Flag.");
 	  self.isResuming = NO;
 	}];
 
@@ -309,11 +309,11 @@ NSString *const ApptentiveBuildPayloadRequestsName = @"Build Payload Requests";
 	  NSError *fetchError;
 	  NSArray *queuedRequests = [childContext executeFetchRequest:fetchRequest error:&fetchError];
 	  if (fetchError != nil) {
-		  ApptentiveLogError(@"Error while fetching requests without a conversation id: %@", fetchError);
+		  ApptentiveLogError(ApptentiveLogTagPayload, @"Error while fetching requests without a conversation identifier (%@).", fetchError);
 		  return;
 	  }
 
-	  ApptentiveLogDebug(@"Fetched %d requests without a conversation id", queuedRequests.count);
+	  ApptentiveLogDebug(ApptentiveLogTagPayload, @"Fetched %d requests without a conversation identifier.", queuedRequests.count);
 
 	  if (queuedRequests.count > 0) {
 		  // Set a new conversation identifier
@@ -327,13 +327,13 @@ NSString *const ApptentiveBuildPayloadRequestsName = @"Build Payload Requests";
 		  // save child context
 		  NSError *saveError;
 		  if (![childContext save:&saveError]) {
-			  ApptentiveLogError(@"Unable to save temporary managed object context: %@", saveError);
+			  ApptentiveLogError(ApptentiveLogTagPayload, @"Unable to save temporary managed object context (%@).", saveError);
 		  }
 
 		  [context performBlockAndWait:^{
 			NSError *parentSaveError;
 			if (![context save:&parentSaveError]) {
-				ApptentiveLogError(@"Unable to save parent managed object context: %@", parentSaveError);
+				ApptentiveLogError(ApptentiveLogTagPayload, @"Unable to save parent managed object context (%@).", parentSaveError);
 			}
 
 			// we call -createOperationsForQueuedRequestsInContext: to send everything

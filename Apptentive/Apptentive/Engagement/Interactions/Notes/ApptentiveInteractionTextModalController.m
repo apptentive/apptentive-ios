@@ -7,9 +7,9 @@
 //
 
 #import "ApptentiveInteractionTextModalController.h"
+#import "ApptentiveUtilities.h"
 #import "ApptentiveBackend+Engagement.h"
 #import "ApptentiveInteraction.h"
-#import "ApptentiveInteractionInvocation.h"
 #import "ApptentiveUtilities.h"
 #import "Apptentive_Private.h"
 #import "UIAlertController+Apptentive.h"
@@ -59,7 +59,7 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 	NSString *message = config[@"body"];
 
 	if (!title && !message) {
-		ApptentiveLogError(@"Skipping display of Apptentive Note that does not have a title and body.");
+		ApptentiveLogError(ApptentiveLogTagInteractions, @"Skipping display of Apptentive Note that does not have a title and body.");
 		return nil;
 	}
 
@@ -85,7 +85,7 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 				cancelActionAdded = YES;
 			} else {
 				// Additional cancel buttons are ignored.
-				ApptentiveLogError(@"Apptentive Notes cannot have more than one cancel button.");
+				ApptentiveLogError(ApptentiveLogTagInteractions, @"Apptentive Notes cannot have more than one cancel button.");
 				continue;
 			}
 		}
@@ -106,7 +106,7 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 	// Better to use default button text than to potentially create an un-cancelable alert with no buttons.
 	// Exception: 'Actions added to UIAlertController must have a title'
 	if (!title) {
-		ApptentiveLogError(@"Apptentive Note button action does not have a title!");
+		ApptentiveLogWarning(ApptentiveLogTagInteractions, @"Apptentive Note button action does not have a title.");
 		title = ApptentiveLocalizedString(@"OK", @"OK");
 	}
 
@@ -133,7 +133,7 @@ typedef void (^alertActionHandler)(UIAlertAction *);
 	} else if ([actionType isEqualToString:@"interaction"]) {
 		actionHandler = [self createButtonHandlerBlockInteractionAction:actionConfig];
 	} else {
-		ApptentiveLogError(@"Apptentive note contains an unknown action.");
+		ApptentiveLogError(ApptentiveLogTagInteractions, @"Apptentive note contains an unknown action.");
 	}
 
 	UIAlertAction *alertAction = [UIAlertAction actionWithTitle:title style:style handler:actionHandler];

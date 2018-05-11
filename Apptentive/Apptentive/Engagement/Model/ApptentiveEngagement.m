@@ -160,4 +160,68 @@ static NSString *const ATEngagementInteractionsInvokesLastDateKey = @"ATEngageme
 
 @end
 
+@implementation ApptentiveEngagement (Criteria)
+
+- (nullable NSObject *)valueForFieldWithPath:(NSString *)path {
+	NSArray *parts = [path componentsSeparatedByString:@"/"];
+
+	if (parts.count != 4) {
+		ApptentiveLogError(@"Invalid field name “%@”", path);
+		return nil;
+	}
+
+	NSString *key = parts[1];
+
+	if ([parts.firstObject isEqualToString:@"code_point"]) {
+		[self warmCodePoint:key];
+	} else if ([parts.firstObject isEqualToString:@"interactions"]) {
+		[self warmInteraction:key];
+	}
+
+	NSDictionary *values = @{ @"code_point": self.codePoints, @"interactions": self.interactions };
+
+	ApptentiveCount *count = [values[parts.firstObject] objectForKey:key];
+
+	if (count == nil) {
+		ApptentiveLogError(@"%@ “%@” not found", parts.firstObject, key);
+		return nil;
+	}
+
+	return [count valueForFieldWithPath:[[parts subarrayWithRange:NSMakeRange(2, 2)] componentsJoinedByString:@"/"]];
+}
+
+- (NSString *)descriptionForFieldWithPath:(NSString *)path {
+	NSArray *parts = [path componentsSeparatedByString:@"/"];
+
+	if (parts.count != 4) {
+		ApptentiveLogError(@"Invalid field name “%@”", path);
+		return [NSString stringWithFormat:@"Unrecognized engagement field %@", path];
+	}
+
+	NSString *type = [parts[0] isEqualToString:@"code_point"] ? @"event" : @"interaction";
+	NSString *target = parts[1];
+	NSString *invokesOrTime = parts[2];
+	NSString *scope = parts[3];
+
+	if ([invokesOrTime isEqualToString:@"invokes"]) {
+		if ([scope isEqualToString:@"total"]) {
+			return [NSString stringWithFormat:@"number of invokes for %@ '%@'", type, target];
+		} else if ([scope isEqualToString:@"cf_bundle_short_version_string"]) {
+			// TODO: Could print out version here to match Android
+			return [NSString stringWithFormat:@"number of invokes for %@ '%@' for current version", type, target];
+		} else if ([scope isEqualToString:@"cf_bundle_version"]) {
+			// TODO: Could print out build here to match Android
+			return [NSString stringWithFormat:@"number of invokes for %@ '%@' for current build", type, target];
+		}
+	} else if ([invokesOrTime isEqualToString:@"last_invoked_at"] && [scope isEqualToString:@"total"]) {
+		return [NSString stringWithFormat:@"last time %@ '%@' was invoked", type, target];
+	}
+
+	return [NSString stringWithFormat:@"Unrecognized engagement field %@", path];
+}
+
+
+
+@end
+
 NS_ASSUME_NONNULL_END

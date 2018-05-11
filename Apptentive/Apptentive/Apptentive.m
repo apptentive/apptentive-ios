@@ -65,12 +65,12 @@ static Apptentive *_sharedInstance;
 	self = [super init];
 	if (self) {
 		if (apptentiveKey.length == 0) {
-			ApptentiveLogError(@"Can't create Apptentive configuration: key is nil or empty");
+			ApptentiveLogError(@"Can't create Apptentive configuration: key is nil or empty.");
 			return nil;
 		}
 
 		if (apptentiveSignature.length == 0) {
-			ApptentiveLogError(@"Can't create Apptentive configuration: signature is nil or empty");
+			ApptentiveLogError(@"Can't create Apptentive configuration: signature is nil or empty.");
 			return nil;
 		}
 
@@ -78,6 +78,7 @@ static Apptentive *_sharedInstance;
 		_apptentiveSignature = [apptentiveSignature copy];
 		_baseURL = [NSURL URLWithString:@"https://api.apptentive.com/"];
 		_logLevel = ApptentiveLogLevelInfo;
+		_shouldSanitizeLogMessages = YES;
 	}
 	return self;
 }
@@ -98,7 +99,7 @@ static Apptentive *_sharedInstance;
 
 + (instancetype)sharedConnection {
 	if (_sharedInstance == nil) {
-		ApptentiveLogWarning(@"Apptentive instance is not initialized. Make sure you've registered it with your app key and signature");
+		ApptentiveLogWarning(@"Apptentive instance is not initialized. Make sure you've registered it with your app key and signature.");
 	}
 	return _sharedInstance;
 }
@@ -115,16 +116,24 @@ static Apptentive *_sharedInstance;
 		// otherwise the log monitor configuration would be overwritten by
 		// the SDK configuration
 		ApptentiveLogSetLevel(configuration.logLevel);
-
-		[ApptentiveLogMonitor tryInitializeWithBaseURL:configuration.baseURL appKey:configuration.apptentiveKey signature:configuration.apptentiveSignature];
-
+		
+		// we need to initialize dispatch queue before we start log monitor
 		_operationQueue = [ApptentiveDispatchQueue createQueueWithName:@"Apptentive Main Queue" concurrencyType:ApptentiveDispatchQueueConcurrencyTypeSerial];
+		
+		// start log writer
+		ApptentiveStartLogMonitor([ApptentiveUtilities cacheDirectoryPath:@"com.apptentive.logs"]);
+
+		// start log monitor
+		[ApptentiveLogMonitor startSessionWithBaseURL:configuration.baseURL appKey:configuration.apptentiveKey signature:configuration.apptentiveSignature queue:_operationQueue];
 
 		_style = [[ApptentiveStyleSheet alloc] init];
 		_apptentiveKey = configuration.apptentiveKey;
 		_apptentiveSignature = configuration.apptentiveSignature;
 		_baseURL = configuration.baseURL;
 		_appID = configuration.appID;
+
+		setShouldSanitizeApptentiveLogMessages(configuration.shouldSanitizeLogMessages);
+
 		_backend = [[ApptentiveBackend alloc] initWithApptentiveKey:_apptentiveKey
 														  signature:_apptentiveSignature
 															baseURL:_baseURL
@@ -145,13 +154,13 @@ static Apptentive *_sharedInstance;
 
 + (void)registerWithConfiguration:(ApptentiveConfiguration *)configuration {
 	if (_sharedInstance != nil) {
-		ApptentiveLogWarning(@"Apptentive instance is already initialized");
+		ApptentiveLogWarning(@"Apptentive instance is already initialized.");
 		return;
 	}
 	@try {
 		_sharedInstance = [[Apptentive alloc] initWithConfiguration:configuration];
 	} @catch (NSException *e) {
-		ApptentiveLogCrit(@"Exception while initializing Apptentive instance: %@", e);
+		ApptentiveLogCrit(@"Exception while initializing Apptentive instance (%@).", e);
 	}
 }
 
@@ -198,7 +207,7 @@ static Apptentive *_sharedInstance;
 - (void)sendAttachmentText:(NSString *)text {
 	[self.operationQueue dispatchAsync:^{
 	  if (self.backend.conversationManager.activeConversation == nil) {
-		  ApptentiveLogError(@"Attempting to send message with no active conversation.");
+		  ApptentiveLogError(ApptentiveLogTagMessages, @"Attempting to send message with no active conversation.");
 		  return;
 	  }
 
@@ -209,7 +218,7 @@ static Apptentive *_sharedInstance;
 		  if (self.messageManager) {
 			  [self.messageManager enqueueMessageForSending:message];
 		  } else {
-			  ApptentiveLogError(@"Unable to send attachment text: message manager is not initialized");
+			  ApptentiveLogError(ApptentiveLogTagMessages, @"Unable to send attachment text: message manager is not initialized.");
 		  }
 	  }
 	}];
@@ -218,23 +227,23 @@ static Apptentive *_sharedInstance;
 - (void)sendAttachmentImage:(UIImage *)image {
 	[self.operationQueue dispatchAsync:^{
 	  if (self.backend.conversationManager.activeConversation == nil) {
-		  ApptentiveLogError(@"Attempting to send message with no active conversation.");
+		  ApptentiveLogError(ApptentiveLogTagMessages, @"Attempting to send message with no active conversation.");
 		  return;
 	  }
 
 	  if (image == nil) {
-		  ApptentiveLogError(@"Unable to send image attachment: image is nil");
+		  ApptentiveLogError(ApptentiveLogTagMessages, @"Unable to send image attachment: image is nil.");
 		  return;
 	  }
 
 	  NSData *imageData = UIImageJPEGRepresentation(image, 0.95);
 	  if (imageData == nil) {
-		  ApptentiveLogError(@"Unable to send image attachment: image data is invalid");
+		  ApptentiveLogError(ApptentiveLogTagMessages, @"Unable to send image attachment: image data is invalid.");
 		  return;
 	  }
 
 	  if (self.backend.conversationManager.messageManager == nil) {
-		  ApptentiveLogError(@"Unable to send attachment file: message manager is not initialized");
+		  ApptentiveLogError(ApptentiveLogTagMessages, @"Unable to send attachment file: message manager is not initialized.");
 		  return;
 	  }
 
@@ -248,7 +257,7 @@ static Apptentive *_sharedInstance;
 			  if (self.messageManager) {
 				  [self.messageManager enqueueMessageForSending:message];
 			  } else {
-				  ApptentiveLogError(@"Unable to send attachment image: message manager is not initialized");
+				  ApptentiveLogError(ApptentiveLogTagMessages, @"Unable to send attachment image: message manager is not initialized.");
 			  }
 		  }
 	  }
@@ -258,22 +267,22 @@ static Apptentive *_sharedInstance;
 - (void)sendAttachmentFile:(NSData *)fileData withMimeType:(NSString *)mimeType {
 	[self.operationQueue dispatchAsync:^{
 	  if (self.backend.conversationManager.activeConversation == nil) {
-		  ApptentiveLogError(@"Attempting to send message with no active conversation.");
+		  ApptentiveLogError(ApptentiveLogTagMessages, @"Attempting to send message with no active conversation.");
 		  return;
 	  }
 
 	  if (fileData == nil) {
-		  ApptentiveLogError(@"Unable to send attachment file: file data is nil");
+		  ApptentiveLogError(ApptentiveLogTagMessages, @"Unable to send attachment file: file data is nil.");
 		  return;
 	  }
 
 	  if (mimeType.length == 0) {
-		  ApptentiveLogError(@"Unable to send attachment file: mime-type is nil or empty");
+		  ApptentiveLogError(ApptentiveLogTagMessages, @"Unable to send attachment file: mime-type is nil or empty.");
 		  return;
 	  }
 
 	  if (self.backend.conversationManager.messageManager == nil) {
-		  ApptentiveLogError(@"Unable to send attachment file: message manager is not initialized");
+		  ApptentiveLogError(ApptentiveLogTagMessages, @"Unable to send attachment file: message manager is not initialized.");
 		  return;
 	  }
 
@@ -288,7 +297,7 @@ static Apptentive *_sharedInstance;
 			  if (self.messageManager) {
 				  [self.messageManager enqueueMessageForSending:message];
 			  } else {
-				  ApptentiveLogError(@"Unable to send attachment file: message manager is not initialized");
+				  ApptentiveLogError(ApptentiveLogTagMessages, @"Unable to send attachment file: message manager is not initialized.");
 			  }
 		  }
 	  }
@@ -369,7 +378,7 @@ static Apptentive *_sharedInstance;
 	if (simpleType || complexType) {
 		ApptentiveDictionarySetKeyValue(customData, key, object);
 	} else {
-		ApptentiveLogError(@"Apptentive custom data must be of type NSString, NSNumber, or NSNull, or a 'complex type' NSDictionary created by one of the constructors in Apptentive.h");
+		ApptentiveLogError(@"Apptentive custom data must be of type NSString, NSNumber, or NSNull, or a 'complex type' NSDictionary created by one of the constructors in Apptentive.h.");
 	}
 }
 
@@ -689,7 +698,7 @@ static Apptentive *_sharedInstance;
 
 		  // Make sure the push is for the currently logged-in conversation
 		  if ([apptentivePayload[@"conversation_id"] isEqualToString:self.backend.conversationManager.activeConversation.identifier]) {
-			  ApptentiveLogInfo(@"Push notification received for active conversation. userInfo: %@", userInfo);
+			  ApptentiveLogInfo(ApptentiveLogTagPush, @"Push notification received for active conversation. userInfo: %@", ApptentiveHideKeysIfSanitized(userInfo, @[@"alert"]));
 			  NSNumber *contentAvailable = userInfo[@"aps"][@"content-available"];
 
 			  // The content available flag should be set, which indicates that we want to download new messages
@@ -699,7 +708,7 @@ static Apptentive *_sharedInstance;
 				  if (self.messageManager) {
 					  [self.messageManager checkForMessagesInBackground:completionHandler];
 				  } else {
-					  ApptentiveLogError(@"Can't check for incoming messages: message manager is not initialized");
+					  ApptentiveLogError(ApptentiveLogTagPush, @"Can't check for incoming messages: message manager is not initialized.");
 				  }
 			  }
 
@@ -707,14 +716,14 @@ static Apptentive *_sharedInstance;
 			  // We also want to fire a local notification if the app is in the foreground (in which banners aren't shown normally),
 			  // which will trigger the "open message center" logic (or if using the UserNotifications framework, show a banner in-app)
 			  if (userInfo[@"aps"][@"alert"] == nil || applicationState == UIApplicationStateActive) {
-				  ApptentiveLogInfo(@"Silent push notification received or app in foreground. Posting local notification");
+				  ApptentiveLogInfo(ApptentiveLogTagPush, @"Silent push notification received or app in foreground. Posting local notification.");
 
 				  dispatch_async(dispatch_get_main_queue(), ^{
 					[self fireLocalNotificationWithUserInfo:userInfo];
 				  });
 			  }
 		  } else {
-			  ApptentiveLogInfo(@"Push notification received for conversation that is not active. Active conversation ID is %@, push conversation ID is %@", self.backend.conversationManager.activeConversation.identifier, apptentivePayload[@"conversation_id"]);
+			  ApptentiveLogInfo(ApptentiveLogTagPush, @"Push notification received for conversation that is not active. Active conversation ID is %@, push conversation ID is %@", self.backend.conversationManager.activeConversation.identifier, apptentivePayload[@"conversation_id"]);
 		  }
 
 		  if (shouldCallCompletionHandler && completionHandler) {
@@ -724,7 +733,7 @@ static Apptentive *_sharedInstance;
 		  }
 		}];
 	} else {
-		ApptentiveLogInfo(@"Non-apptentive push notification received.");
+		ApptentiveLogInfo(ApptentiveLogTagPush, @"Non-apptentive push notification received.");
 	}
 
 	return (apptentivePayload != nil);
@@ -732,11 +741,11 @@ static Apptentive *_sharedInstance;
 
 - (BOOL)didReceiveLocalNotification:(UILocalNotification *)notification fromViewController:(UIViewController *)viewController {
 	if ([self presentMessageCenterIfNeededForUserInfo:notification.userInfo fromViewController:viewController]) {
-		ApptentiveLogInfo(@"Apptentive local notification received.");
+		ApptentiveLogInfo(ApptentiveLogTagPush, @"Apptentive local notification received.");
 
 		return YES;
 	} else {
-		ApptentiveLogInfo(@"Non-apptentive local notification received.");
+		ApptentiveLogInfo(ApptentiveLogTagPush, @"Non-apptentive local notification received.");
 
 		return NO;
 	}
@@ -749,7 +758,7 @@ static Apptentive *_sharedInstance;
 // We allow passing a view controller to present Message Center from when the user has tapped a notification banner
 - (BOOL)didReceveUserNotificationResponse:(UNNotificationResponse *)response fromViewController:(nullable UIViewController *)viewController withCompletionHandler:(void (^)(void))completionHandler {
 	if ([self presentMessageCenterIfNeededForUserInfo:response.notification.request.content.userInfo fromViewController:viewController]) {
-		ApptentiveLogInfo(@"Apptentive user notification received.");
+		ApptentiveLogInfo(ApptentiveLogTagPush, @"Apptentive user notification received.");
 
 		if (completionHandler != nil) {
 			completionHandler();
@@ -757,7 +766,7 @@ static Apptentive *_sharedInstance;
 
 		return YES;
 	} else {
-		ApptentiveLogInfo(@"Non-apptentive user notification received.");
+		ApptentiveLogInfo(ApptentiveLogTagPush, @"Non-apptentive user notification received.");
 
 		return NO;
 	}
@@ -791,7 +800,7 @@ static Apptentive *_sharedInstance;
 		if (self.messageManager) {
 			[self.messageManager checkForMessages];
 		} else {
-			ApptentiveLogError(@"Can't check for incoming messages: message manager is not initialized");
+			ApptentiveLogError(ApptentiveLogTagPush, @"Can't check for incoming messages: message manager is not initialized.");
 		}
 	}
 
@@ -799,7 +808,7 @@ static Apptentive *_sharedInstance;
 }
 
 - (void)fireLocalNotificationWithUserInfo:(NSDictionary *)userInfo {
-	ApptentiveLogInfo(@"Silent push notification received. Posting local notification");
+	ApptentiveLogInfo(ApptentiveLogTagPush, @"Silent push notification received. Posting local notification.");
 
 	NSString *title = [ApptentiveUtilities appName];
 	NSString *body = userInfo[@"apptentive"][@"alert"] ?: userInfo[@"aps"][@"alert"] ?: NSLocalizedString(@"A new message awaits you in Message Center", @"Default push alert body");
@@ -820,7 +829,7 @@ static Apptentive *_sharedInstance;
 			[UNUserNotificationCenter.currentNotificationCenter addNotificationRequest:request
 																 withCompletionHandler:^(NSError *_Nullable error) {
 																   if (error) {
-																	   ApptentiveLogError(@"Error posting local notification: %@", error);
+																	   ApptentiveLogError(@"Error posting local notification (%@).", error);
 																   }
 																 }];
 
@@ -837,8 +846,8 @@ static Apptentive *_sharedInstance;
 
 		[[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
 	} else {
-		ApptentiveLogError(@"Your app is not properly configured to accept Apptentive Message Center push notifications.");
-		ApptentiveLogError(@"Please see the push notification section of the integration guide for assistance: https://learn.apptentive.com/knowledge-base/ios-integration-reference/#push-notifications");
+		ApptentiveLogError(ApptentiveLogTagPush, @"Your app is not properly configured to accept Apptentive Message Center push notifications.");
+		ApptentiveLogError(ApptentiveLogTagPush, @"Please see the push notification section of the integration guide for assistance: https://learn.apptentive.com/knowledge-base/ios-integration-reference/#push-notifications.");
 	}
 }
 
@@ -921,7 +930,7 @@ static Apptentive *_sharedInstance;
 
 	[self.operationQueue dispatchAsync:^{
 	  if (self.backend.conversationManager.activeConversation.state != ApptentiveConversationStateLoggedIn) {
-		  ApptentiveLogError(@"Attempting to log out of a conversation that is not logged in.");
+		  ApptentiveLogError(ApptentiveLogTagConversation, @"Attempting to log out of a conversation that is not logged in.");
 		  return;
 	  }
 
@@ -951,15 +960,14 @@ static Apptentive *_sharedInstance;
 }
 
 - (void)applicationWillEnterForegroundNotification:(NSNotification *)notification {
-	ApptentiveLogMonitor *logMonitor = [ApptentiveLogMonitor sharedInstance];
-	if (logMonitor) {
+	if ([ApptentiveLogMonitor resumeSession]) {
 		ApptentiveLogDebug(ApptentiveLogTagMonitor, @"Resuming log monitor...");
-		[logMonitor resume];
 	} else {
 		ApptentiveLogDebug(ApptentiveLogTagMonitor, @"Trying to initialize log monitor...");
-		[ApptentiveLogMonitor tryInitializeWithBaseURL:self.baseURL
+		[ApptentiveLogMonitor startSessionWithBaseURL:self.baseURL
 												appKey:self.apptentiveKey
-											 signature:self.apptentiveSignature];
+											 signature:self.apptentiveSignature
+												 queue:self.operationQueue];
 	}
 }
 

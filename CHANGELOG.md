@@ -1,3 +1,14 @@
+# 2018-04-18 - v5.1.0
+
+#### Improvements
+
+- Refine exponential backoff of network requests
+- Improve logging of targeting criteria evaluation
+
+#### Bugs Fixed
+
+- Eliminate a redundant network request on initialization
+
 # 2018-05-04 - v5.0.4
 
 #### Bugs Fixed

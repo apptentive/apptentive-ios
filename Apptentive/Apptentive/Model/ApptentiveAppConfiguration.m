@@ -17,6 +17,7 @@ static NSString *const SupportImageURLKey = @"supportImageURL";
 static NSString *const HideBrandingKey = @"hideBranding";
 static NSString *const MessageCenterEnabledKey = @"messageCenterEnabled";
 static NSString *const MetricsEnabledKey = @"metricsEnabled";
+static NSString *const CollectAdvertisingIdentifierKey = @"collectAdvertisingIdentifier";
 static NSString *const MessageCenterKey = @"messageCenter";
 static NSString *const ExpiryKey = @"expiry";
 
@@ -71,6 +72,7 @@ static NSString *const ATAppConfigurationMessageCenterBackgroundRefreshIntervalK
 		_hideBranding = [JSONDictionary[@"hide_branding"] boolValue];
 		_messageCenterEnabled = [JSONDictionary[@"message_center_enabled"] boolValue];
 		_metricsEnabled = [JSONDictionary[@"metrics_enabled"] boolValue];
+		_collectAdvertisingIdentifier = [JSONDictionary[@"collect_ad_id"] boolValue];
 
 		_messageCenter = [[ApptentiveMessageCenterConfiguration alloc] initWithJSONDictionary:JSONDictionary[@"message_center"]];
 
@@ -115,6 +117,7 @@ static NSString *const ATAppConfigurationMessageCenterBackgroundRefreshIntervalK
 		_hideBranding = [coder decodeBoolForKey:HideBrandingKey];
 		_messageCenterEnabled = [coder decodeBoolForKey:MessageCenterEnabledKey];
 		_metricsEnabled = [coder decodeBoolForKey:MetricsEnabledKey];
+		_collectAdvertisingIdentifier = [coder decodeBoolForKey:CollectAdvertisingIdentifierKey];
 		_messageCenter = [coder decodeObjectOfClass:[ApptentiveMessageCenterConfiguration class] forKey:MessageCenterKey];
 		_expiry = [coder decodeObjectOfClass:[NSDate class] forKey:ExpiryKey];
 	}
@@ -129,6 +132,7 @@ static NSString *const ATAppConfigurationMessageCenterBackgroundRefreshIntervalK
 	[coder encodeBool:self.hideBranding forKey:HideBrandingKey];
 	[coder encodeBool:self.messageCenterEnabled forKey:MessageCenterEnabledKey];
 	[coder encodeBool:self.metricsEnabled forKey:MetricsEnabledKey];
+	[coder encodeBool:self.collectAdvertisingIdentifier forKey:CollectAdvertisingIdentifierKey];
 	[coder encodeObject:self.messageCenter forKey:MessageCenterKey];
 	[coder encodeObject:self.expiry forKey:ExpiryKey];
 }

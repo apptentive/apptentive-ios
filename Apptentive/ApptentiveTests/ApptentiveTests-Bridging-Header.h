@@ -3,6 +3,8 @@
 //
 
 #import "Apptentive.h"
+#import "ApptentiveLog.h"
+
 #import "ApptentiveConversationManager.h"
 
 #import "ApptentiveAppRelease.h"
@@ -19,7 +21,18 @@
 #import "ApptentiveConversationRequest.h"
 #import "ApptentiveDevice.h"
 #import "ApptentivePerson.h"
+#import "ApptentiveEngagement.h"
+#import "ApptentiveConversation.h"
 
 #import "ApptentiveAttachment.h"
 #import "ApptentiveMessage.h"
 #import "ApptentiveMessageSender.h"
+
+#import "ApptentiveTarget.h"
+#import "ApptentiveClause.h"
+#import "ApptentiveIndentPrinter.h"
+
+#import "ApptentiveAsyncLogWriter.h"
+#import "ApptentiveMockDispatchQueue.h"
+
+#import "ApptentiveRetryPolicy.h"

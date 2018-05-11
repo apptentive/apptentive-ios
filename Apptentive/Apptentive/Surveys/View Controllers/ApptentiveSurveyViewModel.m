@@ -46,7 +46,7 @@ NSString *const ApptentiveInteractionSurveyEventLabelCancel = @"cancel";
 		@try {
 			_survey = [[ApptentiveSurvey alloc] initWithJSON:interaction.configuration];
 		} @catch (NSException *exception) {
-			ApptentiveLogError(@"Unable to parse survey.");
+			ApptentiveLogError(ApptentiveLogTagInteractions, @"Unable to parse survey.");
 			return nil;
 		}
 

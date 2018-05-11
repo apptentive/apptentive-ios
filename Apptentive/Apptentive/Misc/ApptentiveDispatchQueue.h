@@ -17,6 +17,8 @@ typedef enum : NSUInteger {
 
 extern NSString * _Nullable ApptentiveGetCurrentThreadName(void);
 
+@class ApptentiveDispatchTask;
+
 @interface ApptentiveDispatchQueue : NSObject
 
 @property (nonatomic, assign, getter=isSuspended) BOOL suspended;
@@ -40,6 +42,10 @@ extern NSString * _Nullable ApptentiveGetCurrentThreadName(void);
 - (void)dispatchAsync:(void (^)(void))task;
 
 - (void)dispatchAsync:(void (^)(void))task withDependency:(NSOperation *)dependency;
+
+- (void)dispatchTask:(ApptentiveDispatchTask *)task;
+
+- (void)dispatchTaskOnce:(ApptentiveDispatchTask *)task;
 
 @end
 

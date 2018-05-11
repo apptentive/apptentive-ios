@@ -44,7 +44,7 @@ static NSString *const InboundKey = @"inboundKey";
 
 	if (self) {
 		if (![JSON isKindOfClass:[NSDictionary class]]) {
-			ApptentiveLogError(@"Can't init %@: invalid json: %@", NSStringFromClass([self class]), JSON);
+			ApptentiveLogError(ApptentiveLogTagMessages, @"Can't init %@: invalid json: %@", NSStringFromClass([self class]), ApptentiveHideKeysIfSanitized(JSON, @[@"body", @"custom_data", @"title"]));
 			return nil;
 		}
 
@@ -68,7 +68,7 @@ static NSString *const InboundKey = @"inboundKey";
 
 		_sender = [[ApptentiveMessageSender alloc] initWithJSON:JSON[@"sender"]];
 		if (_sender == nil) {
-			ApptentiveLogError(@"Can't init %@: sender can't be created", NSStringFromClass([self class]));
+			ApptentiveLogError(ApptentiveLogTagMessages, @"Can't init %@: sender can't be created", NSStringFromClass([self class]));
 			return nil;
 		}
 
@@ -186,7 +186,7 @@ static NSString *const InboundKey = @"inboundKey";
 
 		_attachments = updatedAttachments;
 	} else {
-		ApptentiveLogError(@"Mismatch in number of attachments between client and server.");
+		ApptentiveLogError(ApptentiveLogTagMessages, @"Mismatch in number of attachments between client and server.");
 	}
 
 	return self;

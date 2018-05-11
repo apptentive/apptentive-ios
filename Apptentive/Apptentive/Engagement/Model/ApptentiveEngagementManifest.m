@@ -8,7 +8,7 @@
 
 #import "ApptentiveEngagementManifest.h"
 #import "ApptentiveInteraction.h"
-#import "ApptentiveInteractionInvocation.h"
+#import "ApptentiveTargets.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -32,7 +32,7 @@ static NSString *const ATEngagementInteractionsAppBuildNumberKey = @"ATEngagemen
 	self = [super init];
 
 	if (self) {
-		_targets = @{};
+		_targets = [[ApptentiveTargets alloc] initWithTargetsDictionary:@{}];
 		_interactions = @{};
 
 		_expiry = [NSDate distantPast];
@@ -51,15 +51,7 @@ static NSString *const ATEngagementInteractionsAppBuildNumberKey = @"ATEngagemen
 		// Targets
 		NSDictionary *targetsDictionary = JSONDictionary[@"targets"];
 		if ([targetsDictionary isKindOfClass:[NSDictionary class]]) {
-			NSMutableDictionary *targets = [NSMutableDictionary dictionary];
-
-			for (NSString *event in [targetsDictionary allKeys]) {
-				NSArray *invocationsJSONArray = targetsDictionary[event];
-				NSArray *invocationsArray = [ApptentiveInteractionInvocation invocationsWithJSONArray:invocationsJSONArray];
-				ApptentiveDictionarySetKeyValue(targets, event, invocationsArray);
-			}
-
-			_targets = [NSDictionary dictionaryWithDictionary:targets];
+			_targets = [[ApptentiveTargets alloc] initWithTargetsDictionary:targetsDictionary];
 		}
 
 		// Interactions
@@ -91,7 +83,7 @@ static NSString *const ATEngagementInteractionsAppBuildNumberKey = @"ATEngagemen
 			@try {
 				_targets = [NSKeyedUnarchiver unarchiveObjectWithFile:cachedTargetsPath];
 			} @catch (NSException *exception) {
-				ApptentiveLogError(@"Unable to unarchive cached targets at path %@ (%@)", cachedTargetsPath, exception);
+				ApptentiveLogWarning(ApptentiveLogTagConversation, @"Unable to unarchive cached targets at path %@ (%@)", cachedTargetsPath, exception);
 			}
 		}
 
@@ -100,7 +92,7 @@ static NSString *const ATEngagementInteractionsAppBuildNumberKey = @"ATEngagemen
 			@try {
 				_interactions = [NSKeyedUnarchiver unarchiveObjectWithFile:cachedInteractionsPath];
 			} @catch (NSException *exception) {
-				ApptentiveLogError(@"Unable to unarchive cached interactions at path %@ (%@)", cachedInteractionsPath, exception);
+				ApptentiveLogWarning(ApptentiveLogTagConversation, @"Unable to unarchive cached interactions at path %@ (%@)", cachedInteractionsPath, exception);
 			}
 		}
 	}
@@ -116,12 +108,12 @@ static NSString *const ATEngagementInteractionsAppBuildNumberKey = @"ATEngagemen
 	NSError *error;
 	NSString *targetsCachePath = [cachePath stringByAppendingPathComponent:@"cachedtargets.objects"];
 	if (![[NSFileManager defaultManager] removeItemAtPath:targetsCachePath error:&error]) {
-		ApptentiveLogError(@"Unable to remove migrated target data: %@", error);
+		ApptentiveLogWarning(ApptentiveLogTagConversation, @"Unable to remove migrated target data: %@", error);
 	}
 
 	NSString *cachedInteractionsPath = [cachePath stringByAppendingPathComponent:@"cachedinteractionsV2.objects"];
 	if (![[NSFileManager defaultManager] removeItemAtPath:cachedInteractionsPath error:&error]) {
-		ApptentiveLogError(@"Unable to remove migrated interactions data: %@", error);
+		ApptentiveLogWarning(ApptentiveLogTagConversation, @"Unable to remove migrated interactions data: %@", error);
 	}
 }
 
@@ -129,7 +121,7 @@ static NSString *const ATEngagementInteractionsAppBuildNumberKey = @"ATEngagemen
 	self = [super init];
 
 	if (self) {
-		_targets = [coder decodeObjectOfClass:[NSDictionary class] forKey:TargetsKey];
+		_targets = [coder decodeObjectOfClass:[ApptentiveTargets class] forKey:TargetsKey];
 		_interactions = [coder decodeObjectOfClass:[NSDictionary class] forKey:InteractionsKey];
 		_expiry = [coder decodeObjectOfClass:[NSDate class] forKey:ExpiryKey];
 	}

@@ -221,7 +221,7 @@ NSString *const ATInteractionMessageCenterEventLabelAttachmentDelete = @"attachm
 	if (photo) {
 		[self insertImage:photo];
 	} else {
-		ApptentiveLogError(@"Unable to get photo");
+		ApptentiveLogWarning(ApptentiveLogTagMessages, @"Unable to get photo.");
 	}
 
 	[self dismissImagePicker:picker];

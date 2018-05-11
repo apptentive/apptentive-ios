@@ -8,11 +8,15 @@
 
 #import "ApptentiveLog.h"
 #import "ApptentiveDispatchQueue.h"
+#import "ApptentiveAsyncLogWriter.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
+static const NSUInteger kLogHistorySize = 2;
+
 static ApptentiveLogLevel _logLevel = ApptentiveLogLevelInfo;
-static ApptentiveLoggerCallback _logCallback;
+static ApptentiveAsyncLogWriter * _logWriter;
+static BOOL _shouldSanitizeLogMessages;
 
 static const char *_Nonnull _logLevelNameLookup[] = {
 	"?", // ApptentiveLogLevelUndefined
@@ -36,29 +40,29 @@ inline static BOOL shouldLogLevel(ApptentiveLogLevel logLevel) {
 
 static void _ApptentiveLogHelper(ApptentiveLogLevel level, id arg, va_list ap) {
 	ApptentiveLogTag *tag = [arg isKindOfClass:[ApptentiveLogTag class]] ? arg : nil;
-	if (shouldLogLevel(level) && (tag == nil || tag.enabled)) {
-		if (tag != nil) {
-			arg = va_arg(ap, ApptentiveLogTag *);
-		}
+	if (tag != nil) {
+		arg = va_arg(ap, ApptentiveLogTag *);
+	}
 
-		NSString *format = arg;
-		NSString *threadName = ApptentiveGetCurrentThreadName();
-		NSString *message = [[NSString alloc] initWithFormat:format arguments:ap];
+	NSString *format = arg;
+	NSString *threadName = ApptentiveGetCurrentThreadName();
+	NSString *message = [[NSString alloc] initWithFormat:format arguments:ap];
 
-		NSMutableString *fullMessage = [[NSMutableString alloc] initWithFormat:@"%s/Apptentive: ", _logLevelNameLookup[level]];
-		if (threadName != nil) {
-			[fullMessage appendFormat:@"[%@] ", threadName];
-		}
-		if (tag != nil) {
-			[fullMessage appendFormat:@"[%@] ", tag.name];
-		}
-		[fullMessage appendString:message];
+	NSMutableString *fullMessage = [[NSMutableString alloc] initWithFormat:@"%s/Apptentive: ", _logLevelNameLookup[level]];
+	if (threadName != nil) {
+		[fullMessage appendFormat:@"[%@] ", threadName];
+	}
+	if (tag != nil) {
+		[fullMessage appendFormat:@"[%@] ", tag.name];
+	}
+	[fullMessage appendString:message];
 
+	if (shouldLogLevel(level)) {
 		NSLog(@"%@", fullMessage);
+	}
 
-		if (_logCallback) {
-			_logCallback(level, fullMessage);
-		}
+	if (_logWriter) {
+		[_logWriter logMessage:fullMessage];
 	}
 }
 
@@ -102,10 +106,6 @@ void ApptentiveLogVerbose(id arg, ...) {
 	va_start(ap, arg);
 	_ApptentiveLogHelper(ApptentiveLogLevelVerbose, arg, ap);
 	va_end(ap);
-}
-
-void ApptentiveSetLoggerCallback(_Nullable ApptentiveLoggerCallback callback) {
-	_logCallback = callback;
 }
 
 ApptentiveLogLevel ApptentiveLogGetLevel(void) {
@@ -162,6 +162,44 @@ ApptentiveLogLevel ApptentiveLogLevelFromString(NSString *level) {
 		return ApptentiveLogLevelVerbose;
 	}
 	return ApptentiveLogLevelUndefined;
+}
+
+NSObject * _Nullable ApptentiveHideIfSanitized(NSObject * _Nullable value) {
+	return value != nil && _shouldSanitizeLogMessages ? @"<HIDDEN>" : value;
+}
+
+NSDictionary *ApptentiveHideKeysIfSanitized(NSDictionary *dictionary, NSArray *sensitiveKeys) {
+	if (dictionary == nil || !_shouldSanitizeLogMessages || ![dictionary isKindOfClass:[NSDictionary class]]) {
+		return dictionary;
+	}
+
+	NSMutableDictionary *result = [NSMutableDictionary dictionaryWithCapacity:dictionary.count];
+	for (NSString *key in dictionary) {
+		NSObject *value = dictionary[key];
+
+		if ([value isKindOfClass:[NSDictionary class]]) {
+			value = ApptentiveHideKeysIfSanitized((NSDictionary *)value, ((NSDictionary *)value).allKeys);
+		} else if ([sensitiveKeys containsObject:key]) {
+			value = @"<HIDDEN>";
+		}
+
+		[result setObject:value forKey:key];
+	}
+
+	return result;
+}
+
+
+void setShouldSanitizeApptentiveLogMessages(BOOL shouldSanitize) {
+	_shouldSanitizeLogMessages = shouldSanitize;
+}
+
+void ApptentiveStartLogMonitor(NSString *logDir) {
+	_logWriter = [[ApptentiveAsyncLogWriter alloc] initWithDestDir:logDir historySize:kLogHistorySize];
+}
+
+NSArray<NSString *> *ApptentiveListLogFiles(void) {
+	return [_logWriter listLogFiles];
 }
 
 NS_ASSUME_NONNULL_END

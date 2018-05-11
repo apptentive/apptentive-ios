@@ -157,7 +157,7 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 	NSDictionary *appReleaseDiffs = [ApptentiveUtilities diffDictionary:currentAppRelease.JSONDictionary againstDictionary:self.appRelease.JSONDictionary];
 
 	if (appReleaseDiffs.count > 0) {
-		ApptentiveLogDebug(ApptentiveLogTagConversation, @"App release did change.");
+		ApptentiveLogDebug(ApptentiveLogTagConversation, @"One or more App release fields have changed: %@", ApptentiveHideKeysIfSanitized(appReleaseDiffs, [ApptentiveAppRelease sensitiveKeys]));
 		conversationNeedsUpdate = YES;
 
 		if (![currentAppRelease.version isEqualToVersion:self.appRelease.version]) {
@@ -176,7 +176,7 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 	NSDictionary *SDKDiffs = [ApptentiveUtilities diffDictionary:currentSDK.JSONDictionary againstDictionary:self.SDK.JSONDictionary];
 
 	if (SDKDiffs.count > 0) {
-		ApptentiveLogDebug(ApptentiveLogTagConversation, @"SDK did change.");
+		ApptentiveLogDebug(ApptentiveLogTagConversation, @"One or more Apptentive SDK fields have changed: %@", ApptentiveHideKeysIfSanitized(SDKDiffs, [ApptentiveSDK sensitiveKeys]));
 		
 		conversationNeedsUpdate = YES;
 
@@ -196,27 +196,31 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 }
 
 - (void)checkForDeviceDiffs {
-	ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Diffing device");
+	ApptentiveLogDebug(ApptentiveLogTagConversation, @"Checking for changes to the device fields...");
 
 	[self.device updateWithCurrentDeviceValues];
 
 	NSDictionary *deviceDiffs = [ApptentiveUtilities diffDictionary:self.device.JSONDictionary againstDictionary:self.lastSentDevice];
 
 	if (deviceDiffs.count > 0) {
-		ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Device diffs found: %@", deviceDiffs);
+		ApptentiveLogVerbose(ApptentiveLogTagConversation, @"One or more device fields have changed: %@", ApptentiveHideKeysIfSanitized(deviceDiffs, [ApptentiveDevice sensitiveKeys]));
 
 		[self.delegate conversation:self deviceDidChange:deviceDiffs];
-		self.lastSentDevice = self.device.JSONDictionary;
+		[self updateLastSentDevice];
 	}
 }
 
+- (void)updateLastSentDevice {
+	self.lastSentDevice = self.device.JSONDictionary;
+}
+
 - (void)checkForPersonDiffs {
-	ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Diffing person");
+	ApptentiveLogDebug(ApptentiveLogTagConversation, @"Checking for changes to the person fields...");
 
 	NSDictionary *personDiffs = [ApptentiveUtilities diffDictionary:self.person.JSONDictionary againstDictionary:self.lastSentPerson];
 
 	if (personDiffs.count > 0) {
-		ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Person diffs found: %@", personDiffs);
+		ApptentiveLogVerbose(ApptentiveLogTagConversation, @"One or more person fields have changed: %@", ApptentiveHideKeysIfSanitized(personDiffs, [ApptentivePerson sensitiveKeys]));
 
 		[self.delegate conversation:self personDidChange:personDiffs];
 		self.lastSentPerson = self.person.JSONDictionary;
@@ -390,6 +394,18 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 			return NO;
 		}
 	}
+
+	if (self.state == ApptentiveConversationStateAnonymousPending || self.state == ApptentiveConversationStateLegacyPending) {
+		if (self.identifier.length > 0) {
+			ApptentiveLogError(ApptentiveLogTagConversation, @"Pending conversation has identifier.");
+			return NO;
+		}
+
+		if (self.token.length > 0) {
+			ApptentiveLogError(ApptentiveLogTagConversation, @"Pending conversation has token.");
+			return NO;
+		}
+	}
 	
 	return YES;
 }
@@ -418,7 +434,7 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 			[_delegate conversationUserInfoDidChange:self];
 		}
 	} else {
-		ApptentiveLogError(ApptentiveLogTagConversation, @"Attempting to set user info with nil key and/or value");
+		ApptentiveLogError(ApptentiveLogTagConversation, @"Attempting to set user info with nil key and/or value.");
 	}
 }
 
@@ -426,7 +442,7 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 	if (key != nil) {
 		[self.mutableUserInfo removeObjectForKey:key];
 	} else {
-		ApptentiveLogError(ApptentiveLogTagConversation, @"Attempting to set user info with nil key and/or value");
+		ApptentiveLogError(ApptentiveLogTagConversation, @"Attempting to set user info with nil key and/or value.");
 	}
 }
 
@@ -525,6 +541,77 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 - (void)setConversationIdentifier:(NSString *)identifier JWT:(NSString *)JWT {
 	self.identifier = identifier;
 	self.token = JWT;
+}
+
+@end
+
+@implementation ApptentiveConversation (Criteria)
+
+- (nullable NSObject *)valueForFieldWithPath:(NSString *)path {
+	if ([path hasPrefix:@"code_point/"] || [path hasPrefix:@"interactions/"]) {
+		return [self.engagement valueForFieldWithPath:path];
+	} else if ([path hasPrefix:@"is_update/"] || [path hasPrefix:@"time_at_install/"]) {
+		return [self.appRelease valueForFieldWithPath:path];
+	} else if ([path isEqualToString:@"current_time"]) {
+		return self.currentTime;
+	} else {
+		// Fan out to properties
+		NSArray *parts = [path componentsSeparatedByString:@"/"];
+		NSMutableArray *trimmedParts = [NSMutableArray arrayWithCapacity:parts.count];
+
+		for (NSString *part in parts) {
+			[trimmedParts addObject:[part stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]];
+		}
+
+		NSString *first = trimmedParts.firstObject;
+		NSString *rest = [[trimmedParts subarrayWithRange:NSMakeRange(1, parts.count - 1)] componentsJoinedByString:@"/"];
+
+		if ([first isEqualToString:@"application"]) {
+			return [self.appRelease valueForFieldWithPath:rest];
+		} else if ([first isEqualToString:@"sdk"]) {
+			return [self.SDK valueForFieldWithPath:rest];
+		} else if ([first isEqualToString:@"person"]) {
+			return [self.person valueForFieldWithPath:rest];
+		} else if ([first isEqualToString:@"device"]) {
+			return [self.device valueForFieldWithPath:rest];
+		}
+	}
+
+	ApptentiveLogError(@"Unrecognized field name “%@”", path);
+	return nil;
+}
+
+- (NSString *)descriptionForFieldWithPath:(id)path {
+	if ([path hasPrefix:@"code_point/"] || [path hasPrefix:@"interactions/"]) {
+		return [self.engagement descriptionForFieldWithPath:path];
+	} else if ([path hasPrefix:@"is_update/"] || [path hasPrefix:@"time_at_install/"]) {
+		return [self.appRelease descriptionForFieldWithPath:path];
+	} else if ([path isEqualToString:@"current_time"]) {
+		return @"current time";
+	} else {
+		// Fan out to properties
+		NSArray *parts = [path componentsSeparatedByString:@"/"];
+		NSMutableArray *trimmedParts = [NSMutableArray arrayWithCapacity:parts.count];
+
+		for (NSString *part in parts) {
+			[trimmedParts addObject:[part stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]];
+		}
+
+		NSString *first = trimmedParts.firstObject;
+		NSString *rest = [[trimmedParts subarrayWithRange:NSMakeRange(1, parts.count - 1)] componentsJoinedByString:@"/"];
+
+		if ([first isEqualToString:@"application"]) {
+			return [self.appRelease descriptionForFieldWithPath:rest];
+		} else if ([first isEqualToString:@"sdk"]) {
+			return [self.SDK descriptionForFieldWithPath:rest];
+		} else if ([first isEqualToString:@"person"]) {
+			return [self.person descriptionForFieldWithPath:rest];
+		} else if ([first isEqualToString:@"device"]) {
+			return [self.device descriptionForFieldWithPath:rest];
+		}
+	}
+
+	return [NSString stringWithFormat:@"Unrecognized field %@", path];
 }
 
 @end

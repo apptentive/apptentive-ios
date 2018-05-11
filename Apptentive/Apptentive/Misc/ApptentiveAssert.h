@@ -59,6 +59,15 @@ extern NSString * _Nullable ApptentiveGetCurrentThreadName(void);
 	if (!(expression)) __ApptentiveAssertHelper(#expression, __FILE__, __LINE__, __PRETTY_FUNCTION__, __VA_ARGS__)
 
 /*!
+ * @define ApptentiveAssertFalse(expression, ...)
+ * Generates a failure when ((\a expression) == true).
+ * @param expression An expression of boolean type.
+ * @param ... An optional supplementary description of the failure. A literal NSString, optionally with string format specifiers. This parameter can be completely omitted.
+ */
+#define ApptentiveAssertFalse(expression, ...) \
+if (expression) __ApptentiveAssertHelper(#expression, __FILE__, __LINE__, __PRETTY_FUNCTION__, __VA_ARGS__)
+
+/*!
  * @define ApptentiveAssertDispatchQueue(expression, ...)
  * Generates a failure when ((\a expression1) does not match the current dispatch queue.
  * @param expression An expression of dispatch_queue_t type.

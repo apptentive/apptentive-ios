@@ -34,13 +34,13 @@ NS_ASSUME_NONNULL_BEGIN
 		NSError *error = nil;
 		fileData = [NSData dataWithContentsOfFile:self.path options:NSDataReadingMappedIfSafe error:&error];
 		if (!fileData) {
-			ApptentiveLogError(@"Unable to get contents of file path for uploading: %@", error);
+			ApptentiveLogError(ApptentiveLogTagPayload, @"Unable to get contents of file path for uploading: %@", error);
 		} else {
 			return fileData;
 		}
 	}
 
-	ApptentiveLogError(@"Missing sidecar file for %@", self);
+	ApptentiveLogError(ApptentiveLogTagPayload, @"Missing sidecar file for: %@", self);
 	return nil;
 }
 

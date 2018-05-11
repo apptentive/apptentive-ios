@@ -71,6 +71,8 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (BOOL)isEqualToVersion:(ApptentiveVersion *)version;
 
+- (NSComparisonResult)compare:(ApptentiveVersion *)otherVersion;
+
 @end
 
 NS_ASSUME_NONNULL_END

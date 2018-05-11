@@ -20,7 +20,7 @@ FOUNDATION_EXPORT double ApptentiveVersionNumber;
 FOUNDATION_EXPORT const unsigned char ApptentiveVersionString[];
 
 /** The version number of the Apptentive SDK. */
-#define kApptentiveVersionString @"5.0.4"
+#define kApptentiveVersionString @"5.1.0"
 
 /** The version number of the Apptentive API platform. */
 #define kApptentiveAPIVersionString @"9"
@@ -75,6 +75,13 @@ extern NSNotificationName const ApptentiveSurveyShownNotification;
 
 /** Notification sent when a survey is submitted by the user. */
 extern NSNotificationName const ApptentiveSurveySentNotification;
+
+/** Notification sent when a message is sent, either by the user or using a sendAttachment method.
+ You can use this notification to ask the user to enable push notifications. */
+extern NSNotificationName const ApptentiveMessageSentNotification;
+
+/** Notification user info key whose value indicates whether the message was sent by the user or using a sendAttachment method. */
+extern NSString * const ApptentiveSentByUserKey;
 
 /** Error domain for the Apptentive SDK */
 extern NSString *const ApptentiveErrorDomain;
@@ -135,6 +142,9 @@ typedef NS_ENUM(NSUInteger, ApptentiveLogLevel) {
 
 /** The granularity of log messages emitted from the SDK (defaults to `ApptentiveLogLevelInfo`). */
 @property (assign, nonatomic) ApptentiveLogLevel logLevel;
+
+/** If set, redacts potentially-sensitive information such as user data and credentials from logging. */
+@property (assign, nonatomic) BOOL shouldSanitizeLogMessages;
 
 /** The server URL to use for API calls. Should only be used for testing. */
 @property (copy, nonatomic) NSURL *baseURL;
@@ -739,7 +749,7 @@ typedef NS_ENUM(NSUInteger, ApptentiveLogLevel) {
 
 /** The style sheet used for styling Apptentive UI.
 
- @note See the [Apptentive Styling Guide for iOS](https://docs.apptentive.com/ios/customization/) for information on configuring this property.
+ @note See the [Apptentive Styling Guide for iOS](https://learn.apptentive.com/knowledge-base/interface-customization-ios/) for information on configuring this property.
  */
 @property (strong, nonatomic) id<ApptentiveStyle> styleSheet;
 

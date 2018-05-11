@@ -7,17 +7,21 @@
 //
 
 #import "CriteriaTests.h"
+#import "Apptentive_Private.h"
+#import "ApptentiveConversation.h"
+#import "ApptentiveEngagement.h"
+#import "ApptentiveCount.h"
+#import "ApptentiveClause.h"
 #import "ApptentiveConversation.h"
 #import "ApptentiveCount.h"
 #import "ApptentiveEngagement.h"
-#import "ApptentiveInteractionInvocation.h"
-#import "ApptentiveInteractionUsageData.h"
 #import "Apptentive_Private.h"
 
 
 @interface CodePointTest : CriteriaTest
 
-@property (strong, nonatomic) ApptentiveInteractionUsageData *usageData;
+@property (strong, nonatomic) ApptentiveConversation *conversation;
+
 @end
 
 
@@ -26,15 +30,15 @@
 - (void)setUp {
 	[super setUp];
 
-	self.usageData = [ApptentiveInteractionUsageData usageDataWithConversation:[[ApptentiveConversation alloc] initWithState:ApptentiveConversationStateAnonymous]];
+	self.conversation = [[ApptentiveConversation alloc] initWithState:ApptentiveConversationStateAnonymous];
 }
 
 - (void)incrementCodePoint:(NSString *)codePoint {
-	[self.usageData.conversation.engagement engageCodePoint:codePoint];
+	[self.conversation.engagement engageCodePoint:codePoint];
 }
 
 - (void)incrementInteraction:(NSString *)interactionID {
-	[self.usageData.conversation.engagement engageInteraction:interactionID];
+	[self.conversation.engagement engageInteraction:interactionID];
 }
 
 @end
@@ -49,54 +53,54 @@
 - (void)setUp {
 	[super setUp];
 
-	[self.usageData.conversation.engagement warmCodePoint:@"test.code.point"];
-	[self.usageData.conversation.engagement warmCodePoint:@"switch.code.point"];
+	[self.conversation.engagement warmCodePoint:@"test.code.point"];
+	[self.conversation.engagement warmCodePoint:@"switch.code.point"];
 }
 
 - (void)testGt {
-	XCTAssertFalse([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertFalse([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertFalse([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertFalse([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertTrue([self.clause criteriaMetForConversation:self.conversation]);
 }
 
 - (void)testGte {
 	[self incrementCodePoint:@"switch.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertFalse([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertFalse([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertTrue([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertTrue([self.clause criteriaMetForConversation:self.conversation]);
 }
 
 - (void)testNe {
 	[self incrementCodePoint:@"switch.code.point"];
 	[self incrementCodePoint:@"switch.code.point"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertTrue([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertTrue([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertFalse([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertTrue([self.clause criteriaMetForConversation:self.conversation]);
 }
 
 - (void)testEq {
 	[self incrementCodePoint:@"switch.code.point"];
 	[self incrementCodePoint:@"switch.code.point"];
 	[self incrementCodePoint:@"switch.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertFalse([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertFalse([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertTrue([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertFalse([self.clause criteriaMetForConversation:self.conversation]);
 }
 
 - (void)testColon {
@@ -104,13 +108,13 @@
 	[self incrementCodePoint:@"switch.code.point"];
 	[self incrementCodePoint:@"switch.code.point"];
 	[self incrementCodePoint:@"switch.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertFalse([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertFalse([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertTrue([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertFalse([self.clause criteriaMetForConversation:self.conversation]);
 }
 
 - (void)testLte {
@@ -119,13 +123,13 @@
 	[self incrementCodePoint:@"switch.code.point"];
 	[self incrementCodePoint:@"switch.code.point"];
 	[self incrementCodePoint:@"switch.code.point"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertTrue([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertTrue([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertTrue([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertFalse([self.clause criteriaMetForConversation:self.conversation]);
 }
 
 - (void)testLt {
@@ -135,13 +139,13 @@
 	[self incrementCodePoint:@"switch.code.point"];
 	[self incrementCodePoint:@"switch.code.point"];
 	[self incrementCodePoint:@"switch.code.point"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertTrue([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertTrue([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertFalse([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertFalse([self.clause criteriaMetForConversation:self.conversation]);
 }
 
 @end
@@ -156,8 +160,8 @@
 - (void)setUp {
 	[super setUp];
 
-	[self.usageData.conversation.engagement warmCodePoint:@"test.code.point"];
-	[self.usageData.conversation.engagement warmCodePoint:@"switch.code.point"];
+	[self.conversation.engagement warmCodePoint:@"test.code.point"];
+	[self.conversation.engagement warmCodePoint:@"switch.code.point"];
 }
 
 - (NSString *)codePointFormatString {
@@ -165,49 +169,49 @@
 }
 
 - (void)testGt {
-	XCTAssertFalse([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertFalse([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertFalse([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertFalse([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertTrue([self.clause criteriaMetForConversation:self.conversation]);
 }
 
 - (void)testGte {
 	[self incrementCodePoint:@"switch.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertFalse([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertFalse([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertTrue([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertTrue([self.clause criteriaMetForConversation:self.conversation]);
 }
 
 - (void)testNe {
 	[self incrementCodePoint:@"switch.code.point"];
 	[self incrementCodePoint:@"switch.code.point"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertTrue([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertTrue([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertFalse([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertTrue([self.clause criteriaMetForConversation:self.conversation]);
 }
 
 - (void)testEq {
 	[self incrementCodePoint:@"switch.code.point"];
 	[self incrementCodePoint:@"switch.code.point"];
 	[self incrementCodePoint:@"switch.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertFalse([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertFalse([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertTrue([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertFalse([self.clause criteriaMetForConversation:self.conversation]);
 }
 
 - (void)testColon {
@@ -215,13 +219,13 @@
 	[self incrementCodePoint:@"switch.code.point"];
 	[self incrementCodePoint:@"switch.code.point"];
 	[self incrementCodePoint:@"switch.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertFalse([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertFalse([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertTrue([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertFalse([self.clause criteriaMetForConversation:self.conversation]);
 }
 
 - (void)testLte {
@@ -230,13 +234,13 @@
 	[self incrementCodePoint:@"switch.code.point"];
 	[self incrementCodePoint:@"switch.code.point"];
 	[self incrementCodePoint:@"switch.code.point"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertTrue([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertTrue([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertTrue([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertFalse([self.clause criteriaMetForConversation:self.conversation]);
 }
 
 - (void)testLt {
@@ -246,13 +250,13 @@
 	[self incrementCodePoint:@"switch.code.point"];
 	[self incrementCodePoint:@"switch.code.point"];
 	[self incrementCodePoint:@"switch.code.point"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertTrue([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertTrue([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertFalse([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementCodePoint:@"test.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertFalse([self.clause criteriaMetForConversation:self.conversation]);
 }
 
 @end
@@ -269,54 +273,50 @@
 - (void)setUp {
 	[super setUp];
 
-	[self.usageData.conversation.engagement warmCodePoint:@"test.code.point"];
-	[self.usageData.conversation.engagement warmCodePoint:@"switch.code.point"];
+	[self.conversation.engagement warmCodePoint:@"test.code.point"];
+	[self.conversation.engagement warmCodePoint:@"switch.code.point"];
 }
 
 - (void)incrementTimeAgoCodePoint:(NSString *)codePoint {
-	[self.usageData.conversation.engagement engageCodePoint:codePoint];
+	[self.conversation.engagement engageCodePoint:codePoint];
 }
 
 - (void)testAfter {
-	[self.usageData.conversation.engagement.codePoints[@"test.code.point"] setValue:[NSDate distantPast] forKey:@"lastInvoked"];
+	[self.conversation.engagement.codePoints[@"test.code.point"] setValue:[NSDate distantPast] forKey:@"lastInvoked"];
 
-	XCTAssertFalse([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
-	NSLog(@"%@", [self.usageData predicateEvaluationDictionary][@"code_point/test.code.point/last_invoked_at/total"]);
+	XCTAssertFalse([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementTimeAgoCodePoint:@"test.code.point"];
-	NSLog(@"%@", [self.usageData predicateEvaluationDictionary][@"code_point/test.code.point/last_invoked_at/total"]);
-	XCTAssertTrue([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertTrue([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementTimeAgoCodePoint:@"test.code.point"];
 	usleep(300000);
-	NSLog(@"%@", [self.usageData predicateEvaluationDictionary][@"code_point/test.code.point/last_invoked_at/total"]);
-	XCTAssertTrue([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertTrue([self.clause criteriaMetForConversation:self.conversation]);
 	usleep(300000);
-	NSLog(@"%@", [self.usageData predicateEvaluationDictionary][@"code_point/test.code.point/last_invoked_at/total"]);
-	XCTAssertFalse([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertFalse([self.clause criteriaMetForConversation:self.conversation]);
 }
 
 - (void)testNe {
-	[self.usageData.conversation.engagement engageCodePoint:@"test.code.point"];
+	[self.conversation.engagement engageCodePoint:@"test.code.point"];
 
 	[self incrementCodePoint:@"switch.code.point"];
 	// There is always going to be a few microseconds of time offset here, so I can't really run this test.
-	//XCTAssertFalse([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	//XCTAssertFalse([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementTimeAgoCodePoint:@"test.code.point"];
 	usleep(300000);
-	XCTAssertTrue([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertTrue([self.clause criteriaMetForConversation:self.conversation]);
 	usleep(300000);
-	XCTAssertTrue([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertTrue([self.clause criteriaMetForConversation:self.conversation]);
 }
 
 - (void)testEq {
 	// 2 - $eq // There's no easy way to test this unless we contrive the times.
 	[self incrementCodePoint:@"switch.code.point"];
 	[self incrementCodePoint:@"switch.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertFalse([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementTimeAgoCodePoint:@"test.code.point"];
 	usleep(300000);
-	XCTAssertFalse([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertFalse([self.clause criteriaMetForConversation:self.conversation]);
 	usleep(300000);
-	XCTAssertFalse([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertFalse([self.clause criteriaMetForConversation:self.conversation]);
 }
 
 - (void)testColon {
@@ -324,12 +324,12 @@
 	[self incrementCodePoint:@"switch.code.point"];
 	[self incrementCodePoint:@"switch.code.point"];
 	[self incrementCodePoint:@"switch.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertFalse([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementTimeAgoCodePoint:@"test.code.point"];
 	usleep(300000);
-	XCTAssertFalse([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertFalse([self.clause criteriaMetForConversation:self.conversation]);
 	usleep(300000);
-	XCTAssertFalse([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertFalse([self.clause criteriaMetForConversation:self.conversation]);
 }
 
 - (void)testBefore {
@@ -337,12 +337,12 @@
 	[self incrementCodePoint:@"switch.code.point"];
 	[self incrementCodePoint:@"switch.code.point"];
 	[self incrementCodePoint:@"switch.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertFalse([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementTimeAgoCodePoint:@"test.code.point"];
 	usleep(300000);
-	XCTAssertFalse([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertFalse([self.clause criteriaMetForConversation:self.conversation]);
 	usleep(300000);
-	XCTAssertTrue([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertTrue([self.clause criteriaMetForConversation:self.conversation]);
 }
 
 @end
@@ -357,54 +357,54 @@
 - (void)setUp {
 	[super setUp];
 
-	[self.usageData.conversation.engagement warmInteraction:@"test.interaction"];
-	[self.usageData.conversation.engagement warmCodePoint:@"switch.code.point"];
+	[self.conversation.engagement warmInteraction:@"test.interaction"];
+	[self.conversation.engagement warmCodePoint:@"switch.code.point"];
 }
 
 - (void)testInteractionInvokesTotalGt {
-	XCTAssertFalse([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertFalse([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementInteraction:@"test.interaction"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertFalse([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementInteraction:@"test.interaction"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertFalse([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementInteraction:@"test.interaction"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertTrue([self.clause criteriaMetForConversation:self.conversation]);
 }
 
 - (void)testInteractionInvokesTotalGte {
 	[self incrementCodePoint:@"switch.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertFalse([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementInteraction:@"test.interaction"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertFalse([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementInteraction:@"test.interaction"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertTrue([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementInteraction:@"test.interaction"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertTrue([self.clause criteriaMetForConversation:self.conversation]);
 }
 
 - (void)testInteractionInvokesTotalNe {
 	[self incrementCodePoint:@"switch.code.point"];
 	[self incrementCodePoint:@"switch.code.point"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertTrue([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementInteraction:@"test.interaction"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertTrue([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementInteraction:@"test.interaction"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertFalse([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementInteraction:@"test.interaction"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertTrue([self.clause criteriaMetForConversation:self.conversation]);
 }
 
 - (void)testInteractionInvokesTotalEq {
 	[self incrementCodePoint:@"switch.code.point"];
 	[self incrementCodePoint:@"switch.code.point"];
 	[self incrementCodePoint:@"switch.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertFalse([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementInteraction:@"test.interaction"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertFalse([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementInteraction:@"test.interaction"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertTrue([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementInteraction:@"test.interaction"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertFalse([self.clause criteriaMetForConversation:self.conversation]);
 }
 
 - (void)testInteractionInvokesTotalColon {
@@ -412,13 +412,13 @@
 	[self incrementCodePoint:@"switch.code.point"];
 	[self incrementCodePoint:@"switch.code.point"];
 	[self incrementCodePoint:@"switch.code.point"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertFalse([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementInteraction:@"test.interaction"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertFalse([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementInteraction:@"test.interaction"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertTrue([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementInteraction:@"test.interaction"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertFalse([self.clause criteriaMetForConversation:self.conversation]);
 }
 
 - (void)testInteractionInvokesTotalLte {
@@ -427,13 +427,13 @@
 	[self incrementCodePoint:@"switch.code.point"];
 	[self incrementCodePoint:@"switch.code.point"];
 	[self incrementCodePoint:@"switch.code.point"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertTrue([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementInteraction:@"test.interaction"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertTrue([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementInteraction:@"test.interaction"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertTrue([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementInteraction:@"test.interaction"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertFalse([self.clause criteriaMetForConversation:self.conversation]);
 }
 
 - (void)testInteractionInvokesTotalLt {
@@ -443,13 +443,13 @@
 	[self incrementCodePoint:@"switch.code.point"];
 	[self incrementCodePoint:@"switch.code.point"];
 	[self incrementCodePoint:@"switch.code.point"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertTrue([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementInteraction:@"test.interaction"];
-	XCTAssertTrue([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertTrue([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementInteraction:@"test.interaction"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertFalse([self.clause criteriaMetForConversation:self.conversation]);
 	[self incrementInteraction:@"test.interaction"];
-	XCTAssertFalse([self.interaction criteriaAreMetForConversation:self.usageData.conversation]);
+	XCTAssertFalse([self.clause criteriaMetForConversation:self.conversation]);
 }
 
 @end

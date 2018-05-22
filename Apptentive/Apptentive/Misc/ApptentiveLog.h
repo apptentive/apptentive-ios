@@ -22,6 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 #define ApptentiveLogTagInteractions [ApptentiveLogTag interactionsTag]
 #define ApptentiveLogTagPush [ApptentiveLogTag pushTag]
 #define ApptentiveLogTagMessages [ApptentiveLogTag messagesTag]
+#define ApptentiveLogTagApptimize [ApptentiveLogTag apptimizeTag]
 
 extern ApptentiveLogLevel ApptentiveLogGetLevel(void);
 extern void ApptentiveLogSetLevel(ApptentiveLogLevel level);

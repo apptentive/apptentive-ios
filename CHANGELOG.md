@@ -1,3 +1,9 @@
+# 2018-05-22 - v5.1.1
+
+#### Improvements
+
+- Add support for Apptimize integration
+
 # 2018-04-18 - v5.1.0
 
 #### Improvements

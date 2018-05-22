@@ -20,6 +20,7 @@ static ApptentiveLogTag *_criteriaTag;
 static ApptentiveLogTag *_interactionsTag;
 static ApptentiveLogTag *_pushTag;
 static ApptentiveLogTag *_messagesTag;
+static ApptentiveLogTag *_apptimizeTag;
 
 
 @implementation ApptentiveLogTag
@@ -37,6 +38,7 @@ static ApptentiveLogTag *_messagesTag;
 		_pushTag = [ApptentiveLogTag logTagWithName:@"PUSH"];
 		_messagesTag = [ApptentiveLogTag logTagWithName:@"MESSAGES"];
 		_criteriaTag = [ApptentiveLogTag logTagWithName:@"CRITERIA"];
+		_apptimizeTag = [ApptentiveLogTag logTagWithName:@"APPTIMIZE"];
 	}
 }
 
@@ -93,6 +95,10 @@ static ApptentiveLogTag *_messagesTag;
 
 + (ApptentiveLogTag *)messagesTag {
 	return _logMonitorTag;
+}
+
++ (ApptentiveLogTag *)apptimizeTag {
+	return _apptimizeTag;
 }
 
 @end

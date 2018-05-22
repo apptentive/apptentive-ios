@@ -35,6 +35,8 @@
 #import "ApptentiveLegacyMessage.h"
 #import "ApptentiveLegacySurveyResponse.h"
 
+#import "ApptentiveApptimize.h"
+
 @import CoreTelephony;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -122,6 +124,7 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 		  [self loadConfiguration];
 			
 		  [self maybeGetAdvertisingIdentifier];
+		  [self tryInitializeApptimizeSDK];
 
 		  [self startUp];
 		}];
@@ -432,10 +435,11 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 	ApptentiveAssertOperationQueue(self.operationQueue);
 
 	_configuration = [[ApptentiveAppConfiguration alloc] initWithJSONDictionary:configurationResponse cacheLifetime:cacheLifetime];
-
+	
 	[self saveConfiguration];
 
 	[self maybeGetAdvertisingIdentifier];
+	[self tryUpdateApptimizeData];
 }
 
 - (BOOL)saveConfiguration {
@@ -553,11 +557,13 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 
 #pragma mark Person/Device management
 
+// TODO: get rid of this function and listen to data changes instead
 - (void)scheduleDeviceUpdate {
 	ApptentiveAssertOperationQueue(self.operationQueue);
 	[self.conversationManager.activeConversation checkForDeviceDiffs];
 }
 
+// TODO: get rid of this function and listen to data changes instead
 - (void)schedulePersonUpdate {
 	ApptentiveAssertOperationQueue(self.operationQueue);
 	[self.conversationManager.activeConversation checkForPersonDiffs];
@@ -672,6 +678,63 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 	}
 }
 
+#pragma mark -
+#pragma mark Apptimize SDK
+
+- (void)tryUpdateApptimizeData {
+	if (!self.configuration.collectApptimizeData) {
+		return;
+	}
+	
+	ApptentiveConversation *activeConversation = self.conversationManager.activeConversation;
+	if (activeConversation == nil) {
+		ApptentiveLogWarning(ApptentiveLogTagApptimize, @"Unable to update Apptimize data: no active conversation");
+		return;
+	}
+	
+	if (![ApptentiveApptimize isApptimizeSDKAvailable]) {
+		ApptentiveLogWarning(ApptentiveLogTagApptimize, @"Unable to update Apptimize data: SDK is not detected");
+		return;
+	}
+	
+	if (![ApptentiveApptimize isSupportedLibraryVersion]) {
+		ApptentiveLogWarning(ApptentiveLogTagApptimize, @"Unable to update Apptimize data: unsupported library version '%@'", [ApptentiveApptimize libraryVersion]);
+		return;
+	}
+	
+	NSDictionary<NSString *, ApptentiveApptimizeTestInfo*> * experiments = [ApptentiveApptimize testInfo];
+	if (experiments.count == 0) {
+		ApptentiveLogDebug(ApptentiveLogTagApptimize, @"Unable to update Apptimize data: no experiments");
+		return;
+	}
+	
+	for (NSString *experimentName in experiments) {
+		ApptentiveApptimizeTestInfo *experiment = experiments[experimentName];
+		if (experiment == nil) {
+			continue;
+		}
+		
+		[self conversation:activeConversation addApptimizeExperimentToDeviceData:experiment];
+	}
+	
+	[self scheduleDeviceUpdate];
+}
+
+- (void)conversation:(ApptentiveConversation *)conversation addApptimizeExperimentToDeviceData:(ApptentiveApptimizeTestInfo *)experiment {
+	ApptentiveAssertNotNil(conversation, @"Attempted to add Apptimize experiment to a nil conversation");
+	if (conversation == nil) {
+		return;
+	}
+	
+	NSString *testName = experiment.testName;
+	NSString *variantName = experiment.enrolledVariantName;
+	
+	NSString *participationState = experiment.userHasParticipated ? @"participated" : @"enrolled";
+	
+	NSString *key = [NSString stringWithFormat:@"Apptimize: %@ %@", testName, participationState];
+	[conversation.device addCustomString:variantName withKey:key];
+}
+
 #pragma mark - Paths
 
 - (NSString *)cacheDirectoryPath {
@@ -711,6 +774,75 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 		[ApptentiveDevice getAdvertisingIdentifier];
 		[self scheduleDeviceUpdate];
 	}
+}
+
+#pragma mark -
+#pragma mark Apptimize SDK
+
+- (void)tryInitializeApptimizeSDK {
+	ApptentiveAssertOperationQueue(self.operationQueue);
+	ApptentiveAssertNotNil(self.configuration, @"Missing configuration");
+	
+	if (!self.configuration.collectApptimizeData) {
+		return;
+	}
+	
+	if (![ApptentiveApptimize isApptimizeSDKAvailable]) {
+		ApptentiveLogWarning(ApptentiveLogTagApptimize, @"Unable to initialize Apptimize SDK support: SDK integration not found");
+		return;
+	}
+	
+	if (![ApptentiveApptimize isSupportedLibraryVersion]) {
+		ApptentiveLogWarning(ApptentiveLogTagApptimize, @"Unable to update Apptimize data: unsupported library version '%@'", [ApptentiveApptimize libraryVersion]);
+		return;
+	}
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(experimentParticipationNotification:)
+												 name:ApptentiveApptimizeTestRunNotification
+											   object:nil];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(testsProcessedNotification:)
+												 name:ApptimizeTestsProcessedNotification
+											   object:nil];
+	
+	[self tryUpdateApptimizeData];
+}
+
+- (void)experimentParticipationNotification:(NSNotification*)notification {
+	ApptentiveConversation *conversation = self.conversationManager.activeConversation;
+	
+	// Get the relevant participation info
+	NSString *experimentName = notification.userInfo[ApptentiveApptimizeTestNameUserInfoKey];
+	if (experimentName.length == 0) {
+		ApptentiveLogVerbose(ApptentiveLogTagApptimize, @"Missing experiment name");
+		return;
+	}
+	
+	NSString *variantName = notification.userInfo[ApptentiveApptimizeVariantNameUserInfoKey];
+	if (variantName.length == 0) {
+		ApptentiveLogVerbose(ApptentiveLogTagApptimize, @"Missing variant name for experiment '%@'", experimentName);
+		return;
+	}
+	
+	if (conversation == nil) {
+		ApptentiveLogVerbose(ApptentiveLogTagApptimize, @"Ignoring experiment '%@-%@': no active conversation", experimentName, variantName);
+		return;
+	}
+	
+	ApptentiveApptimizeTestInfo *experiment = [ApptentiveApptimize testInfo][experimentName];
+	if (!experiment) {
+		// Shouldn't happen but just in case
+		return;
+	}
+	
+	[self conversation:conversation addApptimizeExperimentToDeviceData:experiment];
+	[self scheduleDeviceUpdate];
+}
+
+- (void)testsProcessedNotification:(NSNotification*)notification {
+	[self tryUpdateApptimizeData];
 }
 
 @end

@@ -130,6 +130,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) NSDate *expiry;
 
 /**
+ Whether to collect experiments data from Apptimize framework.
+ */
+@property (readonly, assign, nonatomic) BOOL collectApptimizeData;
+
+/**
  Creates a new app configuration object based on the JSON downloaded from the
  `/conversation/configuration` endpoint of the Apptentive server API.
 

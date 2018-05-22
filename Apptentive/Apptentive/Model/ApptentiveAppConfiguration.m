@@ -26,6 +26,7 @@ static NSString *const ForegroundPollingIntervalKey = @"foregroundPollingInterva
 static NSString *const BackgroundPollingIntervalKey = @"backgroundPollingInterval";
 static NSString *const EmailRequiredKey = @"emailRequired";
 static NSString *const NotificationPopupEnabledKey = @"notificationPopupEnabled";
+static NSString *const CollectApptimizeDataKey = @"collectApptimizeData";
 
 // Legacy keys
 static NSString *const ATAppConfigurationMetricsEnabledPreferenceKey = @"ATAppConfigurationMetricsEnabledPreferenceKey";
@@ -73,6 +74,7 @@ static NSString *const ATAppConfigurationMessageCenterBackgroundRefreshIntervalK
 		_messageCenterEnabled = [JSONDictionary[@"message_center_enabled"] boolValue];
 		_metricsEnabled = [JSONDictionary[@"metrics_enabled"] boolValue];
 		_collectAdvertisingIdentifier = [JSONDictionary[@"collect_ad_id"] boolValue];
+		_collectApptimizeData = [JSONDictionary[@"apptimize_integration"] boolValue];
 
 		_messageCenter = [[ApptentiveMessageCenterConfiguration alloc] initWithJSONDictionary:JSONDictionary[@"message_center"]];
 
@@ -118,6 +120,7 @@ static NSString *const ATAppConfigurationMessageCenterBackgroundRefreshIntervalK
 		_messageCenterEnabled = [coder decodeBoolForKey:MessageCenterEnabledKey];
 		_metricsEnabled = [coder decodeBoolForKey:MetricsEnabledKey];
 		_collectAdvertisingIdentifier = [coder decodeBoolForKey:CollectAdvertisingIdentifierKey];
+		_collectApptimizeData = [coder decodeBoolForKey:CollectApptimizeDataKey];
 		_messageCenter = [coder decodeObjectOfClass:[ApptentiveMessageCenterConfiguration class] forKey:MessageCenterKey];
 		_expiry = [coder decodeObjectOfClass:[NSDate class] forKey:ExpiryKey];
 	}
@@ -133,6 +136,7 @@ static NSString *const ATAppConfigurationMessageCenterBackgroundRefreshIntervalK
 	[coder encodeBool:self.messageCenterEnabled forKey:MessageCenterEnabledKey];
 	[coder encodeBool:self.metricsEnabled forKey:MetricsEnabledKey];
 	[coder encodeBool:self.collectAdvertisingIdentifier forKey:CollectAdvertisingIdentifierKey];
+	[coder encodeBool:self.collectApptimizeData forKey:CollectApptimizeDataKey];
 	[coder encodeObject:self.messageCenter forKey:MessageCenterKey];
 	[coder encodeObject:self.expiry forKey:ExpiryKey];
 }

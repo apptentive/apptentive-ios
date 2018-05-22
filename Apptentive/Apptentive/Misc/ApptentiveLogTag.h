@@ -28,6 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (ApptentiveLogTag *)interactionsTag;
 + (ApptentiveLogTag *)pushTag;
 + (ApptentiveLogTag *)messagesTag;
++ (ApptentiveLogTag *)apptimizeTag;
 
 @end
 

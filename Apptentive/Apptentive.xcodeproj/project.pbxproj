@@ -387,6 +387,10 @@
 		EF18124D1E8084C80053BD68 /* ApptentiveSafeCollections.m in Sources */ = {isa = PBXBuildFile; fileRef = EF18124A1E8084C80053BD68 /* ApptentiveSafeCollections.m */; };
 		EF3063A91F2A8353004B4EB9 /* ApptentivePayloadDebug.h in Headers */ = {isa = PBXBuildFile; fileRef = EF3063A71F2A8353004B4EB9 /* ApptentivePayloadDebug.h */; };
 		EF3063AA1F2A8353004B4EB9 /* ApptentivePayloadDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = EF3063A81F2A8353004B4EB9 /* ApptentivePayloadDebug.m */; };
+		EF3FE88A20A2270000A3C9C5 /* ApptentiveApptimize.h in Headers */ = {isa = PBXBuildFile; fileRef = EF3FE88820A2270000A3C9C5 /* ApptentiveApptimize.h */; };
+		EF3FE88B20A2270000A3C9C5 /* ApptentiveApptimize.m in Sources */ = {isa = PBXBuildFile; fileRef = EF3FE88920A2270000A3C9C5 /* ApptentiveApptimize.m */; };
+		EF3FE88E20A2285700A3C9C5 /* ApptentiveInvocation.h in Headers */ = {isa = PBXBuildFile; fileRef = EF3FE88C20A2285700A3C9C5 /* ApptentiveInvocation.h */; };
+		EF3FE88F20A2285700A3C9C5 /* ApptentiveInvocation.m in Sources */ = {isa = PBXBuildFile; fileRef = EF3FE88D20A2285700A3C9C5 /* ApptentiveInvocation.m */; };
 		EF43D89E1FD5EBBB00C0FF9F /* ApptentiveDispatchQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = EF43D89C1FD5EBBA00C0FF9F /* ApptentiveDispatchQueue.h */; };
 		EF43D89F1FD5EBBB00C0FF9F /* ApptentiveDispatchQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = EF43D89D1FD5EBBB00C0FF9F /* ApptentiveDispatchQueue.m */; };
 		EF43D8AA1FD5FE6D00C0FF9F /* ApptentiveGCDDispatchQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = EF43D8A81FD5FE6D00C0FF9F /* ApptentiveGCDDispatchQueue.m */; };
@@ -855,6 +859,10 @@
 		EF3063A71F2A8353004B4EB9 /* ApptentivePayloadDebug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentivePayloadDebug.h; sourceTree = "<group>"; };
 		EF3063A81F2A8353004B4EB9 /* ApptentivePayloadDebug.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentivePayloadDebug.m; sourceTree = "<group>"; };
 		EF37099C1EDE19F300CFC5E5 /* ApptentiveDefines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ApptentiveDefines.h; sourceTree = "<group>"; };
+		EF3FE88820A2270000A3C9C5 /* ApptentiveApptimize.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ApptentiveApptimize.h; sourceTree = "<group>"; };
+		EF3FE88920A2270000A3C9C5 /* ApptentiveApptimize.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ApptentiveApptimize.m; sourceTree = "<group>"; };
+		EF3FE88C20A2285700A3C9C5 /* ApptentiveInvocation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ApptentiveInvocation.h; sourceTree = "<group>"; };
+		EF3FE88D20A2285700A3C9C5 /* ApptentiveInvocation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ApptentiveInvocation.m; sourceTree = "<group>"; };
 		EF43D89C1FD5EBBA00C0FF9F /* ApptentiveDispatchQueue.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ApptentiveDispatchQueue.h; sourceTree = "<group>"; };
 		EF43D89D1FD5EBBB00C0FF9F /* ApptentiveDispatchQueue.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ApptentiveDispatchQueue.m; sourceTree = "<group>"; };
 		EF43D8A81FD5FE6D00C0FF9F /* ApptentiveGCDDispatchQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveGCDDispatchQueue.m; sourceTree = "<group>"; };
@@ -1018,6 +1026,7 @@
 		01A2CF931E49062700C2103A /* Apptentive */ = {
 			isa = PBXGroup;
 			children = (
+				EF3FE88720A226EE00A3C9C5 /* Apptimize */,
 				01A2CFB01E490A9700C2103A /* Custom Views */,
 				01A2CFBB1E490A9700C2103A /* Engagement */,
 				01A2D0021E490A9700C2103A /* Images */,
@@ -1482,6 +1491,8 @@
 				EF4EAB8C203F876A003318C9 /* ApptentiveDispatchTask.m */,
 				EF43D8A91FD5FE6D00C0FF9F /* ApptentiveGCDDispatchQueue.h */,
 				EF43D8A81FD5FE6D00C0FF9F /* ApptentiveGCDDispatchQueue.m */,
+				EF3FE88C20A2285700A3C9C5 /* ApptentiveInvocation.h */,
+				EF3FE88D20A2285700A3C9C5 /* ApptentiveInvocation.m */,
 				01A2D08B1E490A9700C2103A /* ApptentiveJSONSerialization.h */,
 				01A2D08C1E490A9700C2103A /* ApptentiveJSONSerialization.m */,
 				EF8EE3A91EBBA5D00033E7A1 /* ApptentiveJWT.h */,
@@ -1751,6 +1762,15 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		EF3FE88720A226EE00A3C9C5 /* Apptimize */ = {
+			isa = PBXGroup;
+			children = (
+				EF3FE88820A2270000A3C9C5 /* ApptentiveApptimize.h */,
+				EF3FE88920A2270000A3C9C5 /* ApptentiveApptimize.m */,
+			);
+			path = Apptimize;
+			sourceTree = "<group>";
+		};
 		EF4EABA22040A8C5003318C9 /* utils */ = {
 			isa = PBXGroup;
 			children = (
@@ -1796,6 +1816,7 @@
 				01A2D0F81E490A9700C2103A /* Apptentive_Private.h in Headers */,
 				01A2D1DE1E490A9700C2103A /* ApptentiveSurveyAnswer.h in Headers */,
 				01E8E2361E6E096D00786738 /* ApptentiveInteractionAppleRatingDialogController.h in Headers */,
+				EF3FE88A20A2270000A3C9C5 /* ApptentiveApptimize.h in Headers */,
 				01A2D1DA1E490A9700C2103A /* ApptentiveReachability.h in Headers */,
 				01A2D1851E490A9700C2103A /* ApptentiveAttachmentCell.h in Headers */,
 				01A2D1191E490A9700C2103A /* ApptentiveInteractionSurveyController.h in Headers */,
@@ -1885,6 +1906,7 @@
 				EF18124B1E8084C80053BD68 /* ApptentiveSafeCollections.h in Headers */,
 				01A2D1A11E490A9700C2103A /* ApptentiveJSONSerialization.h in Headers */,
 				01A2D13B1E490A9700C2103A /* ApptentiveSDK.h in Headers */,
+				EF3FE88E20A2285700A3C9C5 /* ApptentiveInvocation.h in Headers */,
 				EF18123F1E807FC00053BD68 /* ApptentiveAssert.h in Headers */,
 				4D536E361EFC6690000EA45D /* ApptentiveNewLoginRequest.h in Headers */,
 				01A2D1071E490A9700C2103A /* ApptentiveInteractionController.h in Headers */,
@@ -2215,6 +2237,7 @@
 				4D4B36251F01892A005C7EC0 /* ApptentiveEngagementBackend.m in Sources */,
 				01A2D12C1E490A9700C2103A /* ApptentiveInteraction.m in Sources */,
 				01A50EC51FC5FFB00058C06C /* ApptentiveInvocations.m in Sources */,
+				EF3FE88B20A2270000A3C9C5 /* ApptentiveApptimize.m in Sources */,
 				EF43D89F1FD5EBBB00C0FF9F /* ApptentiveDispatchQueue.m in Sources */,
 				012ED92A2072F33F003D87F3 /* ApptentiveRetryPolicy.m in Sources */,
 				EF8EE3AC1EBBA5D00033E7A1 /* ApptentiveJWT.m in Sources */,
@@ -2280,6 +2303,7 @@
 				01A2D0F91E490A9700C2103A /* Apptentive.m in Sources */,
 				01A2D1811E490A9700C2103A /* ApptentiveMessageCenterViewController.m in Sources */,
 				01A2D11C1E490A9700C2103A /* ApptentiveInteractionUpgradeMessageController.m in Sources */,
+				EF3FE88F20A2285700A3C9C5 /* ApptentiveInvocation.m in Sources */,
 				01A2D1911E490A9700C2103A /* ApptentiveMessageCenterGreetingView.m in Sources */,
 				01A2D13A1E490A9700C2103A /* ApptentivePerson.m in Sources */,
 				01A2D13E1E490A9700C2103A /* ApptentiveConversation.m in Sources */,
@@ -2453,7 +2477,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 13;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -2511,7 +2535,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 13;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -2543,7 +2567,7 @@
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 86WML2UN43;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 11;
+				DYLIB_CURRENT_VERSION = 13;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				GCC_PREFIX_HEADER = "Apptentive/Misc/ApptentiveConnect-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = "APPTENTIVE_DEBUG=1";
@@ -2565,7 +2589,7 @@
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 86WML2UN43;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 11;
+				DYLIB_CURRENT_VERSION = 13;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				GCC_PREFIX_HEADER = "Apptentive/Misc/ApptentiveConnect-Prefix.pch";
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
@@ -2616,7 +2640,7 @@
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 86WML2UN43;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 11;
+				DYLIB_CURRENT_VERSION = 13;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = ApptentiveDebugging/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -2635,7 +2659,7 @@
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 86WML2UN43;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 11;
+				DYLIB_CURRENT_VERSION = 13;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = ApptentiveDebugging/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";

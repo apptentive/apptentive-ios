@@ -16,8 +16,6 @@
 		0116D5281E92F516001DA5CF /* ApptentiveMessageStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 0116D5261E92F516001DA5CF /* ApptentiveMessageStore.m */; };
 		01201AD31FC637BE00EB3593 /* CodePointAndInteractionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 01201AD21FC637BD00EB3593 /* CodePointAndInteractionTests.m */; };
 		01216C501EBBB53E0062BD0D /* RequestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01216C4F1EBBB53E0062BD0D /* RequestTests.swift */; };
-		012285481E4A81AD00DD2F58 /* Apptentive_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2CFAB1E490A9600C2103A /* Apptentive_Private.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		012285491E4A831500DD2F58 /* Apptentive.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01A2CF911E49062700C2103A /* Apptentive.framework */; };
 		0123005F20531698000EC3C3 /* ClauseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0123005E20531698000EC3C3 /* ClauseTests.m */; };
 		012ED9292072F33F003D87F3 /* ApptentiveRetryPolicy.h in Headers */ = {isa = PBXBuildFile; fileRef = 012ED9272072F33F003D87F3 /* ApptentiveRetryPolicy.h */; };
 		012ED92A2072F33F003D87F3 /* ApptentiveRetryPolicy.m in Sources */ = {isa = PBXBuildFile; fileRef = 012ED9282072F33F003D87F3 /* ApptentiveRetryPolicy.m */; };
@@ -352,10 +350,6 @@
 		01A2D26B1E4946D600C2103A /* testJsonDiffing.1.old.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D2301E4946D600C2103A /* testJsonDiffing.1.old.json */; };
 		01A2D26C1E4946D600C2103A /* testJsonDiffing.2.new.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D2311E4946D600C2103A /* testJsonDiffing.2.new.json */; };
 		01A2D26D1E4946D600C2103A /* testJsonDiffing.2.old.json in Resources */ = {isa = PBXBuildFile; fileRef = 01A2D2321E4946D600C2103A /* testJsonDiffing.2.old.json */; };
-		01A2D28C1E49609100C2103A /* ApptentiveDebugging.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D27E1E49609100C2103A /* ApptentiveDebugging.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		01A2D2951E4960E100C2103A /* Apptentive+Debugging.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2D2931E4960E100C2103A /* Apptentive+Debugging.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		01A2D2961E4960E100C2103A /* Apptentive+Debugging.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D2941E4960E100C2103A /* Apptentive+Debugging.m */; };
-		01A2D2971E49614A00C2103A /* Apptentive+Debugging.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D2941E4960E100C2103A /* Apptentive+Debugging.m */; };
 		01A2D2981E49638A00C2103A /* ATDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0B01E490A9700C2103A /* ATDataModel.xcdatamodeld */; };
 		01A2D2991E4963A500C2103A /* ATDataModel v1 to v2.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0AB1E490A9700C2103A /* ATDataModel v1 to v2.xcmappingmodel */; };
 		01A2D29A1E4963A500C2103A /* ATDataModel v2 to v3.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 01A2D0AC1E490A9700C2103A /* ATDataModel v2 to v3.xcmappingmodel */; };
@@ -437,13 +431,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		012285461E4A814300DD2F58 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 01A2CF881E49062700C2103A /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 01A2CF901E49062700C2103A;
-			remoteInfo = Apptentive;
-		};
 		01A2CF9C1E49062800C2103A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 01A2CF881E49062700C2103A /* Project object */;
@@ -827,11 +814,6 @@
 		01A2D2301E4946D600C2103A /* testJsonDiffing.1.old.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testJsonDiffing.1.old.json; sourceTree = "<group>"; };
 		01A2D2311E4946D600C2103A /* testJsonDiffing.2.new.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testJsonDiffing.2.new.json; sourceTree = "<group>"; };
 		01A2D2321E4946D600C2103A /* testJsonDiffing.2.old.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testJsonDiffing.2.old.json; sourceTree = "<group>"; };
-		01A2D27C1E49609100C2103A /* ApptentiveDebugging.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ApptentiveDebugging.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		01A2D27E1E49609100C2103A /* ApptentiveDebugging.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ApptentiveDebugging.h; sourceTree = "<group>"; };
-		01A2D27F1E49609100C2103A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		01A2D2931E4960E100C2103A /* Apptentive+Debugging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Apptentive+Debugging.h"; sourceTree = "<group>"; };
-		01A2D2941E4960E100C2103A /* Apptentive+Debugging.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Apptentive+Debugging.m"; sourceTree = "<group>"; };
 		01A2D29E1E4963F700C2103A /* v2CorruptDatabase */ = {isa = PBXFileReference; lastKnownFileType = folder; path = v2CorruptDatabase; sourceTree = "<group>"; };
 		01A2D29F1E4963F700C2103A /* v2WALDatabase */ = {isa = PBXFileReference; lastKnownFileType = folder; path = v2WALDatabase; sourceTree = "<group>"; };
 		01A2D2A01E4963F700C2103A /* v3WALDatabase */ = {isa = PBXFileReference; lastKnownFileType = folder; path = v3WALDatabase; sourceTree = "<group>"; };
@@ -925,14 +907,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		01A2D2781E49609100C2103A /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				012285491E4A831500DD2F58 /* Apptentive.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -1007,7 +981,6 @@
 			isa = PBXGroup;
 			children = (
 				01A2CF931E49062700C2103A /* Apptentive */,
-				01A2D27D1E49609100C2103A /* ApptentiveDebugging */,
 				01A2CF9E1E49062800C2103A /* ApptentiveTests */,
 				01A2CF921E49062700C2103A /* Products */,
 			);
@@ -1018,7 +991,6 @@
 			children = (
 				01A2CF911E49062700C2103A /* Apptentive.framework */,
 				01A2CF9A1E49062800C2103A /* ApptentiveTests.xctest */,
-				01A2D27C1E49609100C2103A /* ApptentiveDebugging.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1725,17 +1697,6 @@
 			path = criteria;
 			sourceTree = "<group>";
 		};
-		01A2D27D1E49609100C2103A /* ApptentiveDebugging */ = {
-			isa = PBXGroup;
-			children = (
-				01A2D2931E4960E100C2103A /* Apptentive+Debugging.h */,
-				01A2D2941E4960E100C2103A /* Apptentive+Debugging.m */,
-				01A2D27E1E49609100C2103A /* ApptentiveDebugging.h */,
-				01A2D27F1E49609100C2103A /* Info.plist */,
-			);
-			path = ApptentiveDebugging;
-			sourceTree = "<group>";
-		};
 		01AD54981E8706800057D10C /* Message Center */ = {
 			isa = PBXGroup;
 			children = (
@@ -1948,16 +1909,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		01A2D2791E49609100C2103A /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				01A2D28C1E49609100C2103A /* ApptentiveDebugging.h in Headers */,
-				012285481E4A81AD00DD2F58 /* Apptentive_Private.h in Headers */,
-				01A2D2951E4960E100C2103A /* Apptentive+Debugging.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
@@ -1997,25 +1948,6 @@
 			productReference = 01A2CF9A1E49062800C2103A /* ApptentiveTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		01A2D27B1E49609100C2103A /* ApptentiveDebugging */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 01A2D28D1E49609100C2103A /* Build configuration list for PBXNativeTarget "ApptentiveDebugging" */;
-			buildPhases = (
-				01A2D2771E49609100C2103A /* Sources */,
-				01A2D2781E49609100C2103A /* Frameworks */,
-				01A2D2791E49609100C2103A /* Headers */,
-				01A2D27A1E49609100C2103A /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				012285471E4A814300DD2F58 /* PBXTargetDependency */,
-			);
-			name = ApptentiveDebugging;
-			productName = ApptentiveDebugging;
-			productReference = 01A2D27C1E49609100C2103A /* ApptentiveDebugging.framework */;
-			productType = "com.apple.product-type.framework";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -2034,11 +1966,6 @@
 						CreatedOnToolsVersion = 8.2.1;
 						DevelopmentTeam = 86WML2UN43;
 						LastSwiftMigration = 0900;
-						ProvisioningStyle = Automatic;
-					};
-					01A2D27B1E49609100C2103A = {
-						CreatedOnToolsVersion = 8.2.1;
-						DevelopmentTeam = 86WML2UN43;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -2076,7 +2003,6 @@
 			targets = (
 				01A2CF901E49062700C2103A /* Apptentive */,
 				01A2CF991E49062800C2103A /* ApptentiveTests */,
-				01A2D27B1E49609100C2103A /* ApptentiveDebugging */,
 			);
 		};
 /* End PBXProject section */
@@ -2183,13 +2109,6 @@
 				01A2D2671E4946D600C2103A /* Survey.json in Resources */,
 				01A2D26D1E4946D600C2103A /* testJsonDiffing.2.old.json in Resources */,
 				01A2D2501E4946D600C2103A /* ATDataModelv5.sqlite in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		01A2D27A1E49609100C2103A /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2380,7 +2299,6 @@
 				01216C501EBBB53E0062BD0D /* RequestTests.swift in Sources */,
 				EFF4D2A91EC3806300FD4EFE /* ApptentiveConversationMigrationTests.m in Sources */,
 				01A2D2981E49638A00C2103A /* ATDataModel.xcdatamodeld in Sources */,
-				01A2D2971E49614A00C2103A /* Apptentive+Debugging.m in Sources */,
 				010FE33B203E2D900021C246 /* CriteriaDescriptionTests.swift in Sources */,
 				01A2D2401E4946D600C2103A /* ApptentiveConnectTests.m in Sources */,
 				01A2D2991E4963A500C2103A /* ATDataModel v1 to v2.xcmappingmodel in Sources */,
@@ -2390,22 +2308,9 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		01A2D2771E49609100C2103A /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				01A2D2961E4960E100C2103A /* Apptentive+Debugging.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		012285471E4A814300DD2F58 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 01A2CF901E49062700C2103A /* Apptentive */;
-			targetProxy = 012285461E4A814300DD2F58 /* PBXContainerItemProxy */;
-		};
 		01A2CF9D1E49062800C2103A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 01A2CF901E49062700C2103A /* Apptentive */;
@@ -2477,7 +2382,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 14;
+				CURRENT_PROJECT_VERSION = 15;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -2535,7 +2440,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 14;
+				CURRENT_PROJECT_VERSION = 15;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -2567,7 +2472,7 @@
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 86WML2UN43;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 14;
+				DYLIB_CURRENT_VERSION = 15;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				GCC_PREFIX_HEADER = "Apptentive/Misc/ApptentiveConnect-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = "APPTENTIVE_DEBUG=1";
@@ -2589,7 +2494,7 @@
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 86WML2UN43;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 14;
+				DYLIB_CURRENT_VERSION = 15;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				GCC_PREFIX_HEADER = "Apptentive/Misc/ApptentiveConnect-Prefix.pch";
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
@@ -2633,44 +2538,7 @@
 			};
 			name = Release;
 		};
-		01A2D28E1E49609100C2103A /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 86WML2UN43;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 14;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = ApptentiveDebugging/Info.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.apptentive.ApptentiveDebugging;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-			};
-			name = Debug;
-		};
-		01A2D28F1E49609100C2103A /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 86WML2UN43;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 14;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = ApptentiveDebugging/Info.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.apptentive.ApptentiveDebugging;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-			};
-			name = Release;
-		};
+
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -2697,15 +2565,6 @@
 			buildConfigurations = (
 				01A2CFA91E49062800C2103A /* Debug */,
 				01A2CFAA1E49062800C2103A /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		01A2D28D1E49609100C2103A /* Build configuration list for PBXNativeTarget "ApptentiveDebugging" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				01A2D28E1E49609100C2103A /* Debug */,
-				01A2D28F1E49609100C2103A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

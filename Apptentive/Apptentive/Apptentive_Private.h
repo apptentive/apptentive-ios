@@ -6,11 +6,7 @@
 //  Copyright (c) 2013 Apptentive, Inc. All rights reserved.
 //
 
-#if NO_USE_FRAMEWORKS
 #import "Apptentive.h"
-#else
-#import <Apptentive/Apptentive.h>
-#endif
 
 NS_ASSUME_NONNULL_BEGIN
 

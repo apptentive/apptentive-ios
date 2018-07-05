@@ -629,6 +629,18 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 	}];
 }
 
+- (void)setMParticleId:(NSString *)mParticleId {
+	[self.operationQueue dispatchAsync:^{
+		if (self.conversationManager.activeConversation == nil) {
+			ApptentiveLogWarning(ApptentiveLogTagConversation, @"Cannot update mParticle ID because the active conversation is nil");
+			return;
+		}
+
+		self.conversationManager.activeConversation.person.mParticleId = mParticleId;
+		[self schedulePersonUpdate];
+	}];
+}
+
 #pragma mark - Conversation manager delegate
 
 - (void)conversationManager:(ApptentiveConversationManager *)manager conversationDidChangeState:(ApptentiveConversation *)conversation {

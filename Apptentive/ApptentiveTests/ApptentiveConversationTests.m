@@ -92,10 +92,12 @@
 - (void)testPerson {
 	XCTAssertNil(self.conversation.person.name);
 	XCTAssertNil(self.conversation.person.emailAddress);
+	XCTAssertNil(self.conversation.person.mParticleId);
 	XCTAssertEqual(self.conversation.person.customData.count, (NSUInteger)0);
 
 	self.conversation.person.name = @"Testy McTesterson";
 	self.conversation.person.emailAddress = @"test@apptentive.com";
+	self.conversation.person.mParticleId = @"0123456789ABCDEF";
 
 	[self.conversation.person addCustomString:@"bar" withKey:@"foo"];
 	[self.conversation.person addCustomNumber:@(5) withKey:@"five"];
@@ -110,6 +112,7 @@
 	XCTAssertEqualObjects(personDiffs[@"custom_data"][@"foo"], @"bar");
 	XCTAssertEqualObjects(personDiffs[@"custom_data"][@"five"], @5);
 	XCTAssertEqualObjects(personDiffs[@"custom_data"][@"yes"], @YES);
+	XCTAssertEqualObjects(personDiffs[@"mparticle_id"], @"0123456789ABCDEF");
 	self.personDiffs = nil;
 
 	XCTAssertEqualObjects(self.conversation.person.name, @"Testy McTesterson");
@@ -117,6 +120,7 @@
 	XCTAssertEqualObjects(self.conversation.person.customData[@"foo"], @"bar");
 	XCTAssertEqualObjects(self.conversation.person.customData[@"five"], @5);
 	XCTAssertEqualObjects(self.conversation.person.customData[@"yes"], @YES);
+	XCTAssertEqualObjects(self.conversation.person.mParticleId, @"0123456789ABCDEF");
 
 	self.conversation.person.name = nil;
 	self.conversation.person.emailAddress = nil;
@@ -131,6 +135,7 @@
 	XCTAssertEqualObjects(personDiffs[@"name"], [NSNull null]);
 	XCTAssertEqualObjects(personDiffs[@"email"], [NSNull null]);
 	XCTAssertEqualObjects(personDiffs[@"custom_data"][@"yes"], @5);
+	XCTAssertNil(personDiffs[@"mparticle_id"]);
 
 	XCTAssertNil(self.conversation.person.name);
 	XCTAssertNil(self.conversation.person.emailAddress);
@@ -255,6 +260,7 @@
 
 	mutableConversation.person.name = @"Testy McTesterson";
 	mutableConversation.person.emailAddress = @"test@apptentive.com";
+	mutableConversation.person.mParticleId = @"ABCDEF0123456789";
 
 	[mutableConversation.person addCustomString:@"bar" withKey:@"foo"];
 	[mutableConversation.person addCustomNumber:@(5) withKey:@"five"];
@@ -281,6 +287,7 @@
 
 	XCTAssertEqualObjects(conversation.person.name, @"Testy McTesterson");
 	XCTAssertEqualObjects(conversation.person.emailAddress, @"test@apptentive.com");
+	XCTAssertEqualObjects(conversation.person.mParticleId, @"ABCDEF0123456789");
 	XCTAssertEqualObjects(conversation.person.customData[@"foo"], @"bar");
 	XCTAssertEqualObjects(conversation.person.customData[@"five"], @5);
 	XCTAssertEqualObjects(conversation.person.customData[@"yes"], @YES);

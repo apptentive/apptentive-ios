@@ -59,6 +59,8 @@ extern NSString *const ApptentiveAuthenticationDidFailNotificationKeyConversatio
 @property (strong, nonatomic) NSString *personName;
 @property (strong, nonatomic) NSString *personEmailAddress;
 
+- (void)setMParticleId:(NSString *)mParticleId;
+
 /**
  Initializes a new backend object.
 

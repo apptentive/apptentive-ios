@@ -53,6 +53,7 @@ NSString *const ApptentiveManifestRawDataKey = @"ApptentiveManifestRawDataKey";
 NSString *const ApptentiveErrorDomain = @"com.apptentive";
 
 static Apptentive *_sharedInstance;
+static Apptentive *_nullInstance;
 
 
 @implementation ApptentiveConfiguration
@@ -100,12 +101,22 @@ static Apptentive *_sharedInstance;
 + (instancetype)sharedConnection {
 	if (_sharedInstance == nil) {
 		ApptentiveLogWarning(@"Apptentive instance is not initialized. Make sure you've registered it with your app key and signature.");
+
+		if (_nullInstance == nil) {
+			_nullInstance = [Apptentive nullInstance];
+		}
+
+		return _nullInstance;
 	}
 	return _sharedInstance;
 }
 
 + (instancetype)shared {
 	return [self sharedConnection];
+}
+
++ (instancetype)nullInstance {
+	return [[Apptentive alloc] init];
 }
 
 - (id)initWithConfiguration:(ApptentiveConfiguration *)configuration {
@@ -162,6 +173,8 @@ static Apptentive *_sharedInstance;
 	} @catch (NSException *e) {
 		ApptentiveLogCrit(@"Exception while initializing Apptentive instance (%@).", e);
 	}
+
+	_nullInstance = nil;
 }
 
 - (id<ApptentiveStyle>)styleSheet {
@@ -202,6 +215,10 @@ static Apptentive *_sharedInstance;
 
 - (void)setPersonEmailAddress:(nullable NSString *)personEmailAddress {
 	self.backend.personEmailAddress = personEmailAddress;
+}
+
+- (void)setMParticleId:(NSString *)mParticleId {
+	[self.backend setMParticleId:mParticleId];
 }
 
 - (void)sendAttachmentText:(NSString *)text {
@@ -941,6 +958,16 @@ static Apptentive *_sharedInstance;
 	  [self.operationQueue dispatchAsync:^{
 		[self.backend.conversationManager endActiveConversation];
 	  }];
+	}];
+}
+
+- (void)updateToken:(NSString *)token completion:(nullable void (^)(BOOL))completion {
+	[self.operationQueue dispatchAsync:^{
+		BOOL success = [self.backend.conversationManager updateToken:token];
+
+		if (completion != nil) {
+			completion(success);
+		}
 	}];
 }
 

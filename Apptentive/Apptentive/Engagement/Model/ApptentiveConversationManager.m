@@ -431,6 +431,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		ApptentiveAssertTrue(conversation.identifier != nil || conversation.state == ApptentiveConversationStateAnonymousPending || conversation.state == ApptentiveConversationStateLegacyPending, @"Missing conversation id for state: %@", NSStringFromApptentiveConversationState(conversation.state));
 		item.conversationIdentifier = conversation.identifier;
 		item.conversationLocalIdentifier = conversation.localIdentifier;
+		item.JWT = conversation.token;
 	}
 
 	item.state = conversation.state;
@@ -603,6 +604,35 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	} else {
 		ApptentiveLogError(ApptentiveLogTagConversation, @"Unexpectedly found nil login completion block");
 	}
+}
+
+- (BOOL)updateToken:(NSString *)token {
+	ApptentiveAssertOperationQueue(self.operationQueue);
+	ApptentiveAssertNotEmpty(token, @"Token is nil or empty");
+
+	if (token.length == 0) {
+		ApptentiveLogError(ApptentiveLogTagConversation, @"Attempting to update to nil or empty token");
+		return NO;
+	}
+
+	ApptentiveAssertNotNil(self.activeConversation, @"Attempting to update token without an active conversation");
+
+	if (self.activeConversation == nil) {
+		ApptentiveLogError(ApptentiveLogTagConversation, @"Attempting to update token without an active conversation");
+		return NO;
+	}
+
+	ApptentiveMutableConversation *mutableConversation = [self.activeConversation mutableCopy];
+
+	mutableConversation.token = token;
+
+	self.activeConversation = mutableConversation;
+	self.activeConversation.delegate = self;
+
+	[self scheduleSaveConversation:self.activeConversation];
+	[self updateMetadataItems:self.activeConversation];
+
+	return YES;
 }
 
 #pragma mark - ApptentiveConversationDelegate

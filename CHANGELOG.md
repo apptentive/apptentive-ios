@@ -1,3 +1,15 @@
+# 2018-07-05 - v5.1.2
+
+#### Improvements
+
+- Add support for mParticle ID
+- Remove obsolete ApptentiveDebugging framework target
+- Add a method to allow updating a stale JWT
+
+#### Bugs Fixed
+
+- Prevent a crash if Apptentive singleton is accessed before calling `register` from Swift
+
 # 2018-05-22 - v5.1.1
 
 #### Improvements

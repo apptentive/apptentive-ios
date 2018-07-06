@@ -12,6 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 static NSString *const NameKey = @"name";
 static NSString *const EmailAddressKey = @"emailAddress";
+static NSString *const MParticleIdKey = @"mParticleId";
 
 // Legacy keys
 NSString *const ATPersonLastUpdateValuePreferenceKey = @"ATPersonLastUpdateValuePreferenceKey";
@@ -27,6 +28,7 @@ static NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCus
 	if (self) {
 		_name = [aDecoder decodeObjectOfClass:[NSString class] forKey:NameKey];
 		_emailAddress = [aDecoder decodeObjectOfClass:[NSString class] forKey:EmailAddressKey];
+		_mParticleId = [aDecoder decodeObjectOfClass:[NSString class] forKey:MParticleIdKey];
 	}
 
 	return self;
@@ -37,6 +39,7 @@ static NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCus
 
 	[aCoder encodeObject:self.name forKey:NameKey];
 	[aCoder encodeObject:self.emailAddress forKey:EmailAddressKey];
+	[aCoder encodeObject:self.mParticleId forKey:MParticleIdKey];
 }
 
 - (instancetype)initAndMigrate {
@@ -86,7 +89,7 @@ static NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCus
 }
 
 + (NSArray *)sensitiveKeys {
-	return [super.sensitiveKeys arrayByAddingObjectsFromArray:@[@"name", @"email"]];
+	return [super.sensitiveKeys arrayByAddingObjectsFromArray:@[@"name", @"email", @"mParticleId"]];
 }
 
 @end
@@ -98,7 +101,8 @@ static NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCus
 	return @{
 		@"custom_data": NSStringFromSelector(@selector(customData)),
 		@"email": NSStringFromSelector(@selector(emailAddress)),
-		@"name": NSStringFromSelector(@selector(name))
+		@"name": NSStringFromSelector(@selector(name)),
+		@"mparticle_id": NSStringFromSelector(@selector(mParticleId))
 	};
 }
 

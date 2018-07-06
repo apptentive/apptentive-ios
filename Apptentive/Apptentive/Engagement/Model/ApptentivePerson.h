@@ -27,6 +27,11 @@ extern NSString *const ATPersonLastUpdateValuePreferenceKey;
  */
 @property (copy, nullable, nonatomic) NSString *emailAddress;
 
+/**
+ The mParticle Id associated with the person.
+ */
+@property (copy, nullable, nonatomic) NSString *mParticleId;
+
 @end
 
 

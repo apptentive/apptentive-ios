@@ -1,3 +1,9 @@
+# 2018-08-23 - v5.2.0
+
+#### Improvements
+
+* Added `preInteractionCallback` to intercept interactions flow.
+
 # 2018-07-05 - v5.1.2
 
 #### Improvements

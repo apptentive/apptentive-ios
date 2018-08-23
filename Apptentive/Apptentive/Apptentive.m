@@ -541,6 +541,26 @@ static Apptentive *_nullInstance;
 			};
 		}
 		
+		// first, we check if there's an engagement callback to inject
+		if (self.preInteractionCallback) {
+			BOOL canShowInteraction = [self.backend canShowInteractionForLocalEvent:event];
+			if (!canShowInteraction) {
+				if (wrappedCompletion) {
+					wrappedCompletion(NO);
+				}
+				return;
+			}
+			
+			BOOL allowsInteraction = self.preInteractionCallback(event, customData);
+			ApptentiveLogInfo(@"Engagement callback allows interaction for event '%@': %@", event, allowsInteraction ? @"YES" : @"NO");
+			if (!allowsInteraction) {
+				if (wrappedCompletion) {
+					wrappedCompletion(NO);
+				}
+				return;
+			}
+		}
+		
 		[self.backend engageLocalEvent:event userInfo:nil customData:customData extendedData:extendedData fromViewController:viewController completion:wrappedCompletion];
 	}];
 }

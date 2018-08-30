@@ -1,3 +1,10 @@
+2018-08-29 frankus, weeebox v4.0.11
+-----------------------------------
+
+###Bugs Fixed
+
+- Add availability check for appearanceWhenContainedInInstancesOfClasses
+
 2018-01-12 frankus, weeebox v4.0.10
 -----------------------------------
 

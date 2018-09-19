@@ -121,9 +121,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
-	[coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> _Nonnull context) {
-		[self.collectionViewLayout invalidateLayout];
-	} completion:nil];
+	[self.collectionViewLayout invalidateLayout];
 }
 
 - (void)sizeDidUpdate:(NSNotification *)notification {

@@ -279,11 +279,13 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 	ApptentiveAssertOperationQueue(self.operationQueue);
 
 	_client = [[ApptentiveClient alloc] initWithBaseURL:self.baseURL apptentiveKey:self.apptentiveKey apptentiveSignature:self.apptentiveSignature delegateQueue:self.operationQueue];
+	_client.paused = !self.networkAvailable;
 
 	_conversationManager = [[ApptentiveConversationManager alloc] initWithStoragePath:self.supportDirectoryPath operationQueue:self.operationQueue client:self.client parentManagedObjectContext:self.managedObjectContext];
 	self.conversationManager.delegate = self;
 
 	_payloadSender = [[ApptentivePayloadSender alloc] initWithBaseURL:self.baseURL apptentiveKey:self.apptentiveKey apptentiveSignature:self.apptentiveSignature managedObjectContext:self.managedObjectContext delegateQueue:self.operationQueue];
+	_payloadSender.paused = !self.networkAvailable;
 
 	[self.conversationManager loadActiveConversation];
 
@@ -458,10 +460,14 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 		if (self.networkAvailable) {
 			[self.client.retryPolicy resetRetryDelay];
 			[self.payloadSender.retryPolicy resetRetryDelay];
+			self.client.paused = NO;
+			self.payloadSender.paused = NO;
 
 			[self completeHousekeepingTasks];
 		} else {
 			[self.payloadSender cancelNetworkOperations];
+			self.client.paused = YES;
+			self.payloadSender.paused = YES;
 		}
 	}
 }

@@ -95,6 +95,13 @@ NS_ASSUME_NONNULL_BEGIN
 	return self;
 }
 
+- (void)setPaused:(BOOL)paused {
+	_paused = paused;
+
+	ApptentiveLogInfo(ApptentiveLogTagNetwork, @"%@ %@", paused ? @"Pausing" : @"Resuming", NSStringFromClass([self class]));
+	self.networkQueue.suspended = self.paused;
+}
+
 #pragma mark - Creating request operations
 
 - (ApptentiveRequestOperation *)requestOperationWithRequest:(id<ApptentiveRequest>)request token:(nullable NSString *)token delegate:(ApptentiveRequestOperationCallback *)delegate {

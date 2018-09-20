@@ -1,3 +1,10 @@
+# 2018-09-18 - v5.2.1
+
+#### Bugs Fixed
+
+* Pause network requests when network is unreachable
+* Fix survey layout warning on rotation from landscape to portrait
+
 # 2018-08-23 - v5.2.0
 
 #### Improvements

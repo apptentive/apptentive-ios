@@ -150,7 +150,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)updateHeaderHeight {
 	if ([self.collectionView isKindOfClass:[ApptentiveSurveyCollectionView class]]) {
 		UIView *collectionHeaderView = ((ApptentiveSurveyCollectionView *)self.collectionView).collectionHeaderView;
-		CGSize headerSize = [collectionHeaderView systemLayoutSizeFittingSize:CGSizeMake(self.collectionView.bounds.size.width, CGFLOAT_MAX)];
+		CGSize headerSize = [collectionHeaderView systemLayoutSizeFittingSize:CGSizeMake(self.collectionView.bounds.size.width, 10000.0)];
 		self.headerHeight = headerSize.height + self.sectionInset.bottom;
 	} else {
 		self.headerHeight = 0;

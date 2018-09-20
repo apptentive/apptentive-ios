@@ -25,6 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (readonly, nonatomic) NSURL *baseURL;
 @property (readonly, nonatomic) NSString *apptentiveKey;
 @property (readonly, nonatomic) NSString *apptentiveSignature;
+@property (assign, nonatomic, getter=isPaused) BOOL paused;
 
 - (instancetype)initWithBaseURL:(NSURL *)baseURL apptentiveKey:(NSString *)apptentiveKey apptentiveSignature:(NSString *)apptentiveSignature delegateQueue:(ApptentiveDispatchQueue *)delegateQueue;
 

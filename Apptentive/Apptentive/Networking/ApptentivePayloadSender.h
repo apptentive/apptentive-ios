@@ -38,7 +38,7 @@ typedef NS_ENUM(NSInteger, ApptentiveQueueStatus) {
  Instructs the client to read any pending request information from Core Data and
  create an `ApptentiveSerialRequestOperation` instance for each of them. These
  operations are then enqueued, followed by an operation that saves the private
- context to its parent, and saves the parent context to disk.
+ context to disk.
 
  @param context The managed object context in which to look for pending network payloads.
  */

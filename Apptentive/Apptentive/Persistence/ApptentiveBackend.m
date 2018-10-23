@@ -116,10 +116,7 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 		[_operationQueue dispatchAsync:^{
 		  [self createSupportDirectoryIfNeeded];
 
-		  // it's important to initialize CoreData stack on the main thread so we block the execution of our queue
-		  dispatch_sync(dispatch_get_main_queue(), ^{
-			[self setUpCoreData];
-		  });
+		  [self setUpCoreData];
 
 		  [self loadConfiguration];
 			
@@ -199,6 +196,7 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 	[self.operationQueue dispatchAsync:^{
 		if (self.foreground) {
 			[self addExitMetric];
+			[self.conversationManager.activeConversation endSession];
 		}
 	}];
 
@@ -209,6 +207,7 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 	[self.operationQueue dispatchAsync:^{
 		self->_foreground = NO;
 		[self addExitMetric];
+		[self.conversationManager.activeConversation endSession];
 	}];
 
 	[self shutDown];
@@ -218,6 +217,7 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 	[self.operationQueue dispatchAsync:^{
 		self->_foreground = YES;
 		[self resume];
+		[self.conversationManager.activeConversation startSession];
 		[self addLaunchMetric];
 		[self maybeGetAdvertisingIdentifier];
 	}];
@@ -281,7 +281,7 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 	_client = [[ApptentiveClient alloc] initWithBaseURL:self.baseURL apptentiveKey:self.apptentiveKey apptentiveSignature:self.apptentiveSignature delegateQueue:self.operationQueue];
 	_client.paused = !self.networkAvailable;
 
-	_conversationManager = [[ApptentiveConversationManager alloc] initWithStoragePath:self.supportDirectoryPath operationQueue:self.operationQueue client:self.client parentManagedObjectContext:self.managedObjectContext];
+	_conversationManager = [[ApptentiveConversationManager alloc] initWithStoragePath:self.supportDirectoryPath operationQueue:self.operationQueue client:self.client managedObjectContext:self.managedObjectContext];
 	self.conversationManager.delegate = self;
 
 	_payloadSender = [[ApptentivePayloadSender alloc] initWithBaseURL:self.baseURL apptentiveKey:self.apptentiveKey apptentiveSignature:self.apptentiveSignature managedObjectContext:self.managedObjectContext delegateQueue:self.operationQueue];
@@ -292,6 +292,7 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 	[self completeStartupAndResumeTasks];
 
 	if (self.foreground) {
+		[self.conversationManager.activeConversation startSession];
 		[self addLaunchMetric];
 	} else {
 		ApptentiveLogDebug(@"Skip engaging launch event because app started in the background.");
@@ -336,7 +337,7 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 
 // Note: must be called on main thread
 - (void)setUpCoreData {
-	ApptentiveAssertMainQueue
+	ApptentiveAssertOperationQueue(self.operationQueue);
 	ApptentiveLogVerbose(ApptentiveLogTagStorage, @"Setting up data manager.");
 	self.dataManager = [[ApptentiveDataManager alloc] initWithModelName:@"ATDataModel" inBundle:[ApptentiveUtilities resourceBundle] storagePath:[self supportDirectoryPath]];
 	if (![self.dataManager setupAndVerify]) {
@@ -392,9 +393,8 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 		return;
 	}
 
-	NSManagedObjectContext *parentContext = self.managedObjectContext;
-	ApptentiveAssertNotNil(parentContext, @"Parent context is nil");
-	if (parentContext == nil) {
+	ApptentiveAssertNotNil(self.managedObjectContext, @"Managed object context is nil");
+	if (self.managedObjectContext == nil) {
 		return;
 	}
 
@@ -407,17 +407,13 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 	NSString *newAttachmentPath = [ApptentiveMessageManager attachmentDirectoryPathForConversationDirectory:directoryPath];
 	NSString *oldAttachmentPath = [self.supportDirectoryPath stringByAppendingPathComponent:@"attachments"];
 
-	// Enqueue any unsent messages, events, or survey responses from <= v3.4
-	NSManagedObjectContext *migrationContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-	migrationContext.parentContext = parentContext;
-
-	[migrationContext performBlockAndWait:^{
-	  [ApptentiveLegacyMessage enqueueUnsentMessagesInContext:migrationContext forConversation:conversation oldAttachmentPath:oldAttachmentPath newAttachmentPath:newAttachmentPath];
-	  [ApptentiveLegacyEvent enqueueUnsentEventsInContext:migrationContext forConversation:conversation];
-	  [ApptentiveLegacySurveyResponse enqueueUnsentSurveyResponsesInContext:migrationContext forConversation:conversation];
+	[self.managedObjectContext performBlockAndWait:^{
+	  [ApptentiveLegacyMessage enqueueUnsentMessagesInContext:self.managedObjectContext forConversation:conversation oldAttachmentPath:oldAttachmentPath newAttachmentPath:newAttachmentPath];
+	  [ApptentiveLegacyEvent enqueueUnsentEventsInContext:self.managedObjectContext forConversation:conversation];
+	  [ApptentiveLegacySurveyResponse enqueueUnsentSurveyResponsesInContext:self.managedObjectContext forConversation:conversation];
 
 	  NSError *coreDataError;
-	  if (![migrationContext save:&coreDataError]) {
+	  if (![self.managedObjectContext save:&coreDataError]) {
 		  ApptentiveLogError(@"Unable to save core data migration context (%@).", coreDataError);
 	  }
 	}];

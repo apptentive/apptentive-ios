@@ -38,7 +38,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 	for (ApptentiveLegacyEvent *event in unsentEvents) {
 		NSDate *creationDate = [NSDate dateWithTimeIntervalSince1970:event.clientCreationTime.doubleValue];
-		ApptentiveEventPayload *payload = [[ApptentiveEventPayload alloc] initWithLabel:event.label creationDate:creationDate];
+		ApptentiveEventPayload *payload = [[ApptentiveEventPayload alloc] initWithLabel:event.label creationDate:creationDate sessionIdentifier:nil];
 		ApptentiveAssertNotNil(payload, @"Failed to create an event payload");
 
 		// Add custom data, interaction identifier, and extended data

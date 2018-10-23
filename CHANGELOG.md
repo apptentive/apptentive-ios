@@ -1,3 +1,14 @@
+# 2018-10-23 - v5.2.2
+
+#### Improvements
+
+* Add session identifier to help group events by session
+
+#### Bugs Fixed
+
+* Move core data completely off of main thread
+* Explicitly set quality of service on background queues
+
 # 2018-09-18 - v5.2.1
 
 #### Bugs Fixed

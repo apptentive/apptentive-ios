@@ -94,7 +94,7 @@ NS_ASSUME_NONNULL_BEGIN
 				message.state = ApptentiveMessageStateHidden;
 			}
 
-			ApptentiveMessagePayload *payload = [[ApptentiveMessagePayload alloc] initWithMessage:message];
+			ApptentiveMessagePayload *payload = [[ApptentiveMessagePayload alloc] initWithMessage:message sessionIdentifier:nil];
 			ApptentiveAssertNotNil(payload, @"Failed to create a message payload");
 
 			if (payload != nil) {

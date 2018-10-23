@@ -342,7 +342,7 @@ NSString *const ApptentiveSentByUserKey = @"com.apptentive.sentByUser";
 	NSString *previousLocalIdentifier = message.localIdentifier;
 	ApptentiveConversation *conversation = Apptentive.shared.backend.conversationManager.activeConversation;
 
-	ApptentiveMessagePayload *payload = [[ApptentiveMessagePayload alloc] initWithMessage:message];
+	ApptentiveMessagePayload *payload = [[ApptentiveMessagePayload alloc] initWithMessage:message sessionIdentifier:conversation.sessionIdentifier];
 
 	[ApptentiveSerialRequest enqueuePayload:payload forConversation:conversation usingAuthToken:conversation.token inContext:Apptentive.shared.backend.managedObjectContext];
 

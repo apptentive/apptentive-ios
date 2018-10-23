@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (readonly, nonatomic) ApptentiveMessage *message;
 @property (readonly, nonatomic) NSString *boundary;
 
-- (nullable instancetype)initWithMessage:(ApptentiveMessage *)message;
+- (nullable instancetype)initWithMessage:(ApptentiveMessage *)message sessionIdentifier:(nullable NSString *)sessionIdentifier;
 
 @end
 

@@ -129,7 +129,7 @@ static Apptentive *_nullInstance;
 		ApptentiveLogSetLevel(configuration.logLevel);
 		
 		// we need to initialize dispatch queue before we start log monitor
-		_operationQueue = [ApptentiveDispatchQueue createQueueWithName:@"Apptentive Main Queue" concurrencyType:ApptentiveDispatchQueueConcurrencyTypeSerial];
+		_operationQueue = [ApptentiveDispatchQueue createQueueWithName:@"Apptentive Main Queue" concurrencyType:ApptentiveDispatchQueueConcurrencyTypeSerial qualityOfService:NSQualityOfServiceUserInitiated];
 		
 		// start log writer
 		ApptentiveStartLogMonitor([ApptentiveUtilities cacheDirectoryPath:@"com.apptentive.logs"]);

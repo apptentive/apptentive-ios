@@ -35,9 +35,9 @@ extern NSString *const ApptentiveConversationStateDidChangeNotificationKeyConver
 
 @property (readonly, strong, nonatomic) ApptentiveEngagementManifest *manifest;
 
-@property (readonly, strong, nonatomic) NSManagedObjectContext *parentManagedObjectContext;
+@property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 
-- (instancetype)initWithStoragePath:(NSString *)storagePath operationQueue:(ApptentiveDispatchQueue *)operationQueue client:(ApptentiveClient *)client parentManagedObjectContext:(NSManagedObjectContext *)parentManagedObjectContext;
+- (instancetype)initWithStoragePath:(NSString *)storagePath operationQueue:(ApptentiveDispatchQueue *)operationQueue client:(ApptentiveClient *)client managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
 /**
  * Attempts to load an active conversation.

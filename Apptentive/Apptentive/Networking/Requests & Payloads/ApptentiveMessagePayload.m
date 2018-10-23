@@ -26,8 +26,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation ApptentiveMessagePayload
 
-- (nullable instancetype)initWithMessage:(ApptentiveMessage *)message {
-	self = [super init];
+- (nullable instancetype)initWithMessage:(ApptentiveMessage *)message sessionIdentifier:(nullable NSString *)sessionIdentifier {
+	self = [super initWithCreationDate:[NSDate date] sessionIdentifier:sessionIdentifier];
 
 	if (self) {
 		APPTENTIVE_CHECK_INIT_NOT_NIL_ARG(message);

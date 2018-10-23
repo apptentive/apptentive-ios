@@ -80,6 +80,7 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 @property (strong, nonatomic) NSDictionary *lastSentPerson;
 @property (strong, nonatomic) NSDictionary *lastSentDevice;
 @property (strong, nonatomic) NSString *directoryName;
+@property (strong, nullable, nonatomic) NSString *sessionIdentifier;
 
 @end
 
@@ -410,6 +411,14 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 	return YES;
 }
 
+- (void)startSession {
+	_sessionIdentifier = [NSUUID.UUID.UUIDString stringByReplacingOccurrencesOfString:@"-" withString:@""];
+}
+
+- (void)endSession {
+	_sessionIdentifier = nil;
+}
+
 + (void)deleteMigratedData {
 	[ApptentiveAppRelease deleteMigratedData];
 	[ApptentiveSDK deleteMigratedData];
@@ -468,6 +477,7 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 	result.lastMessageID = self.lastMessageID;
 	result.delegate = self.delegate;
 	result.directoryName = self.directoryName;
+	result.sessionIdentifier = self.sessionIdentifier;
 	return result;
 }
 
@@ -531,6 +541,7 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 @dynamic encryptionKey;
 @dynamic lastMessageID;
 @dynamic directoryName;
+@dynamic sessionIdentifier;
 
 - (void)setToken:(NSString *)token conversationID:(NSString *)conversationID personID:(NSString *)personID deviceID:(NSString *)deviceID {
 	[self setConversationIdentifier:conversationID JWT:token];

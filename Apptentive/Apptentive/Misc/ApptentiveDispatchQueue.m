@@ -63,8 +63,6 @@ NSString * _Nullable ApptentiveGetCurrentThreadName() {
 + (void)initialize {
 	if ([self class] == [ApptentiveDispatchQueue class]) {
 		_mainQueue = [[ApptentiveGCDDispatchQueue alloc] initWithQueue:NSOperationQueue.mainQueue];
-		
-		_backgroundQueue = [self createQueueWithName:@"Apptentive Background Queue" concurrencyType:ApptentiveDispatchQueueConcurrencyTypeConcurrent];
 	}
 }
 
@@ -72,15 +70,12 @@ NSString * _Nullable ApptentiveGetCurrentThreadName() {
 	return _mainQueue;
 }
 
-+ (instancetype)background {
-	return _backgroundQueue;
-}
-
-+ (nullable instancetype)createQueueWithName:(NSString *)name concurrencyType:(ApptentiveDispatchQueueConcurrencyType)type {
++ (nullable instancetype)createQueueWithName:(NSString *)name concurrencyType:(ApptentiveDispatchQueueConcurrencyType)type qualityOfService:(NSQualityOfService)qualityOfService {
 	if (type == ApptentiveDispatchQueueConcurrencyTypeSerial) {
 		NSOperationQueue *queue = [NSOperationQueue new];
 		queue.name = name;
 		queue.maxConcurrentOperationCount = 1;
+		queue.qualityOfService = qualityOfService;
 		return [[ApptentiveGCDDispatchQueue alloc] initWithQueue:queue];
 	}
 	

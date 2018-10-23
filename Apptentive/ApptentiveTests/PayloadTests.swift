@@ -11,7 +11,7 @@ import XCTest
 class PayloadTests: XCTestCase {
     
 	func testEventPayload() {
-		let payload = ApptentiveEventPayload(label: "event_1", creationDate: Date())!
+		let payload = ApptentiveEventPayload(label: "event_1", creationDate: Date(), sessionIdentifier: "10837BF9D6864364B599F8B526C9A8CB")!
 		payload.interactionIdentifier = "abc123def456ghi789"
 		payload.customData = ["string": "foo", "number": 2, "bool": true]
 
@@ -31,6 +31,7 @@ class PayloadTests: XCTestCase {
 			XCTAssertEqual(customData["string"] as? String, "foo")
 			XCTAssertEqual(customData["number"] as? Int, 2)
 			XCTAssertEqual(customData["bool"] as? Bool, true)
+			XCTAssertEqual(contents["session_id"] as? String, "10837BF9D6864364B599F8B526C9A8CB")
 
 			XCTAssertNotNil(contents["time"])
 			XCTAssertNotNil(contents["commerce"])
@@ -41,12 +42,13 @@ class PayloadTests: XCTestCase {
 	}
 
 	func testSurveyPayload() {
-		let payload = ApptentiveSurveyResponsePayload(answers: ["56d49499c719925f3300000b":["id": "56d49499c719925f3300000b", "value": "Other Text"]], identifier: "56d49499c719925f3300000a", creationDate: Date())!
+		let payload = ApptentiveSurveyResponsePayload(answers: ["56d49499c719925f3300000b":["id": "56d49499c719925f3300000b", "value": "Other Text"]], identifier: "56d49499c719925f3300000a", creationDate: Date(), sessionIdentifier: "10837BF9D6864364B599F8B526C9A8CB")!
 
 		if let contents = self.testBoilerplateForPayload(payload, containerName: "response"), let answers = contents["answers"] as? [String:Any], let answer = answers["56d49499c719925f3300000b"] as? [String:String] {
 			XCTAssertEqual(contents["id"] as? String, "56d49499c719925f3300000a")
 			XCTAssertEqual(answer["id"], "56d49499c719925f3300000b")
 			XCTAssertEqual(answer["value"], "Other Text")
+			XCTAssertEqual(contents["session_id"] as? String, "10837BF9D6864364B599F8B526C9A8CB")
 		} else {
 			XCTFail()
 		}
@@ -76,8 +78,13 @@ class PayloadTests: XCTestCase {
 	func testLogoutPayload() {
 		let payload = ApptentiveLogoutPayload()
 
+		guard let payloadData = payload.payload else {
+			XCTFail("Can't get payload data")
+			return;
+		}
+
 		do {
-			if let _ = try JSONSerialization.jsonObject(with: payload.payload!, options: []) as? [String: Any] {
+			if let _ = try JSONSerialization.jsonObject(with: payloadData, options: []) as? [String: Any] {
 			} else {
 				XCTFail("can't decode JSON")
 			}
@@ -110,6 +117,43 @@ class PayloadTests: XCTestCase {
 			}
 		} catch {
 			XCTFail("can't decode JSON")
+		}
+	}
+
+	func testMessagePayload() {
+		guard let message = ApptentiveMessage(body: "Body", attachments: [], automated: false, customData: [:], creationDate: Date()) else {
+			XCTFail("can't create message object")
+			return
+		}
+
+		guard let payload = ApptentiveMessagePayload(message: message, sessionIdentifier: "10837BF9D6864364B599F8B526C9A8CB") else {
+			XCTFail("can't create message payload")
+			return
+		}
+
+		guard let payloadData = payload.payload, let stringValue = String(data: payloadData, encoding: .utf8) else {
+			XCTFail("can't get string value of payload")
+			return
+		}
+
+		guard let requestBody = stringValue.components(separatedBy: "\r\n\r\n").last else {
+			XCTFail("can't second part of request after two CRLFs")
+			return
+		}
+
+		guard let body = requestBody.components(separatedBy: "\r\n").first, let bodyData = body.data(using: .utf8) else {
+			XCTFail("can't second part of body as data")
+			return
+		}
+
+		do {
+			if let JSONDictionary = try JSONSerialization.jsonObject(with: bodyData, options: []) as? [String: Any] {
+				XCTAssertEqual(JSONDictionary["session_id"] as? String, "10837BF9D6864364B599F8B526C9A8CB")
+			} else {
+				XCTFail("can't decode JSON")
+			}
+		} catch {
+			XCTFail("can't decode body as JSON")
 		}
 	}
 

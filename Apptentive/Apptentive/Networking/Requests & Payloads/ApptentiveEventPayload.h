@@ -19,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nullable, nonatomic) NSDictionary<NSString *, id> *customData;
 @property (strong, nullable, nonatomic) NSArray<NSDictionary *> *extendedData;
 
-- (nullable instancetype)initWithLabel:(NSString *)label creationDate:(NSDate *)creationDate;
+- (nullable instancetype)initWithLabel:(NSString *)label creationDate:(NSDate *)creationDate sessionIdentifier:(nullable NSString *)sessionIdentifier;
 
 @end
 

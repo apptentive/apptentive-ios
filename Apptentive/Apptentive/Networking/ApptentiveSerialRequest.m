@@ -68,12 +68,6 @@ NS_ASSUME_NONNULL_BEGIN
 		return NO;
 	}
 
-	// create a child context on a private concurrent queue
-	NSManagedObjectContext *childContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-
-	// set parent context
-	[childContext setParentContext:context];
-
 	// FIXME: don't modify payload here
 	payload.token = authToken;
 
@@ -96,9 +90,9 @@ NS_ASSUME_NONNULL_BEGIN
 	NSArray *payloadAttachments = payload.attachments;
 
 	// execute the block on a background thread (this call returns immediatelly)
-	[childContext performBlockAndWait:^{
+	[context performBlockAndWait:^{
 
-	  ApptentiveSerialRequest *request = (ApptentiveSerialRequest *)[[NSManagedObject alloc] initWithEntity:[NSEntityDescription entityForName:@"QueuedRequest" inManagedObjectContext:childContext] insertIntoManagedObjectContext:childContext];
+	  ApptentiveSerialRequest *request = (ApptentiveSerialRequest *)[[NSManagedObject alloc] initWithEntity:[NSEntityDescription entityForName:@"QueuedRequest" inManagedObjectContext:context] insertIntoManagedObjectContext:context];
 
 	  ApptentiveAssertNotNil(request, @"Can't load managed request object.");
 	  if (request == nil) {
@@ -120,26 +114,18 @@ NS_ASSUME_NONNULL_BEGIN
 
 	  NSMutableArray *attachmentArray = [NSMutableArray arrayWithCapacity:payload.attachments.count];
 	  for (ApptentiveAttachment *attachment in payloadAttachments) {
-		  ApptentiveArrayAddObject(attachmentArray, [ApptentiveSerialRequestAttachment queuedAttachmentWithName:attachment.name path:attachment.fullLocalPath MIMEType:attachment.contentType inContext:childContext]);
+		  ApptentiveArrayAddObject(attachmentArray, [ApptentiveSerialRequestAttachment queuedAttachmentWithName:attachment.name path:attachment.fullLocalPath MIMEType:attachment.contentType inContext:context]);
 	  }
 	  request.attachments = [NSOrderedSet orderedSetWithArray:attachmentArray];
 
 	  // save child context
 	  NSError *saveError;
-	  if (![childContext save:&saveError]) {
+	  if (![context save:&saveError]) {
 		  ApptentiveLogError(ApptentiveLogTagPayload, @"Unable to save temporary managed object context (%@).", saveError);
 	  }
 
-	  // save parent context
-	  [context performBlockAndWait:^{
-		NSError *parentSaveError;
-		if (![context save:&parentSaveError]) {
-			ApptentiveLogError(ApptentiveLogTagPayload, @"Unable to save parent managed object context (%@).", parentSaveError);
-		}
-	  }];
-
 	  // print payload queue
-	  [ApptentivePayloadDebug printPayloadSendingQueueWithContext:childContext title:@"Enqueue payload"];
+	  [ApptentivePayloadDebug printPayloadSendingQueueWithContext:context title:@"Enqueue payload"];
 	}];
 
 	return YES;
@@ -155,14 +141,6 @@ NS_ASSUME_NONNULL_BEGIN
 	if (queuedRequests == nil) {
 		ApptentiveLogError(ApptentiveLogTagPayload, @"Unable to fetch waiting network payloads.");
 	}
-}
-
-- (void)awakeFromFetch {
-	if (self.conversationIdentifier.length > 0 && [self.path containsString:@"<cid>"]) {
-		self.path = [self.path stringByReplacingOccurrencesOfString:@"<cid>" withString:self.conversationIdentifier];
-	}
-
-	_messageIdentifier = [self.identifier copy];
 }
 
 - (BOOL)isMessageRequest {

@@ -100,7 +100,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (BOOL)enqueuePayload:(ApptentivePayload *)payload forConversation:(ApptentiveConversation *)conversation usingAuthToken:(nullable NSString *)authToken inContext:(NSManagedObjectContext *)context;
 
 @property (readonly, nonatomic, getter=isMessageRequest) BOOL messageRequest;
-@property (readonly, nullable, nonatomic) NSString *messageIdentifier;
+@property (copy, nullable, nonatomic) NSString *messageIdentifier;
 
 @end
 

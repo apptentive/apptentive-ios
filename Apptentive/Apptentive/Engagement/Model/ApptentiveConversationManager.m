@@ -75,14 +75,14 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 @synthesize activeConversation = _activeConversation;
 
-- (instancetype)initWithStoragePath:(NSString *)storagePath operationQueue:(ApptentiveDispatchQueue *)operationQueue client:(ApptentiveClient *)client parentManagedObjectContext:(NSManagedObjectContext *)parentManagedObjectContext {
+- (instancetype)initWithStoragePath:(NSString *)storagePath operationQueue:(ApptentiveDispatchQueue *)operationQueue client:(ApptentiveClient *)client managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
 	self = [super init];
 
 	if (self) {
 		_storagePath = storagePath;
 		_operationQueue = operationQueue;
 		_client = client;
-		_parentManagedObjectContext = parentManagedObjectContext;
+		_managedObjectContext = managedObjectContext;
 	}
 
 	return self;
@@ -305,7 +305,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 		ApptentiveLogoutPayload *payload = [[ApptentiveLogoutPayload alloc] init];
 
-		[ApptentiveSerialRequest enqueuePayload:payload forConversation:conversation usingAuthToken:conversation.token inContext:self.parentManagedObjectContext];
+		[ApptentiveSerialRequest enqueuePayload:payload forConversation:conversation usingAuthToken:conversation.token inContext:self.managedObjectContext];
 
 		[self.delegate processQueuedRecords];
 
@@ -652,7 +652,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 	ApptentiveSDKAppReleasePayload *payload = [[ApptentiveSDKAppReleasePayload alloc] initWithConversation:conversation];
 
-	[ApptentiveSerialRequest enqueuePayload:payload forConversation:conversation usingAuthToken:conversation.token inContext:self.parentManagedObjectContext];
+	[ApptentiveSerialRequest enqueuePayload:payload forConversation:conversation usingAuthToken:conversation.token inContext:self.managedObjectContext];
 
 	[self.delegate processQueuedRecords];
 
@@ -666,7 +666,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 	ApptentivePersonPayload *payload = [[ApptentivePersonPayload alloc] initWithPersonDiffs:diffs];
 
-	[ApptentiveSerialRequest enqueuePayload:payload forConversation:conversation usingAuthToken:conversation.token inContext:self.parentManagedObjectContext];
+	[ApptentiveSerialRequest enqueuePayload:payload forConversation:conversation usingAuthToken:conversation.token inContext:self.managedObjectContext];
 
 	[self saveConversation:conversation];
 
@@ -678,7 +678,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 	ApptentiveDevicePayload *payload = [[ApptentiveDevicePayload alloc] initWithDeviceDiffs:diffs];
 
-	[ApptentiveSerialRequest enqueuePayload:payload forConversation:conversation usingAuthToken:conversation.token inContext:self.parentManagedObjectContext];
+	[ApptentiveSerialRequest enqueuePayload:payload forConversation:conversation usingAuthToken:conversation.token inContext:self.managedObjectContext];
 
 	[self saveConversation:conversation];
 

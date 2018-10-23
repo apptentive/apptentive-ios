@@ -111,6 +111,16 @@ extern NSString *NSStringFromApptentiveConversationState(ApptentiveConversationS
  */
 @property (readonly, nonatomic) NSDate *currentTime;
 
+
+/**
+ Uniquely identifies the current session, i.e. period between launch and exit.
+ This should not be persisted.
+ */
+@property (readonly, nullable, nonatomic) NSString *sessionIdentifier;
+
+- (void)startSession;
+- (void)endSession;
+
 /**
  Freeform key-value data used for things `NSUserDefaults` would typically be
  used for in an app.

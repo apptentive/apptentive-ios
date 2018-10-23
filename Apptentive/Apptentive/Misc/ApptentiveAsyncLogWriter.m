@@ -27,7 +27,7 @@ static const NSUInteger kMessageQueueSize = 256;
 @implementation ApptentiveAsyncLogWriter
 
 - (instancetype)initWithDestDir:(NSString *)destDir historySize:(NSUInteger)historySize {
-	return [self initWithDestDir:destDir historySize:historySize queue:[ApptentiveDispatchQueue createQueueWithName:@"Log Queue" concurrencyType:ApptentiveDispatchQueueConcurrencyTypeSerial]];
+	return [self initWithDestDir:destDir historySize:historySize queue:[ApptentiveDispatchQueue createQueueWithName:@"Log Queue" concurrencyType:ApptentiveDispatchQueueConcurrencyTypeSerial qualityOfService:NSQualityOfServiceBackground]];
 }
 - (instancetype)initWithDestDir:(NSString *)destDir historySize:(NSUInteger)historySize queue:(ApptentiveDispatchQueue *)queue {
 	APPTENTIVE_CHECK_INIT_NOT_EMPTY_ARG(destDir)

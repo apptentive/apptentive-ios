@@ -206,7 +206,7 @@ NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 		return;
 	}
 
-	ApptentiveEventPayload *payload = [[ApptentiveEventPayload alloc] initWithLabel:name creationDate:[NSDate date]];
+	ApptentiveEventPayload *payload = [[ApptentiveEventPayload alloc] initWithLabel:name creationDate:[NSDate date] sessionIdentifier:conversation.sessionIdentifier];
 	payload.interactionIdentifier = fromInteraction.identifier;
 	payload.userInfo = userInfo;
 	payload.customData = customData;

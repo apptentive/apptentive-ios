@@ -77,7 +77,7 @@ typedef enum {
 
 		NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
 		if (coordinator != nil) {
-			_managedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
+			_managedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
 			[_managedObjectContext setPersistentStoreCoordinator:coordinator];
 		}
 	}
@@ -105,31 +105,40 @@ typedef enum {
 	}
 
 	NSManagedObjectContext *moc = [self managedObjectContext];
-	NSFetchRequest *request = [[NSFetchRequest alloc] init];
-	@try {
-		// Due to a migration error from v2 to v3, these items may not have customData fields.
-		[request setEntity:[NSEntityDescription entityForName:@"ATMessage" inManagedObjectContext:moc]];
-		[request setFetchBatchSize:20];
-		NSArray *results = [moc executeFetchRequest:request error:nil];
-		for (NSManagedObject *c in results) {
-			__unused NSObject *d = [c valueForKey:@"customData"];
-			break;
-		}
-	}
-	@catch (NSException *exception) {
-		ApptentiveLogError(ApptentiveLogTagStorage, @"Caught exception attempting to test classes (%@).", exception);
-		self.managedObjectContext = nil;
-		self.persistentStoreCoordinator = nil;
-		ApptentiveLogError(ApptentiveLogTagStorage, @"Removing persistent store and starting over.");
-		[self removePersistentStore];
-	}
-	@finally {
-		request = nil;
-	}
+	__block BOOL success = YES;
 
-	if (![self persistentStoreCoordinator]) {
+	[moc performBlockAndWait:^{
+		NSFetchRequest *request = [[NSFetchRequest alloc] init];
+		@try {
+			// Due to a migration error from v2 to v3, these items may not have customData fields.
+			[request setEntity:[NSEntityDescription entityForName:@"ATMessage" inManagedObjectContext:moc]];
+			[request setFetchBatchSize:20];
+			NSArray *results = [moc executeFetchRequest:request error:nil];
+			for (NSManagedObject *c in results) {
+				__unused NSObject *d = [c valueForKey:@"customData"];
+				break;
+			}
+		}
+		@catch (NSException *exception) {
+			ApptentiveLogError(ApptentiveLogTagStorage, @"Caught exception attempting to test classes (%@).", exception);
+			self.managedObjectContext = nil;
+			self.persistentStoreCoordinator = nil;
+			ApptentiveLogError(ApptentiveLogTagStorage, @"Removing persistent store and starting over.");
+			[self removePersistentStore];
+		}
+		@finally {
+			request = nil;
+		}
+
+		if (![self persistentStoreCoordinator]) {
+			success = NO;
+		}
+	}];
+
+	if (!success) {
 		return NO;
 	}
+
 	// Seems to have gone well, so remove canary.
 	if (![self removeCanaryFile]) {
 		return NO;

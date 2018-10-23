@@ -18,10 +18,14 @@ NS_ASSUME_NONNULL_BEGIN
 @implementation ApptentivePayload
 
 - (instancetype)init {
-	return [self initWithCreationDate:[NSDate date]];
+	return [self initWithSessionIdentifier:nil];
 }
 
-- (instancetype)initWithCreationDate:(NSDate *)creationDate {
+- (instancetype)initWithSessionIdentifier:(nullable NSString *)sessionIdentifier {
+	return [self initWithCreationDate:[NSDate date] sessionIdentifier:sessionIdentifier];
+}
+
+- (instancetype)initWithCreationDate:(NSDate *)creationDate sessionIdentifier:(nullable NSString *)sessionIdentifier {
 	self = [super init];
 	if (self) {
 		_contents = @{
@@ -29,6 +33,12 @@ NS_ASSUME_NONNULL_BEGIN
 			@"client_created_at": @(creationDate.timeIntervalSince1970),
 			@"client_created_at_utc_offset": @([[NSTimeZone systemTimeZone] secondsFromGMTForDate:creationDate])
 		};
+
+		if (sessionIdentifier) {
+			NSMutableDictionary *contents = [_contents mutableCopy];
+			[contents setObject:sessionIdentifier forKey:@"session_id"];
+			_contents = [contents copy];
+		}
 	}
 	return self;
 }

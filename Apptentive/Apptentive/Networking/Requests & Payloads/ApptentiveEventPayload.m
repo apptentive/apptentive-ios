@@ -13,8 +13,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation ApptentiveEventPayload
 
-- (nullable instancetype)initWithLabel:(NSString *)label creationDate:(NSDate *)creationDate {
-	self = [super initWithCreationDate:creationDate];
+- (nullable instancetype)initWithLabel:(NSString *)label creationDate:(NSDate *)creationDate sessionIdentifier:(nullable NSString *)sessionIdentifier {
+	self = [super initWithCreationDate:creationDate sessionIdentifier:sessionIdentifier];
 
 	if (self) {
 		if (label.length == 0) {

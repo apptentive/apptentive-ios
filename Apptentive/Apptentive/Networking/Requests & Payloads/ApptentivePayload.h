@@ -30,7 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic) NSData *encryptionKey;
 @property (nullable, nonatomic) NSString *token;
 
-- (instancetype)initWithCreationDate:(NSDate *)creationDate;
+- (instancetype)initWithCreationDate:(NSDate *)creationDate sessionIdentifier:(nullable NSString *)sessiondIdentifier;
 - (NSData *)marshalForSending;
 
 @end

@@ -60,6 +60,16 @@
 	[self.conversation.appRelease setValue:ApptentiveSDK.SDKVersion forKey:@"version"];
 
 	[self.conversation checkForDiffs];
+
+	XCTAssertNil(self.conversation.sessionIdentifier);
+
+	[self.conversation startSession];
+
+	XCTAssertEqual(self.conversation.sessionIdentifier.length, 32);
+
+	[self.conversation endSession];
+
+	XCTAssertNil(self.conversation.sessionIdentifier);
 }
 
 - (void)testAppRelease {
@@ -275,6 +285,8 @@
 	NSDate *engagementTime = [NSDate date];
 	[mutableConversation.engagement resetVersion];
 
+	[mutableConversation startSession];
+
 	NSString *path = [NSTemporaryDirectory() stringByAppendingString:@"conversation.archive"];
 
 	[NSKeyedArchiver archiveRootObject:mutableConversation toFile:path];
@@ -313,6 +325,8 @@
 	XCTAssertEqual(testInteraction.buildCount, 1);
 	XCTAssertEqual(testInteraction.versionCount, 0);
 	XCTAssertEqualWithAccuracy(testInteraction.lastInvoked.timeIntervalSince1970, [engagementTime timeIntervalSince1970], 0.01);
+
+	XCTAssertNil(conversation.sessionIdentifier);
 }
 
 - (void)testResetDeviceDiffs {

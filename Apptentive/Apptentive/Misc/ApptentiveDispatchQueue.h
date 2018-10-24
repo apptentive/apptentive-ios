@@ -30,14 +30,9 @@ extern NSString * _Nullable ApptentiveGetCurrentThreadName(void);
 + (instancetype)main;
 
 /**
- @return a global concurrent dispatch queue associated with a background thread.
- */
-+ (instancetype)background;
-
-/**
  Creates a background queue with a specified name and concurrency type
  */
-+ (nullable instancetype)createQueueWithName:(NSString *)name concurrencyType:(ApptentiveDispatchQueueConcurrencyType)type;
++ (nullable instancetype)createQueueWithName:(NSString *)name concurrencyType:(ApptentiveDispatchQueueConcurrencyType)type qualityOfService:(NSQualityOfService)qualityOfService;
 
 - (void)dispatchAsync:(void (^)(void))task;
 

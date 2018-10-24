@@ -22,6 +22,7 @@ static NSString *const StateKey = @"state";
 static NSString *const AutomatedKey = @"automated";
 static NSString *const CustomDataKey = @"customData";
 static NSString *const InboundKey = @"inboundKey";
+static NSString *const SessionIdentifier = @"sessionIdentifier";
 
 
 @interface ApptentiveMessage ()

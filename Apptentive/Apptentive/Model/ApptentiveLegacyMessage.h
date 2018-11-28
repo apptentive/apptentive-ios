@@ -40,7 +40,7 @@ typedef NS_ENUM(NSInteger, ATPendingMessageState) {
 @property (copy, nonatomic) NSString *title;
 @property (strong, nonatomic) NSOrderedSet *attachments;
 
-+ (void)enqueueUnsentMessagesInContext:(NSManagedObjectContext *)context forConversation:(ApptentiveConversation *)conversation oldAttachmentPath:(NSString *)oldAttachmentPath newAttachmentPath:(NSString *)newAttachmentPath;
++ (BOOL)enqueueUnsentMessagesInContext:(NSManagedObjectContext *)context forConversation:(ApptentiveConversation *)conversation oldAttachmentPath:(NSString *)oldAttachmentPath newAttachmentPath:(NSString *)newAttachmentPath;
 
 @end
 

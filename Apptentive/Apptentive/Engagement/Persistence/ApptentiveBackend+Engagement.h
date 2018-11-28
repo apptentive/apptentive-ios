@@ -11,21 +11,6 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-extern NSString *const ATEngagementInstallDateKey;
-extern NSString *const ATEngagementUpgradeDateKey;
-extern NSString *const ATEngagementLastUsedVersionKey;
-extern NSString *const ATEngagementIsUpdateVersionKey;
-extern NSString *const ATEngagementIsUpdateBuildKey;
-extern NSString *const ATEngagementCodePointsInvokesTotalKey;
-extern NSString *const ATEngagementCodePointsInvokesVersionKey;
-extern NSString *const ATEngagementCodePointsInvokesBuildKey;
-extern NSString *const ATEngagementCodePointsInvokesLastDateKey;
-extern NSString *const ATEngagementInteractionsInvokesTotalKey;
-extern NSString *const ATEngagementInteractionsInvokesVersionKey;
-extern NSString *const ATEngagementInteractionsInvokesBuildKey;
-extern NSString *const ATEngagementInteractionsInvokesLastDateKey;
-extern NSString *const ATEngagementInteractionsSDKVersionKey;
-
 extern NSString *const ATEngagementCodePointHostAppVendorKey;
 extern NSString *const ATEngagementCodePointHostAppInteractionKey;
 extern NSString *const ATEngagementCodePointApptentiveVendorKey;
@@ -45,6 +30,7 @@ extern NSString *const ApptentiveEngagementMessageCenterEvent;
 - (BOOL)canShowInteractionForCodePoint:(NSString *)codePoint;
 
 + (NSString *)codePointForVendor:(NSString *)vendor interactionType:(NSString *)interactionType event:(NSString *)event;
++ (NSString *)stringByEscapingCodePointSeparatorCharactersInString:(NSString *)string;
 
 - (void)engageApptentiveAppEvent:(NSString *)event;
 - (void)engageLocalEvent:(NSString *)event userInfo:(nullable NSDictionary *)userInfo customData:(nullable NSDictionary *)customData extendedData:(nullable NSArray *)extendedData fromViewController:(nullable UIViewController *)viewController;

@@ -821,6 +821,8 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 		[self saveConversation:self.activeConversation];
 
+		self.messageManager.conversation = self.activeConversation;
+
 		[self handleConversationStateChange:self.activeConversation];
 
 		[self updateManifestIfNeeded];
@@ -854,10 +856,15 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 			mutableConversation.state = ApptentiveConversationStateAnonymous;
 		}
 
+		[self.messageManager stop];
+
 		self.activeConversation = mutableConversation;
 		self.activeConversation.delegate = self;
 
 		[self saveConversation:self.activeConversation];
+
+		self.messageManager.conversation = self.activeConversation;
+
 		[self handleConversationStateChange:self.activeConversation];
 
 		[self updateManifestIfNeeded];

@@ -70,8 +70,25 @@ NSString *const ATInteractionTextModalEventLabelInteraction = @"interaction";
 	return self.conversationManager.manifest.interactions[interactionIdentifier];
 }
 
++ (NSString *)stringByEscapingCodePointSeparatorCharactersInString:(NSString *)string {
+	// Only escape "%", "/", and "#".
+	// Do not change unless the server spec changes.
+	NSMutableString *escape = [string mutableCopy];
+	[escape replaceOccurrencesOfString:@"%" withString:@"%25" options:NSLiteralSearch range:NSMakeRange(0, escape.length)];
+	[escape replaceOccurrencesOfString:@"/" withString:@"%2F" options:NSLiteralSearch range:NSMakeRange(0, escape.length)];
+	[escape replaceOccurrencesOfString:@"#" withString:@"%23" options:NSLiteralSearch range:NSMakeRange(0, escape.length)];
+
+	return escape;
+}
+
 + (NSString *)codePointForVendor:(NSString *)vendor interactionType:(NSString *)interactionType event:(NSString *)event {
-	return [NSString stringWithFormat:@"%@#%@#%@", vendor, interactionType, event];;
+	NSString *encodedVendor = [[self class] stringByEscapingCodePointSeparatorCharactersInString:vendor];
+	NSString *encodedInteractionType = [[self class] stringByEscapingCodePointSeparatorCharactersInString:interactionType];
+	NSString *encodedEvent = [[self class] stringByEscapingCodePointSeparatorCharactersInString:event];
+
+	NSString *codePoint = [NSString stringWithFormat:@"%@#%@#%@", encodedVendor, encodedInteractionType, encodedEvent];
+
+	return codePoint;
 }
 
 - (void)engageApptentiveAppEvent:(NSString *)event {

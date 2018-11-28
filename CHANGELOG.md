@@ -1,3 +1,10 @@
+# 2018-11-27 - v5.2.3
+
+#### Bugs Fixed
+
+* Fix problem that required app relaunch to receive replies in Message Center.
+* Correct handling of event names that include any pound signs, percent signs, or slashes. 
+
 # 2018-10-23 - v5.2.2
 
 #### Improvements

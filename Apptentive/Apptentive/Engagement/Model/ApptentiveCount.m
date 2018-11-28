@@ -78,6 +78,16 @@ static NSString *const LastInvokedKey = @"lastInvoked";
 	return [NSString stringWithFormat:@"[%@] totalCount=%ld versionCount=%ld buildCount=%ld lastInvoked=%@", NSStringFromClass([self class]), (unsigned long)_totalCount, (unsigned long)_versionCount, (unsigned long)_buildCount, _lastInvoked];
 }
 
+// This is used for migrating version 5.1.0 through 5.2.2 (with unescaped code points) to 5.2.3 and later.
++ (ApptentiveCount *)mergeOldCount:(nullable ApptentiveCount *)oldCount withNewCount:(nullable ApptentiveCount *)newCount {
+	NSInteger totalCount = oldCount.totalCount + newCount.totalCount;
+	NSInteger versionCount = newCount.versionCount; // Old count is likely to be for a different version
+	NSInteger buildCount = newCount.buildCount; // Old count is likely to be for a different build
+	NSDate *lastInvoked = newCount.lastInvoked ?: oldCount.lastInvoked; // New count, if present, will have been invoked last
+
+	return [[ApptentiveCount alloc] initWithTotalCount:totalCount versionCount:versionCount buildCount:buildCount lastInvoked:lastInvoked];
+}
+
 @end
 
 

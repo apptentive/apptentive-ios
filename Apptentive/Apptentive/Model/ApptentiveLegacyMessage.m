@@ -39,7 +39,7 @@ NS_ASSUME_NONNULL_BEGIN
 @dynamic body;
 @dynamic attachments;
 
-+ (void)enqueueUnsentMessagesInContext:(NSManagedObjectContext *)context forConversation:(ApptentiveConversation *)conversation oldAttachmentPath:(NSString *)oldAttachmentPath newAttachmentPath:(NSString *)newAttachmentPath {
++ (BOOL)enqueueUnsentMessagesInContext:(NSManagedObjectContext *)context forConversation:(ApptentiveConversation *)conversation oldAttachmentPath:(NSString *)oldAttachmentPath newAttachmentPath:(NSString *)newAttachmentPath {
 	ApptentiveAssertNotNil(context, @"Context is nil");
 	ApptentiveAssertNotNil(conversation, @"Conversation is nil");
 	ApptentiveAssertNotNil(oldAttachmentPath, @"Old attachment path is nil");
@@ -53,7 +53,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 	if (unsentMessages == nil) {
 		ApptentiveLogError(ApptentiveLogTagMessages, @"Unable to retrieve unsent messages: %@", error);
-		return;
+		return NO;
 	}
 
 	for (ApptentiveLegacyMessage *legacyMessage in unsentMessages) {
@@ -108,6 +108,8 @@ NS_ASSUME_NONNULL_BEGIN
 	if ([[NSFileManager defaultManager] fileExistsAtPath:oldAttachmentPath] && ![[NSFileManager defaultManager] removeItemAtPath:oldAttachmentPath error:&error]) {
 		ApptentiveLogWarning(ApptentiveLogTagMessages, @"Unable to remove legacy attachments directory (%@): %@", oldAttachmentPath, error);
 	}
+
+	return unsentMessages.count > 0;
 }
 
 @end

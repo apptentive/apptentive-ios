@@ -22,7 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (readonly, nonatomic) NSString *storagePath;
 @property (readonly, nonatomic) NSString *conversationIdentifier;
 @property (readonly, nonatomic) ApptentiveDispatchQueue *operationQueue;
-@property (readonly, nonatomic) ApptentiveConversation *conversation;
+@property (strong, nonatomic) ApptentiveConversation *conversation;
 
 @property (readonly, nonatomic) ApptentiveClient *client;
 @property (assign, nonatomic) NSTimeInterval pollingInterval;

@@ -23,6 +23,7 @@
 #import "ApptentivePerson.h"
 #import "ApptentiveEngagement.h"
 #import "ApptentiveConversation.h"
+#import "ApptentiveCount.h"
 
 #import "ApptentiveAttachment.h"
 #import "ApptentiveMessage.h"
@@ -36,3 +37,4 @@
 #import "ApptentiveMockDispatchQueue.h"
 
 #import "ApptentiveRetryPolicy.h"
+#import "ApptentiveBackend+Engagement.h"

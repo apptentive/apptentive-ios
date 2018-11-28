@@ -69,7 +69,7 @@ NSString *const ApptentiveSentByUserKey = @"com.apptentive.sentByUser";
 
 		_didSkipProfile = [conversation.userInfo[ATMessageCenterDidSkipProfileKey] boolValue];
 		_draftMessage = conversation.userInfo[ATMessageCenterDraftMessageKey];
-		_hasSentMessage = [conversation.userInfo[ApptentiveHasSentMessageKey] boolValue];
+		_hasSentMessage = [conversation.userInfo[ApptentiveHasSentMessageKey] boolValue] || _messageStore.messages.count > 0;
 
 		for (ApptentiveMessage *message in _messageStore.messages) {
 			for (ApptentiveAttachment *attachment in message.attachments) {

@@ -78,6 +78,9 @@
 		01798C021EAF94FE00633164 /* ApptentivePayloadSender.h in Headers */ = {isa = PBXBuildFile; fileRef = 01798C001EAF94FD00633164 /* ApptentivePayloadSender.h */; };
 		01798C031EAF94FE00633164 /* ApptentivePayloadSender.m in Sources */ = {isa = PBXBuildFile; fileRef = 01798C011EAF94FD00633164 /* ApptentivePayloadSender.m */; };
 		017E54ED1F3B860E00EA9F81 /* ApptentiveJSONSerializationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 017E54EC1F3B860E00EA9F81 /* ApptentiveJSONSerializationTests.m */; };
+		018E1CE021936B1400E58F33 /* ApptentiveEngagementTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 018E1CDF21936B1300E58F33 /* ApptentiveEngagementTests.swift */; };
+		018E1CE321936B6600E58F33 /* conversation-4.archive in Resources */ = {isa = PBXBuildFile; fileRef = 018E1CE121936B6600E58F33 /* conversation-4.archive */; };
+		018E1CE421936B6600E58F33 /* conversation-5.archive in Resources */ = {isa = PBXBuildFile; fileRef = 018E1CE221936B6600E58F33 /* conversation-5.archive */; };
 		018FAFDF1FC4A9C6007C52FE /* ApptentiveAndClause.h in Headers */ = {isa = PBXBuildFile; fileRef = 018FAFDD1FC4A9C6007C52FE /* ApptentiveAndClause.h */; };
 		018FAFE01FC4A9C6007C52FE /* ApptentiveAndClause.m in Sources */ = {isa = PBXBuildFile; fileRef = 018FAFDE1FC4A9C6007C52FE /* ApptentiveAndClause.m */; };
 		018FAFE31FC4AC41007C52FE /* ApptentiveOrClause.h in Headers */ = {isa = PBXBuildFile; fileRef = 018FAFE11FC4AC41007C52FE /* ApptentiveOrClause.h */; };
@@ -512,6 +515,9 @@
 		01798C001EAF94FD00633164 /* ApptentivePayloadSender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentivePayloadSender.h; sourceTree = "<group>"; };
 		01798C011EAF94FD00633164 /* ApptentivePayloadSender.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentivePayloadSender.m; sourceTree = "<group>"; };
 		017E54EC1F3B860E00EA9F81 /* ApptentiveJSONSerializationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveJSONSerializationTests.m; sourceTree = "<group>"; };
+		018E1CDF21936B1300E58F33 /* ApptentiveEngagementTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApptentiveEngagementTests.swift; sourceTree = "<group>"; };
+		018E1CE121936B6600E58F33 /* conversation-4.archive */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = "conversation-4.archive"; sourceTree = "<group>"; };
+		018E1CE221936B6600E58F33 /* conversation-5.archive */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = "conversation-5.archive"; sourceTree = "<group>"; };
 		018FAFDD1FC4A9C6007C52FE /* ApptentiveAndClause.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ApptentiveAndClause.h; sourceTree = "<group>"; };
 		018FAFDE1FC4A9C6007C52FE /* ApptentiveAndClause.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ApptentiveAndClause.m; sourceTree = "<group>"; };
 		018FAFE11FC4AC41007C52FE /* ApptentiveOrClause.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ApptentiveOrClause.h; sourceTree = "<group>"; };
@@ -1024,6 +1030,7 @@
 		01A2CF9E1E49062800C2103A /* ApptentiveTests */ = {
 			isa = PBXGroup;
 			children = (
+				01917D431E5E0B7400B37D82 /* ApptentiveTests-Bridging-Header.h */,
 				01201AD21FC637BD00EB3593 /* CodePointAndInteractionTests.m */,
 				EF4EABA22040A8C5003318C9 /* utils */,
 				01A2D20F1E4946D500C2103A /* data */,
@@ -1041,7 +1048,6 @@
 				01A2D2071E4946D500C2103A /* ApptentiveMigrationTests.m */,
 				01A2D2091E4946D500C2103A /* ApptentiveStyleSheetTests.m */,
 				01A2D20A1E4946D500C2103A /* ApptentiveSurveyTests.m */,
-				01917D431E5E0B7400B37D82 /* ApptentiveTests-Bridging-Header.h */,
 				01A2D20B1E4946D500C2103A /* ApptentiveUtilitiesTests.m */,
 				01917D441E5E0B7400B37D82 /* ConversationManagerTests.swift */,
 				01A2D20D1E4946D500C2103A /* CriteriaTests.h */,
@@ -1053,6 +1059,7 @@
 				0123005E20531698000EC3C3 /* ClauseTests.m */,
 				EF4EAB99203F9821003318C9 /* AppptentiveAsyncLogWriterTests.swift */,
 				012ED92B2072FABE003D87F3 /* RetryPolicyTests.swift */,
+				018E1CDF21936B1300E58F33 /* ApptentiveEngagementTests.swift */,
 			);
 			path = ApptentiveTests;
 			sourceTree = "<group>";
@@ -1645,6 +1652,8 @@
 		01A2D20F1E4946D500C2103A /* data */ = {
 			isa = PBXGroup;
 			children = (
+				018E1CE121936B6600E58F33 /* conversation-4.archive */,
+				018E1CE221936B6600E58F33 /* conversation-5.archive */,
 				EFF4D2A51EC37F0A00FD4EFE /* containers */,
 				01A2D2161E4946D500C2103A /* criteria */,
 				01A2D2101E4946D500C2103A /* ATDataModelv1.sqlite */,
@@ -2081,6 +2090,8 @@
 				01A2D2551E4946D600C2103A /* testCornerCasesThatShouldBeFalse.json in Resources */,
 				01A2D2531E4946D600C2103A /* testCodePointInvokesVersion.json in Resources */,
 				01A2D25F1E4946D600C2103A /* testOperatorGreaterThanOrEqual.json in Resources */,
+				018E1CE321936B6600E58F33 /* conversation-4.archive in Resources */,
+				018E1CE421936B6600E58F33 /* conversation-5.archive in Resources */,
 				01A2D25B1E4946D600C2103A /* testOperatorContains.json in Resources */,
 				01A2D24E1E4946D600C2103A /* ATDataModelv3.sqlite in Resources */,
 				01A2D26A1E4946D600C2103A /* testJsonDiffing.1.new.json in Resources */,
@@ -2280,6 +2291,7 @@
 				EFF4D2AC1EC39EC000FD4EFE /* ApptentiveAppDataContainer.m in Sources */,
 				01A2D2481E4946D600C2103A /* ApptentiveSurveyTests.m in Sources */,
 				01A2D29B1E4963A500C2103A /* ATDataModel v3 to v4.xcmappingmodel in Sources */,
+				018E1CE021936B1400E58F33 /* ApptentiveEngagementTests.swift in Sources */,
 				0174772F1EA92D7D00A0A949 /* PayloadTests.swift in Sources */,
 				01201AD31FC637BE00EB3593 /* CodePointAndInteractionTests.m in Sources */,
 				01A2D2451E4946D600C2103A /* ApptentiveMigrationTests.m in Sources */,
@@ -2382,7 +2394,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 20;
+				CURRENT_PROJECT_VERSION = 23;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -2440,7 +2452,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 20;
+				CURRENT_PROJECT_VERSION = 23;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -2472,7 +2484,7 @@
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 86WML2UN43;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 20;
+				DYLIB_CURRENT_VERSION = 23;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				GCC_PREFIX_HEADER = "Apptentive/Misc/ApptentiveConnect-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = "APPTENTIVE_DEBUG=1";
@@ -2494,7 +2506,7 @@
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 86WML2UN43;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 20;
+				DYLIB_CURRENT_VERSION = 23;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				GCC_PREFIX_HEADER = "Apptentive/Misc/ApptentiveConnect-Prefix.pch";
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
@@ -2538,7 +2550,6 @@
 			};
 			name = Release;
 		};
-
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */

@@ -79,6 +79,18 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)invoke;
 
+
+/**
+ Adds the values from `otherCount` to the current object.
+
+ @param oldCount The older count object, presumably from a previous version.
+ @param newCount The newer count object, which would have been invoked last.
+ @return The sum of the two count objects.
+
+ @discussion If either is nil, the other one is returned. If both are nil, nil is returned.
+ */
++ (ApptentiveCount *)mergeOldCount:(nullable ApptentiveCount *)oldCount withNewCount:(nullable ApptentiveCount *)newCount;
+
 @end
 
 NS_ASSUME_NONNULL_END

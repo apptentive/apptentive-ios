@@ -72,6 +72,10 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)resetBuild;
 
+// Test only
++ (nullable NSString *)escapedKeyForKey:(NSString *)key;
+@property (readonly, nonatomic) NSInteger version;
+
 @end
 
 NS_ASSUME_NONNULL_END

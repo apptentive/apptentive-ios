@@ -408,7 +408,8 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 	NSString *oldAttachmentPath = [self.supportDirectoryPath stringByAppendingPathComponent:@"attachments"];
 
 	[self.managedObjectContext performBlockAndWait:^{
-	  [ApptentiveLegacyMessage enqueueUnsentMessagesInContext:self.managedObjectContext forConversation:conversation oldAttachmentPath:oldAttachmentPath newAttachmentPath:newAttachmentPath];
+	  BOOL hasMessages = [ApptentiveLegacyMessage enqueueUnsentMessagesInContext:self.managedObjectContext forConversation:conversation oldAttachmentPath:oldAttachmentPath newAttachmentPath:newAttachmentPath];
+	  [conversation setUserInfo:@(hasMessages) forKey:ApptentiveHasSentMessageKey];
 	  [ApptentiveLegacyEvent enqueueUnsentEventsInContext:self.managedObjectContext forConversation:conversation];
 	  [ApptentiveLegacySurveyResponse enqueueUnsentSurveyResponsesInContext:self.managedObjectContext forConversation:conversation];
 

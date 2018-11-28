@@ -8,11 +8,13 @@
 
 #import "ApptentiveEngagement.h"
 #import "ApptentiveCount.h"
+#import "ApptentiveBackend+Engagement.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 static NSString *const InteractionsKey = @"interactions";
 static NSString *const CodePointsKey = @"codePoints";
+static NSString *const VersionKey = @"version";
 
 // Legacy keys
 static NSString *const ATEngagementCodePointsInvokesTotalKey = @"ATEngagementCodePointsInvokesTotalKey";
@@ -23,15 +25,15 @@ static NSString *const ATEngagementInteractionsInvokesTotalKey = @"ATEngagementI
 static NSString *const ATEngagementInteractionsInvokesVersionKey = @"ATEngagementInteractionsInvokesVersionKey";
 static NSString *const ATEngagementInteractionsInvokesBuildKey = @"ATEngagementInteractionsInvokesBuildKey";
 static NSString *const ATEngagementInteractionsInvokesLastDateKey = @"ATEngagementInteractionsInvokesLastDateKey";
-
+static NSInteger const CurrentVersion = 2;
 
 @interface ApptentiveEngagement ()
 
 @property (strong, nonatomic) NSMutableDictionary<NSString *, ApptentiveCount *> *mutableInteractions;
 @property (strong, nonatomic) NSMutableDictionary<NSString *, ApptentiveCount *> *mutableCodePoints;
+@property (assign, nonatomic) NSInteger version;
 
 @end
-
 
 @implementation ApptentiveEngagement
 
@@ -40,6 +42,7 @@ static NSString *const ATEngagementInteractionsInvokesLastDateKey = @"ATEngageme
 	if (self) {
 		_mutableInteractions = [NSMutableDictionary dictionary];
 		_mutableCodePoints = [NSMutableDictionary dictionary];
+		_version = CurrentVersion;
 	}
 	return self;
 }
@@ -49,6 +52,20 @@ static NSString *const ATEngagementInteractionsInvokesLastDateKey = @"ATEngageme
 	if (self) {
 		_mutableInteractions = [coder decodeObjectOfClass:[NSMutableDictionary class] forKey:InteractionsKey];
 		_mutableCodePoints = [coder decodeObjectOfClass:[NSMutableDictionary class] forKey:CodePointsKey];
+		if ([coder containsValueForKey:VersionKey]) {
+			_version = [coder decodeIntegerForKey:VersionKey];
+		} else {
+			_version = 1;
+		}
+
+		@try {
+			if (_version != CurrentVersion) {
+				[self migrateFrom:_version to:CurrentVersion];
+			}
+		} @catch(NSException *exception) {
+			ApptentiveLogError(ApptentiveLogTagConversation, @"Caught exception %e when migrating engagement data. Starting over.", exception);
+			return [self init];
+		}
 	}
 	return self;
 }
@@ -57,8 +74,10 @@ static NSString *const ATEngagementInteractionsInvokesLastDateKey = @"ATEngageme
 	[super encodeWithCoder:coder];
 	[coder encodeObject:self.mutableInteractions forKey:InteractionsKey];
 	[coder encodeObject:self.mutableCodePoints forKey:CodePointsKey];
+	[coder encodeInteger:self.version forKey:VersionKey];
 }
 
+// This migrates pre-4.0 data stored in NSUserDefaults to 4.0 and later versions stored in NSCoding archive
 - (instancetype)initAndMigrate {
 	self = [self init];
 
@@ -94,6 +113,75 @@ static NSString *const ATEngagementInteractionsInvokesLastDateKey = @"ATEngageme
 	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATEngagementInteractionsInvokesVersionKey];
 	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATEngagementInteractionsInvokesBuildKey];
 	[[NSUserDefaults standardUserDefaults] removeObjectForKey:ATEngagementInteractionsInvokesLastDateKey];
+}
+
+- (void)migrateFrom:(NSInteger)fromVersion to:(NSInteger)toVersion {
+	if (fromVersion == 1 && toVersion == 2) {
+		if ([self escapeUnescapedKeysInCodePoints]) {
+			_version = toVersion;
+		}
+	}
+}
+
+- (BOOL)escapeUnescapedKeysInCodePoints {
+	NSMutableArray *codePointsToMerge = [NSMutableArray array];
+
+	for (NSString *key in self.codePoints) {
+		NSString *escapedKey = [[self class] escapedKeyForKey:key];
+
+		if (escapedKey == nil) {
+			continue;
+		}
+
+		[codePointsToMerge addObject:@[key, escapedKey]];
+	}
+
+	NSMutableDictionary *escapedCodePoints = [NSMutableDictionary dictionaryWithDictionary:self.codePoints];
+	for (NSArray *keys in codePointsToMerge) {
+		NSString *key = keys[0];
+		NSString *escapedKey = keys[1];
+
+		ApptentiveCount *oldCount = [self.codePoints objectForKey:key];
+		ApptentiveCount *newCount = [self.codePoints objectForKey:escapedKey];
+		escapedCodePoints[escapedKey] = [ApptentiveCount mergeOldCount:oldCount withNewCount:newCount];
+		[escapedCodePoints removeObjectForKey:key];
+	}
+
+	_mutableCodePoints = escapedCodePoints;
+
+	return YES;
+}
+
++ (nullable NSString *)escapedKeyForKey:(NSString *)key {
+	NSArray *keyParts = [key componentsSeparatedByString:@"#"];
+
+	if (keyParts.count < 3) {
+		ApptentiveLogWarning(ApptentiveLogTagConversation, @"Unable to migrate unencoded code point %@", key);
+		return nil;
+	}
+
+	NSString *vendor = keyParts[0];
+	NSString *interaction = keyParts[1];
+	// If the event name had pound signs in it, then there will be two or more parts starting at index 2.
+	// We join those parts with a pound sign, which conveniently no-ops in the case of a single part.
+	NSString *event = [[keyParts subarrayWithRange:NSMakeRange(2, keyParts.count - 2)] componentsJoinedByString:@"#"];
+
+	if ([[self class] eventNeedsEscaping:event]) {
+		return [ApptentiveBackend codePointForVendor:vendor interactionType:interaction event:event];
+	} else {
+		return nil;
+	}
+}
+
+// Use some heuristics to see if the event name needs to be escaped and hasn't already been escaped
++ (BOOL)eventNeedsEscaping:(NSString *)event {
+	// Slashes definitey need escaping
+	BOOL slashesFound = [event containsString:@"/"];
+	// Pound signs definitely need escaping
+	BOOL poundSignsFound = [event containsString:@"#"];
+	// Third-party percent signs would also need escaping, but there aren't instances of those in our events database, so we good.
+
+	return slashesFound || poundSignsFound;
 }
 
 - (NSDictionary<NSString *, ApptentiveCount *> *)interactions {

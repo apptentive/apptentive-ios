@@ -289,8 +289,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 		self.profileView.containerView.backgroundColor = [self.viewModel.styleSheet colorForStyle:ApptentiveColorBackground];
 		self.profileView.titleLabel.text = self.viewModel.profileInitialTitle;
 		self.profileView.titleLabel.textColor = [self.viewModel.styleSheet colorForStyle:ApptentiveTextStyleButton];
-		self.profileView.requiredLabel.text = self.viewModel.profileInitialEmailExplanation;
-		self.profileView.requiredLabel.textColor = [self.viewModel.styleSheet colorForStyle:ApptentiveTextStyleSurveyInstructions];
 		[self.profileView.saveButton setTitle:self.viewModel.profileInitialSaveButtonTitle forState:UIControlStateNormal];
 		[self.profileView.skipButton setTitle:self.viewModel.profileInitialSkipButtonTitle forState:UIControlStateNormal];
 		self.profileView.skipButton.hidden = self.viewModel.profileRequired;
@@ -306,14 +304,11 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 		if (self.viewModel.profileRequired && [self shouldShowProfileViewBeforeComposing:YES]) {
 			self.profileView.skipButton.hidden = YES;
-			self.profileView.mode = ATMessageCenterProfileModeCompact;
 
 			self.composeButtonItem.enabled = NO;
 			self.neuMessageButtonItem.enabled = NO;
-		} else {
-			self.profileView.mode = ATMessageCenterProfileModeFull;
 		}
-	} else {
+    } else {
 		self.navigationItem.leftBarButtonItem = nil;
 	}
 }
@@ -743,8 +738,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (IBAction)showWho:(id)sender {
-	self.profileView.mode = ATMessageCenterProfileModeFull;
-
 	self.profileView.skipButton.hidden = NO;
 	self.profileView.titleLabel.text = self.viewModel.profileEditTitle;
 
@@ -1254,7 +1247,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.profileView.titleLabel.font = [self.viewModel.styleSheet fontForStyle:ApptentiveTextStyleButton];
 	self.profileView.saveButton.titleLabel.font = [self.viewModel.styleSheet fontForStyle:ApptentiveTextStyleDoneButton];
 	self.profileView.skipButton.titleLabel.font = [self.viewModel.styleSheet fontForStyle:ApptentiveTextStyleButton];
-	self.profileView.requiredLabel.font = [self.viewModel.styleSheet fontForStyle:ApptentiveTextStyleSurveyInstructions];
 	self.profileView.nameField.font = [self.viewModel.styleSheet fontForStyle:ApptentiveTextStyleTextInput];
 	self.profileView.emailField.font = [self.viewModel.styleSheet fontForStyle:ApptentiveTextStyleTextInput];
 }

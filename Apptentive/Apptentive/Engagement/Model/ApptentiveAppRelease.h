@@ -24,6 +24,12 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (readonly, strong, nonatomic) NSString *type;
 
+
+/**
+ The bundle identifier of the app, e.g. com.example.MyApp
+ */
+@property (readonly, strong, nonatomic) NSString *bundleIdentifier;
+
 /**
  The version object corresponding to the value of the
  `CFBundleShortVersionString` key in the application's `Info.plist` file.

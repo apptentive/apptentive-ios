@@ -81,6 +81,8 @@
 	XCTAssertFalse(self.conversation.appRelease.debugBuild);
 #endif
 
+    XCTAssertEqualObjects(self.conversation.appRelease.bundleIdentifier, @"com.apple.dt.xctest.tool");
+
 	XCTAssertFalse(self.conversation.appRelease.isUpdateBuild);
 	XCTAssertFalse(self.conversation.appRelease.isUpdateVersion);
 	XCTAssertFalse(self.conversation.appRelease.isOverridingStyles);

@@ -12,6 +12,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 static NSString *const TypeKey = @"type";
+static NSString *const BundleIdentifierKey = @"bundleIdentifier";
 static NSString *const VersionKey = @"version";
 static NSString *const BuildKey = @"build";
 static NSString *const HasAppStoreReceiptKey = @"hasAppStoreReceipt";
@@ -62,6 +63,7 @@ static NSString *const ATEngagementIsUpdateBuildKey = @"ATEngagementIsUpdateBuil
 
 	if (self) {
 		_type = @"ios";
+        _bundleIdentifier = NSBundle.mainBundle.infoDictionary[@"CFBundleIdentifier"];
 		_version = [[ApptentiveVersion alloc] initWithString:[NSBundle mainBundle].infoDictionary[@"CFBundleShortVersionString"]];
 		_build = [[ApptentiveVersion alloc] initWithString:[NSBundle mainBundle].infoDictionary[(NSString *)kCFBundleVersionKey]];
 		_hasAppStoreReceipt = [NSData dataWithContentsOfURL:[NSBundle mainBundle].appStoreReceiptURL] != nil;
@@ -89,6 +91,7 @@ static NSString *const ATEngagementIsUpdateBuildKey = @"ATEngagementIsUpdateBuil
 
 	if (self) {
 		_type = [coder decodeObjectOfClass:[NSString class] forKey:TypeKey];
+        _bundleIdentifier = [coder decodeObjectOfClass:[NSString class] forKey:BundleIdentifierKey];
 		_version = [coder decodeObjectOfClass:[ApptentiveVersion class] forKey:VersionKey];
 		_build = [coder decodeObjectOfClass:[ApptentiveVersion class] forKey:BuildKey];
 		_hasAppStoreReceipt = [coder decodeBoolForKey:HasAppStoreReceiptKey];
@@ -119,6 +122,7 @@ static NSString *const ATEngagementIsUpdateBuildKey = @"ATEngagementIsUpdateBuil
 	[super encodeWithCoder:coder];
 
 	[coder encodeObject:self.type forKey:TypeKey];
+    [coder encodeObject:self.bundleIdentifier forKey:BundleIdentifierKey];
 	[coder encodeObject:self.version forKey:VersionKey];
 	[coder encodeObject:self.build forKey:BuildKey];
 	[coder encodeBool:self.hasAppStoreReceipt forKey:HasAppStoreReceiptKey];
@@ -235,6 +239,7 @@ static NSString *const ATEngagementIsUpdateBuildKey = @"ATEngagementIsUpdateBuil
 + (NSDictionary *)JSONKeyPathMapping {
 	return @{
 		@"type": NSStringFromSelector(@selector(type)),
+        @"cf_bundle_identifier": NSStringFromSelector(@selector(bundleIdentifier)),
 		@"cf_bundle_short_version_string": NSStringFromSelector(@selector(versionString)),
 		@"cf_bundle_version": NSStringFromSelector(@selector(buildString)),
 		@"app_store_receipt": NSStringFromSelector(@selector(appStoreReceiptDictionary)),

@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
-        <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
-        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
-        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -23,7 +19,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <gestureRecognizers/>
-                        <view key="tableHeaderView" contentMode="scaleToFill" id="3OP-Us-sTC" customClass="ApptentiveMessageCenterGreetingView">
+                        <view key="tableHeaderView" contentMode="scaleToFill" misplaced="YES" id="3OP-Us-sTC" customClass="ApptentiveMessageCenterGreetingView">
                             <rect key="frame" x="0.0" y="0.0" width="375" height="258"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
@@ -38,7 +34,7 @@
                                     </userDefinedRuntimeAttributes>
                                 </imageView>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sQH-Xo-hct" userLabel="Bottom Border">
-                                    <rect key="frame" x="0.0" y="257" width="375" height="1"/>
+                                    <rect key="frame" x="0.0" y="213" width="375" height="1"/>
                                     <color key="backgroundColor" red="0.81568627450980391" green="0.83137254901960778" blue="0.85490196078431369" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="1" id="xWx-Gq-u4K"/>
@@ -59,16 +55,16 @@
                                     </connections>
                                 </button>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GdB-EU-leh">
-                                    <rect key="frame" x="37.5" y="136" width="300" height="104"/>
+                                    <rect key="frame" x="37.5" y="136" width="300" height="60"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="We'd love to get feedback from you on your app." textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="8" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="Zbc-2w-9Gi">
-                                            <rect key="frame" x="8" y="39.5" width="284" height="64.5"/>
+                                            <rect key="frame" x="8" y="25.5" width="284" height="34.5"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                             <color key="textColor" red="0.51764705882352935" green="0.51764705882352935" blue="0.56470588235294117" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hello!" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="304" translatesAutoresizingMaskIntoConstraints="NO" id="kjS-eF-EIi">
-                                            <rect key="frame" x="8" y="0.0" width="284" height="31.5"/>
+                                            <rect key="frame" x="8" y="0.0" width="284" height="17.5"/>
                                             <fontDescription key="fontDescription" type="system" weight="light" pointSize="22"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
@@ -332,12 +328,6 @@
                                                         <outlet property="delegate" destination="W0l-Dy-ioE" id="K1r-eF-uzX"/>
                                                     </connections>
                                                 </textField>
-                                                <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Required so we can get back to you." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hhv-V6-6VP">
-                                                    <rect key="frame" x="18" y="121" width="219.5" height="16"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                                    <color key="textColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
                                             </subviews>
                                             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <constraints>
@@ -345,7 +335,6 @@
                                                 <constraint firstItem="8sl-tE-JA8" firstAttribute="leading" secondItem="PJM-ba-h4O" secondAttribute="leading" constant="18" id="6Ja-O1-nhy"/>
                                                 <constraint firstAttribute="trailing" secondItem="Pbw-4k-2h3" secondAttribute="trailing" id="8HX-ic-Xbi"/>
                                                 <constraint firstItem="WEB-50-wCX" firstAttribute="trailing" secondItem="8sl-tE-JA8" secondAttribute="trailing" id="COP-kc-keG"/>
-                                                <constraint firstItem="Hhv-V6-6VP" firstAttribute="top" secondItem="TsT-ug-J0g" secondAttribute="bottom" constant="3" id="Cph-PZ-MX3"/>
                                                 <constraint firstItem="WEB-50-wCX" firstAttribute="top" secondItem="8sl-tE-JA8" secondAttribute="bottom" constant="16" id="DHd-i8-oAa"/>
                                                 <constraint firstItem="8sl-tE-JA8" firstAttribute="top" secondItem="PJM-ba-h4O" secondAttribute="top" constant="16" id="EFa-0N-SGh"/>
                                                 <constraint firstAttribute="bottom" secondItem="Pbw-4k-2h3" secondAttribute="bottom" id="GC6-T4-rHB"/>
@@ -353,7 +342,6 @@
                                                 <constraint firstItem="8sl-tE-JA8" firstAttribute="trailing" secondItem="TsT-ug-J0g" secondAttribute="trailing" id="Liq-y7-BCY"/>
                                                 <constraint firstItem="WEB-50-wCX" firstAttribute="leading" secondItem="8sl-tE-JA8" secondAttribute="leading" id="OXd-f6-L6I"/>
                                                 <constraint firstItem="TsT-ug-J0g" firstAttribute="top" secondItem="8sl-tE-JA8" secondAttribute="bottom" priority="100" constant="16" id="RPZ-GJ-Ysz"/>
-                                                <constraint firstItem="Hhv-V6-6VP" firstAttribute="leading" secondItem="TsT-ug-J0g" secondAttribute="leading" id="kfn-Zf-yZw"/>
                                                 <constraint firstAttribute="trailing" secondItem="8sl-tE-JA8" secondAttribute="trailing" constant="18" id="l0h-wW-K1k"/>
                                                 <constraint firstItem="WEB-50-wCX" firstAttribute="width" secondItem="TsT-ug-J0g" secondAttribute="width" id="w24-De-Rf8"/>
                                                 <constraint firstItem="TsT-ug-J0g" firstAttribute="top" secondItem="WEB-50-wCX" secondAttribute="bottom" constant="8" id="xCZ-s0-1oX"/>
@@ -383,7 +371,6 @@
                                         <outlet property="nameField" destination="WEB-50-wCX" id="6db-F7-3sw"/>
                                         <outlet property="nameTrailingConstraint" destination="COP-kc-keG" id="5fL-LW-0pC"/>
                                         <outlet property="nameVerticalSpaceToEmail" destination="xCZ-s0-1oX" id="UfP-z0-RbJ"/>
-                                        <outlet property="requiredLabel" destination="Hhv-V6-6VP" id="fsh-Tc-sEI"/>
                                         <outlet property="saveButton" destination="EJ0-DT-gxJ" id="p4c-6n-T9l"/>
                                         <outlet property="skipButton" destination="ucW-DV-V6C" id="6It-vF-gMD"/>
                                         <outlet property="titleLabel" destination="8sl-tE-JA8" id="aeG-Ma-iLJ"/>
@@ -580,14 +567,14 @@
                                                                 <rect key="frame" x="16" y="62" width="28" height="2"/>
                                                             </progressView>
                                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Ko1-Lh-LSg">
-                                                                <rect key="frame" x="12" y="16" width="37" height="48"/>
+                                                                <rect key="frame" x="11.5" y="16" width="37" height="48"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="37" id="8br-A2-oxZ"/>
                                                                     <constraint firstAttribute="height" constant="48" id="aH4-O0-P1L"/>
                                                                 </constraints>
                                                             </imageView>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="pdf" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HZk-wq-oXY">
-                                                                <rect key="frame" x="20" y="32" width="21" height="16"/>
+                                                                <rect key="frame" x="19.5" y="32" width="21" height="16"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                 <nil key="highlightedColor"/>
@@ -675,7 +662,7 @@
                                             </userDefinedRuntimeAttributes>
                                         </imageView>
                                         <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="8yd-Pf-GMV" customClass="ApptentiveIndexedCollectionView">
-                                            <rect key="frame" x="0.0" y="90" width="375" height="79"/>
+                                            <rect key="frame" x="0.0" y="89.5" width="375" height="79"/>
                                             <color key="backgroundColor" red="0.96862745100000003" green="0.96862745100000003" blue="0.97647058819999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="79" id="Zg6-bh-qrn"/>
@@ -698,14 +685,14 @@
                                                                 <rect key="frame" x="16" y="62" width="28" height="2"/>
                                                             </progressView>
                                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="vd2-Ch-rnE">
-                                                                <rect key="frame" x="12" y="16" width="37" height="48"/>
+                                                                <rect key="frame" x="11.5" y="16" width="37" height="48"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="48" id="0mM-io-lR8"/>
                                                                     <constraint firstAttribute="width" constant="37" id="xRW-KI-epx"/>
                                                                 </constraints>
                                                             </imageView>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="pdf" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cFG-01-BJv">
-                                                                <rect key="frame" x="20" y="32" width="21" height="16"/>
+                                                                <rect key="frame" x="19.5" y="32" width="21" height="16"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                 <nil key="highlightedColor"/>
@@ -732,7 +719,7 @@
                                             </cells>
                                         </collectionView>
                                         <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" verticalCompressionResistancePriority="749" scrollEnabled="NO" editable="NO" text="Yeah, I like the app overall, but it just closed without saving. Can you help?" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="OL7-yh-Ixu">
-                                            <rect key="frame" x="61" y="33" width="299" height="57"/>
+                                            <rect key="frame" x="61" y="33" width="299" height="56.5"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                             <dataDetectorType key="dataDetectorTypes" phoneNumber="YES" link="YES" address="YES"/>
@@ -886,7 +873,7 @@
                     </connections>
                 </collectionView>
             </objects>
-            <point key="canvasLocation" x="350" y="604"/>
+            <point key="canvasLocation" x="507.24637681159425" y="404.46428571428572"/>
         </scene>
         <!--Apptentive Navigation Controller-->
         <scene sceneID="B96-Wi-z9y">
@@ -902,7 +889,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iHE-Jk-VUn" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-190" y="1342"/>
+            <point key="canvasLocation" x="-275.36231884057975" y="898.66071428571422"/>
         </scene>
         <!--Message Center Error View-->
         <scene sceneID="G8v-Qy-vVc">
@@ -953,7 +940,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oFN-UH-K4t" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="303" y="1342"/>
+            <point key="canvasLocation" x="439.13043478260875" y="898.66071428571422"/>
         </scene>
         <!--Apptentive Banner View Controller-->
         <scene sceneID="pcU-LA-MMv">
@@ -1041,7 +1028,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="800" y="938"/>
+            <point key="canvasLocation" x="1159.4202898550725" y="628.125"/>
         </scene>
         <!--About-->
         <scene sceneID="zxj-fk-0sF">
@@ -1118,7 +1105,7 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YNL-fH-V4b" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="800" y="520"/>
+            <point key="canvasLocation" x="1159.4202898550725" y="348.21428571428572"/>
         </scene>
         <!--Apptentive Navigation Controller-->
         <scene sceneID="Xx8-Lb-CI2">
@@ -1138,7 +1125,7 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BbL-CI-qsi" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-190" y="604"/>
+            <point key="canvasLocation" x="-275.36231884057975" y="404.46428571428572"/>
         </scene>
         <!--Apptentive Navigation Controller-->
         <scene sceneID="L0d-DX-A0W">
@@ -1153,7 +1140,7 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lGe-NI-XIe" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-190" y="2021"/>
+            <point key="canvasLocation" x="-275.36231884057975" y="1353.3482142857142"/>
         </scene>
         <!--Apptentive Interaction Upgrade Message View Controller-->
         <scene sceneID="ZBg-KV-iHb">
@@ -1192,11 +1179,11 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
                                 <rect key="frame" x="0.0" y="634" width="375" height="33"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="at_update_logo.png" translatesAutoresizingMaskIntoConstraints="NO" id="II0-bw-JAC" userLabel="poweredByImage">
-                                        <rect key="frame" x="190" y="10" width="85" height="16"/>
+                                        <rect key="frame" x="189.5" y="9.5" width="85" height="16"/>
                                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                     </imageView>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="1000" text="Powered by" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="7" translatesAutoresizingMaskIntoConstraints="NO" id="SaJ-AG-jHh">
-                                        <rect key="frame" x="110" y="7" width="76" height="17"/>
+                                        <rect key="frame" x="109.5" y="7" width="76" height="17"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <color key="textColor" red="0.52962923049926758" green="0.52933984994888306" blue="0.53808635473251343" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
@@ -1226,7 +1213,7 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
                                 </constraints>
                             </view>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="oVM-16-SXc" userLabel="AppIcon">
-                                <rect key="frame" x="148" y="84" width="80" height="80"/>
+                                <rect key="frame" x="147.5" y="84" width="80" height="80"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="oVM-16-SXc" secondAttribute="height" multiplier="1:1" id="9DI-uq-Pkx"/>
                                     <constraint firstAttribute="width" constant="80" id="r5X-Ks-laa"/>
@@ -1277,7 +1264,7 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="303" y="2021"/>
+            <point key="canvasLocation" x="439.13043478260875" y="1353.3482142857142"/>
         </scene>
         <!--Apptentive Navigation Controller-->
         <scene sceneID="4Ue-53-Dzz">
@@ -1294,7 +1281,7 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9B6-oc-5ra" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-190" y="2832"/>
+            <point key="canvasLocation" x="-275.36231884057975" y="1896.4285714285713"/>
         </scene>
         <!--Apptentive Survey View Controller-->
         <scene sceneID="AdM-Ua-90G">
@@ -1860,7 +1847,7 @@ Lines</string>
                     <viewLayoutGuide key="safeArea" id="SNv-iB-3hH"/>
                 </view>
             </objects>
-            <point key="canvasLocation" x="303" y="2832"/>
+            <point key="canvasLocation" x="439.13043478260875" y="1896.4285714285713"/>
         </scene>
     </scenes>
     <resources>

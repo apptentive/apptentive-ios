@@ -213,10 +213,6 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 	return self.interaction.configuration[@"profile"][@"initial"][@"save_button"];
 }
 
-- (NSString *)profileInitialEmailExplanation {
-	return self.interaction.configuration[@"profile"][@"initial"][@"email_explanation"];
-}
-
 #pragma mark - Profile (Edit)
 
 - (NSString *)profileEditTitle {
@@ -299,6 +295,10 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 
 - (ATMessageCenterMessageStatus)statusOfMessageAtIndexPath:(NSIndexPath *)indexPath {
 	ApptentiveMessage *message = [self messageAtIndexPath:indexPath];
+
+	if (message.hidden) {
+		return ATMessageCenterMessageStatusHidden;
+	}
 
 	switch (message.state) {
 		case ApptentiveMessageStateFailedToSend:

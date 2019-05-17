@@ -25,9 +25,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) NSArray *portraitFullConstraints;
 @property (strong, nonatomic) NSArray *landscapeFullConstraints;
 
-@property (strong, nonatomic) NSArray *portraitCompactConstraints;
-@property (strong, nonatomic) NSArray *landscapeCompactConstraints;
-
 @property (strong, nonatomic) NSArray *baseConstraints;
 
 @end
@@ -42,14 +39,12 @@ NS_ASSUME_NONNULL_BEGIN
 	self.buttonBar.layer.borderWidth = borderWidth;
 
 	self.portraitFullConstraints = @[self.nameTrailingConstraint, self.emailLeadingConstraint, self.nameVerticalSpaceToEmail];
-	self.portraitCompactConstraints = @[self.nameTrailingConstraint, self.emailLeadingConstraint];
 
 	self.nameHorizontalSpaceToEmail = [NSLayoutConstraint constraintWithItem:self.nameField attribute:NSLayoutAttributeTrailing relatedBy:NSLayoutRelationEqual toItem:self.emailField attribute:NSLayoutAttributeLeading multiplier:1.0 constant:-8.0];
 	NSLayoutConstraint *nameEmailTopAlignment = [NSLayoutConstraint constraintWithItem:self.nameField attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.emailField attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.0];
 	NSLayoutConstraint *nameEmailBottomAlignment = [NSLayoutConstraint constraintWithItem:self.nameField attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.emailField attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0.0];
 
 	self.landscapeFullConstraints = @[self.nameHorizontalSpaceToEmail, nameEmailTopAlignment, nameEmailBottomAlignment];
-	self.landscapeCompactConstraints = @[self.emailLeadingConstraint, nameEmailTopAlignment, nameEmailBottomAlignment];
 
 	// Find constraints common to both modes/orientations
 	NSMutableSet *baseConstraintSet = [NSMutableSet setWithArray:self.containerView.constraints];
@@ -60,11 +55,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 - (BOOL)becomeFirstResponder {
-	if (self.mode == ATMessageCenterProfileModeFull) {
-		return [self.nameField becomeFirstResponder];
-	} else {
-		return [self.emailField becomeFirstResponder];
-	}
+    return [self.nameField becomeFirstResponder];
 }
 
 - (void)setBorderColor:(UIColor *)borderColor {
@@ -79,65 +70,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 	// Deactivate all, then selectively re-activate
 	[NSLayoutConstraint deactivateConstraints:self.portraitFullConstraints];
-	[NSLayoutConstraint deactivateConstraints:self.portraitCompactConstraints];
 	[NSLayoutConstraint deactivateConstraints:self.landscapeFullConstraints];
-	[NSLayoutConstraint deactivateConstraints:self.landscapeCompactConstraints];
 
 	if (self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassCompact) {
-		switch (self.mode) {
-			case ATMessageCenterProfileModeFull:
-				[NSLayoutConstraint activateConstraints:self.landscapeFullConstraints];
-				break;
-
-			case ATMessageCenterProfileModeCompact:
-				[NSLayoutConstraint activateConstraints:self.landscapeCompactConstraints];
-				break;
-		}
+        [NSLayoutConstraint activateConstraints:self.landscapeFullConstraints];
 	} else {
-		switch (self.mode) {
-			case ATMessageCenterProfileModeFull:
-				[NSLayoutConstraint activateConstraints:self.portraitFullConstraints];
-				break;
-
-			case ATMessageCenterProfileModeCompact:
-				[NSLayoutConstraint activateConstraints:self.portraitCompactConstraints];
-				break;
-		}
-	}
-}
-
-- (void)setMode:(ATMessageCenterProfileMode)mode {
-	if (_mode != mode) {
-		_mode = mode;
-
-		CGFloat nameFieldAlpha;
-
-		if (mode == ATMessageCenterProfileModeCompact) {
-			self.requiredLabel.hidden = NO;
-			nameFieldAlpha = 0;
-			self.emailVerticalSpaceToButtonBar.constant = 37.0;
-		} else {
-			self.nameField.hidden = NO;
-			nameFieldAlpha = 1;
-			self.emailVerticalSpaceToButtonBar.constant = 16.0;
-		}
-
-		[self traitCollectionDidChange:self.traitCollection];
-
-		[UIView animateWithDuration:0.25
-			animations:^{
-			  self.nameField.alpha = nameFieldAlpha;
-			  self.requiredLabel.alpha = 1.0 - nameFieldAlpha;
-
-			  [self layoutIfNeeded];
-			}
-			completion:^(BOOL finished) {
-			  if (nameFieldAlpha == 0) {
-				  self.nameField.hidden = YES;
-			  } else {
-				  self.requiredLabel.hidden = YES;
-			  }
-			}];
+        [NSLayoutConstraint activateConstraints:self.portraitFullConstraints];
 	}
 }
 

@@ -12,6 +12,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 @interface ApptentiveSurveyAnswerCell : UICollectionViewCell
+
+@property (nonatomic, assign) BOOL forceUnhide;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -62,7 +62,7 @@ NS_ASSUME_NONNULL_BEGIN
 	}
 
 	JSON[@"automated"] = @(self.message.automated);
-	JSON[@"hidden"] = @(self.message.state == ApptentiveMessageStateHidden);
+	JSON[@"hidden"] = @(self.message.hidden);
 
 	if (self.message.customData) {
 		NSDictionary *customDataDictionary = self.message.customData;

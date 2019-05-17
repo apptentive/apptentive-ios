@@ -416,6 +416,23 @@ NS_ASSUME_NONNULL_BEGIN
 	}
 }
 
+- (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
+    // We need to work around a bug where cells that are/contain the first responder sometimes disappear.
+    // An internal property (_isHiddenForReuse) gets incorrectly stuck set to true, which hides the cell
+    // in one of two ways depending on OS version (see https://openradar.appspot.com/39604024)
+
+    // In iOS 12.2, it sets the cell's layer to hidden, so we can undo that easily:
+    cell.layer.hidden = NO;
+
+    // In iOS 10..<12.2 we need to force the hidden property to be false, so we use a custom getter in the
+    // cell that looks at our `forceUnhide` property.
+    if ([cell isKindOfClass:ApptentiveSurveyAnswerCell.class]) {
+        // If a cell is about to be displayed and is hidden, override it.
+        // If the cell is behaving correctly, clear the flag.
+        ((ApptentiveSurveyAnswerCell *)cell).forceUnhide = !cell.hidden;
+    }
+}
+
 #pragma mark Collection View Flow Layout Delegate
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {

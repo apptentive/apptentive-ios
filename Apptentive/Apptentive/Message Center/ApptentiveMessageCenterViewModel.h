@@ -76,7 +76,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterMessageStatus) {
 @property (readonly, nonatomic) NSString *profileInitialEmailPlaceholder;
 @property (readonly, nonatomic) NSString *profileInitialSkipButtonTitle;
 @property (readonly, nonatomic) NSString *profileInitialSaveButtonTitle;
-@property (readonly, nonatomic) NSString *profileInitialEmailExplanation;
 
 @property (readonly, nonatomic) NSString *profileEditTitle;
 @property (readonly, nonatomic) NSString *profileEditNamePlaceholder;

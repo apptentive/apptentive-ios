@@ -1,3 +1,15 @@
+# 2019-05-17 - v5.2.4
+
+#### Bugs Fixed
+
+* Work around an iOS bug where survey text fields could disappear.
+* Fix an issue where hidden messages (send with `sendAttachment()`) were visible in Message Center
+
+#### Improvements
+
+* Explicitly set the protection level on Message Center attachments.
+* Also ask for name when Message Center requires an email address.
+
 # 2018-11-27 - v5.2.3
 
 #### Bugs Fixed

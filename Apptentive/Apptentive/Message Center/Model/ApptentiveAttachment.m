@@ -98,7 +98,14 @@ static NSString *const RemoteURLKey = @"remoteURL";
 		_attachmentDirectoryPath = attachmentDirectoryPath;
 
 		NSURL *URL = [self permanentLocation];
-		[data writeToURL:URL atomically:YES];
+		NSError *error = nil;
+		BOOL success = [data writeToURL:URL options:NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUntilFirstUserAuthentication error:&error];
+
+		if (!success) {
+			ApptentiveLogError(ApptentiveLogTagMessages, @"Failed to write attachment to path");
+			return nil;
+		}
+
 		_filename = URL.lastPathComponent;
 		_size = [data length];
 	}

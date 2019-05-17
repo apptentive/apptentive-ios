@@ -229,6 +229,7 @@ static Apptentive *_nullInstance;
 	  }
 
 	  ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:text attachments:nil automated:NO customData:nil creationDate:[NSDate date]];
+	  message.hidden = YES;
 	  ApptentiveAssertNotNil(message, @"Message is nil");
 
 	  if (message != nil) {
@@ -268,6 +269,7 @@ static Apptentive *_nullInstance;
 	  ApptentiveAssertNotNil(attachment, @"Attachment is nil");
 	  if (attachment != nil) {
 		  ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:nil attachments:@[attachment] automated:NO customData:nil creationDate:[NSDate date]];
+		  message.hidden = YES;
 		  ApptentiveAssertNotNil(message, @"Message is nil");
 
 		  if (message != nil) {
@@ -308,8 +310,9 @@ static Apptentive *_nullInstance;
 
 	  if (attachment != nil) {
 		  ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:nil attachments:@[attachment] automated:NO customData:nil creationDate:[NSDate date]];
-
+		  message.hidden = YES;
 		  ApptentiveAssertNotNil(message, @"Message is nil");
+
 		  if (message != nil) {
 			  if (self.messageManager) {
 				  [self.messageManager enqueueMessageForSending:message];

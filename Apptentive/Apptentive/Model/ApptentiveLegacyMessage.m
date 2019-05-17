@@ -91,7 +91,7 @@ NS_ASSUME_NONNULL_BEGIN
 			ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:legacyMessage.body attachments:attachments automated:legacyMessage.automated.boolValue customData:customData creationDate:[NSDate dateWithTimeIntervalSince1970:legacyMessage.clientCreationTime.doubleValue]];
 
 			if (legacyMessage.hidden.boolValue) {
-				message.state = ApptentiveMessageStateHidden;
+				message.hidden = YES;
 			}
 
 			ApptentiveMessagePayload *payload = [[ApptentiveMessagePayload alloc] initWithMessage:message sessionIdentifier:nil];

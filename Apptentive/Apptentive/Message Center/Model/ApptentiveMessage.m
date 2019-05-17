@@ -82,14 +82,17 @@ static NSString *const SessionIdentifier = @"sessionIdentifier";
 			_inbound = YES;
 		}
 
+
 		if ([JSON[@"hidden"] isKindOfClass:[NSNumber class]] && [JSON[@"hidden"] boolValue]) {
-			_state = ApptentiveMessageStateHidden;
+			_hidden = YES;
 		} else {
-			if (_inbound) {
-				_state = ApptentiveMessageStateSent;
-			} else {
-				_state = ApptentiveMessageStateUnread;
-			}
+			_hidden = NO;
+		}
+
+		if (_inbound) {
+			_state = ApptentiveMessageStateSent;
+		} else {
+			_state = ApptentiveMessageStateUnread;
 		}
 
 		_identifier = ApptentiveDictionaryGetString(JSON, @"id");

@@ -50,6 +50,9 @@ NSString *const ATInteractionAboutViewEventLabelClose = @"close";
 	self.aboutLabel.text = ApptentiveLocalizedString(@"Apptentive is a service that allows you to have a conversation with the makers of this app. Your input and feedback can help to provide you with a better overall experience.\n\nYour feedback is hosted by Apptentive and is subject to both Apptentive’s privacy policy and the privacy policy of this app’s developer.", @"About apptentive introductory message");
 	[self.aboutButton setTitle:ApptentiveLocalizedString(@"Learn about Apptentive", @"About apptentive link button label") forState:UIControlStateNormal];
 	[self.privacyButton setTitle:ApptentiveLocalizedString(@"Apptentive’s Privacy Policy", @"About apptentive privacy button label") forState:UIControlStateNormal];
+
+	self.view.backgroundColor = [Apptentive.shared.styleSheet colorForStyle:ApptentiveColorBackground];
+	self.aboutLabel.textColor = [Apptentive.shared.styleSheet colorForStyle:ApptentiveTextStyleBody];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {

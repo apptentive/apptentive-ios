@@ -20,7 +20,7 @@ FOUNDATION_EXPORT double ApptentiveVersionNumber;
 FOUNDATION_EXPORT const unsigned char ApptentiveVersionString[];
 
 /** The version number of the Apptentive SDK. */
-#define kApptentiveVersionString @"5.2.4"
+#define kApptentiveVersionString @"5.2.5"
 
 /** The version number of the Apptentive API platform. */
 #define kApptentiveAPIVersionString @"9"
@@ -256,8 +256,8 @@ typedef NS_ENUM(NSUInteger, ApptentiveLogLevel) {
 /**
  Shows interaction UI, if applicable, related to a given event.
 
- For example, if you have an upgrade message to display on app launch, you might call with event label set to
- `@"app.launch"` here, along with the view controller an upgrade message might be displayed from.
+ For example, if you have a survey to display on app launch, you might call with event label set to
+ `@"app.launch"` here, along with the view controller survey should be displayed from.
 
  @param event A string representing the name of the event.
  @param viewController A view controller Apptentive UI may be presented from. If `nil`, a view controller should be provided by the delegate.
@@ -267,9 +267,9 @@ typedef NS_ENUM(NSUInteger, ApptentiveLogLevel) {
 /**
  Shows interaction UI, if applicable, related to a given event.
  
- For example, if you have an upgrade message to display on app launch, you might call with event label set to
- `@"app.launch"` here, along with the view controller an upgrade message might be displayed from.
- 
+ For example, if you have a survey to display on app launch, you might call with event label set to
+ `@"app.launch"` here, along with the view controller survey should be displayed from.
+
  @param event A string representing the name of the event.
  @param viewController A view controller Apptentive UI may be presented from. If `nil`, a view controller should be provided by the delegate.
  @param completion A completion callback

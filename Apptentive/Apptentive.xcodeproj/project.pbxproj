@@ -125,10 +125,6 @@
 		01A2D1181E490A9700C2103A /* ApptentiveInteractionRatingDialogController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2CFD11E490A9700C2103A /* ApptentiveInteractionRatingDialogController.m */; };
 		01A2D1191E490A9700C2103A /* ApptentiveInteractionSurveyController.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2CFD31E490A9700C2103A /* ApptentiveInteractionSurveyController.h */; };
 		01A2D11A1E490A9700C2103A /* ApptentiveInteractionSurveyController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2CFD41E490A9700C2103A /* ApptentiveInteractionSurveyController.m */; };
-		01A2D11B1E490A9700C2103A /* ApptentiveInteractionUpgradeMessageController.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2CFD61E490A9700C2103A /* ApptentiveInteractionUpgradeMessageController.h */; };
-		01A2D11C1E490A9700C2103A /* ApptentiveInteractionUpgradeMessageController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2CFD71E490A9700C2103A /* ApptentiveInteractionUpgradeMessageController.m */; };
-		01A2D11D1E490A9700C2103A /* ApptentiveInteractionUpgradeMessageViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2CFD81E490A9700C2103A /* ApptentiveInteractionUpgradeMessageViewController.h */; };
-		01A2D11E1E490A9700C2103A /* ApptentiveInteractionUpgradeMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2CFD91E490A9700C2103A /* ApptentiveInteractionUpgradeMessageViewController.m */; };
 		01A2D11F1E490A9700C2103A /* ApptentiveAppRelease.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2CFDB1E490A9700C2103A /* ApptentiveAppRelease.h */; };
 		01A2D1201E490A9700C2103A /* ApptentiveAppRelease.m in Sources */ = {isa = PBXBuildFile; fileRef = 01A2CFDC1E490A9700C2103A /* ApptentiveAppRelease.m */; };
 		01A2D1211E490A9700C2103A /* ApptentiveCount.h in Headers */ = {isa = PBXBuildFile; fileRef = 01A2CFDD1E490A9700C2103A /* ApptentiveCount.h */; };
@@ -566,10 +562,6 @@
 		01A2CFD11E490A9700C2103A /* ApptentiveInteractionRatingDialogController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveInteractionRatingDialogController.m; sourceTree = "<group>"; };
 		01A2CFD31E490A9700C2103A /* ApptentiveInteractionSurveyController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveInteractionSurveyController.h; sourceTree = "<group>"; };
 		01A2CFD41E490A9700C2103A /* ApptentiveInteractionSurveyController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveInteractionSurveyController.m; sourceTree = "<group>"; };
-		01A2CFD61E490A9700C2103A /* ApptentiveInteractionUpgradeMessageController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveInteractionUpgradeMessageController.h; sourceTree = "<group>"; };
-		01A2CFD71E490A9700C2103A /* ApptentiveInteractionUpgradeMessageController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveInteractionUpgradeMessageController.m; sourceTree = "<group>"; };
-		01A2CFD81E490A9700C2103A /* ApptentiveInteractionUpgradeMessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveInteractionUpgradeMessageViewController.h; sourceTree = "<group>"; };
-		01A2CFD91E490A9700C2103A /* ApptentiveInteractionUpgradeMessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveInteractionUpgradeMessageViewController.m; sourceTree = "<group>"; };
 		01A2CFDB1E490A9700C2103A /* ApptentiveAppRelease.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveAppRelease.h; sourceTree = "<group>"; };
 		01A2CFDC1E490A9700C2103A /* ApptentiveAppRelease.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveAppRelease.m; sourceTree = "<group>"; };
 		01A2CFDD1E490A9700C2103A /* ApptentiveCount.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveCount.h; sourceTree = "<group>"; };
@@ -1098,7 +1090,6 @@
 				01A2CFC41E490A9700C2103A /* Notes */,
 				01A2CFC91E490A9700C2103A /* Rating Flow */,
 				01A2CFD21E490A9700C2103A /* Surveys */,
-				01A2CFD51E490A9700C2103A /* Upgrade Message */,
 				01A2CFBD1E490A9700C2103A /* ApptentiveInteractionController.h */,
 				01A2CFBE1E490A9700C2103A /* ApptentiveInteractionController.m */,
 			);
@@ -1138,17 +1129,6 @@
 				01A2CFD41E490A9700C2103A /* ApptentiveInteractionSurveyController.m */,
 			);
 			path = Surveys;
-			sourceTree = "<group>";
-		};
-		01A2CFD51E490A9700C2103A /* Upgrade Message */ = {
-			isa = PBXGroup;
-			children = (
-				01A2CFD61E490A9700C2103A /* ApptentiveInteractionUpgradeMessageController.h */,
-				01A2CFD71E490A9700C2103A /* ApptentiveInteractionUpgradeMessageController.m */,
-				01A2CFD81E490A9700C2103A /* ApptentiveInteractionUpgradeMessageViewController.h */,
-				01A2CFD91E490A9700C2103A /* ApptentiveInteractionUpgradeMessageViewController.m */,
-			);
-			path = "Upgrade Message";
 			sourceTree = "<group>";
 		};
 		01A2CFDA1E490A9700C2103A /* Model */ = {
@@ -1855,7 +1835,6 @@
 				01F1DFF41E5BBFB3009AB3D2 /* ApptentiveConversationManager.h in Headers */,
 				0174772A1EA92BED00A0A949 /* ApptentivePayload.h in Headers */,
 				EF4EABA02040A194003318C9 /* ApptentiveFileUtilities.h in Headers */,
-				01A2D11B1E490A9700C2103A /* ApptentiveInteractionUpgradeMessageController.h in Headers */,
 				018FAFEF1FC4B21A007C52FE /* ApptentiveComparisonClause.h in Headers */,
 				01A2D0FB1E490A9700C2103A /* ApptentiveStyleSheet.h in Headers */,
 				0134EB121EA991AE00DA4925 /* ApptentiveLogoutPayload.h in Headers */,
@@ -1903,7 +1882,6 @@
 				01A2D11F1E490A9700C2103A /* ApptentiveAppRelease.h in Headers */,
 				0134EB1E1EA9930E00DA4925 /* ApptentivePersonPayload.h in Headers */,
 				018FAFDF1FC4A9C6007C52FE /* ApptentiveAndClause.h in Headers */,
-				01A2D11D1E490A9700C2103A /* ApptentiveInteractionUpgradeMessageViewController.h in Headers */,
 				01A2D1871E490A9700C2103A /* ApptentiveCompoundMessageCell.h in Headers */,
 				01626EB91EB7D60C0064E73F /* NSData+Encryption.h in Headers */,
 				01A2D1151E490A9700C2103A /* ApptentiveInteractionMessageCenterController.h in Headers */,
@@ -1974,7 +1952,7 @@
 					01A2CF991E49062800C2103A = {
 						CreatedOnToolsVersion = 8.2.1;
 						DevelopmentTeam = 86WML2UN43;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1030;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -1984,6 +1962,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				ar,
 				da,
@@ -2232,7 +2211,6 @@
 				01AA89B91F18177E00FB59AB /* ApptentiveAppInstall.m in Sources */,
 				01A2D0F91E490A9700C2103A /* Apptentive.m in Sources */,
 				01A2D1811E490A9700C2103A /* ApptentiveMessageCenterViewController.m in Sources */,
-				01A2D11C1E490A9700C2103A /* ApptentiveInteractionUpgradeMessageController.m in Sources */,
 				EF3FE88F20A2285700A3C9C5 /* ApptentiveInvocation.m in Sources */,
 				01A2D1911E490A9700C2103A /* ApptentiveMessageCenterGreetingView.m in Sources */,
 				01A2D13A1E490A9700C2103A /* ApptentivePerson.m in Sources */,
@@ -2279,7 +2257,6 @@
 				01A2D1401E490A9700C2103A /* ApptentiveState.m in Sources */,
 				01A2D1A71E490A9700C2103A /* ApptentiveUtilities.m in Sources */,
 				01A2D13C1E490A9700C2103A /* ApptentiveSDK.m in Sources */,
-				01A2D11E1E490A9700C2103A /* ApptentiveInteractionUpgradeMessageViewController.m in Sources */,
 				01A2D1991E490A9700C2103A /* ApptentiveMessageCenterReplyCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2394,7 +2371,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 24;
+				CURRENT_PROJECT_VERSION = 25;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -2452,7 +2429,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 24;
+				CURRENT_PROJECT_VERSION = 25;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -2484,7 +2461,7 @@
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 86WML2UN43;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 24;
+				DYLIB_CURRENT_VERSION = 25;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				GCC_PREFIX_HEADER = "Apptentive/Misc/ApptentiveConnect-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = "APPTENTIVE_DEBUG=1";
@@ -2506,7 +2483,7 @@
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 86WML2UN43;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 24;
+				DYLIB_CURRENT_VERSION = 25;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				GCC_PREFIX_HEADER = "Apptentive/Misc/ApptentiveConnect-Prefix.pch";
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
@@ -2533,6 +2510,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "ApptentiveTests/ApptentiveTests-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -2547,6 +2525,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.apptentive.ApptentiveTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "ApptentiveTests/ApptentiveTests-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};

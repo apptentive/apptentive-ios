@@ -65,7 +65,8 @@
 - (void)testKeyParsing {
 	NSData *hexKeyData = [NSData apptentive_dataWithHexString:@"1234567890ABCDEF1234567890ABCDEF"];
 
-	XCTAssertEqualObjects(hexKeyData.description, @"<12345678 90abcdef 12345678 90abcdef>");
+	XCTAssertEqual(hexKeyData.length, 16);
+	XCTAssertTrue([hexKeyData.description containsString:@"12345678"]);
 }
 
 @end

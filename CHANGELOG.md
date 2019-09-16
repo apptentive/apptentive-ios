@@ -1,3 +1,9 @@
+# 2019-09-16 - v5.2.6
+
+#### Bugs Fixed
+
+* Fix a bug where running an app built with Xcode 10 on iOS 13 can result in unreadable (all-magenta) Survey and Message Center views. 
+
 # 2019-09-05 - v5.2.5
 
 #### Bugs Fixed

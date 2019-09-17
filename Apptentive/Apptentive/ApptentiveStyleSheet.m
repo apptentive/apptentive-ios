@@ -341,6 +341,9 @@ NSString *const FontOverridesKey = @"FontOverrides";
 #ifdef __IPHONE_13_0
 			_secondaryColor = [UIColor secondaryLabelColor];
 			_failureColor = [UIColor systemRedColor];
+#else
+			_secondaryColor = [UIColor colorWithRed:118.0 / 255.0 green:118.0 / 255.0 blue:122.0 / 255.0 alpha:1.0];
+			_failureColor = [UIColor colorWithRed:218.0 / 255.0 green:53.0 / 255.0 blue:71.0 / 255.0 alpha:1.0];
 #endif
 		} else {
 			_secondaryColor = [UIColor colorWithRed:118.0 / 255.0 green:118.0 / 255.0 blue:122.0 / 255.0 alpha:1.0];
@@ -462,14 +465,20 @@ NSString *const FontOverridesKey = @"FontOverrides";
 		_backgroundColor = self.backgroundColor ?: [UIColor systemBackgroundColor];
 		_collectionBackgroundColor = self.collectionBackgroundColor ?: [UIColor systemGroupedBackgroundColor];
 		_placeholderColor = self.placeholderColor ?: [UIColor placeholderTextColor];
+#else
+		[self inheritAppearanceColors];
 #endif
 	} else {
-		_primaryColor = self.primaryColor ?: [self appearanceColorForClass:[UILabel class] property:@selector(textColor) default:[UIColor blackColor]];
-		_separatorColor = self.separatorColor ?: [self appearanceColorForClass:[UITableView class] property:@selector(separatorColor) default:[UIColor colorWithRed:199.0 / 255.0 green:200.0 / 255.0 blue:204.0 / 255.0 alpha:1.0]];
-		_backgroundColor = self.backgroundColor ?: [self appearanceColorForClass:[UITableViewCell class] property:@selector(backgroundColor) default:[UIColor whiteColor]];
-		_collectionBackgroundColor = self.collectionBackgroundColor ?: [self appearanceColorForClass:[UITableView class] property:@selector(backgroundColor) default:[UIColor groupTableViewBackgroundColor]];
-		_placeholderColor = self.placeholderColor ?: [UIColor colorWithRed:0 green:0 blue:25.0 / 255.0 alpha:56.0 / 255.0];
+		[self inheritAppearanceColors];
 	}
+}
+
+- (void)inheritAppearanceColors {
+	_primaryColor = self.primaryColor ?: [self appearanceColorForClass:[UILabel class] property:@selector(textColor) default:[UIColor blackColor]];
+	_separatorColor = self.separatorColor ?: [self appearanceColorForClass:[UITableView class] property:@selector(separatorColor) default:[UIColor colorWithRed:199.0 / 255.0 green:200.0 / 255.0 blue:204.0 / 255.0 alpha:1.0]];
+	_backgroundColor = self.backgroundColor ?: [self appearanceColorForClass:[UITableViewCell class] property:@selector(backgroundColor) default:[UIColor whiteColor]];
+	_collectionBackgroundColor = self.collectionBackgroundColor ?: [self appearanceColorForClass:[UITableView class] property:@selector(backgroundColor) default:[UIColor groupTableViewBackgroundColor]];
+	_placeholderColor = self.placeholderColor ?: [UIColor colorWithRed:0 green:0 blue:25.0 / 255.0 alpha:56.0 / 255.0];
 }
 
 - (void)setFontDescriptor:(UIFontDescriptor *)fontDescriptor forStyle:(ApptentiveStyleIdentifier)textStyle {

@@ -1,3 +1,9 @@
+# 2019-09-18 - v5.2.7
+
+#### Bugs Fixed
+
+* Fix a bugs with gesture-driven dismissal of Message Center and Surveys.
+
 # 2019-09-16 - v5.2.6
 
 #### Bugs Fixed

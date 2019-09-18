@@ -132,6 +132,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	ApptentiveProgressNavigationBar *navigationBar = (ApptentiveProgressNavigationBar *)self.navigationController.navigationBar;
 
 	navigationBar.progressView.hidden = YES;
+
+	self.navigationController.presentationController.delegate = self;
 }
 
 - (void)dealloc {
@@ -657,23 +659,21 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	return NO;
 }
 
+#pragma mark - Presentation Controller delegate
+
+- (void)presentationControllerDidDismiss:(UIPresentationController *)presentationController {
+	[self startDismissal];
+	[self completeDismissal];
+	ApptentiveLogInfo(@"Presentation Controller did dismiss");
+}
+
+
 #pragma mark - Actions
 
 - (IBAction)dismiss:(id)sender {
-	[self.attachmentController resignFirstResponder];
+	[self startDismissal];
 
-	[self saveDraft];
-
-	[self.viewModel stop];
-
-	UIViewController *presentingViewController = self.presentingViewController;
-
-	[self dismissViewControllerAnimated:YES
-							 completion:^{
-							   [Apptentive.shared.backend engage:ATInteractionMessageCenterEventLabelClose fromInteraction:self.viewModel.interaction fromViewController:presentingViewController];
-							 }];
-
-	self.interactionController = nil;
+	[self dismissViewControllerAnimated:YES completion:^{ [self completeDismissal]; }];
 }
 
 - (IBAction)send:(id)sender {
@@ -842,6 +842,18 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 #pragma mark - Private
+
+- (void)startDismissal {
+	[self.attachmentController resignFirstResponder];
+	[self saveDraft];
+	[self.viewModel stop];
+}
+
+- (void)completeDismissal {
+	[Apptentive.shared.backend engage:ATInteractionMessageCenterEventLabelClose fromInteraction:self.viewModel.interaction fromViewController:self.presentingViewController];
+
+	self.interactionController = nil;
+}
 
 - (void)updateStatusOfVisibleCells {
 	NSMutableArray *indexPathsToReload = [NSMutableArray array];

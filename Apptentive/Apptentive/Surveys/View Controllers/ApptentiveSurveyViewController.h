@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class ApptentiveInteractionController;
 
 
-@interface ApptentiveSurveyViewController : UICollectionViewController <UICollectionViewDelegateFlowLayout, UITextViewDelegate, UITextFieldDelegate, ApptentiveCollectionViewDataSource, ATSurveyViewModelDelegate>
+@interface ApptentiveSurveyViewController : UICollectionViewController <UICollectionViewDelegateFlowLayout, UITextViewDelegate, UITextFieldDelegate, UIAdaptivePresentationControllerDelegate, ApptentiveCollectionViewDataSource, ATSurveyViewModelDelegate>
 
 @property (strong, nonatomic) ApptentiveSurveyViewModel *viewModel;
 

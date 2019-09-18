@@ -114,6 +114,8 @@ NS_ASSUME_NONNULL_BEGIN
 	self.navigationController.toolbar.translucent = NO;
 	self.navigationController.toolbar.barTintColor = [style colorForStyle:ApptentiveColorFailure];
 	self.navigationController.toolbar.userInteractionEnabled = NO;
+
+	self.navigationController.presentationController.delegate = self;
 }
 
 - (void)dealloc {
@@ -615,6 +617,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
 	[self.viewModel commitChangeAtIndexPath:[self.viewModel indexPathForTextFieldTag:textField.tag]];
+}
+
+#pragma mark - Presentation controller delegate
+- (void)presentationControllerDidDismiss:(UIPresentationController *)presentationController {
+	[self.viewModel didCancel:self];
+
+	self.interactionController = nil;
 }
 
 #pragma mark - View model delegate

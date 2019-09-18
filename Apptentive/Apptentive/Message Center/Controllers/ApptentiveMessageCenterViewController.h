@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class ApptentiveInteractionController;
 
 
-@interface ApptentiveMessageCenterViewController : UITableViewController <ApptentiveMessageCenterViewModelDelegate, UITextViewDelegate, UITextFieldDelegate, UICollectionViewDataSource, UICollectionViewDelegate>
+@interface ApptentiveMessageCenterViewController : UITableViewController <ApptentiveMessageCenterViewModelDelegate, UITextViewDelegate, UITextFieldDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UIAdaptivePresentationControllerDelegate>
 
 @property (strong, nonatomic) ApptentiveMessageCenterViewModel *viewModel;
 
@@ -23,6 +23,9 @@ NS_ASSUME_NONNULL_BEGIN
 // until the view controller is dismissed (required for
 // `-dismissAllInteractions:` calls).
 @property (strong, nullable, nonatomic) ApptentiveInteractionController *interactionController;
+
+- (void)startDismissal;
+- (void)completeDismissal;
 
 @end
 

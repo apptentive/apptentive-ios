@@ -29,6 +29,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (readonly, nonatomic) id<ApptentiveStyle> styleSheet;
 @property (weak, nonatomic) id<ATSurveyViewModelDelegate> delegate;
 
+@property (readonly, nonatomic) BOOL showInfoButton;
+
 @property (readonly, nonatomic) NSString *title;
 @property (readonly, nonatomic) NSString *greeting;
 @property (readonly, nonatomic) NSString *submitButtonText;

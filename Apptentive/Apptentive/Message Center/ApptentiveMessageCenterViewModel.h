@@ -45,7 +45,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterMessageStatus) {
 @property (readonly, nonatomic) id<ApptentiveStyle> styleSheet;
 
 @property (readonly, nonatomic) NSString *title;
-@property (readonly, nonatomic) NSString *branding;
 
 @property (readonly, nonatomic) NSString *composerTitle;
 @property (readonly, nonatomic) NSString *composerPlaceholderText;
@@ -82,6 +81,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterMessageStatus) {
 @property (readonly, nonatomic) NSString *profileEditEmailPlaceholder;
 @property (readonly, nonatomic) NSString *profileEditSkipButtonTitle;
 @property (readonly, nonatomic) NSString *profileEditSaveButtonTitle;
+
+@property (readonly, nonatomic) BOOL showInfoButton;
 
 @property (readonly, nonatomic) BOOL networkIsReachable;
 

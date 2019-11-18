@@ -43,7 +43,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ApptentiveSurveyViewController ()
 
-@property (strong, nonatomic) IBOutlet ApptentiveSurveyGreetingView *headerView;
+@property (strong, nullable, nonatomic) IBOutlet ApptentiveSurveyGreetingView *headerView;
 @property (strong, nonatomic) IBOutlet UIView *headerBackgroundView;
 @property (strong, nonatomic) IBOutlet UIView *footerView;
 @property (strong, nonatomic) IBOutlet UIView *footerBackgroundView;
@@ -80,6 +80,10 @@ NS_ASSUME_NONNULL_BEGIN
 	self.headerView.infoButton.accessibilityLabel = ApptentiveLocalizedString(@"About Apptentive", @"Accessibility label for 'show about' button");
 	[self.submitButton setTitle:self.viewModel.submitButtonText forState:UIControlStateNormal];
 
+	if (!self.viewModel.showInfoButton && self.viewModel.greeting.length == 0) {
+		self.headerView = nil;
+	}
+
 	((ApptentiveSurveyCollectionView *)self.collectionView).collectionHeaderView = self.headerView;
 	((ApptentiveSurveyCollectionView *)self.collectionView).collectionFooterView = self.footerView;
 	((ApptentiveSurveyCollectionViewLayout *)self.collectionViewLayout).shouldExpand = YES;
@@ -97,6 +101,7 @@ NS_ASSUME_NONNULL_BEGIN
 	self.headerView.greetingLabel.textColor = [style colorForStyle:ApptentiveTextStyleHeaderMessage];
 	self.headerView.infoButton.tintColor = [style colorForStyle:ApptentiveTextStyleSurveyInstructions];
 	self.headerView.borderView.backgroundColor = [style colorForStyle:ApptentiveColorSeparator];
+	self.headerView.showInfoButton = self.viewModel.showInfoButton;
 
 	self.footerBackgroundView.backgroundColor = [style colorForStyle:ApptentiveColorFooterBackground];
 	self.submitButton.titleLabel.font = [style fontForStyle:ApptentiveTextStyleSubmitButton];

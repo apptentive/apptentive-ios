@@ -105,10 +105,6 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 	return self.interaction.configuration[@"title"];
 }
 
-- (NSString *)branding {
-	return self.interaction.configuration[@"branding"];
-}
-
 #pragma mark - Composer
 
 - (NSString *)composerTitle {
@@ -149,6 +145,10 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 	NSString *URLString = self.interaction.configuration[@"greeting"][@"image_url"];
 
 	return (URLString.length > 0) ? [NSURL URLWithString:URLString] : nil;
+}
+
+- (BOOL)showInfoButton {
+	return Apptentive.shared.showInfoButton;
 }
 
 #pragma mark - Status

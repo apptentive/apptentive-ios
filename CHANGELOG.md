@@ -1,8 +1,14 @@
+# 2019-11-18 - v5.2.8
+
+#### Improvements
+
+* Add the ability to hide the About Apptentive (i) button from Message Center and Surveys.
+
 # 2019-09-18 - v5.2.7
 
 #### Bugs Fixed
 
-* Fix a bugs with gesture-driven dismissal of Message Center and Surveys.
+* Fix a bug with gesture-driven dismissal of Message Center and Surveys.
 
 # 2019-09-16 - v5.2.6
 

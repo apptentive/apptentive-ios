@@ -16,6 +16,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) IBOutlet UILabel *greetingLabel;
 @property (strong, nonatomic) IBOutlet UIButton *infoButton;
 @property (strong, nonatomic) IBOutlet UIView *borderView;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *infoButtonSpacer;
+
+@property (assign, nonatomic) BOOL showInfoButton;
 
 @end
 

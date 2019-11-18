@@ -36,6 +36,14 @@ NS_ASSUME_NONNULL_BEGIN
 	[super layoutSubviews];
 }
 
+- (void)setShowInfoButton:(BOOL)showInfoButton {
+	_showInfoButton = showInfoButton;
+
+	self.infoButton.hidden = !showInfoButton;
+
+	self.infoButtonSpacer.active = showInfoButton;
+}
+
 @end
 
 NS_ASSUME_NONNULL_END

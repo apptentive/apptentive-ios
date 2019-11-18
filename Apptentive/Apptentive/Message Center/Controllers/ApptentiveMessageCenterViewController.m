@@ -236,9 +236,10 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 	self.greetingView.imageView.imageURL = self.viewModel.greetingImageURL;
 
-	self.greetingView.aboutButton.hidden = !self.viewModel.branding;
 	self.greetingView.aboutButton.tintColor = [self.viewModel.styleSheet colorForStyle:ApptentiveTextStyleHeaderMessage];
 	self.greetingView.isOnScreen = NO;
+
+	self.greetingView.aboutButton.hidden = !self.viewModel.showInfoButton;
 
 	[self updateHeaderFooterTextSize:nil];
 

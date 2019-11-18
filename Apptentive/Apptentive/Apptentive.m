@@ -80,6 +80,7 @@ static Apptentive *_nullInstance;
 		_baseURL = [NSURL URLWithString:@"https://api.apptentive.com/"];
 		_logLevel = ApptentiveLogLevelInfo;
 		_shouldSanitizeLogMessages = YES;
+		_showInfoButton = YES;
 	}
 	return self;
 }
@@ -142,6 +143,8 @@ static Apptentive *_nullInstance;
 		_apptentiveSignature = configuration.apptentiveSignature;
 		_baseURL = configuration.baseURL;
 		_appID = configuration.appID;
+
+		_showInfoButton = configuration.showInfoButton;
 
 		setShouldSanitizeApptentiveLogMessages(configuration.shouldSanitizeLogMessages);
 

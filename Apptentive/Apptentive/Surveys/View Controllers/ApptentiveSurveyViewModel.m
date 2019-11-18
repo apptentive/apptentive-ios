@@ -68,6 +68,10 @@ NSString *const ApptentiveInteractionSurveyEventLabelCancel = @"cancel";
 	return self.survey.surveyDescription;
 }
 
+- (BOOL)showInfoButton {
+	return Apptentive.shared.showInfoButton;
+}
+
 - (NSString *)submitButtonText {
 	return self.survey.submitText;
 }

@@ -20,7 +20,7 @@ FOUNDATION_EXPORT double ApptentiveVersionNumber;
 FOUNDATION_EXPORT const unsigned char ApptentiveVersionString[];
 
 /** The version number of the Apptentive SDK. */
-#define kApptentiveVersionString @"5.2.7"
+#define kApptentiveVersionString @"5.2.8"
 
 /** The version number of the Apptentive API platform. */
 #define kApptentiveAPIVersionString @"9"
@@ -161,6 +161,9 @@ typedef NS_ENUM(NSUInteger, ApptentiveLogLevel) {
 /** The iTunes store app ID of the app (used for Apptentive rating prompt). */
 @property (copy, nonatomic, nullable) NSString *appID;
 
+/** If set, shows a button in Surveys and Message Center that presents information about Apptentive including a link to our privacy policy. */
+@property (assign, nonatomic) BOOL showInfoButton;
+
 /**
  Returns an instance of the `ApptentiveConfiguration` class
  initialized with the specified parameters.
@@ -240,6 +243,8 @@ typedef NS_ENUM(NSUInteger, ApptentiveLogLevel) {
  You can find this in iTunes Connect, and is the numeric "Apple ID" shown on your app details page.
  */
 @property (copy, nonatomic, nullable) NSString *appID;
+
+@property (readonly, nonatomic) BOOL showInfoButton;
 
 /** An object conforming to the `ApptentiveDelegate` protocol.
  If a `nil` value is passed for the view controller into methods such as	`-engage:fromViewController`,

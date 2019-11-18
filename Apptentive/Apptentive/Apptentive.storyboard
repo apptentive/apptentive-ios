@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14865.1" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14819.2"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -1653,8 +1653,8 @@ Lines</string>
                     </subviews>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
-                        <constraint firstItem="eQS-jv-07Q" firstAttribute="trailing" secondItem="QJU-jb-fK0" secondAttribute="trailingMargin" constant="50" id="3M8-7U-DAv"/>
-                        <constraint firstAttribute="trailingMargin" secondItem="eQS-jv-07Q" secondAttribute="trailing" id="5o0-nM-4r0"/>
+                        <constraint firstItem="eQS-jv-07Q" firstAttribute="leading" secondItem="QJU-jb-fK0" secondAttribute="trailing" constant="8" id="eko-8l-aOf"/>
+                        <constraint firstAttribute="trailingMargin" secondItem="QJU-jb-fK0" secondAttribute="trailing" priority="760" constant="3" id="WFh-nD-Kvx"/>
                         <constraint firstAttribute="trailing" secondItem="kjO-RC-C9t" secondAttribute="trailing" id="7ki-29-dG1"/>
                         <constraint firstItem="kjO-RC-C9t" firstAttribute="top" relation="greaterThanOrEqual" secondItem="eQS-jv-07Q" secondAttribute="bottom" constant="24" id="FhP-NR-GO3"/>
                         <constraint firstAttribute="trailing" secondItem="hym-vX-x0x" secondAttribute="trailing" id="O7u-UU-rCY"/>
@@ -1667,6 +1667,7 @@ Lines</string>
                         <constraint firstAttribute="bottom" secondItem="QJU-jb-fK0" secondAttribute="bottom" constant="26" id="inw-Yq-JwN"/>
                         <constraint firstItem="QJU-jb-fK0" firstAttribute="top" secondItem="5MM-w9-NsG" secondAttribute="top" constant="19" id="j86-Xc-x2p"/>
                         <constraint firstAttribute="bottom" secondItem="hym-vX-x0x" secondAttribute="bottom" id="o7f-uU-vfB"/>
+                        <constraint firstAttribute="trailingMargin" secondItem="eQS-jv-07Q" secondAttribute="trailing" constant="17" id="vZy-Ar-xGY"/>
                     </constraints>
                     <viewLayoutGuide key="safeArea" id="H9x-X5-ni1"/>
                     <connections>
@@ -1674,6 +1675,7 @@ Lines</string>
                         <outlet property="borderViewHeight" destination="BYb-xi-ZnV" id="RTk-wS-BmV"/>
                         <outlet property="greetingLabel" destination="QJU-jb-fK0" id="xYM-nv-FYb"/>
                         <outlet property="infoButton" destination="eQS-jv-07Q" id="Wss-bq-skU"/>
+                        <outlet property="infoButtonSpacer" destination="eko-8l-aOf" id="eYL-k1-CtM"/>
                     </connections>
                 </view>
                 <view contentMode="scaleToFill" id="bBK-pb-4Z7">

@@ -1,3 +1,10 @@
+# 2019-03-06 - v5.2.9
+
+#### Bugs Fixed
+
+* Turn of Treat Warnings as Errors
+* Normalize deployment targets across targets
+
 # 2019-11-18 - v5.2.8
 
 #### Improvements

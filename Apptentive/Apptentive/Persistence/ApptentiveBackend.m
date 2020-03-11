@@ -36,6 +36,8 @@
 #import "ApptentiveLegacySurveyResponse.h"
 
 #import "ApptentiveApptimize.h"
+#import "ApptentiveArchiver.h"
+#import "ApptentiveUnarchiver.h"
 
 @import CoreTelephony;
 
@@ -146,16 +148,30 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 	__weak ApptentiveBackend *weakSelf = self;
 	if ([CTTelephonyNetworkInfo class]) {
 		_telephonyNetworkInfo = [[CTTelephonyNetworkInfo alloc] init];
-		ApptentiveDevice.carrierName = _telephonyNetworkInfo.subscriberCellularProvider.carrierName;
-
-		_telephonyNetworkInfo.subscriberCellularProviderDidUpdateNotifier = ^(CTCarrier *_Nonnull carrier) {
-		  ApptentiveBackend *strongSelf = weakSelf;
-		  ApptentiveDevice.carrierName = carrier.carrierName;
-		  ApptentiveLogDebug(@"Carrier changed to %@. Updating device.", ApptentiveDevice.carrierName);
-		  [strongSelf.operationQueue dispatchAsync:^{
-			[strongSelf scheduleDeviceUpdate]; // Must happen on our queue
-		  }];
-		};
+		if (@available(iOS 12.0, *)) {
+			ApptentiveDevice.carrierName = [[_telephonyNetworkInfo.serviceSubscriberCellularProviders.allValues valueForKeyPath:@"carrierName"] componentsJoinedByString:@", "];
+			_telephonyNetworkInfo.serviceSubscriberCellularProvidersDidUpdateNotifier = ^(NSString *_Nonnull carrier) {
+				ApptentiveBackend *strongSelf = weakSelf;
+				ApptentiveDevice.carrierName = strongSelf->_telephonyNetworkInfo.serviceSubscriberCellularProviders[carrier].carrierName;
+				ApptentiveLogDebug(@"Carrier changed to %@. Updating device.", ApptentiveDevice.carrierName);
+				[strongSelf.operationQueue dispatchAsync:^{
+					[strongSelf scheduleDeviceUpdate]; // Must happen on our queue
+				}];
+			};
+		} else {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+			ApptentiveDevice.carrierName = _telephonyNetworkInfo.subscriberCellularProvider.carrierName;
+			_telephonyNetworkInfo.subscriberCellularProviderDidUpdateNotifier = ^(CTCarrier *_Nonnull carrier) {
+				ApptentiveBackend *strongSelf = weakSelf;
+				ApptentiveDevice.carrierName = carrier.carrierName;
+				ApptentiveLogDebug(@"Carrier changed to %@. Updating device.", ApptentiveDevice.carrierName);
+				[strongSelf.operationQueue dispatchAsync:^{
+					[strongSelf scheduleDeviceUpdate]; // Must happen on our queue
+				}];
+			};
+#pragma clang diagnostic pop
+		}
 	}
 
 	ApptentiveDevice.contentSizeCategory = [UIApplication sharedApplication].preferredContentSizeCategory;
@@ -350,7 +366,7 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 - (void)loadConfiguration {
 	ApptentiveAssertOperationQueue(self.operationQueue);
 	if ([[NSFileManager defaultManager] fileExistsAtPath:[self configurationPath]]) {
-		self->_configuration = [NSKeyedUnarchiver unarchiveObjectWithFile:[self configurationPath]];
+		self->_configuration = [ApptentiveUnarchiver unarchivedObjectOfClass:[ApptentiveAppConfiguration class] fromFile:[self configurationPath]];
 	} else if ([[NSUserDefaults standardUserDefaults] objectForKey:@"ATConfigurationSDKVersionKey"]) {
 		self->_configuration = [[ApptentiveAppConfiguration alloc] initWithUserDefaults:[NSUserDefaults standardUserDefaults]];
 		if ([self saveConfiguration]) {
@@ -443,7 +459,7 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 
 - (BOOL)saveConfiguration {
 	ApptentiveAssertOperationQueue(self.operationQueue);
-	return [NSKeyedArchiver archiveRootObject:self.configuration toFile:[self configurationPath]];
+	return [ApptentiveArchiver archiveRootObject:self.configuration toFile:[self configurationPath]];
 }
 
 - (void)updateNetworkingForCurrentNetworkStatus {

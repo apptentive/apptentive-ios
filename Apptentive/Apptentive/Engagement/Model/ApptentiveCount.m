@@ -18,6 +18,10 @@ static NSString *const LastInvokedKey = @"lastInvoked";
 
 @implementation ApptentiveCount
 
++ (BOOL)supportsSecureCoding {
+	return YES;
+}
+
 - (instancetype)init {
 	return [self initWithTotalCount:0 versionCount:0 buildCount:0 lastInvoked:nil];
 }

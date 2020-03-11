@@ -20,6 +20,8 @@
 #import "ApptentiveUtilities.h"
 #import "Apptentive_Private.h"
 #import "ApptentiveDispatchQueue.h"
+#import "ApptentiveUnarchiver.h"
+#import "ApptentiveArchiver.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -65,7 +67,7 @@ NSString *const ApptentiveSentByUserKey = @"com.apptentive.sentByUser";
 		_operationQueue = operationQueue;
 
 		_messageIdentifierIndex = [NSMutableDictionary dictionary];
-		_messageStore = [NSKeyedUnarchiver unarchiveObjectWithFile:self.messageStorePath] ?: [[ApptentiveMessageStore alloc] init];
+		_messageStore = [ApptentiveUnarchiver unarchivedObjectOfClass:[ApptentiveMessageStore class] fromFile:self.messageStorePath] ?: [[ApptentiveMessageStore alloc] init];
 
 		_didSkipProfile = [conversation.userInfo[ATMessageCenterDidSkipProfileKey] boolValue];
 		_draftMessage = conversation.userInfo[ATMessageCenterDraftMessageKey];
@@ -147,7 +149,7 @@ NSString *const ApptentiveSentByUserKey = @"com.apptentive.sentByUser";
 }
 
 - (BOOL)saveMessageStore {
-	return [NSKeyedArchiver archiveRootObject:self.messageStore toFile:self.messageStorePath];
+	return [ApptentiveArchiver archiveRootObject:self.messageStore toFile:self.messageStorePath];
 }
 
 - (NSString *)attachmentDirectoryPath {

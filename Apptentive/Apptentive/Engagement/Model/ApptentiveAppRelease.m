@@ -43,6 +43,10 @@ static NSString *const ATEngagementIsUpdateBuildKey = @"ATEngagementIsUpdateBuil
 
 @implementation ApptentiveAppRelease
 
++ (BOOL)supportsSecureCoding {
+	return YES;
+}
+
 - (instancetype)init {
 	self = [super init];
 

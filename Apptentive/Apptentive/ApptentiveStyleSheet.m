@@ -338,13 +338,8 @@ NSString *const FontOverridesKey = @"FontOverrides";
 		_sizeAdjustment = 1.0;
 
 		if (@available(iOS 13.0, *)) {
-#ifdef __IPHONE_13_0
 			_secondaryColor = [UIColor secondaryLabelColor];
 			_failureColor = [UIColor systemRedColor];
-#else
-			_secondaryColor = [UIColor colorWithRed:118.0 / 255.0 green:118.0 / 255.0 blue:122.0 / 255.0 alpha:1.0];
-			_failureColor = [UIColor colorWithRed:218.0 / 255.0 green:53.0 / 255.0 blue:71.0 / 255.0 alpha:1.0];
-#endif
 		} else {
 			_secondaryColor = [UIColor colorWithRed:118.0 / 255.0 green:118.0 / 255.0 blue:122.0 / 255.0 alpha:1.0];
 			_failureColor = [UIColor colorWithRed:218.0 / 255.0 green:53.0 / 255.0 blue:71.0 / 255.0 alpha:1.0];
@@ -459,25 +454,32 @@ NSString *const FontOverridesKey = @"FontOverrides";
 
 - (void)inheritDefaultColors {
 	if (@available(iOS 13.0, *)) {
-#ifdef __IPHONE_13_0
 		_primaryColor = self.primaryColor ?: [UIColor labelColor];
 		_separatorColor = self.separatorColor ?: [UIColor separatorColor];
 		_backgroundColor = self.backgroundColor ?: [UIColor systemBackgroundColor];
 		_collectionBackgroundColor = self.collectionBackgroundColor ?: [UIColor systemGroupedBackgroundColor];
 		_placeholderColor = self.placeholderColor ?: [UIColor placeholderTextColor];
-#else
-		[self inheritAppearanceColors];
-#endif
 	} else {
 		[self inheritAppearanceColors];
 	}
 }
 
 - (void)inheritAppearanceColors {
+	UIColor *tableViewBackgroundColor;
+
+	if (@available(iOS 13.0, *)) {
+		tableViewBackgroundColor = UIColor.systemGroupedBackgroundColor;
+	} else {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+		tableViewBackgroundColor = UIColor.groupTableViewBackgroundColor;
+#pragma clang diagnostic pop
+	}
+
 	_primaryColor = self.primaryColor ?: [self appearanceColorForClass:[UILabel class] property:@selector(textColor) default:[UIColor blackColor]];
 	_separatorColor = self.separatorColor ?: [self appearanceColorForClass:[UITableView class] property:@selector(separatorColor) default:[UIColor colorWithRed:199.0 / 255.0 green:200.0 / 255.0 blue:204.0 / 255.0 alpha:1.0]];
 	_backgroundColor = self.backgroundColor ?: [self appearanceColorForClass:[UITableViewCell class] property:@selector(backgroundColor) default:[UIColor whiteColor]];
-	_collectionBackgroundColor = self.collectionBackgroundColor ?: [self appearanceColorForClass:[UITableView class] property:@selector(backgroundColor) default:[UIColor groupTableViewBackgroundColor]];
+	_collectionBackgroundColor = self.collectionBackgroundColor ?: [self appearanceColorForClass:[UITableView class] property:@selector(backgroundColor) default:tableViewBackgroundColor];
 	_placeholderColor = self.placeholderColor ?: [UIColor colorWithRed:0 green:0 blue:25.0 / 255.0 alpha:56.0 / 255.0];
 }
 

@@ -15,6 +15,7 @@
 #import "ApptentiveSDK.h"
 #import "ApptentiveUtilities.h"
 #import "ApptentiveVersion.h"
+#import "ApptentiveUnarchiver.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -86,6 +87,10 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 
 
 @implementation ApptentiveConversation
+
++ (BOOL)supportsSecureCoding {
+	return YES;
+}
 
 - (instancetype)initWithState:(ApptentiveConversationState)state {
 	self = [super init];
@@ -302,7 +307,7 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 			[NSKeyedUnarchiver setClass:[ApptentiveLegacyConversation class] forClassName:@"ApptentiveConversation"];
 			[NSKeyedUnarchiver setClass:[ApptentiveLegacyConversation class] forClassName:@"ATConversation"];
 
-			ApptentiveLegacyConversation *legacyConversation = (ApptentiveLegacyConversation *)[NSKeyedUnarchiver unarchiveObjectWithData:legacyConversationData];
+            ApptentiveLegacyConversation *legacyConversation = [ApptentiveUnarchiver unarchivedObjectOfClass:[ApptentiveLegacyConversation class] fromData:legacyConversationData];
 
 			[NSKeyedUnarchiver setClass:[self class] forClassName:@"ApptentiveConversation"];
 
@@ -329,7 +334,7 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 		NSData *lastSentPersondata = [[NSUserDefaults standardUserDefaults] dataForKey:ATPersonLastUpdateValuePreferenceKey];
 
 		if (lastSentPersondata != nil) {
-			NSDictionary *person = [NSKeyedUnarchiver unarchiveObjectWithData:lastSentPersondata];
+            NSDictionary *person = [ApptentiveUnarchiver unarchivedObjectOfClass:[NSDictionary class] fromData:lastSentPersondata];
 			if ([person isKindOfClass:[NSDictionary class]]) {
 				_lastSentPerson = person[@"person"];
 			} else {
@@ -487,6 +492,10 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 
 @implementation ApptentiveLegacyConversation
 
++ (BOOL)supportsSecureCoding {
+    return YES;
+}
+
 + (void)load {
 	[NSKeyedUnarchiver setClass:self forClassName:@"ATConversation"];
 }
@@ -542,6 +551,14 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 @dynamic lastMessageID;
 @dynamic directoryName;
 @dynamic sessionIdentifier;
+
++ (BOOL)supportsSecureCoding {
+	return YES;
+}
+
+- (nullable instancetype)initWithCoder:(NSCoder *)coder {
+	return [super initWithCoder:coder];
+}
 
 - (void)setToken:(NSString *)token conversationID:(NSString *)conversationID personID:(NSString *)personID deviceID:(NSString *)deviceID {
 	[self setConversationIdentifier:conversationID JWT:token];

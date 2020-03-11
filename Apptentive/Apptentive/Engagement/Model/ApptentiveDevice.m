@@ -51,6 +51,10 @@ static NSUUID * _Nullable _currentAdvertisingIdentifier;
 
 @implementation ApptentiveDevice
 
++ (BOOL)supportsSecureCoding {
+	return YES;
+}
+
 + (void)setIntegrationConfiguration:(NSDictionary *)integrationConfiguration {
 	_currentIntegrationConfiguration = integrationConfiguration;
 }

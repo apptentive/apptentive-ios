@@ -14,6 +14,8 @@
 #import "ApptentiveMessageCenterViewController.h"
 #import "Apptentive_Private.h"
 #import "ApptentiveBackend+Engagement.h"
+#import "ApptentiveArchiver.h"
+#import "ApptentiveUnarchiver.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -70,7 +72,8 @@ NSString *const ATInteractionMessageCenterEventLabelAttachmentDelete = @"attachm
 	layout.itemSize = [ApptentiveAttachmentCell sizeForScreen:[UIScreen mainScreen] withMargin:marginWithInsets];
 
 	[self willChangeValueForKey:@"attachments"];
-	self.mutableAttachments = [NSKeyedUnarchiver unarchiveObjectWithFile:self.archivePath];
+	NSSet *allowedClasses = [NSSet setWithArray:@[[NSArray class], [UIImage class]]];
+	self.mutableAttachments = [ApptentiveUnarchiver unarchivedObjectOfClasses:allowedClasses fromFile:self.archivePath];
 
 	if (![self.mutableAttachments isKindOfClass:[NSMutableArray class]]) {
 		self.mutableAttachments = [NSMutableArray array];
@@ -86,7 +89,7 @@ NSString *const ATInteractionMessageCenterEventLabelAttachmentDelete = @"attachm
 }
 
 - (void)saveDraft {
-	[NSKeyedArchiver archiveRootObject:self.mutableAttachments toFile:self.archivePath];
+	[ApptentiveArchiver archiveRootObject:self.mutableAttachments toFile:self.archivePath];
 }
 
 - (nullable UIResponder *)nextResponder {

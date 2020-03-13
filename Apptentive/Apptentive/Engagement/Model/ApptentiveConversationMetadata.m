@@ -39,7 +39,8 @@ static NSString *const VersionKey = @"version";
 	self = [super init];
 
 	if (self) {
-		_items = [coder decodeObjectOfClass:[NSMutableArray class] forKey:ItemsKey];
+		NSSet *allowedClasses = [NSSet setWithArray:@[[NSMutableArray class], [ApptentiveConversationMetadataItem class]]];
+		_items = [coder decodeObjectOfClasses:allowedClasses forKey:ItemsKey];
 
 		[self checkConsistency];
 	}

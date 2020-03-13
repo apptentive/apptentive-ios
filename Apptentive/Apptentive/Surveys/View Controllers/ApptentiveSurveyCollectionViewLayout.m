@@ -32,12 +32,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 		UIEdgeInsets contentInset = self.collectionView.contentInset;
 		UIEdgeInsets adjustedContentInset = self.collectionView.contentInset;
-#ifdef __IPHONE_11_0
 		if (@available(iOS 11.0, *)) {
 			contentInset = self.collectionView.safeAreaInsets;
 			adjustedContentInset = self.collectionView.adjustedContentInset;
 		}
-#endif
 		if (self.shouldExpand) {
 			superSize.height = fmax(superSize.height, CGRectGetHeight(self.collectionView.bounds) - contentInset.top - contentInset.bottom);
 		} else if (adjustedContentInset.bottom > contentInset.bottom || adjustedContentInset.top > contentInset.top) {
@@ -53,12 +51,10 @@ NS_ASSUME_NONNULL_BEGIN
 	NSInteger numberOfItems = [self.collectionView.dataSource collectionView:self.collectionView numberOfItemsInSection:section];
 
 	UIEdgeInsets sectionInset = self.sectionInset;
-#ifdef __IPHONE_11_0
 	if (@available(iOS 11.0, *)) {
 		sectionInset.left += self.collectionView.safeAreaInsets.left;
 		sectionInset.right += self.collectionView.safeAreaInsets.right;
 	}
-#endif
 
 	UICollectionViewLayoutAttributes *attributesForFirstItem = nil;
 	UICollectionViewLayoutAttributes *attributesForLastItem = nil;

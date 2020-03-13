@@ -124,7 +124,15 @@ static NSString * const SubClausesKey = @"subClauses";
 {
 	self = [super initWithCoder:coder];
 	if (self) {
-		_subClauses = [coder decodeObjectForKey:SubClausesKey];
+		NSSet *allowedClasses = [NSSet setWithArray:@[
+			[NSArray class],
+			[ApptentiveAndClause class],
+			[ApptentiveOrClause class],
+			[ApptentiveNotClause class],
+			[ApptentiveComparisonClause class],
+			[ApptentiveFalseClause class]
+		]];
+		_subClauses = [coder decodeObjectOfClasses:allowedClasses forKey:SubClausesKey];
 	}
 	return self;
 }

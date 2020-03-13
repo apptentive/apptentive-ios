@@ -1,3 +1,12 @@
+# 2020-03-13 - v5.2.9
+
+#### Improvements
+
+* Convert to full use of secure archiving/unarchiving.
+* Convert use of other deprecated APIs to use newest APIs where available.
+* Guard use of deprecated code with `@available` checks, and suppress warnings for newer deployment targets.
+* Warnings no longer automatically block compilation.
+
 # 2019-11-18 - v5.2.8
 
 #### Improvements

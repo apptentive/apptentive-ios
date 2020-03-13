@@ -35,7 +35,7 @@ extern NSString *const ATPersonLastUpdateValuePreferenceKey;
 @end
 
 
-@interface ApptentiveLegacyPerson : NSObject
+@interface ApptentiveLegacyPerson : NSObject <NSSecureCoding>
 
 @property (copy, nonatomic) NSString *name;
 @property (copy, nonatomic) NSString *emailAddress;

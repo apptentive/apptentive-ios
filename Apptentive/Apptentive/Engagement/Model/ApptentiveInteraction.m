@@ -17,6 +17,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation ApptentiveInteraction
 
++ (BOOL)supportsSecureCoding {
+	return YES;
+}
+
 + (void)load {
 	[NSKeyedUnarchiver setClass:self forClassName:@"ATInteraction"];
 }

@@ -7,6 +7,7 @@
 //
 
 #import "ApptentiveMessageStore.h"
+#import "ApptentiveMessage.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -32,7 +33,8 @@ static NSString *const ArchiveVersionKey = @"archiveVersion";
 - (nullable instancetype)initWithCoder:(NSCoder *)coder {
 	self = [super init];
 	if (self) {
-		_messages = [coder decodeObjectOfClass:[NSMutableArray class] forKey:MessagesKey];
+		NSSet *allowedClasses = [NSSet setWithArray:@[[NSMutableArray class], [ApptentiveMessage class]]];
+		_messages = [coder decodeObjectOfClasses:allowedClasses forKey:MessagesKey];
 		_lastMessageIdentifier = [coder decodeObjectOfClass:[NSString class] forKey:LastMessageIdentifierKey];
 	}
 	return self;

@@ -13,6 +13,7 @@
 #import "ApptentiveUtilities.h"
 #import "Apptentive_Private.h"
 #import "UIAlertController+Apptentive.h"
+#import "ApptentiveURLOpener.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -120,22 +121,16 @@ NSString *const ATInteractionAppStoreRatingEventLabelUnableToRate = @"unable_to_
 	if ([self appID]) {
 		NSURL *url = [self URLForRatingApp];
 
-		BOOL attemptToOpenURL = [[UIApplication sharedApplication] canOpenURL:url];
-
-		// In iOS 9, `canOpenURL:` returns NO unless that URL scheme has been added to LSApplicationQueriesSchemes.
-		if (!attemptToOpenURL) {
-			attemptToOpenURL = YES;
-		}
-
-		if (attemptToOpenURL) {
+		if ([[UIApplication sharedApplication] canOpenURL:url]) {
 			[Apptentive.shared.backend engage:ATInteractionAppStoreRatingEventLabelOpenAppStoreURL fromInteraction:self.interaction fromViewController:self.presentingViewController];
 
-			BOOL openedURL = [[UIApplication sharedApplication] openURL:url];
-			if (!openedURL) {
-				ApptentiveLogWarning(ApptentiveLogTagInteractions, @"Could not open App Store URL: %@", url);
-			}
+			[ApptentiveURLOpener openURL:url completionHandler:^(BOOL success) {
+				if (!success) {
+					ApptentiveLogWarning(ApptentiveLogTagInteractions, @"Could not open App Store URL: %@", url);
+				}
+			}];
 		} else {
-			ApptentiveLogWarning(ApptentiveLogTagInteractions, @"No application can open the URL: %@", url);
+			ApptentiveLogWarning(ApptentiveLogTagInteractions, @"No application can open the Interaction's URL (%@), or the %@ scheme is missing from Info.plist's LSApplicationQueriesSchemes value.", url, url.scheme);
 			[self showUnableToOpenAppStoreDialog];
 		}
 	} else {

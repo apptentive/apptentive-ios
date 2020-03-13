@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 extern NSNotificationName const ApptentiveLogMonitorSessionDidStart;
 extern NSNotificationName const ApptentiveLogMonitorSessionDidStop;
 
-@interface ApptentiveLogMonitorSession : NSObject
+@interface ApptentiveLogMonitorSession : NSObject <NSSecureCoding>
 
 /** Email recipients for the log email */
 @property (nonatomic, strong) NSArray<NSString *> *emailRecipients;

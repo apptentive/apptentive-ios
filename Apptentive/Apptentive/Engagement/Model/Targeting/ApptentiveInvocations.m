@@ -9,6 +9,11 @@
 #import "ApptentiveInvocations.h"
 #import "ApptentiveTarget.h"
 #import "ApptentiveClause.h"
+#import "ApptentiveAndClause.h"
+#import "ApptentiveOrClause.h"
+#import "ApptentiveNotClause.h"
+#import "ApptentiveComparisonClause.h"
+#import "ApptentiveFalseClause.h"
 #import "ApptentiveIndentPrinter.h"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -45,7 +50,16 @@ static NSString * const TargetsKey = @"targets";
 {
 	self = [super init];
 	if (self) {
-		_targets = [coder decodeObjectOfClass:[NSArray class] forKey:TargetsKey];
+		NSSet *allowedClasses = [NSSet setWithArray:@[
+			[NSArray class],
+			[ApptentiveTarget class],
+			[ApptentiveAndClause class],
+			[ApptentiveOrClause class],
+			[ApptentiveNotClause class],
+			[ApptentiveComparisonClause class],
+			[ApptentiveFalseClause class]
+		]];
+		_targets = [coder decodeObjectOfClasses:allowedClasses forKey:TargetsKey];
 	}
 	return self;
 }

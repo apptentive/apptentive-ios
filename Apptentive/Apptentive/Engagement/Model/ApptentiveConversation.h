@@ -255,7 +255,7 @@ extern NSString *NSStringFromApptentiveConversationState(ApptentiveConversationS
  The `ApptentiveLegacyConversation` object is used to unarchive data for
  migrating from older (<= 3.4.x) versions of the Apptentive SDK.
  */
-@interface ApptentiveLegacyConversation : NSObject <NSCoding>
+@interface ApptentiveLegacyConversation : NSObject <NSSecureCoding>
 
 
 /**

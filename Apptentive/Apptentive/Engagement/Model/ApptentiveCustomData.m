@@ -47,7 +47,8 @@ static NSString *const IdentifierKey = @"identifier";
 	self = [super initWithCoder:aDecoder];
 
 	if (self) {
-		_mutableCustomData = [aDecoder decodeObjectOfClass:[NSMutableDictionary class] forKey:CustomDataKey];
+		NSSet *allowedClasses = [NSSet setWithArray:@[[NSDictionary class], [NSString class]]];
+		_mutableCustomData = [aDecoder decodeObjectOfClasses:allowedClasses forKey:CustomDataKey];
 		_identifier = [aDecoder decodeObjectOfClass:[NSString class] forKey:IdentifierKey];
 	}
 

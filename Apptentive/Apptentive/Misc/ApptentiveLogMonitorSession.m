@@ -13,6 +13,8 @@
 #import "ApptentiveFileUtilities.h"
 #import "ApptentiveJWT.h"
 #import "ApptentiveSafeCollections.h"
+#import "ApptentiveArchiver.h"
+#import "ApptentiveUnarchiver.h"
 
 NSNotificationName const ApptentiveLogMonitorSessionDidStart = @"ApptentiveLogMonitorSessionDidStart";
 NSNotificationName const ApptentiveLogMonitorSessionDidStop = @"ApptentiveLogMonitorSessionDidStop";
@@ -31,6 +33,10 @@ extern NSString *ApptentiveLocalizedString(NSString *key, NSString *_Nullable co
 @end
 
 @implementation ApptentiveLogMonitorSession
+
++ (BOOL)supportsSecureCoding {
+	return YES;
+}
 
 - (instancetype)init {
 	self = [super init];
@@ -207,7 +213,7 @@ extern NSString *ApptentiveLocalizedString(NSString *key, NSString *_Nullable co
 + (nullable ApptentiveLogMonitorSession *)readSessionFromPersistentStorage {
 	NSString *filepath = [self sessionStoragePath];
 	ApptentiveAssertNotNil(filepath, @"Session path is nil");
-	return filepath != nil ? [NSKeyedUnarchiver unarchiveObjectWithFile:filepath] : nil;
+	return filepath != nil ? [ApptentiveUnarchiver unarchivedObjectOfClass:[ApptentiveLogMonitorSession class] fromFile:filepath] : nil;
 }
 
 + (void)clearCurrentSession {
@@ -221,7 +227,7 @@ extern NSString *ApptentiveLocalizedString(NSString *key, NSString *_Nullable co
 	NSString *filepath = [self sessionStoragePath];
 	ApptentiveAssertNotNil(filepath, @"Session path is nil");
 	if (filepath) {
-		[NSKeyedArchiver archiveRootObject:session toFile:filepath];
+		[ApptentiveArchiver archiveRootObject:session toFile:filepath];
 	}
 }
 

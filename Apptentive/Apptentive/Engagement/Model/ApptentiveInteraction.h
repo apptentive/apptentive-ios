@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class ApptentiveInteractionUsageData;
 
 
-@interface ApptentiveInteraction : NSObject <NSCoding, NSCopying>
+@interface ApptentiveInteraction : NSObject <NSSecureCoding, NSCopying>
 @property (copy, nonatomic) NSString *identifier;
 @property (assign, nonatomic) NSInteger priority;
 @property (copy, nonatomic) NSString *type;

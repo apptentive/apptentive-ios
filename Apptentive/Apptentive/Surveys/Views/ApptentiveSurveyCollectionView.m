@@ -102,11 +102,9 @@ NS_ASSUME_NONNULL_BEGIN
 	[super layoutSubviews];
 
 	UIEdgeInsets contentInset = self.contentInset;
-#ifdef __IPHONE_11_0
 	if (@available(iOS 11.0, *)) {
 		contentInset = self.safeAreaInsets;
 	}
-#endif
 
 	CGFloat top = [self.collectionViewLayout collectionViewContentSize].height - CGRectGetHeight(self.collectionFooterView.bounds);
 	if (((ApptentiveSurveyCollectionViewLayout *)self.collectionViewLayout).shouldExpand) {

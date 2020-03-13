@@ -126,12 +126,17 @@ static NSString *const SessionIdentifier = @"sessionIdentifier";
 		_identifier = [coder decodeObjectOfClass:[NSString class] forKey:IdentifierKey];
 		_localIdentifier = [coder decodeObjectOfClass:[NSString class] forKey:LocalIdentifierKey];
 		_sentDate = [coder decodeObjectOfClass:[NSDate class] forKey:SentDateKey];
-		_attachments = [coder decodeObjectOfClass:[ApptentiveAttachment class] forKey:AttachmentsKey];
+
+		NSSet *allowedAttachmentClasses = [NSSet setWithArray:@[[NSArray class], [ApptentiveAttachment class]]];
+		_attachments = [coder decodeObjectOfClasses:allowedAttachmentClasses forKey:AttachmentsKey];
+
 		_sender = [coder decodeObjectOfClass:[ApptentiveMessageSender class] forKey:SenderKey];
 		_body = [coder decodeObjectOfClass:[NSString class] forKey:BodyKey];
 		_state = [coder decodeIntegerForKey:StateKey];
 		_automated = [coder decodeBoolForKey:AutomatedKey];
-		_customData = [coder decodeObjectOfClass:[NSDictionary class] forKey:CustomDataKey];
+
+		NSSet *allowedCustomDataClasses = [NSSet setWithArray:@[[NSDictionary class], [NSString class]]];
+		_customData = [coder decodeObjectOfClasses:allowedCustomDataClasses forKey:CustomDataKey];
 		_inbound = [coder decodeBoolForKey:InboundKey];
 	}
 	return self;

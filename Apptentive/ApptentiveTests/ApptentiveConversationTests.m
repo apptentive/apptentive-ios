@@ -15,6 +15,8 @@
 #import "ApptentiveSDK.h"
 #import "ApptentiveVersion.h"
 #import <XCTest/XCTest.h>
+#import "ApptentiveArchiver.h"
+#import "ApptentiveUnarchiver.h"
 
 
 @interface ApptentiveConversationTests : XCTestCase <ApptentiveConversationDelegate>
@@ -160,7 +162,8 @@
 	XCTAssertNotNil(self.conversation.device.localeRaw);
 	XCTAssertNotNil(self.conversation.device.localeLanguageCode);
 	XCTAssertNotNil(self.conversation.device.localeCountryCode);
-	XCTAssertEqualObjects(self.conversation.device.OSName, @"iOS");
+	XCTAssert([self.conversation.device.OSName hasPrefix:@"i"]);
+    XCTAssert([self.conversation.device.OSName hasSuffix:@"OS"]);
 	XCTAssertEqual(self.conversation.device.UUID.UUIDString.length, (NSUInteger)36);
 	XCTAssertEqual(self.conversation.device.customData.count, (NSUInteger)0);
 
@@ -184,7 +187,8 @@
 	XCTAssertNotNil(self.conversation.device.localeRaw);
 	XCTAssertNotNil(self.conversation.device.localeLanguageCode);
 	XCTAssertNotNil(self.conversation.device.localeCountryCode);
-	XCTAssertEqualObjects(self.conversation.device.OSName, @"iOS");
+    XCTAssert([self.conversation.device.OSName hasPrefix:@"i"]);
+    XCTAssert([self.conversation.device.OSName hasSuffix:@"OS"]);
 	XCTAssertEqual(self.conversation.device.UUID.UUIDString.length, (NSUInteger)36);
 
 	[self.conversation.device removeCustomValueWithKey:@"foo"];
@@ -263,6 +267,8 @@
 
 - (void)testNSCoding {
 	ApptentiveMutableConversation *mutableConversation = [self.conversation mutableCopy];
+    
+    NSString *OSName = mutableConversation.device.OSName;
 
 	// Make some changes to the default values
 	[mutableConversation setToken:@"DEF456" conversationID:@"ABC123" personID:@"GHI789" deviceID:@"JKL101"];
@@ -291,9 +297,9 @@
 
 	NSString *path = [NSTemporaryDirectory() stringByAppendingString:@"conversation.archive"];
 
-	[NSKeyedArchiver archiveRootObject:mutableConversation toFile:path];
+	[ApptentiveArchiver archiveRootObject:mutableConversation toFile:path];
 
-	ApptentiveConversation *conversation = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
+	ApptentiveConversation *conversation = [ApptentiveUnarchiver unarchivedObjectOfClass:[ApptentiveConversation class] fromFile:path];
 
 	XCTAssertEqualObjects(conversation.userInfo[@"bar"], @"foo");
 
@@ -310,7 +316,7 @@
 	XCTAssertNotNil(conversation.device.localeRaw);
 	XCTAssertNotNil(conversation.device.localeLanguageCode);
 	XCTAssertNotNil(conversation.device.localeCountryCode);
-	XCTAssertEqualObjects(conversation.device.OSName, @"iOS");
+	XCTAssertEqualObjects(conversation.device.OSName, OSName); // This is "iOS" on new systems, "iPhone OS" on iOS 9
 	XCTAssertEqual(conversation.device.UUID.UUIDString.length, (NSUInteger)36);
 	XCTAssertEqualObjects(conversation.device.customData[@"foo"], @"bar");
 	XCTAssertEqualObjects(conversation.device.customData[@"five"], @5);

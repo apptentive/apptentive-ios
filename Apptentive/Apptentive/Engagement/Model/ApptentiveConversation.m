@@ -15,6 +15,7 @@
 #import "ApptentiveSDK.h"
 #import "ApptentiveUtilities.h"
 #import "ApptentiveVersion.h"
+#import "ApptentiveUnarchiver.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -87,6 +88,10 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 
 @implementation ApptentiveConversation
 
++ (BOOL)supportsSecureCoding {
+	return YES;
+}
+
 - (instancetype)initWithState:(ApptentiveConversationState)state {
 	self = [super init];
 	if (self) {
@@ -122,8 +127,10 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 		_identifier = [coder decodeObjectOfClass:[NSString class] forKey:IdentifierKey];
 		_localIdentifier = [coder decodeObjectOfClass:[NSString class] forKey:LocalIdentifierKey] ?: [[NSUUID UUID] UUIDString];
 		_directoryName = [coder decodeObjectOfClass:[NSString class] forKey:DirectoryNameKey];
-		_lastSentDevice = [coder decodeObjectOfClass:[NSDictionary class] forKey:LastSentDeviceKey];
-		_lastSentPerson = [coder decodeObjectOfClass:[NSDictionary class] forKey:LastSentPersonKey];
+
+		NSSet *allowedClasses = [NSSet setWithArray:@[[NSDictionary class], [NSString class]]];
+		_lastSentDevice = [coder decodeObjectOfClasses:allowedClasses forKey:LastSentDeviceKey];
+		_lastSentPerson = [coder decodeObjectOfClasses:allowedClasses forKey:LastSentPersonKey];
 	}
 	return self;
 }
@@ -302,7 +309,7 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 			[NSKeyedUnarchiver setClass:[ApptentiveLegacyConversation class] forClassName:@"ApptentiveConversation"];
 			[NSKeyedUnarchiver setClass:[ApptentiveLegacyConversation class] forClassName:@"ATConversation"];
 
-			ApptentiveLegacyConversation *legacyConversation = (ApptentiveLegacyConversation *)[NSKeyedUnarchiver unarchiveObjectWithData:legacyConversationData];
+            ApptentiveLegacyConversation *legacyConversation = [ApptentiveUnarchiver unarchivedObjectOfClass:[ApptentiveLegacyConversation class] fromData:legacyConversationData];
 
 			[NSKeyedUnarchiver setClass:[self class] forClassName:@"ApptentiveConversation"];
 
@@ -329,7 +336,8 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 		NSData *lastSentPersondata = [[NSUserDefaults standardUserDefaults] dataForKey:ATPersonLastUpdateValuePreferenceKey];
 
 		if (lastSentPersondata != nil) {
-			NSDictionary *person = [NSKeyedUnarchiver unarchiveObjectWithData:lastSentPersondata];
+			NSSet *allowedClasses = [NSSet setWithArray:@[[NSDictionary class], [NSString class]]];
+            NSDictionary *person = [ApptentiveUnarchiver unarchivedObjectOfClasses:allowedClasses fromData:lastSentPersondata];
 			if ([person isKindOfClass:[NSDictionary class]]) {
 				_lastSentPerson = person[@"person"];
 			} else {
@@ -487,6 +495,10 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 
 @implementation ApptentiveLegacyConversation
 
++ (BOOL)supportsSecureCoding {
+    return YES;
+}
+
 + (void)load {
 	[NSKeyedUnarchiver setClass:self forClassName:@"ATConversation"];
 }
@@ -495,9 +507,9 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 	self = [super init];
 
 	if (self) {
-		_token = [coder decodeObjectForKey:@"token"];
-		_personID = [coder decodeObjectForKey:@"personID"];
-		_deviceID = [coder decodeObjectForKey:@"deviceID"];
+		_token = [coder decodeObjectOfClass:[NSString class] forKey:@"token"];
+		_personID = [coder decodeObjectOfClass:[NSString class] forKey:@"personID"];
+		_deviceID = [coder decodeObjectOfClass:[NSString class] forKey:@"deviceID"];
 	}
 
 	return self;
@@ -542,6 +554,14 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 @dynamic lastMessageID;
 @dynamic directoryName;
 @dynamic sessionIdentifier;
+
++ (BOOL)supportsSecureCoding {
+	return YES;
+}
+
+- (nullable instancetype)initWithCoder:(NSCoder *)coder {
+	return [super initWithCoder:coder];
+}
 
 - (void)setToken:(NSString *)token conversationID:(NSString *)conversationID personID:(NSString *)personID deviceID:(NSString *)deviceID {
 	[self setConversationIdentifier:conversationID JWT:token];

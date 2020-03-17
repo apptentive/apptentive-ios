@@ -12,6 +12,7 @@
 #import "ApptentiveOrClause.h"
 #import "ApptentiveNotClause.h"
 #import "ApptentiveIndentPrinter.h"
+#import "ApptentiveComparisonClause.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -34,6 +35,24 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (BOOL)supportsSecureCoding {
 	return YES;
+}
+
++ (NSSet *)decodingClasses {
+	static NSSet *_decodingClasses = nil;
+
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		_decodingClasses = [NSSet setWithArray:@[
+			[NSArray class],
+			[ApptentiveAndClause class],
+			[ApptentiveOrClause class],
+			[ApptentiveNotClause class],
+			[ApptentiveComparisonClause class],
+			[ApptentiveFalseClause class]
+		]];
+	});
+
+	return _decodingClasses;
 }
 
 - (nullable instancetype)initWithCoder:(NSCoder *)coder

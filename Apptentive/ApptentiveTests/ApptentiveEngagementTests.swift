@@ -94,9 +94,21 @@ class ApptentiveEngagementTests: XCTestCase {
 		Bundle(for: ApptentiveEngagementTests.self).url(forResource: "conversation-4", withExtension:"archive")
 
 		// Open a 4.0.0 archive with slash/pound/percent event names
-		guard let fourOhUrl = Bundle(for: ApptentiveEngagementTests.self).url(forResource: "conversation-4", withExtension:"archive"), let fourOhConversation = NSKeyedUnarchiver.unarchiveObject(withFile: fourOhUrl.path) as? ApptentiveConversation else {
-			XCTFail("Can't open 4.0 conversation archive")
-			return
+		guard let fourOhUrl = Bundle(for: ApptentiveEngagementTests.self).url(forResource: "conversation-4", withExtension:"archive"),
+			let fourOhData = try? Data(contentsOf: fourOhUrl) else {
+				return XCTFail("Can't open 4.0 conversation archive")
+		}
+
+		let maybeFourOhConversation: ApptentiveConversation?
+
+		if #available(iOS 11.0, *) {
+			maybeFourOhConversation = try? NSKeyedUnarchiver.unarchivedObject(ofClass: ApptentiveConversation.self, from: fourOhData)
+		} else {
+			maybeFourOhConversation = NSKeyedUnarchiver.unarchiveObject(with: fourOhData) as? ApptentiveConversation
+		}
+
+		guard let fourOhConversation = maybeFourOhConversation else {
+			return XCTFail("Can't unarchive 4.0 conversation archive")
 		}
 
 		let fourOhEngagement = fourOhConversation.engagement
@@ -108,11 +120,21 @@ class ApptentiveEngagementTests: XCTestCase {
 		XCTAssertEqual(fourOhEngagement.codePoints["local#app#go%25daddy"]?.totalCount, 1)
 		XCTAssertEqual(fourOhEngagement.codePoints["local#app#go%2520daddy"]?.totalCount, 1)
 
+		guard let fiveTwoUrl = Bundle(for: ApptentiveEngagementTests.self).url(forResource: "conversation-5", withExtension:"archive"),
+			let fiveTwoData = try? Data(contentsOf: fiveTwoUrl) else {
+				return XCTFail("Can't open 5.2 conversation archive")
+		}
 
-		// Open a 5.2.2 archive with slash/pound/percent event names
-		guard let fiveTwoUrl = Bundle(for: ApptentiveEngagementTests.self).url(forResource: "conversation-5", withExtension:"archive"), let fiveTwoConversation = NSKeyedUnarchiver.unarchiveObject(withFile: fiveTwoUrl.path) as? ApptentiveConversation else {
-			XCTFail("Can't open 5.2 conversation archive")
-			return
+		let maybeFiveTwoConversation: ApptentiveConversation?
+
+		if #available(iOS 11.0, *) {
+			maybeFiveTwoConversation = try? NSKeyedUnarchiver.unarchivedObject(ofClass: ApptentiveConversation.self, from: fiveTwoData)
+		} else {
+			maybeFiveTwoConversation = NSKeyedUnarchiver.unarchiveObject(with: fiveTwoData) as? ApptentiveConversation
+		}
+
+		guard let fiveTwoConversation = maybeFiveTwoConversation else {
+			return XCTFail("Can't unarchive 5.2 conversation archive")
 		}
 
 		let fiveTwoEngagement = fiveTwoConversation.engagement

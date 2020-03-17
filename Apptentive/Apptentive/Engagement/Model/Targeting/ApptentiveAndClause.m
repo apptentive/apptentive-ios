@@ -124,7 +124,7 @@ static NSString * const SubClausesKey = @"subClauses";
 {
 	self = [super initWithCoder:coder];
 	if (self) {
-		_subClauses = [coder decodeObjectForKey:SubClausesKey];
+		_subClauses = [coder decodeObjectOfClasses:[[self class] decodingClasses] forKey:SubClausesKey];
 	}
 	return self;
 }

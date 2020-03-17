@@ -9,6 +9,8 @@
 #import "ApptentiveEngagementManifest.h"
 #import "ApptentiveInteraction.h"
 #import "ApptentiveTargets.h"
+#import "ApptentiveUnarchiver.h"
+#import "ApptentiveInvocations.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -73,31 +75,9 @@ static NSString *const ATEngagementInteractionsAppBuildNumberKey = @"ATEngagemen
 }
 
 - (instancetype)initWithCachePath:(NSString *)cachePath userDefaults:(NSUserDefaults *)userDefaults {
-	self = [super init];
-
-	if (self) {
-		_expiry = [userDefaults objectForKey:ATEngagementCachedInteractionsExpirationPreferenceKey];
-
-		NSString *cachedTargetsPath = [cachePath stringByAppendingPathComponent:@"cachedtargets.objects"];
-		if ([[NSFileManager defaultManager] fileExistsAtPath:cachedTargetsPath]) {
-			@try {
-				_targets = [NSKeyedUnarchiver unarchiveObjectWithFile:cachedTargetsPath];
-			} @catch (NSException *exception) {
-				ApptentiveLogWarning(ApptentiveLogTagConversation, @"Unable to unarchive cached targets at path %@ (%@)", cachedTargetsPath, exception);
-			}
-		}
-
-		NSString *cachedInteractionsPath = [cachePath stringByAppendingPathComponent:@"cachedinteractionsV2.objects"];
-		if ([[NSFileManager defaultManager] fileExistsAtPath:cachedInteractionsPath]) {
-			@try {
-				_interactions = [NSKeyedUnarchiver unarchiveObjectWithFile:cachedInteractionsPath];
-			} @catch (NSException *exception) {
-				ApptentiveLogWarning(ApptentiveLogTagConversation, @"Unable to unarchive cached interactions at path %@ (%@)", cachedInteractionsPath, exception);
-			}
-		}
-	}
-
-	return self;
+	// Don't try to migrate legacy engagement manifests here, rather just download a new one.
+	// (it's complicated and error prone and hard to test and not really valuable).
+	return [self init];
 }
 
 + (void)deleteMigratedDataFromCachePath:(NSString *)cachePath {
@@ -122,7 +102,8 @@ static NSString *const ATEngagementInteractionsAppBuildNumberKey = @"ATEngagemen
 
 	if (self) {
 		_targets = [coder decodeObjectOfClass:[ApptentiveTargets class] forKey:TargetsKey];
-		_interactions = [coder decodeObjectOfClass:[NSDictionary class] forKey:InteractionsKey];
+		NSSet *allowedClasses = [NSSet setWithArray:@[[NSDictionary class], [ApptentiveInteraction class]]];
+		_interactions = [coder decodeObjectOfClasses:allowedClasses forKey:InteractionsKey];
 		_expiry = [coder decodeObjectOfClass:[NSDate class] forKey:ExpiryKey];
 	}
 

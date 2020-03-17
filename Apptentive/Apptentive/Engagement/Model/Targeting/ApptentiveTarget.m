@@ -50,7 +50,7 @@ static NSString * const CriteriaKey = @"criteria";
 	self = [super init];
 	if (self) {
 		_interactionIdentifier = [coder decodeObjectOfClass:[NSString class] forKey:InteractionIdentifierKey];
-		_criteria = [coder decodeObjectForKey:CriteriaKey];
+		_criteria = [coder decodeObjectOfClasses:[ApptentiveClause decodingClasses] forKey:CriteriaKey];
 	}
 	return self;
 }

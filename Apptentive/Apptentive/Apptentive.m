@@ -782,6 +782,8 @@ static Apptentive *_nullInstance;
 	return (apptentivePayload != nil);
 }
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
 - (BOOL)didReceiveLocalNotification:(UILocalNotification *)notification fromViewController:(UIViewController *)viewController {
 	if ([self presentMessageCenterIfNeededForUserInfo:notification.userInfo fromViewController:viewController]) {
 		ApptentiveLogInfo(ApptentiveLogTagPush, @"Apptentive local notification received.");
@@ -793,6 +795,7 @@ static Apptentive *_nullInstance;
 		return NO;
 	}
 }
+#pragma clang diagnostic pop
 
 - (BOOL)didReceveUserNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)(void))completionHandler {
 	return [self didReceveUserNotificationResponse:response fromViewController:nil withCompletionHandler:completionHandler];
@@ -878,20 +881,25 @@ static Apptentive *_nullInstance;
 
 			return;
 		}
-	}
-
-	if ([[UIApplication sharedApplication].delegate respondsToSelector:@selector(application:didReceiveLocalNotification:)]) {
-		UILocalNotification *localNotification = [[UILocalNotification alloc] init];
-		localNotification.alertTitle = title;
-		localNotification.alertBody = body;
-		localNotification.userInfo = apptentiveUserInfo;
-		localNotification.soundName = [soundName isEqualToString:@"default"] ? UILocalNotificationDefaultSoundName : soundName;
-
-		[[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
 	} else {
-		ApptentiveLogError(ApptentiveLogTagPush, @"Your app is not properly configured to accept Apptentive Message Center push notifications.");
-		ApptentiveLogError(ApptentiveLogTagPush, @"Please see the push notification section of the integration guide for assistance: https://learn.apptentive.com/knowledge-base/ios-integration-reference/#push-notifications.");
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+		if ([[UIApplication sharedApplication].delegate respondsToSelector:@selector(application:didReceiveLocalNotification:)]) {
+			UILocalNotification *localNotification = [[UILocalNotification alloc] init];
+			localNotification.alertTitle = title;
+			localNotification.alertBody = body;
+			localNotification.userInfo = apptentiveUserInfo;
+			localNotification.soundName = [soundName isEqualToString:@"default"] ? UILocalNotificationDefaultSoundName : soundName;
+
+			[[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
+
+			return;
+		}
+#pragma clang diagnostic pop
 	}
+
+	ApptentiveLogError(ApptentiveLogTagPush, @"Your app is not properly configured to accept Apptentive Message Center push notifications.");
+	ApptentiveLogError(ApptentiveLogTagPush, @"Please see the push notification section of the integration guide for assistance: https://learn.apptentive.com/knowledge-base/ios-integration-reference/#push-notifications.");
 }
 
 #pragma mark - UNUserNotificationCenterDelegate methods

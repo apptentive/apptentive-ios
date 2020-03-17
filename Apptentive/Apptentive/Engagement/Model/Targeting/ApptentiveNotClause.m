@@ -7,8 +7,8 @@
 //
 
 #import "ApptentiveNotClause.h"
-#import "ApptentiveFalseClause.h"
 #import "ApptentiveAndClause.h"
+#import "ApptentiveFalseClause.h"
 #import "ApptentiveIndentPrinter.h"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -63,7 +63,7 @@ static NSString * const SubClauseKey = @"subClause";
 {
 	self = [super initWithCoder:coder];
 	if (self) {
-		_subClause = [coder decodeObjectForKey:SubClauseKey];
+		_subClause = [coder decodeObjectOfClasses:[[self class] decodingClasses] forKey:SubClauseKey];
 	}
 	return self;
 }

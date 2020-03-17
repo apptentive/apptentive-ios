@@ -64,11 +64,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)viewDidLoad {
 	[super viewDidLoad];
 
-#ifdef __IPHONE_11_0
 	if (@available(iOS 11.0, *)) {
 		((UICollectionViewFlowLayout *)self.collectionViewLayout).sectionInsetReference = UICollectionViewFlowLayoutSectionInsetFromSafeArea;
 	}
-#endif
 
 	self.collectionView.allowsMultipleSelection = YES;
 	[self.collectionViewLayout registerClass:[ApptentiveSurveyQuestionBackgroundView class] forDecorationViewOfKind:@"QuestionBackground"];
@@ -445,12 +443,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
 	UIEdgeInsets sectionInset = ((UICollectionViewFlowLayout *)collectionViewLayout).sectionInset;
 
-#ifdef __IPHONE_11_0
 	if (@available(iOS 11.0, *)) {
 		sectionInset.left += self.view.safeAreaInsets.left;
 		sectionInset.right += self.view.safeAreaInsets.right;
 	}
-#endif
 
 	CGSize itemSize = CGSizeMake(collectionView.bounds.size.width - sectionInset.left - sectionInset.right, 44.0);
 
@@ -523,12 +519,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
 	UIEdgeInsets sectionInset = ((UICollectionViewFlowLayout *)self.collectionViewLayout).sectionInset;
 
-#ifdef __IPHONE_11_0
 	if (@available(iOS 11.0, *)) {
 		sectionInset.left += self.view.safeAreaInsets.left;
 		sectionInset.right += self.view.safeAreaInsets.right;
 	}
-#endif
 
 	CGFloat headerWidth = CGRectGetWidth(collectionView.bounds) - sectionInset.left - sectionInset.right;
 	CGFloat labelWidth = headerWidth - QUESTION_HORIZONTAL_MARGIN;
@@ -549,12 +543,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section {
 	UIEdgeInsets sectionInset = ((UICollectionViewFlowLayout *)collectionViewLayout).sectionInset;
 
-#ifdef __IPHONE_11_0
 	if (@available(iOS 11.0, *)) {
 		sectionInset.left += self.view.safeAreaInsets.left;
 		sectionInset.right += self.view.safeAreaInsets.right;
 	}
-#endif
 
 	CGSize result = CGSizeMake(collectionView.bounds.size.width - sectionInset.left - sectionInset.right, 12.0);
 

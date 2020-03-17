@@ -11,6 +11,7 @@
 #import "ApptentiveSerialRequest.h"
 #import "ApptentiveSurveyResponsePayload.h"
 #import "Apptentive_Private.h"
+#import "ApptentiveUnarchiver.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -80,11 +81,8 @@ NS_ASSUME_NONNULL_BEGIN
 		return @{};
 	} else {
 		NSDictionary *result = nil;
-		@try {
-			result = [NSKeyedUnarchiver unarchiveObjectWithData:self.answersData];
-		} @catch (NSException *exception) {
-			ApptentiveLogError(ApptentiveLogTagInteractions, @"Unable to unarchive answers data: %@", exception);
-		}
+		NSSet *allowedClasses = [NSSet setWithArray:@[[NSDictionary class], [NSArray class], [NSString class]]];
+		result = [ApptentiveUnarchiver unarchivedObjectOfClasses:allowedClasses fromData:self.answersData];
 		return result;
 	}
 }

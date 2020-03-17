@@ -7,6 +7,7 @@
 //
 
 #import "ApptentivePerson.h"
+#import "ApptentiveUnarchiver.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -21,6 +22,10 @@ static NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCus
 
 
 @implementation ApptentivePerson
+
++ (BOOL)supportsSecureCoding {
+	return YES;
+}
 
 - (nullable instancetype)initWithCoder:(NSCoder *)aDecoder {
 	self = [super initWithCoder:aDecoder];
@@ -52,7 +57,7 @@ static NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCus
 		[NSKeyedUnarchiver setClass:[ApptentiveLegacyPerson class] forClassName:@"ApptentivePersonInfo"];
 		[NSKeyedUnarchiver setClass:[ApptentiveLegacyPerson class] forClassName:@"ATPersonInfo"];
 
-		ApptentiveLegacyPerson *person = [NSKeyedUnarchiver unarchiveObjectWithData:personData];
+		ApptentiveLegacyPerson *person = [ApptentiveUnarchiver unarchivedObjectOfClass:[ApptentiveLegacyPerson class] fromData:personData];
 
 		name = person.name;
 		emailAddress = person.emailAddress;
@@ -65,7 +70,8 @@ static NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCus
 		NSData *data = [[NSUserDefaults standardUserDefaults] dataForKey:ATPersonLastUpdateValuePreferenceKey];
 
 		if (data) {
-			NSDictionary *person = [[NSKeyedUnarchiver unarchiveObjectWithData:data] valueForKey:@"person"];
+			NSSet *allowedClasses = [NSSet setWithArray:@[[NSDictionary class], [NSString class]]];
+			NSDictionary *person = [[ApptentiveUnarchiver unarchivedObjectOfClasses:allowedClasses fromData:data] valueForKey:@"person"];
 			if ([person isKindOfClass:[NSDictionary class]]) {
 				customData = person[@"custom_data"];
 			}
@@ -111,15 +117,23 @@ static NSString *const ApptentiveCustomPersonDataPreferenceKey = @"ApptentiveCus
 
 @implementation ApptentiveLegacyPerson
 
++ (BOOL)supportsSecureCoding {
+    return YES;
+}
+
 - (nullable instancetype)initWithCoder:(NSCoder *)coder {
 	self = [super init];
 
 	if (self) {
-		self.name = (NSString *)[coder decodeObjectForKey:@"name"];
-		self.emailAddress = (NSString *)[coder decodeObjectForKey:@"emailAddress"];
+		self.name = (NSString *)[coder decodeObjectOfClass:[NSString class] forKey:@"name"];
+		self.emailAddress = (NSString *)[coder decodeObjectOfClass:[NSString class] forKey:@"emailAddress"];
 	}
 
 	return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)coder {
+    ApptentiveAssertFail(@"We only ever decode this object, not encode it.");
 }
 
 @end

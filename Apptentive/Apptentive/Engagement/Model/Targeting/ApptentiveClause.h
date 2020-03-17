@@ -15,6 +15,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ApptentiveClause : NSObject <NSSecureCoding>
 
++ (NSSet *)decodingClasses;
+
 - (BOOL)criteriaMetForConversation:(ApptentiveConversation *)conversation;
 - (BOOL)criteriaMetForConversation:(ApptentiveConversation *)conversation indentPrinter:(ApptentiveIndentPrinter *)indentPrinter;
 

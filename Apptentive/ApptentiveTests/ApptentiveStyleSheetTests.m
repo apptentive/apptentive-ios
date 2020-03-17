@@ -28,13 +28,11 @@
 
 - (void)testUIAppearanceDefaults {
 	[UITableView appearance].separatorColor = [UIColor redColor];
-	[UITableView appearanceWhenContainedIn:[ApptentiveNavigationController class], nil].backgroundColor = [UIColor greenColor];
+	[UITableView appearanceWhenContainedInInstancesOfClasses:@[[ApptentiveNavigationController class]]].backgroundColor = UIColor.greenColor;
 
 	if (@available(iOS 13.0, *)) {
-#ifdef __IPHONE_13_0
 		XCTAssertEqualObjects([self.styleSheet colorForStyle:ApptentiveColorSeparator], [UIColor separatorColor]);
 		XCTAssertEqualObjects([self.styleSheet colorForStyle:ApptentiveColorCollectionBackground], [UIColor systemGroupedBackgroundColor]);
-#endif
 	} else {
 		XCTAssertEqualObjects([self.styleSheet colorForStyle:ApptentiveColorSeparator], [UIColor redColor]);
 		XCTAssertEqualObjects([self.styleSheet colorForStyle:ApptentiveColorCollectionBackground], [UIColor greenColor]);

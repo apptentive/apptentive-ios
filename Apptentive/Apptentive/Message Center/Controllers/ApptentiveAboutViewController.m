@@ -11,6 +11,7 @@
 #import "ApptentiveUtilities.h"
 #import "Apptentive_Private.h"
 #import "ApptentiveInteraction.h"
+#import "ApptentiveURLOpener.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -65,14 +66,14 @@ NSString *const ATInteractionAboutViewEventLabelClose = @"close";
 	NSURLComponents *components = [NSURLComponents componentsWithString:@"http://www.apptentive.com/"];
 	components.queryItems = @[[[NSURLQueryItem alloc] initWithName:@"source" value:[NSBundle mainBundle].bundleIdentifier]];
 
-	[[UIApplication sharedApplication] openURL:components.URL];
+	[ApptentiveURLOpener openURL:components.URL completionHandler:nil];
 }
 
 - (IBAction)showPrivacy:(id)sender {
 	NSURLComponents *components = [NSURLComponents componentsWithString:@"http://www.apptentive.com/privacy/"];
 	components.queryItems = @[[[NSURLQueryItem alloc] initWithName:@"source" value:[NSBundle mainBundle].bundleIdentifier]];
 
-	[[UIApplication sharedApplication] openURL:components.URL];
+	[ApptentiveURLOpener openURL:components.URL completionHandler:nil];
 }
 
 - (void)traitCollectionDidChange:(nullable UITraitCollection *)previousTraitCollection {

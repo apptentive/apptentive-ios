@@ -17,6 +17,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation ApptentiveInteraction
 
++ (BOOL)supportsSecureCoding {
+	return YES;
+}
+
 + (void)load {
 	[NSKeyedUnarchiver setClass:self forClassName:@"ATInteraction"];
 }
@@ -61,11 +65,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable instancetype)initWithCoder:(NSCoder *)coder {
 	if ((self = [super init])) {
-		self.identifier = [coder decodeObjectForKey:@"identifier"];
+		self.identifier = [coder decodeObjectOfClass:[NSString class] forKey:@"identifier"];
 		self.priority = [coder decodeIntegerForKey:@"priority"];
-		self.type = [coder decodeObjectForKey:@"type"];
-		self.configuration = [coder decodeObjectForKey:@"configuration"];
-		self.version = [coder decodeObjectForKey:@"version"];
+		self.type = [coder decodeObjectOfClass:[NSString class] forKey:@"type"];
+		NSSet *allowedClasses = [NSSet setWithArray:@[[NSDictionary class], [NSString class], [NSArray class]]];
+		self.configuration = [coder decodeObjectOfClasses:allowedClasses forKey:@"configuration"];
+		self.version = [coder decodeObjectOfClass:[NSString class] forKey:@"version"];
 	}
 	return self;
 }

@@ -8,6 +8,10 @@
 
 #import "ApptentiveTarget.h"
 #import "ApptentiveAndClause.h"
+#import "ApptentiveOrClause.h"
+#import "ApptentiveNotClause.h"
+#import "ApptentiveComparisonClause.h"
+#import "ApptentiveFalseClause.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -50,7 +54,17 @@ static NSString * const CriteriaKey = @"criteria";
 	self = [super init];
 	if (self) {
 		_interactionIdentifier = [coder decodeObjectOfClass:[NSString class] forKey:InteractionIdentifierKey];
-		_criteria = [coder decodeObjectForKey:CriteriaKey];
+
+		NSSet *allowedClasses = [NSSet setWithArray:@[
+			[NSArray class],
+			[ApptentiveTarget class],
+			[ApptentiveAndClause class],
+			[ApptentiveOrClause class],
+			[ApptentiveNotClause class],
+			[ApptentiveComparisonClause class],
+			[ApptentiveFalseClause class]
+		]];
+		_criteria = [coder decodeObjectOfClasses:allowedClasses forKey:CriteriaKey];
 	}
 	return self;
 }

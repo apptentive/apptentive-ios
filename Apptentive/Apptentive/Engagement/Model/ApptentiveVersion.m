@@ -18,6 +18,10 @@ static NSString *const PatchKey = @"patch";
 
 @implementation ApptentiveVersion
 
++ (BOOL)supportsSecureCoding {
+	return YES;
+}
+
 - (instancetype)initWithString:(NSString *)versionString {
 	self = [super init];
 

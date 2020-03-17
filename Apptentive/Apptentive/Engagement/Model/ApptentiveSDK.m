@@ -30,6 +30,10 @@ static ApptentiveVersion *_distributionVersion;
 
 @implementation ApptentiveSDK
 
++ (BOOL)supportsSecureCoding {
+	return YES;
+}
+
 + (ApptentiveVersion *)SDKVersion {
 	return [[ApptentiveVersion alloc] initWithString:kApptentiveVersionString];
 }

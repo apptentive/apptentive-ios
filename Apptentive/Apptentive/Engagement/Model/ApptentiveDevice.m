@@ -51,6 +51,10 @@ static NSUUID * _Nullable _currentAdvertisingIdentifier;
 
 @implementation ApptentiveDevice
 
++ (BOOL)supportsSecureCoding {
+	return YES;
+}
+
 + (void)setIntegrationConfiguration:(NSDictionary *)integrationConfiguration {
 	_currentIntegrationConfiguration = integrationConfiguration;
 }
@@ -174,7 +178,9 @@ static NSUUID * _Nullable _currentAdvertisingIdentifier;
 		_localeCountryCode = [aDecoder decodeObjectOfClass:[NSString class] forKey:LocaleCountryCodeKey];
 		_localeLanguageCode = [aDecoder decodeObjectOfClass:[NSString class] forKey:LocaleLanguageCodeKey];
 		_UTCOffset = [aDecoder decodeIntegerForKey:UTCOffsetKey];
-		_integrationConfiguration = [aDecoder decodeObjectOfClass:[NSDictionary class] forKey:IntegrationConfigurationKey];
+
+		NSSet *allowedClasses = [NSSet setWithArray:@[[NSDictionary class], [NSString class]]];
+		_integrationConfiguration = [aDecoder decodeObjectOfClasses:allowedClasses forKey:IntegrationConfigurationKey];
 		_advertisingIdentifier = [aDecoder decodeObjectOfClass:[NSUUID class] forKey:AdvertisingIdentifierKey];
 	}
 

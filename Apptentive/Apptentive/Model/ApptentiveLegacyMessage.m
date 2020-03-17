@@ -18,6 +18,7 @@
 #import "ApptentivePerson.h"
 #import "ApptentiveSerialRequest.h"
 #import "Apptentive_Private.h"
+#import "ApptentiveUnarchiver.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -85,7 +86,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 			NSDictionary *customData = @{};
 			if (legacyMessage.customData) {
-				customData = [NSKeyedUnarchiver unarchiveObjectWithData:legacyMessage.customData];
+				NSSet *allowedClasses = [NSSet setWithArray:@[[NSDictionary class], [NSString class]]];
+				customData = [ApptentiveUnarchiver unarchivedObjectOfClasses:allowedClasses fromData:legacyMessage.customData];
 			};
 
 			ApptentiveMessage *message = [[ApptentiveMessage alloc] initWithBody:legacyMessage.body attachments:attachments automated:legacyMessage.automated.boolValue customData:customData creationDate:[NSDate dateWithTimeIntervalSince1970:legacyMessage.clientCreationTime.doubleValue]];

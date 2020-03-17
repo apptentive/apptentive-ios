@@ -465,20 +465,6 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	}
 }
 
-- (BOOL)tableView:(UITableView *)tableView shouldShowMenuForRowAtIndexPath:(NSIndexPath *)indexPath {
-	return YES;
-}
-
-- (BOOL)tableView:(UITableView *)tableView canPerformAction:(SEL)action forRowAtIndexPath:(NSIndexPath *)indexPath withSender:(nullable id)sender {
-	return action == @selector(copy:);
-}
-
-- (void)tableView:(UITableView *)tableView performAction:(SEL)action forRowAtIndexPath:(NSIndexPath *)indexPath withSender:(nullable id)sender {
-	if (indexPath) {
-		[[UIPasteboard generalPasteboard] setValue:[self.viewModel textOfMessageAtIndexPath:indexPath] forPasteboardType:(__bridge NSString *)kUTTypeUTF8PlainText];
-	}
-}
-
 #pragma mark Scroll view delegate
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
@@ -1109,7 +1095,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 	CGFloat heightOfVisibleView = fmin(CGRectGetMinY(localKeyboardRect), CGRectGetHeight(self.view.bounds) - toolbarHeight);
 
-#ifdef __IPHONE_11_0
+	CGFloat topInset;
 	if (@available(iOS 11.0, *)) {
 		CGFloat homeAreaHeight = self.tableView.safeAreaInsets.bottom - self.tableView.contentInset.bottom;
 
@@ -1117,10 +1103,16 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 			// If keyboard is hidden, save room for the home "button"
 			heightOfVisibleView -= homeAreaHeight;
 		}
-	}
-#endif
 
-	CGFloat verticalOffsetMaximum = fmax(self.topLayoutGuide.length * -1, self.tableView.contentSize.height - heightOfVisibleView);
+		topInset = self.view.safeAreaInsets.top;
+	} else {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+		topInset = self.topLayoutGuide.length;
+#pragma clang diagnostic pop
+	}
+
+	CGFloat verticalOffsetMaximum = fmax(topInset * -1, self.tableView.contentSize.height - heightOfVisibleView);
 
 	verticalOffset = fmin(verticalOffset, verticalOffsetMaximum);
 	CGPoint contentOffset = CGPointMake(0, verticalOffset);
@@ -1144,12 +1136,10 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 		CGFloat topContentInset = self.tableView.contentInset.top;
 		CGFloat homeAreaInset = 0;
-#ifdef __IPHONE_11_0
 		if (@available(iOS 11.0, *)) {
 			topContentInset = fmax(self.tableView.layoutMargins.top, self.tableView.safeAreaInsets.top);
 			homeAreaInset = fmax(0, self.tableView.safeAreaInsets.bottom - self.tableView.contentInset.bottom);
 		}
-#endif
 
 		// Available space is between the top of the keyboard and the bottom of the navigation bar
 		height = fmin(CGRectGetMinY(localKeyboardRect), CGRectGetHeight(self.view.bounds)) - topContentInset;

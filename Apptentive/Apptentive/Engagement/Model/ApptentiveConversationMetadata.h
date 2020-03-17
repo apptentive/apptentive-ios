@@ -17,7 +17,7 @@ typedef BOOL (^ApptentiveConversationMetadataItemFilter)(ApptentiveConversationM
 
 @interface ApptentiveConversationMetadata : NSObject <NSSecureCoding>
 
-@property (strong, nonatomic) NSMutableArray *items;
+@property (readonly, strong, nonatomic) NSMutableArray *items;
 
 - (nullable ApptentiveConversationMetadataItem *)findItemFilter:(ApptentiveConversationMetadataItemFilter)filter;
 - (void)addItem:(ApptentiveConversationMetadataItem *)item;

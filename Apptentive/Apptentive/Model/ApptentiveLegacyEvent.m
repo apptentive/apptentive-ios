@@ -12,6 +12,8 @@
 #import "ApptentiveLegacyEvent.h"
 #import "ApptentiveSerialRequest.h"
 #import "Apptentive_Private.h"
+#import "ApptentiveUnarchiver.h"
+#import "ApptentiveArchiver.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -43,7 +45,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 		// Add custom data, interaction identifier, and extended data
 		if (event.dictionaryData != nil) {
-			NSDictionary *dictionaryData = [NSKeyedUnarchiver unarchiveObjectWithData:event.dictionaryData];
+			NSSet *allowedClasses = [NSSet setWithArray:@[[NSDictionary class], [NSArray class]]];
+			NSDictionary *dictionaryData = [ApptentiveUnarchiver unarchivedObjectOfClasses:allowedClasses fromData:event.dictionaryData];
 
 			payload.customData = dictionaryData[@"custom_data"];
 
@@ -129,7 +132,8 @@ NS_ASSUME_NONNULL_BEGIN
 	} else {
 		NSDictionary *result = nil;
 		@try {
-			result = [NSKeyedUnarchiver unarchiveObjectWithData:self.dictionaryData];
+			NSSet *allowedClasses = [NSSet setWithArray:@[[NSDictionary class], [NSString class]]];
+			result = [ApptentiveUnarchiver unarchivedObjectOfClasses:allowedClasses fromData:self.dictionaryData];
 		} @catch (NSException *exception) {
 			ApptentiveLogError(ApptentiveLogTagInteractions, @"Unable to unarchive event: %@", exception);
 		}
@@ -141,7 +145,7 @@ NS_ASSUME_NONNULL_BEGIN
 	if (dictionary == nil) {
 		return nil;
 	} else {
-		return [NSKeyedArchiver archivedDataWithRootObject:dictionary];
+		return [ApptentiveArchiver archivedDataWithRootObject:dictionary];
 	}
 }
 

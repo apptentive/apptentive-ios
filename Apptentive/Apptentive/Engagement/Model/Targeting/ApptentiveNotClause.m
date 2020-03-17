@@ -9,6 +9,9 @@
 #import "ApptentiveNotClause.h"
 #import "ApptentiveFalseClause.h"
 #import "ApptentiveAndClause.h"
+#import "ApptentiveOrClause.h"
+#import "ApptentiveNotClause.h"
+#import "ApptentiveComparisonClause.h"
 #import "ApptentiveIndentPrinter.h"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -63,7 +66,15 @@ static NSString * const SubClauseKey = @"subClause";
 {
 	self = [super initWithCoder:coder];
 	if (self) {
-		_subClause = [coder decodeObjectForKey:SubClauseKey];
+		NSSet *allowedClasses = [NSSet setWithArray:@[
+			[NSArray class],
+			[ApptentiveAndClause class],
+			[ApptentiveOrClause class],
+			[ApptentiveNotClause class],
+			[ApptentiveComparisonClause class],
+			[ApptentiveFalseClause class]
+		]];
+		_subClause = [coder decodeObjectOfClasses:allowedClasses forKey:SubClauseKey];
 	}
 	return self;
 }

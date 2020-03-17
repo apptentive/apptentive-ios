@@ -38,6 +38,8 @@
 #import "Apptentive_Private.h"
 #import "NSData+Encryption.h"
 #import "ApptentiveDispatchQueue.h"
+#import "ApptentiveArchiver.h"
+#import "ApptentiveUnarchiver.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -259,7 +261,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Conversation decrypted (took %g ms).", decryptionStopWatch.elapsedMilliseconds);
 	}
 
-	ApptentiveConversation *conversation = [NSKeyedUnarchiver unarchiveObjectWithData:conversationData];
+	ApptentiveConversation *conversation = [ApptentiveUnarchiver unarchivedObjectOfClass:[ApptentiveConversation class] fromData:conversationData];
 	if (conversation == nil) {
 		ApptentiveLogError(ApptentiveLogTagConversation, @"Unable to load conversation from archive.");
 		return nil;
@@ -457,7 +459,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 	ApptentiveConversationMetadata *metadata = nil;
 	if ([ApptentiveFileUtilities fileExistsAtPath:metadataPath]) {
-		metadata = [NSKeyedUnarchiver unarchiveObjectWithFile:metadataPath];
+		metadata = [ApptentiveUnarchiver unarchivedObjectOfClass:[ApptentiveConversationMetadata class] fromFile:metadataPath];
 		if (metadata) {
 			// TODO: dispatch debug event
 			return metadata;
@@ -470,7 +472,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 }
 
 - (BOOL)saveMetadata {
-	return [NSKeyedArchiver archiveRootObject:self.conversationMetadata toFile:self.metadataPath];
+	return [ApptentiveArchiver archiveRootObject:self.conversationMetadata toFile:self.metadataPath];
 }
 
 #pragma mark - Login/Logout
@@ -904,7 +906,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		return NO;
 	}
 
-	NSData *conversationData = [NSKeyedArchiver archivedDataWithRootObject:conversation];
+	NSData *conversationData = [ApptentiveArchiver archivedDataWithRootObject:conversation];
 
 	ApptentiveAssertNotNil(conversationData, @"Conversation data serialization failed");
 
@@ -955,7 +957,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 	if ([[NSFileManager defaultManager] fileExistsAtPath:self.manifestPath]) {
 		ApptentiveLogDebug(ApptentiveLogTagConversation, @"Loading cached engagment manifest from %@.", self.manifestPath);
 		@try {
-			_manifest = [NSKeyedUnarchiver unarchiveObjectWithFile:self.manifestPath];
+			_manifest = [ApptentiveUnarchiver unarchivedObjectOfClass:[ApptentiveEngagementManifest class] fromFile:self.manifestPath];
 
 			[self notifyEngagementManifestUpdate];
 		} @catch (NSException *exc) {
@@ -984,7 +986,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 - (BOOL)saveManifest {
 	ApptentiveAssertOperationQueue(self.operationQueue);
 
-	return [NSKeyedArchiver archiveRootObject:_manifest toFile:self.manifestPath];
+	return [ApptentiveArchiver archiveRootObject:_manifest toFile:self.manifestPath];
 }
 
 #pragma mark - Private
@@ -1103,7 +1105,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 		_localEngagementManifestURL = localEngagementManifestURL;
 
 		if (localEngagementManifestURL == nil) {
-			_manifest = [NSKeyedUnarchiver unarchiveObjectWithFile:self.manifestPath];
+			_manifest = [ApptentiveUnarchiver unarchivedObjectOfClass:[ApptentiveEngagementManifest class] fromFile:self.manifestPath];
 
 			if ([self.manifest.expiry timeIntervalSinceNow] <= 0) {
 				[self fetchEngagementManifest];

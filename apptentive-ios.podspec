@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
   s.platform = :ios, '9.0'
   s.source_files   = 'Apptentive/Apptentive/**/*.{h,m}'
   s.requires_arc = true
-  s.frameworks     = 'AVFoundation', 'CoreData', 'CoreGraphics', 'Foundation', 'ImageIO', 'MobileCoreServices', 'QuartzCore', 'QuickLook', 'SystemConfiguration', 'UIKit'
+  s.frameworks     = 'AVFoundation', 'CoreData', 'CoreGraphics', 'Foundation', 'ImageIO', 'QuartzCore', 'QuickLook', 'SystemConfiguration', 'UIKit'
   s.resource_bundle = { 'ApptentiveResources' => [
 		'Apptentive/Apptentive/Model/*.xcdatamodeld',
 		'Apptentive/Apptentive/Model/*.xcmappingmodel',

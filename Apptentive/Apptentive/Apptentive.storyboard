@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16086"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Message Center Title-->
         <scene sceneID="Gzy-cr-Fse">
             <objects>
                 <tableViewController storyboardIdentifier="MessageCenter" id="W0l-Dy-ioE" customClass="ApptentiveMessageCenterViewController" sceneMemberID="viewController">
@@ -1132,7 +1132,6 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="55b-97-XRn">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="barTintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </navigationBar>
                     <connections>
                         <segue destination="0Su-Sq-q29" kind="relationship" relationship="rootViewController" id="NxR-vG-Lh2"/>
@@ -1204,7 +1203,7 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="characterWrap" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="36H-6w-wxR">
-                                            <rect key="frame" x="0.0" y="11" width="306" height="0.0"/>
+                                            <rect key="frame" x="0.0" y="11" width="73" height="30"/>
                                             <accessibility key="accessibilityConfiguration">
                                                 <accessibilityTraits key="traits" notEnabled="YES"/>
                                             </accessibility>
@@ -1213,14 +1212,14 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="V0d-qS-AUl">
-                                            <rect key="frame" x="142" y="19" width="22" height="17"/>
+                                            <rect key="frame" x="25.5" y="49" width="22" height="22"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="22" id="SUc-ta-9Xx"/>
                                                 <constraint firstAttribute="height" constant="22" id="fFx-iS-OmJ"/>
                                             </constraints>
                                         </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Not at all likely" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fhA-48-7Ls">
-                                            <rect key="frame" x="142" y="44" width="83" height="15"/>
+                                            <rect key="frame" x="25.5" y="79" width="83" height="15"/>
                                             <accessibility key="accessibilityConfiguration">
                                                 <accessibilityTraits key="traits" staticText="YES" notEnabled="YES"/>
                                             </accessibility>
@@ -1256,7 +1255,7 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="characterWrap" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="O2s-1I-ie4">
-                                            <rect key="frame" x="0.0" y="11" width="306" height="0.0"/>
+                                            <rect key="frame" x="0.0" y="11" width="73" height="30"/>
                                             <accessibility key="accessibilityConfiguration">
                                                 <accessibilityTraits key="traits" notEnabled="YES"/>
                                             </accessibility>
@@ -1265,7 +1264,7 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="9se-la-06w">
-                                            <rect key="frame" x="142" y="19" width="22" height="17"/>
+                                            <rect key="frame" x="25.5" y="49" width="22" height="22"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="22" id="13Q-a7-HHI"/>
                                                 <constraint firstAttribute="height" constant="22" id="K5t-uD-k3k"/>
@@ -1296,7 +1295,7 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="characterWrap" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="56T-vU-eNv">
-                                            <rect key="frame" x="0.0" y="11" width="306" height="0.0"/>
+                                            <rect key="frame" x="0.0" y="11" width="73" height="30"/>
                                             <accessibility key="accessibilityConfiguration">
                                                 <accessibilityTraits key="traits" notEnabled="YES"/>
                                             </accessibility>
@@ -1305,7 +1304,7 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Extremely likely" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="F6q-PO-OtH">
-                                            <rect key="frame" x="76" y="44" width="88" height="15"/>
+                                            <rect key="frame" x="-40.5" y="79" width="88" height="15"/>
                                             <accessibility key="accessibilityConfiguration">
                                                 <accessibilityTraits key="traits" staticText="YES" notEnabled="YES"/>
                                             </accessibility>
@@ -1314,7 +1313,7 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="vCy-0S-vv2">
-                                            <rect key="frame" x="142" y="19" width="22" height="17"/>
+                                            <rect key="frame" x="25.5" y="49" width="22" height="22"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="22" id="LGr-De-SFp"/>
                                                 <constraint firstAttribute="height" constant="22" id="cTf-d5-2qv"/>
@@ -1488,7 +1487,7 @@ Your feedback is hosted by Apptentive and is subject to both Apptentive’s priv
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="n5o-EB-mVk">
-                                            <rect key="frame" x="19" y="0.0" width="268" height="44"/>
+                                            <rect key="frame" x="19" y="0.0" width="268" height="88"/>
                                             <string key="text">Three
 Whole
 Lines</string>
@@ -1618,8 +1617,10 @@ Lines</string>
                         <outlet property="footerView" destination="bBK-pb-4Z7" id="fuG-Zm-GSj"/>
                         <outlet property="headerBackgroundView" destination="hym-vX-x0x" id="J6F-sy-hZo"/>
                         <outlet property="headerView" destination="5MM-w9-NsG" id="8C8-T1-htU"/>
-                        <outlet property="missingRequiredItem" destination="j9x-29-teK" id="7iq-6Q-OwO"/>
+                        <outlet property="missingRequiredItem" destination="j9x-29-teK" id="Qzp-O8-FAk"/>
                         <outlet property="submitButton" destination="W2C-ze-Odt" id="tRG-fw-1rW"/>
+                        <outlet property="termsAndConditionsTextView" destination="j7b-7z-fPp" id="t4p-jE-1Wf"/>
+                        <outlet property="termsAndConditionsTopConstraint" destination="qhO-XE-qU6" id="1zU-D2-9P8"/>
                     </connections>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="WC4-1a-1lH" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1632,13 +1633,13 @@ Lines</string>
                             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         </view>
                         <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eQS-jv-07Q">
-                            <rect key="frame" x="274" y="24" width="30" height="34"/>
+                            <rect key="frame" x="257" y="24" width="30" height="34"/>
                             <connections>
                                 <action selector="showAbout:" destination="0Su-Sq-q29" eventType="touchUpInside" id="oe5-zj-xZf"/>
                             </connections>
                         </button>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Would you like to take a survey?!" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="220" translatesAutoresizingMaskIntoConstraints="NO" id="QJU-jb-fK0">
-                            <rect key="frame" x="19" y="19" width="243" height="40"/>
+                            <rect key="frame" x="19" y="19" width="230" height="40"/>
                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                             <color key="textColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <nil key="highlightedColor"/>
@@ -1653,14 +1654,14 @@ Lines</string>
                     </subviews>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
-                        <constraint firstItem="eQS-jv-07Q" firstAttribute="leading" secondItem="QJU-jb-fK0" secondAttribute="trailing" constant="8" id="eko-8l-aOf"/>
-                        <constraint firstAttribute="trailingMargin" secondItem="QJU-jb-fK0" secondAttribute="trailing" priority="760" constant="3" id="WFh-nD-Kvx"/>
                         <constraint firstAttribute="trailing" secondItem="kjO-RC-C9t" secondAttribute="trailing" id="7ki-29-dG1"/>
                         <constraint firstItem="kjO-RC-C9t" firstAttribute="top" relation="greaterThanOrEqual" secondItem="eQS-jv-07Q" secondAttribute="bottom" constant="24" id="FhP-NR-GO3"/>
                         <constraint firstAttribute="trailing" secondItem="hym-vX-x0x" secondAttribute="trailing" id="O7u-UU-rCY"/>
                         <constraint firstItem="kjO-RC-C9t" firstAttribute="leading" secondItem="5MM-w9-NsG" secondAttribute="leading" id="RHh-BL-x21"/>
+                        <constraint firstAttribute="trailingMargin" secondItem="QJU-jb-fK0" secondAttribute="trailing" priority="760" constant="3" id="WFh-nD-Kvx"/>
                         <constraint firstItem="hym-vX-x0x" firstAttribute="top" secondItem="5MM-w9-NsG" secondAttribute="top" constant="-1000" id="YEn-ux-FqZ"/>
                         <constraint firstAttribute="bottom" secondItem="kjO-RC-C9t" secondAttribute="bottom" id="akX-ad-z1E"/>
+                        <constraint firstItem="eQS-jv-07Q" firstAttribute="leading" secondItem="QJU-jb-fK0" secondAttribute="trailing" constant="8" id="eko-8l-aOf"/>
                         <constraint firstItem="QJU-jb-fK0" firstAttribute="leading" secondItem="5MM-w9-NsG" secondAttribute="leadingMargin" constant="3" id="fZv-8x-wkE"/>
                         <constraint firstItem="eQS-jv-07Q" firstAttribute="top" secondItem="5MM-w9-NsG" secondAttribute="top" constant="24" id="fsQ-O1-gcB"/>
                         <constraint firstItem="hym-vX-x0x" firstAttribute="leading" secondItem="5MM-w9-NsG" secondAttribute="leading" id="hnU-Vl-6cU"/>
@@ -1686,8 +1687,17 @@ Lines</string>
                             <rect key="frame" x="0.0" y="0.0" width="320" height="1085"/>
                             <color key="backgroundColor" red="0.96772205829620361" green="0.96772205829620361" blue="0.96772205829620361" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         </view>
+                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" verticalHuggingPriority="1000" verticalCompressionResistancePriority="500" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" delaysContentTouches="NO" canCancelContentTouches="NO" bouncesZoom="NO" editable="NO" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="j7b-7z-fPp">
+                            <rect key="frame" x="8" y="68" width="304" height="17"/>
+                            <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
+                            <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
+                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            <connections>
+                                <outlet property="delegate" destination="0Su-Sq-q29" id="O7E-AA-iLC"/>
+                            </connections>
+                        </textView>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="W2C-ze-Odt" customClass="ApptentiveSurveySubmitButton">
-                            <rect key="frame" x="128" y="25" width="64" height="36"/>
+                            <rect key="frame" x="128" y="24" width="64" height="36"/>
                             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
                             <state key="normal" title="Submit"/>
@@ -1697,12 +1707,16 @@ Lines</string>
                         </button>
                     </subviews>
                     <constraints>
-                        <constraint firstAttribute="bottom" secondItem="W2C-ze-Odt" secondAttribute="bottom" constant="24" id="0YT-BH-6dL"/>
+                        <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="W2C-ze-Odt" secondAttribute="bottom" constant="24" id="0YT-BH-6dL"/>
                         <constraint firstAttribute="trailing" secondItem="j6Y-7N-uj9" secondAttribute="trailing" id="5cq-NM-1l8"/>
                         <constraint firstItem="j6Y-7N-uj9" firstAttribute="leading" secondItem="bBK-pb-4Z7" secondAttribute="leading" id="9zx-eE-1ZZ"/>
-                        <constraint firstItem="W2C-ze-Odt" firstAttribute="top" secondItem="bBK-pb-4Z7" secondAttribute="top" constant="25" id="A33-8U-jkg"/>
                         <constraint firstAttribute="bottom" secondItem="j6Y-7N-uj9" secondAttribute="bottom" constant="-1000" id="HCT-mn-Dui"/>
+                        <constraint firstItem="SNv-iB-3hH" firstAttribute="bottom" secondItem="j7b-7z-fPp" secondAttribute="bottom" id="Idh-s1-FZd"/>
+                        <constraint firstItem="SNv-iB-3hH" firstAttribute="trailing" secondItem="j7b-7z-fPp" secondAttribute="trailing" constant="8" id="Mab-k5-MTs"/>
+                        <constraint firstItem="j7b-7z-fPp" firstAttribute="leading" secondItem="bBK-pb-4Z7" secondAttribute="leading" constant="8" id="RNF-Er-HmF"/>
+                        <constraint firstItem="W2C-ze-Odt" firstAttribute="top" secondItem="SNv-iB-3hH" secondAttribute="top" constant="24" id="TcT-bu-jly"/>
                         <constraint firstItem="W2C-ze-Odt" firstAttribute="centerX" secondItem="bBK-pb-4Z7" secondAttribute="centerX" id="W5Y-vq-irv"/>
+                        <constraint firstItem="j7b-7z-fPp" firstAttribute="top" secondItem="W2C-ze-Odt" secondAttribute="bottom" constant="8" id="qhO-XE-qU6"/>
                         <constraint firstItem="j6Y-7N-uj9" firstAttribute="top" secondItem="bBK-pb-4Z7" secondAttribute="top" id="sOs-gn-9Hl"/>
                     </constraints>
                     <viewLayoutGuide key="safeArea" id="SNv-iB-3hH"/>

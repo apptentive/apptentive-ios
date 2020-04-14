@@ -55,6 +55,27 @@ NSString *const ApptentiveErrorDomain = @"com.apptentive";
 static Apptentive *_sharedInstance;
 static Apptentive *_nullInstance;
 
+@implementation TermsAndConditions
+
+- (instancetype)initWithBodyText:(nullable NSString *)bodyText linkText:(nullable NSString *)linkText linkURL:(nullable NSURL *)linkURL {
+    
+	self = [super init];
+
+	if (self) {
+		_bodyText = bodyText;
+		_linkText = linkText;
+        _linkURL = linkURL;
+	}
+
+	return self;
+}
+
+- (id)copyWithZone:(nullable NSZone *)zone {
+    return [[[self class] alloc] initWithBodyText: [self.bodyText copy] linkText: [self.linkText copy] linkURL: [self.linkURL copy]];
+}
+
+@end
+
 
 @implementation ApptentiveConfiguration
 
@@ -145,7 +166,9 @@ static Apptentive *_nullInstance;
 		_appID = configuration.appID;
 
 		_showInfoButton = configuration.showInfoButton;
-
+		
+        _surveyTermsAndConditions = configuration.surveyTermsAndConditions;
+        
 		setShouldSanitizeApptentiveLogMessages(configuration.shouldSanitizeLogMessages);
 
 		_backend = [[ApptentiveBackend alloc] initWithApptentiveKey:_apptentiveKey
@@ -1073,16 +1096,6 @@ static Apptentive *_nullInstance;
 @implementation ApptentiveNavigationController
 
 // Container to allow customization of Apptentive UI using UIAppearance
-
-- (nullable instancetype)initWithCoder:(NSCoder *)aDecoder {
-	self = [super initWithCoder:aDecoder];
-	if (self) {
-		if (!([UINavigationBar appearance].barTintColor || [UINavigationBar appearanceWhenContainedInInstancesOfClasses:@[[ApptentiveNavigationController class]]].barTintColor)) {
-			[UINavigationBar appearanceWhenContainedInInstancesOfClasses:@[[ApptentiveNavigationController class]]].barTintColor = [UIColor whiteColor];
-		}
-	}
-	return self;
-}
 
 - (void)presentAnimated:(BOOL)animated completion:(void (^__nullable)(void))completion {
 	self.apptentiveAlertWindow = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];

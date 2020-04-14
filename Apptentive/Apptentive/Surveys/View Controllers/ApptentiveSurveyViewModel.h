@@ -76,6 +76,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)didSubmit:(UIViewController *)presentingViewController;
 - (void)commitChangeAtIndexPath:(NSIndexPath *)indexPath;
 
+- (nullable NSAttributedString *)termsAndConditionsAttributedText:(TermsAndConditions *)termsAndConditions;
+
 @property (readonly, nonatomic) NSDictionary *answers;
 
 @end

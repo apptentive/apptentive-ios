@@ -17,6 +17,7 @@
 #import "ApptentiveSurveyResponsePayload.h"
 #import "Apptentive_Private.h"
 #import "ApptentiveBackend+Engagement.h"
+#import "Apptentive.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -203,6 +204,57 @@ NSString *const ApptentiveInteractionSurveyEventLabelCancel = @"cancel";
 
 - (NSInteger)textFieldTagForIndexPath:(NSIndexPath *)indexPath {
 	return (indexPath.section << 16) | (indexPath.item & 0xFFFF);
+}
+
+-(BOOL)isNonEmptyText:(NSString *)text {
+    NSString *trimmed = [text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    BOOL isValid = [trimmed length] > 0;
+    
+    return isValid;
+}
+
+- (nullable NSAttributedString *)termsAndConditionsAttributedText:(TermsAndConditions *)termsAndConditions {
+    NSMutableAttributedString *result = [[NSMutableAttributedString alloc] init];
+    
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    paragraphStyle.alignment = NSTextAlignmentCenter;
+    
+    NSDictionary *attributes = @{
+        NSParagraphStyleAttributeName: paragraphStyle,
+        NSFontAttributeName: [self.styleSheet fontForStyle:ApptentiveTextStyleSurveyInstructions],
+        NSForegroundColorAttributeName: [self.styleSheet colorForStyle:ApptentiveTextStyleBody],
+    };
+    
+    NSString *bodyText = termsAndConditions.bodyText;
+    BOOL hasBodyText = [self isNonEmptyText:bodyText];
+    
+    if (hasBodyText) {
+        [result appendAttributedString:[[NSAttributedString alloc] initWithString:bodyText attributes:attributes]];
+    }
+    
+    NSURL *linkURL = termsAndConditions.linkURL;
+    BOOL hasValidURL = linkURL && [linkURL scheme] && [linkURL host];
+    
+    if(hasValidURL) {
+        if (hasBodyText) {
+            [result appendAttributedString:[[NSAttributedString alloc] initWithString:@"\n\n" attributes:attributes]];
+        }
+        
+        NSString *linkText = termsAndConditions.linkText;
+        NSString *linkURLString = [linkURL absoluteString];
+        NSString *linkTextToDisplay = [self isNonEmptyText:linkText] ? linkText : linkURLString;
+        
+        NSMutableDictionary *linkAttributes = [attributes mutableCopy];
+        linkAttributes[NSLinkAttributeName] = linkURL;
+        
+        [result appendAttributedString:[[NSAttributedString alloc] initWithString:linkTextToDisplay attributes:linkAttributes]];
+    } else {
+        ApptentiveLogWarning(@"Link URL invalid in the configuration file: Please make sure Link URL in TermsAndConditions is a valid link.");
+    }
+    
+    result = (hasBodyText || hasValidURL) ? result : nil;
+    
+    return result;
 }
 
 #pragma mark - Mutation

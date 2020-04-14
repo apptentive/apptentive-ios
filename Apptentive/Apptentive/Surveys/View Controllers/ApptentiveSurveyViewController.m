@@ -24,6 +24,8 @@
 #import "ApptentiveUtilities.h"
 #import "Apptentive_Private.h"
 
+#import "ApptentiveURLOpener.h"
+
 // These need to match the values from the storyboard
 #define QUESTION_HORIZONTAL_MARGIN 52.0
 #define QUESTION_VERTICAL_MARGIN 36.0
@@ -49,6 +51,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) IBOutlet UIView *footerBackgroundView;
 @property (strong, nonatomic) IBOutlet ApptentiveSurveySubmitButton *submitButton;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *missingRequiredItem;
+@property (strong, nonatomic) IBOutlet UITextView *termsAndConditionsTextView;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *termsAndConditionsTopConstraint;
+
 
 @property (nullable, strong, nonatomic) NSIndexPath *editingIndexPath;
 
@@ -77,6 +82,15 @@ NS_ASSUME_NONNULL_BEGIN
 	[self.headerView.infoButton setImage:[ApptentiveUtilities imageNamed:@"at_info"] forState:UIControlStateNormal];
 	self.headerView.infoButton.accessibilityLabel = ApptentiveLocalizedString(@"About Apptentive", @"Accessibility label for 'show about' button");
 	[self.submitButton setTitle:self.viewModel.submitButtonText forState:UIControlStateNormal];
+
+	NSAttributedString *termsAndConditions = [self.viewModel termsAndConditionsAttributedText:Apptentive.shared.surveyTermsAndConditions];
+
+	if (termsAndConditions != nil) {
+		self.termsAndConditionsTextView.attributedText = termsAndConditions;
+	} else {
+		self.termsAndConditionsTopConstraint.active = NO;
+		self.termsAndConditionsTextView.hidden = YES;
+	}
 
 	if (!self.viewModel.showInfoButton && self.viewModel.greeting.length == 0) {
 		self.headerView = nil;
@@ -590,6 +604,18 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)textViewDidEndEditing:(UITextView *)textView {
 	[self.viewModel commitChangeAtIndexPath:[self.viewModel indexPathForTextFieldTag:textView.tag]];
+}
+
+- (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange {
+	if (textView != self.termsAndConditionsTextView) {
+		return NO;
+	}
+    
+    if([UIApplication.sharedApplication canOpenURL:URL]) {
+        [ApptentiveURLOpener openURL:URL completionHandler: NULL];
+    }
+    
+	return NO;
 }
 
 #pragma mark - Text field delegate

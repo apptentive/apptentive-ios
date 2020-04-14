@@ -20,7 +20,7 @@ FOUNDATION_EXPORT double ApptentiveVersionNumber;
 FOUNDATION_EXPORT const unsigned char ApptentiveVersionString[];
 
 /** The version number of the Apptentive SDK. */
-#define kApptentiveVersionString @"5.2.9"
+#define kApptentiveVersionString @"5.2.10"
 
 /** The version number of the Apptentive API platform. */
 #define kApptentiveAPIVersionString @"9"
@@ -84,7 +84,7 @@ extern NSNotificationName const ApptentiveSurveySentNotification;
 extern NSNotificationName const ApptentiveMessageSentNotification;
 
 /** Notification user info key whose value indicates whether the message was sent by the user or using a sendAttachment method. */
-extern NSString * const ApptentiveSentByUserKey;
+extern NSString *const ApptentiveSentByUserKey;
 
 /** Error domain for the Apptentive SDK */
 extern NSString *const ApptentiveErrorDomain;
@@ -127,6 +127,16 @@ typedef NS_ENUM(NSUInteger, ApptentiveLogLevel) {
 	ApptentiveLogLevelVerbose = 6
 };
 
+@interface TermsAndConditions : NSObject<NSCopying>
+
+@property (nullable, strong, nonatomic, readonly) NSString *bodyText;
+@property (nullable, strong, nonatomic, readonly) NSString *linkText;
+@property (nullable, strong, nonatomic, readonly) NSURL *linkURL;
+
+- (instancetype)initWithBodyText:(nullable NSString *)bodyText linkText:(nullable NSString *)linkText linkURL:(nullable NSURL *)linkURL;
+
+@end
+
 /**
  An `ApptentiveConfiguration` instance is used to pass configuration
  parameters into the `-registerWithConfiguration:` method.
@@ -163,6 +173,9 @@ typedef NS_ENUM(NSUInteger, ApptentiveLogLevel) {
 
 /** If set, shows a button in Surveys and Message Center that presents information about Apptentive including a link to our privacy policy. */
 @property (assign, nonatomic) BOOL showInfoButton;
+
+/** If set, shows a valid combination of terms & conditions and/or a link with an optional text mask, below the submit button in Surveys. */
+@property (copy, nonatomic, nullable) TermsAndConditions* surveyTermsAndConditions;
 
 /**
  Returns an instance of the `ApptentiveConfiguration` class
@@ -245,6 +258,9 @@ typedef NS_ENUM(NSUInteger, ApptentiveLogLevel) {
 @property (copy, nonatomic, nullable) NSString *appID;
 
 @property (readonly, nonatomic) BOOL showInfoButton;
+
+@property (copy, nonatomic, nullable, readonly) TermsAndConditions* surveyTermsAndConditions;
+
 
 /** An object conforming to the `ApptentiveDelegate` protocol.
  If a `nil` value is passed for the view controller into methods such as	`-engage:fromViewController`,

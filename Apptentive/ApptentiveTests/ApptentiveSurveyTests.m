@@ -246,4 +246,33 @@
 	XCTAssertEqualObjects([self.viewModel errorMessageAtIndex:4], @"You have selected too many or too few answers.");
 }
 
+-(void)testTermsAndConditions {
+    NSString *bodyText = @"body";
+    NSString *linkText = @"link";
+    NSString *linkURLText = @"http://www.apple.com";
+    
+    [self assertTermsAndConditonsBodyText:@"" linkText:@"" linkURLText:@"" expectedText:NULL expectedURLText:NULL];
+    [self assertTermsAndConditonsBodyText:NULL linkText:NULL linkURLText:NULL expectedText:NULL expectedURLText:NULL];
+    [self assertTermsAndConditonsBodyText:NULL linkText:linkText linkURLText:NULL expectedText:NULL expectedURLText:NULL];
+    [self assertTermsAndConditonsBodyText:bodyText linkText:NULL linkURLText:NULL expectedText:bodyText expectedURLText:NULL];
+    [self assertTermsAndConditonsBodyText:@" " linkText:NULL linkURLText:NULL expectedText:NULL expectedURLText:NULL];
+    [self assertTermsAndConditonsBodyText:bodyText linkText:linkText linkURLText:NULL expectedText:bodyText expectedURLText:NULL];
+    [self assertTermsAndConditonsBodyText:NULL linkText:linkText linkURLText:linkURLText expectedText:linkText expectedURLText:linkURLText];
+    [self assertTermsAndConditonsBodyText:NULL linkText:@" " linkURLText:linkURLText expectedText:linkURLText expectedURLText:linkURLText];
+    [self assertTermsAndConditonsBodyText:NULL linkText:NULL linkURLText:linkURLText expectedText:linkURLText expectedURLText:linkURLText];
+    [self assertTermsAndConditonsBodyText:bodyText linkText:linkText linkURLText:linkURLText expectedText:@"body\n\nlink" expectedURLText:linkURLText];
+    [self assertTermsAndConditonsBodyText:bodyText linkText:NULL linkURLText:linkURLText expectedText:@"body\n\nhttp://www.apple.com" expectedURLText:linkURLText];
+}
+
+-(void)assertTermsAndConditonsBodyText:(NSString*)bodyText linkText:(NSString*)linkText linkURLText:(NSString*)linkURLText expectedText:(NSString*)expectedText expectedURLText:(NSString*)expectedURLText {
+    NSURL *linkURL = [NSURL URLWithString:linkURLText];
+    TermsAndConditions *termsAndConditions = [[TermsAndConditions alloc] initWithBodyText:bodyText linkText:linkText linkURL:linkURL];
+    
+    NSAttributedString *result = [self.viewModel termsAndConditionsAttributedText:termsAndConditions];
+    NSURL *resultURL = [result attribute:NSLinkAttributeName atIndex:[result length] - 1 effectiveRange:NULL];
+    
+    XCTAssertEqualObjects([resultURL absoluteString], expectedURLText);
+    XCTAssertEqualObjects([result string], expectedText);
+}
+
 @end

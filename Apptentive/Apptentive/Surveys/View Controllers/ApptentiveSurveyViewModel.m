@@ -161,13 +161,59 @@ NSString *const ApptentiveInteractionSurveyEventLabelCancel = @"cancel";
 	return [self.selectedIndexPaths containsObject:indexPath];
 }
 
+- (nullable NSString *)rangeOptionAccessibilityLabelForQuestionAtIndexPath:(NSIndexPath *)indexPath {
+    NSString *result = [self textOfChoiceAtIndexPath:indexPath];
+    
+    return result;
+}
+
+- (nullable NSString *)rangeOptionAccessibilityHintForQuestionAtIndexPath:(NSIndexPath *)indexPath {
+    NSInteger questionIndex = indexPath.section;
+    
+    NSIndexPath *minValueIndexPath = [NSIndexPath indexPathForRow:0 inSection: questionIndex];
+    NSString *minValueLabel = [self textOfChoiceAtIndexPath:minValueIndexPath];
+    NSString *minLabel = [self minimumLabelForQuestionAtIndex:questionIndex];
+    
+    NSInteger numberOfAnswers = [self numberOfAnswersForQuestionAtIndex:questionIndex];
+    NSIndexPath *maxValueIndexPath = [NSIndexPath indexPathForRow:numberOfAnswers - 1 inSection: questionIndex];
+    NSString *maxValueLabel = [self textOfChoiceAtIndexPath:maxValueIndexPath];
+    NSString *maxLabel = [self maximumLabelForQuestionAtIndex:questionIndex];
+    
+    NSString *result = [NSString stringWithFormat:@"where %@ is %@ and %@ is %@", minValueLabel, minLabel, maxValueLabel, maxLabel];
+
+    return result;
+  }
+  
+- (nullable NSString *)accessibilityLabelForQuestionAtIndexPath:(NSIndexPath *)indexPath {
+	ApptentiveSurveyQuestion *question = [self questionAtIndex:indexPath.section];
+
+	NSMutableArray *resultParts = [[NSMutableArray alloc] init];
+
+	if ([self.invalidQuestionIndexes containsIndex:indexPath.section] && question.errorMessage != nil) {
+		[resultParts addObject:question.errorMessage];
+	}
+
+	if (question.value) {
+		[resultParts addObject:question.value];
+	}
+
+	if (question.required) {
+		NSString *requiredHint = self.survey.requiredText ?: ApptentiveLocalizedString(@"required", @"Required answer hint");
+
+		if (requiredHint) {
+			[resultParts addObject:requiredHint];
+		}
+	}
+
+	NSString *result = [resultParts count] > 0 ? [resultParts componentsJoinedByString:@", "] : nil;
+
+	return result;
+}
+
 - (nullable NSString *)accessibilityHintForQuestionAtIndexPath:(NSIndexPath *)indexPath {
 	ApptentiveSurveyQuestion *question = [self questionAtIndex:indexPath.section];
-	if (question.required) {
-		return ApptentiveLocalizedString(@"required", @"Required answer hint");
-	}
-	
-	return nil;
+
+	return question.instructions;
 }
 
 - (ATSurveyQuestionType)typeOfQuestionAtIndex:(NSInteger)index {
@@ -187,7 +233,9 @@ NSString *const ApptentiveInteractionSurveyEventLabelCancel = @"cancel";
 }
 
 - (nullable NSString *)errorMessageAtIndex:(NSInteger)index {
-	return [self questionAtIndex:index].errorMessage;
+	ApptentiveSurveyQuestion *question = [self questionAtIndex:index];
+
+	return question.errorMessage;
 }
 
 - (BOOL)answerIsValidForQuestionAtIndex:(NSInteger)index {
@@ -207,35 +255,35 @@ NSString *const ApptentiveInteractionSurveyEventLabelCancel = @"cancel";
 }
 
 -(BOOL)isNonEmptyText:(NSString *)text {
-    NSString *trimmed = [text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    BOOL isValid = [trimmed length] > 0;
-    
-    return isValid;
+	NSString *trimmed = [text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+	BOOL isValid = [trimmed length] > 0;
+
+	return isValid;
 }
 
 - (nullable NSAttributedString *)termsAndConditionsAttributedText:(TermsAndConditions *)termsAndConditions {
-    NSMutableAttributedString *result = [[NSMutableAttributedString alloc] init];
-    
-    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-    paragraphStyle.alignment = NSTextAlignmentCenter;
-    
-    NSDictionary *attributes = @{
-        NSParagraphStyleAttributeName: paragraphStyle,
-        NSFontAttributeName: [self.styleSheet fontForStyle:ApptentiveTextStyleSurveyInstructions],
-        NSForegroundColorAttributeName: [self.styleSheet colorForStyle:ApptentiveTextStyleBody],
-    };
-    
-    NSString *bodyText = termsAndConditions.bodyText;
-    BOOL hasBodyText = [self isNonEmptyText:bodyText];
-    
-    if (hasBodyText) {
+	NSMutableAttributedString *result = [[NSMutableAttributedString alloc] init];
+
+	NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+	paragraphStyle.alignment = NSTextAlignmentCenter;
+
+	NSDictionary *attributes = @{
+		NSParagraphStyleAttributeName: paragraphStyle,
+		NSFontAttributeName: [self.styleSheet fontForStyle:ApptentiveTextStyleSurveyInstructions],
+		NSForegroundColorAttributeName: [self.styleSheet colorForStyle:ApptentiveTextStyleBody],
+	};
+
+	NSString *bodyText = termsAndConditions.bodyText;
+	BOOL hasBodyText = [self isNonEmptyText:bodyText];
+
+	if (hasBodyText) {
         [result appendAttributedString:[[NSAttributedString alloc] initWithString:bodyText attributes:attributes]];
     }
     
     NSURL *linkURL = termsAndConditions.linkURL;
     BOOL hasValidURL = linkURL && [linkURL scheme] && [linkURL host];
     
-    if(hasValidURL) {
+    if (hasValidURL) {
         if (hasBodyText) {
             [result appendAttributedString:[[NSAttributedString alloc] initWithString:@"\n\n" attributes:attributes]];
         }

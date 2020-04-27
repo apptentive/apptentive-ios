@@ -1,3 +1,9 @@
+# 2020-04-27 - v5.2.11
+
+#### Improvements
+
+* Improve accessibility in surveys for VoiceOver users.
+
 # 2020-04-14 - v5.2.10
 
 #### Improvements

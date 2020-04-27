@@ -61,6 +61,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (assign, nonatomic) CGFloat toolbarInset;
 @property (assign, nonatomic) BOOL keyboardVisible;
 
+@property (assign, nonatomic) BOOL shouldPostAccessibiltyNotificationOnScrollViewDidEndScrollingAnimation;
+
 @end
 
 
@@ -177,12 +179,25 @@ NS_ASSUME_NONNULL_BEGIN
 			HUD.imageView.image = [ApptentiveUtilities imageNamed:@"at_thanks"];
 		}
 	} else {
-		NSIndexPath *firstInvalidQuestionIndex = self.viewModel.firstInvalidAnswerIndexPath;
-		ApptentiveAssertNotNil(firstInvalidQuestionIndex, @"Expected non-nil index");
-		if (firstInvalidQuestionIndex) {
-			[self.collectionView scrollToItemAtIndexPath:firstInvalidQuestionIndex atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:YES];
-			UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, [self.viewModel errorMessageAtIndex:firstInvalidQuestionIndex.section]);
+		NSIndexPath *firstInvalidQuestionIndexPath = self.viewModel.firstInvalidAnswerIndexPath;
+		ApptentiveAssertNotNil(firstInvalidQuestionIndexPath, @"Expected non-nil index");
+		if (firstInvalidQuestionIndexPath) {
+			// Defer moving VoiceOver focus to first invalid question until after scrolling completes
+			self.shouldPostAccessibiltyNotificationOnScrollViewDidEndScrollingAnimation = YES;
+
+			[self.collectionView scrollToItemAtIndexPath:firstInvalidQuestionIndexPath atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:YES];
 		}
+	}
+}
+
+- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
+	if (self.shouldPostAccessibiltyNotificationOnScrollViewDidEndScrollingAnimation) {
+		NSIndexPath *firstInvalidQuestionIndexPath = self.viewModel.firstInvalidAnswerIndexPath;
+
+		UIView *firstInvalidQuestionView = [self.collectionView supplementaryViewForElementKind:UICollectionElementKindSectionHeader atIndexPath:firstInvalidQuestionIndexPath];
+		UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, firstInvalidQuestionView);
+
+		self.shouldPostAccessibiltyNotificationOnScrollViewDidEndScrollingAnimation = NO;
 	}
 }
 
@@ -238,6 +253,7 @@ NS_ASSUME_NONNULL_BEGIN
 			cell.textView.text = [self.viewModel textOfAnswerAtIndexPath:indexPath];
 			cell.placeholderLabel.attributedText = [self.viewModel placeholderTextOfAnswerAtIndexPath:indexPath];
 			cell.placeholderLabel.hidden = cell.textView.text.length > 0;
+			cell.placeholderLabel.isAccessibilityElement = NO;
 			cell.textView.delegate = self;
 			cell.textView.tag = [self.viewModel textFieldTagForIndexPath:indexPath];
 			cell.textView.accessibilityLabel = cell.placeholderLabel.text;
@@ -254,7 +270,6 @@ NS_ASSUME_NONNULL_BEGIN
 			cell.textField.delegate = self;
 			cell.textField.tag = [self.viewModel textFieldTagForIndexPath:indexPath];
 			cell.textField.font = [self.viewModel.styleSheet fontForStyle:ApptentiveTextStyleTextInput];
-			cell.textField.accessibilityLabel = cell.textField.placeholder;
 			cell.textField.textColor = [self.viewModel.styleSheet colorForStyle:ApptentiveTextStyleTextInput];
 
 			return cell;
@@ -263,30 +278,33 @@ NS_ASSUME_NONNULL_BEGIN
 		case ATSurveyQuestionTypeSingleSelect:
 		case ATSurveyQuestionTypeMultipleSelect: {
 			NSString *reuseIdentifier, *buttonImageName, *detailText;
-			NSString *accessibilityHintDetails = nil;
+            NSString *accessibilityLabel = nil;
+            NSString *accessibilityHint = nil;
 
 			switch ([self.viewModel typeOfQuestionAtIndex:indexPath.section]) {
 				case ATSurveyQuestionTypeRange:
 					if (indexPath.item == 0) {
 						reuseIdentifier = @"RangeMinimum";
 						detailText = [self.viewModel minimumLabelForQuestionAtIndex:indexPath.section];
-						accessibilityHintDetails = [self.viewModel minimumLabelForQuestionAtIndex:indexPath.section];
 					} else if (indexPath.item == [self.viewModel numberOfAnswersForQuestionAtIndex:indexPath.section] - 1) {
 						reuseIdentifier = @"RangeMaximum";
 						detailText = [self.viewModel maximumLabelForQuestionAtIndex:indexPath.section];
-						accessibilityHintDetails = [self.viewModel maximumLabelForQuestionAtIndex:indexPath.section];
 					} else {
 						reuseIdentifier = @"Range";
 					}
 					buttonImageName = @"at_circle";
+                    accessibilityLabel = [self.viewModel rangeOptionAccessibilityLabelForQuestionAtIndexPath:indexPath];
+                    accessibilityHint = [self.viewModel rangeOptionAccessibilityHintForQuestionAtIndexPath:indexPath];
 					break;
 				case ATSurveyQuestionTypeMultipleSelect:
 					reuseIdentifier = @"Checkbox";
 					buttonImageName = @"at_checkmark";
+                    accessibilityLabel = [self.viewModel textOfChoiceAtIndexPath:indexPath];
 					break;
 				default:
 					reuseIdentifier = @"Radio";
 					buttonImageName = @"at_circle";
+                    accessibilityLabel = [self.viewModel textOfChoiceAtIndexPath:indexPath];
 					break;
 			}
 
@@ -306,17 +324,11 @@ NS_ASSUME_NONNULL_BEGIN
 			cell.detailTextLabel.text = detailText;
 			cell.detailTextLabel.font = [self.viewModel.styleSheet fontForStyle:ApptentiveTextStyleSurveyInstructions];
 			cell.detailTextLabel.textColor = [self.viewModel.styleSheet colorForStyle:ApptentiveTextStyleSurveyInstructions];
-
-			if (detailText) {
-				cell.accessibilityHint = detailText;
-			}
-
-			if (accessibilityHintDetails.length > 0) {
-				cell.accessibilityLabel = [NSString stringWithFormat:@"%@, %@", accessibilityHintDetails, [self.viewModel textOfChoiceAtIndexPath:indexPath]];
-			} else {
-				cell.accessibilityLabel = [self.viewModel textOfChoiceAtIndexPath:indexPath];
-			}
+            
+            cell.accessibilityLabel = accessibilityLabel;
+            cell.accessibilityHint = accessibilityHint;
 			cell.accessibilityTraits |= UIAccessibilityTraitButton;
+            
 			cell.button.image = buttonImage;
 			cell.button.highlightedImage = highlightedButtonImage;
 			[cell.button sizeToFit];
@@ -352,11 +364,14 @@ NS_ASSUME_NONNULL_BEGIN
 		view.textLabel.text = [self.viewModel textOfQuestionAtIndex:indexPath.section];
 		view.textLabel.font = [self.viewModel.styleSheet fontForStyle:UIFontTextStyleBody];
 		view.textLabel.textColor = [self.viewModel.styleSheet colorForStyle:UIFontTextStyleBody];
-		view.textLabel.accessibilityHint = [self.viewModel accessibilityHintForQuestionAtIndexPath:indexPath];
 		view.instructionsTextLabel.attributedText = [self.viewModel instructionTextOfQuestionAtIndex:indexPath.section];
 		view.instructionsTextLabel.font = [self.viewModel.styleSheet fontForStyle:ApptentiveTextStyleSurveyInstructions];
 
 		view.separatorView.backgroundColor = [self.viewModel.styleSheet colorForStyle:ApptentiveColorSeparator];
+
+        view.isAccessibilityElement = YES;
+        view.accessibilityLabel = [self.viewModel accessibilityLabelForQuestionAtIndexPath:indexPath];
+        view.accessibilityHint = [self.viewModel accessibilityHintForQuestionAtIndexPath:indexPath];
 
 		return view;
 	} else {
@@ -611,7 +626,7 @@ NS_ASSUME_NONNULL_BEGIN
 		return NO;
 	}
     
-    if([UIApplication.sharedApplication canOpenURL:URL]) {
+    if ([UIApplication.sharedApplication canOpenURL:URL]) {
         [ApptentiveURLOpener openURL:URL completionHandler: NULL];
     }
     
@@ -652,7 +667,7 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - View model delegate
 
 - (void)viewModelValidationChanged:(ApptentiveSurveyViewModel *)viewModel isValid:(BOOL)valid {
-	[self.collectionViewLayout invalidateLayout];
+	[self.collectionView reloadData];
 
 	[self setToolbarHidden:valid];
 

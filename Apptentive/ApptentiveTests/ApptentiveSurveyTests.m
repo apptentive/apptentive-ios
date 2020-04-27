@@ -246,6 +246,59 @@
 	XCTAssertEqualObjects([self.viewModel errorMessageAtIndex:4], @"You have selected too many or too few answers.");
 }
 
+-(void)testRangeOptionAccessibilityLabel {
+    [self assertRangeOptionAccessibilityLabelForQuestionAtIndexPath:[NSIndexPath indexPathForItem:5 inSection:10] withExpectedResult:@"0"];
+    [self assertRangeOptionAccessibilityLabelForQuestionAtIndexPath:[NSIndexPath indexPathForItem:3 inSection:11] withExpectedResult:@"3"];
+}
+
+-(void)assertRangeOptionAccessibilityLabelForQuestionAtIndexPath:(NSIndexPath *) indexPath withExpectedResult:(NSString *)expectedResult {
+    [self.viewModel selectAnswerAtIndexPath:indexPath];
+    
+    NSString *result = [self.viewModel rangeOptionAccessibilityLabelForQuestionAtIndexPath:indexPath];
+    
+    XCTAssertEqualObjects(result, expectedResult);
+}
+
+-(void)testAccessibilityLabelForQuestionAtIndexPath {
+    [self.viewModel validate:YES];
+    
+    [self assertAccessibilityLabelForQuestionAtIndexPath: [NSIndexPath indexPathForItem:2 inSection:2] expectedResult:@"Multiselect Optional"];
+    [self assertAccessibilityLabelForQuestionAtIndexPath: [NSIndexPath indexPathForItem:2 inSection:5] expectedResult:@"Multiselect Required With Limits, Required"];
+    [self assertAccessibilityLabelForQuestionAtIndexPath: [NSIndexPath indexPathForItem:2 inSection:10] expectedResult:nil];
+    [self assertAccessibilityLabelForQuestionAtIndexPath: [NSIndexPath indexPathForItem:2 inSection:11] expectedResult:@"Required"];
+    [self assertAccessibilityLabelForQuestionAtIndexPath: [NSIndexPath indexPathForItem:0 inSection:1] expectedResult:@"You have to select one., Multichoice Required, Required"];
+}
+
+-(void) assertAccessibilityLabelForQuestionAtIndexPath:(NSIndexPath*) indexPath expectedResult:(NSString*)expectedResult {
+    NSString *result = [self.viewModel accessibilityLabelForQuestionAtIndexPath:indexPath];
+    
+    XCTAssertEqualObjects(result, expectedResult);
+}
+
+-(void)testRangeOptionAccessibilityHint {
+    [self assertRangeOptionAccessibilityHintForQuestionAtIndexPath:[NSIndexPath indexPathForItem:5 inSection:10] withExpectedResult:@"where -5 is Negative and 5 is Positive"];
+    [self assertRangeOptionAccessibilityHintForQuestionAtIndexPath:[NSIndexPath indexPathForItem:3 inSection:11] withExpectedResult:@"where 0 is Not at all likely and 10 is Extremely likely"];
+}
+
+-(void)assertRangeOptionAccessibilityHintForQuestionAtIndexPath:(NSIndexPath *) indexPath withExpectedResult:(NSString *)expectedResult {
+    [self.viewModel selectAnswerAtIndexPath:indexPath];
+    
+    NSString *result = [self.viewModel rangeOptionAccessibilityHintForQuestionAtIndexPath:indexPath];
+    
+    XCTAssertEqualObjects(result, expectedResult);
+}
+
+-(void)testAccessibilityHintForQuestionAtIndexPath {
+    [self assertAccessibilityHintForQuestionAtIndexPath: [NSIndexPath indexPathForItem:2 inSection:2] expectedResult:@"select all that apply"];
+    [self assertAccessibilityHintForQuestionAtIndexPath: [NSIndexPath indexPathForItem:2 inSection:10] expectedResult:nil];
+}
+
+-(void) assertAccessibilityHintForQuestionAtIndexPath:(NSIndexPath*) indexPath expectedResult:(NSString*)expectedResult {
+    NSString *result = [self.viewModel accessibilityHintForQuestionAtIndexPath:indexPath];
+    
+    XCTAssertEqualObjects(result, expectedResult);
+}
+
 -(void)testTermsAndConditions {
     NSString *bodyText = @"body";
     NSString *linkText = @"link";

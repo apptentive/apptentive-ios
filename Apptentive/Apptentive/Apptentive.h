@@ -79,6 +79,9 @@ extern NSNotificationName const ApptentiveSurveyShownNotification;
 /** Notification sent when a survey is submitted by the user. */
 extern NSNotificationName const ApptentiveSurveySentNotification;
 
+/** Notification sent when a survey is cancelled. */
+extern NSNotificationName const ApptentiveSurveyCancelledNotification;
+
 /** Notification sent when a message is sent, either by the user or using a sendAttachment method.
  You can use this notification to ask the user to enable push notifications. */
 extern NSNotificationName const ApptentiveMessageSentNotification;

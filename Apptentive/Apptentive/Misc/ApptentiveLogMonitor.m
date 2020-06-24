@@ -75,7 +75,7 @@ static ApptentiveLogMonitorSession * _currentSession;
 		ApptentiveLogInfo(ApptentiveLogTagMonitor, @"Previous Apptentive Log Monitor session loaded from persistent storage: %@", session);
 		[self startSession:session];
 	} else {
-#ifdef DEBUG
+#ifdef APPTENTIVE_DEBUG
 		// attempt to read access token from a clipboard
 		NSString *accessToken = [self readAccessTokenFromClipboard];
 		if (accessToken == nil) {

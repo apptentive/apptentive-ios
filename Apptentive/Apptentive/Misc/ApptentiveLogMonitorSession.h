@@ -31,7 +31,6 @@ extern NSNotificationName const ApptentiveLogMonitorSessionDidStop;
 + (nullable ApptentiveLogMonitorSession *)readSessionFromPersistentStorage;
 + (void)clearCurrentSession;
 + (void)writeSessionToPersistentStorage:(ApptentiveLogMonitorSession *)session;
-+ (nullable ApptentiveLogMonitorSession *)readSessionFromJWT:(NSString *)token;
 
 @end
 

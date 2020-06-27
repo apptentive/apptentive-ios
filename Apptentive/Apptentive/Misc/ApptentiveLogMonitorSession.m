@@ -231,24 +231,6 @@ extern NSString *ApptentiveLocalizedString(NSString *key, NSString *_Nullable co
 	}
 }
 
-+ (nullable ApptentiveLogMonitorSession *)readSessionFromJWT:(NSString *)token {
-	NSError *jwtError;
-	ApptentiveJWT *jwt = [ApptentiveJWT JWTWithContentOfString:token error:&jwtError];
-	if (jwtError != nil) {
-		ApptentiveLogError(ApptentiveLogTagMonitor, @"JWT parsing error (%@)", jwtError);
-		return nil;
-	}
-	
-	ApptentiveLogMonitorSession *configuration = [[ApptentiveLogMonitorSession alloc] init];
-	
-	NSArray *emailRecepients = ApptentiveDictionaryGetArray(jwt.payload, @"recipients");
-	if (emailRecepients != nil) {
-		configuration.emailRecipients = emailRecepients;
-	}
-	
-	return configuration;
-}
-
 + (NSString *)sessionStoragePath {
 	return [ApptentiveUtilities cacheDirectoryPath:kSessionStorageFile];
 }

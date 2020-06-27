@@ -20,7 +20,7 @@ FOUNDATION_EXPORT double ApptentiveVersionNumber;
 FOUNDATION_EXPORT const unsigned char ApptentiveVersionString[];
 
 /** The version number of the Apptentive SDK. */
-#define kApptentiveVersionString @"5.2.11"
+#define kApptentiveVersionString @"5.2.12"
 
 /** The version number of the Apptentive API platform. */
 #define kApptentiveAPIVersionString @"9"
@@ -78,6 +78,9 @@ extern NSNotificationName const ApptentiveSurveyShownNotification;
 
 /** Notification sent when a survey is submitted by the user. */
 extern NSNotificationName const ApptentiveSurveySentNotification;
+
+/** Notification sent when a survey is cancelled. */
+extern NSNotificationName const ApptentiveSurveyCancelledNotification;
 
 /** Notification sent when a message is sent, either by the user or using a sendAttachment method.
  You can use this notification to ask the user to enable push notifications. */

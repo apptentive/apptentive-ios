@@ -348,6 +348,7 @@ NS_ASSUME_NONNULL_BEGIN
 				otherCell.textField.tag = [self.viewModel textFieldTagForIndexPath:indexPath];
 				otherCell.textField.font = [self.viewModel.styleSheet fontForStyle:ApptentiveTextStyleTextInput];
 				otherCell.textField.textColor = [self.viewModel.styleSheet colorForStyle:ApptentiveTextStyleTextInput];
+                otherCell.textField.backgroundColor = [self.viewModel.styleSheet colorForStyle:ApptentiveColorTextInputBackground];
 			}
 
 			return cell;

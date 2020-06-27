@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ApptentiveLogMonitor : NSObject
 
-+ (void)startSessionWithBaseURL:(NSURL *)baseURL appKey:(NSString *)appKey signature:(NSString *)appSignature queue:(ApptentiveDispatchQueue *)queue;
++ (void)startSessionWithQueue:(ApptentiveDispatchQueue *)queue;
 + (BOOL)resumeSession;
 
 @end

@@ -34,22 +34,7 @@ static ApptentiveLogMonitorSession * _currentSession;
 #pragma mark -
 #pragma mark Session
 
-+ (void)startSessionWithBaseURL:(NSURL *)baseURL appKey:(NSString *)appKey signature:(NSString *)appSignature queue:(nonnull ApptentiveDispatchQueue *)queue {
-	if (baseURL == nil) {
-		ApptentiveLogError(ApptentiveLogTagMonitor, @"Unable to initialize log monitor: base URL is nil.");
-		return;
-	}
-
-	if (appKey.length == 0) {
-		ApptentiveLogError(ApptentiveLogTagMonitor, @"Unable to initialize log monitor: app key is nil or empty.");
-		return;
-	}
-
-	if (appSignature.length == 0) {
-		ApptentiveLogError(ApptentiveLogTagMonitor, @"Unable to initialize log monitor: app signature is nil or empty.");
-		return;
-	}
-	
++ (void)startSessionWithQueue:(nonnull ApptentiveDispatchQueue *)queue {
 	if (queue == NULL) {
 		ApptentiveLogError(ApptentiveLogTagMonitor, @"Unable to initialize log monitor: no dispatch queue.");
 		return;
@@ -62,51 +47,26 @@ static ApptentiveLogMonitorSession * _currentSession;
 			[self registerObservers];
 			
 			// attempt to start a session
-			[self startSessionWithBaseURL:baseURL appKey:appKey signature:appSignature];
+            ApptentiveLogMonitorSession *session = [ApptentiveLogMonitorSessionIO readSessionFromPersistentStorage];
+            if (session != nil) {
+                ApptentiveLogInfo(ApptentiveLogTagMonitor, @"Previous Apptentive Log Monitor session loaded from persistent storage: %@", session);
+                [self startSession:session];
+            } else {
+                if ([self IsMobileConfigInstalled]) {
+                    // Create session
+                    ApptentiveLogMonitorSession *session = [[ApptentiveLogMonitorSession alloc] init];
+
+                    // save session
+                    [ApptentiveLogMonitorSessionIO writeSessionToPersistentStorage:session];
+
+                    // start session
+                    [self startSession:session];
+                }
+            }
 		} @catch (NSException *e) {
 			ApptentiveLogCrit(ApptentiveLogTagMonitor, @"Exception while starting log monitor session (%@)", e);
 		}
 	}];
-}
-
-+ (void)startSessionWithBaseURL:(NSURL *)baseURL appKey:(NSString *)appKey signature:(NSString *)appSignature {
-	ApptentiveLogMonitorSession *session = [ApptentiveLogMonitorSessionIO readSessionFromPersistentStorage];
-	if (session != nil) {
-		ApptentiveLogInfo(ApptentiveLogTagMonitor, @"Previous Apptentive Log Monitor session loaded from persistent storage: %@", session);
-		[self startSession:session];
-	} else {
-		// attempt to read access token from a clipboard
-		NSString *accessToken = [self readAccessTokenFromClipboard];
-		if (accessToken == nil) {
-			ApptentiveLogVerbose(ApptentiveLogTagMonitor, @"No access token found in clipboard");
-			return;
-		}
-		
-		// clear pastboard text
-		[[UIPasteboard generalPasteboard] setString:@""];
-		
-		// send token verification request
-		[self verifyAccessToken:accessToken baseURL:baseURL appKey:appKey signature:appSignature completionHandler:^(BOOL sessionValid, NSError * _Nullable error) {
-			if (!sessionValid) {
-				ApptentiveLogVerbose(ApptentiveLogTagMonitor, @"Unable to start Apptentive Log Monitor: the access token was rejected on the server (%@)", accessToken);
-				return;
-			}
-			
-			ApptentiveLogMonitorSession *session = [ApptentiveLogMonitorSessionIO readSessionFromJWT:accessToken];
-			if (session == nil) {
-				ApptentiveLogVerbose(ApptentiveLogTagMonitor, @"Unable to start Apptentive Log Monitor: failed to parse the access token (%s)", accessToken);
-				return;
-			}
-			
-			ApptentiveLogInfo(ApptentiveLogTagMonitor, @"Read log monitor configuration from clipboard: %@", session);
-			
-			// save session
-			[ApptentiveLogMonitorSessionIO writeSessionToPersistentStorage:session];
-			
-			// start session
-			[self startSession:session];
-		}];
-	}
 }
 
 + (void)startSession:(nonnull ApptentiveLogMonitorSession *)session {
@@ -151,75 +111,38 @@ static ApptentiveLogMonitorSession * _currentSession;
 }
 
 #pragma mark -
-#pragma mark Access Token
+#pragma mark Configuration Profile
 
-+ (nullable NSString *)readAccessTokenFromClipboard {
-	NSString *text = [UIPasteboard generalPasteboard].string;
++ (BOOL)IsMobileConfigInstalled {
+    NSString* certPath = [[NSBundle bundleForClass:self] pathForResource:@"DebugLogging" ofType:@"cer"];
+    if (certPath == nil) {
+        return NO;
+    }
 
-	// remove white spaces
-	text = [text stringByReplacingOccurrencesOfString:@"\\s" withString:@"" options:NSRegularExpressionSearch range:NSMakeRange(0, text.length)];
+    NSData* certData = [NSData dataWithContentsOfFile:certPath];
+    if (certData == nil) {
+        return NO;
+    }
 
-	if (![text hasPrefix:DebugTextHeader]) {
-		return nil;
-	}
-	
-	// clear the token from the clipboard
-	[UIPasteboard generalPasteboard].string = @"";
+    SecCertificateRef cert = SecCertificateCreateWithData(NULL, (__bridge CFDataRef) certData);
+    SecPolicyRef policy = SecPolicyCreateBasicX509();
+    SecTrustRef trust;
 
-	return [text substringFromIndex:DebugTextHeader.length];
-}
+    OSStatus err = SecTrustCreateWithCertificates((__bridge CFArrayRef) [NSArray arrayWithObject:(__bridge id)cert], policy, &trust);
 
-+ (void)verifyAccessToken:(NSString *)accessToken baseURL:(NSURL *)baseURL appKey:(NSString *)appKey signature:(NSString *)appSignature completionHandler:(void(^)(BOOL success, NSError *error))completionHandler {
-	ApptentiveLogInfo(ApptentiveLogTagMonitor, @"Starting access token verification: %@", accessToken);
+    SecTrustResultType trustResult = -1;
 
-	NSData *body = [ApptentiveJSONSerialization dataWithJSONObject:@{ @"debug_token": accessToken } options:0 error:nil];
+    err = SecTrustEvaluate(trust, &trustResult);
 
-	NSDictionary *headers = @{
-		@"X-API-Version": kApptentiveAPIVersionString,
-		@"APPTENTIVE-KEY": appKey,
-		@"APPTENTIVE-SIGNATURE": appSignature,
-		@"Content-Type": @"application/json",
-		@"Accept": @"application/json",
-		@"User-Agent": [NSString stringWithFormat:@"ApptentiveConnect/%@ (iOS)", kApptentiveVersionString]
-	};
+    CFRelease(trust);
+    CFRelease(policy);
+    CFRelease(cert);
 
-	NSURL *URL = [NSURL URLWithString:@"/debug_token/verify" relativeToURL:baseURL];
-	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:URL];
-	for (NSString *key in headers) {
-		[request setValue:headers[key] forHTTPHeaderField:key];
-	}
-	request.HTTPBody = body;
-	request.HTTPMethod = @"POST";
-
-	NSOperationQueue *delegateQueue = NSOperationQueue.currentQueue; // this is a hack: we dispatch the enclosing call on ApptentiveGCDDispatchQueue which is based on NSOperation queue
-	ApptentiveAssertNotNil(delegateQueue, @"Delegate queue is nil");
-	NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:nil delegateQueue:delegateQueue];
-	NSURLSessionDataTask *task = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-		if (!data) {
-			completionHandler(false, error);
-			return;
-		}
-		
-		NSError *jsonError;
-		id object = [ApptentiveJSONSerialization JSONObjectWithData:data error:&jsonError];
-		if (jsonError != nil) {
-			ApptentiveLogError(ApptentiveLogTagMonitor, @"Unable to verify access token: returned json object is invalid (%@)", jsonError);
-			completionHandler(false, jsonError);
-			return;
-		}
-		
-		if (![object isKindOfClass:[NSDictionary class]]) {
-			ApptentiveLogError(ApptentiveLogTagMonitor, @"Unable to verify access token: unexpected JSON object (%@)", object);
-			completionHandler(false, [ApptentiveUtilities errorWithCode:101 failureReason:@"Unexpected JSON object"]);
-			return;
-		}
-		
-		NSDictionary *json = (NSDictionary *)object;
-		BOOL valid = [[json objectForKey:@"valid"] boolValue];
-		
-		completionHandler(valid, nil);
-	}];
-	[task resume];
+    if(trustResult == kSecTrustResultUnspecified || trustResult == kSecTrustResultProceed) {
+        return YES;
+    } else {
+        return NO;
+    }
 }
 
 @end

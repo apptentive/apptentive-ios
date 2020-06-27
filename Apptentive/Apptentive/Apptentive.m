@@ -35,6 +35,7 @@ NSNotificationName const ApptentiveAppRatingFlowUserAgreedToRateAppNotification 
 
 NSNotificationName const ApptentiveSurveyShownNotification = @"ApptentiveSurveyShownNotification";
 NSNotificationName const ApptentiveSurveySentNotification = @"ApptentiveSurveySentNotification";
+NSNotificationName const ApptentiveSurveyCancelledNotification = @"ApptentiveSurveyCancelledNotification";
 
 NSNotificationName const ApptentiveCustomPersonDataChangedNotification = @"ApptentiveCustomPersonDataChangedNotification";
 NSNotificationName const ApptentiveCustomDeviceDataChangedNotification = @"ApptentiveCustomDeviceDataChangedNotification";
@@ -157,7 +158,7 @@ static Apptentive *_nullInstance;
 		ApptentiveStartLogMonitor([ApptentiveUtilities cacheDirectoryPath:@"com.apptentive.logs"]);
 
 		// start log monitor
-		[ApptentiveLogMonitor startSessionWithBaseURL:configuration.baseURL appKey:configuration.apptentiveKey signature:configuration.apptentiveSignature queue:_operationQueue];
+		[ApptentiveLogMonitor startSessionWithQueue:_operationQueue];
 
 		_style = [[ApptentiveStyleSheet alloc] init];
 		_apptentiveKey = configuration.apptentiveKey;
@@ -1048,10 +1049,7 @@ static Apptentive *_nullInstance;
 		ApptentiveLogDebug(ApptentiveLogTagMonitor, @"Resuming log monitor...");
 	} else {
 		ApptentiveLogDebug(ApptentiveLogTagMonitor, @"Trying to initialize log monitor...");
-		[ApptentiveLogMonitor startSessionWithBaseURL:self.baseURL
-												appKey:self.apptentiveKey
-											 signature:self.apptentiveSignature
-												 queue:self.operationQueue];
+		[ApptentiveLogMonitor startSessionWithQueue:self.operationQueue];
 	}
 }
 

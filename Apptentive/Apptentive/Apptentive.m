@@ -35,6 +35,7 @@ NSNotificationName const ApptentiveAppRatingFlowUserAgreedToRateAppNotification 
 
 NSNotificationName const ApptentiveSurveyShownNotification = @"ApptentiveSurveyShownNotification";
 NSNotificationName const ApptentiveSurveySentNotification = @"ApptentiveSurveySentNotification";
+NSNotificationName const ApptentiveSurveyCancelledNotification = @"ApptentiveSurveyCancelledNotification";
 
 NSNotificationName const ApptentiveCustomPersonDataChangedNotification = @"ApptentiveCustomPersonDataChangedNotification";
 NSNotificationName const ApptentiveCustomDeviceDataChangedNotification = @"ApptentiveCustomDeviceDataChangedNotification";

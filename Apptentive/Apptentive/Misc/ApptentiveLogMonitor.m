@@ -74,7 +74,7 @@ static ApptentiveLogMonitorSession * _currentSession;
 	if (session != nil) {
 		ApptentiveLogInfo(ApptentiveLogTagMonitor, @"Previous Apptentive Log Monitor session loaded from persistent storage: %@", session);
 		[self startSession:session];
-	} else {
+    } else if ([self IsMobileConfigInstalled]) {
 		// attempt to read access token from a clipboard
 		NSString *accessToken = [self readAccessTokenFromClipboard];
 		if (accessToken == nil) {
@@ -220,6 +220,41 @@ static ApptentiveLogMonitorSession * _currentSession;
 		completionHandler(valid, nil);
 	}];
 	[task resume];
+}
+
+#pragma mark -
+#pragma mark Configuration Profile
+
++ (BOOL)IsMobileConfigInstalled {
+    NSString* certPath = [[NSBundle bundleForClass:self] pathForResource:@"DebugLogging" ofType:@"cer"];
+    if (certPath == nil) {
+        return NO;
+    }
+
+    NSData* certData = [NSData dataWithContentsOfFile:certPath];
+    if (certData == nil) {
+        return NO;
+    }
+
+    SecCertificateRef cert = SecCertificateCreateWithData(NULL, (__bridge CFDataRef) certData);
+    SecPolicyRef policy = SecPolicyCreateBasicX509();
+    SecTrustRef trust;
+
+    OSStatus err = SecTrustCreateWithCertificates((__bridge CFArrayRef) [NSArray arrayWithObject:(__bridge id)cert], policy, &trust);
+
+    SecTrustResultType trustResult = -1;
+
+    err = SecTrustEvaluate(trust, &trustResult);
+
+    CFRelease(trust);
+    CFRelease(policy);
+    CFRelease(cert);
+
+    if(trustResult == kSecTrustResultUnspecified || trustResult == kSecTrustResultProceed) {
+        return YES;
+    } else {
+        return NO;
+    }
 }
 
 @end

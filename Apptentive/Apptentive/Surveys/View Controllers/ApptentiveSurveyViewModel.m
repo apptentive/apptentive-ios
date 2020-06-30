@@ -520,6 +520,7 @@ NSString *const ApptentiveInteractionSurveyEventLabelCancel = @"cancel";
 }
 
 - (void)didCancel:(UIViewController *)presentingViewController {
+    [[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveSurveyCancelledNotification object:nil];
 	[Apptentive.shared.backend engage:ApptentiveInteractionSurveyEventLabelCancel fromInteraction:self.interaction fromViewController:presentingViewController];
 }
 

@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
   s.name     = 'apptentive-ios'
   s.module_name = 'Apptentive'
-  s.version  = '5.2.11'
+  s.version  = '5.2.12'
   s.license  = 'BSD'
   s.summary  = 'Apptentive Customer Communications SDK.'
   s.homepage = 'https://www.apptentive.com/'
@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
   s.platform = :ios, '9.0'
   s.source_files   = 'Apptentive/Apptentive/**/*.{h,m}'
   s.requires_arc = true
-  s.frameworks     = 'AVFoundation', 'CoreData', 'CoreGraphics', 'Foundation', 'ImageIO', 'MobileCoreServices', 'QuartzCore', 'QuickLook', 'SystemConfiguration', 'UIKit'
+  s.frameworks     = 'AVFoundation', 'CoreData', 'CoreGraphics', 'Foundation', 'ImageIO', 'QuartzCore', 'QuickLook', 'SystemConfiguration', 'UIKit'
   s.resource_bundle = { 'ApptentiveResources' => [
 		'Apptentive/Apptentive/Model/*.xcdatamodeld',
 		'Apptentive/Apptentive/Model/*.xcmappingmodel',

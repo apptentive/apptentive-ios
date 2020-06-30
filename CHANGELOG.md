@@ -1,3 +1,15 @@
+# 2020-06-29 - v5.2.12
+
+#### Improvements
+
+* Use configuration profile to enable log monitor. This will avoid the pasting-from-clipboard notification in iOS 14. 
+* Post a notification when a survey is cancelled.
+
+#### Bugs Fixed
+
+* Remove `MobileCoreServices` from the `podspec` to fix a deprecation warning.
+* Fix missing background color override for "Other" question text boxes in surveys.
+
 # 2020-04-27 - v5.2.11
 
 #### Improvements

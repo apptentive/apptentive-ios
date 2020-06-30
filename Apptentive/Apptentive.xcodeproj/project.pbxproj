@@ -63,6 +63,7 @@
 		01626EB91EB7D60C0064E73F /* NSData+Encryption.h in Headers */ = {isa = PBXBuildFile; fileRef = 01626EB71EB7D60C0064E73F /* NSData+Encryption.h */; };
 		01626EBA1EB7D60C0064E73F /* NSData+Encryption.m in Sources */ = {isa = PBXBuildFile; fileRef = 01626EB81EB7D60C0064E73F /* NSData+Encryption.m */; };
 		01626EBC1EB7E5B90064E73F /* ApptentiveEncryptionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 01626EBB1EB7E5B90064E73F /* ApptentiveEncryptionTests.m */; };
+		0168B1AD24AAAFD1006EEF65 /* DebugLogging.cer in Resources */ = {isa = PBXBuildFile; fileRef = 0168B1AC24AAAFD1006EEF65 /* DebugLogging.cer */; };
 		017477261EA92BED00A0A949 /* ApptentiveEventPayload.h in Headers */ = {isa = PBXBuildFile; fileRef = 0174771E1EA92BED00A0A949 /* ApptentiveEventPayload.h */; };
 		017477271EA92BED00A0A949 /* ApptentiveEventPayload.m in Sources */ = {isa = PBXBuildFile; fileRef = 0174771F1EA92BED00A0A949 /* ApptentiveEventPayload.m */; };
 		017477281EA92BED00A0A949 /* ApptentiveMessagePayload.h in Headers */ = {isa = PBXBuildFile; fileRef = 017477201EA92BED00A0A949 /* ApptentiveMessagePayload.h */; };
@@ -504,6 +505,7 @@
 		01626EB71EB7D60C0064E73F /* NSData+Encryption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Encryption.h"; sourceTree = "<group>"; };
 		01626EB81EB7D60C0064E73F /* NSData+Encryption.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Encryption.m"; sourceTree = "<group>"; };
 		01626EBB1EB7E5B90064E73F /* ApptentiveEncryptionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveEncryptionTests.m; sourceTree = "<group>"; };
+		0168B1AC24AAAFD1006EEF65 /* DebugLogging.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = DebugLogging.cer; sourceTree = "<group>"; };
 		0174771E1EA92BED00A0A949 /* ApptentiveEventPayload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveEventPayload.h; sourceTree = "<group>"; };
 		0174771F1EA92BED00A0A949 /* ApptentiveEventPayload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveEventPayload.m; sourceTree = "<group>"; };
 		017477201EA92BED00A0A949 /* ApptentiveMessagePayload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveMessagePayload.h; sourceTree = "<group>"; };
@@ -1013,6 +1015,7 @@
 		01A2CF931E49062700C2103A /* Apptentive */ = {
 			isa = PBXGroup;
 			children = (
+				0168B1AC24AAAFD1006EEF65 /* DebugLogging.cer */,
 				EF3FE88720A226EE00A3C9C5 /* Apptimize */,
 				01A2CFB01E490A9700C2103A /* Custom Views */,
 				01A2CFBB1E490A9700C2103A /* Engagement */,
@@ -2031,6 +2034,7 @@
 			files = (
 				01A2D1481E490A9700C2103A /* at_apptentive_logo.png in Resources */,
 				01A2D15D1E490A9700C2103A /* at_document.png in Resources */,
+				0168B1AD24AAAFD1006EEF65 /* DebugLogging.cer in Resources */,
 				01A2D1681E490A9700C2103A /* at_network_error@3x.png in Resources */,
 				01A2D14B1E490A9700C2103A /* at_attach.png in Resources */,
 				01A2D1721E490A9700C2103A /* at_update_logo.png in Resources */,
@@ -2405,7 +2409,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 39;
+				CURRENT_PROJECT_VERSION = 41;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -2463,7 +2467,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 39;
+				CURRENT_PROJECT_VERSION = 41;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -2495,7 +2499,7 @@
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 86WML2UN43;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 39;
+				DYLIB_CURRENT_VERSION = 41;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				GCC_PREFIX_HEADER = "Apptentive/Misc/ApptentiveConnect-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = "APPTENTIVE_DEBUG=1";
@@ -2515,7 +2519,7 @@
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 86WML2UN43;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 39;
+				DYLIB_CURRENT_VERSION = 41;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				GCC_PREFIX_HEADER = "Apptentive/Misc/ApptentiveConnect-Prefix.pch";
 				INFOPLIST_FILE = Apptentive/Info.plist;

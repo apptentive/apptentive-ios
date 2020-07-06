@@ -1,3 +1,9 @@
+# 2020-07-06 - v5.2.13
+
+#### Bugs Fixed
+
+* Revert change to thread sanitizer settings.
+
 # 2020-06-29 - v5.2.12
 
 #### Improvements

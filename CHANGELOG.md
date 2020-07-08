@@ -1,3 +1,9 @@
+# 2020-07-08 - v5.2.14
+
+#### Bugs Fixed
+
+* Fix a bug where a survey with missing/invalid answers loses all user selections on attempted submit.
+
 # 2020-07-06 - v5.2.13
 
 #### Bugs Fixed

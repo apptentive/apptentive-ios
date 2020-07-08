@@ -668,14 +668,22 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - View model delegate
 
 - (void)viewModelValidationChanged:(ApptentiveSurveyViewModel *)viewModel isValid:(BOOL)valid {
-	[self.collectionView reloadData];
-
+	[self.collectionViewLayout invalidateLayout];
+	
 	[self setToolbarHidden:valid];
-
+	
 	for (UICollectionViewCell *cell in self.collectionView.visibleCells) {
 		if ([cell isKindOfClass:[ApptentiveSurveyOtherCell class]]) {
 			ApptentiveSurveyOtherCell *otherCell = (ApptentiveSurveyOtherCell *)cell;
 			otherCell.valid = [self.viewModel answerIsValidAtIndexPath:[self.viewModel indexPathForTextFieldTag:otherCell.textField.tag]];
+		}
+	}
+	
+	for (NSIndexPath *indexPath in [self.collectionView indexPathsForVisibleSupplementaryElementsOfKind:UICollectionElementKindSectionHeader]) {
+		UIView *view = [self.collectionView supplementaryViewForElementKind:UICollectionElementKindSectionHeader atIndexPath:indexPath];
+		
+		if ([view isKindOfClass:[ApptentiveSurveyQuestionView class]]) {
+			view.accessibilityLabel = [self.viewModel accessibilityLabelForQuestionAtIndexPath:indexPath];
 		}
 	}
 }

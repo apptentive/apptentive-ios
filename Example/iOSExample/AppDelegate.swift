@@ -14,7 +14,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
 
 	var window: UIWindow?
 
-	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 		if let configuration = ApptentiveConfiguration(apptentiveKey: "<#Your Apptentive Key#>", apptentiveSignature: "<#Your Apptentive Signature#>") {
 
 			precondition(configuration.apptentiveKey != "<#Your Apptentive Key#>" && configuration.apptentiveSignature != "<#Your Apptentive Signature#>", "Please set your Apptentive key and signature above")
@@ -31,7 +31,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UITabBarControllerDelegat
 
 	// MARK: Tab bar controller delegate
 	func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
-		if tabBarController.viewControllers?.index(of: viewController) ?? 0 == 0 {
+		if tabBarController.viewControllers?.firstIndex(of: viewController) ?? 0 == 0 {
 			Apptentive.shared.engage(event: "photos_tab_selected", from: tabBarController)
 		} else {
 			Apptentive.shared.engage(event: "favorites_tab_selected", from: tabBarController)

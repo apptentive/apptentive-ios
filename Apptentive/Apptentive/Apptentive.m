@@ -848,7 +848,18 @@ static Apptentive *_nullInstance;
 		if ([notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
 			completionHandler(UNNotificationPresentationOptionNone);
 		} else {
+#ifdef __IPHONE_14_0
+			if (@available(iOS 14.0, *)) {
+				completionHandler(UNNotificationPresentationOptionBanner);
+			} else {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+				completionHandler(UNNotificationPresentationOptionAlert);
+#pragma clang diagnostic pop
+			}
+#else
 			completionHandler(UNNotificationPresentationOptionAlert);
+#endif
 		}
 
 		return YES;
@@ -885,45 +896,26 @@ static Apptentive *_nullInstance;
 	NSDictionary *apptentiveUserInfo = @{ @"apptentive": userInfo[@"apptentive"] };
 	NSString *soundName = userInfo[@"apptentive"][@"sound"];
 
-	if (@available(iOS 10.0, *)) {
-		if ([[UNUserNotificationCenter currentNotificationCenter].delegate respondsToSelector:@selector(userNotificationCenter:didReceiveNotificationResponse:withCompletionHandler:)]) {
-			UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
-			content.title = title;
-			content.body = body;
-			content.userInfo = apptentiveUserInfo;
-			content.sound = [soundName isEqualToString:@"default"] ? [UNNotificationSound defaultSound] : [UNNotificationSound soundNamed:soundName];
+	if ([[UNUserNotificationCenter currentNotificationCenter].delegate respondsToSelector:@selector(userNotificationCenter:didReceiveNotificationResponse:withCompletionHandler:)]) {
+		UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
+		content.title = title;
+		content.body = body;
+		content.userInfo = apptentiveUserInfo;
+		content.sound = [soundName isEqualToString:@"default"] ? [UNNotificationSound defaultSound] : [UNNotificationSound soundNamed:soundName];
 
-			UNTimeIntervalNotificationTrigger *trigger = [UNTimeIntervalNotificationTrigger triggerWithTimeInterval:1 repeats:NO];
-			UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:@"com.apptentive" content:content trigger:trigger];
+		UNTimeIntervalNotificationTrigger *trigger = [UNTimeIntervalNotificationTrigger triggerWithTimeInterval:1 repeats:NO];
+		UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:@"com.apptentive" content:content trigger:trigger];
 
-			[UNUserNotificationCenter.currentNotificationCenter addNotificationRequest:request
-																 withCompletionHandler:^(NSError *_Nullable error) {
-																   if (error) {
-																	   ApptentiveLogError(@"Error posting local notification (%@).", error);
-																   }
-																 }];
-
-			return;
-		}
+		[UNUserNotificationCenter.currentNotificationCenter addNotificationRequest:request
+															 withCompletionHandler:^(NSError *_Nullable error) {
+			if (error) {
+				ApptentiveLogError(@"Error posting local notification (%@).", error);
+			}
+		}];
 	} else {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-		if ([[UIApplication sharedApplication].delegate respondsToSelector:@selector(application:didReceiveLocalNotification:)]) {
-			UILocalNotification *localNotification = [[UILocalNotification alloc] init];
-			localNotification.alertTitle = title;
-			localNotification.alertBody = body;
-			localNotification.userInfo = apptentiveUserInfo;
-			localNotification.soundName = [soundName isEqualToString:@"default"] ? UILocalNotificationDefaultSoundName : soundName;
-
-			[[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
-
-			return;
-		}
-#pragma clang diagnostic pop
+		ApptentiveLogError(ApptentiveLogTagPush, @"Your app is not properly configured to accept Apptentive Message Center push notifications.");
+		ApptentiveLogError(ApptentiveLogTagPush, @"Please see the push notification section of the integration guide for assistance: https://learn.apptentive.com/knowledge-base/ios-integration-reference/#push-notifications.");
 	}
-
-	ApptentiveLogError(ApptentiveLogTagPush, @"Your app is not properly configured to accept Apptentive Message Center push notifications.");
-	ApptentiveLogError(ApptentiveLogTagPush, @"Please see the push notification section of the integration guide for assistance: https://learn.apptentive.com/knowledge-base/ios-integration-reference/#push-notifications.");
 }
 
 #pragma mark - UNUserNotificationCenterDelegate methods

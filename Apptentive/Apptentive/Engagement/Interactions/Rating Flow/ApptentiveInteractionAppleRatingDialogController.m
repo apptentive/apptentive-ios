@@ -40,17 +40,12 @@ NSString *const ApptentiveInteractionAppleRatingDialogEventLabelFallback = @"fal
 
 	[Apptentive.shared.backend engage:ApptentiveInteractionAppleRatingDialogEventLabelRequest fromInteraction:self.interaction fromViewController:viewController];
 
-	// Guard against not having store review controller class in OS and/or SDK
-	if (@available(iOS 10.3, *)) {
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowDidBecomeVisible:) name:UIWindowDidBecomeVisibleNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowDidBecomeVisible:) name:UIWindowDidBecomeVisibleNotification object:nil];
 
-		[SKStoreReviewController performSelector:@selector(requestReview)];
+	[SKStoreReviewController performSelector:@selector(requestReview)];
 
-		// Give the window a sec to appear before (possibly) invoking fallback
-		[self performSelector:@selector(checkIfAppleRatingDialogShowed) withObject:nil afterDelay:REVIEW_WINDOW_TIMEOUT];
-	} else {
-		[self invokeNotShownInteractionFromViewController:viewController withReason:@"It is not available in this iOS version."];
-	}
+	// Give the window a sec to appear before (possibly) invoking fallback
+	[self performSelector:@selector(checkIfAppleRatingDialogShowed) withObject:nil afterDelay:REVIEW_WINDOW_TIMEOUT];
 }
 
 - (void)windowDidBecomeVisible:(NSNotification *)notification {

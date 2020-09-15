@@ -28,7 +28,11 @@ NS_ASSUME_NONNULL_BEGIN
 	if ([self.collectionView isKindOfClass:[ApptentiveSurveyCollectionView class]]) {
 		ApptentiveSurveyCollectionView *myCollectionView = (ApptentiveSurveyCollectionView *)self.collectionView;
 		// Add space for the global header, global footer, and spacing between them and their adjacent sections
-		superSize.height += CGRectGetHeight(myCollectionView.collectionHeaderView.bounds) + CGRectGetHeight(myCollectionView.collectionFooterView.bounds) + self.sectionInset.top + self.sectionInset.bottom;
+
+		CGSize headerSize = [myCollectionView.collectionHeaderView sizeThatFits:self.collectionView.bounds.size];
+		CGSize footerSize = [myCollectionView.collectionFooterView sizeThatFits:self.collectionView.bounds.size];
+
+		superSize.height += headerSize.height + footerSize.height + self.sectionInset.top + self.sectionInset.bottom;
 
 		UIEdgeInsets contentInset = self.collectionView.contentInset;
 		UIEdgeInsets adjustedContentInset = self.collectionView.contentInset;
@@ -36,11 +40,19 @@ NS_ASSUME_NONNULL_BEGIN
 			contentInset = self.collectionView.safeAreaInsets;
 			adjustedContentInset = self.collectionView.adjustedContentInset;
 		}
+
 		if (self.shouldExpand) {
 			superSize.height = fmax(superSize.height, CGRectGetHeight(self.collectionView.bounds) - contentInset.top - contentInset.bottom);
 		} else if (adjustedContentInset.bottom > contentInset.bottom || adjustedContentInset.top > contentInset.top) {
 			superSize.height = fmax(superSize.height, CGRectGetHeight(self.collectionView.bounds) - adjustedContentInset.top - adjustedContentInset.bottom);
 		}
+
+		CGFloat top = superSize.height - CGRectGetHeight(myCollectionView.collectionFooterView.bounds);
+		if (self.shouldExpand) {
+			top = fmax(top, CGRectGetHeight(myCollectionView.bounds) - CGRectGetHeight(myCollectionView.collectionFooterView.bounds) - contentInset.top - contentInset.bottom);
+		}
+
+		myCollectionView.footerConstraint.constant = top;
 	}
 
 	return superSize;
@@ -146,7 +158,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)updateHeaderHeight {
 	if ([self.collectionView isKindOfClass:[ApptentiveSurveyCollectionView class]]) {
 		UIView *collectionHeaderView = ((ApptentiveSurveyCollectionView *)self.collectionView).collectionHeaderView;
-		CGSize headerSize = [collectionHeaderView systemLayoutSizeFittingSize:CGSizeMake(self.collectionView.bounds.size.width, 10000.0)];
+		CGSize headerSize = [collectionHeaderView systemLayoutSizeFittingSize:self.collectionView.bounds.size withHorizontalFittingPriority:UILayoutPriorityRequired verticalFittingPriority:UILayoutPriorityFittingSizeLevel];
 		self.headerHeight = headerSize.height + self.sectionInset.bottom;
 	} else {
 		self.headerHeight = 0;

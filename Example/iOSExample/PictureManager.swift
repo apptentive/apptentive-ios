@@ -48,7 +48,7 @@ class PictureManager {
 	}
 	
 	fileprivate func indexOfFavorite(_ picture: Picture) -> Int? {
-		return self.favoriteDataSource.pictures.index(of: picture)
+		return self.favoriteDataSource.pictures.firstIndex(of: picture)
 	}
 	
 	func isFavorite(_ picture: Picture) -> Bool {

@@ -23,17 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)awakeFromNib {
 	self.borderViewHeight.constant = 1.0 / [UIScreen mainScreen].scale;
 
-	self.greetingLabel.numberOfLines = 0;
-
 	[super awakeFromNib];
-}
-
-- (void)layoutSubviews {
-	[super layoutSubviews];
-
-	self.greetingLabel.preferredMaxLayoutWidth = CGRectGetWidth(self.greetingLabel.bounds);
-
-	[super layoutSubviews];
 }
 
 - (void)setShowInfoButton:(BOOL)showInfoButton {

@@ -20,7 +20,7 @@ FOUNDATION_EXPORT double ApptentiveVersionNumber;
 FOUNDATION_EXPORT const unsigned char ApptentiveVersionString[];
 
 /** The version number of the Apptentive SDK. */
-#define kApptentiveVersionString @"5.2.14"
+#define kApptentiveVersionString @"5.3.0"
 
 /** The version number of the Apptentive API platform. */
 #define kApptentiveAPIVersionString @"9"
@@ -883,12 +883,6 @@ typedef NSString *ApptentiveStyleIdentifier NS_EXTENSIBLE_STRING_ENUM;
 - (UIColor *)colorForStyle:(ApptentiveStyleIdentifier)style NS_SWIFT_NAME(color(for:));
 
 @end
-
-NS_ASSUME_NONNULL_END
-
-#import "ApptentiveStyleSheet.h"
-
-NS_ASSUME_NONNULL_BEGIN
 
 /// The text style for the title text of the greeting view in Message Center.
 extern ApptentiveStyleIdentifier ApptentiveTextStyleBody NS_SWIFT_NAME(body);

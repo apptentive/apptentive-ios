@@ -12,13 +12,6 @@
 NS_ASSUME_NONNULL_BEGIN
 
 
-@interface ApptentiveSurveyCollectionView ()
-
-@property (strong, nonatomic) NSLayoutConstraint *footerConstraint;
-
-@end
-
-
 @implementation ApptentiveSurveyCollectionView
 
 - (void)setCollectionHeaderView:(UIView *)collectionHeaderView {
@@ -93,27 +86,6 @@ NS_ASSUME_NONNULL_BEGIN
 	}
 
 	[self.collectionViewLayout invalidateLayout];
-}
-
-- (void)layoutSubviews {
-	// We might change the layout attributes if the header size changes. Makes sure we warn the OS. 
-	[self.collectionViewLayout invalidateLayout];
-
-	[super layoutSubviews];
-
-	UIEdgeInsets contentInset = self.contentInset;
-	if (@available(iOS 11.0, *)) {
-		contentInset = self.safeAreaInsets;
-	}
-
-	CGFloat top = [self.collectionViewLayout collectionViewContentSize].height - CGRectGetHeight(self.collectionFooterView.bounds);
-	if (((ApptentiveSurveyCollectionViewLayout *)self.collectionViewLayout).shouldExpand) {
-		top = fmax(top, CGRectGetHeight(self.bounds) - CGRectGetHeight(self.collectionFooterView.bounds) - contentInset.top - contentInset.bottom);
-	}
-
-	self.footerConstraint.constant = top;
-
-	[super layoutSubviews];
 }
 
 @end

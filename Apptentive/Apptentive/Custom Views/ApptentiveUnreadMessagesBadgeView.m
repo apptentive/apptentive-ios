@@ -7,7 +7,7 @@
 //
 
 #import "ApptentiveUnreadMessagesBadgeView.h"
-#import "Apptentive.h"
+#import "ApptentiveMain.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

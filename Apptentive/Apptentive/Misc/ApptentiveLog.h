@@ -6,7 +6,7 @@
 //  Copyright (c) 2017 Apptentive, Inc. All rights reserved.
 //
 
-#import "Apptentive.h"
+#import "ApptentiveMain.h"
 #import "ApptentiveLogTag.h"
 #import <Foundation/Foundation.h>
 

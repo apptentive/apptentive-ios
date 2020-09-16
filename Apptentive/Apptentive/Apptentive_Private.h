@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Apptentive, Inc. All rights reserved.
 //
 
-#import "Apptentive.h"
+#import "ApptentiveMain.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

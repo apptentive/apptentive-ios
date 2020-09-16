@@ -6,7 +6,7 @@
 //  Copyright (c) 2011 Apptentive. All rights reserved.
 //
 
-#import "Apptentive.h"
+#import "ApptentiveMain.h"
 #import <XCTest/XCTest.h>
 
 

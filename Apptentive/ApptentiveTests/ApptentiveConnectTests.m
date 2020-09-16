@@ -6,7 +6,7 @@
 //  Copyright 2011 Apptentive, Inc.. All rights reserved.
 //
 
-#import "Apptentive.h"
+#import "ApptentiveMain.h"
 #import "ApptentiveConversation.h"
 #import "ApptentiveDevice.h"
 #import "ApptentivePerson.h"

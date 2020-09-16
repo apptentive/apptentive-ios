@@ -1,0 +1,6 @@
+framework module Apptentive {
+  umbrella header "Apptentive.h"
+
+  export *
+  module * { export * }
+}

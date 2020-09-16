@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
   s.name     = 'apptentive-ios'
   s.module_name = 'Apptentive'
-  s.version  = '5.3.0'
+  s.version  = '5.3.1'
   s.license  = 'BSD'
   s.summary  = 'Apptentive Customer Communications SDK.'
   s.homepage = 'https://www.apptentive.com/'
@@ -22,5 +22,5 @@ Pod::Spec.new do |s|
   s.prefix_header_contents = '#import "ApptentiveLog.h"', '#import "ApptentiveAssert.h"', '#import "ApptentiveSafeCollections.h"'
   s.pod_target_xcconfig = { "GCC_PREPROCESSOR_DEFINITIONS[config=Debug]" => "APPTENTIVE_DEBUG=1 APPTENTIVE_COCOAPODS=1",
   "GCC_PREPROCESSOR_DEFINITIONS[config=Release]" => "APPTENTIVE_COCOAPODS=1" }
-  s.public_header_files = 'Apptentive/Apptentive/Apptentive.h', 'Apptentive/Apptentive/ApptentiveMain.h', 'Apptentive/Apptentive/ApptentiveStyleSheet.h'
+  s.public_header_files = 'Apptentive/Apptentive/ApptentiveMain.h', 'Apptentive/Apptentive/ApptentiveStyleSheet.h'
 end

@@ -9,12 +9,7 @@
 #ifndef Apptentive_h
 #define Apptentive_h
 
-#ifdef NO_USE_FRAMEWORKS
-#import <ApptentiveMain.h>
-#import <ApptentiveStyleSheet.h>
-#else
 #import <Apptentive/ApptentiveMain.h>
 #import <Apptentive/ApptentiveStyleSheet.h>
-#endif
 
 #endif /* Apptentive_h */

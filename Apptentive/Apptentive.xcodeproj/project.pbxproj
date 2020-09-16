@@ -20,7 +20,7 @@
 		01201AD31FC637BE00EB3593 /* CodePointAndInteractionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 01201AD21FC637BD00EB3593 /* CodePointAndInteractionTests.m */; };
 		01216C501EBBB53E0062BD0D /* RequestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01216C4F1EBBB53E0062BD0D /* RequestTests.swift */; };
 		0123005F20531698000EC3C3 /* ClauseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0123005E20531698000EC3C3 /* ClauseTests.m */; };
-		012B96C325118349008A56CC /* Apptentive.h in Headers */ = {isa = PBXBuildFile; fileRef = 012B96C22511832D008A56CC /* Apptentive.h */; };
+		012B96C325118349008A56CC /* Apptentive.h in Headers */ = {isa = PBXBuildFile; fileRef = 012B96C22511832D008A56CC /* Apptentive.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		012ED9292072F33F003D87F3 /* ApptentiveRetryPolicy.h in Headers */ = {isa = PBXBuildFile; fileRef = 012ED9272072F33F003D87F3 /* ApptentiveRetryPolicy.h */; };
 		012ED92A2072F33F003D87F3 /* ApptentiveRetryPolicy.m in Sources */ = {isa = PBXBuildFile; fileRef = 012ED9282072F33F003D87F3 /* ApptentiveRetryPolicy.m */; };
 		012ED92C2072FABE003D87F3 /* RetryPolicyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 012ED92B2072FABE003D87F3 /* RetryPolicyTests.swift */; };
@@ -840,6 +840,7 @@
 		01B9055A2411C83600E2A663 /* ApptentiveArchiver.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ApptentiveArchiver.m; sourceTree = "<group>"; };
 		01B9057C2416C52B00E2A663 /* ApptentiveURLOpener.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ApptentiveURLOpener.h; sourceTree = "<group>"; };
 		01B9057D2416C52B00E2A663 /* ApptentiveURLOpener.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ApptentiveURLOpener.m; sourceTree = "<group>"; };
+		01BEA06D2511E97500DF982D /* Apptentive.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = Apptentive.modulemap; sourceTree = "<group>"; };
 		01E04F9C1E819CD300D7E849 /* ApptentiveMessageManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveMessageManager.h; sourceTree = "<group>"; };
 		01E04F9D1E819CD300D7E849 /* ApptentiveMessageManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApptentiveMessageManager.m; sourceTree = "<group>"; };
 		01E8E2341E6E096D00786738 /* ApptentiveInteractionAppleRatingDialogController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApptentiveInteractionAppleRatingDialogController.h; sourceTree = "<group>"; };
@@ -999,6 +1000,8 @@
 		01A2CF871E49062700C2103A = {
 			isa = PBXGroup;
 			children = (
+				01BEA06D2511E97500DF982D /* Apptentive.modulemap */,
+				012B96C22511832D008A56CC /* Apptentive.h */,
 				01A2CF931E49062700C2103A /* Apptentive */,
 				01A2CF9E1E49062800C2103A /* ApptentiveTests */,
 				01A2CF921E49062700C2103A /* Products */,
@@ -1018,7 +1021,6 @@
 		01A2CF931E49062700C2103A /* Apptentive */ = {
 			isa = PBXGroup;
 			children = (
-				012B96C22511832D008A56CC /* Apptentive.h */,
 				0168B1AC24AAAFD1006EEF65 /* DebugLogging.cer */,
 				EF3FE88720A226EE00A3C9C5 /* Apptimize */,
 				01A2CFB01E490A9700C2103A /* Custom Views */,
@@ -2386,7 +2388,6 @@
 		01A2CFA31E49062800C2103A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -2416,7 +2417,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 45;
+				CURRENT_PROJECT_VERSION = 46;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -2445,7 +2446,6 @@
 		01A2CFA41E49062800C2103A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -2475,7 +2475,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 45;
+				CURRENT_PROJECT_VERSION = 46;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -2507,13 +2507,14 @@
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 86WML2UN43;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 45;
+				DYLIB_CURRENT_VERSION = 46;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				GCC_PREFIX_HEADER = "Apptentive/Misc/ApptentiveConnect-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = "APPTENTIVE_DEBUG=1";
 				INFOPLIST_FILE = Apptentive/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = $SRCROOT/Apptentive.modulemap;
 				PRODUCT_BUNDLE_IDENTIFIER = com.apptentive.Apptentive;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -2527,12 +2528,13 @@
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 86WML2UN43;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 45;
+				DYLIB_CURRENT_VERSION = 46;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				GCC_PREFIX_HEADER = "Apptentive/Misc/ApptentiveConnect-Prefix.pch";
 				INFOPLIST_FILE = Apptentive/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = $SRCROOT/Apptentive.modulemap;
 				PRODUCT_BUNDLE_IDENTIFIER = com.apptentive.Apptentive;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

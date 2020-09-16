@@ -15,21 +15,19 @@ BUILD_DIR="/tmp/apptentive_framework_build"
 PROJECT_DIR="Apptentive"
 OUTPUT_DIR="${BUILD_DIR}/${FRAMEWORK_NAME}-${CONFIGURATION}-iphoneuniversal/"
 
-SIMULATOR_LIBRARY_PATH="${BUILD_DIR}/${CONFIGURATION}-iphonesimulator/${FRAMEWORK_NAME}.framework"
+SIMULATOR_ARCHIVE_PATH="${BUILD_DIR}/${CONFIGURATION}-iphonesimulator/${FRAMEWORK_NAME}.xcarchive"
 
-DEVICE_LIBRARY_PATH="${BUILD_DIR}/${CONFIGURATION}-iphoneos/${FRAMEWORK_NAME}.framework"
+DEVICE_ARCHIVE_PATH="${BUILD_DIR}/${CONFIGURATION}-iphoneos/${FRAMEWORK_NAME}.xcarchive"
 
 UNIVERSAL_LIBRARY_DIR="${BUILD_DIR}/${CONFIGURATION}-iphoneuniversal"
-
-FRAMEWORK="${UNIVERSAL_LIBRARY_DIR}/${FRAMEWORK_NAME}.framework"
 
 ######################
 # Build Frameworks
 ######################
 
-xcodebuild -project ${PROJECT_DIR}/${PROJECT_NAME}.xcodeproj -scheme ${FRAMEWORK_NAME} -sdk iphonesimulator -configuration ${CONFIGURATION} clean build CONFIGURATION_BUILD_DIR=${BUILD_DIR}/${CONFIGURATION}-iphonesimulator ENABLE_BITCODE=YES OTHER_CFLAGS='-fembed-bitcode' GCC_PREPROCESSOR_DEFINITIONS='APPTENTIVE_FRAMEWORK=1' 2>&1
+xcodebuild archive -project ${PROJECT_DIR}/${PROJECT_NAME}.xcodeproj -scheme ${FRAMEWORK_NAME} -destination="iOS Simulator" -archivePath "${SIMULATOR_ARCHIVE_PATH}" -sdk iphonesimulator SKIP_INSTALL=NO BUILD_LIBRARIES_FOR_DISTRIBUTION=YES
 
-xcodebuild -project ${PROJECT_DIR}/${PROJECT_NAME}.xcodeproj -scheme ${FRAMEWORK_NAME} -sdk iphoneos -configuration ${CONFIGURATION} clean archive CONFIGURATION_BUILD_DIR=${BUILD_DIR}/${CONFIGURATION}-iphoneos ENABLE_BITCODE=YES OTHER_CFLAGS='-fembed-bitcode' GCC_PREPROCESSOR_DEFINITIONS='APPTENTIVE_FRAMEWORK=1' 2>&1
+xcodebuild archive -project ${PROJECT_DIR}/${PROJECT_NAME}.xcodeproj -scheme ${FRAMEWORK_NAME} -destination="iOS" -archivePath "${DEVICE_ARCHIVE_PATH}" -sdk iphoneos SKIP_INSTALL=NO BUILD_LIBRARIES_FOR_DISTRIBUTION=YES
 
 ######################
 # Create directory for universal
@@ -39,19 +37,11 @@ rm -rf "${UNIVERSAL_LIBRARY_DIR}"
 
 mkdir "${UNIVERSAL_LIBRARY_DIR}"
 
-mkdir "${FRAMEWORK}"
-
 ######################
-# Copy files Framework
+# Make an xcframework
 ######################
 
-cp -r "${DEVICE_LIBRARY_PATH}/." "${FRAMEWORK}"
-
-######################
-# Make an universal binary
-######################
-
-lipo "${SIMULATOR_LIBRARY_PATH}/${FRAMEWORK_NAME}" "${DEVICE_LIBRARY_PATH}/${FRAMEWORK_NAME}" -create -output "${FRAMEWORK}/${FRAMEWORK_NAME}" | echo
+xcodebuild -create-xcframework -framework "${SIMULATOR_ARCHIVE_PATH}/Products/Library/Frameworks/${FRAMEWORK_NAME}.framework" -framework "${DEVICE_ARCHIVE_PATH}/Products/Library/Frameworks/${FRAMEWORK_NAME}.framework" -output "${UNIVERSAL_LIBRARY_DIR}/${FRAMEWORK_NAME}.xcframework" | echo
 
 ######################
 # On Release, copy the result to release directory
@@ -60,12 +50,12 @@ lipo "${SIMULATOR_LIBRARY_PATH}/${FRAMEWORK_NAME}" "${DEVICE_LIBRARY_PATH}/${FRA
 rm -rf "$OUTPUT_DIR"
 mkdir -p "$OUTPUT_DIR"
 
-cp -r "${FRAMEWORK}" "$OUTPUT_DIR"
+cp -r "${UNIVERSAL_LIBRARY_DIR}/${FRAMEWORK_NAME}.xcframework" "$OUTPUT_DIR"
 cp "$PROJECT_DIR/../LICENSE.TXT" "$OUTPUT_DIR"
 cp "$PROJECT_DIR/../README.md" "$OUTPUT_DIR"
 cp "$PROJECT_DIR/../CHANGELOG.md" "$OUTPUT_DIR"
 
-VERSION=`cat Apptentive/Apptentive/Apptentive.h | sed -n -e 's/#define kApptentiveVersionString @"\([^"]*\)"/\1/p'`
+VERSION=`cat Apptentive/Apptentive/ApptentiveMain.h | sed -n -e 's/#define kApptentiveVersionString @"\([^"]*\)"/\1/p'`
 
 pushd "$OUTPUT_DIR"
 tar -zcv -f "../apptentive_ios_framework-$VERSION.tar.gz" .

@@ -7,7 +7,7 @@
 //
 
 #import "CriteriaTests.h"
-#import "Apptentive.h"
+#import "ApptentiveMain.h"
 #import "ApptentiveConversation.h"
 #import "ApptentiveDevice.h"
 #import "ApptentiveEngagement.h"

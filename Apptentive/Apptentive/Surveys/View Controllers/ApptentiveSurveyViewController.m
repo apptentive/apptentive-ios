@@ -141,7 +141,9 @@ NS_ASSUME_NONNULL_BEGIN
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+- (void)traitCollectionDidChange:(nullable UITraitCollection *)previousTraitCollection {
+	[super traitCollectionDidChange:previousTraitCollection];
+
 	[self.collectionViewLayout invalidateLayout];
 }
 
@@ -622,17 +624,33 @@ NS_ASSUME_NONNULL_BEGIN
 	[self.viewModel commitChangeAtIndexPath:[self.viewModel indexPathForTextFieldTag:textView.tag]];
 }
 
-- (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange {
+- (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange interaction:(UITextItemInteraction)interaction  API_AVAILABLE(ios(10.0)) {
 	if (textView != self.termsAndConditionsTextView) {
 		return NO;
 	}
-    
+	
+	if ([UIApplication.sharedApplication canOpenURL:URL]) {
+		[ApptentiveURLOpener openURL:URL completionHandler: NULL];
+	}
+	
+	return NO;
+}
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-implementations"
+- (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange {
+    if (textView != self.termsAndConditionsTextView) {
+        return NO;
+    }
+
     if ([UIApplication.sharedApplication canOpenURL:URL]) {
         [ApptentiveURLOpener openURL:URL completionHandler: NULL];
     }
-    
-	return NO;
+
+    return NO;
 }
+#pragma clang diagnostic pop
+
 
 #pragma mark - Text field delegate
 

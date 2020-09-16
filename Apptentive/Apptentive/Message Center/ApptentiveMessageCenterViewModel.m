@@ -10,7 +10,7 @@
 #import "ApptentiveAttachment.h"
 #import "ApptentiveMessageSender.h"
 
-#import "Apptentive.h"
+#import "ApptentiveMain.h"
 #import "ApptentiveAttachmentCell.h"
 #import "ApptentiveBackend.h"
 #import "ApptentiveDefines.h"

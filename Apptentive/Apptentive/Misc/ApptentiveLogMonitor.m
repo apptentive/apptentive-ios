@@ -242,19 +242,27 @@ static ApptentiveLogMonitorSession * _currentSession;
 
     OSStatus err = SecTrustCreateWithCertificates((__bridge CFArrayRef) [NSArray arrayWithObject:(__bridge id)cert], policy, &trust);
 
-    SecTrustResultType trustResult = -1;
+	BOOL result = NO;
 
-    err = SecTrustEvaluate(trust, &trustResult);
+	if (@available(iOS 12.0, *)) {
+		CFErrorRef trustError = NULL;
+
+		err = SecTrustEvaluateWithError(trust, &trustError);
+
+		result = (trustError == nil);
+	} else {
+		SecTrustResultType trustResult = -1;
+
+		err = SecTrustEvaluate(trust, &trustResult);
+
+		result = (trustResult == kSecTrustResultUnspecified || trustResult == kSecTrustResultProceed);
+	}
 
     CFRelease(trust);
     CFRelease(policy);
     CFRelease(cert);
 
-    if(trustResult == kSecTrustResultUnspecified || trustResult == kSecTrustResultProceed) {
-        return YES;
-    } else {
-        return NO;
-    }
+	return result;
 }
 
 @end

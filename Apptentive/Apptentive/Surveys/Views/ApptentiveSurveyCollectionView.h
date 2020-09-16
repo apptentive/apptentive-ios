@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (strong, nonatomic) UIView *collectionHeaderView;
 @property (strong, nonatomic) UIView *collectionFooterView;
+@property (strong, nonatomic) NSLayoutConstraint *footerConstraint;
 
 @end
 

@@ -1,3 +1,15 @@
+# 2020-09-15 - v5.3.0
+
+Version 5.3 adds support for iOS 14 and drops support for iOS versions prior to 10.3.
+
+Building projects with Xcode 12 and later *requires* using this version or a later one.
+
+#### Bugs Fixed
+
+* Fix an infinite loop/crash in Surveys on iOS 14 (when built with Xcode 12).
+* Fix deprecation warnings.
+* Fix a warning for framework headers included with double quotes.
+
 # 2020-07-08 - v5.2.14
 
 #### Bugs Fixed

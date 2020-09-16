@@ -6,7 +6,7 @@
 //  Copyright © 2017 Apptentive, Inc. All rights reserved.
 //
 
-#import "Apptentive.h"
+#import "ApptentiveMain.h"
 #import "ApptentiveDefines.h"
 #import "ApptentiveJSONSerialization.h"
 #import "ApptentiveRequest.h"

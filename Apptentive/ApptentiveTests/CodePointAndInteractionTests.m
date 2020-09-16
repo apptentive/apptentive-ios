@@ -265,7 +265,7 @@
 @interface CodePointLastInvokedAt : CodePointTest
 @end
 
-#import "Apptentive.h"
+#import "ApptentiveMain.h"
 
 
 @implementation CodePointLastInvokedAt

@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		01045DEB1CFF47CD00355633 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 01045DE91CFF47CD00355633 /* LaunchScreen.xib */; };
 		0116DA191BA37FA800E50BC3 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0116DA0E1BA37FA800E50BC3 /* Accelerate.framework */; };
-		0116DA1A1BA37FA800E50BC3 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0116DA0F1BA37FA800E50BC3 /* AssetsLibrary.framework */; };
 		0116DA1B1BA37FA800E50BC3 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0116DA101BA37FA800E50BC3 /* CoreData.framework */; };
 		0116DA1C1BA37FA800E50BC3 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0116DA111BA37FA800E50BC3 /* CoreGraphics.framework */; };
 		0116DA1D1BA37FA800E50BC3 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0116DA121BA37FA800E50BC3 /* CoreTelephony.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
@@ -64,7 +63,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				0116DA191BA37FA800E50BC3 /* Accelerate.framework in Frameworks */,
-				0116DA1A1BA37FA800E50BC3 /* AssetsLibrary.framework in Frameworks */,
 				0116DA1B1BA37FA800E50BC3 /* CoreData.framework in Frameworks */,
 				0116DA1C1BA37FA800E50BC3 /* CoreGraphics.framework in Frameworks */,
 				0116DA1D1BA37FA800E50BC3 /* CoreTelephony.framework in Frameworks */,
@@ -105,6 +103,7 @@
 				0118C22E1B754945009D6C4B /* Pictures */,
 				0116DA2B1BA3800A00E50BC3 /* Frameworks */,
 				01045DE81CFE574900355633 /* iOSExample.app */,
+				6417B5DF0CE198E77C165CB6 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -132,6 +131,13 @@
 				014E033E1B7401A50059A3C6 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		6417B5DF0CE198E77C165CB6 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -162,13 +168,13 @@
 			attributes = {
 				LastSwiftMigration = 0700;
 				LastSwiftUpdateCheck = 0700;
-				LastUpgradeCheck = 0930;
+				LastUpgradeCheck = 1200;
 				ORGANIZATIONNAME = "Apptentive, Inc.";
 				TargetAttributes = {
 					014E03391B7401A50059A3C6 = {
 						CreatedOnToolsVersion = 6.4;
 						DevelopmentTeam = 86WML2UN43;
-						LastSwiftMigration = 0920;
+						LastSwiftMigration = 1200;
 						SystemCapabilities = {
 							com.apple.InAppPurchase = {
 								enabled = 0;
@@ -179,7 +185,7 @@
 			};
 			buildConfigurationList = 014E03351B7401A50059A3C6 /* Build configuration list for PBXProject "Example" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
@@ -250,6 +256,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -268,6 +275,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -305,6 +313,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -323,6 +332,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -359,7 +369,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.apptentive.iOSExample;
 				PRODUCT_NAME = iOSExample;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -374,7 +384,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.apptentive.iOSExample;
 				PRODUCT_NAME = iOSExample;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;

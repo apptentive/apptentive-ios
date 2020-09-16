@@ -17,7 +17,7 @@
 #import "ApptentiveSurveyResponsePayload.h"
 #import "Apptentive_Private.h"
 #import "ApptentiveBackend+Engagement.h"
-#import "Apptentive.h"
+#import "ApptentiveMain.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

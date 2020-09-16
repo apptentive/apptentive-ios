@@ -1,3 +1,14 @@
+# 2020-09-16 - v5.3.1
+
+#### Improvements
+
+* SDK framework now ships as an xcframework that includes simulator and device architectures
+* SDK framework now includes a module map for easier imports
+
+#### Bugs Fixed
+
+* Fix issue with framework header imports
+
 # 2020-09-15 - v5.3.0
 
 Version 5.3 adds support for iOS 14 and drops support for iOS versions prior to 10.3.

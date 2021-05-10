@@ -162,6 +162,9 @@ typedef NS_ENUM(NSUInteger, ApptentiveLogLevel) {
 /** If set, redacts potentially-sensitive information such as user data and credentials from logging. */
 @property (assign, nonatomic) BOOL shouldSanitizeLogMessages;
 
+/** Determines if the SDK will write a debug log file in the cache directory (defaults to YES)  */
+@property (assign, nonatomic) BOOL enableDebugLogFile;
+
 /** The server URL to use for API calls. Should only be used for testing. */
 @property (copy, nonatomic) NSURL *baseURL;
 

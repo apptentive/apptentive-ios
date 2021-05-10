@@ -103,6 +103,7 @@ static Apptentive *_nullInstance;
 		_logLevel = ApptentiveLogLevelInfo;
 		_shouldSanitizeLogMessages = YES;
 		_showInfoButton = YES;
+		_enableDebugLogFile = YES;
 	}
 	return self;
 }
@@ -155,7 +156,9 @@ static Apptentive *_nullInstance;
 		_operationQueue = [ApptentiveDispatchQueue createQueueWithName:@"Apptentive Main Queue" concurrencyType:ApptentiveDispatchQueueConcurrencyTypeSerial qualityOfService:NSQualityOfServiceUserInitiated];
 		
 		// start log writer
-		ApptentiveStartLogMonitor([ApptentiveUtilities cacheDirectoryPath:@"com.apptentive.logs"]);
+		if (configuration.enableDebugLogFile) {
+			ApptentiveStartLogMonitor([ApptentiveUtilities cacheDirectoryPath:@"com.apptentive.logs"]);
+		}
 
 		// start log monitor
 		[ApptentiveLogMonitor startSessionWithBaseURL:configuration.baseURL appKey:configuration.apptentiveKey signature:configuration.apptentiveSignature queue:_operationQueue];

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>ConsentText</key>
+	<dict>
+		<key>default</key>
+		<string>This profile will allow enable an enhanced logging feature for apps using the Apptentive SDK. Apps using the SDK will request permission from users to save log messages, and will have the ability send them as an email attachment. </string>
+	</dict>
+	<key>PayloadContent</key>
+	<array>
+		<dict>
+			<key>PayloadCertificateFileName</key>
+			<string>DebugLoggingCA.cer</string>
+			<key>PayloadContent</key>
+			<data>
+			MIID6DCCAtCgAwIBAgIBATANBgkqhkiG9w0BAQsFADCBpDEkMCIG
+			A1UEAwwbQXBwdGVudGl2ZSBEZWJ1ZyBMb2dnaW5nIENBMRkwFwYD
+			VQQKDBBBcHB0ZW50aXZlLCBJbmMuMREwDwYDVQQLDAhTREsgVGVh
+			bTELMAkGA1UECAwCV0ExCzAJBgNVBAYTAlVTMRAwDgYDVQQHDAdT
+			ZWF0dGxlMSIwIAYJKoZIhvcNAQkBFhNzZGtzQGFwcHRlbnRpdmUu
+			Y29tMB4XDTIwMDYyNjIwMDUxOFoXDTQwMDYyMTIwMDUxOFowgaQx
+			JDAiBgNVBAMMG0FwcHRlbnRpdmUgRGVidWcgTG9nZ2luZyBDQTEZ
+			MBcGA1UECgwQQXBwdGVudGl2ZSwgSW5jLjERMA8GA1UECwwIU0RL
+			IFRlYW0xCzAJBgNVBAgMAldBMQswCQYDVQQGEwJVUzEQMA4GA1UE
+			BwwHU2VhdHRsZTEiMCAGCSqGSIb3DQEJARYTc2Rrc0BhcHB0ZW50
+			aXZlLmNvbTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEB
+			AL3eM1XWDZNp3Z828Gf31L44x0QzCjA7yfy8qHGmhMd/pNpEHMwY
+			3qx0nFw1emKDKiH5X6uGET+JBWiq0k0QfDmNMw9cvUCacDPPTNUt
+			UjdWZ+2ZT3bf7QPuzSj8x+zaOdkdIRuNFE6Pi67KulsROWvEfwfp
+			TuttVUinQakI1Z+1gMLrAWnYC8teYh9tesr7zRbiG7OzFy2t+kdW
+			1iMum/rPy8c5aSn6J9myyXbXJ0HRqYU7adRun3JTJI6kra0BjM5V
+			hk+dsvx9/mgx5DJX1ThqrSVglpQSud8vafKAdWDFEM50zBwPfxOq
+			F56X5lMpqXPeHY7UYajgGfUC9c7TXEUCAwEAAaMjMCEwDwYDVR0T
+			AQH/BAUwAwEB/zAOBgNVHQ8BAf8EBAMCAqQwDQYJKoZIhvcNAQEL
+			BQADggEBAApI6IYvOZshYAf73cPF0Bph0qMCpY6YHFE+Wp3adkse
+			sasoGtGfnmK1jyoDveI8BRMDfClEoGcjI8JOIRyHIzDL3weLfIWp
+			kL7kx0XO4KNewGuXTUJp6RajpQgbqSdD9CP4pJdjoLlJzAtG7ecj
+			SykyzWK2xhXqnXQfqLodrrqpXRoHQUhvJ/JUKnCOtUj9HKBwfVfS
+			IfI/QqXaBp95GKTq1UUe1BNoiVGgdMz8m1Qyz5VhJk+rN2lTvTcq
+			AkJ3DQ9Qj2LrPpK5EbAjya3h2mBrU9W5wXgMQxWW0sndoSDtbH0X
+			ks0cBfrcfuEkgI42z/ukfEBi20jhwjxA26i0sjE=
+			</data>
+			<key>PayloadDescription</key>
+			<string>Adds a CA root certificate</string>
+			<key>PayloadDisplayName</key>
+			<string>Apptentive Debug Logging CA</string>
+			<key>PayloadIdentifier</key>
+			<string>com.apple.security.root.002CD40C-395F-4FFA-8CD8-60A6ACC7E465</string>
+			<key>PayloadType</key>
+			<string>com.apple.security.root</string>
+			<key>PayloadUUID</key>
+			<string>002CD40C-395F-4FFA-8CD8-60A6ACC7E465</string>
+			<key>PayloadVersion</key>
+			<integer>1</integer>
+		</dict>
+	</array>
+	<key>PayloadDescription</key>
+	<string>Enables users to capture Apptentive SDK log messages and send them via email. </string>
+	<key>PayloadDisplayName</key>
+	<string>Apptentive Debug Logging</string>
+	<key>PayloadIdentifier</key>
+	<string>Apptentive-Debug-Logging.8126CC13-A0FA-4365-AF96-C3BC745FDA25</string>
+	<key>PayloadOrganization</key>
+	<string>Apptentive, Inc.</string>
+	<key>PayloadRemovalDisallowed</key>
+	<false/>
+	<key>PayloadType</key>
+	<string>Configuration</string>
+	<key>PayloadUUID</key>
+	<string>AAC46820-C6A4-47F4-B637-B2073E3B2434</string>
+	<key>PayloadVersion</key>
+	<integer>1</integer>
+</dict>
+</plist>

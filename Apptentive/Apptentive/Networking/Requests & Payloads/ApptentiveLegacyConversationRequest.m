@@ -35,7 +35,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 - (NSDictionary *)JSONDictionary {
-	return @{}; // TODO: pass params?
+	return nil;
 }
 
 - (NSString *)conversationIdentifier {

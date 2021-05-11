@@ -30,7 +30,6 @@ static NSString *const LocaleCountryCodeKey = @"localeCountryCode";
 static NSString *const LocaleLanguageCodeKey = @"localeLanguageCode";
 static NSString *const UTCOffsetKey = @"UTCOffset";
 static NSString *const IntegrationConfigurationKey = @"integrationConfiguration";
-static NSString *const AdvertisingIdentifierKey = @"advertisingIdentifier";
 
 // Legacy keys
 NSString *const ATDeviceLastUpdateValuePreferenceKey = @"ATDeviceLastUpdateValuePreferenceKey";
@@ -46,7 +45,6 @@ static NSString *_currentHardware;
 static NSDictionary *_currentIntegrationConfiguration;
 static NSString *_currentCarrierName;
 static UIContentSizeCategory _currentContentSizeCategory;
-static NSUUID * _Nullable _currentAdvertisingIdentifier;
 
 
 @implementation ApptentiveDevice
@@ -77,50 +75,6 @@ static NSUUID * _Nullable _currentAdvertisingIdentifier;
 
 + (UIContentSizeCategory)contentSizeCategory {
 	return _currentContentSizeCategory;
-}
-
-+ (void)getAdvertisingIdentifier {
-	NSUUID *oldAdvertisingIdentifier = _currentAdvertisingIdentifier;
-	_currentAdvertisingIdentifier = nil;
-	@try {
-		Class IdentifierManager = NSClassFromString(@"ASIdentifierManager");
-		if (IdentifierManager) {
-	#pragma clang diagnostic push
-	#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-			id sharedManager = [IdentifierManager performSelector:NSSelectorFromString(@"sharedManager")];
-			SEL advertisingIdentifierSelector = NSSelectorFromString(@"advertisingIdentifier");
-			SEL advertisingTrackingEnabledSelector = NSSelectorFromString(@"isAdvertisingTrackingEnabled");
-
-			if (![sharedManager respondsToSelector:advertisingIdentifierSelector] ||
-				![sharedManager respondsToSelector:advertisingTrackingEnabledSelector]) {
-				ApptentiveLogDebug(ApptentiveLogTagConversation, @"Unable to get advertising id: required method on ASIdentifierManager not found");
-				return;
-			}
-			
-			if (![sharedManager performSelector:advertisingTrackingEnabledSelector]) {
-				ApptentiveLogDebug(ApptentiveLogTagConversation, @"Unable to get advertising id: advertising tracking disabled");
-				return;
-			}
-			
-			NSUUID *advertisingIdentifier = [sharedManager performSelector:advertisingIdentifierSelector];
-			if ([advertisingIdentifier.UUIDString isEqualToString:@"00000000-0000-0000-0000-000000000000"]) {
-				ApptentiveLogDebug(ApptentiveLogTagConversation, @"Unable to get advertising id: invalid value");
-				return;
-			}
-			
-			if (![advertisingIdentifier isEqual:oldAdvertisingIdentifier]) {
-				ApptentiveLogVerbose(ApptentiveLogTagConversation, @"Updated advertising id: %@", advertisingIdentifier);
-			}
-			_currentAdvertisingIdentifier = advertisingIdentifier;
-	#pragma clang diagnostic pop
-		}
-	} @catch (NSException *e) {
-		ApptentiveLogError(ApptentiveLogTagConversation, @"Exception while trying to resolve advertising id.\n%@", e);
-	}
-}
-
-+ (NSUUID *)advertisingIdentifier {
-	return _currentAdvertisingIdentifier;
 }
 
 + (void)getPermanentDeviceValues {
@@ -181,7 +135,6 @@ static NSUUID * _Nullable _currentAdvertisingIdentifier;
 
 		NSSet *allowedClasses = [NSSet setWithArray:@[[NSDictionary class], [NSString class]]];
 		_integrationConfiguration = [aDecoder decodeObjectOfClasses:allowedClasses forKey:IntegrationConfigurationKey];
-		_advertisingIdentifier = [aDecoder decodeObjectOfClass:[NSUUID class] forKey:AdvertisingIdentifierKey];
 	}
 
 	return self;
@@ -202,7 +155,6 @@ static NSUUID * _Nullable _currentAdvertisingIdentifier;
 	[aCoder encodeObject:self.localeLanguageCode forKey:LocaleLanguageCodeKey];
 	[aCoder encodeInteger:self.UTCOffset forKey:UTCOffsetKey];
 	[aCoder encodeObject:self.integrationConfiguration forKey:IntegrationConfigurationKey];
-	[aCoder encodeObject:self.advertisingIdentifier forKey:AdvertisingIdentifierKey];
 }
 
 - (instancetype)initAndMigrate {
@@ -252,8 +204,6 @@ static NSUUID * _Nullable _currentAdvertisingIdentifier;
 	_UTCOffset = [NSTimeZone systemTimeZone].secondsFromGMT;
 
 	_integrationConfiguration = ApptentiveDevice.integrationConfiguration;
-
-	_advertisingIdentifier = _currentAdvertisingIdentifier;
 }
 
 @end
@@ -273,10 +223,6 @@ static NSUUID * _Nullable _currentAdvertisingIdentifier;
 	return self.OSVersion.versionString;
 }
 
-- (NSString *)advertisingIdentifierString {
-	return self.advertisingIdentifier.UUIDString;
-}
-
 + (NSDictionary *)JSONKeyPathMapping {
 	return @{
 		@"custom_data": NSStringFromSelector(@selector(customData)),
@@ -292,7 +238,6 @@ static NSUUID * _Nullable _currentAdvertisingIdentifier;
 		@"locale_language_code": NSStringFromSelector(@selector(localeLanguageCode)),
 		@"utc_offset": NSStringFromSelector(@selector(boxedUTCOffset)),
 		@"integration_config": NSStringFromSelector(@selector(integrationConfiguration)),
-		@"advertiser_id": NSStringFromSelector(@selector(advertisingIdentifierString))
 	};
 }
 

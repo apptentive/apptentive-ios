@@ -1,3 +1,13 @@
+# 2021-05-11 - v5.3.2
+
+#### Improvements
+
+* Add property on configuration to disable writing debug logs to disk
+
+#### Bugs Fixed
+
+* Don't send a body with GET request to upgrade auth token to JWT
+
 # 2020-09-16 - v5.3.1
 
 #### Improvements

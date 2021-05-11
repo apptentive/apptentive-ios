@@ -20,7 +20,7 @@ FOUNDATION_EXPORT double ApptentiveVersionNumber;
 FOUNDATION_EXPORT const unsigned char ApptentiveVersionString[];
 
 /** The version number of the Apptentive SDK. */
-#define kApptentiveVersionString @"5.3.1"
+#define kApptentiveVersionString @"5.3.2"
 
 /** The version number of the Apptentive API platform. */
 #define kApptentiveAPIVersionString @"9"
@@ -161,6 +161,12 @@ typedef NS_ENUM(NSUInteger, ApptentiveLogLevel) {
 
 /** If set, redacts potentially-sensitive information such as user data and credentials from logging. */
 @property (assign, nonatomic) BOOL shouldSanitizeLogMessages;
+
+/** If set, writes SDK-related log messages to a file in the app's cache directory (defaults to YES).
+
+ This is allows the Apptentive Debug Logging feature to capture and send logs for debugging
+ purposes (with explicit user opt-in). Setting this to NO will disable the debug logging feature. */
+@property (assign, nonatomic) BOOL enableDebugLogFile;
 
 /** The server URL to use for API calls. Should only be used for testing. */
 @property (copy, nonatomic) NSURL *baseURL;

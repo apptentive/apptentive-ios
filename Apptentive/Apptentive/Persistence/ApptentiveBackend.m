@@ -122,7 +122,6 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 
 		  [self loadConfiguration];
 			
-		  [self maybeGetAdvertisingIdentifier];
 		  [self tryInitializeApptimizeSDK];
 
 		  [self startUp];
@@ -235,7 +234,6 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 		[self resume];
 		[self.conversationManager.activeConversation startSession];
 		[self addLaunchMetric];
-		[self maybeGetAdvertisingIdentifier];
 	}];
 }
 
@@ -453,7 +451,6 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 	
 	[self saveConfiguration];
 
-	[self maybeGetAdvertisingIdentifier];
 	[self tryUpdateApptimizeData];
 }
 
@@ -796,18 +793,6 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 }
 
 #pragma mark -
-#pragma mark Advertising Identifier
-
-- (void)maybeGetAdvertisingIdentifier {
-	ApptentiveAssertOperationQueue(self.operationQueue);
-	
-	if (self.configuration.collectAdvertisingIdentifier) {
-		[ApptentiveDevice getAdvertisingIdentifier];
-		[self scheduleDeviceUpdate];
-	}
-}
-
-#pragma mark -
 #pragma mark Apptimize SDK
 
 - (void)tryInitializeApptimizeSDK {
@@ -819,7 +804,7 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 	}
 	
 	if (![ApptentiveApptimize isApptimizeSDKAvailable]) {
-		ApptentiveLogWarning(ApptentiveLogTagApptimize, @"Unable to initialize Apptimize SDK support: SDK integration not found");
+		ApptentiveLogInfo(ApptentiveLogTagApptimize, @"Unable to initialize Apptimize SDK support: SDK integration not found");
 		return;
 	}
 	

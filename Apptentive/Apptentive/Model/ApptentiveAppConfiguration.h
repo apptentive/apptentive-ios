@@ -114,11 +114,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (readonly, assign, nonatomic) BOOL metricsEnabled;
 
 /**
- Whether to collect the advertisingIdentifier from the AdSupport framework.
- */
-@property (readonly, assign, nonatomic) BOOL collectAdvertisingIdentifier;
-
-/**
  The configuration for Message Center (see
  `ApptentiveMessageCenterConfiguration`).
  */

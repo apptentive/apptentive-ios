@@ -63,6 +63,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 /**
+ The minimum iOS version the app can run on.
+ */
+@property (readonly, strong, nonatomic) NSString *deploymentTarget;
+
+/**
  Indicates whether the version has changed since the first release that 
  included the Apptentive SDK.
  */

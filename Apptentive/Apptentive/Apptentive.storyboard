@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17154" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17124"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -119,7 +119,7 @@
                             </connections>
                         </view>
                         <view key="tableFooterView" contentMode="scaleToFill" id="6et-WJ-u3H">
-                            <rect key="frame" x="0.0" y="897.5" width="375" height="300"/>
+                            <rect key="frame" x="0.0" y="891.5" width="375" height="300"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Aj5-aD-yTM" customClass="ApptentiveMessageCenterInputView">
@@ -161,6 +161,10 @@
                                                         </button>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="250" text="New Message" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Mka-QN-zVs">
                                                             <rect key="frame" x="44" y="13" width="102" height="18"/>
+                                                            <accessibility key="accessibilityConfiguration">
+                                                                <accessibilityTraits key="traits" notEnabled="YES"/>
+                                                                <bool key="isElement" value="NO"/>
+                                                            </accessibility>
                                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                                             <color key="textColor" red="0.51764705879999995" green="0.51764705879999995" blue="0.56470588239999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <nil key="highlightedColor"/>
@@ -209,6 +213,10 @@
                                                 </textView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please leave detailed feedback" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ase-Kg-1uo">
                                                     <rect key="frame" x="17" y="54" width="199.5" height="17"/>
+                                                    <accessibility key="accessibilityConfiguration">
+                                                        <accessibilityTraits key="traits" notEnabled="YES"/>
+                                                        <bool key="isElement" value="NO"/>
+                                                    </accessibility>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <color key="textColor" red="0.73333333329999995" green="0.72941176470000002" blue="0.76078431369999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -423,7 +431,7 @@
                         </view>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="ContextMessage" rowHeight="48" id="5ec-cK-c7K" userLabel="Context Message" customClass="ApptentiveMessageCenterContextMessageCell">
-                                <rect key="frame" x="0.0" y="313.5" width="375" height="48"/>
+                                <rect key="frame" x="0.0" y="307.5" width="375" height="48"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="5ec-cK-c7K" id="jRh-G0-si1">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="48"/>
@@ -450,7 +458,7 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="Reply" rowHeight="87" id="JK9-ui-0US" customClass="ApptentiveMessageCenterReplyCell">
-                                <rect key="frame" x="0.0" y="361.5" width="375" height="87"/>
+                                <rect key="frame" x="0.0" y="355.5" width="375" height="87"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="JK9-ui-0US" id="mF7-ws-xVD">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="87"/>
@@ -498,7 +506,7 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="Message" rowHeight="93" id="hi8-Bq-GR3" customClass="ApptentiveMessageCenterMessageCell">
-                                <rect key="frame" x="0.0" y="448.5" width="375" height="93"/>
+                                <rect key="frame" x="0.0" y="442.5" width="375" height="93"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="hi8-Bq-GR3" id="H0J-6d-bTN">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="93"/>
@@ -536,7 +544,7 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="CompoundMessage" rowHeight="181" id="evQ-54-Bpq" userLabel="CompoundMessage" customClass="ApptentiveCompoundMessageCell">
-                                <rect key="frame" x="0.0" y="541.5" width="375" height="181"/>
+                                <rect key="frame" x="0.0" y="535.5" width="375" height="181"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="evQ-54-Bpq" id="cxM-mJ-g02">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="181"/>
@@ -638,7 +646,7 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="CompoundReply" rowHeight="169" id="nj1-yL-vAx" customClass="ApptentiveCompoundReplyCell">
-                                <rect key="frame" x="0.0" y="722.5" width="375" height="169"/>
+                                <rect key="frame" x="0.0" y="716.5" width="375" height="169"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="nj1-yL-vAx" id="n4I-KM-rdG">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="169"/>
@@ -855,7 +863,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="contactAdd" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qyh-3U-iDJ">
-                                <rect key="frame" x="7.5" y="58" width="25" height="24"/>
+                                <rect key="frame" x="10" y="60" width="20" height="20"/>
                                 <connections>
                                     <action selector="chooseImage:" destination="lUk-lg-QHV" eventType="touchUpInside" id="L0p-LU-a4M"/>
                                 </connections>

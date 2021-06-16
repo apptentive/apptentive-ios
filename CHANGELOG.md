@@ -1,3 +1,10 @@
+# 2021-06-16 - v5.3.3
+
+#### Bugs Fixed
+
+* Remove duplicate VoiceOver elements in Message Center
+* Fix a bug where Message Center placeholder text would disappear
+
 # 2021-05-11 - v5.3.2
 
 #### Improvements

@@ -1222,6 +1222,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 - (void)discardDraft {
 	self.messageInputView.messageView.text = nil;
+	self.messageInputView.placeholderLabel.hidden = false;
 	[self.messageInputView.messageView resignFirstResponder];
 
 	[self.attachmentController clear];

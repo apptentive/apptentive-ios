@@ -18,6 +18,7 @@ static NSString *const BuildKey = @"build";
 static NSString *const HasAppStoreReceiptKey = @"hasAppStoreReceipt";
 static NSString *const DebugBuildKey = @"debugBuild";
 static NSString *const OverridingStylesKey = @"overridingStyles";
+static NSString *const DeploymentTargetKey = @"deploymentTarget";
 static NSString *const UpdateVersionKey = @"updateVersion";
 static NSString *const UpdateBuildKey = @"updateBuild";
 static NSString *const TimeAtInstallTotalKey = @"timeAtInstallTotal";
@@ -71,6 +72,7 @@ static NSString *const ATEngagementIsUpdateBuildKey = @"ATEngagementIsUpdateBuil
 		_version = [[ApptentiveVersion alloc] initWithString:[NSBundle mainBundle].infoDictionary[@"CFBundleShortVersionString"]];
 		_build = [[ApptentiveVersion alloc] initWithString:[NSBundle mainBundle].infoDictionary[(NSString *)kCFBundleVersionKey]];
 		_hasAppStoreReceipt = [NSData dataWithContentsOfURL:[NSBundle mainBundle].appStoreReceiptURL] != nil;
+		_deploymentTarget = [NSBundle mainBundle].infoDictionary[@"MinimumOSVersion"];
 
 		_compiler = [NSBundle mainBundle].infoDictionary[@"DTCompiler"];
 		_platformBuild = [NSBundle mainBundle].infoDictionary[@"DTPlatformBuild"];
@@ -101,6 +103,7 @@ static NSString *const ATEngagementIsUpdateBuildKey = @"ATEngagementIsUpdateBuil
 		_hasAppStoreReceipt = [coder decodeBoolForKey:HasAppStoreReceiptKey];
 		_debugBuild = [coder decodeBoolForKey:DebugBuildKey];
 		_overridingStyles = [coder decodeBoolForKey:OverridingStylesKey];
+		_deploymentTarget = [coder decodeObjectOfClass:[NSString class] forKey:DeploymentTargetKey];
 
 		_updateVersion = [coder decodeBoolForKey:UpdateVersionKey];
 		_updateBuild = [coder decodeBoolForKey:UpdateBuildKey];
@@ -132,6 +135,7 @@ static NSString *const ATEngagementIsUpdateBuildKey = @"ATEngagementIsUpdateBuil
 	[coder encodeBool:self.hasAppStoreReceipt forKey:HasAppStoreReceiptKey];
 	[coder encodeBool:self.debugBuild forKey:DebugBuildKey];
 	[coder encodeBool:self.overridingStyles forKey:OverridingStylesKey];
+	[coder encodeObject:self.deploymentTarget forKey:DeploymentTargetKey];
 
 	[coder encodeBool:self.updateVersion forKey:UpdateVersionKey];
 	[coder encodeBool:self.updateBuild forKey:UpdateBuildKey];
@@ -163,6 +167,7 @@ static NSString *const ATEngagementIsUpdateBuildKey = @"ATEngagementIsUpdateBuil
 		_hasAppStoreReceipt = [appRelease[@"app_store_receipt"][@"has_receipt"] boolValue];
 		_debugBuild = [appRelease[@"debug"] boolValue];
 		_overridingStyles = [appRelease[@"overriding_styles"] boolValue];
+		_deploymentTarget = @"";
 
 		_updateVersion = YES;
 		_updateBuild = YES;
@@ -249,6 +254,7 @@ static NSString *const ATEngagementIsUpdateBuildKey = @"ATEngagementIsUpdateBuil
 		@"app_store_receipt": NSStringFromSelector(@selector(appStoreReceiptDictionary)),
 		@"debug": NSStringFromSelector(@selector(boxedDebugBuild)),
 		@"overriding_styles": NSStringFromSelector(@selector(boxedOverridingStyles)),
+		@"deployment_target": NSStringFromSelector(@selector(deploymentTarget)),
 		@"dt_compiler": NSStringFromSelector(@selector(compiler)),
 		@"dt_platform_build": NSStringFromSelector(@selector(platformBuild)),
 		@"dt_platform_name": NSStringFromSelector(@selector(platformName)),

@@ -58,7 +58,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)updateUnreadCount;
 
-+ (NSString *)attachmentDirectoryPathForConversationDirectory:(NSString *)storagePath;
++ (nullable NSString *)attachmentDirectoryPathForConversationDirectory:(NSString *)storagePath;
 
 @property (readonly, nonatomic) NSString *attachmentDirectoryPath;
 

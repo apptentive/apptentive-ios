@@ -8,6 +8,7 @@
 
 #import "ApptentiveHUDViewController.h"
 #import "ApptentivePassThroughWindow.h"
+#import "UIWindow+Apptentive.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -94,11 +95,9 @@ static ApptentiveHUDViewController *currentHUD;
 	self.interval = self.interval ?: 2.0;
 	self.animationDuration = fmin(self.animationDuration ?: 0.25, self.interval / 2.0);
 
-	self.hostWindow = [[ApptentivePassThroughWindow alloc] init];
-
+	
+	self.hostWindow = [ApptentivePassThroughWindow apptentive_windowWithRootViewController:self];
 	[self.hostWindow makeKeyAndVisible];
-	self.hostWindow.rootViewController = self;
-	self.hostWindow.windowLevel = UIWindowLevelAlert;
 	self.hostWindow.backgroundColor = [UIColor clearColor];
 
 	self.HUDView.alpha = 0.0;

@@ -26,6 +26,7 @@
 #import "ApptentiveVersion.h"
 #import "Apptentive_Private.h"
 #import "ApptentiveDispatchQueue.h"
+#import "UIWindow+Apptentive.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -104,6 +105,7 @@ static Apptentive *_nullInstance;
 		_shouldSanitizeLogMessages = YES;
 		_showInfoButton = YES;
 		_enableDebugLogFile = YES;
+		_gatherCarrierInfo = YES;
 	}
 	return self;
 }
@@ -157,7 +159,7 @@ static Apptentive *_nullInstance;
 		
 		// start log writer
 		if (configuration.enableDebugLogFile) {
-			ApptentiveStartLogMonitor([ApptentiveUtilities cacheDirectoryPath:@"com.apptentive.logs"]);
+			ApptentiveStartLogWriter([ApptentiveUtilities cacheDirectoryPath:@"com.apptentive.logs"]);
 		}
 
 		// start log monitor
@@ -170,6 +172,8 @@ static Apptentive *_nullInstance;
 		_appID = configuration.appID;
 
 		_showInfoButton = configuration.showInfoButton;
+
+		ApptentiveBackend.gatherCarrierInfo = configuration.gatherCarrierInfo;
 		
         _surveyTermsAndConditions = configuration.surveyTermsAndConditions;
         
@@ -1094,9 +1098,7 @@ static Apptentive *_nullInstance;
 // Container to allow customization of Apptentive UI using UIAppearance
 
 - (void)presentAnimated:(BOOL)animated completion:(void (^__nullable)(void))completion {
-	self.apptentiveAlertWindow = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-	self.apptentiveAlertWindow.rootViewController = [[UIViewController alloc] init];
-	self.apptentiveAlertWindow.windowLevel = UIWindowLevelAlert + 1;
+	self.apptentiveAlertWindow = [UIWindow apptentive_windowWithRootViewController:[[UIViewController alloc] init]];
 	[self.apptentiveAlertWindow makeKeyAndVisible];
 	[self.apptentiveAlertWindow.rootViewController presentViewController:self animated:animated completion:completion];
 }

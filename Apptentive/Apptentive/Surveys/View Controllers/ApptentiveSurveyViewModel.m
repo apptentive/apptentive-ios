@@ -455,7 +455,7 @@ NSString *const ApptentiveInteractionSurveyEventLabelCancel = @"cancel";
 	return self.invalidQuestionIndexes.count == 0;
 }
 
-- (NSIndexPath *)firstInvalidAnswerIndexPath {
+- (nullable NSIndexPath *)firstInvalidAnswerIndexPath {
 	__block NSUInteger minIndex = NSNotFound;
 	[self.invalidQuestionIndexes enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *_Nonnull stop) {
 	  minIndex = MIN(minIndex, idx);
@@ -535,7 +535,7 @@ NSString *const ApptentiveInteractionSurveyEventLabelCancel = @"cancel";
 	return [self.survey.questions objectAtIndex:index];
 }
 
-- (ApptentiveSurveyAnswer *)answerAtIndexPath:(NSIndexPath *)indexPath {
+- (nullable ApptentiveSurveyAnswer *)answerAtIndexPath:(NSIndexPath *)indexPath {
 	NSArray *answers = [self questionAtIndex:indexPath.section].answers;
 
 	return answers.count > (NSUInteger)indexPath.row ? answers[indexPath.row] : nil;

@@ -240,23 +240,30 @@ static ApptentiveLogMonitorSession * _currentSession;
     SecPolicyRef policy = SecPolicyCreateBasicX509();
     SecTrustRef trust;
 
-    OSStatus err = SecTrustCreateWithCertificates((__bridge CFArrayRef) [NSArray arrayWithObject:(__bridge id)cert], policy, &trust);
+    OSStatus status = SecTrustCreateWithCertificates((__bridge CFArrayRef) [NSArray arrayWithObject:(__bridge id)cert], policy, &trust);
+    if (status != 0) {
+        ApptentiveLogInfo(@"OSStatus is %d.", status);
+    }
 
 	BOOL result = NO;
 
 	if (@available(iOS 12.0, *)) {
 		CFErrorRef trustError = NULL;
 
-		err = SecTrustEvaluateWithError(trust, &trustError);
+		status = SecTrustEvaluateWithError(trust, &trustError);
 
 		result = (trustError == nil);
 	} else {
 		SecTrustResultType trustResult = -1;
 
-		err = SecTrustEvaluate(trust, &trustResult);
+		status = SecTrustEvaluate(trust, &trustResult);
 
 		result = (trustResult == kSecTrustResultUnspecified || trustResult == kSecTrustResultProceed);
 	}
+
+    if (status != 0) {
+        ApptentiveLogInfo(@"OSStatus is %d.", status);
+    }
 
     CFRelease(trust);
     CFRelease(policy);

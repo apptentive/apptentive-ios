@@ -55,7 +55,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterMessageStatus) {
 
 @property (readonly, nonatomic) NSString *greetingTitle;
 @property (readonly, nonatomic) NSString *greetingBody;
-@property (readonly, nonatomic) NSURL *greetingImageURL;
+@property (readonly, nonatomic, nullable) NSURL *greetingImageURL;
 
 @property (readonly, nonatomic) NSString *statusBody;
 

@@ -81,7 +81,7 @@ NS_ASSUME_NONNULL_BEGIN
 		return @{};
 	} else {
 		NSDictionary *result = nil;
-		NSSet *allowedClasses = [NSSet setWithArray:@[[NSDictionary class], [NSArray class], [NSString class]]];
+		NSSet *allowedClasses = [NSSet setWithArray:@[[NSDictionary class], [NSArray class], [NSString class], [NSNumber class]]];
 		result = [ApptentiveUnarchiver unarchivedObjectOfClasses:allowedClasses fromData:self.answersData];
 		return result;
 	}

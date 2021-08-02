@@ -34,7 +34,7 @@ NS_ASSUME_NONNULL_BEGIN
 	return @"conversation/token";
 }
 
-- (NSDictionary *)JSONDictionary {
+- (nullable NSDictionary *)JSONDictionary {
 	return nil;
 }
 

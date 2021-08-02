@@ -102,7 +102,7 @@ static NSString *const ATEngagementInteractionsAppBuildNumberKey = @"ATEngagemen
 
 	if (self) {
 		_targets = [coder decodeObjectOfClass:[ApptentiveTargets class] forKey:TargetsKey];
-		NSSet *allowedClasses = [NSSet setWithArray:@[[NSDictionary class], [ApptentiveInteraction class]]];
+		NSSet *allowedClasses = [NSSet setWithArray:@[[NSDictionary class], [ApptentiveInteraction class], [NSString class]]];
 		_interactions = [coder decodeObjectOfClasses:allowedClasses forKey:InteractionsKey];
 		_expiry = [coder decodeObjectOfClass:[NSDate class] forKey:ExpiryKey];
 	}

@@ -156,7 +156,7 @@ NSString *const ApptentiveSentByUserKey = @"com.apptentive.sentByUser";
 	return [[self class] attachmentDirectoryPathForConversationDirectory:self.storagePath];
 }
 
-+ (NSString *)attachmentDirectoryPathForConversationDirectory:(NSString *)conversationDirectory {
++ (nullable NSString *)attachmentDirectoryPathForConversationDirectory:(NSString *)conversationDirectory {
 	NSString *result = [conversationDirectory stringByAppendingPathComponent:@"Attachments"];
 
 	if (![[NSFileManager defaultManager] fileExistsAtPath:result]) {

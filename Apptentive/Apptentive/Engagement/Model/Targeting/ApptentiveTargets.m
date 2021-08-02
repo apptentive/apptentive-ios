@@ -49,7 +49,7 @@ static NSString * const InvocationsKey = @"invocations";
 {
 	self = [super init];
 	if (self) {
-		NSSet *allowedClasses = [NSSet setWithArray:@[[NSDictionary class], [ApptentiveInvocations class]]];
+		NSSet *allowedClasses = [NSSet setWithArray:@[[NSDictionary class], [ApptentiveInvocations class], [NSString class]]];
 		_invocations = [coder decodeObjectOfClasses:allowedClasses forKey:InvocationsKey];
 	}
 	return self;

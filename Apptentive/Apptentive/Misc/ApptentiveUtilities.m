@@ -31,25 +31,27 @@ UIViewController *topChildViewController(UIViewController *viewController) {
 
 @implementation ApptentiveUtilities
 
-+ (NSString *)applicationSupportPath {
++ (nullable NSString *)applicationSupportPath {
 	static NSString *_applicationSupportPath;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-	  _applicationSupportPath = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES).firstObject;
+		_applicationSupportPath = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES).firstObject;
+		NSError *error;
 
-	  NSError *error;
+		if (![[NSFileManager defaultManager] createDirectoryAtPath:_applicationSupportPath withIntermediateDirectories:YES attributes:nil error:&error]) {
+			ApptentiveLogError(ApptentiveLogTagUtility, @"Failed to create Application Support directory: %@", _applicationSupportPath);
+			ApptentiveLogError(ApptentiveLogTagUtility, @"Error was: %@", error);
+			_applicationSupportPath = nil;
+		}
 
-	  if (![[NSFileManager defaultManager] createDirectoryAtPath:_applicationSupportPath withIntermediateDirectories:YES attributes:nil error:&error]) {
-		  ApptentiveLogError(ApptentiveLogTagUtility, @"Failed to create Application Support directory: %@", _applicationSupportPath);
-		  ApptentiveLogError(ApptentiveLogTagUtility, @"Error was: %@", error);
-		  _applicationSupportPath = nil;
-	  }
+		if (_applicationSupportPath == nil) {
+			return;
+		}
 
-
-	  if (![[NSFileManager defaultManager] setAttributes:@{ NSFileProtectionKey: NSFileProtectionCompleteUntilFirstUserAuthentication } ofItemAtPath:_applicationSupportPath error:&error]) {
-		  ApptentiveLogError(ApptentiveLogTagUtility, @"Failed to set file protection level: %@", _applicationSupportPath);
-		  ApptentiveLogError(ApptentiveLogTagUtility, @"Error was: %@", error);
-	  }
+		if (![[NSFileManager defaultManager] setAttributes:@{ NSFileProtectionKey: NSFileProtectionCompleteUntilFirstUserAuthentication } ofItemAtPath:_applicationSupportPath error:&error]) {
+			ApptentiveLogError(ApptentiveLogTagUtility, @"Failed to set file protection level: %@", _applicationSupportPath);
+			ApptentiveLogError(ApptentiveLogTagUtility, @"Error was: %@", error);
+		}
 	});
 
 	return _applicationSupportPath;
@@ -74,6 +76,10 @@ UIViewController *topChildViewController(UIViewController *viewController) {
 			_cacheDirectoryPath = nil;
 		}
 		
+		if (_cacheDirectoryPath == nil) {
+			return;
+		}
+
 		if (![[NSFileManager defaultManager] setAttributes:@{ NSFileProtectionKey: NSFileProtectionCompleteUntilFirstUserAuthentication } ofItemAtPath:_cacheDirectoryPath error:&error]) {
 			ApptentiveLogError(ApptentiveLogTagUtility, @"Failed to set file protection level: %@", _cacheDirectoryPath);
 			ApptentiveLogError(ApptentiveLogTagUtility, @"Error was: %@", error);

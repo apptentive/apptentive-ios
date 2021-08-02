@@ -148,7 +148,7 @@ static BOOL canCompare(NSObject *value, NSObject *parameter, NSComparisonResult 
 	self = [super init];
 	if (self) {
 		_field = [coder decodeObjectOfClass:[NSString class] forKey:FieldKey];
-		NSSet *allowedClasses = [NSSet setWithArray:@[[NSDictionary class], [NSString class]]];
+		NSSet *allowedClasses = [NSSet setWithArray:@[[NSDictionary class], [NSString class], [NSNumber class]]];
 		_comparisons = [coder decodeObjectOfClasses:allowedClasses forKey:ComparisonsKey];
 	}
 	return self;

@@ -40,7 +40,7 @@ void ApptentiveLogInfo(id arg, ...);
 void ApptentiveLogDebug(id arg, ...);
 void ApptentiveLogVerbose(id arg, ...);
 
-void ApptentiveStartLogMonitor(NSString *logDir);
+void ApptentiveStartLogWriter(NSString *logDir);
 NSArray<NSString *> * _Nullable ApptentiveListLogFiles(void);
 
 NS_ASSUME_NONNULL_END

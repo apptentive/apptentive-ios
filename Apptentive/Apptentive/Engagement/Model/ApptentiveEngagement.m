@@ -54,10 +54,10 @@ static NSInteger const CurrentVersion = 2;
 - (nullable instancetype)initWithCoder:(NSCoder *)coder {
 	self = [super initWithCoder:coder];
 	if (self) {
-		NSSet *classes = [NSSet setWithArray:@[[NSMutableDictionary class], [ApptentiveCount class]]];
+        NSSet *allowedClasses = [NSSet setWithArray:@[[NSMutableDictionary class], [ApptentiveCount class], [NSString class]]];
 
-		_mutableInteractions = [coder decodeObjectOfClasses:classes forKey:InteractionsKey];
-		_mutableCodePoints = [coder decodeObjectOfClasses:classes forKey:CodePointsKey];
+		_mutableInteractions = [coder decodeObjectOfClasses:allowedClasses forKey:InteractionsKey];
+		_mutableCodePoints = [coder decodeObjectOfClasses:allowedClasses forKey:CodePointsKey];
 		if ([coder containsValueForKey:VersionKey]) {
 			_version = [coder decodeIntegerForKey:VersionKey];
 		} else {

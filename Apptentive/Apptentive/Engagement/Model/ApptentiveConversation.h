@@ -23,7 +23,7 @@ typedef NS_ENUM(NSInteger, ApptentiveConversationState) {
 
 extern NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState state);
 
-@class ApptentivePerson, ApptentiveDevice, ApptentiveSDK, ApptentiveAppRelease, ApptentiveEngagement, ApptentiveVersion, ApptentiveConversationMetadataItem;
+@class ApptentivePerson, ApptentiveDevice, ApptentiveSDK, ApptentiveAppRelease, ApptentiveEngagement, ApptentiveVersion, ApptentiveConversationMetadataItem, ApptentiveRandom;
 @protocol ApptentiveConversationDelegate;
 
 /**
@@ -70,6 +70,11 @@ extern NSString *NSStringFromApptentiveConversationState(ApptentiveConversationS
  The `ApptentiveEngagement` object for this conversation.
  */
 @property (readonly, nonatomic) ApptentiveEngagement *engagement;
+
+/**
+ The `ApptentiveRandom` object for this conversation.
+ */
+@property (readonly, nonatomic) ApptentiveRandom *random;
 
 /**
  The authorization token obtained when creating the conversation.

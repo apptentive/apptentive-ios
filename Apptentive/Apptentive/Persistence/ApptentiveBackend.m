@@ -50,6 +50,7 @@ NSString *const ApptentiveAuthenticationDidFailNotificationKeyConversationIdenti
 NSString *const ATInteractionAppEventLabelLaunch = @"launch";
 NSString *const ATInteractionAppEventLabelExit = @"exit";
 
+static BOOL _gatherCarrierInfo;
 
 @interface ApptentiveBackend ()
 
@@ -145,7 +146,7 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 	[ApptentiveDevice getPermanentDeviceValues];
 
 	__weak ApptentiveBackend *weakSelf = self;
-	if ([CTTelephonyNetworkInfo class]) {
+	if ([CTTelephonyNetworkInfo class] && ApptentiveBackend.shouldGatherCarrierInfo) {
 		_telephonyNetworkInfo = [[CTTelephonyNetworkInfo alloc] init];
 		if (@available(iOS 12.0, *)) {
 			ApptentiveDevice.carrierName = [[_telephonyNetworkInfo.serviceSubscriberCellularProviders.allValues valueForKeyPath:@"carrierName"] componentsJoinedByString:@"|"];
@@ -765,11 +766,13 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 
 #pragma mark - Paths
 
-- (NSString *)cacheDirectoryPath {
+- (nullable NSString *)cacheDirectoryPath {
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-	NSString *path = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
+    if (paths.count == 0) {
+        return nil;
+    }
 
-	NSString *newPath = [path stringByAppendingPathComponent:@"com.apptentive"];
+	NSString *newPath = [[paths objectAtIndex:0] stringByAppendingPathComponent:@"com.apptentive"];
 	NSFileManager *fm = [NSFileManager defaultManager];
 	NSError *error = nil;
 	BOOL result = [fm createDirectoryAtPath:newPath withIntermediateDirectories:YES attributes:nil error:&error];
@@ -790,6 +793,14 @@ NSString *const ATInteractionAppEventLabelExit = @"exit";
 - (ApptentiveMessageManager *)messageManager {
 	ApptentiveAssertOperationQueue(self.operationQueue);
 	return self.conversationManager.messageManager;
+}
+
++ (BOOL)shouldGatherCarrierInfo {
+	return _gatherCarrierInfo;
+}
+
++ (void)setGatherCarrierInfo:(BOOL)gatherCarrierInfo {
+	_gatherCarrierInfo = gatherCarrierInfo;
 }
 
 #pragma mark -

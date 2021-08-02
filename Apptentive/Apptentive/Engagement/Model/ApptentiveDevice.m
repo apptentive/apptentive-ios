@@ -9,8 +9,6 @@
 #import "ApptentiveDevice.h"
 #import "ApptentiveVersion.h"
 
-#import <CoreTelephony/CTCarrier.h>
-#import <CoreTelephony/CTTelephonyNetworkInfo.h>
 #import <UIKit/UIKit.h>
 #include <stdlib.h>
 #import <sys/sysctl.h>

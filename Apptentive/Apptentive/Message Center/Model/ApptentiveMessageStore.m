@@ -33,7 +33,7 @@ static NSString *const ArchiveVersionKey = @"archiveVersion";
 - (nullable instancetype)initWithCoder:(NSCoder *)coder {
 	self = [super init];
 	if (self) {
-		NSSet *allowedClasses = [NSSet setWithArray:@[[NSArray class], [ApptentiveMessage class]]];
+		NSSet *allowedClasses = [NSSet setWithArray:@[[NSMutableArray class], [ApptentiveMessage class]]];
 		_messages = [coder decodeObjectOfClasses:allowedClasses forKey:MessagesKey];
 		_lastMessageIdentifier = [coder decodeObjectOfClass:[NSString class] forKey:LastMessageIdentifierKey];
 	}

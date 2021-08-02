@@ -1092,6 +1092,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 		if (timeAtInstall == nil) {
 			ApptentiveLogError(ApptentiveLogTagConversation, @"Error retrieving support directory creation date.");
+			return;
 		}
 
 		[self.activeConversation.appRelease updateMissingTimeAtInstallTo:timeAtInstall];
@@ -1119,6 +1120,7 @@ NSString *const ApptentiveConversationStateDidChangeNotificationKeyConversation 
 
 			if (!manifestDictionary) {
 				ApptentiveLogError(ApptentiveLogTagConversation, @"Unable to parse local manifest %@ (%@).", localEngagementManifestURL.absoluteString, error);
+				return;
 			}
 
 			_manifest = [[ApptentiveEngagementManifest alloc] initWithJSONDictionary:manifestDictionary cacheLifetime:MAXFLOAT];

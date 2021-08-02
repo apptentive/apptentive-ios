@@ -40,6 +40,8 @@ extern NSString *const ApptentiveHasSentMessageKey;
  */
 @interface ApptentiveBackend : NSObject <NSFetchedResultsControllerDelegate, ApptentiveConversationManagerDelegate>
 
+@property (class, assign, nonatomic, getter=shouldGatherCarrierInfo) BOOL gatherCarrierInfo;
+
 @property (readonly, strong, nonatomic) ApptentiveConversationManager *conversationManager;
 @property (readonly, strong, nonatomic) ApptentiveAppConfiguration *configuration;
 @property (readonly, strong, nonatomic) ApptentiveDispatchQueue *operationQueue;

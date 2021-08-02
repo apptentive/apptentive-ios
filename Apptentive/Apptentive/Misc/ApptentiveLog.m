@@ -194,7 +194,7 @@ void setShouldSanitizeApptentiveLogMessages(BOOL shouldSanitize) {
 	_shouldSanitizeLogMessages = shouldSanitize;
 }
 
-void ApptentiveStartLogMonitor(NSString *logDir) {
+void ApptentiveStartLogWriter(NSString *logDir) {
 	_logWriter = [[ApptentiveAsyncLogWriter alloc] initWithDestDir:logDir historySize:kLogHistorySize];
 }
 

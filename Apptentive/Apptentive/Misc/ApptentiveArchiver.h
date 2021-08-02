@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ApptentiveArchiver : NSObject
 
 + (BOOL)archiveRootObject:(NSObject *)rootObject toFile:(NSString *)path;
-+ (NSData *)archivedDataWithRootObject:(NSObject *)rootObject;
++ (nullable NSData *)archivedDataWithRootObject:(NSObject *)rootObject;
 
 @end
 

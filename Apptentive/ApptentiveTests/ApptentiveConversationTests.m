@@ -11,6 +11,7 @@
 #import "ApptentiveCount.h"
 #import "ApptentiveDevice.h"
 #import "ApptentiveEngagement.h"
+#import "ApptentiveRandom.h"
 #import "ApptentivePerson.h"
 #import "ApptentiveSDK.h"
 #import "ApptentiveVersion.h"
@@ -72,6 +73,8 @@
 	[self.conversation endSession];
 
 	XCTAssertNil(self.conversation.sessionIdentifier);
+
+	XCTAssertNotNil(self.conversation.random);
 }
 
 - (void)testAppRelease {
@@ -265,6 +268,12 @@
 	XCTAssertEqualWithAccuracy(testInteraction.lastInvoked.timeIntervalSince1970, [[NSDate date] timeIntervalSince1970], 0.01);
 }
 
+- (void)testRandom {
+	XCTAssertEqualObjects([self.conversation.random valueForFieldWithPath:@"percent"], @50);
+	XCTAssertEqualObjects([self.conversation.random valueForFieldWithPath:@"xyz/percent"], @50);
+	XCTAssertNil([self.conversation.random valueForFieldWithPath:@"xyz/abc/percent"]);
+}
+
 - (void)testNSCoding {
 	ApptentiveMutableConversation *mutableConversation = [self.conversation mutableCopy];
     
@@ -294,6 +303,8 @@
 	[mutableConversation.engagement resetVersion];
 
 	[mutableConversation startSession];
+
+	[mutableConversation valueForFieldWithPath:@"random/xyz/percent"];
 
 	NSString *path = [NSTemporaryDirectory() stringByAppendingString:@"conversation.archive"];
 
@@ -333,6 +344,9 @@
 	XCTAssertEqual(testInteraction.buildCount, 1);
 	XCTAssertEqual(testInteraction.versionCount, 0);
 	XCTAssertEqualWithAccuracy(testInteraction.lastInvoked.timeIntervalSince1970, [engagementTime timeIntervalSince1970], 0.01);
+
+	NSMutableDictionary *randomValues = [conversation.random valueForKey:@"randomValues"];
+	XCTAssertEqualObjects(randomValues[@"xyz"], @0.5);
 
 	XCTAssertNil(conversation.sessionIdentifier);
 }

@@ -15,6 +15,7 @@
 #import "ApptentiveSafeCollections.h"
 #import "ApptentiveArchiver.h"
 #import "ApptentiveUnarchiver.h"
+#import "UIWindow+Apptentive.h"
 
 NSNotificationName const ApptentiveLogMonitorSessionDidStart = @"ApptentiveLogMonitorSessionDidStart";
 NSNotificationName const ApptentiveLogMonitorSessionDidStop = @"ApptentiveLogMonitorSessionDidStop";
@@ -27,7 +28,7 @@ extern NSString *ApptentiveLocalizedString(NSString *key, NSString *_Nullable co
 
 @interface ApptentiveLogMonitorSession () <NSSecureCoding, MFMailComposeViewControllerDelegate>
 
-@property (nonatomic, strong) UIWindow *mailComposeControllerWindow;
+@property (nonatomic, strong) UIWindow *presentationWindow;
 @property (nonatomic, assign) ApptentiveLogLevel oldLogLevel;
 
 @end
@@ -64,7 +65,9 @@ extern NSString *ApptentiveLocalizedString(NSString *key, NSString *_Nullable co
 	ApptentiveLogSetLevel(ApptentiveLogLevelVerbose);
 	
 	dispatch_async(dispatch_get_main_queue(), ^{
-		[self showReportUI];
+		if (self.presentationWindow == nil) {
+			[self showReportUI];
+		}
 	});
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveLogMonitorSessionDidStart object:nil];
@@ -72,7 +75,9 @@ extern NSString *ApptentiveLocalizedString(NSString *key, NSString *_Nullable co
 
 - (void)resume {
 	dispatch_async(dispatch_get_main_queue(), ^{
-		[self showReportUI];
+		if (self.presentationWindow == nil) {
+			[self showReportUI];
+		}
 	});
 }
 
@@ -86,91 +91,94 @@ extern NSString *ApptentiveLocalizedString(NSString *key, NSString *_Nullable co
 
 - (void)showReportUI {
 	// create a custom window to show UI on top of everything
-	UIWindow *window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+	self.presentationWindow = [UIWindow apptentive_windowWithRootViewController:[[UIViewController alloc] init]];
 	
 	// create alert controller with "Send", "Continue" and "Discard" actions
 	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:ApptentiveLocalizedString(@"Apptentive", @"Apptentive") message:ApptentiveLocalizedString(@"Troubleshooting mode", @"Troubleshooting mode") preferredStyle:UIAlertControllerStyleActionSheet];
 	[alertController addAction:[UIAlertAction actionWithTitle:ApptentiveLocalizedString(@"Send Report", @"Send Report")
 														style:UIAlertActionStyleDefault
 													  handler:^(UIAlertAction *_Nonnull action) {
-														  window.hidden = YES;
-														  [self sendReportWithAttachedFiles:[ApptentiveLogMonitorSession listAttachments]];
-													  }]];
+		self.presentationWindow.hidden = YES;
+		self.presentationWindow = nil;
+		[self sendReportWithAttachedFiles:[ApptentiveLogMonitorSession listAttachments]];
+	}]];
 	[alertController addAction:[UIAlertAction actionWithTitle:ApptentiveLocalizedString(@"Continue", @"Continue")
 														style:UIAlertActionStyleCancel
 													  handler:^(UIAlertAction *_Nonnull action) {
-														  window.hidden = YES;
-													  }]];
+		self.presentationWindow.hidden = YES;
+		self.presentationWindow = nil;
+	}]];
 	[alertController addAction:[UIAlertAction actionWithTitle:ApptentiveLocalizedString(@"Discard Report", @"Discard Report")
 														style:UIAlertActionStyleDestructive
 													  handler:^(UIAlertAction *_Nonnull action) {
-														  window.hidden = YES;
-														  [self stop];
-													  }]];
+		self.presentationWindow.hidden = YES;
+		self.presentationWindow = nil;
+		[self stop];
+	}]];
 	
-	window.rootViewController = [[UIViewController alloc] init];
-	window.windowLevel = UIWindowLevelAlert + 1;
-	window.hidden = NO; // don't use makeKeyAndVisible since we don't have any knowledge about the host app's UI
-	[window.rootViewController presentViewController:alertController animated:YES completion:nil];
+	self.presentationWindow.hidden = NO; // don't use makeKeyAndVisible since we don't have any knowledge about the host app's UI
+	[self.presentationWindow.rootViewController presentViewController:alertController animated:YES completion:nil];
 }
 
 #pragma mark -
 #pragma mark Report
 
 - (void)sendReportWithAttachedFiles:(NSArray<NSString *> *)files {
-	if (![MFMailComposeViewController canSendMail]) {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-		UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:ApptentiveLocalizedString(@"Apptentive Log Monitor", @"Apptentive Log Monitor") message:ApptentiveLocalizedString(@"Unable to send email", @"Unable to send email") delegate:nil cancelButtonTitle:ApptentiveLocalizedString(@"OK", @"OK") otherButtonTitles:nil];
-		[alertView show];
-#pragma clang diagnostic pop
-		
-		return;
-	}
-	
-	NSDictionary *bundleInfo = [[NSBundle mainBundle] infoDictionary];
-	
-	// collecting system info
-	NSMutableString *messageBody = [NSMutableString new];
-	[messageBody appendString:@"This email may contain sensitive content.\n Please review before sending.\n\n"];
-	[messageBody appendFormat:@"App Bundle Identifier: %@\n", [NSBundle mainBundle].bundleIdentifier];
-	[messageBody appendFormat:@"App Version: %@\n", [bundleInfo objectForKey:@"CFBundleShortVersionString"]];
-	[messageBody appendFormat:@"App Build: %@\n", [bundleInfo objectForKey:@"CFBundleVersion"]];
-	[messageBody appendFormat:@"Apptentive SDK: %@\n", kApptentiveVersionString];
-	[messageBody appendFormat:@"Device Model: %@\n", [ApptentiveUtilities deviceMachine]];
-	[messageBody appendFormat:@"iOS Version: %@\n", [UIDevice currentDevice].systemVersion];
-	[messageBody appendFormat:@"Locale: %@", [NSLocale currentLocale].localeIdentifier];
-	
-	NSString *emailTitle = [NSString stringWithFormat:@"%@ (iOS)", [NSBundle mainBundle].infoDictionary[@"CFBundleName"]];
-	
-	MFMailComposeViewController *mc = [[MFMailComposeViewController alloc] init];
-	mc.mailComposeDelegate = self;
-	[mc setSubject:emailTitle];
-	[mc setMessageBody:messageBody isHTML:NO];
-	[mc setToRecipients:_emailRecipients];
-	
-	// Get the resource path and read the file using NSData
-	for (NSString *path in files) {
-		NSString *filename = [path lastPathComponent];
-		NSData *fileData = [NSData dataWithContentsOfFile:path];
-		if (fileData.length == 0) {
-			ApptentiveLogError(ApptentiveLogTagMonitor, @"Attachment file does not exist or empty: %@", path);
-			continue;
+	// Present mail view controller/unavailable alert on screen in a separate window
+	UIViewController *presentedViewController = nil;
+
+	self.presentationWindow = [UIWindow apptentive_windowWithRootViewController:[[UIViewController alloc] init]];
+	self.presentationWindow.hidden = NO;
+
+	if ([MFMailComposeViewController canSendMail]) {
+		// collecting system info
+		NSDictionary *bundleInfo = [[NSBundle mainBundle] infoDictionary];
+
+		NSMutableString *messageBody = [NSMutableString new];
+		[messageBody appendString:@"This email may contain sensitive content.\n Please review before sending.\n\n"];
+		[messageBody appendFormat:@"App Bundle Identifier: %@\n", [NSBundle mainBundle].bundleIdentifier];
+		[messageBody appendFormat:@"App Version: %@\n", [bundleInfo objectForKey:@"CFBundleShortVersionString"]];
+		[messageBody appendFormat:@"App Build: %@\n", [bundleInfo objectForKey:@"CFBundleVersion"]];
+		[messageBody appendFormat:@"Apptentive SDK: %@\n", kApptentiveVersionString];
+		[messageBody appendFormat:@"Device Model: %@\n", [ApptentiveUtilities deviceMachine]];
+		[messageBody appendFormat:@"iOS Version: %@\n", [UIDevice currentDevice].systemVersion];
+		[messageBody appendFormat:@"Locale: %@", [NSLocale currentLocale].localeIdentifier];
+
+		NSString *emailTitle = [NSString stringWithFormat:@"%@ (iOS)", [NSBundle mainBundle].infoDictionary[@"CFBundleName"]];
+
+		MFMailComposeViewController *mc = [[MFMailComposeViewController alloc] init];
+		mc.mailComposeDelegate = self;
+		[mc setSubject:emailTitle];
+		[mc setMessageBody:messageBody isHTML:NO];
+		[mc setToRecipients:_emailRecipients];
+
+		// Get the resource path and read the file using NSData
+		for (NSString *path in files) {
+			NSString *filename = [path lastPathComponent];
+			NSData *fileData = [NSData dataWithContentsOfFile:path];
+			if (fileData.length == 0) {
+				ApptentiveLogError(ApptentiveLogTagMonitor, @"Attachment file does not exist or empty: %@", path);
+				continue;
+			}
+
+			// Add attachment
+			[mc addAttachmentData:fileData mimeType:@"text/plain" fileName:filename];
 		}
-		
-		// Add attachment
-		[mc addAttachmentData:fileData mimeType:@"text/plain" fileName:filename];
+
+		presentedViewController = mc;
+	} else {
+		UIAlertController *alertController = [UIAlertController alertControllerWithTitle:ApptentiveLocalizedString(@"Apptentive Log Monitor", @"Apptentive Log Monitor") message:ApptentiveLocalizedString(@"Unable to send email", @"Unable to send email") preferredStyle:UIAlertControllerStyleAlert];
+		[alertController addAction:[UIAlertAction actionWithTitle:ApptentiveLocalizedString(@"OK", @"OK")
+															style:UIAlertActionStyleCancel
+														  handler:^(UIAlertAction *_Nonnull action) {
+			self.presentationWindow.hidden = YES;
+			self.presentationWindow = nil;
+		}]];
+
+		presentedViewController = alertController;
 	}
-	
-	// Present mail view controller on screen in a separate window
-	UIViewController *rootController = [UIViewController new];
-	
-	self.mailComposeControllerWindow = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-	self.mailComposeControllerWindow.windowLevel = UIWindowLevelAlert + 1;
-	self.mailComposeControllerWindow.rootViewController = rootController;
-	self.mailComposeControllerWindow.hidden = NO;
-	
-	[rootController presentViewController:mc animated:YES completion:nil];
+
+	[self.presentationWindow.rootViewController presentViewController:presentedViewController animated:YES completion:nil];
 }
 
 #pragma mark -
@@ -180,8 +188,8 @@ extern NSString *ApptentiveLocalizedString(NSString *key, NSString *_Nullable co
 	[controller dismissViewControllerAnimated:YES
 								   completion:^{
 									   [self stop];
-									   self.mailComposeControllerWindow.hidden = YES;
-									   self.mailComposeControllerWindow = nil;
+									   self.presentationWindow.hidden = YES;
+									   self.presentationWindow = nil;
 								   }];
 }
 

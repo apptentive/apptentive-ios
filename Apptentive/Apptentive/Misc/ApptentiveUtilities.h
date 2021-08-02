@@ -12,8 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 @interface ApptentiveUtilities : NSObject
-+ (NSString *)applicationSupportPath;
-+ (NSString * _Nullable)cacheDirectoryPath:(NSString *)path;
++ (nullable NSString *)applicationSupportPath;
++ (nullable NSString *)cacheDirectoryPath:(NSString *)path;
 + (NSBundle *)resourceBundle;
 + (UIStoryboard *)storyboard;
 + (UIImage *)imageNamed:(NSString *)name;

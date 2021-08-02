@@ -20,7 +20,7 @@
 	}
 }
 
-+ (NSData *)archivedDataWithRootObject:(NSObject *)rootObject {
++ (nullable NSData *)archivedDataWithRootObject:(NSObject *)rootObject {
 	NSError *error = nil;
 	NSData *result = nil;
 

@@ -7,6 +7,7 @@
 //
 
 #import "ApptentiveStoreProductViewController.h"
+#import "UIWindow+Apptentive.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -21,9 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 @implementation ApptentiveStoreProductViewController
 
 - (void)presentAnimated:(BOOL)animated completion:(void (^__nullable)(void))completion {
-	self.apptentiveAlertWindow = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-	self.apptentiveAlertWindow.rootViewController = [[UIViewController alloc] init];
-	self.apptentiveAlertWindow.windowLevel = UIWindowLevelAlert + 1;
+	self.apptentiveAlertWindow = [UIWindow apptentive_windowWithRootViewController:[[UIViewController alloc] init]];
 	[self.apptentiveAlertWindow makeKeyAndVisible];
 	[self.apptentiveAlertWindow.rootViewController presentViewController:self animated:animated completion:completion];
 }

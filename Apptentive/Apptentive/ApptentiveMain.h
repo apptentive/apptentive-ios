@@ -20,7 +20,7 @@ FOUNDATION_EXPORT double ApptentiveVersionNumber;
 FOUNDATION_EXPORT const unsigned char ApptentiveVersionString[];
 
 /** The version number of the Apptentive SDK. */
-#define kApptentiveVersionString @"5.3.3"
+#define kApptentiveVersionString @"5.3.4"
 
 /** The version number of the Apptentive API platform. */
 #define kApptentiveAPIVersionString @"9"
@@ -185,6 +185,9 @@ typedef NS_ENUM(NSUInteger, ApptentiveLogLevel) {
 
 /** If set, shows a valid combination of terms & conditions and/or a link with an optional text mask, below the submit button in Surveys. */
 @property (copy, nonatomic, nullable) TermsAndConditions* surveyTermsAndConditions;
+
+/** If set, uses the CoreTelephony framework to expose the mobile carrier name to the targeting system. Defaults to `YES`. */
+@property (assign, nonatomic) BOOL gatherCarrierInfo;
 
 /**
  Returns an instance of the `ApptentiveConfiguration` class

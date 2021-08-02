@@ -16,6 +16,7 @@
 #import "ApptentiveUtilities.h"
 #import "ApptentiveVersion.h"
 #import "ApptentiveUnarchiver.h"
+#import "ApptentiveRandom.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -24,6 +25,7 @@ static NSString *const SDKKey = @"SDK";
 static NSString *const PersonKey = @"person";
 static NSString *const DeviceKey = @"device";
 static NSString *const EngagementKey = @"engagement";
+static NSString *const RandomKey = @"random";
 static NSString *const APIKeyKey = @"APIKey";
 static NSString *const TokenKey = @"token";
 static NSString *const LegacyTokenKey = @"legacyToken";
@@ -77,6 +79,7 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 @property (strong, nonatomic) ApptentivePerson *person;
 @property (strong, nonatomic) ApptentiveDevice *device;
 @property (strong, nonatomic) ApptentiveEngagement *engagement;
+@property (strong, nonatomic) ApptentiveRandom *random;
 @property (strong, nonatomic) NSMutableDictionary *mutableUserInfo;
 @property (strong, nonatomic) NSDictionary *lastSentPerson;
 @property (strong, nonatomic) NSDictionary *lastSentDevice;
@@ -102,6 +105,7 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 		_person = [[ApptentivePerson alloc] init];
 		_device = [[ApptentiveDevice alloc] initWithCurrentDevice];
 		_engagement = [[ApptentiveEngagement alloc] init];
+		_random = [[ApptentiveRandom alloc] init];
 		_mutableUserInfo = [[NSMutableDictionary alloc] init];
 
 		_directoryName = [NSUUID UUID].UUIDString;
@@ -120,6 +124,7 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 		_person = [coder decodeObjectOfClass:[ApptentivePerson class] forKey:PersonKey];
 		_device = [coder decodeObjectOfClass:[ApptentiveDevice class] forKey:DeviceKey];
 		_engagement = [coder decodeObjectOfClass:[ApptentiveEngagement class] forKey:EngagementKey];
+		_random = [coder decodeObjectOfClass:[ApptentiveRandom class] forKey:RandomKey] ?: [[ApptentiveRandom alloc] init];
 		_token = [coder decodeObjectOfClass:[NSString class] forKey:TokenKey];
 		_legacyToken = [coder decodeObjectOfClass:[NSString class] forKey:LegacyTokenKey];
 		_lastMessageID = [coder decodeObjectOfClass:[NSString class] forKey:LastMessageIDKey];
@@ -128,7 +133,7 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 		_localIdentifier = [coder decodeObjectOfClass:[NSString class] forKey:LocalIdentifierKey] ?: [[NSUUID UUID] UUIDString];
 		_directoryName = [coder decodeObjectOfClass:[NSString class] forKey:DirectoryNameKey];
 
-		NSSet *allowedClasses = [NSSet setWithArray:@[[NSDictionary class], [NSString class]]];
+		NSSet *allowedClasses = [NSSet setWithArray:@[[NSDictionary class], [NSString class], [NSNumber class]]];
 		_lastSentDevice = [coder decodeObjectOfClasses:allowedClasses forKey:LastSentDeviceKey];
 		_lastSentPerson = [coder decodeObjectOfClasses:allowedClasses forKey:LastSentPersonKey];
 	}
@@ -142,6 +147,7 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 	[coder encodeObject:self.person forKey:PersonKey];
 	[coder encodeObject:self.device forKey:DeviceKey];
 	[coder encodeObject:self.engagement forKey:EngagementKey];
+	[coder encodeObject:self.random	forKey:RandomKey];
 	[coder encodeObject:self.token forKey:TokenKey];
 	[coder encodeObject:self.legacyToken forKey:LegacyTokenKey];
 	[coder encodeObject:self.lastMessageID forKey:LastMessageIDKey];
@@ -336,7 +342,7 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 		NSData *lastSentPersondata = [[NSUserDefaults standardUserDefaults] dataForKey:ATPersonLastUpdateValuePreferenceKey];
 
 		if (lastSentPersondata != nil) {
-			NSSet *allowedClasses = [NSSet setWithArray:@[[NSDictionary class], [NSString class]]];
+			NSSet *allowedClasses = [NSSet setWithArray:@[[NSDictionary class], [NSString class], [NSNumber class]]];
             NSDictionary *person = [ApptentiveUnarchiver unarchivedObjectOfClasses:allowedClasses fromData:lastSentPersondata];
 			if ([person isKindOfClass:[NSDictionary class]]) {
 				_lastSentPerson = person[@"person"];
@@ -477,6 +483,7 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 	result.person = self.person;
 	result.device = self.device;
 	result.engagement = self.engagement;
+	result.random = self.random;
 	result.mutableUserInfo = self.mutableUserInfo;
 	result.lastSentPerson = self.lastSentPerson;
 	result.lastSentDevice = self.lastSentDevice;
@@ -545,6 +552,7 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 @dynamic person;
 @dynamic device;
 @dynamic engagement;
+@dynamic random;
 @dynamic token;
 @dynamic identifier;
 @dynamic localIdentifier;
@@ -605,6 +613,8 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 			return [self.person valueForFieldWithPath:rest];
 		} else if ([first isEqualToString:@"device"]) {
 			return [self.device valueForFieldWithPath:rest];
+		} else if ([first isEqualToString:@"random"]) {
+			return [self.random valueForFieldWithPath:rest];
 		}
 	}
 
@@ -639,6 +649,8 @@ NSString *NSStringFromApptentiveConversationState(ApptentiveConversationState st
 			return [self.person descriptionForFieldWithPath:rest];
 		} else if ([first isEqualToString:@"device"]) {
 			return [self.device descriptionForFieldWithPath:rest];
+		} else if ([first isEqualToString:@"random"]) {
+			return [self.random descriptionForFieldWithPath:rest];
 		}
 	}
 

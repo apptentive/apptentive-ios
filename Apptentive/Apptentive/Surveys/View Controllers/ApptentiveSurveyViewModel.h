@@ -39,7 +39,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (readonly, nonatomic) NSString *thankYouText;
 @property (readonly, nonatomic) NSString *missingRequiredItemText;
 
-@property (readonly, nonatomic) NSIndexPath *firstInvalidAnswerIndexPath;
+@property (readonly, nonatomic, nullable) NSIndexPath *firstInvalidAnswerIndexPath;
 
 - (NSInteger)numberOfQuestionsInSurvey;
 - (NSInteger)numberOfAnswersForQuestionAtIndex:(NSInteger)index;

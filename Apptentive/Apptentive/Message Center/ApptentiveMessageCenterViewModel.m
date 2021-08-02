@@ -141,7 +141,7 @@ NSString *const ATInteractionMessageCenterEventLabelRead = @"read";
 	return self.interaction.configuration[@"greeting"][@"body"];
 }
 
-- (NSURL *)greetingImageURL {
+- (nullable NSURL *)greetingImageURL {
 	NSString *URLString = self.interaction.configuration[@"greeting"][@"image_url"];
 
 	return (URLString.length > 0) ? [NSURL URLWithString:URLString] : nil;

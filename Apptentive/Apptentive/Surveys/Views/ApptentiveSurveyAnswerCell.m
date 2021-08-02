@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @implementation ApptentiveSurveyAnswerCell
 
 - (BOOL)isHidden {
-    return super.hidden && !self.forceUnhide;
+	return super.hidden && !self.forceUnhide;
 }
 
 @end

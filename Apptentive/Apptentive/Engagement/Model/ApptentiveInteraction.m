@@ -68,9 +68,9 @@ NS_ASSUME_NONNULL_BEGIN
 		self.identifier = [coder decodeObjectOfClass:[NSString class] forKey:@"identifier"];
 		self.priority = [coder decodeIntegerForKey:@"priority"];
 		self.type = [coder decodeObjectOfClass:[NSString class] forKey:@"type"];
-		NSSet *allowedClasses = [NSSet setWithArray:@[[NSDictionary class], [NSString class], [NSArray class]]];
+		NSSet *allowedClasses = [NSSet setWithArray:@[[NSDictionary class], [NSString class], [NSArray class], [NSNumber class]]];
 		self.configuration = [coder decodeObjectOfClasses:allowedClasses forKey:@"configuration"];
-		self.version = [coder decodeObjectOfClass:[NSString class] forKey:@"version"];
+		self.version = [coder decodeObjectOfClass:[NSNumber class] forKey:@"version"];
 	}
 	return self;
 }

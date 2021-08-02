@@ -45,7 +45,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 		// Add custom data, interaction identifier, and extended data
 		if (event.dictionaryData != nil) {
-			NSSet *allowedClasses = [NSSet setWithArray:@[[NSDictionary class], [NSArray class]]];
+			NSSet *allowedClasses = [NSSet setWithArray:@[[NSDictionary class], [NSArray class], [NSString class]]];
 			NSDictionary *dictionaryData = [ApptentiveUnarchiver unarchivedObjectOfClasses:allowedClasses fromData:event.dictionaryData];
 
 			payload.customData = dictionaryData[@"custom_data"];

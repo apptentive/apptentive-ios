@@ -1,3 +1,14 @@
+# 2021-08-02 - v5.3.4
+
+#### Improvements
+
+* Add a flag to disable CoreTelephony framework import
+
+#### Bugs Fixed
+
+* Fix window-based interaction presentation for `UIScene`-based apps
+* Fix unarchiving warnings for iOS 15
+
 # 2021-06-16 - v5.3.3
 
 #### Bugs Fixed

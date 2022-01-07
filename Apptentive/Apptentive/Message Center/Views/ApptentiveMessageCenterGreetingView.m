@@ -37,7 +37,7 @@ NS_ASSUME_NONNULL_BEGIN
 @implementation ApptentiveMessageCenterGreetingView
 
 - (void)awakeFromNib {
-	self.bottomBorderHeightConstraint.constant = 1.0 / [UIScreen mainScreen].scale;
+//	self.bottomBorderHeightConstraint.constant = 1.0 / [UIScreen mainScreen].scale;
 
 	[super awakeFromNib];
 }
@@ -69,9 +69,9 @@ NS_ASSUME_NONNULL_BEGIN
 	[self sizeToFit];
 }
 
-- (CGSize)sizeThatFits:(CGSize)size {
-	return [self systemLayoutSizeFittingSize:CGSizeMake(size.width, 2000)];
-}
+//- (CGSize)sizeThatFits:(CGSize)size {
+//	return [self systemLayoutSizeFittingSize:CGSizeMake(size.width, 2000)];
+//}
 
 @end
 

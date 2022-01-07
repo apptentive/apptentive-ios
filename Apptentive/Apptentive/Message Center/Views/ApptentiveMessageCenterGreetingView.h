@@ -15,11 +15,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ApptentiveMessageCenterGreetingView : UIView
 
-@property (retain, nonatomic) IBOutlet ApptentiveNetworkImageIconView *imageView;
-@property (retain, nonatomic) IBOutlet UILabel *titleLabel;
-@property (retain, nonatomic) IBOutlet UILabel *messageLabel;
+//@property (retain, nonatomic) IBOutlet ApptentiveNetworkImageIconView *imageView;
+//@property (retain, nonatomic) IBOutlet UILabel *titleLabel;
+//@property (retain, nonatomic) IBOutlet UILabel *messageLabel;
 @property (weak, nonatomic) IBOutlet UIButton *aboutButton;
-@property (weak, nonatomic) IBOutlet UIView *borderView;
+//@property (weak, nonatomic) IBOutlet UIView *borderView;
 
 @property (assign, nonatomic) BOOL isOnScreen;
 

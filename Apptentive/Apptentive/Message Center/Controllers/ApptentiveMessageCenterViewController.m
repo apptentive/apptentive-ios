@@ -152,7 +152,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (void)traitCollectionDidChange:(nullable UITraitCollection *)previousTraitCollection {
-	[self.greetingView traitCollectionDidChange:previousTraitCollection];
+	//[self.greetingView traitCollectionDidChange:previousTraitCollection];
 
 	[self resizeFooterView:nil];
 }
@@ -192,7 +192,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 - (void)viewDidLayoutSubviews {
 	if (self.isSubsequentDisplay == NO) {
 		[self engageGreetingViewEventIfNecessary];
-		[self scrollToLastMessageAnimated:NO];
+		//[self scrollToLastMessageAnimated:NO];
 
 		self.isSubsequentDisplay = YES;
 	}
@@ -226,15 +226,15 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 	self.tableView.backgroundColor = [self.viewModel.styleSheet colorForStyle:ApptentiveColorCollectionBackground];
 
 	self.greetingView.backgroundColor = [self.viewModel.styleSheet colorForStyle:ApptentiveColorHeaderBackground];
-	self.greetingView.borderView.backgroundColor = [self.viewModel.styleSheet colorForStyle:ApptentiveColorSeparator];
-
-	self.greetingView.titleLabel.text = self.viewModel.greetingTitle;
-	self.greetingView.titleLabel.textColor = [self.viewModel.styleSheet colorForStyle:ApptentiveTextStyleHeaderTitle];
-
-	self.greetingView.messageLabel.text = self.viewModel.greetingBody;
-	self.greetingView.messageLabel.textColor = [self.viewModel.styleSheet colorForStyle:ApptentiveTextStyleHeaderMessage];
-
-	self.greetingView.imageView.imageURL = self.viewModel.greetingImageURL;
+//	self.greetingView.borderView.backgroundColor = [self.viewModel.styleSheet colorForStyle:ApptentiveColorSeparator];
+//
+//	self.greetingView.titleLabel.text = self.viewModel.greetingTitle;
+//	self.greetingView.titleLabel.textColor = [self.viewModel.styleSheet colorForStyle:ApptentiveTextStyleHeaderTitle];
+//
+//	self.greetingView.messageLabel.text = self.viewModel.greetingBody;
+//	self.greetingView.messageLabel.textColor = [self.viewModel.styleSheet colorForStyle:ApptentiveTextStyleHeaderMessage];
+//
+//	self.greetingView.imageView.imageURL = self.viewModel.greetingImageURL;
 
 	self.greetingView.aboutButton.tintColor = [self.viewModel.styleSheet colorForStyle:ApptentiveTextStyleHeaderMessage];
 	self.greetingView.isOnScreen = NO;
@@ -679,7 +679,7 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 
 		self.state = ATMessageCenterStateWhoCard;
 	} else {
-		[self.messageInputView.messageView resignFirstResponder];
+		//[self.messageInputView.messageView resignFirstResponder];
 		[self updateState];
 	}
 

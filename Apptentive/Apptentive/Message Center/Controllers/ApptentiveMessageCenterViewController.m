@@ -1237,8 +1237,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 }
 
 - (void)updateHeaderFooterTextSize:(nullable NSNotification *)notification {
-	self.greetingView.titleLabel.font = [self.viewModel.styleSheet fontForStyle:ApptentiveTextStyleHeaderTitle];
-	self.greetingView.messageLabel.font = [self.viewModel.styleSheet fontForStyle:ApptentiveTextStyleHeaderMessage];
+//	self.greetingView.titleLabel.font = [self.viewModel.styleSheet fontForStyle:ApptentiveTextStyleHeaderTitle];
+//	self.greetingView.messageLabel.font = [self.viewModel.styleSheet fontForStyle:ApptentiveTextStyleHeaderMessage];
 
 	self.messageInputView.sendButton.titleLabel.font = [self.viewModel.styleSheet fontForStyle:ApptentiveTextStyleDoneButton];
 	self.messageInputView.placeholderLabel.font = [self.viewModel.styleSheet fontForStyle:ApptentiveTextStyleTextInput];

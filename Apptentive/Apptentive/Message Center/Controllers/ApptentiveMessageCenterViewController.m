@@ -666,6 +666,8 @@ typedef NS_ENUM(NSInteger, ATMessageCenterState) {
 - (IBAction)send:(id)sender {
 	[self.viewModel sendMessage:self.trimmedMessage withAttachments:self.attachmentController.attachments];
 
+	[[NSNotificationCenter defaultCenter] postNotificationName:ApptentiveFeedbackSentNotification object:Apptentive.shared userInfo:@{ @"BodyTxt": self.trimmedMessage}];
+	
 	[self.attachmentController clear];
 	[self.attachmentController resignFirstResponder];
 	self.attachmentController.active = NO;

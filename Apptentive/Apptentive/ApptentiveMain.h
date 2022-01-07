@@ -86,6 +86,10 @@ extern NSNotificationName const ApptentiveSurveyCancelledNotification;
  You can use this notification to ask the user to enable push notifications. */
 extern NSNotificationName const ApptentiveMessageSentNotification;
 
+/** Notification sent when a feedback is sent, either by the user or using a sendAttachment method.
+ You can use this notification to ask the user to enable push notifications. */
+extern NSNotificationName const ApptentiveFeedbackSentNotification;
+
 /** Notification user info key whose value indicates whether the message was sent by the user or using a sendAttachment method. */
 extern NSString *const ApptentiveSentByUserKey;
 

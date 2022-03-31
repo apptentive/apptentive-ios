@@ -1,5 +1,7 @@
 # Apptentive iOS SDK
 
+**Note: This repository hosts Versions 5.3.4 and earlier. Version 6.0 is now available at https://github.com/apptentive/apptentive-kit-ios**
+
 The Apptentive iOS SDK provides a simple and powerful channel to communicate in-app with your customers.
 
 Use Apptentive features to improve your app's App Store ratings, collect and respond to customer feedback, show surveys at specific points within your app, and more.
